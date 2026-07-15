@@ -20,7 +20,7 @@ class LetterTypeFactory implements FactoryInterface
      * @return LetterType
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         return new LetterType(
             $container->get(AbstractListDataServiceServices::class)

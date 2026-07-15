@@ -25,7 +25,7 @@ class LicenceProcessingTasksControllerFactory implements FactoryInterface
      * @return LicenceProcessingTasksController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceProcessingTasksController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LicenceProcessingTasksController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);

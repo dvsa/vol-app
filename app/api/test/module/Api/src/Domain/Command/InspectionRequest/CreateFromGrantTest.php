@@ -19,7 +19,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateFromGrantTest extends \PHPUnit\Framework\TestCase
+final class CreateFromGrantTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

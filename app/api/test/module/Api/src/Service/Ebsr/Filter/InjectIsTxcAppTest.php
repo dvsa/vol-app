@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  * Class InjectIsTxcAppTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\Filter
  */
-class InjectIsTxcAppTest extends TestCase
+final class InjectIsTxcAppTest extends TestCase
 {
     public function testFilter(): void
     {
@@ -35,13 +35,11 @@ class InjectIsTxcAppTest extends TestCase
         $this->assertEquals($expected, $return['ebsrRefresh']);
     }
 
-    public static function provideEbsrRefresh(): array
+    public static function provideEbsrRefresh(): \Iterator
     {
-        return [
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, 'Y'],
-            [BusRegEntity::TXC_APP_NEW, 'N'],
-            [BusRegEntity::TXC_APP_CANCEL, 'N'],
-            [BusRegEntity::TXC_APP_CHARGEABLE, 'N']
-        ];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, 'Y'];
+        yield [BusRegEntity::TXC_APP_NEW, 'N'];
+        yield [BusRegEntity::TXC_APP_CANCEL, 'N'];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, 'N'];
     }
 }

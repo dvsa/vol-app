@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class CheckboxTest extends MockeryTestCase
+final class CheckboxTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetRepresentation')]
     public function testGetRepresentation(mixed $checked): void
@@ -49,11 +49,9 @@ class CheckboxTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestGetRepresentation(): array
+    public static function dpTestGetRepresentation(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 }

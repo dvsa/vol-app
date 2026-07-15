@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\PermitApplicationReference as Sut;
 /**
  * PermitApplicationReference bookmark test
  */
-class PermitApplicationReferenceTest extends \PHPUnit\Framework\TestCase
+final class PermitApplicationReferenceTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -28,23 +28,21 @@ class PermitApplicationReferenceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'irhpPermitApplication' => [
-                        'relatedApplication' => [
-                            'applicationRef' => 'OB1234567/1',
-                        ]
+                'irhpPermitApplication' => [
+                    'relatedApplication' => [
+                        'applicationRef' => 'OB1234567/1',
                     ]
-                ],
-                'OB1234567/1'
+                ]
             ],
-            [
-                [],
-                ''
-            ],
+            'OB1234567/1'
+        ];
+        yield [
+            [],
+            ''
         ];
     }
 }

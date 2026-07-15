@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ApggCandidatePermitFactoryTest extends MockeryTestCase
+final class ApggCandidatePermitFactoryTest extends MockeryTestCase
 {
     public function testCreate(): void
     {

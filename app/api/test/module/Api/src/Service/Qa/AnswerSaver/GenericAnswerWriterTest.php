@@ -22,16 +22,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class GenericAnswerWriterTest extends MockeryTestCase
+final class GenericAnswerWriterTest extends MockeryTestCase
 {
-    /**
-     * @var string
-     */
-    public $questionType;
-    private $questionId;
-
-    private $qaEntityId;
-
     private $answerValue;
 
     private $answer;
@@ -42,8 +34,6 @@ class GenericAnswerWriterTest extends MockeryTestCase
 
     private $question;
 
-    private $applicationStep;
-
     private $qaEntity;
 
     private $qaContext;
@@ -52,13 +42,14 @@ class GenericAnswerWriterTest extends MockeryTestCase
 
     private $genericAnswerWriter;
 
+    #[\Override]
     public function setUp(): void
     {
-        $this->questionId = 43;
+        $questionId = 43;
 
-        $this->questionType = Question::QUESTION_TYPE_STRING;
+        $questionType = Question::QUESTION_TYPE_STRING;
 
-        $this->qaEntityId = 47;
+        $qaEntityId = 47;
 
         $this->answerValue = 866;
 
@@ -70,8 +61,8 @@ class GenericAnswerWriterTest extends MockeryTestCase
 
         $this->question = m::mock(Question::class);
 
-        $this->applicationStep = m::mock(ApplicationStep::class);
-        $this->applicationStep->shouldReceive('getQuestion')
+        $applicationStep = m::mock(ApplicationStep::class);
+        $applicationStep->shouldReceive('getQuestion')
             ->withNoArgs()
             ->andReturn($this->question);
 
@@ -83,7 +74,7 @@ class GenericAnswerWriterTest extends MockeryTestCase
         $this->qaContext = m::mock(QaContext::class);
         $this->qaContext->shouldReceive('getApplicationStepEntity')
             ->withNoArgs()
-            ->andReturn($this->applicationStep);
+            ->andReturn($applicationStep);
         $this->qaContext->shouldReceive('getQaEntity')
             ->withNoArgs()
             ->andReturn($this->qaEntity);
@@ -162,13 +153,11 @@ class GenericAnswerWriterTest extends MockeryTestCase
         );
     }
 
-    public static function dpForceQuestionType(): array
+    public static function dpForceQuestionType(): \Iterator
     {
-        return [
-            [Question::QUESTION_TYPE_INTEGER, null, Question::QUESTION_TYPE_INTEGER],
-            [Question::QUESTION_TYPE_STRING, null, Question::QUESTION_TYPE_STRING],
-            [Question::QUESTION_TYPE_STRING, Question::QUESTION_TYPE_INTEGER, Question::QUESTION_TYPE_INTEGER],
-            [Question::QUESTION_TYPE_STRING, Question::QUESTION_TYPE_BOOLEAN, Question::QUESTION_TYPE_BOOLEAN],
-        ];
+        yield [Question::QUESTION_TYPE_INTEGER, null, Question::QUESTION_TYPE_INTEGER];
+        yield [Question::QUESTION_TYPE_STRING, null, Question::QUESTION_TYPE_STRING];
+        yield [Question::QUESTION_TYPE_STRING, Question::QUESTION_TYPE_INTEGER, Question::QUESTION_TYPE_INTEGER];
+        yield [Question::QUESTION_TYPE_STRING, Question::QUESTION_TYPE_BOOLEAN, Question::QUESTION_TYPE_BOOLEAN];
     }
 }

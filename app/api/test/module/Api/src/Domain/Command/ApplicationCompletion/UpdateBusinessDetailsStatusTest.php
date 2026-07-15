@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateBusinessDetailsStat
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateBusinessDetailsStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateBusinessDetailsStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

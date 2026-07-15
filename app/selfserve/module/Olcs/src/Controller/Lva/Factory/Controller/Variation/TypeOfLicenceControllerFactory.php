@@ -21,7 +21,7 @@ class TypeOfLicenceControllerFactory implements FactoryInterface
      * @return TypeOfLicenceController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TypeOfLicenceController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TypeOfLicenceController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

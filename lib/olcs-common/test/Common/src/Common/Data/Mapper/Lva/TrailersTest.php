@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * Trailers Test
+ *
+ * @author Rob Caiger <rob@clocal.co.uk>
+ */
+
+declare(strict_types=1);
+
+namespace CommonTest\Data\Mapper\Lva;
+
+use Common\Data\Mapper\Lva\Trailers;
+
+/**
+ * Trailers Test
+ *
+ * @author Rob Caiger <rob@clocal.co.uk>
+ */
+final class TrailersTest extends \PHPUnit\Framework\TestCase
+{
+    public function testMapFromResult(): void
+    {
+        $data = [
+            'organisation' => [
+                'confirmShareTrailerInfo' => 'Y'
+            ]
+        ];
+
+        $expected = [
+            'trailers' => [
+                'shareInfo' => 'Y'
+            ]
+        ];
+
+        $this->assertEquals($expected, Trailers::mapFromResult($data));
+    }
+}

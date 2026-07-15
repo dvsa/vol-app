@@ -20,7 +20,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class Schedule41CancelTest extends AbstractCommandHandlerTestCase
+final class Schedule41CancelTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

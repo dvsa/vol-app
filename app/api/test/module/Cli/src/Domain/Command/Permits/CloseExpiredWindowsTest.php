@@ -10,7 +10,7 @@ use Dvsa\Olcs\Cli\Domain\Command\Permits\CloseExpiredWindows;
  * Close expired windows test
  *
  */
-class CloseExpiredWindowsTest extends \PHPUnit\Framework\TestCase
+final class CloseExpiredWindowsTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {
@@ -20,6 +20,6 @@ class CloseExpiredWindowsTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals('TEST', $sut->getSince());
+        $this->assertEquals('TEST', $sut->getSince());
     }
 }

@@ -25,7 +25,7 @@ use Mockery as m;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class InformationCompleteTest extends AbstractCommandHandlerTestCase
+final class InformationCompleteTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

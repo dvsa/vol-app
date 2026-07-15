@@ -8,14 +8,10 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 
 /**
  * LicenceNoGen Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="licence_no_gen",
- *    indexes={
- *        @ORM\Index(name="ix_licence_no_gen_licence_id", columns={"licence_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'licence_no_gen')]
+#[ORM\Index(name: 'ix_licence_no_gen_licence_id', columns: ['licence_id'])]
+#[ORM\Entity]
 class LicenceNoGen extends AbstractLicenceNoGen
 {
     public function __construct(Licence $licence)

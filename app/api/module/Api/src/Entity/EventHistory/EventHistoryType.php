@@ -6,10 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * EventHistoryType Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="event_history_type")
  */
+#[ORM\Table(name: 'event_history_type')]
+#[ORM\Entity]
 class EventHistoryType extends AbstractEventHistoryType
 {
     public const EVENT_CODE_PASSWORD_RESET = 'PWR';

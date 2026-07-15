@@ -18,7 +18,7 @@ use ReflectionClass;
 /**
  * @see QueryHandler
  */
-class UserListTest extends QueryHandlerTestCase
+final class UserListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -59,13 +59,11 @@ class UserListTest extends QueryHandlerTestCase
         $this->assertSame('COUNT', $result['count']);
     }
 
-    public static function handleQueryProvider(): array
+    public static function handleQueryProvider(): \Iterator
     {
-        return [
-            'not internal and does not have full access' => [false, false, ['QUERY']],
-            'is internal and does have full access' => [true, true, ['QUERY']],
-            'is internal and has an org id' => [true, true, ['organisation' => 888]],
-        ];
+        yield 'not internal and does not have full access' => [false, false, ['QUERY']];
+        yield 'is internal and does have full access' => [true, true, ['QUERY']];
+        yield 'is internal and has an org id' => [true, true, ['organisation' => 888]];
     }
 
     public function testRedirectWhenInternalAndNotFullAccess(): void

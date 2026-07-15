@@ -13,7 +13,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 /**
  * BusRegBrowseContextList test
  */
-class BusRegBrowseContextListTest extends QueryHandlerTestCase
+final class BusRegBrowseContextListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

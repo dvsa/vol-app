@@ -94,9 +94,6 @@ abstract class AbstractQueryByIdHandlerTestCase extends QueryHandlerTestCase
             ->once()
             ->andReturn($mockEntity)->getMock();
 
-        self::assertSame(
-            $resultArray,
-            $this->sut->handleQuery($query)->serialize()
-        );
+        $this->assertSame($resultArray, $this->sut->handleQuery($query)->serialize());
     }
 }

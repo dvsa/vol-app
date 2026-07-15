@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Logging\Log;
 
 use Mockery as m;
@@ -8,10 +10,11 @@ use Olcs\Logging\Log\Logger;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
-class LoggerTest extends MockeryTestCase
+final class LoggerTest extends MockeryTestCase
 {
     private $logger;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->logger = m::mock(LoggerInterface::class);

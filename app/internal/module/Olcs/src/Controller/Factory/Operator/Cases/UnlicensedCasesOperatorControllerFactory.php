@@ -26,7 +26,7 @@ class UnlicensedCasesOperatorControllerFactory implements FactoryInterface
      * @return UnlicensedCasesOperatorController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): UnlicensedCasesOperatorController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): UnlicensedCasesOperatorController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);

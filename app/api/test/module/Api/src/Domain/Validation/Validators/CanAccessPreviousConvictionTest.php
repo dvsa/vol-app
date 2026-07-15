@@ -13,7 +13,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CanAccessPreviousConvictionTest extends AbstractValidatorsTestCase
+final class CanAccessPreviousConvictionTest extends AbstractValidatorsTestCase
 {
     /**
      * @var CanAccessPreviousConviction
@@ -60,11 +60,9 @@ class CanAccessPreviousConvictionTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid(111));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false]
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

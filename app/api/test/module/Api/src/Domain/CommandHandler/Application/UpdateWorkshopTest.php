@@ -24,7 +24,7 @@ use Dvsa\Olcs\Transfer\Command\Workshop\UpdateWorkshop as WorkshopUpdateWorkshop
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateWorkshopTest extends AbstractCommandHandlerTestCase
+final class UpdateWorkshopTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

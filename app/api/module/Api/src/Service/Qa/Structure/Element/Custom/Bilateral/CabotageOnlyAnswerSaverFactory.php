@@ -18,7 +18,7 @@ class CabotageOnlyAnswerSaverFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CabotageOnlyAnswerSaver
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CabotageOnlyAnswerSaver
     {
         return new CabotageOnlyAnswerSaver(
             $container->get('QaBilateralCountryDeletingAnswerSaver')

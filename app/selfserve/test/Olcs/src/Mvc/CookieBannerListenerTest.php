@@ -26,7 +26,7 @@ use Laminas\Router\Http\RouteMatch;
 use Laminas\View\Helper\Placeholder;
 use Laminas\View\Helper\Placeholder\Container\AbstractContainer;
 
-class CookieBannerListenerTest extends MockeryTestCase
+final class CookieBannerListenerTest extends MockeryTestCase
 {
     private $acceptAllSetCookieGenerator;
     private $bannerVisibilityProvider;
@@ -36,6 +36,7 @@ class CookieBannerListenerTest extends MockeryTestCase
     /** @var CookieBannerListener */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->acceptAllSetCookieGenerator = m::mock(AcceptAllSetCookieGenerator::class);
@@ -203,11 +204,9 @@ class CookieBannerListenerTest extends MockeryTestCase
         $this->sut->onRoute($event);
     }
 
-    public static function provideBannerVisibilityScenarios(): array
+    public static function provideBannerVisibilityScenarios(): \Iterator
     {
-        return [
-            'banner visible' => [true, 'banner'],
-            'banner hidden' => [false, ''],
-        ];
+        yield 'banner visible' => [true, 'banner'];
+        yield 'banner hidden' => [false, ''];
     }
 }

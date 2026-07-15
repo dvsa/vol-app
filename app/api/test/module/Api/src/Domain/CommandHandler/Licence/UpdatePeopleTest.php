@@ -12,10 +12,10 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Licence\UpdatePeople::class)]
-class UpdatePeopleTest extends AbstractCommandHandlerTestCase
+final class UpdatePeopleTest extends AbstractCommandHandlerTestCase
 {
-    public const PERSON_ID = 7001;
-    public const VERSION = 666;
+    public const int PERSON_ID = 7001;
+    public const int VERSION = 666;
 
     /** @var  UpdatePeople */
     protected $sut;
@@ -110,7 +110,7 @@ class UpdatePeopleTest extends AbstractCommandHandlerTestCase
             ->twice()
             ->andReturnUsing(
                 function (Entity\Organisation\OrganisationPerson $orgPerson) use ($data) {
-                    static::assertSame($data['position'], $orgPerson->getPosition());
+                    $this->assertSame($data['position'], $orgPerson->getPosition());
                 }
             );
 

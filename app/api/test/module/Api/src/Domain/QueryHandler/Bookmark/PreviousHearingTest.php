@@ -18,7 +18,7 @@ use Dvsa\Olcs\Api\Entity\Pi\PiHearing as Entity;
 /**
  * Previous Hearing Bundle Test
  */
-class PreviousHearingTest extends QueryHandlerTestCase
+final class PreviousHearingTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

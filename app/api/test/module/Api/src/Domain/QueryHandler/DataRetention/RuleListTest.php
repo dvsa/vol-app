@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * Rule List Test
  */
-class RuleListTest extends QueryHandlerTestCase
+final class RuleListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

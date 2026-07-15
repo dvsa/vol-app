@@ -9,16 +9,15 @@ use Dvsa\Olcs\Api\Entity\Types\DateType;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Types\DateType
- */
-class DateTypeTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Types\DateType::class)]
+final class DateTypeTest extends MockeryTestCase
 {
     /** @var  DateType */
     private $sut;
     /** @var  AbstractPlatform | m\MockInterface */
     private $mockPlatform;
 
+    #[\Override]
     public function setUp(): void
     {
         DateType::overrideType('datetime', DateType::class);
@@ -48,24 +47,22 @@ class DateTypeTest extends MockeryTestCase
 
         $actual = $this->sut->convertToPHPValue($value, $this->mockPlatform);
 
-        static::assertEquals($expect, $actual);
+        $this->assertEquals($expect, $actual);
     }
 
-    public static function dpTestConvertToPhpValue(): array
+    public static function dpTestConvertToPhpValue(): \Iterator
     {
-        return [
-            [
-                'value' => null,
-                'expect' => null,
-            ],
-            [
-                'value' => new \DateTime('@1146711721'),
-                'expect' => '2006-05-04',
-            ],
-            [
-                'value' => '04-05-2016',
-                'expect' => '2016-05-04',
-            ],
+        yield [
+            'value' => null,
+            'expect' => null,
+        ];
+        yield [
+            'value' => new \DateTime('@1146711721'),
+            'expect' => '2006-05-04',
+        ];
+        yield [
+            'value' => '04-05-2016',
+            'expect' => '2016-05-04',
         ];
     }
 
@@ -82,24 +79,22 @@ class DateTypeTest extends MockeryTestCase
 
         $actual = $this->sut->convertToDatabaseValue($value, $mockPlatform);
 
-        static::assertEquals($expect, $actual);
+        $this->assertEquals($expect, $actual);
     }
 
-    public static function dpTestConvertToDatabaseValue(): array
+    public static function dpTestConvertToDatabaseValue(): \Iterator
     {
-        return [
-            [
-                'value' => null,
-                'expect' => null,
-            ],
-            [
-                'value' => '@1146711721',
-                'expect' => '04-05-2006',
-            ],
-            [
-                'value' => new \DateTime('2013-12-11'),
-                'expect' => '11-12-2013',
-            ],
+        yield [
+            'value' => null,
+            'expect' => null,
+        ];
+        yield [
+            'value' => '@1146711721',
+            'expect' => '04-05-2006',
+        ];
+        yield [
+            'value' => new \DateTime('2013-12-11'),
+            'expect' => '11-12-2013',
         ];
     }
 }

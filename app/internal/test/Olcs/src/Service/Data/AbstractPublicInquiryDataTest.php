@@ -8,17 +8,16 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Data\AbstractPublicInquiryData;
 
-/**
- * @covers Olcs\Service\Data\AbstractPublicInquiryData
- */
-class AbstractPublicInquiryDataTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\AbstractPublicInquiryData::class)]
+final class AbstractPublicInquiryDataTest extends MockeryTestCase
 {
-    public const LIC_ID = 9999;
-    public const APP_ID = 8888;
+    public const int LIC_ID = 9999;
+    public const int APP_ID = 8888;
 
     /** @var  m\MockInterface | AbstractPublicInquiryData */
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(AbstractPublicInquiryData::class)
@@ -71,7 +70,7 @@ class AbstractPublicInquiryDataTest extends MockeryTestCase
         //  call & check
         $actual = $this->sut->fetchListOptions(null);
 
-        static::assertEquals([], $actual);
+        $this->assertEquals([], $actual);
     }
 
     public function testFetchListOptionsEmptyLicenceId(): void
@@ -104,7 +103,7 @@ class AbstractPublicInquiryDataTest extends MockeryTestCase
         //  call & check
         $actual = $this->sut->fetchListOptions($ctx);
 
-        static::assertEquals('EXPECT', $actual);
+        $this->assertEquals('EXPECT', $actual);
     }
 
     public function testFetchListOptionsEmptyLicenceIdUseGroup(): void
@@ -133,6 +132,6 @@ class AbstractPublicInquiryDataTest extends MockeryTestCase
         //  call & check
         $actual = $this->sut->fetchListOptions(null, true);
 
-        static::assertEquals('EXPECT', $actual);
+        $this->assertEquals('EXPECT', $actual);
     }
 }

@@ -21,17 +21,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="public_holiday",
- *    indexes={
- *        @ORM\Index(name="ix_public_holiday_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_public_holiday_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_public_holiday_public_holiday_date", columns={"public_holiday_date"})
- *    }
- * )
  */
+#[ORM\Table(name: 'public_holiday')]
+#[ORM\Index(name: 'ix_public_holiday_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_public_holiday_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_public_holiday_public_holiday_date', columns: ['public_holiday_date'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractPublicHoliday implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -44,88 +40,79 @@ abstract class AbstractPublicHoliday implements BundleSerializableInterface, Jso
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Public holiday date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="public_holiday_date", nullable=false)
      */
+    #[ORM\Column(type: 'date', name: 'public_holiday_date', nullable: false)]
     protected $publicHolidayDate;
 
     /**
      * isEngland
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_england", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'is_england', nullable: true)]
     protected $isEngland;
 
     /**
      * isWales
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_wales", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'is_wales', nullable: true)]
     protected $isWales;
 
     /**
      * isScotland
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_scotland", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'is_scotland', nullable: true)]
     protected $isScotland;
 
     /**
      * isNi
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_ni", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'is_ni', nullable: true)]
     protected $isNi;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

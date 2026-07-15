@@ -12,7 +12,7 @@ use Mockery as m;
  * Class ContinuationDigitalReminderTest
  * @package Dvsa\OlcsTest\Cli\Service\Queue\Consumer
  */
-class ContinuationDigitalReminderTest extends AbstractConsumerTestCase
+final class ContinuationDigitalReminderTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = ContinuationDigitalReminder::class;
 

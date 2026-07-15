@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\NotIsAnonymousUser;
 /**
  * Not ss Anonymous User Test
  */
-class NotIsAnonymousUserTest extends AbstractHandlerTestCase
+final class NotIsAnonymousUserTest extends AbstractHandlerTestCase
 {
     /**
      * @var NotIsAnonymousUser
@@ -49,13 +49,11 @@ class NotIsAnonymousUserTest extends AbstractHandlerTestCase
     /**
      * Returns true or false based on whether user is anonymous
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isAnonymousUserProvider(): array
+    public static function isAnonymousUserProvider(): \Iterator
     {
-        return[
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 }

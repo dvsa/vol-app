@@ -8,7 +8,7 @@ use Dvsa\Olcs\Email\View\NotifyChrome;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 use PHPUnit\Framework\TestCase;
 
-class NotifyChromeTest extends TestCase
+final class NotifyChromeTest extends TestCase
 {
     public function testTemplateContainsRequiredPlaceholders(): void
     {

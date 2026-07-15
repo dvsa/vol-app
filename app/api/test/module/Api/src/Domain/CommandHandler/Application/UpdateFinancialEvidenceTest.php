@@ -25,7 +25,7 @@ use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class UpdateFinancialEvidenceTest extends AbstractCommandHandlerTestCase
+final class UpdateFinancialEvidenceTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

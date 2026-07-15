@@ -26,7 +26,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class SelfservePageGeneratorTest extends MockeryTestCase
+final class SelfservePageGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

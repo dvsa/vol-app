@@ -21,16 +21,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irfo_country",
- *    indexes={
- *        @ORM\Index(name="ix_irfo_country_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_irfo_country_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irfo_country')]
+#[ORM\Index(name: 'ix_irfo_country_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_irfo_country_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrfoCountry implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -43,52 +39,47 @@ abstract class AbstractIrfoCountry implements BundleSerializableInterface, JsonS
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=100, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 100, nullable: false)]
     protected $description = '';
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

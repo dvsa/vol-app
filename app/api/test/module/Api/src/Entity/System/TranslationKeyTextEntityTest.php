@@ -15,7 +15,7 @@ use Mockery as m;
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class TranslationKeyTextEntityTest extends EntityTester
+final class TranslationKeyTextEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

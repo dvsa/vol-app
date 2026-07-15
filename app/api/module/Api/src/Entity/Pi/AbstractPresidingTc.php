@@ -20,15 +20,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="presiding_tc",
- *    indexes={
- *        @ORM\Index(name="presiding_tc_user_id_fk", columns={"user_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'presiding_tc')]
+#[ORM\Index(name: 'presiding_tc_user_id_fk', columns: ['user_id'])]
+#[ORM\MappedSuperclass]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractPresidingTc implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -40,30 +36,27 @@ abstract class AbstractPresidingTc implements BundleSerializableInterface, JsonS
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * User
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 
     /**
      * Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=70, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 70, nullable: false)]
     protected $name = '';
 
     /**

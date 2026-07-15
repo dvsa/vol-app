@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_operating_centre;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_operating_centre()
@@ -23,30 +22,28 @@ BEGIN
 
     SELECT COUNT(*)
     INTO @total
-    FROM operating_centre
-    WHERE id NOT IN (
-        SELECT operating_centre_id
-        FROM application_operating_centre)
-    AND id NOT IN ( 
-        SELECT operating_centre_id
-        FROM licence_operating_centre);
+    FROM operating_centre oc
+    LEFT JOIN application_operating_centre aoc ON oc.id = aoc.operating_centre_id
+    LEFT JOIN licence_operating_centre loc     ON oc.id = loc.operating_centre_id
+    WHERE aoc.operating_centre_id IS NULL
+      AND loc.operating_centre_id IS NULL;
 
     SELECT CONCAT(@total,' operating_centre rows to delete.') AS ''; 
     
     SET @total:=0;
     SET @rowcount:=10000;
     
+    START TRANSACTION;
+
     WHILE(@rowcount = 10000) DO
 
 
 
-        DELETE FROM operating_centre
-        WHERE id NOT IN (
-            SELECT operating_centre_id
-            FROM application_operating_centre)
-        AND id NOT IN ( 
-            SELECT operating_centre_id
-            FROM licence_operating_centre)
+        DELETE oc FROM operating_centre oc
+        LEFT JOIN application_operating_centre aoc ON oc.id = aoc.operating_centre_id
+        LEFT JOIN licence_operating_centre loc     ON oc.id = loc.operating_centre_id
+        WHERE aoc.operating_centre_id IS NULL
+          AND loc.operating_centre_id IS NULL
         LIMIT 10000;
     
         SET @rowcount := row_count();
@@ -56,13 +53,15 @@ BEGIN
     
         SELECT CONCAT(@total,' operating_centre rows deleted.') AS '';
 
+        COMMIT;
+        START TRANSACTION;
+
     END WHILE;
+
+    COMMIT;
 
     SELECT CONCAT('delete operating_centre finished at ',now()) AS '' ; 
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

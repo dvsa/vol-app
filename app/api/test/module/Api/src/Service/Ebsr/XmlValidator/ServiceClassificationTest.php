@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase as TestCase;
  * Class ServiceClassificationTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\XmlValidator
  */
-class ServiceClassificationTest extends TestCase
+final class ServiceClassificationTest extends TestCase
 {
     /**
      * @param $xml
@@ -28,7 +28,7 @@ class ServiceClassificationTest extends TestCase
         $this->assertEquals($valid, $sut->isValid($dom));
     }
 
-    public static function isValidProvider(): array
+    public static function isValidProvider(): \Iterator
     {
         $multiServiceXml = '
             <Services>
@@ -43,12 +43,9 @@ class ServiceClassificationTest extends TestCase
                 <Service></Service>
             </Services>
         ';
-
-        return [
-            ['<Service></Service>', false],
-            ['<Service><ServiceClassification></ServiceClassification></Service>', true],
-            [$multiServiceXml, true],
-            [$multiServiceXmlInvalid, false]
-        ];
+        yield ['<Service></Service>', false];
+        yield ['<Service><ServiceClassification></ServiceClassification></Service>', true];
+        yield [$multiServiceXml, true];
+        yield [$multiServiceXmlInvalid, false];
     }
 }

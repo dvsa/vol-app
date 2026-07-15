@@ -1,0 +1,236 @@
+{
+  "Comment": "Document Classification using a cheap Claude model on Bedrock (replaces Textract Lending Analysis). A single Lambda (classify-document) does GetObject -> base64 -> Bedrock InvokeModel -> forced-tool classification, because Bedrock requires inline base64 PDFs which exceed the Step Functions 256KB state limit. The Lambda returns the same verdict shape the old Textract JSONata produced (dominant classified type + confidence + pageBreakdown), so the DocumentProcessing-Classified event and all downstream routing are unchanged.",
+  "StartAt": "FilterByCurrentYearMonth",
+  "TimeoutSeconds": 900,
+  "States": {
+    "FilterByCurrentYearMonth": {
+      "Type": "Choice",
+      "QueryLanguage": "JSONata",
+      "Comment": "Dynamic year/month gate. $now() returns an ISO 8601 timestamp at execution time (e.g. '2026-07-03T15:00:00Z'), so $substring($now(),0,4) & '/' & $substring($now(),5,2) yields the current 'YYYY/MM'. $contains() checks the uploaded key includes that segment. Documents outside the current month's path (uploaded to an old or future path) succeed immediately with no classification — no event, no cost. This requires zero Terraform re-applies as the month or year rolls over.",
+      "Choices": [
+        {
+          "Condition": "{% $contains($states.input.key, $substring($now(), 0, 4) & '/' & $substring($now(), 5, 2)) %}",
+          "Next": "HeadObject"
+        }
+      ],
+      "Default": "SkipOutOfWindowDocument"
+    },
+    "SkipOutOfWindowDocument": {
+      "Type": "Succeed",
+      "Comment": "Document key does not contain the current YYYY/MM segment. Not an error — it is simply outside the active processing window. No classification, no event emitted."
+    },
+    "HeadObject": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:s3:headObject",
+      "Parameters": {
+        "Bucket.$": "$.bucket",
+        "Key.$": "$.key"
+      },
+      "ResultPath": "$.head",
+      "Next": "IsSupportedContentType",
+      "Retry": [
+        {
+          "ErrorEquals": ["S3.ServiceException", "ThrottlingException"],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "EmitClassificationFailedEvent"
+        }
+      ]
+    },
+    "IsSupportedContentType": {
+      "Type": "Choice",
+      "Comment": "PDF-only. JPEG/PNG/etc are normalised to PDF upstream by the signed X->PDF converter, so anything that isn't application/pdf here is unexpected and is rejected with a typed event.",
+      "Choices": [
+        {
+          "Variable": "$.head.ContentType",
+          "StringMatches": "application/pdf",
+          "Next": "ClassifyDocument"
+        }
+      ],
+      "Default": "EmitUnsupportedEvent"
+    },
+    "ClassifyDocument": {
+      "Type": "Task",
+      "Comment": "Invokes the classify-document Lambda. The Lambda HeadObjects for a size pre-flight (refuses docs too large to send inline, throwing DocumentTooLargeForInlineClassification), then GetObject -> base64 -> Bedrock InvokeModel with a forced submit_classification tool, and computes the dominant type/confidence in JS mirroring the prior JSONata.",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${CLASSIFY_DOCUMENT_LAMBDA_ARN}",
+        "Payload": {
+          "bucket.$": "$.bucket",
+          "key.$": "$.key"
+        }
+      },
+      "ResultSelector": {
+        "verdict.$": "$.Payload"
+      },
+      "ResultPath": "$.cls",
+      "Next": "NormalizeClassification",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "EmitClassificationFailedEvent"
+        }
+      ]
+    },
+    "NormalizeClassification": {
+      "Type": "Pass",
+      "Comment": "Lifts the Lambda verdict and the carried-through routing fields into a flat shape, dropping the model's token usage so state stays small. documentSizeBytes comes from the EventBridge object.size, as before. modelId replaces the old textractJobId diagnostic field.",
+      "Parameters": {
+        "bucket.$": "$.bucket",
+        "key.$": "$.key",
+        "object.$": "$.object",
+        "config.$": "$.config",
+        "classification.$": "$.cls.verdict.classification",
+        "classificationConfidence.$": "$.cls.verdict.classificationConfidence",
+        "totalPages.$": "$.cls.verdict.totalPages",
+        "classifiedPages.$": "$.cls.verdict.classifiedPages",
+        "dominantTypePages.$": "$.cls.verdict.dominantTypePages",
+        "pageBreakdown.$": "$.cls.verdict.pageBreakdown",
+        "documentSizeBytes.$": "$.object.size",
+        "modelId.$": "$.cls.verdict.modelId"
+      },
+      "Next": "GetExistingTags"
+    },
+    "GetExistingTags": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:s3:getObjectTagging",
+      "Parameters": {
+        "Bucket.$": "$.bucket",
+        "Key.$": "$.key"
+      },
+      "ResultPath": "$.existingTags",
+      "Next": "BuildUpdatedTagSet"
+    },
+    "BuildUpdatedTagSet": {
+      "Type": "Pass",
+      "QueryLanguage": "JSONata",
+      "Comment": "Appends the Classification tag to whatever existing tags are present, replacing any existing Classification tag to avoid duplicates. Uses JSONata $append so the merged array length is always existingTags.length + 1 (no hardcoded index slots).",
+      "Output": {
+        "bucket": "{% $states.input.bucket %}",
+        "key": "{% $states.input.key %}",
+        "object": "{% $states.input.object %}",
+        "config": "{% $states.input.config %}",
+        "classification": "{% $states.input.classification %}",
+        "classificationConfidence": "{% $states.input.classificationConfidence %}",
+        "totalPages": "{% $states.input.totalPages %}",
+        "classifiedPages": "{% $states.input.classifiedPages %}",
+        "dominantTypePages": "{% $states.input.dominantTypePages %}",
+        "pageBreakdown": "{% $states.input.pageBreakdown %}",
+        "documentSizeBytes": "{% $states.input.documentSizeBytes %}",
+        "modelId": "{% $states.input.modelId %}",
+        "mergedTags": "{% $append($filter($states.input.existingTags.TagSet, function($t){ $t.Key != 'Classification' }), [{'Key': 'Classification', 'Value': $states.input.classification}]) %}"
+      },
+      "Next": "TagWithClassification"
+    },
+    "TagWithClassification": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:s3:putObjectTagging",
+      "Parameters": {
+        "Bucket.$": "$.bucket",
+        "Key.$": "$.key",
+        "Tagging": {
+          "TagSet.$": "$.mergedTags"
+        }
+      },
+      "ResultPath": null,
+      "Next": "EmitClassifiedEvent",
+      "Retry": [
+        {
+          "ErrorEquals": ["S3.ServiceException", "ThrottlingException"],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ]
+    },
+    "EmitClassifiedEvent": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "bucket.$": "$.bucket",
+              "key.$": "$.key",
+              "object.$": "$.object",
+              "config.$": "$.config",
+              "classification.$": "$.classification",
+              "classificationConfidence.$": "$.classificationConfidence",
+              "totalPages.$": "$.totalPages",
+              "classifiedPages.$": "$.classifiedPages",
+              "dominantTypePages.$": "$.dominantTypePages",
+              "pageBreakdown.$": "$.pageBreakdown",
+              "documentSizeBytes.$": "$.documentSizeBytes",
+              "modelId.$": "$.modelId"
+            },
+            "DetailType": "DocumentProcessing-Classified",
+            "Source": "custom.documentProcessing"
+          }
+        ]
+      },
+      "End": true
+    },
+    "EmitUnsupportedEvent": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "bucket.$": "$.bucket",
+              "key.$": "$.key",
+              "object.$": "$.object",
+              "config.$": "$.config",
+              "reason": "Unsupported content type",
+              "contentType.$": "$.head.ContentType"
+            },
+            "DetailType": "DocumentProcessing-ClassificationFailed",
+            "Source": "custom.documentProcessing"
+          }
+        ]
+      },
+      "End": true
+    },
+    "EmitClassificationFailedEvent": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "bucket.$": "$.bucket",
+              "key.$": "$.key",
+              "object.$": "$.object",
+              "config.$": "$.config",
+              "reason": "Classification processing failed"
+            },
+            "DetailType": "DocumentProcessing-ClassificationFailed",
+            "Source": "custom.documentProcessing"
+          }
+        ]
+      },
+      "End": true
+    }
+  }
+}

@@ -13,7 +13,7 @@ use Laminas\View\HelperPluginManager;
 class CompaniesHouseAlertControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CompaniesHouseAlertController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CompaniesHouseAlertController
     {
         $translationHelperService = $container->get(TranslationHelperService::class);
         assert($translationHelperService instanceof TranslationHelperService);

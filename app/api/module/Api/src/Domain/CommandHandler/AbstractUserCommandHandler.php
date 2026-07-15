@@ -57,7 +57,7 @@ abstract class AbstractUserCommandHandler extends AbstractCommandHandler impleme
      * @return bool
      * @throws ValidationException
      */
-    protected function validateRoles(array $new, array $current = null): bool
+    protected function validateRoles(array $new, ?array $current = null): bool
     {
         // convert to list of roles
         $current = isset($current) ? array_map(

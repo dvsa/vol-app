@@ -25,7 +25,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\Olcs\Api\Domain\Service\OperatingCentreHelper;
 use Laminas\ServiceManager\ServiceLocatorInterface;
 
-class OperatingCentreHelperTest extends MockeryTestCase
+final class OperatingCentreHelperTest extends MockeryTestCase
 {
     protected OperatingCentreHelper $sut;
 
@@ -35,6 +35,7 @@ class OperatingCentreHelperTest extends MockeryTestCase
 
     protected m\MockInterface|TrafficAreaValidator $trafficAreaValidator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->addressService = m::mock(AddressHelperService::class);
@@ -551,220 +552,216 @@ class OperatingCentreHelperTest extends MockeryTestCase
 
         $this->assertEquals(ApplicationOperatingCentre::AD_UPLOAD_NOW, $loc->getAdPlaced());
         $this->assertEquals('Foo', $loc->getAdPlacedIn());
-        $this->assertEquals('2015-01-01', $loc->getAdPlacedDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $loc->getAdPlacedDate()->format('Y-m-d'));
     }
 
-    public static function validateWithErrors(): array
+    public static function validateWithErrors(): \Iterator
     {
-        return [
+        yield [
+            true,
+            false,
             [
-                true,
-                false,
-                [
-                    'noOfVehiclesRequired' => 0
-                ],
-                [
-                    'noOfVehiclesRequired' => [
-                        [
-                            'ERR_OC_VR_1B' => 'ERR_OC_VR_1B'
-                        ]
-                    ]
-                ]
+                'noOfVehiclesRequired' => 0
             ],
             [
-                true,
-                true,
-                [
-                    'noOfVehiclesRequired' => 3
-                ],
-                [
-                    'noOfVehiclesRequired' => [
-                        [
-                            'ERR_OC_R_1' => 'ERR_OC_R_1'
-                        ]
+                'noOfVehiclesRequired' => [
+                    [
+                        'ERR_OC_VR_1B' => 'ERR_OC_VR_1B'
                     ]
                 ]
+            ]
+        ];
+        yield [
+            true,
+            true,
+            [
+                'noOfVehiclesRequired' => 3
             ],
             [
-                false,
-                false,
-                [
-                    'noOfVehiclesRequired' => 0,
-                    'noOfTrailersRequired' => 0,
-                    'adPlaced' => ApplicationOperatingCentre::AD_POST
-                ],
-                [
-                    'noOfVehiclesRequired' => [
-                        [
-                            'ERR_OC_VR_1A' => 'ERR_OC_VR_1A'
-                        ]
-                    ],
-                    'noOfTrailersRequired' => [
-                        [
-                            'ERR_OC_VR_1A' => 'ERR_OC_VR_1A'
-                        ]
+                'noOfVehiclesRequired' => [
+                    [
+                        'ERR_OC_R_1' => 'ERR_OC_R_1'
                     ]
                 ]
+            ]
+        ];
+        yield [
+            false,
+            false,
+            [
+                'noOfVehiclesRequired' => 0,
+                'noOfTrailersRequired' => 0,
+                'adPlaced' => ApplicationOperatingCentre::AD_POST
             ],
             [
-                false,
-                false,
-                [
-                    'noOfVehiclesRequired' => 0,
-                    'noOfTrailersRequired' => 1,
-                    'adPlaced' => ApplicationOperatingCentre::AD_UPLOAD_NOW,
-                    'adPlacedIn' => '',
-                    'adPlacedDate' => ''
+                'noOfVehiclesRequired' => [
+                    [
+                        'ERR_OC_VR_1A' => 'ERR_OC_VR_1A'
+                    ]
                 ],
-                [
-                    'adPlacedIn' => [
-                        [
-                            'ERR_OC_AD_IN_1' => 'ERR_OC_AD_IN_1'
-                        ]
-                    ],
-                    'adPlacedDate' => [
-                        [
-                            'ERR_OC_AD_DT_1' => 'ERR_OC_AD_DT_1'
-                        ]
+                'noOfTrailersRequired' => [
+                    [
+                        'ERR_OC_VR_1A' => 'ERR_OC_VR_1A'
                     ]
                 ]
+            ]
+        ];
+        yield [
+            false,
+            false,
+            [
+                'noOfVehiclesRequired' => 0,
+                'noOfTrailersRequired' => 1,
+                'adPlaced' => ApplicationOperatingCentre::AD_UPLOAD_NOW,
+                'adPlacedIn' => '',
+                'adPlacedDate' => ''
             ],
             [
-                false,
-                false,
-                [
-                    'noOfVehiclesRequired' => 0,
-                    'noOfTrailersRequired' => 1,
-                    'adPlaced' => ApplicationOperatingCentre::AD_UPLOAD_NOW,
-                    'adPlacedIn' => 'sasdasd',
-                    'adPlacedDate' => 'asdsad'
+                'adPlacedIn' => [
+                    [
+                        'ERR_OC_AD_IN_1' => 'ERR_OC_AD_IN_1'
+                    ]
                 ],
-                [
+                'adPlacedDate' => [
+                    [
+                        'ERR_OC_AD_DT_1' => 'ERR_OC_AD_DT_1'
+                    ]
                 ]
+            ]
+        ];
+        yield [
+            false,
+            false,
+            [
+                'noOfVehiclesRequired' => 0,
+                'noOfTrailersRequired' => 1,
+                'adPlaced' => ApplicationOperatingCentre::AD_UPLOAD_NOW,
+                'adPlacedIn' => 'sasdasd',
+                'adPlacedDate' => 'asdsad'
+            ],
+            [
             ]
         ];
     }
 
-    public static function validateWithErrorsExternal(): array
+    public static function validateWithErrorsExternal(): \Iterator
     {
-        return [
+        yield [
+            true,
+            false,
             [
-                true,
-                false,
-                [
-                    'noOfVehiclesRequired' => 0
-                ],
-                [
-                    'noOfVehiclesRequired' => [
-                        [
-                            'ERR_OC_VR_1B' => 'ERR_OC_VR_1B'
-                        ]
-                    ],
-                    'permission' => [
-                        [
-                            'ERR_OC_PERMISSION' => 'ERR_OC_PERMISSION'
-                        ]
-                    ]
-                ]
+                'noOfVehiclesRequired' => 0
             ],
             [
-                true,
-                true,
-                [
-                    'noOfVehiclesRequired' => 3
+                'noOfVehiclesRequired' => [
+                    [
+                        'ERR_OC_VR_1B' => 'ERR_OC_VR_1B'
+                    ]
                 ],
-                [
-                    'noOfVehiclesRequired' => [
-                        [
-                            'ERR_OC_R_1' => 'ERR_OC_R_1'
-                        ]
-                    ],
-                    'permission' => [
-                        [
-                            'ERR_OC_PERMISSION' => 'ERR_OC_PERMISSION'
-                        ]
+                'permission' => [
+                    [
+                        'ERR_OC_PERMISSION' => 'ERR_OC_PERMISSION'
                     ]
                 ]
+            ]
+        ];
+        yield [
+            true,
+            true,
+            [
+                'noOfVehiclesRequired' => 3
             ],
             [
-                false,
-                false,
-                [
-                    'noOfVehiclesRequired' => 0,
-                    'noOfTrailersRequired' => 0,
-                    'adPlaced' => ApplicationOperatingCentre::AD_POST
+                'noOfVehiclesRequired' => [
+                    [
+                        'ERR_OC_R_1' => 'ERR_OC_R_1'
+                    ]
                 ],
-                [
-                    'noOfVehiclesRequired' => [
-                        [
-                            'ERR_OC_VR_1A' => 'ERR_OC_VR_1A'
-                        ]
-                    ],
-                    'noOfTrailersRequired' => [
-                        [
-                            'ERR_OC_VR_1A' => 'ERR_OC_VR_1A'
-                        ]
-                    ],
-                    'permission' => [
-                        [
-                            'ERR_OC_PERMISSION' => 'ERR_OC_PERMISSION'
-                        ]
+                'permission' => [
+                    [
+                        'ERR_OC_PERMISSION' => 'ERR_OC_PERMISSION'
                     ]
                 ]
+            ]
+        ];
+        yield [
+            false,
+            false,
+            [
+                'noOfVehiclesRequired' => 0,
+                'noOfTrailersRequired' => 0,
+                'adPlaced' => ApplicationOperatingCentre::AD_POST
             ],
             [
-                false,
-                false,
-                [
-                    'noOfVehiclesRequired' => 0,
-                    'noOfTrailersRequired' => 1,
-                    'adPlaced' => ApplicationOperatingCentre::AD_UPLOAD_NOW,
-                    'adPlacedIn' => '',
-                    'adPlacedDate' => ''
+                'noOfVehiclesRequired' => [
+                    [
+                        'ERR_OC_VR_1A' => 'ERR_OC_VR_1A'
+                    ]
                 ],
-                [
-                    'adPlacedIn' => [
-                        [
-                            'ERR_OC_AD_IN_1' => 'ERR_OC_AD_IN_1'
-                        ]
-                    ],
-                    'adPlacedDate' => [
-                        [
-                            'ERR_OC_AD_DT_1' => 'ERR_OC_AD_DT_1'
-                        ]
-                    ],
-                    'file' => [
-                        [
-                            'ERR_OC_AD_FI_1' => 'ERR_OC_AD_FI_1'
-                        ]
-                    ],
-                    'permission' => [
-                        [
-                            'ERR_OC_PERMISSION' => 'ERR_OC_PERMISSION'
-                        ]
+                'noOfTrailersRequired' => [
+                    [
+                        'ERR_OC_VR_1A' => 'ERR_OC_VR_1A'
+                    ]
+                ],
+                'permission' => [
+                    [
+                        'ERR_OC_PERMISSION' => 'ERR_OC_PERMISSION'
                     ]
                 ]
+            ]
+        ];
+        yield [
+            false,
+            false,
+            [
+                'noOfVehiclesRequired' => 0,
+                'noOfTrailersRequired' => 1,
+                'adPlaced' => ApplicationOperatingCentre::AD_UPLOAD_NOW,
+                'adPlacedIn' => '',
+                'adPlacedDate' => ''
             ],
             [
-                false,
-                false,
-                [
-                    'noOfVehiclesRequired' => 0,
-                    'noOfTrailersRequired' => 1,
-                    'adPlaced' => ApplicationOperatingCentre::AD_UPLOAD_NOW,
-                    'adPlacedIn' => 'sasdasd',
-                    'adPlacedDate' => 'asdsad'
+                'adPlacedIn' => [
+                    [
+                        'ERR_OC_AD_IN_1' => 'ERR_OC_AD_IN_1'
+                    ]
                 ],
-                [
-                    'file' => [
-                        [
-                            'ERR_OC_AD_FI_1' => 'ERR_OC_AD_FI_1'
-                        ]
-                    ],
-                    'permission' => [
-                        [
-                            'ERR_OC_PERMISSION' => 'ERR_OC_PERMISSION'
-                        ]
+                'adPlacedDate' => [
+                    [
+                        'ERR_OC_AD_DT_1' => 'ERR_OC_AD_DT_1'
+                    ]
+                ],
+                'file' => [
+                    [
+                        'ERR_OC_AD_FI_1' => 'ERR_OC_AD_FI_1'
+                    ]
+                ],
+                'permission' => [
+                    [
+                        'ERR_OC_PERMISSION' => 'ERR_OC_PERMISSION'
+                    ]
+                ]
+            ]
+        ];
+        yield [
+            false,
+            false,
+            [
+                'noOfVehiclesRequired' => 0,
+                'noOfTrailersRequired' => 1,
+                'adPlaced' => ApplicationOperatingCentre::AD_UPLOAD_NOW,
+                'adPlacedIn' => 'sasdasd',
+                'adPlacedDate' => 'asdsad'
+            ],
+            [
+                'file' => [
+                    [
+                        'ERR_OC_AD_FI_1' => 'ERR_OC_AD_FI_1'
+                    ]
+                ],
+                'permission' => [
+                    [
+                        'ERR_OC_PERMISSION' => 'ERR_OC_PERMISSION'
                     ]
                 ]
             ]

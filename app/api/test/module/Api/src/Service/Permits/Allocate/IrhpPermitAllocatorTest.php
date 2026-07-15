@@ -22,12 +22,13 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class IrhpPermitAllocatorTest extends MockeryTestCase
+final class IrhpPermitAllocatorTest extends MockeryTestCase
 {
     private $irhpPermitRepo;
 
     private $irhpPermitAllocator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpPermitRepo = m::mock(IrhpPermitRepository::class);
@@ -214,13 +215,11 @@ class IrhpPermitAllocatorTest extends MockeryTestCase
         );
     }
 
-    public static function dpCriteriaAndExpiryDate(): array
+    public static function dpCriteriaAndExpiryDate(): \Iterator
     {
-        return [
-            [m::mock(RangeMatchingCriteriaInterface::class), null],
-            [null, null],
-            [null, new DateTime('2030-10-22')],
-        ];
+        yield [m::mock(RangeMatchingCriteriaInterface::class), null];
+        yield [null, null];
+        yield [null, new DateTime('2030-10-22')];
     }
 
     private function createMockRange(mixed $id, mixed $fromNo, mixed $toNo, mixed $size, DateTime $stockValidTo): mixed

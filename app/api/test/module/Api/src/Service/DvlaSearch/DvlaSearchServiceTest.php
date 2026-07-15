@@ -20,7 +20,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 
-class DvlaSearchServiceTest extends MockeryTestCase
+final class DvlaSearchServiceTest extends MockeryTestCase
 {
     /**
      * @var DvlaSearchService

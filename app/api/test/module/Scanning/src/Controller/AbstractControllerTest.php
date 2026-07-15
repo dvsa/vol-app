@@ -19,11 +19,12 @@ use Olcs\Logging\Log\Logger;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class AbstractControllerTest extends MockeryTestCase
+final class AbstractControllerTest extends MockeryTestCase
 {
     protected $sut;
     protected $response;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->response = m::mock(\Laminas\Http\Response::class)->makePartial();

@@ -12,10 +12,11 @@ use Laminas\ServiceManager\Exception\InvalidServiceException;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class RepositoryServiceManagerTest extends MockeryTestCase
+final class RepositoryServiceManagerTest extends MockeryTestCase
 {
     protected RepositoryServiceManager $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $container = m::mock(ContainerInterface::class);
@@ -41,11 +42,9 @@ class RepositoryServiceManagerTest extends MockeryTestCase
         $this->assertNull($this->sut->validate(m::mock($instance)));
     }
 
-    public static function dpValidate(): array
+    public static function dpValidate(): \Iterator
     {
-        return [
-            [RepositoryInterface::class],
-            [ReadonlyRepositoryInterface::class],
-        ];
+        yield [RepositoryInterface::class];
+        yield [ReadonlyRepositoryInterface::class];
     }
 }

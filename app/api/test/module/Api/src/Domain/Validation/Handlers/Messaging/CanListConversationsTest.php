@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 
-class CanListConversationsTest extends AbstractHandlerTestCase
+final class CanListConversationsTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanListConversationsByOrganisation
@@ -43,13 +43,11 @@ class CanListConversationsTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function dpTestIsValid(): array
+    public static function dpTestIsValid(): \Iterator
     {
-        return [
-            [true, true, true],
-            [true, false, false],
-            [false, true, false],
-            [false, false, false],
-        ];
+        yield [true, true, true];
+        yield [true, false, false];
+        yield [false, true, false];
+        yield [false, false, false];
     }
 }

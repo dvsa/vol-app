@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class TaskAllocationRuleEntityTest extends EntityTester
+final class TaskAllocationRuleEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

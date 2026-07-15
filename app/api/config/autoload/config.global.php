@@ -58,14 +58,6 @@ return [
                 'params' => $doctrine_connection_params,
             ],
         ],
-        'driver' => [
-            'EntityDriver' => [
-                'cache' => 'redis'
-            ],
-            'translatable_metadata_driver' => [
-                'cache' => 'redis',
-            ]
-        ],
         'configuration' => [
             'orm_default' => [
                 'metadata_cache' => 'redis',
@@ -108,6 +100,19 @@ return [
 
     // Document service
     'document_share' => [
+        // Document store backend selector: 'webdav' | 's3'. Resolved per environment from
+        // SSM / Secrets Manager; any value other than 's3' (including an unresolved placeholder)
+        // falls back to WebDAV, so this is a safe, instantly-reversible cutover toggle.
+        // (Only used by the WebDAV->S3 migration; the bucket browser ignores it.)
+        'backend' => '%olcs_document_store_backend%',
+        // Native S3 document store / bucket-browser settings. Bucket name + key prefix are
+        // environment-specific and resolved from SSM / Secrets Manager (the bucket name is the
+        // per-env `<project>-<env>-<component>-sabredav`; the key prefix aligns stored identifiers
+        // with the keys the EBS->S3 sync produced, and may resolve to '').
+        's3' => [
+            'bucket' => '%olcs_document_store_s3_bucket%',
+            'key_prefix' => '%olcs_document_store_s3_key_prefix%',
+        ],
         'client' => [
             // Document service workspace "olcs"
             'workspace' => 'olcs',
@@ -263,9 +268,11 @@ return [
 
     // Email config
     'email' => [
-        // Debugging option forces all email to be sent to an address
-        // Selfserve/external URI e.g. http://demo_dvsa-selfserve.web03.olcs.mgt.mtpdvsa *Environment specific*
-        'send_all_mail_to' => ($isProductionAccount && !$isProduction) ? '%olcs_send_all_mail_to%' : null,
+        // Debugging option: redirect ALL outbound email to a single address. Driven by the env's
+        // `olcs_send_all_mail_to` param — a real address enables it, a blank/"null" sentinel disables
+        // it (SSM String params cannot be empty, so envs opt out with " " or "null"). NEVER in
+        // production (APP): prod always sends to the real recipients regardless of the param.
+        'send_all_mail_to' => $isProduction ? null : '%olcs_send_all_mail_to%',
         'from_name' => 'OLCS do not reply',
         'from_email' => '%olcs_from_email%',
         'selfserve_uri' => '%olcs_ss_uri%',
@@ -277,6 +284,10 @@ return [
                 'en_GB' => '%olcs_notify_template_en_gb%',
                 'cy_GB' => '%olcs_notify_template_cy_gb%',
             ],
+            // Outbound egress in deployed environments is only reachable via the shared forward
+            // proxy, so the Notify HTTP client is routed through it like every other external
+            // integration. Overridden to empty in local.php where egress is direct.
+            'proxy' => 'http://%shd_proxy%',
         ],
         // VOL-7238: dedicated DSN for the admin "Send test via Notify" button. Populated only
         // in pre-cutover envs (dev/int) so admins can exercise the Notify path against a

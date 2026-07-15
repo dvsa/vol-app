@@ -19,7 +19,7 @@ class EmissionsStandardsQuestionHandlerFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FixedAnswerQuestionHandler
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): FixedAnswerQuestionHandler
     {
         return new FixedAnswerQuestionHandler(
             $container->get('QaGenericAnswerWriter'),

@@ -27,7 +27,7 @@ use ReflectionClass;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DashboardControllerTest extends MockeryTestCase
+final class DashboardControllerTest extends MockeryTestCase
 {
     use ControllerTestTrait;
 
@@ -36,6 +36,7 @@ class DashboardControllerTest extends MockeryTestCase
     protected $mockTableFactory;
 
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(\Olcs\Controller\DashboardController::class)
@@ -58,18 +59,16 @@ class DashboardControllerTest extends MockeryTestCase
     }
 
     /**
-     * @return bool[][]
+     * @return \Iterator<(int | string), array<bool>>
      *
      * @psalm-return list{list{true, true, true}, list{true, false, true}, list{false, true, false}, list{false, false, true}}
      */
-    public static function dataProviderCorrectDashboardShown(): array
+    public static function dataProviderCorrectDashboardShown(): \Iterator
     {
-        return [
-            [true, true, true],
-            [true, false, true],
-            [false, true, false],
-            [false, false, true], // this should be impossible as if you don't have either you shouldn't be on the page
-        ];
+        yield [true, true, true];
+        yield [true, false, true];
+        yield [false, true, false];
+        yield [false, false, true];
     }
 
     /**

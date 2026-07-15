@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Legacy\LegacyOffence as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class LegacyOffenceEntityTest extends EntityTester
+final class LegacyOffenceEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

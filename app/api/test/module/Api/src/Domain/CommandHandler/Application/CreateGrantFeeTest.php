@@ -29,7 +29,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\CreateGrantFee as Cmd;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateGrantFeeTest extends AbstractCommandHandlerTestCase
+final class CreateGrantFeeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

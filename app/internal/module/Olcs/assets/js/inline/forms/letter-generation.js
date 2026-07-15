@@ -250,6 +250,7 @@ OLCS.ready(function () {
   $("body").on("click", "#prepare-to-send-btn", function (e) {
     e.preventDefault();
     var $btn = $(this);
+    $("#prepare-to-send-error").hide().text("");
     $btn.prop("disabled", true).text("Preparing...");
 
     // Get letterInstanceId from the preview link (set during generateAction success)
@@ -297,7 +298,14 @@ OLCS.ready(function () {
           $btn.prop("disabled", false).text("Prepare to send");
         }
       },
-      error: function () {
+      error: function (xhr) {
+        // Surface the server's reason (e.g. VOL-7402 "requires input" block)
+        // instead of silently resetting the button.
+        var message = "Something went wrong preparing the letter. Try again.";
+        if (xhr.responseJSON && xhr.responseJSON.message) {
+          message = xhr.responseJSON.message;
+        }
+        $("#prepare-to-send-error").text(message).show();
         $btn.prop("disabled", false).text("Prepare to send");
       },
     });

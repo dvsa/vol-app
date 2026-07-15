@@ -10,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email as SymfonyEmail;
 
-class NotifyTestMailerTest extends MockeryTestCase
+final class NotifyTestMailerTest extends MockeryTestCase
 {
     public function testIsDisabledWhenMailerIsNull(): void
     {

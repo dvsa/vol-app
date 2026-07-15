@@ -9,7 +9,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\Base\ImageBookmark::class)]
-class ImageBookmarkTest extends MockeryTestCase
+final class ImageBookmarkTest extends MockeryTestCase
 {
     public function testGetImageFail(): void
     {
@@ -23,12 +23,25 @@ class ImageBookmarkTest extends MockeryTestCase
         $sut->setFileStore($mockFs);
 
         //  expect
-        static::expectException(
-            \RuntimeException::class
-        );
+        $this->expectException(\RuntimeException::class);
 
         //  call
         $sut->getImage($name);
+    }
+
+    public function testGetImageFailWhenFileReadReturnsFalse(): void
+    {
+        $mockFs = m::mock();
+        // The content store returns File|false (never null); a missing image must still raise,
+        // not fatal on getContent() against a bool.
+        $mockFs->shouldReceive('read')->andReturn(false);
+
+        $sut = new ImageBookmarkStub();
+        $sut->setFileStore($mockFs);
+
+        $this->expectException(\RuntimeException::class);
+
+        $sut->getImage('unit_Name');
     }
 
     public function testGetImageOk(): void
@@ -69,6 +82,6 @@ class ImageBookmarkTest extends MockeryTestCase
         $sut->setParser($mockParser);
         $sut->setFileStore($mockFs);
 
-        static::assertEquals('EXPECTED', $sut->getImage($name));
+        $this->assertEquals('EXPECTED', $sut->getImage($name));
     }
 }

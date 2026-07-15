@@ -22,8 +22,9 @@ use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
 use Dvsa\Olcs\Email\Service\TemplateRenderer;
 use Laminas\Mail\Transport\Sendmail;
+use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 
-class LastTmLetterTest extends AbstractCommandHandlerTestCase
+final class LastTmLetterTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -44,7 +45,7 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
         $sideEffectResultsWithAllowEmail = [
             'GenerateAndStore' => [
@@ -71,323 +72,320 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
             ]
         ];
-
-        return [
-            'no_licences_with_removed_tm' => [
-                'dataProvider' => [
-                    'licence' => []
-                ],
-                'expectedResult' => [
-                    'id' => [],
-                    'messages' => []
-                ]
+        yield 'no_licences_with_removed_tm' => [
+            'dataProvider' => [
+                'licence' => []
             ],
-            'licence_with_removed_tm_allow_email_gb_gv' => [
-                'dataProvider' => [
-                    'licence' => [
-                        'id' => 1,
-                        'licNo' => 'AB123',
-                        'isNi' => false,
-                        'isPsv' => false,
-                        'organisation' => [
-                            'allowEmail' => 'Y'
-                        ],
-                        'correspondenceCd' => null
+            'expectedResult' => [
+                'id' => [],
+                'messages' => []
+            ]
+        ];
+        yield 'licence_with_removed_tm_allow_email_gb_gv' => [
+            'dataProvider' => [
+                'licence' => [
+                    'id' => 1,
+                    'licNo' => 'AB123',
+                    'isNi' => false,
+                    'isPsv' => false,
+                    'organisation' => [
+                        'allowEmail' => 'Y'
                     ],
-                    'user' => [
-                        'contactDetails ' => [
-                            'address' => '12 Food Road'
-                        ]
-                    ],
-                    'sideEffectResults' => $sideEffectResultsWithAllowEmail
-
+                    'correspondenceCd' => null
                 ],
-                'expectedResult' => [
-                    'id' => [
-                        'document' => 123,
-                        'correspondenceAddress' => '123',
-                    ],
-                    'messages' => [
-                        "Document id '123', queued for print",
-                        "Correspondence record created",
-                        "Email sent"
+                'user' => [
+                    'contactDetails ' => [
+                        'address' => '12 Food Road'
                     ]
-                ]
-            ],
-            'licence_with_removed_tm_correspondenceCd_email_null' => [
-                'dataProvider' => [
-                    'licence' => [
-                        'id' => 1,
-                        'licNo' => 'AB123',
-                        'isNi' => false,
-                        'isPsv' => false,
-                        'organisation' => [
-                            'allowEmail' => 'Y'
-                        ],
-                        'correspondenceCd' => [
-                            'emailAddress' => null
-                        ]
-                    ],
-                    'user' => [
-                        'contactDetails ' => [
-                            'address' => '12 Food Road'
-                        ]
-                    ],
-                    'sideEffectResults' => $sideEffectResultsWithAllowEmail
-
                 ],
-                'expectedResult' => [
-                    'id' => [
-                        'document' => 123,
-                        'correspondenceAddress' => '123',
+                'sideEffectResults' => $sideEffectResultsWithAllowEmail
+
+            ],
+            'expectedResult' => [
+                'id' => [
+                    'document' => 123,
+                    'correspondenceAddress' => '123',
+                ],
+                'messages' => [
+                    "Document id '123', queued for print",
+                    "Correspondence record created",
+                    "Email sent"
+                ]
+            ]
+        ];
+        yield 'licence_with_removed_tm_correspondenceCd_email_null' => [
+            'dataProvider' => [
+                'licence' => [
+                    'id' => 1,
+                    'licNo' => 'AB123',
+                    'isNi' => false,
+                    'isPsv' => false,
+                    'organisation' => [
+                        'allowEmail' => 'Y'
                     ],
-                    'messages' => [
-                        "Document id '123', queued for print",
-                        "Correspondence record created",
-                        "Email sent",
+                    'correspondenceCd' => [
+                        'emailAddress' => null
                     ]
-                ]
-            ],
-            'licence_with_removed_tm_correspondenceCd_with_email_not_existing_user' => [
-                'dataProvider' => [
-                    'licence' => [
-                        'id' => 1,
-                        'licNo' => 'AB123',
-                        'isNi' => false,
-                        'isPsv' => false,
-                        'organisation' => [
-                            'allowEmail' => 'Y'
-                        ],
-                        'correspondenceCd' => [
-                            'emailAddress' => 'test@email.com'
-                        ]
-                    ],
-                    'user' => [
-                        'contactDetails ' => [
-                            'address' => '12 Food Road'
-                        ],
-                        'fetchFirstByEmailOrFalse' => false
-                    ],
-                    'sideEffectResults' => $sideEffectResultsWithAllowEmail
-
                 ],
-                'expectedResult' => [
-                    'id' => [
-                        'document' => 123,
-                        'correspondenceAddress' => '123',
-                    ],
-                    'messages' => [
-                        "Document id '123', queued for print",
-                        "Correspondence record created",
-                        "Email sent",]
-                ]
-            ],
-            'licence_with_removed_tm_correspondenceCd_with_email_existing_user' => [
-                'dataProvider' => [
-                    'licence' => [
-                        'id' => 1,
-                        'licNo' => 'AB123',
-                        'isNi' => false,
-                        'isPsv' => false,
-                        'organisation' => [
-                            'allowEmail' => 'Y'
-                        ],
-                        'correspondenceCd' => [
-                            'emailAddress' => 'test@email.com'
-                        ]
-                    ],
-                    'user' => [
-                        'contactDetails ' => [
-                            'address' => '12 Food Road'
-                        ],
-                        'fetchFirstByEmailOrFalse' => m::mock(UserEntity::class)
-                    ],
-                    'sideEffectResults' => $sideEffectResultsWithAllowEmail
-
-                ],
-                'expectedResult' => [
-                    'id' => [
-                        'document' => 123,
-                        'correspondenceAddress' => '123',
-                    ],
-                    'messages' => [
-                        "Document id '123', queued for print",
-                        "Correspondence record created",
-                        "Email sent"
+                'user' => [
+                    'contactDetails ' => [
+                        'address' => '12 Food Road'
                     ]
-                ]
-            ],
-            'licence_with_removed_tm_allow_email_ni_gv' => [
-                'dataProvider' => [
-                    'licence' => [
-                        'id' => 1,
-                        'licNo' => 'AB123',
-                        'isNi' => true,
-                        'isPsv' => false,
-                        'organisation' => [
-                            'allowEmail' => 'Y'
-                        ],
-                        'correspondenceCd' => null
-                    ],
-                    'user' => [
-                        'contactDetails ' => [
-                            'address' => '12 Food Road'
-                        ]
-                    ],
-                    'sideEffectResults' => $sideEffectResultsWithAllowEmail
-
                 ],
-                'expectedResult' => [
-                    'id' => [
-                        'document' => 123,
-                        'correspondenceAddress' => '123',
-                    ],
-                    'messages' => [
-                        "Document id '123', queued for print",
-                        "Correspondence record created",
-                        "Email sent",
-                    ]
-                ]
+                'sideEffectResults' => $sideEffectResultsWithAllowEmail
+
             ],
-            'licence_with_removed_tm_not_allow_email_gb_psv' => [
-                'dataProvider' => [
-                    'licence' => [
-                        'id' => 1,
-                        'licNo' => 'AB123',
-                        'isNi' => false,
-                        'isPsv' => true,
-                        'organisation' => [
-                            'allowEmail' => 'N'
-                        ],
-                        'correspondenceCd' => null
+            'expectedResult' => [
+                'id' => [
+                    'document' => 123,
+                    'correspondenceAddress' => '123',
+                ],
+                'messages' => [
+                    "Document id '123', queued for print",
+                    "Correspondence record created",
+                    "Email sent",
+                ]
+            ]
+        ];
+        yield 'licence_with_removed_tm_correspondenceCd_with_email_not_existing_user' => [
+            'dataProvider' => [
+                'licence' => [
+                    'id' => 1,
+                    'licNo' => 'AB123',
+                    'isNi' => false,
+                    'isPsv' => false,
+                    'organisation' => [
+                        'allowEmail' => 'Y'
                     ],
-                    'user' => [
-                        'contactDetails ' => [
-                            'address' => '12 Food Road'
-                        ]
+                    'correspondenceCd' => [
+                        'emailAddress' => 'test@email.com'
+                    ]
+                ],
+                'user' => [
+                    'contactDetails ' => [
+                        'address' => '12 Food Road'
                     ],
-                    'sideEffectResults' => [
-                        'GenerateAndStore' => [
-                            'ids' => [
-                                'documents' => [
-                                    '123' => [
-                                        'metadata' => json_encode([
-                                            'details' => [
-                                                'category' => Category::CATEGORY_TRANSPORT_MANAGER,
-                                                'documentSubCategory' => Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CORRESPONDENCE,
-                                                'documentTemplate' => 1,
-                                                'allowEmail' => 'N',
-                                                'sendToAddress' => 'correspondenceAddress'
-                                            ]
-                                        ]),
-                                        'address' => 'correspondenceAddress'
-                                    ],
-                                ]
+                    'fetchFirstByEmailOrFalse' => false
+                ],
+                'sideEffectResults' => $sideEffectResultsWithAllowEmail
+
+            ],
+            'expectedResult' => [
+                'id' => [
+                    'document' => 123,
+                    'correspondenceAddress' => '123',
+                ],
+                'messages' => [
+                    "Document id '123', queued for print",
+                    "Correspondence record created",
+                    "Email sent",]
+            ]
+        ];
+        yield 'licence_with_removed_tm_correspondenceCd_with_email_existing_user' => [
+            'dataProvider' => [
+                'licence' => [
+                    'id' => 1,
+                    'licNo' => 'AB123',
+                    'isNi' => false,
+                    'isPsv' => false,
+                    'organisation' => [
+                        'allowEmail' => 'Y'
+                    ],
+                    'correspondenceCd' => [
+                        'emailAddress' => 'test@email.com'
+                    ]
+                ],
+                'user' => [
+                    'contactDetails ' => [
+                        'address' => '12 Food Road'
+                    ],
+                    'fetchFirstByEmailOrFalse' => m::mock(UserEntity::class)
+                ],
+                'sideEffectResults' => $sideEffectResultsWithAllowEmail
+
+            ],
+            'expectedResult' => [
+                'id' => [
+                    'document' => 123,
+                    'correspondenceAddress' => '123',
+                ],
+                'messages' => [
+                    "Document id '123', queued for print",
+                    "Correspondence record created",
+                    "Email sent"
+                ]
+            ]
+        ];
+        yield 'licence_with_removed_tm_allow_email_ni_gv' => [
+            'dataProvider' => [
+                'licence' => [
+                    'id' => 1,
+                    'licNo' => 'AB123',
+                    'isNi' => true,
+                    'isPsv' => false,
+                    'organisation' => [
+                        'allowEmail' => 'Y'
+                    ],
+                    'correspondenceCd' => null
+                ],
+                'user' => [
+                    'contactDetails ' => [
+                        'address' => '12 Food Road'
+                    ]
+                ],
+                'sideEffectResults' => $sideEffectResultsWithAllowEmail
+
+            ],
+            'expectedResult' => [
+                'id' => [
+                    'document' => 123,
+                    'correspondenceAddress' => '123',
+                ],
+                'messages' => [
+                    "Document id '123', queued for print",
+                    "Correspondence record created",
+                    "Email sent",
+                ]
+            ]
+        ];
+        yield 'licence_with_removed_tm_not_allow_email_gb_psv' => [
+            'dataProvider' => [
+                'licence' => [
+                    'id' => 1,
+                    'licNo' => 'AB123',
+                    'isNi' => false,
+                    'isPsv' => true,
+                    'organisation' => [
+                        'allowEmail' => 'N'
+                    ],
+                    'correspondenceCd' => null
+                ],
+                'user' => [
+                    'contactDetails ' => [
+                        'address' => '12 Food Road'
+                    ]
+                ],
+                'sideEffectResults' => [
+                    'GenerateAndStore' => [
+                        'ids' => [
+                            'documents' => [
+                                '123' => [
+                                    'metadata' => json_encode([
+                                        'details' => [
+                                            'category' => Category::CATEGORY_TRANSPORT_MANAGER,
+                                            'documentSubCategory' => Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CORRESPONDENCE,
+                                            'documentTemplate' => 1,
+                                            'allowEmail' => 'N',
+                                            'sendToAddress' => 'correspondenceAddress'
+                                        ]
+                                    ]),
+                                    'address' => 'correspondenceAddress'
+                                ],
                             ]
-                        ],
-                        'CreateTask' => [
-                            'ids' => [
-                                'assignedToUser' => 111
-                            ]
-
                         ]
-                    ]
-
-                ],
-                'expectedResult' => [
-                    'id' => [
-                        'document' => 123,
-                        'correspondenceAddress' => '123',
                     ],
-                    'messages' => [
-                        "Document id '123', queued for print",
+                    'CreateTask' => [
+                        'ids' => [
+                            'assignedToUser' => 111
+                        ]
+
                     ]
                 ]
+
             ],
-            'multiple_removed_tms_only_one_document' => [
-                'dataProvider' => [
-                    'licence' => [
-                        'id' => 1,
-                        'licNo' => 'AB123',
-                        'isNi' => false,
-                        'isPsv' => false,
-                        'organisation' => [
-                            'allowEmail' => 'Y',
-                            'name' => 'Test Operator Ltd',
-                        ],
-                        'correspondenceCd' => [
-                            'emailAddress' => 'test@email.com'
-                        ]
-                    ],
-                    'user' => [
-                        'fetchFirstByEmailOrFalse' => false
-                    ],
-                    'sideEffectResults' => [
-                        'GenerateAndStore' => [
-                            'ids' => [
-                                'documents' => [
-                                    '123' => [
-                                        'metadata' => json_encode([
-                                            'details' => [
-                                                'category' => Category::CATEGORY_TRANSPORT_MANAGER,
-                                                'documentSubCategory' => Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CORRESPONDENCE,
-                                                'documentTemplate' => 1285,
-                                                'allowEmail' => 'Y',
-                                                'sendToAddress' => 'correspondenceAddress',
-                                            ]
-                                        ]),
-                                    ],
-                                ]
-                            ]
-                        ],
-                        'CreateTask' => [
-                            'ids' => []
-
-                        ],
-                    ],
-                    'multipleRemovedTms' => true,
+            'expectedResult' => [
+                'id' => [
+                    'document' => 123,
+                    'correspondenceAddress' => '123',
                 ],
-                'expectedResult' => [
-                    'id' => [
-                        'document' => 123,
-                        '' => 123,
+                'messages' => [
+                    "Document id '123', queued for print",
+                ]
+            ]
+        ];
+        yield 'multiple_removed_tms_only_one_document' => [
+            'dataProvider' => [
+                'licence' => [
+                    'id' => 1,
+                    'licNo' => 'AB123',
+                    'isNi' => false,
+                    'isPsv' => false,
+                    'organisation' => [
+                        'allowEmail' => 'Y',
+                        'name' => 'Test Operator Ltd',
                     ],
-                    'messages' => [
-                        "Document id '123', queued for print",
-                        "Correspondence record created",
-                        "Email sent"
+                    'correspondenceCd' => [
+                        'emailAddress' => 'test@email.com'
                     ]
-                ]
-            ],
-            'licence_with_active_variation_updated_tm_skip_ptr' => [
-                'dataProvider' => [
-                    'licence' => [
-                        'id' => 1,
-                        'licNo' => 'AB123',
-                        'isNi' => false,
-                        'isPsv' => false,
-                        'organisation' => [
-                            'allowEmail' => 'Y'
-                        ],
-                        'correspondenceCd' => null
-                    ],
-                    'user' => [],
-                    'activeVariationHasUpdatedTm' => true,
-                    'sideEffectResults' => [
-                        'GenerateAndStore' => [
-                            'ids' => [
-                                'documents' => []
+                ],
+                'user' => [
+                    'fetchFirstByEmailOrFalse' => false
+                ],
+                'sideEffectResults' => [
+                    'GenerateAndStore' => [
+                        'ids' => [
+                            'documents' => [
+                                '123' => [
+                                    'metadata' => json_encode([
+                                        'details' => [
+                                            'category' => Category::CATEGORY_TRANSPORT_MANAGER,
+                                            'documentSubCategory' => Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CORRESPONDENCE,
+                                            'documentTemplate' => 1285,
+                                            'allowEmail' => 'Y',
+                                            'sendToAddress' => 'correspondenceAddress',
+                                        ]
+                                    ]),
+                                ],
                             ]
-                        ],
-                        'CreateTask' => [
-                            'ids' => []
                         ]
                     ],
+                    'CreateTask' => [
+                        'ids' => []
+
+                    ],
                 ],
-                'expectedResult' => [
-                    'id' => [],
-                    'messages' => []
+                'multipleRemovedTms' => true,
+            ],
+            'expectedResult' => [
+                'id' => [
+                    'document' => 123,
+                    '' => 123,
+                ],
+                'messages' => [
+                    "Document id '123', queued for print",
+                    "Correspondence record created",
+                    "Email sent"
                 ]
+            ]
+        ];
+        yield 'licence_with_active_variation_updated_tm_skip_ptr' => [
+            'dataProvider' => [
+                'licence' => [
+                    'id' => 1,
+                    'licNo' => 'AB123',
+                    'isNi' => false,
+                    'isPsv' => false,
+                    'organisation' => [
+                        'allowEmail' => 'Y'
+                    ],
+                    'correspondenceCd' => null
+                ],
+                'user' => [],
+                'activeVariationHasUpdatedTm' => true,
+                'sideEffectResults' => [
+                    'GenerateAndStore' => [
+                        'ids' => [
+                            'documents' => []
+                        ]
+                    ],
+                    'CreateTask' => [
+                        'ids' => []
+                    ]
+                ],
+            ],
+            'expectedResult' => [
+                'id' => [],
+                'messages' => []
             ]
         ];
     }
@@ -663,5 +661,143 @@ class LastTmLetterTest extends AbstractCommandHandlerTestCase
             $userRepo->shouldReceive('fetchFirstByEmailOrFalse')->andReturn($fetchedUser);
             $this->expectedSideEffect(SendEmail::class, [], new Result());
         }
+    }
+
+    public function testHandleCommandCreatesTaskWhenOperatorNotificationEmailFails(): void
+    {
+        $licenceRepo = $this->repoMap['Licence'];
+        $tmlRepo = $this->repoMap['TransportManagerLicence'];
+
+        $licence = m::mock(LicenceEntity::class);
+
+        $dataProvider = [
+            'licence' => [
+                'id' => 1,
+                'licNo' => 'AB123',
+                'isNi' => false,
+                'isPsv' => false,
+                'organisation' => [
+                    'allowEmail' => 'Y',
+                    'name' => 'Test Operator Ltd',
+                ],
+                'correspondenceCd' => [
+                    'emailAddress' => 'abc',
+                ],
+            ],
+            'user' => [
+                'fetchFirstByEmailOrFalse' => false,
+            ],
+            'sideEffectResults' => [
+                'GenerateAndStore' => [
+                    'ids' => [
+                        'documents' => [
+                            '123' => [
+                                'metadata' => json_encode([
+                                    'details' => [
+                                        'category' => Category::CATEGORY_TRANSPORT_MANAGER,
+                                        'documentSubCategory' => Category::DOC_SUB_CATEGORY_TRANSPORT_MANAGER_CORRESPONDENCE,
+                                        'documentTemplate' => 919,
+                                        'allowEmail' => 'N',
+                                        'sendToAddress' => 'correspondenceAddress',
+                                    ],
+                                ]),
+                                'address' => 'correspondenceAddress',
+                            ],
+                        ],
+                    ],
+                ],
+                'CreateTask' => [
+                    'ids' => [],
+                ],
+            ],
+        ];
+
+        $this->mockLicence($licence, $dataProvider);
+
+        $licence->shouldReceive('getActiveVariations')
+            ->once()
+            ->andReturn([]);
+
+        $this->mockCorrespondenceCd($licence, $dataProvider);
+
+        $licenceRepo->shouldReceive('fetchForLastTmAutoLetter')
+            ->once()
+            ->andReturn([$licence]);
+
+        $tmlEntity = m::mock(TransportManagerLicence::class);
+        $tmlEntity->shouldReceive('getId')->andReturn(5);
+        $tmlEntity->shouldReceive('setLastTmLetterDate')->once();
+
+        $tm = m::mock(\Dvsa\Olcs\Api\Entity\Tm\TransportManager::class);
+        $tm->shouldReceive('getId')->andReturn(1);
+        $tmlEntity->shouldReceive('getTransportManager')->andReturn($tm);
+
+        $tmlRepo->shouldReceive('fetchRemovedTmForLicence')
+            ->with(1, true)
+            ->once()
+            ->andReturn([$tmlEntity]);
+
+        $tmlRepo->shouldReceive('save')
+            ->with($tmlEntity)
+            ->once();
+
+        $generateResult = $this->getGenerateAndStoreResult(
+            $dataProvider['sideEffectResults']['GenerateAndStore']['ids']['documents']
+        );
+
+        $this->expectedSideEffect(GenerateAndStore::class, [], $generateResult);
+
+        // Existing Last TM task
+        $this->expectedSideEffect(CreateTask::class, [], new Result());
+
+        // Print document
+        $this->expectedSideEffect(
+            PrintLetter::class,
+            [],
+            $this->getPrintLetterResult(123)
+        );
+
+        $document = m::mock(DocumentEntity::class);
+        $document->shouldReceive('getMetadata')
+            ->once()
+            ->andReturn($dataProvider['sideEffectResults']['GenerateAndStore']['ids']['documents']['123']['metadata']);
+
+        $this->repoMap['Document']
+            ->shouldReceive('fetchById')
+            ->with(123)
+            ->once()
+            ->andReturn($document);
+
+        $this->repoMap['User']
+            ->shouldReceive('fetchFirstByEmailOrFalse')
+            ->once()
+            ->with('abc')
+            ->andReturn(false);
+
+        $this->commandHandler
+            ->shouldReceive('handleCommand')
+            ->with(m::type(SendEmail::class), false)
+            ->once()
+            ->andThrow(new EmailNotSentException('Email is missing a valid to address'));
+
+        // New missing/invalid email follow-up task
+        $this->expectedSideEffect(CreateTask::class, [], new Result());
+
+        $response = $this->sut->handleCommand(
+            \Dvsa\Olcs\Cli\Domain\Command\LastTmLetter::create([])
+        );
+
+        $this->assertEquals(
+            [
+                'id' => [
+                    'correspondenceAddress' => '123',
+                    'document' => 123,
+                ],
+                'messages' => [
+                    "Document id '123', queued for print",
+                ],
+            ],
+            $response->toArray()
+        );
     }
 }

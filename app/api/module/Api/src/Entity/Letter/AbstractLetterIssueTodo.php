@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_issue_todo",
- *    indexes={
- *        @ORM\Index(name="ix_letter_issue_todo_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_issue_todo_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_issue_todo_letter_todo_version_id", columns={"letter_todo_version_id"}),
- *        @ORM\Index(name="IDX_C261543CE3496B9F", columns={"letter_issue_version_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_issue_todo')]
+#[ORM\Index(name: 'ix_letter_issue_todo_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_issue_todo_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_issue_todo_letter_todo_version_id', columns: ['letter_todo_version_id'])]
+#[ORM\Index(name: 'IDX_C261543CE3496B9F', columns: ['letter_issue_version_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,53 +41,48 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
      * LetterIssueVersion
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion
-     *
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_issue_version_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_issue_version_id', referencedColumnName: 'id')]
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion::class, fetch: 'LAZY')]
     protected $letterIssueVersion;
 
     /**
      * LetterTodoVersion
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion
-     *
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_todo_version_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_todo_version_id', referencedColumnName: 'id')]
+    #[ORM\Id]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion::class, fetch: 'LAZY')]
     protected $letterTodoVersion;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Display order
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="display_order", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false)]
     protected $displayOrder = 0;
 
     /**

@@ -29,7 +29,7 @@ use Dvsa\Olcs\Api\Entity\Fee\Transaction;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ResolvePaymentTest extends AbstractCommandHandlerTestCase
+final class ResolvePaymentTest extends AbstractCommandHandlerTestCase
 {
     protected $mockCpmsService;
 
@@ -503,7 +503,7 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
                 '[type]',
                 22
             ),
-            'actionDate' => (new DateTime('now'))->format(\DateTime::W3C),
+            'actionDate' => new DateTime('now')->format(\DateTime::W3C),
             'isClosed' => 0,
             'urgent' => 1,
             'licence' => 10,
@@ -585,12 +585,10 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function irfoDataProfider(): array
+    public static function irfoDataProfider(): \Iterator
     {
-        return [
-            ['PSV'],
-            ['GV']
-        ];
+        yield ['PSV'];
+        yield ['GV'];
     }
 
     /**
@@ -668,29 +666,27 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function failureStatusProvider(): array
+    public static function failureStatusProvider(): \Iterator
     {
-        return [
-            [
-                CpmsHelper::PAYMENT_FAILURE,
-                PaymentEntity::STATUS_FAILED,
-                'Transaction 69 resolved as PAYMENT FAILED',
-            ],
-            [
-                CpmsHelper::PAYMENT_CANCELLATION,
-                PaymentEntity::STATUS_CANCELLED,
-                'Transaction 69 resolved as PAYMENT CANCELLED',
-            ],
-            [
-                CpmsHelper::PAYMENT_GATEWAY_ERROR,
-                PaymentEntity::STATUS_FAILED,
-                'Transaction 69 resolved as PAYMENT FAILED',
-            ],
-            [
-                CpmsHelper::PAYMENT_SYSTEM_ERROR,
-                PaymentEntity::STATUS_FAILED,
-                'Transaction 69 resolved as PAYMENT FAILED',
-            ],
+        yield [
+            CpmsHelper::PAYMENT_FAILURE,
+            PaymentEntity::STATUS_FAILED,
+            'Transaction 69 resolved as PAYMENT FAILED',
+        ];
+        yield [
+            CpmsHelper::PAYMENT_CANCELLATION,
+            PaymentEntity::STATUS_CANCELLED,
+            'Transaction 69 resolved as PAYMENT CANCELLED',
+        ];
+        yield [
+            CpmsHelper::PAYMENT_GATEWAY_ERROR,
+            PaymentEntity::STATUS_FAILED,
+            'Transaction 69 resolved as PAYMENT FAILED',
+        ];
+        yield [
+            CpmsHelper::PAYMENT_SYSTEM_ERROR,
+            PaymentEntity::STATUS_FAILED,
+            'Transaction 69 resolved as PAYMENT FAILED',
         ];
     }
 
@@ -754,37 +750,35 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function otherStatusProvider(): array
+    public static function otherStatusProvider(): \Iterator
     {
-        return [
-            [
-                ['code' => CpmsHelper::PAYMENT_IN_PROGRESS],
-                'Transaction 69 is pending, CPMS status is 800',
-            ],
-            [
-                ['code' => CpmsHelper::PAYMENT_AWAITING_GATEWAY_URL],
-                'Transaction 69 is pending, CPMS status is 824',
-            ],
-            [
-                ['code' => CpmsHelper::PAYMENT_GATEWAY_REDIRECT_URL_RECEIVED],
-                'Transaction 69 is pending, CPMS status is 825',
-            ],
-            [
-                ['code' => CpmsHelper::PAYMENT_END_OF_FLOW_SIGNALLED],
-                'Transaction 69 is pending, CPMS status is 826',
-            ],
-            [
-                ['code' => CpmsHelper::PAYMENT_CARD_PAYMENT_CONFIRMED],
-                'Transaction 69 is pending, CPMS status is 827',
-            ],
-            [
-                ['code' => CpmsHelper::PAYMENT_ACTIVELY_BEING_TAKEN],
-                'Transaction 69 is pending, CPMS status is 830',
-            ],
-            [
-                ['code' => 'FooBar', 'message' => 'some message'],
-                'Unexpected status received from CPMS, transaction 69 status FooBar, message: some message'
-            ],
+        yield [
+            ['code' => CpmsHelper::PAYMENT_IN_PROGRESS],
+            'Transaction 69 is pending, CPMS status is 800',
+        ];
+        yield [
+            ['code' => CpmsHelper::PAYMENT_AWAITING_GATEWAY_URL],
+            'Transaction 69 is pending, CPMS status is 824',
+        ];
+        yield [
+            ['code' => CpmsHelper::PAYMENT_GATEWAY_REDIRECT_URL_RECEIVED],
+            'Transaction 69 is pending, CPMS status is 825',
+        ];
+        yield [
+            ['code' => CpmsHelper::PAYMENT_END_OF_FLOW_SIGNALLED],
+            'Transaction 69 is pending, CPMS status is 826',
+        ];
+        yield [
+            ['code' => CpmsHelper::PAYMENT_CARD_PAYMENT_CONFIRMED],
+            'Transaction 69 is pending, CPMS status is 827',
+        ];
+        yield [
+            ['code' => CpmsHelper::PAYMENT_ACTIVELY_BEING_TAKEN],
+            'Transaction 69 is pending, CPMS status is 830',
+        ];
+        yield [
+            ['code' => 'FooBar', 'message' => 'some message'],
+            'Unexpected status received from CPMS, transaction 69 status FooBar, message: some message'
         ];
     }
 
@@ -857,7 +851,7 @@ class ResolvePaymentTest extends AbstractCommandHandlerTestCase
             'category' => Task::CATEGORY_LICENSING,
             'subCategory' => Task::SUBCATEGORY_LICENSING_GENERAL_TASK,
             'description' => Task::TASK_DESCRIPTION_FEE_DUE,
-            'actionDate' => (new DateTime('now'))->format(\DateTime::W3C),
+            'actionDate' => new DateTime('now')->format(\DateTime::W3C),
             'assignedToUser' => 1,
             'assignedToTeam' => 2
         ];

@@ -15,7 +15,7 @@ use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Licence\People::class)]
-class PeopleTest extends QueryHandlerTestCase
+final class PeopleTest extends QueryHandlerTestCase
 {
     /** @var People */
     protected $sut;

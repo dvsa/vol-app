@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter\DateDayMonthYear;
 /**
  * DateDayMonthYear formatter test
  */
-class DateDayMonthYearTest extends \PHPUnit\Framework\TestCase
+final class DateDayMonthYearTest extends \PHPUnit\Framework\TestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('scenariosProvider')]
     public function testFormat(mixed $date, mixed $expected): void
@@ -22,11 +22,9 @@ class DateDayMonthYearTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function scenariosProvider(): array
+    public static function scenariosProvider(): \Iterator
     {
-        return [
-            ['2018-02-01 15:10:11', '01 February 2018'],
-            ['2020-05-27 11:10:24', '27 May 2020'],
-        ];
+        yield ['2018-02-01 15:10:11', '01 February 2018'];
+        yield ['2020-05-27 11:10:24', '27 May 2020'];
     }
 }

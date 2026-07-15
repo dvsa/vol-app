@@ -22,21 +22,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="queue",
- *    indexes={
- *        @ORM\Index(name="ix_queue_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_queue_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_queue_status", columns={"status"}),
- *        @ORM\Index(name="ix_queue_status_created_on_process_after_date", columns={"status", "created_on", "process_after_date"}),
- *        @ORM\Index(name="ix_queue_status_type", columns={"status", "type"}),
- *        @ORM\Index(name="ix_queue_type", columns={"type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'queue')]
+#[ORM\Index(name: 'ix_queue_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_queue_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_queue_status', columns: ['status'])]
+#[ORM\Index(name: 'ix_queue_status_created_on_process_after_date', columns: ['status', 'created_on', 'process_after_date'])]
+#[ORM\Index(name: 'ix_queue_status_type', columns: ['status', 'type'])]
+#[ORM\Index(name: 'ix_queue_type', columns: ['type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractQueue implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -50,108 +46,97 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Type
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $type;
 
     /**
      * Status
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Entity id
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="entity_id", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'entity_id', nullable: true)]
     protected $entityId;
 
     /**
      * Options
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="options", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'options', nullable: true)]
     protected $options;
 
     /**
      * Process after date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="process_after_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'process_after_date', nullable: true)]
     protected $processAfterDate;
 
     /**
      * Attempts
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="attempts", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'smallint', name: 'attempts', nullable: false, options: ['default' => 0])]
     protected $attempts = 0;
 
     /**
      * Last error
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="last_error", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'last_error', nullable: true)]
     protected $lastError;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

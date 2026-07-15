@@ -1,0 +1,11 @@
+<?php
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $this->pageTitle(),
+        'backUrl' => true,
+    ]
+);
+?>
+
+<?php echo $this->render('pages/guides/partial/body-two-thirds-blank-sidebar.phtml');

@@ -18,7 +18,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessLicenceWithLicNo;
 /**
  * Can Access Licence With LicNo
  */
-class CanAccessLicenceWithLicNoTest extends AbstractHandlerTestCase
+final class CanAccessLicenceWithLicNoTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessLicenceWithLicNo
@@ -44,11 +44,9 @@ class CanAccessLicenceWithLicNoTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

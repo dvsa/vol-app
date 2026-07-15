@@ -32,7 +32,7 @@ use Olcs\Controller\Licence\Vehicle\SwitchBoardController;
 use Olcs\Form\Model\Form\Vehicle\SwitchBoard;
 use Olcs\Session\LicenceVehicleManagement;
 
-class SwitchBoardControllerTest extends MockeryTestCase
+final class SwitchBoardControllerTest extends MockeryTestCase
 {
     public $sut;
     /**
@@ -75,8 +75,8 @@ class SwitchBoardControllerTest extends MockeryTestCase
      */
     private $formValidatorMock;
 
-    protected const VEHICLES_ROUTE = ['lva-licence/vehicles', [], [], true];
-    protected const A_DECISION_VALUE = 'A_DECISION_VALUE';
+    protected const array VEHICLES_ROUTE = ['lva-licence/vehicles', [], [], true];
+    protected const string A_DECISION_VALUE = 'A_DECISION_VALUE';
 
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -377,81 +377,80 @@ class SwitchBoardControllerTest extends MockeryTestCase
     }
 
     /**
-     * @return (((string|string[])[]|string|true)[]|int|string)[][]
+     * @return \Iterator<(int | string), array<(array<(array<(array<string> | string)> | string | true)> | int | string)>>
      *
      * @psalm-return array{'Add decision': list{'add', 1, list{'licence/vehicle/add/GET', array<never, never>, array<never, never>, true}}, 'Remove Decision': list{'remove', 1, list{'licence/vehicle/remove/GET', array<never, never>, array<never, never>, true}}, 'Reprint decision': list{'reprint', 1, list{'licence/vehicle/reprint/GET', array<never, never>, array<never, never>, true}}, 'Transfer decision': list{'transfer', 1, list{'licence/vehicle/transfer/GET', array<never, never>, array<never, never>, true}}, 'View decision': list{'view', 1, list{'licence/vehicle/list/GET', array<never, never>, array<never, never>, true}}, 'View removed decision': list{'view-removed', 0, list{'licence/vehicle/list/GET', array<never, never>, array{query: array{includeRemoved: ''}, fragment: 'removed-table'}, true}}}
      */
-    public static function indexActionWithPostShouldRedirectToPageDependantOnDecisionProvider(): array
+    public static function indexActionWithPostShouldRedirectToPageDependantOnDecisionProvider(): \Iterator
     {
-        return [
-            'Add decision' => [
-                SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_ADD,
-                1,
-                [
-                    SwitchBoardController::ROUTE_LICENCE_VEHICLE_ADD,
-                    [],
-                    [],
-                    true,
-                ],
+        yield 'Add decision' => [
+            SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_ADD,
+            1,
+            [
+                SwitchBoardController::ROUTE_LICENCE_VEHICLE_ADD,
+                [],
+                [],
+                true,
             ],
-            'Remove Decision' => [
-                SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REMOVE,
-                1,
-                [
-                    SwitchBoardController::ROUTE_LICENCE_VEHICLE_REMOVE,
-                    [],
-                    [],
-                    true,
-                ],
+        ];
+        yield 'Remove Decision' => [
+            SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REMOVE,
+            1,
+            [
+                SwitchBoardController::ROUTE_LICENCE_VEHICLE_REMOVE,
+                [],
+                [],
+                true,
             ],
-            'Reprint decision' => [
-                SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REPRINT,
-                1,
-                [
-                    SwitchBoardController::ROUTE_LICENCE_VEHICLE_REPRINT,
-                    [],
-                    [],
-                    true,
-                ],
+        ];
+        yield 'Reprint decision' => [
+            SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_REPRINT,
+            1,
+            [
+                SwitchBoardController::ROUTE_LICENCE_VEHICLE_REPRINT,
+                [],
+                [],
+                true,
             ],
-            'Transfer decision' => [
-                SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_TRANSFER,
-                1,
-                [
-                    SwitchBoardController::ROUTE_LICENCE_VEHICLE_TRANSFER,
-                    [],
-                    [],
-                    true,
-                ],
+        ];
+        yield 'Transfer decision' => [
+            SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_TRANSFER,
+            1,
+            [
+                SwitchBoardController::ROUTE_LICENCE_VEHICLE_TRANSFER,
+                [],
+                [],
+                true,
             ],
-            'View decision' => [
-                SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW,
-                1,
-                [
-                    SwitchBoardController::ROUTE_LICENCE_VEHICLE_LIST,
-                    [],
-                    [],
-                    true,
-                ],
+        ];
+        yield 'View decision' => [
+            SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW,
+            1,
+            [
+                SwitchBoardController::ROUTE_LICENCE_VEHICLE_LIST,
+                [],
+                [],
+                true,
             ],
-            'View removed decision' => [
-                SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW_REMOVED,
-                0,
+        ];
+        yield 'View removed decision' => [
+            SwitchBoard::FIELD_OPTIONS_VALUE_LICENCE_VEHICLE_VIEW_REMOVED,
+            0,
+            [
+                SwitchBoardController::ROUTE_LICENCE_VEHICLE_LIST,
+                [],
                 [
-                    SwitchBoardController::ROUTE_LICENCE_VEHICLE_LIST,
-                    [],
-                    [
-                        'query' => [
-                            ListVehicleController::QUERY_KEY_INCLUDE_REMOVED => ''
-                        ],
-                        'fragment' => ListVehicleController::REMOVE_TABLE_WRAPPER_ID
+                    'query' => [
+                        ListVehicleController::QUERY_KEY_INCLUDE_REMOVED => ''
                     ],
-                    true,
+                    'fragment' => ListVehicleController::REMOVE_TABLE_WRAPPER_ID
                 ],
-            ]
+                true,
+            ],
         ];
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->flashMessengerMock = m::mock(FlashMessenger::class);

@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsAnswerFetcherTest extends MockeryTestCase
+final class NoOfPermitsAnswerFetcherTest extends MockeryTestCase
 {
     private $applicationStep;
 
@@ -28,6 +28,7 @@ class NoOfPermitsAnswerFetcherTest extends MockeryTestCase
 
     private $noOfPermitsAnswerFetcher;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->applicationStep = m::mock(ApplicationStepEntity::class);

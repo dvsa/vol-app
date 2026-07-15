@@ -22,28 +22,22 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="user",
- *    indexes={
- *        @ORM\Index(name="ix_user_contact_details_id", columns={"contact_details_id"}),
- *        @ORM\Index(name="ix_user_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_user_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_user_local_authority_id", columns={"local_authority_id"}),
- *        @ORM\Index(name="ix_user_partner_contact_details_id", columns={"partner_contact_details_id"}),
- *        @ORM\Index(name="ix_user_team_id", columns={"team_id"}),
- *        @ORM\Index(name="ix_user_transport_manager_id", columns={"transport_manager_id"}),
- *        @ORM\Index(name="uk_user_login_id", columns={"login_id"}),
- *        @ORM\Index(name="uk_user_pid", columns={"pid"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_user_login_id", columns={"login_id"}),
- *        @ORM\UniqueConstraint(name="uk_user_pid", columns={"pid"})
- *    }
- * )
  */
+#[ORM\Table(name: 'user')]
+#[ORM\Index(name: 'ix_user_contact_details_id', columns: ['contact_details_id'])]
+#[ORM\Index(name: 'ix_user_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_user_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_user_local_authority_id', columns: ['local_authority_id'])]
+#[ORM\Index(name: 'ix_user_partner_contact_details_id', columns: ['partner_contact_details_id'])]
+#[ORM\Index(name: 'ix_user_team_id', columns: ['team_id'])]
+#[ORM\Index(name: 'ix_user_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\Index(name: 'uk_user_login_id', columns: ['login_id'])]
+#[ORM\Index(name: 'uk_user_pid', columns: ['pid'])]
+#[ORM\UniqueConstraint(name: 'uk_user_login_id', columns: ['login_id'])]
+#[ORM\UniqueConstraint(name: 'uk_user_pid', columns: ['pid'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractUser implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -57,191 +51,167 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to team
      *
      * @var \Dvsa\Olcs\Api\Entity\User\Team
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\Team", fetch="LAZY")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'team_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\Team::class, fetch: 'LAZY')]
     protected $team;
 
     /**
      * If user is also a transport manager.
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
     protected $transportManager;
 
     /**
      * If user is a member of a local authority a link to the LA details.
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\LocalAuthority", fetch="LAZY")
-     * @ORM\JoinColumn(name="local_authority_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'local_authority_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority::class, fetch: 'LAZY')]
     protected $localAuthority;
 
     /**
      * Foreign Key to contact_details
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY", cascade={"persist"})
-     * @ORM\JoinColumn(name="contact_details_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'contact_details_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY', cascade: ['persist'])]
     protected $contactDetails;
 
     /**
      * If user is part of a partner, such as HMRC a link to the partners details.
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY", cascade={"persist"})
-     * @ORM\JoinColumn(name="partner_contact_details_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'partner_contact_details_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY', cascade: ['persist'])]
     protected $partnerContactDetails;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Pid
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="pid", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'pid', length: 255, nullable: true)]
     protected $pid;
 
     /**
      * Login id
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="login_id", length=40, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'login_id', length: 40, nullable: true)]
     protected $loginId;
 
     /**
      * Account locked by DVSA. Cannot be unlocked by non DVSA user.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="account_disabled", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'account_disabled', nullable: false, options: ['default' => 0])]
     protected $accountDisabled = 0;
 
     /**
      * Date when the account was disabled
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="disabled_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'disabled_date', nullable: true)]
     protected $disabledDate;
 
     /**
      * Communication to be in Welsh
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="translate_to_welsh", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'translate_to_welsh', nullable: false, options: ['default' => 0])]
     protected $translateToWelsh = 0;
 
     /**
      * Last login at
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="last_login_at", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'last_login_at', nullable: true)]
     protected $lastLoginAt;
 
     /**
      * Whether user has agreed to terms and conditions
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="terms_agreed", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'terms_agreed', nullable: false, options: ['default' => 0])]
     protected $termsAgreed = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Roles
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\User\Role", inversedBy="users", fetch="LAZY")
-     * @ORM\JoinTable(name="user_role",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="role_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'user_role')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'role_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\User\Role::class, inversedBy: 'users', fetch: 'LAZY')]
     protected $roles;
 
     /**
      * OrganisationUsers
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser", mappedBy="user", cascade={"persist"}, indexBy="organisation_id", orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser::class, mappedBy: 'user', cascade: ['persist'], indexBy: 'organisation_id', orphanRemoval: true)]
     protected $organisationUsers;
 
     /**
      * PasswordResets
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\User\UserPasswordReset", mappedBy="user", fetch="EXTRA_LAZY")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\User\UserPasswordReset::class, mappedBy: 'user', fetch: 'EXTRA_LAZY')]
     protected $passwordResets;
 
     /**

@@ -9,25 +9,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * LetterAppendix Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="letter_appendix")
  */
+#[ORM\Table(name: 'letter_appendix')]
+#[ORM\Entity]
 class LetterAppendix extends AbstractLetterAppendix
 {
     /**
      * Letter appendix versions
      *
      * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion",
-     *     mappedBy="letterAppendix",
-     *     cascade={"persist"},
-     *     orphanRemoval=false
-     * )
-     * @ORM\OrderBy({"versionNumber" = "DESC"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion::class, mappedBy: 'letterAppendix', cascade: ['persist'], orphanRemoval: false)]
+    #[ORM\OrderBy(['versionNumber' => 'DESC'])]
     protected $versions;
 
     /**

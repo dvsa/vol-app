@@ -9,20 +9,16 @@ use Dvsa\Olcs\Api\Entity\Venue as VenueEntity;
 
 /**
  * Impounding Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="impounding",
- *    indexes={
- *        @ORM\Index(name="ix_impounding_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_impounding_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_impounding_presiding_tc_id", columns={"presiding_tc_id"}),
- *        @ORM\Index(name="ix_impounding_outcome", columns={"outcome"}),
- *        @ORM\Index(name="ix_impounding_impounding_type", columns={"impounding_type"}),
- *        @ORM\Index(name="ix_impounding_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_impounding_venue_id", columns={"venue_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'impounding')]
+#[ORM\Index(name: 'ix_impounding_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_impounding_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_impounding_presiding_tc_id', columns: ['presiding_tc_id'])]
+#[ORM\Index(name: 'ix_impounding_outcome', columns: ['outcome'])]
+#[ORM\Index(name: 'ix_impounding_impounding_type', columns: ['impounding_type'])]
+#[ORM\Index(name: 'ix_impounding_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_impounding_venue_id', columns: ['venue_id'])]
+#[ORM\Entity]
 class Impounding extends AbstractImpounding
 {
     public const VENUE_OTHER = 'other';

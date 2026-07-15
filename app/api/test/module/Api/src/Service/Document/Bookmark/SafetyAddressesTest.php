@@ -13,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class SafetyAddressesTest extends MockeryTestCase
+final class SafetyAddressesTest extends MockeryTestCase
 {
     public function testGetQuery(): void
     {

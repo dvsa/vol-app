@@ -4,18 +4,9 @@ services:
   api:
     volumes:
       - ./app/api:/var/www/html
-      - ../olcs-transfer:/var/www/html/vendor/olcs/olcs-transfer
-
   selfserve:
     volumes:
       - ./app/selfserve:/var/www/html
-      - ../olcs-common:/var/www/html/vendor/olcs/olcs-common
-      - ../olcs-auth:/var/www/html/vendor/olcs/olcs-auth
-      - ../olcs-transfer:/var/www/html/vendor/olcs/olcs-transfer
-
   internal:
     volumes:
       - ./app/internal:/var/www/html
-      - ../olcs-common:/var/www/html/vendor/olcs/olcs-common
-      - ../olcs-auth:/var/www/html/vendor/olcs/olcs-auth
-      - ../olcs-transfer:/var/www/html/vendor/olcs/olcs-transfer

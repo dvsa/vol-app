@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BrRegStatus;
 /**
  * BrRegStatus test
  */
-class BrRegStatusTest extends \PHPUnit\Framework\TestCase
+final class BrRegStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -27,23 +27,21 @@ class BrRegStatusTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
+        yield [
+            [],
+            null
+        ];
+        yield [
             [
-                [],
-                null
+                'status' => [
+                    'description' => 'bus status'
+                ]
             ],
-            [
-                [
-                    'status' => [
-                        'description' => 'bus status'
-                    ]
-                ],
-                'bus status'
-            ]
+            'bus status'
         ];
     }
 }

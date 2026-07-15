@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Domain\Repository\ConditionUndertaking as ConditionUndertaking
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class ConditionUndertakingTest extends QueryHandlerTestCase
+final class ConditionUndertakingTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

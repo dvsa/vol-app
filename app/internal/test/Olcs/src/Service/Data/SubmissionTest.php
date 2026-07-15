@@ -10,7 +10,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class SubmissionTest extends TestCase
+final class SubmissionTest extends TestCase
 {
     /** @var Submission */
     protected $sut;
@@ -18,6 +18,7 @@ class SubmissionTest extends TestCase
     /** @var  m\MockInterface */
     private $refDataService;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->refDataService = m::mock(RefData::class);
@@ -138,21 +139,19 @@ class SubmissionTest extends TestCase
         );
     }
 
-    public static function providerSubmissions(): array
+    public static function providerSubmissions(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'dataSnapshot' => '{"introduction":{"data":["a"]}}',
-                    'submissionSectionComments' => []
-                ],
-                [
-                    'introduction' => [
-                        'sectionId' => 'introduction',
-                        'description' => 'Introduction',
-                        'data' => ['a'],
-                        'comments' => []
-                    ]
+                'dataSnapshot' => '{"introduction":{"data":["a"]}}',
+                'submissionSectionComments' => []
+            ],
+            [
+                'introduction' => [
+                    'sectionId' => 'introduction',
+                    'description' => 'Introduction',
+                    'data' => ['a'],
+                    'comments' => []
                 ]
             ]
         ];

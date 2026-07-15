@@ -12,7 +12,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\AbstractListQueryHandlerTestCase;
 /**
  * ReadyToPrintConfirm Test
  */
-class ReadyToPrintConfirmTest extends AbstractListQueryHandlerTestCase
+final class ReadyToPrintConfirmTest extends AbstractListQueryHandlerTestCase
 {
     protected $sutClass = ReadyToPrintConfirm::class;
     protected $sutRepo = 'IrhpPermit';

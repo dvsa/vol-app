@@ -165,7 +165,7 @@ return [
             'SectionAccessService' => \Dvsa\Olcs\Api\Service\Lva\SectionAccessService::class,
             'ApplicationGrantValidationService' => \Dvsa\Olcs\Api\Service\Lva\Application\GrantValidationService::class,
             'ApplicationPublishValidationService' => \Dvsa\Olcs\Api\Service\Lva\Application\PublishValidationService::class,
-            'ContentStore' => \Dvsa\Olcs\DocumentShare\Service\ClientFactory::class,
+            'ContentStore' => \Dvsa\Olcs\DocumentShare\Service\DocumentStoreFactory::class,
             'PayloadValidationListener' => \Dvsa\Olcs\Api\Mvc\PayloadValidationListenerFactory::class,
             'CommandHandlerManager' => \Dvsa\Olcs\Api\Domain\CommandHandlerManagerFactory::class,
             'QueryHandlerManager' => \Dvsa\Olcs\Api\Domain\QueryHandlerManagerFactory::class,
@@ -207,6 +207,10 @@ return [
             // Letter Preview Service
             \Dvsa\Olcs\Api\Service\Letter\LetterPreviewService::class =>
                 \Dvsa\Olcs\Api\Service\Letter\LetterPreviewServiceFactory::class,
+
+            // Master Template Resolver (VOL-7305)
+            \Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolver::class =>
+                \Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolverFactory::class,
 
             \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClient::class =>
                 \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClientFactory::class,
@@ -934,15 +938,13 @@ return [
     'doctrine' => [
         'driver' => [
             'EntityDriver' => [
-                'class' => \Doctrine\ORM\Mapping\Driver\AnnotationDriver::class,
-                'cache' => 'array',
+                'class' => \Doctrine\ORM\Mapping\Driver\AttributeDriver::class,
                 'paths' => [
                     __DIR__ . '/../src/Entity'
                 ]
             ],
             'translatable_metadata_driver' => [
-                'class' => \Doctrine\ORM\Mapping\Driver\AnnotationDriver::class,
-                'cache' => 'array',
+                'class' => \Doctrine\ORM\Mapping\Driver\AttributeDriver::class,
                 'paths' => [
                     'vendor/gedmo/doctrine-extensions/src/Translatable/Entity'
                 ],

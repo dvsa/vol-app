@@ -10,7 +10,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-class NysiisRestClientFactoryTest extends MockeryTestCase
+final class NysiisRestClientFactoryTest extends MockeryTestCase
 {
     /**
      * Tests client created properly
@@ -59,11 +59,9 @@ class NysiisRestClientFactoryTest extends MockeryTestCase
     /**
      * data provider for testing service creation failures
      */
-    public static function invokeFailProvider(): array
+    public static function invokeFailProvider(): \Iterator
     {
-        return [
-            [['uri' => 'address'], 'Missing nysiis rest client options'],
-            [['options' => []], 'Missing nysiis rest client uri']
-        ];
+        yield [['uri' => 'address'], 'Missing nysiis rest client options'];
+        yield [['options' => []], 'Missing nysiis rest client uri'];
     }
 }

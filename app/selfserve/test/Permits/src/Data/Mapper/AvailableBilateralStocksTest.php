@@ -17,12 +17,13 @@ use Laminas\Form\Element\Hidden;
 use Laminas\Form\Element\Submit;
 use Laminas\Form\Fieldset;
 
-class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class AvailableBilateralStocksTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     public $translationHelperService;
 
     public $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->translationHelperService = m::mock(TranslationHelperService::class);

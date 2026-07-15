@@ -9,25 +9,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * LetterSectionVariant Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="letter_section_variant")
  */
+#[ORM\Table(name: 'letter_section_variant')]
+#[ORM\Entity]
 class LetterSectionVariant extends AbstractLetterSectionVariant
 {
     /**
      * Letter section versions
      *
      * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion",
-     *     mappedBy="letterSectionVariant",
-     *     cascade={"persist", "remove"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"versionNumber" = "DESC"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion::class, mappedBy: 'letterSectionVariant', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OrderBy(['versionNumber' => 'DESC'])]
     protected $versions;
 
     /**

@@ -9,10 +9,8 @@ use Olcs\FormService\Form\Lva\Addresses;
 use Laminas\InputFilter\InputFilter;
 use Laminas\InputFilter\Input;
 
-/**
- * @covers Olcs\FormService\Form\Lva\Addresses
- */
-class AddressesTest extends AbstractLvaFormServiceTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\FormService\Form\Lva\Addresses::class)]
+final class AddressesTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = Addresses::class;
 
@@ -76,6 +74,6 @@ class AddressesTest extends AbstractLvaFormServiceTestCase
             ]
         );
 
-        static::assertSame($mockForm, $form);
+        $this->assertSame($mockForm, $form);
     }
 }

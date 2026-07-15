@@ -15,7 +15,7 @@ use Olcs\FormService\Form\Lva\VariationBusinessDetails;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationBusinessDetailsTest extends MockeryTestCase
+final class VariationBusinessDetailsTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -23,6 +23,7 @@ class VariationBusinessDetailsTest extends MockeryTestCase
 
     protected $fh;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();

@@ -11,7 +11,7 @@ use Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarning;
 use Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarningFactory;
 use Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarningFactoryConfigInputFilter;
 
-class SessionTimeoutWarningFactoryTest extends MockeryTestCase
+final class SessionTimeoutWarningFactoryTest extends MockeryTestCase
 {
     /**
      * @throws \Exception

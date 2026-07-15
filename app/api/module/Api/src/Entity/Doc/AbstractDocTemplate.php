@@ -22,21 +22,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="doc_template",
- *    indexes={
- *        @ORM\Index(name="ix_doc_template_category_id", columns={"category_id"}),
- *        @ORM\Index(name="ix_doc_template_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_doc_template_document_id", columns={"document_id"}),
- *        @ORM\Index(name="ix_doc_template_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_doc_template_letter_type_id", columns={"letter_type_id"}),
- *        @ORM\Index(name="ix_doc_template_sub_category_id", columns={"sub_category_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'doc_template')]
+#[ORM\Index(name: 'ix_doc_template_category_id', columns: ['category_id'])]
+#[ORM\Index(name: 'ix_doc_template_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_doc_template_document_id', columns: ['document_id'])]
+#[ORM\Index(name: 'ix_doc_template_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_doc_template_letter_type_id', columns: ['letter_type_id'])]
+#[ORM\Index(name: 'ix_doc_template_sub_category_id', columns: ['sub_category_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -50,128 +46,115 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to category
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Category
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Category", fetch="LAZY")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Category::class, fetch: 'LAZY')]
     protected $category;
 
     /**
      * Foreign Key to sub_category
      *
      * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SubCategory", fetch="LAZY")
-     * @ORM\JoinColumn(name="sub_category_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SubCategory::class, fetch: 'LAZY')]
     protected $subCategory;
 
     /**
      * Link to new database-driven letter type
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterType", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_type_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, fetch: 'LAZY')]
     protected $letterType;
 
     /**
      * Link to the rtf template
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
     protected $document;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Brief description of what the document is
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: false)]
     protected $description = '';
 
     /**
      * Is a Northern Ireland document
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_ni", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_ni', nullable: false, options: ['default' => 0])]
     protected $isNi = 0;
 
     /**
      * Do not send to organisation even if they are signed up to receive documents by email.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="suppress_from_op", nullable=false)
      */
+    #[ORM\Column(type: 'yesno', name: 'suppress_from_op', nullable: false)]
     protected $suppressFromOp = 0;
 
     /**
      * Template slug
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="template_slug", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'template_slug', length: 100, nullable: true)]
     protected $templateSlug;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * DocTemplateBookmarks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\DocTemplateBookmark", mappedBy="docTemplate")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocTemplateBookmark::class, mappedBy: 'docTemplate')]
     protected $docTemplateBookmarks;
 
     /**

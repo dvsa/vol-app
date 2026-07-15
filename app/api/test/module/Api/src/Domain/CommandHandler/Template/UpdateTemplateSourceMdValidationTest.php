@@ -16,7 +16,7 @@ use Mockery as m;
  * Validator behaviour specifically for `format='md'` rows — the Markdown-Twig path for
  * GOV.UK Notify passthrough templates.
  */
-class UpdateTemplateSourceMdValidationTest extends AbstractCommandHandlerTestCase
+final class UpdateTemplateSourceMdValidationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

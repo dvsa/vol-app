@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as Entity;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class LicencePsvDiscCountNotCeasedTest extends QueryHandlerTestCase
+final class LicencePsvDiscCountNotCeasedTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

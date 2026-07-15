@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class QuestionTextTest extends MockeryTestCase
+final class QuestionTextTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
     public function testGenerate(

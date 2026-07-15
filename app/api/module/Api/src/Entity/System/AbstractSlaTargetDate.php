@@ -22,26 +22,20 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="sla_target_date",
- *    indexes={
- *        @ORM\Index(name="fk_sla_target_date_statement_id_statement_id", columns={"statement_id"}),
- *        @ORM\Index(name="ix_sla_target_date_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_sla_target_date_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_sla_target_date_pi_id", columns={"pi_id"}),
- *        @ORM\Index(name="ix_sla_target_date_propose_to_revoke_idx", columns={"propose_to_revoke_id"}),
- *        @ORM\Index(name="ix_sla_target_date_sla_id", columns={"sla_id"}),
- *        @ORM\Index(name="ix_sla_target_date_submission_id", columns={"submission_id"}),
- *        @ORM\Index(name="uk_sla_target_date_document_id", columns={"document_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_sla_target_date_document_id", columns={"document_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'sla_target_date')]
+#[ORM\Index(name: 'fk_sla_target_date_statement_id_statement_id', columns: ['statement_id'])]
+#[ORM\Index(name: 'ix_sla_target_date_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_sla_target_date_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_sla_target_date_pi_id', columns: ['pi_id'])]
+#[ORM\Index(name: 'ix_sla_target_date_propose_to_revoke_idx', columns: ['propose_to_revoke_id'])]
+#[ORM\Index(name: 'ix_sla_target_date_sla_id', columns: ['sla_id'])]
+#[ORM\Index(name: 'ix_sla_target_date_submission_id', columns: ['submission_id'])]
+#[ORM\Index(name: 'uk_sla_target_date_document_id', columns: ['document_id'])]
+#[ORM\UniqueConstraint(name: 'uk_sla_target_date_document_id', columns: ['document_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractSlaTargetDate implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -55,148 +49,133 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to document
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
     protected $document;
 
     /**
      * Foreign Key to pi
      *
      * @var \Dvsa\Olcs\Api\Entity\Pi\Pi
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Pi", fetch="LAZY")
-     * @ORM\JoinColumn(name="pi_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, fetch: 'LAZY')]
     protected $pi;
 
     /**
      * Foreign Key to submission
      *
      * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Submission\Submission", fetch="LAZY")
-     * @ORM\JoinColumn(name="submission_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'submission_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\Submission::class, fetch: 'LAZY')]
     protected $submission;
 
     /**
      * ProposeToRevoke
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke", fetch="LAZY")
-     * @ORM\JoinColumn(name="propose_to_revoke_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'propose_to_revoke_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke::class, fetch: 'LAZY')]
     protected $proposeToRevoke;
 
     /**
      * Statement
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Statement
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Statement", fetch="LAZY")
-     * @ORM\JoinColumn(name="statement_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'statement_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Statement::class, fetch: 'LAZY')]
     protected $statement;
 
     /**
      * Foreign Key to sla
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Sla
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Sla", fetch="LAZY")
-     * @ORM\JoinColumn(name="sla_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'sla_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Sla::class, fetch: 'LAZY')]
     protected $sla;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Agreed date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="agreed_date", nullable=false)
      */
+    #[ORM\Column(type: 'date', name: 'agreed_date', nullable: false)]
     protected $agreedDate;
 
     /**
      * Target date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="target_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'target_date', nullable: true)]
     protected $targetDate;
 
     /**
      * Sent date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="sent_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'sent_date', nullable: true)]
     protected $sentDate;
 
     /**
      * underDelegation
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="under_delegation", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'under_delegation', nullable: false, options: ['default' => 0])]
     protected $underDelegation = 0;
 
     /**
      * SLA Target date notes
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="notes", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'notes', length: 4000, nullable: true)]
     protected $notes;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

@@ -54,7 +54,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class IrhpApplicationEntityTest extends EntityTester
+final class IrhpApplicationEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -300,19 +300,17 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->isValid());
     }
 
-    public static function dpTestIsValid(): array
+    public static function dpTestIsValid(): \Iterator
     {
-        return [
-            [IrhpInterface::STATUS_CANCELLED, false],
-            [IrhpInterface::STATUS_NOT_YET_SUBMITTED, false],
-            [IrhpInterface::STATUS_UNDER_CONSIDERATION, false],
-            [IrhpInterface::STATUS_WITHDRAWN, false],
-            [IrhpInterface::STATUS_AWAITING_FEE, false],
-            [IrhpInterface::STATUS_FEE_PAID, false],
-            [IrhpInterface::STATUS_UNSUCCESSFUL, false],
-            [IrhpInterface::STATUS_ISSUING, false],
-            [IrhpInterface::STATUS_VALID, true],
-        ];
+        yield [IrhpInterface::STATUS_CANCELLED, false];
+        yield [IrhpInterface::STATUS_NOT_YET_SUBMITTED, false];
+        yield [IrhpInterface::STATUS_UNDER_CONSIDERATION, false];
+        yield [IrhpInterface::STATUS_WITHDRAWN, false];
+        yield [IrhpInterface::STATUS_AWAITING_FEE, false];
+        yield [IrhpInterface::STATUS_FEE_PAID, false];
+        yield [IrhpInterface::STATUS_UNSUCCESSFUL, false];
+        yield [IrhpInterface::STATUS_ISSUING, false];
+        yield [IrhpInterface::STATUS_VALID, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsUnderConsideration')]
@@ -322,19 +320,17 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->isUnderConsideration());
     }
 
-    public static function dpTestIsUnderConsideration(): array
+    public static function dpTestIsUnderConsideration(): \Iterator
     {
-        return [
-            [IrhpInterface::STATUS_CANCELLED, false],
-            [IrhpInterface::STATUS_NOT_YET_SUBMITTED, false],
-            [IrhpInterface::STATUS_UNDER_CONSIDERATION, true],
-            [IrhpInterface::STATUS_WITHDRAWN, false],
-            [IrhpInterface::STATUS_AWAITING_FEE, false],
-            [IrhpInterface::STATUS_FEE_PAID, false],
-            [IrhpInterface::STATUS_UNSUCCESSFUL, false],
-            [IrhpInterface::STATUS_ISSUING, false],
-            [IrhpInterface::STATUS_VALID, false],
-        ];
+        yield [IrhpInterface::STATUS_CANCELLED, false];
+        yield [IrhpInterface::STATUS_NOT_YET_SUBMITTED, false];
+        yield [IrhpInterface::STATUS_UNDER_CONSIDERATION, true];
+        yield [IrhpInterface::STATUS_WITHDRAWN, false];
+        yield [IrhpInterface::STATUS_AWAITING_FEE, false];
+        yield [IrhpInterface::STATUS_FEE_PAID, false];
+        yield [IrhpInterface::STATUS_UNSUCCESSFUL, false];
+        yield [IrhpInterface::STATUS_ISSUING, false];
+        yield [IrhpInterface::STATUS_VALID, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsAwaitingFee')]
@@ -344,19 +340,17 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->isAwaitingFee());
     }
 
-    public static function dpTestIsAwaitingFee(): array
+    public static function dpTestIsAwaitingFee(): \Iterator
     {
-        return [
-            [IrhpInterface::STATUS_CANCELLED, false],
-            [IrhpInterface::STATUS_NOT_YET_SUBMITTED, false],
-            [IrhpInterface::STATUS_UNDER_CONSIDERATION, false],
-            [IrhpInterface::STATUS_WITHDRAWN, false],
-            [IrhpInterface::STATUS_AWAITING_FEE, true],
-            [IrhpInterface::STATUS_FEE_PAID, false],
-            [IrhpInterface::STATUS_UNSUCCESSFUL, false],
-            [IrhpInterface::STATUS_ISSUING, false],
-            [IrhpInterface::STATUS_VALID, false],
-        ];
+        yield [IrhpInterface::STATUS_CANCELLED, false];
+        yield [IrhpInterface::STATUS_NOT_YET_SUBMITTED, false];
+        yield [IrhpInterface::STATUS_UNDER_CONSIDERATION, false];
+        yield [IrhpInterface::STATUS_WITHDRAWN, false];
+        yield [IrhpInterface::STATUS_AWAITING_FEE, true];
+        yield [IrhpInterface::STATUS_FEE_PAID, false];
+        yield [IrhpInterface::STATUS_UNSUCCESSFUL, false];
+        yield [IrhpInterface::STATUS_ISSUING, false];
+        yield [IrhpInterface::STATUS_VALID, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsFeePaid')]
@@ -366,19 +360,17 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->isFeePaid());
     }
 
-    public static function dpTestIsFeePaid(): array
+    public static function dpTestIsFeePaid(): \Iterator
     {
-        return [
-            [IrhpInterface::STATUS_CANCELLED, false],
-            [IrhpInterface::STATUS_NOT_YET_SUBMITTED, false],
-            [IrhpInterface::STATUS_UNDER_CONSIDERATION, false],
-            [IrhpInterface::STATUS_WITHDRAWN, false],
-            [IrhpInterface::STATUS_AWAITING_FEE, false],
-            [IrhpInterface::STATUS_FEE_PAID, true],
-            [IrhpInterface::STATUS_UNSUCCESSFUL, false],
-            [IrhpInterface::STATUS_ISSUING, false],
-            [IrhpInterface::STATUS_VALID, false],
-        ];
+        yield [IrhpInterface::STATUS_CANCELLED, false];
+        yield [IrhpInterface::STATUS_NOT_YET_SUBMITTED, false];
+        yield [IrhpInterface::STATUS_UNDER_CONSIDERATION, false];
+        yield [IrhpInterface::STATUS_WITHDRAWN, false];
+        yield [IrhpInterface::STATUS_AWAITING_FEE, false];
+        yield [IrhpInterface::STATUS_FEE_PAID, true];
+        yield [IrhpInterface::STATUS_UNSUCCESSFUL, false];
+        yield [IrhpInterface::STATUS_ISSUING, false];
+        yield [IrhpInterface::STATUS_VALID, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsIssueInProgress')]
@@ -388,19 +380,17 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->isIssueInProgress());
     }
 
-    public static function dpTestIsIssueInProgress(): array
+    public static function dpTestIsIssueInProgress(): \Iterator
     {
-        return [
-            [IrhpInterface::STATUS_CANCELLED, false],
-            [IrhpInterface::STATUS_NOT_YET_SUBMITTED, false],
-            [IrhpInterface::STATUS_UNDER_CONSIDERATION, false],
-            [IrhpInterface::STATUS_WITHDRAWN, false],
-            [IrhpInterface::STATUS_AWAITING_FEE, false],
-            [IrhpInterface::STATUS_FEE_PAID, false],
-            [IrhpInterface::STATUS_UNSUCCESSFUL, false],
-            [IrhpInterface::STATUS_ISSUING, true],
-            [IrhpInterface::STATUS_VALID, false],
-        ];
+        yield [IrhpInterface::STATUS_CANCELLED, false];
+        yield [IrhpInterface::STATUS_NOT_YET_SUBMITTED, false];
+        yield [IrhpInterface::STATUS_UNDER_CONSIDERATION, false];
+        yield [IrhpInterface::STATUS_WITHDRAWN, false];
+        yield [IrhpInterface::STATUS_AWAITING_FEE, false];
+        yield [IrhpInterface::STATUS_FEE_PAID, false];
+        yield [IrhpInterface::STATUS_UNSUCCESSFUL, false];
+        yield [IrhpInterface::STATUS_ISSUING, true];
+        yield [IrhpInterface::STATUS_VALID, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsActive')]
@@ -410,20 +400,18 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->isActive());
     }
 
-    public static function dpTestIsActive(): array
+    public static function dpTestIsActive(): \Iterator
     {
-        return [
-            [IrhpInterface::STATUS_CANCELLED, false],
-            [IrhpInterface::STATUS_NOT_YET_SUBMITTED, true],
-            [IrhpInterface::STATUS_UNDER_CONSIDERATION, true],
-            [IrhpInterface::STATUS_WITHDRAWN, false],
-            [IrhpInterface::STATUS_AWAITING_FEE, true],
-            [IrhpInterface::STATUS_FEE_PAID, true],
-            [IrhpInterface::STATUS_UNSUCCESSFUL, false],
-            [IrhpInterface::STATUS_ISSUING, true],
-            [IrhpInterface::STATUS_VALID, false],
-            [IrhpInterface::STATUS_EXPIRED, false],
-        ];
+        yield [IrhpInterface::STATUS_CANCELLED, false];
+        yield [IrhpInterface::STATUS_NOT_YET_SUBMITTED, true];
+        yield [IrhpInterface::STATUS_UNDER_CONSIDERATION, true];
+        yield [IrhpInterface::STATUS_WITHDRAWN, false];
+        yield [IrhpInterface::STATUS_AWAITING_FEE, true];
+        yield [IrhpInterface::STATUS_FEE_PAID, true];
+        yield [IrhpInterface::STATUS_UNSUCCESSFUL, false];
+        yield [IrhpInterface::STATUS_ISSUING, true];
+        yield [IrhpInterface::STATUS_VALID, false];
+        yield [IrhpInterface::STATUS_EXPIRED, false];
     }
 
     /**
@@ -451,20 +439,18 @@ class IrhpApplicationEntityTest extends EntityTester
     /**
      * Pass array of app status to make sure an exception is thrown
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function dpCancelException(): array
+    public static function dpCancelException(): \Iterator
     {
-        return [
-            [IrhpInterface::STATUS_CANCELLED],
-            [IrhpInterface::STATUS_UNDER_CONSIDERATION],
-            [IrhpInterface::STATUS_WITHDRAWN],
-            [IrhpInterface::STATUS_AWAITING_FEE],
-            [IrhpInterface::STATUS_FEE_PAID],
-            [IrhpInterface::STATUS_UNSUCCESSFUL],
-            [IrhpInterface::STATUS_ISSUING],
-            [IrhpInterface::STATUS_VALID],
-        ];
+        yield [IrhpInterface::STATUS_CANCELLED];
+        yield [IrhpInterface::STATUS_UNDER_CONSIDERATION];
+        yield [IrhpInterface::STATUS_WITHDRAWN];
+        yield [IrhpInterface::STATUS_AWAITING_FEE];
+        yield [IrhpInterface::STATUS_FEE_PAID];
+        yield [IrhpInterface::STATUS_UNSUCCESSFUL];
+        yield [IrhpInterface::STATUS_ISSUING];
+        yield [IrhpInterface::STATUS_VALID];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCanBeCancelled')]
@@ -474,19 +460,17 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->canBeCancelled());
     }
 
-    public static function dpTestCanBeCancelled(): array
+    public static function dpTestCanBeCancelled(): \Iterator
     {
-        return [
-            [IrhpInterface::STATUS_CANCELLED, false],
-            [IrhpInterface::STATUS_NOT_YET_SUBMITTED, true],
-            [IrhpInterface::STATUS_UNDER_CONSIDERATION, false],
-            [IrhpInterface::STATUS_WITHDRAWN, false],
-            [IrhpInterface::STATUS_AWAITING_FEE, false],
-            [IrhpInterface::STATUS_FEE_PAID, false],
-            [IrhpInterface::STATUS_UNSUCCESSFUL, false],
-            [IrhpInterface::STATUS_ISSUING, false],
-            [IrhpInterface::STATUS_VALID, false],
-        ];
+        yield [IrhpInterface::STATUS_CANCELLED, false];
+        yield [IrhpInterface::STATUS_NOT_YET_SUBMITTED, true];
+        yield [IrhpInterface::STATUS_UNDER_CONSIDERATION, false];
+        yield [IrhpInterface::STATUS_WITHDRAWN, false];
+        yield [IrhpInterface::STATUS_AWAITING_FEE, false];
+        yield [IrhpInterface::STATUS_FEE_PAID, false];
+        yield [IrhpInterface::STATUS_UNSUCCESSFUL, false];
+        yield [IrhpInterface::STATUS_ISSUING, false];
+        yield [IrhpInterface::STATUS_VALID, false];
     }
 
     public function testTerminate(): void
@@ -527,12 +511,10 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpCanBeTerminated(): array
+    public static function dpCanBeTerminated(): \Iterator
     {
-        return [
-            [false, false],
-            [true, true],
-        ];
+        yield [false, false];
+        yield [true, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValidCertificateOfRoadworthiness')]
@@ -551,14 +533,12 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsValidCertificateOfRoadworthiness(): array
+    public static function dpIsValidCertificateOfRoadworthiness(): \Iterator
     {
-        return [
-            [false, false, false],
-            [false, true, false],
-            [true, false, false],
-            [true, true, true],
-        ];
+        yield [false, false, false];
+        yield [false, true, false];
+        yield [true, false, false];
+        yield [true, true, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsCancelled')]
@@ -568,19 +548,17 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->isCancelled());
     }
 
-    public static function dpTestIsCancelled(): array
+    public static function dpTestIsCancelled(): \Iterator
     {
-        return [
-            [IrhpInterface::STATUS_CANCELLED, true],
-            [IrhpInterface::STATUS_NOT_YET_SUBMITTED, false],
-            [IrhpInterface::STATUS_UNDER_CONSIDERATION, false],
-            [IrhpInterface::STATUS_WITHDRAWN, false],
-            [IrhpInterface::STATUS_AWAITING_FEE, false],
-            [IrhpInterface::STATUS_FEE_PAID, false],
-            [IrhpInterface::STATUS_UNSUCCESSFUL, false],
-            [IrhpInterface::STATUS_ISSUING, false],
-            [IrhpInterface::STATUS_VALID, false],
-        ];
+        yield [IrhpInterface::STATUS_CANCELLED, true];
+        yield [IrhpInterface::STATUS_NOT_YET_SUBMITTED, false];
+        yield [IrhpInterface::STATUS_UNDER_CONSIDERATION, false];
+        yield [IrhpInterface::STATUS_WITHDRAWN, false];
+        yield [IrhpInterface::STATUS_AWAITING_FEE, false];
+        yield [IrhpInterface::STATUS_FEE_PAID, false];
+        yield [IrhpInterface::STATUS_UNSUCCESSFUL, false];
+        yield [IrhpInterface::STATUS_ISSUING, false];
+        yield [IrhpInterface::STATUS_VALID, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpCanBeWithdrawn')]
@@ -600,25 +578,23 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpCanBeWithdrawn(): array
+    public static function dpCanBeWithdrawn(): \Iterator
     {
-        return [
-            [null, false, false, false],
-            [new RefData(WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS), false, false, false],
-            [new RefData(WithdrawableInterface::WITHDRAWN_REASON_UNPAID), false, false, false],
-            [new RefData(WithdrawableInterface::WITHDRAWN_REASON_BY_USER), false, false, false],
-            [new RefData(WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED), false, false, false],
-            [null, true, false, true],
-            [new RefData(WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS), true, false, true],
-            [new RefData(WithdrawableInterface::WITHDRAWN_REASON_UNPAID), true, false, true],
-            [new RefData(WithdrawableInterface::WITHDRAWN_REASON_BY_USER), true, false, true],
-            [new RefData(WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED), true, false, true],
-            [null, false, true, true],
-            [new RefData(WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS), false, true, true],
-            [new RefData(WithdrawableInterface::WITHDRAWN_REASON_UNPAID), false, true, true],
-            [new RefData(WithdrawableInterface::WITHDRAWN_REASON_BY_USER), false, true, true],
-            [new RefData(WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED), false, true, true],
-        ];
+        yield [null, false, false, false];
+        yield [new RefData(WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS), false, false, false];
+        yield [new RefData(WithdrawableInterface::WITHDRAWN_REASON_UNPAID), false, false, false];
+        yield [new RefData(WithdrawableInterface::WITHDRAWN_REASON_BY_USER), false, false, false];
+        yield [new RefData(WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED), false, false, false];
+        yield [null, true, false, true];
+        yield [new RefData(WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS), true, false, true];
+        yield [new RefData(WithdrawableInterface::WITHDRAWN_REASON_UNPAID), true, false, true];
+        yield [new RefData(WithdrawableInterface::WITHDRAWN_REASON_BY_USER), true, false, true];
+        yield [new RefData(WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED), true, false, true];
+        yield [null, false, true, true];
+        yield [new RefData(WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS), false, true, true];
+        yield [new RefData(WithdrawableInterface::WITHDRAWN_REASON_UNPAID), false, true, true];
+        yield [new RefData(WithdrawableInterface::WITHDRAWN_REASON_BY_USER), false, true, true];
+        yield [new RefData(WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED), false, true, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpCanBeWithdrawnReasonDeclined')]
@@ -636,12 +612,10 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpCanBeWithdrawnReasonDeclined(): array
+    public static function dpCanBeWithdrawnReasonDeclined(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsWithdrawn')]
@@ -651,19 +625,17 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $entity->isWithdrawn());
     }
 
-    public static function dpTestIsWithdrawn(): array
+    public static function dpTestIsWithdrawn(): \Iterator
     {
-        return [
-            [IrhpInterface::STATUS_CANCELLED, false],
-            [IrhpInterface::STATUS_NOT_YET_SUBMITTED, false],
-            [IrhpInterface::STATUS_UNDER_CONSIDERATION, false],
-            [IrhpInterface::STATUS_WITHDRAWN, true],
-            [IrhpInterface::STATUS_AWAITING_FEE, false],
-            [IrhpInterface::STATUS_FEE_PAID, false],
-            [IrhpInterface::STATUS_UNSUCCESSFUL, false],
-            [IrhpInterface::STATUS_ISSUING, false],
-            [IrhpInterface::STATUS_VALID, false],
-        ];
+        yield [IrhpInterface::STATUS_CANCELLED, false];
+        yield [IrhpInterface::STATUS_NOT_YET_SUBMITTED, false];
+        yield [IrhpInterface::STATUS_UNDER_CONSIDERATION, false];
+        yield [IrhpInterface::STATUS_WITHDRAWN, true];
+        yield [IrhpInterface::STATUS_AWAITING_FEE, false];
+        yield [IrhpInterface::STATUS_FEE_PAID, false];
+        yield [IrhpInterface::STATUS_UNSUCCESSFUL, false];
+        yield [IrhpInterface::STATUS_ISSUING, false];
+        yield [IrhpInterface::STATUS_VALID, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsDeclined')]
@@ -674,13 +646,11 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $entity->isDeclined());
     }
 
-    public static function dpTestIsDeclined(): array
+    public static function dpTestIsDeclined(): \Iterator
     {
-        return [
-            [WithdrawableInterface::WITHDRAWN_REASON_DECLINED, true],
-            [WithdrawableInterface::WITHDRAWN_REASON_BY_USER, false],
-            [WithdrawableInterface::WITHDRAWN_REASON_UNPAID, false],
-        ];
+        yield [WithdrawableInterface::WITHDRAWN_REASON_DECLINED, true];
+        yield [WithdrawableInterface::WITHDRAWN_REASON_BY_USER, false];
+        yield [WithdrawableInterface::WITHDRAWN_REASON_UNPAID, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpWithdraw')]
@@ -708,20 +678,17 @@ class IrhpApplicationEntityTest extends EntityTester
             $this->sut->getWithdrawReason()
         );
 
-        $this->assertEquals(
+        $this->assertSame(
             date('Y-m-d'),
             $this->sut->getWithdrawnDate()->format('Y-m-d')
         );
     }
 
-    public static function dpWithdraw(): array
+    public static function dpWithdraw(): \Iterator
     {
         $withdrawReason = m::mock(RefData::class);
-
-        return [
-            [$withdrawReason, true, $withdrawReason],
-            [$withdrawReason, false, null],
-        ];
+        yield [$withdrawReason, true, $withdrawReason];
+        yield [$withdrawReason, false, null];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpWithdrawException')]
@@ -747,75 +714,72 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpWithdrawException(): array
+    public static function dpWithdrawException(): \Iterator
     {
         $notSuccessRefData = new RefData(WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS);
         $unpaidRefData = new RefData(WithdrawableInterface::WITHDRAWN_REASON_UNPAID);
         $byUserRefData = new RefData(WithdrawableInterface::WITHDRAWN_REASON_BY_USER);
         $declinedRefData = new RefData(WithdrawableInterface::WITHDRAWN_REASON_DECLINED);
         $permitsRevokedRefData = new RefData(WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED);
-
-        return [
-            [
-                $notSuccessRefData,
-                true,
-                $notSuccessRefData,
-                WithdrawableInterface::ERR_CANT_WITHDRAW,
-            ],
-            [
-                $unpaidRefData,
-                true,
-                $unpaidRefData,
-                WithdrawableInterface::ERR_CANT_WITHDRAW,
-            ],
-            [
-                $byUserRefData,
-                true,
-                $byUserRefData,
-                WithdrawableInterface::ERR_CANT_WITHDRAW,
-            ],
-            [
-                $declinedRefData,
-                true,
-                $declinedRefData,
-                WithdrawableInterface::ERR_CANT_DECLINE,
-            ],
-            [
-                $permitsRevokedRefData,
-                true,
-                $permitsRevokedRefData,
-                WithdrawableInterface::ERR_CANT_WITHDRAW,
-            ],
-            [
-                $notSuccessRefData,
-                false,
-                null,
-                WithdrawableInterface::ERR_CANT_WITHDRAW,
-            ],
-            [
-                $unpaidRefData,
-                false,
-                null,
-                WithdrawableInterface::ERR_CANT_WITHDRAW,
-            ],
-            [
-                $byUserRefData,
-                false,
-                null,
-                WithdrawableInterface::ERR_CANT_WITHDRAW,
-            ],
-            [
-                $declinedRefData,
-                false,
-                null,
-                WithdrawableInterface::ERR_CANT_DECLINE,
-            ],
-            [
-                $permitsRevokedRefData,
-                false,
-                null,
-                WithdrawableInterface::ERR_CANT_WITHDRAW,
-            ],
+        yield [
+            $notSuccessRefData,
+            true,
+            $notSuccessRefData,
+            WithdrawableInterface::ERR_CANT_WITHDRAW,
+        ];
+        yield [
+            $unpaidRefData,
+            true,
+            $unpaidRefData,
+            WithdrawableInterface::ERR_CANT_WITHDRAW,
+        ];
+        yield [
+            $byUserRefData,
+            true,
+            $byUserRefData,
+            WithdrawableInterface::ERR_CANT_WITHDRAW,
+        ];
+        yield [
+            $declinedRefData,
+            true,
+            $declinedRefData,
+            WithdrawableInterface::ERR_CANT_DECLINE,
+        ];
+        yield [
+            $permitsRevokedRefData,
+            true,
+            $permitsRevokedRefData,
+            WithdrawableInterface::ERR_CANT_WITHDRAW,
+        ];
+        yield [
+            $notSuccessRefData,
+            false,
+            null,
+            WithdrawableInterface::ERR_CANT_WITHDRAW,
+        ];
+        yield [
+            $unpaidRefData,
+            false,
+            null,
+            WithdrawableInterface::ERR_CANT_WITHDRAW,
+        ];
+        yield [
+            $byUserRefData,
+            false,
+            null,
+            WithdrawableInterface::ERR_CANT_WITHDRAW,
+        ];
+        yield [
+            $declinedRefData,
+            false,
+            null,
+            WithdrawableInterface::ERR_CANT_DECLINE,
+        ];
+        yield [
+            $permitsRevokedRefData,
+            false,
+            null,
+            WithdrawableInterface::ERR_CANT_WITHDRAW,
         ];
     }
 
@@ -879,12 +843,10 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($isMultiStock, $entity->isMultiStock());
     }
 
-    public static function trueOrFalseProvider(): array
+    public static function trueOrFalseProvider(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
     public function testGetAssociatedStock(): void
@@ -935,19 +897,17 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsNotYetSubmitted(): array
+    public static function dpIsNotYetSubmitted(): \Iterator
     {
-        return [
-            [IrhpInterface::STATUS_CANCELLED, false],
-            [IrhpInterface::STATUS_NOT_YET_SUBMITTED, true],
-            [IrhpInterface::STATUS_UNDER_CONSIDERATION, false],
-            [IrhpInterface::STATUS_WITHDRAWN, false],
-            [IrhpInterface::STATUS_AWAITING_FEE, false],
-            [IrhpInterface::STATUS_FEE_PAID, false],
-            [IrhpInterface::STATUS_UNSUCCESSFUL, false],
-            [IrhpInterface::STATUS_ISSUING, false],
-            [IrhpInterface::STATUS_VALID, false],
-        ];
+        yield [IrhpInterface::STATUS_CANCELLED, false];
+        yield [IrhpInterface::STATUS_NOT_YET_SUBMITTED, true];
+        yield [IrhpInterface::STATUS_UNDER_CONSIDERATION, false];
+        yield [IrhpInterface::STATUS_WITHDRAWN, false];
+        yield [IrhpInterface::STATUS_AWAITING_FEE, false];
+        yield [IrhpInterface::STATUS_FEE_PAID, false];
+        yield [IrhpInterface::STATUS_UNSUCCESSFUL, false];
+        yield [IrhpInterface::STATUS_ISSUING, false];
+        yield [IrhpInterface::STATUS_VALID, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsOverviewAccessible')]
@@ -967,12 +927,10 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsOverviewAccessible(): array
+    public static function dpIsOverviewAccessible(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsOverviewAccessibleBilateral')]
@@ -994,7 +952,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsOverviewAccessibleBilateral(): array
+    public static function dpIsOverviewAccessibleBilateral(): \Iterator
     {
         $emptyCountries = new ArrayCollection();
 
@@ -1004,13 +962,10 @@ class IrhpApplicationEntityTest extends EntityTester
                 m::mock(Country::class)
             ]
         );
-
-        return [
-            [false, $emptyCountries, false],
-            [false, $populatedCountries, false],
-            [true, $emptyCountries, false],
-            [true, $populatedCountries, true],
-        ];
+        yield [false, $emptyCountries, false];
+        yield [false, $populatedCountries, false];
+        yield [true, $emptyCountries, false];
+        yield [true, $populatedCountries, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsSubmittedForConsideration')]
@@ -1033,55 +988,53 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsSubmittedForConsideration(): array
+    public static function dpIsSubmittedForConsideration(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_CANCELLED, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_NOT_YET_SUBMITTED, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_UNDER_CONSIDERATION, true],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_WITHDRAWN, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_AWAITING_FEE, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_FEE_PAID, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_UNSUCCESSFUL, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_ISSUING, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_VALID, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_CANCELLED, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_NOT_YET_SUBMITTED, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_UNDER_CONSIDERATION, true],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_WITHDRAWN, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_AWAITING_FEE, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_FEE_PAID, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_UNSUCCESSFUL, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_ISSUING, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_VALID, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_CANCELLED, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_NOT_YET_SUBMITTED, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_UNDER_CONSIDERATION, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_WITHDRAWN, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_AWAITING_FEE, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_FEE_PAID, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_UNSUCCESSFUL, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_ISSUING, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_VALID, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_CANCELLED, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_NOT_YET_SUBMITTED, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_UNDER_CONSIDERATION, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_WITHDRAWN, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_AWAITING_FEE, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_FEE_PAID, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_UNSUCCESSFUL, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_ISSUING, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_VALID, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_CANCELLED, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_NOT_YET_SUBMITTED, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_UNDER_CONSIDERATION, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_WITHDRAWN, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_AWAITING_FEE, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_FEE_PAID, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_UNSUCCESSFUL, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_ISSUING, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_VALID, false],
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_CANCELLED, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_NOT_YET_SUBMITTED, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_UNDER_CONSIDERATION, true];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_WITHDRAWN, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_AWAITING_FEE, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_FEE_PAID, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_UNSUCCESSFUL, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_ISSUING, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT, IrhpInterface::STATUS_VALID, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_CANCELLED, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_NOT_YET_SUBMITTED, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_UNDER_CONSIDERATION, true];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_WITHDRAWN, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_AWAITING_FEE, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_FEE_PAID, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_UNSUCCESSFUL, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_ISSUING, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, IrhpInterface::STATUS_VALID, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_CANCELLED, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_NOT_YET_SUBMITTED, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_UNDER_CONSIDERATION, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_WITHDRAWN, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_AWAITING_FEE, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_FEE_PAID, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_UNSUCCESSFUL, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_ISSUING, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, IrhpInterface::STATUS_VALID, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_CANCELLED, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_NOT_YET_SUBMITTED, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_UNDER_CONSIDERATION, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_WITHDRAWN, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_AWAITING_FEE, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_FEE_PAID, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_UNSUCCESSFUL, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_ISSUING, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, IrhpInterface::STATUS_VALID, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_CANCELLED, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_NOT_YET_SUBMITTED, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_UNDER_CONSIDERATION, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_WITHDRAWN, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_AWAITING_FEE, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_FEE_PAID, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_UNSUCCESSFUL, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_ISSUING, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, IrhpInterface::STATUS_VALID, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpCanBeUpdated')]
@@ -1111,17 +1064,15 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpCanBeUpdated(): array
+    public static function dpCanBeUpdated(): \Iterator
     {
-        return [
-            [false, false, false, false, false],
-            [true, false, false, false, true],
-            [false, true, false, false, true],
-            [false, false, true, false, false],
-            [true, false, false, true, true],
-            [false, true, false, true, true],
-            [false, false, true, true, true],
-        ];
+        yield [false, false, false, false, false];
+        yield [true, false, false, false, true];
+        yield [false, true, false, false, true];
+        yield [false, false, true, false, false];
+        yield [true, false, false, true, true];
+        yield [false, true, false, true, true];
+        yield [false, false, true, true, true];
     }
 
     public function testHasCheckedAnswers(): void
@@ -1148,12 +1099,10 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertFalse($this->sut->hasCheckedAnswers());
     }
 
-    public static function dpHasCheckedAnswersBilateral(): array
+    public static function dpHasCheckedAnswersBilateral(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
     public function testHasMadeDeclaration(): void
@@ -1193,16 +1142,14 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpCanBeSubmitted(): array
+    public static function dpCanBeSubmitted(): \Iterator
     {
-        return [
-            'not yet submitted, not eligible, incomplete' => [true, false, false, false],
-            'not yet submitted, not eligible, complete' => [true, false, true, false],
-            'not yet submitted, eligible, incomplete' => [true, true, false, false],
-            'not yet submitted, eligible, complete' => [true, true, true, true],
-            'already submitted, not eligible, complete' => [false, false, true, false],
-            'already submitted, eligible, complete' => [false, true, true, false],
-        ];
+        yield 'not yet submitted, not eligible, incomplete' => [true, false, false, false];
+        yield 'not yet submitted, not eligible, complete' => [true, false, true, false];
+        yield 'not yet submitted, eligible, incomplete' => [true, true, false, false];
+        yield 'not yet submitted, eligible, complete' => [true, true, true, true];
+        yield 'already submitted, not eligible, complete' => [false, false, true, false];
+        yield 'already submitted, eligible, complete' => [false, true, true, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCanUpdateCountries')]
@@ -1223,33 +1170,31 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->canUpdateCountries());
     }
 
-    public static function dpTestCanUpdateCountries(): array
+    public static function dpTestCanUpdateCountries(): \Iterator
     {
-        return [
-            'cannot be updated' => [
-                'canBeUpdated' => false,
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
-                'isFieldReadyToComplete' => true,
-                'expected' => false,
-            ],
-            'incorrect type' => [
-                'canBeUpdated' => true,
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL,
-                'isFieldReadyToComplete' => true,
-                'expected' => false,
-            ],
-            'the field not ready to complete' => [
-                'canBeUpdated' => true,
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
-                'isFieldReadyToComplete' => false,
-                'expected' => false,
-            ],
-            'can be updated' => [
-                'canBeUpdated' => true,
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
-                'isFieldReadyToComplete' => true,
-                'expected' => true,
-            ],
+        yield 'cannot be updated' => [
+            'canBeUpdated' => false,
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
+            'isFieldReadyToComplete' => true,
+            'expected' => false,
+        ];
+        yield 'incorrect type' => [
+            'canBeUpdated' => true,
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL,
+            'isFieldReadyToComplete' => true,
+            'expected' => false,
+        ];
+        yield 'the field not ready to complete' => [
+            'canBeUpdated' => true,
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
+            'isFieldReadyToComplete' => false,
+            'expected' => false,
+        ];
+        yield 'can be updated' => [
+            'canBeUpdated' => true,
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
+            'isFieldReadyToComplete' => true,
+            'expected' => true,
         ];
     }
 
@@ -1274,29 +1219,27 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsReadyForNoOfPermits(): array
+    public static function dpIsReadyForNoOfPermits(): \Iterator
     {
-        return [
-            [
-                true,
-                [m::mock(IrhpPermitApplication::class), m::mock(IrhpPermitApplication::class)],
-                true
-            ],
-            [
-                true,
-                [],
-                false
-            ],
-            [
-                false,
-                [m::mock(IrhpPermitApplication::class), m::mock(IrhpPermitApplication::class)],
-                false
-            ],
-            [
-                false,
-                [],
-                false
-            ],
+        yield [
+            true,
+            [m::mock(IrhpPermitApplication::class), m::mock(IrhpPermitApplication::class)],
+            true
+        ];
+        yield [
+            true,
+            [],
+            false
+        ];
+        yield [
+            false,
+            [m::mock(IrhpPermitApplication::class), m::mock(IrhpPermitApplication::class)],
+            false
+        ];
+        yield [
+            false,
+            [],
+            false
         ];
     }
 
@@ -1310,104 +1253,102 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expectedResult, $this->sut->hasOutstandingFees());
     }
 
-    public static function dpHasOutstandingFees(): array
+    public static function dpHasOutstandingFees(): \Iterator
     {
-        return [
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRFOGVPERMIT
-                    ]
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
                 ],
-                'expectedResult' => false
-            ],
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_DUP
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_BUSAPP
-                    ]
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
                 ],
-                'expectedResult' => false
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRFOGVPERMIT
+                ]
             ],
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRFOGVPERMIT
-                    ]
+            'expectedResult' => false
+        ];
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_DUP
                 ],
-                'expectedResult' => true
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_BUSAPP
+                ]
             ],
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRFOGVPERMIT
-                    ]
+            'expectedResult' => false
+        ];
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
                 ],
-                'expectedResult' => true
-            ],
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRFOGVPERMIT
-                    ]
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
                 ],
-                'expectedResult' => true
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRFOGVPERMIT
+                ]
             ],
+            'expectedResult' => true
+        ];
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
+                ],
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
+                ],
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRFOGVPERMIT
+                ]
+            ],
+            'expectedResult' => true
+        ];
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
+                ],
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
+                ],
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRFOGVPERMIT
+                ]
+            ],
+            'expectedResult' => true
         ];
     }
 
@@ -1443,26 +1384,24 @@ class IrhpApplicationEntityTest extends EntityTester
 
         $this->sut->setFees($feesCollection);
 
-        $this->assertEquals(4, $this->sut->getFeesByAge($thresholdDays)->count());
+        $this->assertCount(4, $this->sut->getFeesByAge($thresholdDays));
 
         $this->assertTrue($this->sut->issueFeeOverdue($thresholdDays));
     }
 
-    public static function dpIssueFeeOverdue(): array
+    public static function dpIssueFeeOverdue(): \Iterator
     {
-        return [
-            [
-                10,
-                new \DateTime('-9 weekdays'),
-                new \DateTime('-10 weekdays'),
-                new \DateTime('-11 weekdays')
-            ],
-            [
-                5,
-                new \DateTime('-4 weekdays'),
-                new \DateTime('-5 weekdays'),
-                new \DateTime('-6 weekdays')
-            ]
+        yield [
+            10,
+            new \DateTime('-9 weekdays'),
+            new \DateTime('-10 weekdays'),
+            new \DateTime('-11 weekdays')
+        ];
+        yield [
+            5,
+            new \DateTime('-4 weekdays'),
+            new \DateTime('-5 weekdays'),
+            new \DateTime('-6 weekdays')
         ];
     }
 
@@ -1486,13 +1425,11 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpIssueFeeOverdueBoundary(): array
+    public static function dpIssueFeeOverdueBoundary(): \Iterator
     {
-        return [
-            [9, 0],
-            [10, 1],
-            [11, 1],
-        ];
+        yield [9, 0];
+        yield [10, 1];
+        yield [11, 1];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetLatestOutstandingApplicationFee')]
@@ -1504,90 +1441,88 @@ class IrhpApplicationEntityTest extends EntityTester
         $latestOutstandingIssueFee = $this->sut->getLatestOutstandingApplicationFee();
 
         if (is_null($expectedIndex)) {
-            $this->assertNull($latestOutstandingIssueFee);
+            $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Fee\Fee::class, $latestOutstandingIssueFee);
         }
 
         $this->assertSame($expectedIndex === null ? null : $fees[$expectedIndex], $latestOutstandingIssueFee);
     }
 
-    public static function dpGetLatestOutstandingApplicationFee(): array
+    public static function dpGetLatestOutstandingApplicationFee(): \Iterator
     {
-        return [
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_BUSAPP
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_BUSVAR
-                    ]
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_BUSAPP
                 ],
-                'expectedIndex' => null
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_BUSVAR
+                ]
             ],
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-08',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
-                    ]
+            'expectedIndex' => null
+        ];
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
                 ],
-                'expectedIndex' => 1
+                [
+                    'invoicedDate' => '2019-01-08',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
+                ]
             ],
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-08',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
-                    ]
+            'expectedIndex' => 1
+        ];
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-08',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
                 ],
-                'expectedIndex' => 0
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
+                ]
             ],
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-08',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
-                    ]
+            'expectedIndex' => 0
+        ];
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
                 ],
-                'expectedIndex' => 0
+                [
+                    'invoicedDate' => '2019-01-08',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
+                ]
             ],
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-08',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ]
+            'expectedIndex' => 0
+        ];
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
                 ],
-                'expectedIndex' => 0
+                [
+                    'invoicedDate' => '2019-01-08',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
+                ]
             ],
+            'expectedIndex' => 0
         ];
     }
 
@@ -1600,90 +1535,88 @@ class IrhpApplicationEntityTest extends EntityTester
         $latestOutstandingIssueFee = $this->sut->getLatestOutstandingIssueFee();
 
         if (is_null($expectedIndex)) {
-            $this->assertNull($latestOutstandingIssueFee);
+            $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Fee\Fee::class, $latestOutstandingIssueFee);
         }
 
         $this->assertSame($expectedIndex === null ? null : $fees[$expectedIndex], $latestOutstandingIssueFee);
     }
 
-    public static function dpGetLatestOutstandingIssueFee(): array
+    public static function dpGetLatestOutstandingIssueFee(): \Iterator
     {
-        return [
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_BUSAPP
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_BUSVAR
-                    ]
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_BUSAPP
                 ],
-                'expectedIndex' => null
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_BUSVAR
+                ]
             ],
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-08',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ]
+            'expectedIndex' => null
+        ];
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
                 ],
-                'expectedIndex' => 1
+                [
+                    'invoicedDate' => '2019-01-08',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
+                ]
             ],
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-08',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ]
+            'expectedIndex' => 1
+        ];
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-08',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
                 ],
-                'expectedIndex' => 0
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
+                ]
             ],
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-08',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ]
+            'expectedIndex' => 0
+        ];
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
                 ],
-                'expectedIndex' => 0
+                [
+                    'invoicedDate' => '2019-01-08',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
+                ]
             ],
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-08',
-                        'isOutstanding' => true,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
-                    ]
+            'expectedIndex' => 0
+        ];
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
                 ],
-                'expectedIndex' => 0
+                [
+                    'invoicedDate' => '2019-01-08',
+                    'isOutstanding' => true,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
+                ]
             ],
+            'expectedIndex' => 0
         ];
     }
 
@@ -1696,75 +1629,73 @@ class IrhpApplicationEntityTest extends EntityTester
         $latestOutstandingIssueFee = $this->sut->getLatestIssueFee();
 
         if (is_null($expectedIndex)) {
-            $this->assertNull($latestOutstandingIssueFee);
+            $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Fee\Fee::class, $latestOutstandingIssueFee);
         }
 
         $this->assertSame($expectedIndex === null ? null : $fees[$expectedIndex], $latestOutstandingIssueFee);
     }
 
-    public static function dpGetLatestIssueFee(): array
+    public static function dpGetLatestIssueFee(): \Iterator
     {
-        return [
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_BUSAPP
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_BUSVAR
-                    ]
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_BUSAPP
                 ],
-                'expectedIndex' => null
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_BUSVAR
+                ]
             ],
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-08',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ]
+            'expectedIndex' => null
+        ];
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
                 ],
-                'expectedIndex' => 1
+                [
+                    'invoicedDate' => '2019-01-08',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
+                ]
             ],
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-08',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ]
+            'expectedIndex' => 1
+        ];
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-08',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
                 ],
-                'expectedIndex' => 0
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
+                ]
             ],
-            [
-                'feesData' => [
-                    [
-                        'invoicedDate' => '2019-01-04',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
-                    ],
-                    [
-                        'invoicedDate' => '2019-01-08',
-                        'isOutstanding' => false,
-                        'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
-                    ]
+            'expectedIndex' => 0
+        ];
+        yield [
+            'feesData' => [
+                [
+                    'invoicedDate' => '2019-01-04',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_ISSUE
                 ],
-                'expectedIndex' => 0
+                [
+                    'invoicedDate' => '2019-01-08',
+                    'isOutstanding' => false,
+                    'feeTypeId' => FeeType::FEE_TYPE_IRHP_APP
+                ]
             ],
+            'expectedIndex' => 0
         ];
     }
 
@@ -1865,7 +1796,7 @@ class IrhpApplicationEntityTest extends EntityTester
 
         $this->sut->setFees($fees);
 
-        $this->assertEquals(75.56, $this->sut->getOutstandingFeeAmount());
+        $this->assertEqualsWithDelta(75.56, $this->sut->getOutstandingFeeAmount(), PHP_FLOAT_EPSILON);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetSectionCompletionMultilateral')]
@@ -2028,7 +1959,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->getSectionCompletion());
     }
 
-    public static function dpTestGetSectionCompletionBilateral(): array
+    public static function dpTestGetSectionCompletionBilateral(): \Iterator
     {
         $incompleteCountries = [
             [
@@ -2047,53 +1978,50 @@ class IrhpApplicationEntityTest extends EntityTester
                 Entity::COUNTRY_PROPERTY_STATUS => SectionableInterface::SECTION_COMPLETION_COMPLETED
             ],
         ];
-
-        return [
-            'Countries not completed' => [
-                'data' => [
-                    'countries' => $incompleteCountries,
-                    'declaration' => false,
-                    'canBeSubmitted' => false,
-                ],
-                'expected' => [
-                    'countries' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
-                    'declaration' => SectionableInterface::SECTION_COMPLETION_CANNOT_START,
-                    'submitAndPay' => SectionableInterface::SECTION_COMPLETION_CANNOT_START,
-                    'totalSections' => 3,
-                    'totalCompleted' => 0,
-                    'allCompleted' => false,
-                ],
+        yield 'Countries not completed' => [
+            'data' => [
+                'countries' => $incompleteCountries,
+                'declaration' => false,
+                'canBeSubmitted' => false,
             ],
-            'Countries completed, declaration not set' => [
-                'data' => [
-                    'countries' => $completedCountries,
-                    'declaration' => false,
-                    'canBeSubmitted' => false,
-                ],
-                'expected' => [
-                    'countries' => SectionableInterface::SECTION_COMPLETION_COMPLETED,
-                    'declaration' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
-                    'submitAndPay' => SectionableInterface::SECTION_COMPLETION_CANNOT_START,
-                    'totalSections' => 3,
-                    'totalCompleted' => 1,
-                    'allCompleted' => false,
-                ],
+            'expected' => [
+                'countries' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
+                'declaration' => SectionableInterface::SECTION_COMPLETION_CANNOT_START,
+                'submitAndPay' => SectionableInterface::SECTION_COMPLETION_CANNOT_START,
+                'totalSections' => 3,
+                'totalCompleted' => 0,
+                'allCompleted' => false,
             ],
-            'Countries completed, declaration set' => [
-                'data' => [
-                    'countries' => $completedCountries,
-                    'declaration' => true,
-                    'canBeSubmitted' => true,
-                ],
-                'expected' => [
-                    'countries' => SectionableInterface::SECTION_COMPLETION_COMPLETED,
-                    'declaration' => SectionableInterface::SECTION_COMPLETION_COMPLETED,
-                    'submitAndPay' => SectionableInterface::SECTION_COMPLETION_COMPLETED,
-                    'totalSections' => 3,
-                    'totalCompleted' => 3,
-                    'allCompleted' => true,
-                ],
-            ]
+        ];
+        yield 'Countries completed, declaration not set' => [
+            'data' => [
+                'countries' => $completedCountries,
+                'declaration' => false,
+                'canBeSubmitted' => false,
+            ],
+            'expected' => [
+                'countries' => SectionableInterface::SECTION_COMPLETION_COMPLETED,
+                'declaration' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
+                'submitAndPay' => SectionableInterface::SECTION_COMPLETION_CANNOT_START,
+                'totalSections' => 3,
+                'totalCompleted' => 1,
+                'allCompleted' => false,
+            ],
+        ];
+        yield 'Countries completed, declaration set' => [
+            'data' => [
+                'countries' => $completedCountries,
+                'declaration' => true,
+                'canBeSubmitted' => true,
+            ],
+            'expected' => [
+                'countries' => SectionableInterface::SECTION_COMPLETION_COMPLETED,
+                'declaration' => SectionableInterface::SECTION_COMPLETION_COMPLETED,
+                'submitAndPay' => SectionableInterface::SECTION_COMPLETION_COMPLETED,
+                'totalSections' => 3,
+                'totalCompleted' => 3,
+                'allCompleted' => true,
+            ],
         ];
     }
 
@@ -2134,189 +2062,187 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->canCheckAnswers());
     }
 
-    public static function dpCanCheckAnswersForApplicationPathEnabled(): array
+    public static function dpCanCheckAnswersForApplicationPathEnabled(): \Iterator
     {
-        return [
-            'ECMT Removal - not yet submitted - check answers cannot start' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'checkedAnswers',
-                        'slug' => 'custom-check-answers',
-                        'questionShort' => 'section.name.application-check-answers',
-                        'question' => 'section.name.application-check-answers',
-                        'answer' => null,
-                        'status' => SectionableInterface::SECTION_COMPLETION_CANNOT_START,
-                    ],
+        yield 'ECMT Removal - not yet submitted - check answers cannot start' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+            'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
+            'questionAnswerData' => [
+                [
+                    'section' => 'checkedAnswers',
+                    'slug' => 'custom-check-answers',
+                    'questionShort' => 'section.name.application-check-answers',
+                    'question' => 'section.name.application-check-answers',
+                    'answer' => null,
+                    'status' => SectionableInterface::SECTION_COMPLETION_CANNOT_START,
                 ],
-                'expected' => false,
             ],
-            'ECMT Removal - not yet submitted - check answers not started' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'checkedAnswers',
-                        'slug' => 'custom-check-answers',
-                        'questionShort' => 'section.name.application-check-answers',
-                        'question' => 'section.name.application-check-answers',
-                        'answer' => null,
-                        'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
-                    ],
+            'expected' => false,
+        ];
+        yield 'ECMT Removal - not yet submitted - check answers not started' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+            'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
+            'questionAnswerData' => [
+                [
+                    'section' => 'checkedAnswers',
+                    'slug' => 'custom-check-answers',
+                    'questionShort' => 'section.name.application-check-answers',
+                    'question' => 'section.name.application-check-answers',
+                    'answer' => null,
+                    'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
                 ],
-                'expected' => true,
             ],
-            'ECMT Removal - not yet submitted - check answers completed' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'checkedAnswers',
-                        'slug' => 'custom-check-answers',
-                        'questionShort' => 'section.name.application-check-answers',
-                        'question' => 'section.name.application-check-answers',
-                        'answer' => 1,
-                        'status' => SectionableInterface::SECTION_COMPLETION_COMPLETED,
-                    ],
+            'expected' => true,
+        ];
+        yield 'ECMT Removal - not yet submitted - check answers completed' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+            'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
+            'questionAnswerData' => [
+                [
+                    'section' => 'checkedAnswers',
+                    'slug' => 'custom-check-answers',
+                    'questionShort' => 'section.name.application-check-answers',
+                    'question' => 'section.name.application-check-answers',
+                    'answer' => 1,
+                    'status' => SectionableInterface::SECTION_COMPLETION_COMPLETED,
                 ],
-                'expected' => true,
             ],
-            'ECMT Removal - under consideration - check answers not started' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                'status' => IrhpInterface::STATUS_UNDER_CONSIDERATION,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'checkedAnswers',
-                        'slug' => 'custom-check-answers',
-                        'questionShort' => 'section.name.application-check-answers',
-                        'question' => 'section.name.application-check-answers',
-                        'answer' => null,
-                        'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
-                    ],
+            'expected' => true,
+        ];
+        yield 'ECMT Removal - under consideration - check answers not started' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+            'status' => IrhpInterface::STATUS_UNDER_CONSIDERATION,
+            'questionAnswerData' => [
+                [
+                    'section' => 'checkedAnswers',
+                    'slug' => 'custom-check-answers',
+                    'questionShort' => 'section.name.application-check-answers',
+                    'question' => 'section.name.application-check-answers',
+                    'answer' => null,
+                    'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
                 ],
-                'expected' => true,
             ],
-            'ECMT Removal - withdrawn - check answers not started' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                'status' => IrhpInterface::STATUS_WITHDRAWN,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'checkedAnswers',
-                        'slug' => 'custom-check-answers',
-                        'questionShort' => 'section.name.application-check-answers',
-                        'question' => 'section.name.application-check-answers',
-                        'answer' => null,
-                        'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
-                    ],
+            'expected' => true,
+        ];
+        yield 'ECMT Removal - withdrawn - check answers not started' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+            'status' => IrhpInterface::STATUS_WITHDRAWN,
+            'questionAnswerData' => [
+                [
+                    'section' => 'checkedAnswers',
+                    'slug' => 'custom-check-answers',
+                    'questionShort' => 'section.name.application-check-answers',
+                    'question' => 'section.name.application-check-answers',
+                    'answer' => null,
+                    'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
                 ],
-                'expected' => false,
             ],
-            'ECMT Removal - cancelled - check answers not started' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                'status' => IrhpInterface::STATUS_CANCELLED,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'checkedAnswers',
-                        'slug' => 'custom-check-answers',
-                        'questionShort' => 'section.name.application-check-answers',
-                        'question' => 'section.name.application-check-answers',
-                        'answer' => null,
-                        'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
-                    ],
+            'expected' => false,
+        ];
+        yield 'ECMT Removal - cancelled - check answers not started' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+            'status' => IrhpInterface::STATUS_CANCELLED,
+            'questionAnswerData' => [
+                [
+                    'section' => 'checkedAnswers',
+                    'slug' => 'custom-check-answers',
+                    'questionShort' => 'section.name.application-check-answers',
+                    'question' => 'section.name.application-check-answers',
+                    'answer' => null,
+                    'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
                 ],
-                'expected' => false,
             ],
-            'ECMT Short Term - not yet submitted - check answers cannot start' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'checkedAnswers',
-                        'slug' => 'custom-check-answers',
-                        'questionShort' => 'section.name.application-check-answers',
-                        'question' => 'section.name.application-check-answers',
-                        'answer' => null,
-                        'status' => SectionableInterface::SECTION_COMPLETION_CANNOT_START,
-                    ],
+            'expected' => false,
+        ];
+        yield 'ECMT Short Term - not yet submitted - check answers cannot start' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
+            'questionAnswerData' => [
+                [
+                    'section' => 'checkedAnswers',
+                    'slug' => 'custom-check-answers',
+                    'questionShort' => 'section.name.application-check-answers',
+                    'question' => 'section.name.application-check-answers',
+                    'answer' => null,
+                    'status' => SectionableInterface::SECTION_COMPLETION_CANNOT_START,
                 ],
-                'expected' => false,
             ],
-            'ECMT Short Term - not yet submitted - check answers not started' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'checkedAnswers',
-                        'slug' => 'custom-check-answers',
-                        'questionShort' => 'section.name.application-check-answers',
-                        'question' => 'section.name.application-check-answers',
-                        'answer' => null,
-                        'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
-                    ],
+            'expected' => false,
+        ];
+        yield 'ECMT Short Term - not yet submitted - check answers not started' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
+            'questionAnswerData' => [
+                [
+                    'section' => 'checkedAnswers',
+                    'slug' => 'custom-check-answers',
+                    'questionShort' => 'section.name.application-check-answers',
+                    'question' => 'section.name.application-check-answers',
+                    'answer' => null,
+                    'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
                 ],
-                'expected' => true,
             ],
-            'ECMT Short Term - not yet submitted - check answers completed' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'checkedAnswers',
-                        'slug' => 'custom-check-answers',
-                        'questionShort' => 'section.name.application-check-answers',
-                        'question' => 'section.name.application-check-answers',
-                        'answer' => 1,
-                        'status' => SectionableInterface::SECTION_COMPLETION_COMPLETED,
-                    ],
+            'expected' => true,
+        ];
+        yield 'ECMT Short Term - not yet submitted - check answers completed' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
+            'questionAnswerData' => [
+                [
+                    'section' => 'checkedAnswers',
+                    'slug' => 'custom-check-answers',
+                    'questionShort' => 'section.name.application-check-answers',
+                    'question' => 'section.name.application-check-answers',
+                    'answer' => 1,
+                    'status' => SectionableInterface::SECTION_COMPLETION_COMPLETED,
                 ],
-                'expected' => true,
             ],
-            'ECMT Short Term - under consideration - check answers not started' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                'status' => IrhpInterface::STATUS_UNDER_CONSIDERATION,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'checkedAnswers',
-                        'slug' => 'custom-check-answers',
-                        'questionShort' => 'section.name.application-check-answers',
-                        'question' => 'section.name.application-check-answers',
-                        'answer' => null,
-                        'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
-                    ],
+            'expected' => true,
+        ];
+        yield 'ECMT Short Term - under consideration - check answers not started' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            'status' => IrhpInterface::STATUS_UNDER_CONSIDERATION,
+            'questionAnswerData' => [
+                [
+                    'section' => 'checkedAnswers',
+                    'slug' => 'custom-check-answers',
+                    'questionShort' => 'section.name.application-check-answers',
+                    'question' => 'section.name.application-check-answers',
+                    'answer' => null,
+                    'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
                 ],
-                'expected' => true,
             ],
-            'ECMT Short Term - withdrawn - check answers not started' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                'status' => IrhpInterface::STATUS_WITHDRAWN,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'checkedAnswers',
-                        'slug' => 'custom-check-answers',
-                        'questionShort' => 'section.name.application-check-answers',
-                        'question' => 'section.name.application-check-answers',
-                        'answer' => null,
-                        'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
-                    ],
+            'expected' => true,
+        ];
+        yield 'ECMT Short Term - withdrawn - check answers not started' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            'status' => IrhpInterface::STATUS_WITHDRAWN,
+            'questionAnswerData' => [
+                [
+                    'section' => 'checkedAnswers',
+                    'slug' => 'custom-check-answers',
+                    'questionShort' => 'section.name.application-check-answers',
+                    'question' => 'section.name.application-check-answers',
+                    'answer' => null,
+                    'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
                 ],
-                'expected' => false,
             ],
-            'ECMT Short Term - cancelled - check answers not started' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                'status' => IrhpInterface::STATUS_CANCELLED,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'checkedAnswers',
-                        'slug' => 'custom-check-answers',
-                        'questionShort' => 'section.name.application-check-answers',
-                        'question' => 'section.name.application-check-answers',
-                        'answer' => null,
-                        'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
-                    ],
+            'expected' => false,
+        ];
+        yield 'ECMT Short Term - cancelled - check answers not started' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            'status' => IrhpInterface::STATUS_CANCELLED,
+            'questionAnswerData' => [
+                [
+                    'section' => 'checkedAnswers',
+                    'slug' => 'custom-check-answers',
+                    'questionShort' => 'section.name.application-check-answers',
+                    'question' => 'section.name.application-check-answers',
+                    'answer' => null,
+                    'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
                 ],
-                'expected' => false,
             ],
+            'expected' => false,
         ];
     }
 
@@ -2345,34 +2271,32 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->canCheckAnswers());
     }
 
-    public static function dpCanCheckAnswersForMultilateral(): array
+    public static function dpCanCheckAnswersForMultilateral(): \Iterator
     {
-        return [
-            'Not yet submitted - permits required set' => [
-                'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
-                'permitsRequired' => 10,
-                'expected' => true,
-            ],
-            'Not yet submitted - permits required not set' => [
-                'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
-                'permitsRequired' => null,
-                'expected' => false,
-            ],
-            'Under consideration - permits required set' => [
-                'status' => IrhpInterface::STATUS_UNDER_CONSIDERATION,
-                'permitsRequired' => 10,
-                'expected' => true,
-            ],
-            'Withdrawn - permits required set' => [
-                'status' => IrhpInterface::STATUS_WITHDRAWN,
-                'permitsRequired' => 10,
-                'expected' => false,
-            ],
-            'Cancelled - permits required set' => [
-                'status' => IrhpInterface::STATUS_CANCELLED,
-                'permitsRequired' => 10,
-                'expected' => false,
-            ],
+        yield 'Not yet submitted - permits required set' => [
+            'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
+            'permitsRequired' => 10,
+            'expected' => true,
+        ];
+        yield 'Not yet submitted - permits required not set' => [
+            'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
+            'permitsRequired' => null,
+            'expected' => false,
+        ];
+        yield 'Under consideration - permits required set' => [
+            'status' => IrhpInterface::STATUS_UNDER_CONSIDERATION,
+            'permitsRequired' => 10,
+            'expected' => true,
+        ];
+        yield 'Withdrawn - permits required set' => [
+            'status' => IrhpInterface::STATUS_WITHDRAWN,
+            'permitsRequired' => 10,
+            'expected' => false,
+        ];
+        yield 'Cancelled - permits required set' => [
+            'status' => IrhpInterface::STATUS_CANCELLED,
+            'permitsRequired' => 10,
+            'expected' => false,
         ];
     }
 
@@ -2479,99 +2403,97 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->canMakeDeclaration());
     }
 
-    public static function dpCanMakeDeclarationForApplicationPathEnabled(): array
+    public static function dpCanMakeDeclarationForApplicationPathEnabled(): \Iterator
     {
-        return [
-            'ECMT Removal - not yet submitted - declaration cannot start' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'declaration',
-                        'slug' => 'custom-declaration',
-                        'questionShort' => 'section.name.application-declaration',
-                        'question' => 'section.name.application-declaration',
-                        'answer' => null,
-                        'status' => SectionableInterface::SECTION_COMPLETION_CANNOT_START,
-                    ],
+        yield 'ECMT Removal - not yet submitted - declaration cannot start' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+            'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
+            'questionAnswerData' => [
+                [
+                    'section' => 'declaration',
+                    'slug' => 'custom-declaration',
+                    'questionShort' => 'section.name.application-declaration',
+                    'question' => 'section.name.application-declaration',
+                    'answer' => null,
+                    'status' => SectionableInterface::SECTION_COMPLETION_CANNOT_START,
                 ],
-                'expected' => false,
             ],
-            'ECMT Removal - not yet submitted - declaration not started' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'declaration',
-                        'slug' => 'custom-declaration',
-                        'questionShort' => 'section.name.application-declaration',
-                        'question' => 'section.name.application-declaration',
-                        'answer' => null,
-                        'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
-                    ],
+            'expected' => false,
+        ];
+        yield 'ECMT Removal - not yet submitted - declaration not started' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+            'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
+            'questionAnswerData' => [
+                [
+                    'section' => 'declaration',
+                    'slug' => 'custom-declaration',
+                    'questionShort' => 'section.name.application-declaration',
+                    'question' => 'section.name.application-declaration',
+                    'answer' => null,
+                    'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
                 ],
-                'expected' => true,
             ],
-            'ECMT Removal - not yet submitted - declaration completed' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'declaration',
-                        'slug' => 'custom-declaration',
-                        'questionShort' => 'section.name.application-declaration',
-                        'question' => 'section.name.application-declaration',
-                        'answer' => 1,
-                        'status' => SectionableInterface::SECTION_COMPLETION_COMPLETED,
-                    ],
+            'expected' => true,
+        ];
+        yield 'ECMT Removal - not yet submitted - declaration completed' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+            'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
+            'questionAnswerData' => [
+                [
+                    'section' => 'declaration',
+                    'slug' => 'custom-declaration',
+                    'questionShort' => 'section.name.application-declaration',
+                    'question' => 'section.name.application-declaration',
+                    'answer' => 1,
+                    'status' => SectionableInterface::SECTION_COMPLETION_COMPLETED,
                 ],
-                'expected' => true,
             ],
-            'ECMT Removal - under consideration - declaration not started' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                'status' => IrhpInterface::STATUS_UNDER_CONSIDERATION,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'declaration',
-                        'slug' => 'custom-declaration',
-                        'questionShort' => 'section.name.application-declaration',
-                        'question' => 'section.name.application-declaration',
-                        'answer' => null,
-                        'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
-                    ],
+            'expected' => true,
+        ];
+        yield 'ECMT Removal - under consideration - declaration not started' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+            'status' => IrhpInterface::STATUS_UNDER_CONSIDERATION,
+            'questionAnswerData' => [
+                [
+                    'section' => 'declaration',
+                    'slug' => 'custom-declaration',
+                    'questionShort' => 'section.name.application-declaration',
+                    'question' => 'section.name.application-declaration',
+                    'answer' => null,
+                    'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
                 ],
-                'expected' => true,
             ],
-            'ECMT Removal - withdrawn - declaration not started' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                'status' => IrhpInterface::STATUS_WITHDRAWN,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'declaration',
-                        'slug' => 'custom-declaration',
-                        'questionShort' => 'section.name.application-declaration',
-                        'question' => 'section.name.application-declaration',
-                        'answer' => null,
-                        'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
-                    ],
+            'expected' => true,
+        ];
+        yield 'ECMT Removal - withdrawn - declaration not started' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+            'status' => IrhpInterface::STATUS_WITHDRAWN,
+            'questionAnswerData' => [
+                [
+                    'section' => 'declaration',
+                    'slug' => 'custom-declaration',
+                    'questionShort' => 'section.name.application-declaration',
+                    'question' => 'section.name.application-declaration',
+                    'answer' => null,
+                    'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
                 ],
-                'expected' => false,
             ],
-            'ECMT Removal - cancelled - declaration not started' => [
-                'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                'status' => IrhpInterface::STATUS_CANCELLED,
-                'questionAnswerData' => [
-                    [
-                        'section' => 'declaration',
-                        'slug' => 'custom-declaration',
-                        'questionShort' => 'section.name.application-declaration',
-                        'question' => 'section.name.application-declaration',
-                        'answer' => null,
-                        'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
-                    ],
+            'expected' => false,
+        ];
+        yield 'ECMT Removal - cancelled - declaration not started' => [
+            'irhpPermitTypeId' => IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+            'status' => IrhpInterface::STATUS_CANCELLED,
+            'questionAnswerData' => [
+                [
+                    'section' => 'declaration',
+                    'slug' => 'custom-declaration',
+                    'questionShort' => 'section.name.application-declaration',
+                    'question' => 'section.name.application-declaration',
+                    'answer' => null,
+                    'status' => SectionableInterface::SECTION_COMPLETION_NOT_STARTED,
                 ],
-                'expected' => false,
             ],
+            'expected' => false,
         ];
     }
 
@@ -2602,45 +2524,43 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->canMakeDeclaration());
     }
 
-    public static function dpCanMakeDeclarationForMultilateral(): array
+    public static function dpCanMakeDeclarationForMultilateral(): \Iterator
     {
-        return [
-            'Not yet submitted - permits required set - answers checked' => [
-                'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
-                'permitsRequired' => 10,
-                'checkedAnswers' => true,
-                'expected' => true,
-            ],
-            'Not yet submitted - permits required set - answers not checked' => [
-                'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
-                'permitsRequired' => 10,
-                'checkedAnswers' => null,
-                'expected' => false,
-            ],
-            'Not yet submitted - permits required not set - answers not checked' => [
-                'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
-                'permitsRequired' => null,
-                'checkedAnswers' => null,
-                'expected' => false,
-            ],
-            'Under consideration - permits required set - answers checked' => [
-                'status' => IrhpInterface::STATUS_UNDER_CONSIDERATION,
-                'permitsRequired' => 10,
-                'checkedAnswers' => true,
-                'expected' => true,
-            ],
-            'Withdrawn - permits required set - answers checked' => [
-                'status' => IrhpInterface::STATUS_WITHDRAWN,
-                'permitsRequired' => 10,
-                'checkedAnswers' => true,
-                'expected' => false,
-            ],
-            'Cancelled - permits required set - answers checked' => [
-                'status' => IrhpInterface::STATUS_CANCELLED,
-                'permitsRequired' => 10,
-                'checkedAnswers' => true,
-                'expected' => false,
-            ],
+        yield 'Not yet submitted - permits required set - answers checked' => [
+            'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
+            'permitsRequired' => 10,
+            'checkedAnswers' => true,
+            'expected' => true,
+        ];
+        yield 'Not yet submitted - permits required set - answers not checked' => [
+            'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
+            'permitsRequired' => 10,
+            'checkedAnswers' => null,
+            'expected' => false,
+        ];
+        yield 'Not yet submitted - permits required not set - answers not checked' => [
+            'status' => IrhpInterface::STATUS_NOT_YET_SUBMITTED,
+            'permitsRequired' => null,
+            'checkedAnswers' => null,
+            'expected' => false,
+        ];
+        yield 'Under consideration - permits required set - answers checked' => [
+            'status' => IrhpInterface::STATUS_UNDER_CONSIDERATION,
+            'permitsRequired' => 10,
+            'checkedAnswers' => true,
+            'expected' => true,
+        ];
+        yield 'Withdrawn - permits required set - answers checked' => [
+            'status' => IrhpInterface::STATUS_WITHDRAWN,
+            'permitsRequired' => 10,
+            'checkedAnswers' => true,
+            'expected' => false,
+        ];
+        yield 'Cancelled - permits required set - answers checked' => [
+            'status' => IrhpInterface::STATUS_CANCELLED,
+            'permitsRequired' => 10,
+            'checkedAnswers' => true,
+            'expected' => false,
         ];
     }
 
@@ -2665,7 +2585,7 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpCanMakeDeclarationForBilateral(): array
+    public static function dpCanMakeDeclarationForBilateral(): \Iterator
     {
         $incompleteCountries = [
             [
@@ -2684,13 +2604,10 @@ class IrhpApplicationEntityTest extends EntityTester
                 Entity::COUNTRY_PROPERTY_STATUS => SectionableInterface::SECTION_COMPLETION_COMPLETED
             ],
         ];
-
-        return [
-            [$incompleteCountries, false, false],
-            [$incompleteCountries, true, false],
-            [$completedCountries, false, false],
-            [$completedCountries, true, true],
-        ];
+        yield [$incompleteCountries, false, false];
+        yield [$incompleteCountries, true, false];
+        yield [$completedCountries, false, false];
+        yield [$completedCountries, true, true];
     }
 
     public function testMakeDeclaration(): void
@@ -2855,18 +2772,16 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $irhpApplication->haveFeesRequiredChanged());
     }
 
-    public static function dpHaveFeesRequiredChanged(): array
+    public static function dpHaveFeesRequiredChanged(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, 7, 11, 7, 11, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, 7, 11, 9, 9, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, 7, 11, 9, 13, true],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, null, null, 9, 13, true],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, 7, 11, 7, 11, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, 7, 11, 9, 9, false],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, 7, 11, 9, 13, true],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, null, null, 9, 13, true],
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, 7, 11, 7, 11, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, 7, 11, 9, 9, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, 7, 11, 9, 13, true];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL, null, null, 9, 13, true];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, 7, 11, 7, 11, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, 7, 11, 9, 9, false];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, 7, 11, 9, 13, true];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL, null, null, 9, 13, true];
     }
 
     public function testGetApplicationFeeProductRefsAndQuantities(): void
@@ -2899,21 +2814,19 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpGetApplicationFeeProductReference(): array
+    public static function dpGetApplicationFeeProductReference(): \Iterator
     {
-        return [
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
-                FeeType::FEE_TYPE_IRHP_APP_BILATERAL_PRODUCT_REF
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL,
-                FeeType::FEE_TYPE_IRHP_APP_MULTILATERAL_PRODUCT_REF
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                FeeType::FEE_TYPE_ECMT_APP_PRODUCT_REF
-            ],
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
+            FeeType::FEE_TYPE_IRHP_APP_BILATERAL_PRODUCT_REF
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL,
+            FeeType::FEE_TYPE_IRHP_APP_MULTILATERAL_PRODUCT_REF
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            FeeType::FEE_TYPE_ECMT_APP_PRODUCT_REF
         ];
     }
 
@@ -2998,15 +2911,13 @@ class IrhpApplicationEntityTest extends EntityTester
         $irhpApplication->getIssueFeeProductReference();
     }
 
-    public static function dpGetIssueFeeProductReferenceUnsupportedType(): array
+    public static function dpGetIssueFeeProductReferenceUnsupportedType(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER],
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER];
     }
 
     public function testGetIssueFeeProductRefsAndQuantities(): void
@@ -3091,12 +3002,10 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expectedResult, $entity->isReadyForIssuing());
     }
 
-    public static function dpTestIsReadyForIssuing(): array
+    public static function dpTestIsReadyForIssuing(): \Iterator
     {
-        return [
-            [false, true],
-            [true, false],
-        ];
+        yield [false, true];
+        yield [true, false];
     }
 
     public function testSubmit(): void
@@ -3138,12 +3047,10 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->submit($status);
     }
 
-    public static function dpSubmitShortTermAndAnnual(): array
+    public static function dpSubmitShortTermAndAnnual(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM],
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpSubmitCertOfRoadworthiness')]
@@ -3166,12 +3073,10 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->submit($status);
     }
 
-    public static function dpSubmitCertOfRoadworthiness(): array
+    public static function dpSubmitCertOfRoadworthiness(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER],
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER];
     }
 
     public function testSubmitException(): void
@@ -3436,7 +3341,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $licence = m::mock(Licence::class);
         $entity = $this->createNewEntity(null, null, $irhpPermitType, $licence);
 
-        $this->assertEquals([], $entity->getQuestionAnswerData());
+        $this->assertSame([], $entity->getQuestionAnswerData());
     }
 
     public function testGetQuestionAnswerDataWithoutActiveApplicationPath(): void
@@ -3831,45 +3736,43 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpGetAnswerForCustomEcmtNoOfPermits(): array
+    public static function dpGetAnswerForCustomEcmtNoOfPermits(): \Iterator
     {
-        return [
-            [
-                'formControlType' => Question::FORM_CONTROL_ECMT_NO_OF_PERMITS_EITHER,
-                'requiredEuro5' => 5,
-                'requiredEuro6' => 7,
-                'expectedAnswer' => Entity::NON_SCALAR_ANSWER_PRESENT,
-            ],
-            [
-                'formControlType' => Question::FORM_CONTROL_ECMT_NO_OF_PERMITS_EITHER,
-                'requiredEuro5' => 5,
-                'requiredEuro6' => 0,
-                'expectedAnswer' => Entity::NON_SCALAR_ANSWER_PRESENT,
-            ],
-            [
-                'formControlType' => Question::FORM_CONTROL_ECMT_NO_OF_PERMITS_EITHER,
-                'requiredEuro5' => null,
-                'requiredEuro6' => 5,
-                'expectedAnswer' => null,
-            ],
-            [
-                'formControlType' => Question::FORM_CONTROL_ECMT_NO_OF_PERMITS_BOTH,
-                'requiredEuro5' => 5,
-                'requiredEuro6' => 7,
-                'expectedAnswer' => Entity::NON_SCALAR_ANSWER_PRESENT,
-            ],
-            [
-                'formControlType' => Question::FORM_CONTROL_ECMT_NO_OF_PERMITS_BOTH,
-                'requiredEuro5' => 5,
-                'requiredEuro6' => 0,
-                'expectedAnswer' => Entity::NON_SCALAR_ANSWER_PRESENT,
-            ],
-            [
-                'formControlType' => Question::FORM_CONTROL_ECMT_NO_OF_PERMITS_BOTH,
-                'requiredEuro5' => null,
-                'requiredEuro6' => 5,
-                'expectedAnswer' => null,
-            ],
+        yield [
+            'formControlType' => Question::FORM_CONTROL_ECMT_NO_OF_PERMITS_EITHER,
+            'requiredEuro5' => 5,
+            'requiredEuro6' => 7,
+            'expectedAnswer' => Entity::NON_SCALAR_ANSWER_PRESENT,
+        ];
+        yield [
+            'formControlType' => Question::FORM_CONTROL_ECMT_NO_OF_PERMITS_EITHER,
+            'requiredEuro5' => 5,
+            'requiredEuro6' => 0,
+            'expectedAnswer' => Entity::NON_SCALAR_ANSWER_PRESENT,
+        ];
+        yield [
+            'formControlType' => Question::FORM_CONTROL_ECMT_NO_OF_PERMITS_EITHER,
+            'requiredEuro5' => null,
+            'requiredEuro6' => 5,
+            'expectedAnswer' => null,
+        ];
+        yield [
+            'formControlType' => Question::FORM_CONTROL_ECMT_NO_OF_PERMITS_BOTH,
+            'requiredEuro5' => 5,
+            'requiredEuro6' => 7,
+            'expectedAnswer' => Entity::NON_SCALAR_ANSWER_PRESENT,
+        ];
+        yield [
+            'formControlType' => Question::FORM_CONTROL_ECMT_NO_OF_PERMITS_BOTH,
+            'requiredEuro5' => 5,
+            'requiredEuro6' => 0,
+            'expectedAnswer' => Entity::NON_SCALAR_ANSWER_PRESENT,
+        ];
+        yield [
+            'formControlType' => Question::FORM_CONTROL_ECMT_NO_OF_PERMITS_BOTH,
+            'requiredEuro5' => null,
+            'requiredEuro6' => 5,
+            'expectedAnswer' => null,
         ];
     }
 
@@ -3987,16 +3890,14 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpTestGetAnswerForCustomEcmtAnnual2018NoOfPermits(): array
+    public static function dpTestGetAnswerForCustomEcmtAnnual2018NoOfPermits(): \Iterator
     {
-        return [
-            [true, null, null, null],
-            [true, 4, null, 4],
-            [true, null, 6, 6],
-            [false, null, null, null],
-            [false, 4, null, 4],
-            [false, null, 6, 6],
-        ];
+        yield [true, null, null, null];
+        yield [true, 4, null, 4];
+        yield [true, null, 6, 6];
+        yield [false, null, null, null];
+        yield [false, 4, null, 4];
+        yield [false, null, 6, 6];
     }
 
     public function testGetAnswerForQuestionWithoutActiveQuestionText(): void
@@ -4068,17 +3969,15 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($answer, $entity->getAnswer($step));
     }
 
-    public static function dpGetAnswerForQuestion(): array
+    public static function dpGetAnswerForQuestion(): \Iterator
     {
-        return [
-            [false, null],
-            [true, Question::FORM_CONTROL_ECMT_REMOVAL_PERMIT_START_DATE],
-            [true, Question::FORM_CONTROL_ECMT_ANNUAL_TRIPS_ABROAD],
-            [true, Question::FORM_CONTROL_ECMT_SHORT_TERM_EARLIEST_PERMIT_DATE],
-            [true, Question::FORM_CONTROL_ECMT_RESTRICTED_COUNTRIES],
-            [true, Question::FORM_CONTROL_CERT_ROADWORTHINESS_MOT_EXPIRY_DATE],
-            [true, Question::FORM_CONTROL_COMMON_CERTIFICATES],
-        ];
+        yield [false, null];
+        yield [true, Question::FORM_CONTROL_ECMT_REMOVAL_PERMIT_START_DATE];
+        yield [true, Question::FORM_CONTROL_ECMT_ANNUAL_TRIPS_ABROAD];
+        yield [true, Question::FORM_CONTROL_ECMT_SHORT_TERM_EARLIEST_PERMIT_DATE];
+        yield [true, Question::FORM_CONTROL_ECMT_RESTRICTED_COUNTRIES];
+        yield [true, Question::FORM_CONTROL_CERT_ROADWORTHINESS_MOT_EXPIRY_DATE];
+        yield [true, Question::FORM_CONTROL_COMMON_CERTIFICATES];
     }
 
     public function testGetAnswerUnknownCustomType(): void
@@ -4226,18 +4125,13 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->shouldReceive('getIrhpPermitType->getId')
             ->andReturn($irhpPermitTypeId);
 
-        $this->assertEquals(
-            55.35,
-            $entity->getFeePerPermit($applicationFeeType, $issueFeeType)
-        );
+        $this->assertEqualsWithDelta(55.35, $entity->getFeePerPermit($applicationFeeType, $issueFeeType), PHP_FLOAT_EPSILON);
     }
 
-    public static function dpTestGetFeePerPermitBilateralMultilateral(): array
+    public static function dpTestGetFeePerPermitBilateralMultilateral(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL]
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL];
     }
 
     public function testGetFeePerPermitEcmtRemoval(): void
@@ -4357,30 +4251,28 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->canBeExpired());
     }
 
-    public static function dpCanBeExpired(): array
+    public static function dpCanBeExpired(): \Iterator
     {
-        return [
-            [IrhpInterface::STATUS_VALID, true, false],
-            [IrhpInterface::STATUS_VALID, false, true],
-            [IrhpInterface::STATUS_CANCELLED, true, false],
-            [IrhpInterface::STATUS_CANCELLED, false, false],
-            [IrhpInterface::STATUS_NOT_YET_SUBMITTED, true, false],
-            [IrhpInterface::STATUS_NOT_YET_SUBMITTED, false, false],
-            [IrhpInterface::STATUS_UNDER_CONSIDERATION, true, false],
-            [IrhpInterface::STATUS_UNDER_CONSIDERATION, false, false],
-            [IrhpInterface::STATUS_WITHDRAWN, true, false],
-            [IrhpInterface::STATUS_WITHDRAWN, false, false],
-            [IrhpInterface::STATUS_AWAITING_FEE, true, false],
-            [IrhpInterface::STATUS_AWAITING_FEE, false, false],
-            [IrhpInterface::STATUS_FEE_PAID, true, false],
-            [IrhpInterface::STATUS_FEE_PAID, false, false],
-            [IrhpInterface::STATUS_UNSUCCESSFUL, true, false],
-            [IrhpInterface::STATUS_UNSUCCESSFUL, false, false],
-            [IrhpInterface::STATUS_ISSUING, true, false],
-            [IrhpInterface::STATUS_ISSUING, false, false],
-            [IrhpInterface::STATUS_EXPIRED, true, false],
-            [IrhpInterface::STATUS_EXPIRED, false, false],
-        ];
+        yield [IrhpInterface::STATUS_VALID, true, false];
+        yield [IrhpInterface::STATUS_VALID, false, true];
+        yield [IrhpInterface::STATUS_CANCELLED, true, false];
+        yield [IrhpInterface::STATUS_CANCELLED, false, false];
+        yield [IrhpInterface::STATUS_NOT_YET_SUBMITTED, true, false];
+        yield [IrhpInterface::STATUS_NOT_YET_SUBMITTED, false, false];
+        yield [IrhpInterface::STATUS_UNDER_CONSIDERATION, true, false];
+        yield [IrhpInterface::STATUS_UNDER_CONSIDERATION, false, false];
+        yield [IrhpInterface::STATUS_WITHDRAWN, true, false];
+        yield [IrhpInterface::STATUS_WITHDRAWN, false, false];
+        yield [IrhpInterface::STATUS_AWAITING_FEE, true, false];
+        yield [IrhpInterface::STATUS_AWAITING_FEE, false, false];
+        yield [IrhpInterface::STATUS_FEE_PAID, true, false];
+        yield [IrhpInterface::STATUS_FEE_PAID, false, false];
+        yield [IrhpInterface::STATUS_UNSUCCESSFUL, true, false];
+        yield [IrhpInterface::STATUS_UNSUCCESSFUL, false, false];
+        yield [IrhpInterface::STATUS_ISSUING, true, false];
+        yield [IrhpInterface::STATUS_ISSUING, false, false];
+        yield [IrhpInterface::STATUS_EXPIRED, true, false];
+        yield [IrhpInterface::STATUS_EXPIRED, false, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCanViewCandidatePermits')]
@@ -4401,18 +4293,16 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->canViewCandidatePermits());
     }
 
-    public static function dpTestCanViewCandidatePermits(): array
+    public static function dpTestCanViewCandidatePermits(): \Iterator
     {
-        return [
-            [false, false, false, false],
-            [false, false, true, false],
-            [false, true, false, false],
-            [false, true, true, false],
-            [true, false, false, false],
-            [true, false, true, false],
-            [true, true, false, false],
-            [true, true, true, true],
-        ];
+        yield [false, false, false, false];
+        yield [false, false, true, false];
+        yield [false, true, false, false];
+        yield [false, true, true, false];
+        yield [true, false, false, false];
+        yield [true, false, true, false];
+        yield [true, true, false, false];
+        yield [true, true, true, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestCanSelectCandidatePermits')]
@@ -4433,18 +4323,16 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->canSelectCandidatePermits());
     }
 
-    public static function dpTestCanSelectCandidatePermits(): array
+    public static function dpTestCanSelectCandidatePermits(): \Iterator
     {
-        return [
-            [false, false, false, false],
-            [false, false, true, false],
-            [false, true, false, false],
-            [false, true, true, false],
-            [true, false, false, false],
-            [true, false, true, false],
-            [true, true, false, false],
-            [true, true, true, true],
-        ];
+        yield [false, false, false, false];
+        yield [false, false, true, false];
+        yield [false, true, false, false];
+        yield [false, true, true, false];
+        yield [true, false, false, false];
+        yield [true, false, true, false];
+        yield [true, true, false, false];
+        yield [true, true, true, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsCandidatePermitsAllocationMode')]
@@ -4460,16 +4348,14 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpTestIsCandidatePermitsAllocationMode(): array
+    public static function dpTestIsCandidatePermitsAllocationMode(): \Iterator
     {
-        return [
-            [IrhpPermitStock::ALLOCATION_MODE_STANDARD, false],
-            [IrhpPermitStock::ALLOCATION_MODE_EMISSIONS_CATEGORIES, false],
-            [IrhpPermitStock::ALLOCATION_MODE_STANDARD_WITH_EXPIRY, false],
-            [IrhpPermitStock::ALLOCATION_MODE_CANDIDATE_PERMITS, true],
-            [IrhpPermitStock::ALLOCATION_MODE_BILATERAL, false],
-            [IrhpPermitStock::ALLOCATION_MODE_NONE, false],
-        ];
+        yield [IrhpPermitStock::ALLOCATION_MODE_STANDARD, false];
+        yield [IrhpPermitStock::ALLOCATION_MODE_EMISSIONS_CATEGORIES, false];
+        yield [IrhpPermitStock::ALLOCATION_MODE_STANDARD_WITH_EXPIRY, false];
+        yield [IrhpPermitStock::ALLOCATION_MODE_CANDIDATE_PERMITS, true];
+        yield [IrhpPermitStock::ALLOCATION_MODE_BILATERAL, false];
+        yield [IrhpPermitStock::ALLOCATION_MODE_NONE, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpCanBeGranted')]
@@ -4492,15 +4378,13 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->canBeGranted());
     }
 
-    public static function dpCanBeGranted(): array
+    public static function dpCanBeGranted(): \Iterator
     {
-        return [
-            [true, true, RefData::BUSINESS_PROCESS_APGG, true],
-            [false, true, RefData::BUSINESS_PROCESS_APGG, false],
-            [true, false, RefData::BUSINESS_PROCESS_APGG, false],
-            [true, true, RefData::BUSINESS_PROCESS_APSG, false],
-            [true, true, RefData::BUSINESS_PROCESS_APG, false],
-        ];
+        yield [true, true, RefData::BUSINESS_PROCESS_APGG, true];
+        yield [false, true, RefData::BUSINESS_PROCESS_APGG, false];
+        yield [true, false, RefData::BUSINESS_PROCESS_APGG, false];
+        yield [true, true, RefData::BUSINESS_PROCESS_APSG, false];
+        yield [true, true, RefData::BUSINESS_PROCESS_APG, false];
     }
 
     public function testUpdateInternationalJourneys(): void
@@ -4570,7 +4454,7 @@ class IrhpApplicationEntityTest extends EntityTester
     {
         $entity = $this->createNewEntity();
 
-        $this->assertNull($entity->getBusinessProcess());
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\System\RefData::class, $entity->getBusinessProcess());
     }
 
     public function testGetAnswerValueByQuestionId(): void
@@ -4623,14 +4507,12 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->hasCountryId($countryId));
     }
 
-    public static function dpTestHasCountryId(): array
+    public static function dpTestHasCountryId(): \Iterator
     {
-        return [
-            ['FR', true],
-            ['RU', true],
-            ['DE', true],
-            ['ES', false],
-        ];
+        yield ['FR', true];
+        yield ['RU', true];
+        yield ['DE', true];
+        yield ['ES', false];
     }
 
     public function testGetCountryIds(): void
@@ -4711,12 +4593,10 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpCalculateTotalPermitsRequired(): array
+    public static function dpCalculateTotalPermitsRequired(): \Iterator
     {
-        return [
-            'ecmt short term' => [true, false, 5, 3, 8],
-            'ecmt annual' => [false, true, 4, 9, 13],
-        ];
+        yield 'ecmt short term' => [true, false, 5, 3, 8];
+        yield 'ecmt annual' => [false, true, 4, 9, 13];
     }
 
     public function testCalculateTotalPermitsRequiredIncorrectType(): void
@@ -4775,16 +4655,14 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->calculateTotalPermitsRequired();
     }
 
-    public static function dpCalculateTotalPermitsRequiredNotSet(): array
+    public static function dpCalculateTotalPermitsRequiredNotSet(): \Iterator
     {
-        return [
-            'ecmt short term, nothing set' => [true, false, null, null],
-            'ecmt short term, only euro 5' => [true, false, 5, null],
-            'ecmt short term, only euro 6' => [true, false, null, 10],
-            'ecmt annual, nothing set' => [false, true, null, null],
-            'ecmt annual, only euro 5' => [false, true, 5, null],
-            'ecmt annual, only euro 6' => [false, true, null, 10],
-        ];
+        yield 'ecmt short term, nothing set' => [true, false, null, null];
+        yield 'ecmt short term, only euro 5' => [true, false, 5, null];
+        yield 'ecmt short term, only euro 6' => [true, false, null, 10];
+        yield 'ecmt annual, nothing set' => [false, true, null, null];
+        yield 'ecmt annual, only euro 5' => [false, true, 5, null];
+        yield 'ecmt annual, only euro 6' => [false, true, null, 10];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetPermitIntensityOfUse')]
@@ -4851,13 +4729,11 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->getPermitIntensityOfUse('xyz');
     }
 
-    public static function dpTestGetPermitIntensityOfUse(): array
+    public static function dpTestGetPermitIntensityOfUse(): \Iterator
     {
-        return [
-            [null, 5],
-            [RefData::EMISSIONS_CATEGORY_EURO5_REF, 17.5],
-            [RefData::EMISSIONS_CATEGORY_EURO6_REF, 7],
-        ];
+        yield [null, 5];
+        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF, 17.5];
+        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF, 7];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetPermitApplicationScore')]
@@ -4884,19 +4760,17 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpTestGetPermitApplicationScore(): array
+    public static function dpTestGetPermitApplicationScore(): \Iterator
     {
-        return [
-            [null, RefData::INTER_JOURNEY_LESS_60, 1.5],
-            [null, RefData::INTER_JOURNEY_60_90, 3.75],
-            [null, RefData::INTER_JOURNEY_MORE_90, 5],
-            [RefData::EMISSIONS_CATEGORY_EURO5_REF, RefData::INTER_JOURNEY_LESS_60, 1.5],
-            [RefData::EMISSIONS_CATEGORY_EURO5_REF, RefData::INTER_JOURNEY_60_90, 3.75],
-            [RefData::EMISSIONS_CATEGORY_EURO5_REF, RefData::INTER_JOURNEY_MORE_90, 5],
-            [RefData::EMISSIONS_CATEGORY_EURO6_REF, RefData::INTER_JOURNEY_LESS_60, 1.5],
-            [RefData::EMISSIONS_CATEGORY_EURO6_REF, RefData::INTER_JOURNEY_60_90, 3.75],
-            [RefData::EMISSIONS_CATEGORY_EURO6_REF, RefData::INTER_JOURNEY_MORE_90, 5],
-        ];
+        yield [null, RefData::INTER_JOURNEY_LESS_60, 1.5];
+        yield [null, RefData::INTER_JOURNEY_60_90, 3.75];
+        yield [null, RefData::INTER_JOURNEY_MORE_90, 5];
+        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF, RefData::INTER_JOURNEY_LESS_60, 1.5];
+        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF, RefData::INTER_JOURNEY_60_90, 3.75];
+        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF, RefData::INTER_JOURNEY_MORE_90, 5];
+        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF, RefData::INTER_JOURNEY_LESS_60, 1.5];
+        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF, RefData::INTER_JOURNEY_60_90, 3.75];
+        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF, RefData::INTER_JOURNEY_MORE_90, 5];
     }
 
     public function testGetCamelCaseEntityName(): void
@@ -4927,26 +4801,24 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpGetEmailCommandLookup(): array
+    public static function dpGetEmailCommandLookup(): \Iterator
     {
-        return [
+        yield [
+            true,
+            false,
             [
-                true,
-                false,
-                [
-                    ApplicationAcceptConsts::SUCCESS_LEVEL_NONE => SendEcmtShortTermUnsuccessful::class,
-                    ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL => SendEcmtShortTermApsgPartSuccessful::class,
-                    ApplicationAcceptConsts::SUCCESS_LEVEL_FULL => SendEcmtShortTermSuccessful::class
-                ]
-            ],
+                ApplicationAcceptConsts::SUCCESS_LEVEL_NONE => SendEcmtShortTermUnsuccessful::class,
+                ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL => SendEcmtShortTermApsgPartSuccessful::class,
+                ApplicationAcceptConsts::SUCCESS_LEVEL_FULL => SendEcmtShortTermSuccessful::class
+            ]
+        ];
+        yield [
+            false,
+            true,
             [
-                false,
-                true,
-                [
-                    ApplicationAcceptConsts::SUCCESS_LEVEL_NONE => SendEcmtApsgUnsuccessful::class,
-                    ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL => SendEcmtApsgPartSuccessful::class,
-                    ApplicationAcceptConsts::SUCCESS_LEVEL_FULL => SendEcmtApsgSuccessful::class
-                ]
+                ApplicationAcceptConsts::SUCCESS_LEVEL_NONE => SendEcmtApsgUnsuccessful::class,
+                ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL => SendEcmtApsgPartSuccessful::class,
+                ApplicationAcceptConsts::SUCCESS_LEVEL_FULL => SendEcmtApsgSuccessful::class
             ]
         ];
     }
@@ -4991,14 +4863,12 @@ class IrhpApplicationEntityTest extends EntityTester
     /**
      * Pass array of app statuses to make sure an exception is thrown
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function dpProvideOutcomeNotificationType(): array
+    public static function dpProvideOutcomeNotificationType(): \Iterator
     {
-        return [
-            [IrhpInterface::SOURCE_SELFSERVE, ApplicationAcceptConsts::NOTIFICATION_TYPE_EMAIL],
-            [IrhpInterface::SOURCE_INTERNAL, ApplicationAcceptConsts::NOTIFICATION_TYPE_MANUAL]
-        ];
+        yield [IrhpInterface::SOURCE_SELFSERVE, ApplicationAcceptConsts::NOTIFICATION_TYPE_EMAIL];
+        yield [IrhpInterface::SOURCE_INTERNAL, ApplicationAcceptConsts::NOTIFICATION_TYPE_MANUAL];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpProvideSuccessLevel')]
@@ -5040,39 +4910,35 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpHasStateRequiredForPostScoringEmail(): array
+    public static function dpHasStateRequiredForPostScoringEmail(): \Iterator
     {
-        return [
-            [false, false, ApplicationAcceptConsts::SUCCESS_LEVEL_NONE, false],
-            [false, false, ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL, false],
-            [false, false, ApplicationAcceptConsts::SUCCESS_LEVEL_FULL, false],
-            [false, true, ApplicationAcceptConsts::SUCCESS_LEVEL_NONE, false],
-            [false, true, ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL, false],
-            [false, true, ApplicationAcceptConsts::SUCCESS_LEVEL_FULL, false],
-            [true, false, ApplicationAcceptConsts::SUCCESS_LEVEL_NONE, false],
-            [true, false, ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL, false],
-            [true, false, ApplicationAcceptConsts::SUCCESS_LEVEL_FULL, false],
-            [true, true, ApplicationAcceptConsts::SUCCESS_LEVEL_NONE, false],
-            [true, true, ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL, true],
-            [true, true, ApplicationAcceptConsts::SUCCESS_LEVEL_FULL, true],
-        ];
+        yield [false, false, ApplicationAcceptConsts::SUCCESS_LEVEL_NONE, false];
+        yield [false, false, ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL, false];
+        yield [false, false, ApplicationAcceptConsts::SUCCESS_LEVEL_FULL, false];
+        yield [false, true, ApplicationAcceptConsts::SUCCESS_LEVEL_NONE, false];
+        yield [false, true, ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL, false];
+        yield [false, true, ApplicationAcceptConsts::SUCCESS_LEVEL_FULL, false];
+        yield [true, false, ApplicationAcceptConsts::SUCCESS_LEVEL_NONE, false];
+        yield [true, false, ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL, false];
+        yield [true, false, ApplicationAcceptConsts::SUCCESS_LEVEL_FULL, false];
+        yield [true, true, ApplicationAcceptConsts::SUCCESS_LEVEL_NONE, false];
+        yield [true, true, ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL, true];
+        yield [true, true, ApplicationAcceptConsts::SUCCESS_LEVEL_FULL, true];
     }
 
     /**
      * Pass array of app statuses to make sure an exception is thrown
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function dpProvideSuccessLevel(): array
+    public static function dpProvideSuccessLevel(): \Iterator
     {
-        return [
-            [10,  1, ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL],
-            [10,  9, ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL],
-            [10,  0, ApplicationAcceptConsts::SUCCESS_LEVEL_NONE],
-            [ 1,  0, ApplicationAcceptConsts::SUCCESS_LEVEL_NONE],
-            [ 1,  1, ApplicationAcceptConsts::SUCCESS_LEVEL_FULL],
-            [10, 10, ApplicationAcceptConsts::SUCCESS_LEVEL_FULL]
-        ];
+        yield [10,  1, ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL];
+        yield [10,  9, ApplicationAcceptConsts::SUCCESS_LEVEL_PARTIAL];
+        yield [10,  0, ApplicationAcceptConsts::SUCCESS_LEVEL_NONE];
+        yield [ 1,  0, ApplicationAcceptConsts::SUCCESS_LEVEL_NONE];
+        yield [ 1,  1, ApplicationAcceptConsts::SUCCESS_LEVEL_FULL];
+        yield [10, 10, ApplicationAcceptConsts::SUCCESS_LEVEL_FULL];
     }
 
     public function testProceedToUnsuccessful(): void
@@ -5208,14 +5074,12 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpGetIntensityOfUseWarningThreshold(): array
+    public static function dpGetIntensityOfUseWarningThreshold(): \Iterator
     {
-        return [
-            [true, false, 5, 8, 800],
-            [true, false, 4, 2, 400],
-            [false, true, 5, 8, 800],
-            [false, true, 4, 2, 400],
-        ];
+        yield [true, false, 5, 8, 800];
+        yield [true, false, 4, 2, 400];
+        yield [false, true, 5, 8, 800];
+        yield [false, true, 4, 2, 400];
     }
 
     public function testGetIntensityOfUseWarningThresholdException(): void
@@ -5263,19 +5127,17 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpGetAppSubmittedEmailCommand(): array
+    public static function dpGetAppSubmittedEmailCommand(): \Iterator
     {
-        return [
-            [true, false, RefData::BUSINESS_PROCESS_APG, null],
-            [true, false, RefData::BUSINESS_PROCESS_APGG, null],
-            [true, false, RefData::BUSINESS_PROCESS_APSG, SendEcmtShortTermAppSubmitted::class],
-            [false, true, RefData::BUSINESS_PROCESS_APG, null],
-            [false, true, RefData::BUSINESS_PROCESS_APGG, SendEcmtApggAppSubmitted::class],
-            [false, true, RefData::BUSINESS_PROCESS_APSG, SendEcmtApsgAppSubmitted::class],
-            [false, false, RefData::BUSINESS_PROCESS_APG, null],
-            [false, false, RefData::BUSINESS_PROCESS_APGG, null],
-            [false, false, RefData::BUSINESS_PROCESS_APSG, null],
-        ];
+        yield [true, false, RefData::BUSINESS_PROCESS_APG, null];
+        yield [true, false, RefData::BUSINESS_PROCESS_APGG, null];
+        yield [true, false, RefData::BUSINESS_PROCESS_APSG, SendEcmtShortTermAppSubmitted::class];
+        yield [false, true, RefData::BUSINESS_PROCESS_APG, null];
+        yield [false, true, RefData::BUSINESS_PROCESS_APGG, SendEcmtApggAppSubmitted::class];
+        yield [false, true, RefData::BUSINESS_PROCESS_APSG, SendEcmtApsgAppSubmitted::class];
+        yield [false, false, RefData::BUSINESS_PROCESS_APG, null];
+        yield [false, false, RefData::BUSINESS_PROCESS_APGG, null];
+        yield [false, false, RefData::BUSINESS_PROCESS_APSG, null];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetAppWithdrawnEmailCommand')]
@@ -5294,49 +5156,47 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpGetAppWithdrawnEmailCommand(): array
+    public static function dpGetAppWithdrawnEmailCommand(): \Iterator
     {
-        return [
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
-                WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS,
-                null,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
-                WithdrawableInterface::WITHDRAWN_REASON_UNPAID,
-                SendEcmtAutomaticallyWithdrawn::class,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
-                WithdrawableInterface::WITHDRAWN_REASON_BY_USER,
-                null,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
-                WithdrawableInterface::WITHDRAWN_REASON_DECLINED,
-                null,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS,
-                SendEcmtShortTermUnsuccessful::class,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                WithdrawableInterface::WITHDRAWN_REASON_UNPAID,
-                SendEcmtShortTermAutomaticallyWithdrawn::class,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                WithdrawableInterface::WITHDRAWN_REASON_BY_USER,
-                null,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                WithdrawableInterface::WITHDRAWN_REASON_DECLINED,
-                null,
-            ],
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
+            WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS,
+            null,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
+            WithdrawableInterface::WITHDRAWN_REASON_UNPAID,
+            SendEcmtAutomaticallyWithdrawn::class,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
+            WithdrawableInterface::WITHDRAWN_REASON_BY_USER,
+            null,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
+            WithdrawableInterface::WITHDRAWN_REASON_DECLINED,
+            null,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS,
+            SendEcmtShortTermUnsuccessful::class,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            WithdrawableInterface::WITHDRAWN_REASON_UNPAID,
+            SendEcmtShortTermAutomaticallyWithdrawn::class,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            WithdrawableInterface::WITHDRAWN_REASON_BY_USER,
+            null,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            WithdrawableInterface::WITHDRAWN_REASON_DECLINED,
+            null,
         ];
     }
 
@@ -5367,16 +5227,14 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpGetIssuedEmailCommand(): array
+    public static function dpGetIssuedEmailCommand(): \Iterator
     {
-        return [
-            [true, false, true, false, SendEcmtApsgIssued::class],
-            [true, false, false, true, SendEcmtApggIssued::class],
-            [false, true, true, false, SendEcmtShortTermApsgIssued::class],
-            [false, true, false, true, SendEcmtShortTermApggIssued::class],
-            [false, false, true, false, null],
-            [false, false, false, true, null],
-        ];
+        yield [true, false, true, false, SendEcmtApsgIssued::class];
+        yield [true, false, false, true, SendEcmtApggIssued::class];
+        yield [false, true, true, false, SendEcmtShortTermApsgIssued::class];
+        yield [false, true, false, true, SendEcmtShortTermApggIssued::class];
+        yield [false, false, true, false, null];
+        yield [false, false, false, true, null];
     }
 
     public function testGetAllocationMode(): void
@@ -5420,21 +5278,17 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($checked, $this->sut->getChecked());
     }
 
-    public static function dpUpdateChecked(): array
+    public static function dpUpdateChecked(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
-    public static function dpShouldAllocatePermitsOnSubmission(): array
+    public static function dpShouldAllocatePermitsOnSubmission(): \Iterator
     {
-        return [
-            [RefData::BUSINESS_PROCESS_APG, true],
-            [RefData::BUSINESS_PROCESS_APGG, false],
-            [RefData::BUSINESS_PROCESS_APSG, false],
-        ];
+        yield [RefData::BUSINESS_PROCESS_APG, true];
+        yield [RefData::BUSINESS_PROCESS_APGG, false];
+        yield [RefData::BUSINESS_PROCESS_APSG, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetSubmissionTaskDescription')]
@@ -5452,37 +5306,35 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpGetSubmissionTaskDescription(): array
+    public static function dpGetSubmissionTaskDescription(): \Iterator
     {
-        return [
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
-                Task::TASK_DESCRIPTION_ANNUAL_ECMT_RECEIVED
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                Task::TASK_DESCRIPTION_SHORT_TERM_ECMT_RECEIVED
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                Task::TASK_DESCRIPTION_ECMT_INTERNATIONAL_REMOVALS_RECEIVED
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
-                Task::TASK_DESCRIPTION_BILATERAL_RECEIVED
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL,
-                Task::TASK_DESCRIPTION_MULTILATERAL_RECEIVED
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE,
-                Task::TASK_DESCRIPTION_CERT_ROADWORTHINESS_RECEIVED
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER,
-                Task::TASK_DESCRIPTION_CERT_ROADWORTHINESS_RECEIVED
-            ],
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
+            Task::TASK_DESCRIPTION_ANNUAL_ECMT_RECEIVED
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            Task::TASK_DESCRIPTION_SHORT_TERM_ECMT_RECEIVED
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+            Task::TASK_DESCRIPTION_ECMT_INTERNATIONAL_REMOVALS_RECEIVED
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
+            Task::TASK_DESCRIPTION_BILATERAL_RECEIVED
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL,
+            Task::TASK_DESCRIPTION_MULTILATERAL_RECEIVED
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE,
+            Task::TASK_DESCRIPTION_CERT_ROADWORTHINESS_RECEIVED
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER,
+            Task::TASK_DESCRIPTION_CERT_ROADWORTHINESS_RECEIVED
         ];
     }
 
@@ -5516,14 +5368,12 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpGetSubmissionStatus(): array
+    public static function dpGetSubmissionStatus(): \Iterator
     {
-        return [
-            [RefData::BUSINESS_PROCESS_AG, IrhpInterface::STATUS_VALID],
-            [RefData::BUSINESS_PROCESS_APG, IrhpInterface::STATUS_ISSUING],
-            [RefData::BUSINESS_PROCESS_APGG, IrhpInterface::STATUS_UNDER_CONSIDERATION],
-            [RefData::BUSINESS_PROCESS_APSG, IrhpInterface::STATUS_UNDER_CONSIDERATION],
-        ];
+        yield [RefData::BUSINESS_PROCESS_AG, IrhpInterface::STATUS_VALID];
+        yield [RefData::BUSINESS_PROCESS_APG, IrhpInterface::STATUS_ISSUING];
+        yield [RefData::BUSINESS_PROCESS_APGG, IrhpInterface::STATUS_UNDER_CONSIDERATION];
+        yield [RefData::BUSINESS_PROCESS_APSG, IrhpInterface::STATUS_UNDER_CONSIDERATION];
     }
 
     public function testGetSubmissionStatusException(): void
@@ -5591,13 +5441,11 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpRequiresPreAllocationCheck(): array
+    public static function dpRequiresPreAllocationCheck(): \Iterator
     {
-        return [
-            [true, false, true],
-            [false, true, true],
-            [false, false, false],
-        ];
+        yield [true, false, true];
+        yield [false, true, true];
+        yield [false, false, false];
     }
 
     public function testFetchOpenSubmissionTask(): void
@@ -5639,7 +5487,8 @@ class IrhpApplicationEntityTest extends EntityTester
             new ArrayCollection([$task1, $task2, $task3, $task4, $task5])
         );
 
-        $this->assertNull(
+        $this->assertNotInstanceOf(
+            \Dvsa\Olcs\Api\Entity\Task\Task::class,
             $this->sut->fetchOpenSubmissionTask()
         );
     }
@@ -5693,20 +5542,18 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->expireCertificate(m::mock(RefData::class));
     }
 
-    public static function dpExpireCertificateMotNotExpired(): array
+    public static function dpExpireCertificateMotNotExpired(): \Iterator
     {
-        return [
-            'no mot expiry date present' => [null],
-            'mot expires tomorrow' => [(new \DateTime('+1 day'))->format('Y-m-d')],
-            'mot expires today' => [(new \DateTime())->format('Y-m-d')],
-        ];
+        yield 'no mot expiry date present' => [null];
+        yield 'mot expires tomorrow' => [new \DateTime('+1 day')->format('Y-m-d')];
+        yield 'mot expires today' => [new \DateTime()->format('Y-m-d')];
     }
 
     public function testExpireCertificateMotHasExpired(): void
     {
         $validStatus = m::mock(RefData::class);
         $validStatus->expects()->getId()->withNoArgs()->andReturn(IrhpInterface::STATUS_VALID);
-        $expiryDate = (new \DateTime('-1 day'))->format('Y-m-d');
+        $expiryDate = new \DateTime('-1 day')->format('Y-m-d');
         $expiryStatus = m::mock(RefData::class);
 
         $irhpPermitType = m::mock(IrhpPermitType::class);
@@ -5727,8 +5574,8 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity->setIrhpPermitApplications(new ArrayCollection([$irhpPermitApplication]));
 
         $entity->expireCertificate($expiryStatus);
-        self::assertEquals($expiryStatus, $entity->getStatus());
-        self::assertEquals($expiryDate, $entity->getExpiryDate()->format('Y-m-d'));
+        $this->assertEquals($expiryStatus, $entity->getStatus());
+        $this->assertEquals($expiryDate, $entity->getExpiryDate()->format('Y-m-d'));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetMotExpiryDate')]
@@ -5753,17 +5600,15 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpTestGetMotExpiryDate(): array
+    public static function dpTestGetMotExpiryDate(): \Iterator
     {
-        return [
-            'trailer' => [
-                true,
-                Question::QUESTION_ID_ROADWORTHINESS_TRAILER_MOT_EXPIRY,
-            ],
-            'vehicle' => [
-                false,
-                Question::QUESTION_ID_ROADWORTHINESS_VEHICLE_MOT_EXPIRY,
-            ],
+        yield 'trailer' => [
+            true,
+            Question::QUESTION_ID_ROADWORTHINESS_TRAILER_MOT_EXPIRY,
+        ];
+        yield 'vehicle' => [
+            false,
+            Question::QUESTION_ID_ROADWORTHINESS_VEHICLE_MOT_EXPIRY,
         ];
     }
 
@@ -5796,14 +5641,12 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpCanBeResetToNotYetSubmittedFromValid(): array
+    public static function dpCanBeResetToNotYetSubmittedFromValid(): \Iterator
     {
-        return [
-            [true, true, true],
-            [false, true, false],
-            [true, false, false],
-            [false, false, false],
-        ];
+        yield [true, true, true];
+        yield [false, true, false];
+        yield [true, false, false];
+        yield [false, false, false];
     }
 
     public function testResetToNotYetSubmittedFromValid(): void
@@ -5871,22 +5714,20 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpCanBeResetToNotYetSubmittedFromCancelled(): array
+    public static function dpCanBeResetToNotYetSubmittedFromCancelled(): \Iterator
     {
-        return [
-            [false, false, true, false, false],
-            [false, true, false, false, false],
-            [false, false, false, false, false],
-            [true, false, true, false, true],
-            [true, true, false, false, true],
-            [true, false, false, false, false],
-            [false, false, true, true, false],
-            [false, true, false, true, false],
-            [false, false, false, true, false],
-            [true, false, true, true, false],
-            [true, true, false, true, false],
-            [true, false, false, true, false],
-        ];
+        yield [false, false, true, false, false];
+        yield [false, true, false, false, false];
+        yield [false, false, false, false, false];
+        yield [true, false, true, false, true];
+        yield [true, true, false, false, true];
+        yield [true, false, false, false, false];
+        yield [false, false, true, true, false];
+        yield [false, true, false, true, false];
+        yield [false, false, false, true, false];
+        yield [true, false, true, true, false];
+        yield [true, true, false, true, false];
+        yield [true, false, false, true, false];
     }
 
     public function testResetToNotYetSubmittedFromCancelled(): void
@@ -5949,39 +5790,37 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpCanBeRevivedFromWithdrawn(): array
+    public static function dpCanBeRevivedFromWithdrawn(): \Iterator
     {
-        return [
-            [
-                WithdrawableInterface::WITHDRAWN_REASON_UNPAID,
-                true,
-                RefData::BUSINESS_PROCESS_APSG,
-                true,
-            ],
-            [
-                WithdrawableInterface::WITHDRAWN_REASON_DECLINED,
-                true,
-                RefData::BUSINESS_PROCESS_APSG,
-                true,
-            ],
-            [
-                WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS,
-                true,
-                RefData::BUSINESS_PROCESS_APSG,
-                false,
-            ],
-            [
-                WithdrawableInterface::WITHDRAWN_REASON_DECLINED,
-                false,
-                RefData::BUSINESS_PROCESS_APSG,
-                false,
-            ],
-            [
-                WithdrawableInterface::WITHDRAWN_REASON_DECLINED,
-                true,
-                RefData::BUSINESS_PROCESS_APGG,
-                false,
-            ],
+        yield [
+            WithdrawableInterface::WITHDRAWN_REASON_UNPAID,
+            true,
+            RefData::BUSINESS_PROCESS_APSG,
+            true,
+        ];
+        yield [
+            WithdrawableInterface::WITHDRAWN_REASON_DECLINED,
+            true,
+            RefData::BUSINESS_PROCESS_APSG,
+            true,
+        ];
+        yield [
+            WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS,
+            true,
+            RefData::BUSINESS_PROCESS_APSG,
+            false,
+        ];
+        yield [
+            WithdrawableInterface::WITHDRAWN_REASON_DECLINED,
+            false,
+            RefData::BUSINESS_PROCESS_APSG,
+            false,
+        ];
+        yield [
+            WithdrawableInterface::WITHDRAWN_REASON_DECLINED,
+            true,
+            RefData::BUSINESS_PROCESS_APGG,
+            false,
         ];
     }
 
@@ -6012,14 +5851,12 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpCanBeRevivedFromWithdrawnNotWithdrawn(): array
+    public static function dpCanBeRevivedFromWithdrawnNotWithdrawn(): \Iterator
     {
-        return [
-            [true, RefData::BUSINESS_PROCESS_APGG],
-            [false, RefData::BUSINESS_PROCESS_APSG],
-            [true, RefData::BUSINESS_PROCESS_APGG],
-            [false, RefData::BUSINESS_PROCESS_APSG],
-        ];
+        yield [true, RefData::BUSINESS_PROCESS_APGG];
+        yield [false, RefData::BUSINESS_PROCESS_APSG];
+        yield [true, RefData::BUSINESS_PROCESS_APGG];
+        yield [false, RefData::BUSINESS_PROCESS_APSG];
     }
 
     public function testReviveFromWithdrawn(): void
@@ -6050,7 +5887,7 @@ class IrhpApplicationEntityTest extends EntityTester
             ->withNoArgs()
             ->andReturnNull();
 
-        self::assertFalse($this->sut->canBeRevivedFromWithdrawn());
+        $this->assertFalse($this->sut->canBeRevivedFromWithdrawn());
     }
 
     public function testReviveFromWithdrawnException(): void
@@ -6092,109 +5929,107 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpCanBeRevivedFromUnsuccessful(): array
+    public static function dpCanBeRevivedFromUnsuccessful(): \Iterator
     {
-        return [
-            [
-                RefData::BUSINESS_PROCESS_APSG,
-                IrhpInterface::STATUS_CANCELLED,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APSG,
-                IrhpInterface::STATUS_NOT_YET_SUBMITTED,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APSG,
-                IrhpInterface::STATUS_UNDER_CONSIDERATION,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APSG,
-                IrhpInterface::STATUS_WITHDRAWN,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APSG,
-                IrhpInterface::STATUS_AWAITING_FEE,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APSG,
-                IrhpInterface::STATUS_FEE_PAID,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APSG,
-                IrhpInterface::STATUS_UNSUCCESSFUL,
-                true
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APSG,
-                IrhpInterface::STATUS_ISSUING,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APSG,
-                IrhpInterface::STATUS_VALID,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APSG,
-                IrhpInterface::STATUS_EXPIRED,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APGG,
-                IrhpInterface::STATUS_CANCELLED,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APGG,
-                IrhpInterface::STATUS_NOT_YET_SUBMITTED,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APGG,
-                IrhpInterface::STATUS_UNDER_CONSIDERATION,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APGG,
-                IrhpInterface::STATUS_WITHDRAWN,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APGG,
-                IrhpInterface::STATUS_AWAITING_FEE,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APGG,
-                IrhpInterface::STATUS_FEE_PAID,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APGG,
-                IrhpInterface::STATUS_UNSUCCESSFUL,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APGG,
-                IrhpInterface::STATUS_ISSUING,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APGG,
-                IrhpInterface::STATUS_VALID,
-                false
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APGG,
-                IrhpInterface::STATUS_EXPIRED,
-                false
-            ],
+        yield [
+            RefData::BUSINESS_PROCESS_APSG,
+            IrhpInterface::STATUS_CANCELLED,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APSG,
+            IrhpInterface::STATUS_NOT_YET_SUBMITTED,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APSG,
+            IrhpInterface::STATUS_UNDER_CONSIDERATION,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APSG,
+            IrhpInterface::STATUS_WITHDRAWN,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APSG,
+            IrhpInterface::STATUS_AWAITING_FEE,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APSG,
+            IrhpInterface::STATUS_FEE_PAID,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APSG,
+            IrhpInterface::STATUS_UNSUCCESSFUL,
+            true
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APSG,
+            IrhpInterface::STATUS_ISSUING,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APSG,
+            IrhpInterface::STATUS_VALID,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APSG,
+            IrhpInterface::STATUS_EXPIRED,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APGG,
+            IrhpInterface::STATUS_CANCELLED,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APGG,
+            IrhpInterface::STATUS_NOT_YET_SUBMITTED,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APGG,
+            IrhpInterface::STATUS_UNDER_CONSIDERATION,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APGG,
+            IrhpInterface::STATUS_WITHDRAWN,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APGG,
+            IrhpInterface::STATUS_AWAITING_FEE,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APGG,
+            IrhpInterface::STATUS_FEE_PAID,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APGG,
+            IrhpInterface::STATUS_UNSUCCESSFUL,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APGG,
+            IrhpInterface::STATUS_ISSUING,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APGG,
+            IrhpInterface::STATUS_VALID,
+            false
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APGG,
+            IrhpInterface::STATUS_EXPIRED,
+            false
         ];
     }
 
@@ -6204,7 +6039,7 @@ class IrhpApplicationEntityTest extends EntityTester
             ->withNoArgs()
             ->andReturnNull();
 
-        self::assertFalse($this->sut->canBeRevivedFromUnsuccessful());
+        $this->assertFalse($this->sut->canBeRevivedFromUnsuccessful());
     }
 
     public function testReviveFromUnsuccessful(): void
@@ -6253,84 +6088,81 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getProductReferenceForTier($now));
     }
 
-    public static function productRefMonthProvider(): array
+    public static function productRefMonthProvider(): \Iterator
     {
         $validFrom = new DateTime('first day of January next year');
         $validTo = new DateTime('last day of December next year');
-
-        return [
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_100_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of January next year')
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_100_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of February next year')
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_100_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of March next year')
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_75_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of April next year')
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_75_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of May next year')
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_75_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of June next year')
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_50_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of July next year')
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_50_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of August next year')
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_50_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of September next year')
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_25_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of October next year')
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_25_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of November next year')
-            ],
-            [
-                FeeType::FEE_TYPE_ECMT_ISSUE_25_PRODUCT_REF,
-                $validFrom,
-                $validTo,
-                new DateTime('first day of December next year')
-            ],
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_100_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of January next year')
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_100_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of February next year')
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_100_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of March next year')
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_75_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of April next year')
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_75_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of May next year')
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_75_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of June next year')
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_50_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of July next year')
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_50_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of August next year')
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_50_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of September next year')
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_25_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of October next year')
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_25_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of November next year')
+        ];
+        yield [
+            FeeType::FEE_TYPE_ECMT_ISSUE_25_PRODUCT_REF,
+            $validFrom,
+            $validTo,
+            new DateTime('first day of December next year')
         ];
     }
 
@@ -6395,12 +6227,10 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsApplicationPathEnabled(): array
+    public static function dpIsApplicationPathEnabled(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
     public function testGetRepositoryName(): void
@@ -6446,12 +6276,10 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->assertEquals($result, $this->sut->getIrhpPermitApplicationIdForCountry($countryEntity));
     }
 
-    public static function dpGetIrhpPermitApplicationIdForCountry(): array
+    public static function dpGetIrhpPermitApplicationIdForCountry(): \Iterator
     {
-        return [
-            [null, 'NO'],
-            [3322, 'DE'],
-        ];
+        yield [null, 'NO'];
+        yield [3322, 'DE'];
     }
 
     public function testGetIrhpPermitApplicationIdForCountryMissingIrhpPermitApplication(): void
@@ -6571,7 +6399,8 @@ class IrhpApplicationEntityTest extends EntityTester
         $entity = $this->createNewEntity();
         $entity->setIrhpPermitApplications($irhpPermitApplications);
 
-        $this->assertNull(
+        $this->assertNotInstanceOf(
+            \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class,
             $entity->getIrhpPermitApplicationByCountryId(Country::ID_BELARUS)
         );
     }
@@ -6634,15 +6463,13 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsApsg(): array
+    public static function dpIsApsg(): \Iterator
     {
-        return [
-            [null, false],
-            [RefData::BUSINESS_PROCESS_APG, false],
-            [RefData::BUSINESS_PROCESS_APGG, false],
-            [RefData::BUSINESS_PROCESS_APSG, true],
-            [RefData::BUSINESS_PROCESS_AG, false],
-        ];
+        yield [null, false];
+        yield [RefData::BUSINESS_PROCESS_APG, false];
+        yield [RefData::BUSINESS_PROCESS_APGG, false];
+        yield [RefData::BUSINESS_PROCESS_APSG, true];
+        yield [RefData::BUSINESS_PROCESS_AG, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsApgg')]
@@ -6658,15 +6485,13 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsApgg(): array
+    public static function dpIsApgg(): \Iterator
     {
-        return [
-            [null, false],
-            [RefData::BUSINESS_PROCESS_APG, false],
-            [RefData::BUSINESS_PROCESS_APGG, true],
-            [RefData::BUSINESS_PROCESS_APSG, false],
-            [RefData::BUSINESS_PROCESS_AG, false],
-        ];
+        yield [null, false];
+        yield [RefData::BUSINESS_PROCESS_APG, false];
+        yield [RefData::BUSINESS_PROCESS_APGG, true];
+        yield [RefData::BUSINESS_PROCESS_APSG, false];
+        yield [RefData::BUSINESS_PROCESS_AG, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsOngoing')]
@@ -6689,14 +6514,12 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsOngoing(): array
+    public static function dpIsOngoing(): \Iterator
     {
-        return [
-            [false, false, false, false],
-            [false, false, true, true],
-            [false, true, false, true],
-            [true, false, false, true],
-        ];
+        yield [false, false, false, false];
+        yield [false, false, true, true];
+        yield [false, true, false, true];
+        yield [true, false, false, true];
     }
 
     public function testGetDocumentsByCategoryAndSubCategory(): void
@@ -6726,7 +6549,7 @@ class IrhpApplicationEntityTest extends EntityTester
         $this->sut->addDocuments($documents);
         $matchingDocuments = $this->sut->getDocumentsByCategoryAndSubCategory(6, 8);
 
-        $this->assertEquals(2, $matchingDocuments->count());
+        $this->assertCount(2, $matchingDocuments);
         $this->assertSame($document2, $matchingDocuments->get(0));
         $this->assertSame($document5, $matchingDocuments->get(1));
     }
@@ -6770,19 +6593,16 @@ class IrhpApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsUnderConsiderationOrAwaitingFeeAndAssociatedWithStock(): array
+    public static function dpIsUnderConsiderationOrAwaitingFeeAndAssociatedWithStock(): \Iterator
     {
         $irhpPermitStock1 = m::mock(IrhpPermitStock::class);
         $irhpPermitStock2 = m::mock(IrhpPermitStock::class);
-
-        return [
-            [false, false, $irhpPermitStock1, $irhpPermitStock2, false],
-            [true, false, $irhpPermitStock1, $irhpPermitStock2, false],
-            [false, true, $irhpPermitStock1, $irhpPermitStock2, false],
-            [false, false, $irhpPermitStock1, $irhpPermitStock1, false],
-            [true, false, $irhpPermitStock1, $irhpPermitStock1, true],
-            [false, true, $irhpPermitStock1, $irhpPermitStock1, true],
-        ];
+        yield [false, false, $irhpPermitStock1, $irhpPermitStock2, false];
+        yield [true, false, $irhpPermitStock1, $irhpPermitStock2, false];
+        yield [false, true, $irhpPermitStock1, $irhpPermitStock2, false];
+        yield [false, false, $irhpPermitStock1, $irhpPermitStock1, false];
+        yield [true, false, $irhpPermitStock1, $irhpPermitStock1, true];
+        yield [false, true, $irhpPermitStock1, $irhpPermitStock1, true];
     }
 
     public function testUpdateCorCertificateNumber(): void

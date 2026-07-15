@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Utils\Helper;
 
 use Dvsa\Olcs\Utils\Helper\FileHelper;
@@ -7,33 +9,31 @@ use Dvsa\Olcs\Utils\Helper\FileHelper;
 /**
  * @author Dmitry Golubev <dmitrij.golubev@valtech.com>
  */
-class FileHelperTest extends \PHPUnit\Framework\TestCase
+final class FileHelperTest extends \PHPUnit\Framework\TestCase
 {
-    /** @dataProvider dpTestGetExtension */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetExtension')]
     public function testGetExtension($path, $expect)
     {
-        static::assertEquals($expect, FileHelper::getExtension($path));
+        $this->assertEquals($expect, FileHelper::getExtension($path));
     }
 
-    public function dpTestGetExtension()
+    public static function dpTestGetExtension(): \Iterator
     {
-        return [
-            [
-                'path' => 'dir/dir/aaa.bbb.ext',
-                'expect' => 'ext',
-            ],
-            [
-                'path' => 'dir/dir/.ext',
-                'expect' => 'ext',
-            ],
-            [
-                'path' => 'dir/dir/file_without_ext',
-                'expect' => '',
-            ],
-            [
-                'path' => null,
-                'expect' => '',
-            ],
+        yield [
+            'path' => 'dir/dir/aaa.bbb.ext',
+            'expect' => 'ext',
+        ];
+        yield [
+            'path' => 'dir/dir/.ext',
+            'expect' => 'ext',
+        ];
+        yield [
+            'path' => 'dir/dir/file_without_ext',
+            'expect' => '',
+        ];
+        yield [
+            'path' => null,
+            'expect' => '',
         ];
     }
 }

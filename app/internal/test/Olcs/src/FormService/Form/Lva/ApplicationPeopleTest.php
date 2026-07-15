@@ -10,20 +10,19 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationPeople;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class ApplicationPeopleTest extends MockeryTestCase
+final class ApplicationPeopleTest extends MockeryTestCase
 {
     /** @var  ApplicationPeople */
     protected $sut;
 
     /** @var  m\MockInterface|\Common\Service\Helper\FormHelperService */
     protected $formHelper;
-    /** @var  \Common\FormService\FormServiceManager */
-    protected $fsm;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
-        $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
+        $fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
 
         $this->sut = new ApplicationPeople($this->formHelper, m::mock(AuthorizationService::class));
     }

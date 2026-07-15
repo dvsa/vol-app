@@ -30,7 +30,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateBusinessTypeTest extends AbstractCommandHandlerTestCase
+final class UpdateBusinessTypeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

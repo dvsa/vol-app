@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StandardAndCabotageUpdaterTest extends MockeryTestCase
+final class StandardAndCabotageUpdaterTest extends MockeryTestCase
 {
     public function testUpdate(): void
     {

@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @author Scott Callaway <scott.callaway@capgemini.com>
  */
-class DeleteTest extends AbstractCommandHandlerTestCase
+final class DeleteTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

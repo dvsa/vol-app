@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class GoodsDiscEntityTest extends EntityTester
+final class GoodsDiscEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

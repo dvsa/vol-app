@@ -18,7 +18,7 @@ use Mockery as m;
 /**
  * Delete Letter Issue Type Test
  */
-class DeleteTest extends AbstractCommandHandlerTestCase
+final class DeleteTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var DeleteCommandHandler

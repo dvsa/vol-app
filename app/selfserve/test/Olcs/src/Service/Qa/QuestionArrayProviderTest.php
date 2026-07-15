@@ -10,12 +10,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Qa\QuestionArrayProvider;
 use RuntimeException;
 
-class QuestionArrayProviderTest extends MockeryTestCase
+final class QuestionArrayProviderTest extends MockeryTestCase
 {
     private $formattedTranslateableTextParametersGenerator;
 
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formattedTranslateableTextParametersGenerator = m::mock(

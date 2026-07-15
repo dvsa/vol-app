@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class FormFragmentTest extends MockeryTestCase
+final class FormFragmentTest extends MockeryTestCase
 {
     public function testGetRepresentation(): void
     {

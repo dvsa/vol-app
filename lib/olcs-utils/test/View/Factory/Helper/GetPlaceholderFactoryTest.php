@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Utils\View\Factory\Helper;
 
 use Dvsa\Olcs\Utils\View\Factory\Helper\GetPlaceholderFactory;
@@ -10,28 +12,26 @@ use Psr\Container\ContainerInterface;
 use Laminas\View\Helper\Placeholder;
 use Laminas\View\HelperPluginManager;
 
-class GetPlaceholderFactoryTest extends TestCase
+final class GetPlaceholderFactoryTest extends TestCase
 {
     protected $sut;
-
-    /**
-     * @var Placeholder|MockObject
-     */
-    protected $mockPlaceholder;
 
     public function setUp(): void
     {
         $this->sut = new GetPlaceholderFactory();
-        $this->mockPlaceholder = $this->createMock(Placeholder::class);
     }
 
     public function testInvoke(): void
     {
-        $viewHelperManager = $this->createMock(HelperPluginManager::class);
-        $viewHelperManager->method('get')->with('placeholder')->willReturn($this->mockPlaceholder);
+        $viewHelperManager = $this->createStub(HelperPluginManager::class);
+        $viewHelperManager->method('get')->willReturnMap([
+            ['placeholder', $this->createStub(\Laminas\View\Helper\Placeholder::class)],
+        ]);
 
-        $container = $this->createMock(ContainerInterface::class);
-        $container->method('get')->with('ViewHelperManager')->willReturn($viewHelperManager);
+        $container = $this->createStub(ContainerInterface::class);
+        $container->method('get')->willReturnMap([
+            ['ViewHelperManager', $viewHelperManager],
+        ]);
 
         $factory = $this->sut;
         $result = $factory($container, 'getPlaceholder');

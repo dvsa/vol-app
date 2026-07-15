@@ -21,7 +21,7 @@ class CheckAnswersControllerFactory implements FactoryInterface
      * @return CheckAnswersController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CheckAnswersController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CheckAnswersController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

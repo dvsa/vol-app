@@ -17,13 +17,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ForCpWithCountriesAndMultipleMatchingRangesProviderTest extends MockeryTestCase
+final class ForCpWithCountriesAndMultipleMatchingRangesProviderTest extends MockeryTestCase
 {
     private $range1;
 
     private $range2;
-
-    private $range3;
 
     private $ranges;
 
@@ -37,6 +35,7 @@ class ForCpWithCountriesAndMultipleMatchingRangesProviderTest extends MockeryTes
 
     private $rangesProvider;
 
+    #[\Override]
     public function setUp(): void
     {
         $rangeEntity1Id = 47;
@@ -64,12 +63,12 @@ class ForCpWithCountriesAndMultipleMatchingRangesProviderTest extends MockeryTes
             'countryIds' => ['AT', 'GR']
         ];
 
-        $this->range3 = [
+        $range3 = [
             'entity' => $rangeEntity3,
             'countryIds' => ['GR', 'AT']
         ];
 
-        $this->ranges = [$this->range1, $this->range2, $this->range3];
+        $this->ranges = [$this->range1, $this->range2, $range3];
 
         $this->applicationCountryIds = ['AT', 'RU'];
 

@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Domain\Repository\FinancialStandingRate as Repo;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class FinancialStandingRateTest extends QueryHandlerTestCase
+final class FinancialStandingRateTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

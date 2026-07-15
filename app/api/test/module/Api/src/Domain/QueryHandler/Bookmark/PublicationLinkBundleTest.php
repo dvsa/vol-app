@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Entity\Publication\PublicationLink as Entity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class PublicationLinkBundleTest extends QueryHandlerTestCase
+final class PublicationLinkBundleTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

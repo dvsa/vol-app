@@ -13,7 +13,7 @@ use Mockery as m;
  * Class SubmissionActionTypes Test
  * @package CommonTest\Service
  */
-class SubmissionActionTypesTest extends AbstractDataServiceTestCase
+final class SubmissionActionTypesTest extends AbstractDataServiceTestCase
 {
     /** @var SubmissionActionTypes */
     protected $sut;

@@ -9,7 +9,7 @@ use League\OAuth2\Client\Token\AccessTokenInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-class ProviderTest extends TestCase
+final class ProviderTest extends TestCase
 {
     public function testGetToken(): void
     {
@@ -18,6 +18,6 @@ class ProviderTest extends TestCase
         $token->expects('getToken')->withNoArgs()->andReturn($tokenString);
 
         $sut = new Provider($token);
-        $this->assertEquals($tokenString, $sut->getToken());
+        $this->assertSame($tokenString, $sut->getToken());
     }
 }

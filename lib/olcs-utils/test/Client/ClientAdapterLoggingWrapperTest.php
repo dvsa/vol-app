@@ -8,35 +8,38 @@ use Dvsa\Olcs\Utils\Client\ClientAdapterLoggingWrapper;
 use Laminas\Http\Client;
 use Laminas\Uri\Uri;
 use Olcs\Logging\Log\Logger;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class ClientAdapterLoggingWrapperTest extends TestCase
+final class ClientAdapterLoggingWrapperTest extends TestCase
 {
     private ClientAdapterLoggingWrapper $sut;
 
-    private MockObject $mockAdapter;
+    /**
+     * @var Client\Adapter\Curl&Stub
+     */
+    private $adapter;
 
     public function setUp(): void
     {
-        $this->mockAdapter = $this->createMock(Client\Adapter\Curl::class);
+        $this->adapter = $this->createStub(Client\Adapter\Curl::class);
 
         $this->sut = new ClientAdapterLoggingWrapper();
-        $this->sut->setAdapter($this->mockAdapter);
+        $this->sut->setAdapter($this->adapter);
 
         Logger::setLogger(new NullLogger());
     }
 
     public function testSetAdapter()
     {
-        $this->assertSame($this->mockAdapter, $this->sut->getAdapter());
+        $this->assertSame($this->adapter, $this->sut->getAdapter());
     }
 
     public function testWrapAdapter()
     {
         $client = $this->createMock(Client::class);
-        $client->expects($this->once())->method('getAdapter')->willReturn($this->mockAdapter);
+        $client->expects($this->once())->method('getAdapter')->willReturn($this->adapter);
         $client->expects($this->once())->method('setAdapter')->with($this->sut);
 
         $this->sut->wrapAdapter($client);
@@ -44,21 +47,27 @@ class ClientAdapterLoggingWrapperTest extends TestCase
 
     public function testSetOptions()
     {
-        $this->mockAdapter->expects($this->once())->method('setOptions')->with(['foo' => 'bar']);
+        $adapter = $this->createMock(Client\Adapter\Curl::class);
+        $adapter->expects($this->once())->method('setOptions')->with(['foo' => 'bar']);
+        $this->sut->setAdapter($adapter);
 
         $this->sut->setOptions(['foo' => 'bar']);
     }
 
     public function testConnect()
     {
-        $this->mockAdapter->expects($this->once())->method('connect')->with('foo.com', 80, false);
+        $adapter = $this->createMock(Client\Adapter\Curl::class);
+        $adapter->expects($this->once())->method('connect')->with('foo.com', 80, false);
+        $this->sut->setAdapter($adapter);
 
         $this->sut->connect('foo.com', 80);
     }
 
     public function testWrite()
     {
-        $this->mockAdapter->expects($this->once())->method('write')->with('GET', '/foo', '1.1', [], '');
+        $adapter = $this->createMock(Client\Adapter\Curl::class);
+        $adapter->expects($this->once())->method('write')->with('GET', '/foo', '1.1', [], '');
+        $this->sut->setAdapter($adapter);
 
         $this->sut->write('GET', new Uri('/foo'));
     }
@@ -78,7 +87,9 @@ class ClientAdapterLoggingWrapperTest extends TestCase
             . '\r\n'
             . '{\"foo\":\"bar\"}';
 
-        $this->mockAdapter->expects($this->once())->method('read')->willReturn($response);
+        $adapter = $this->createMock(Client\Adapter\Curl::class);
+        $adapter->expects($this->once())->method('read')->willReturn($response);
+        $this->sut->setAdapter($adapter);
 
         $this->sut->setShouldLogData(false);
 
@@ -87,7 +98,9 @@ class ClientAdapterLoggingWrapperTest extends TestCase
 
     public function testClose()
     {
-        $this->mockAdapter->expects($this->once())->method('close');
+        $adapter = $this->createMock(Client\Adapter\Curl::class);
+        $adapter->expects($this->once())->method('close');
+        $this->sut->setAdapter($adapter);
 
         $this->sut->close();
     }
@@ -96,7 +109,9 @@ class ClientAdapterLoggingWrapperTest extends TestCase
     {
         $stream = stream_context_create();
 
-        $this->mockAdapter->expects($this->once())->method('setOutputStream')->willReturn($stream);
+        $adapter = $this->createMock(Client\Adapter\Curl::class);
+        $adapter->expects($this->once())->method('setOutputStream')->willReturn($stream);
+        $this->sut->setAdapter($adapter);
 
         $this->assertSame($this->sut, $this->sut->setOutputStream($stream));
     }

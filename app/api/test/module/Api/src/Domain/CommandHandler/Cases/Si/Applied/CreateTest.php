@@ -19,7 +19,7 @@ use Mockery as m;
 /**
  * Create Test
  */
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

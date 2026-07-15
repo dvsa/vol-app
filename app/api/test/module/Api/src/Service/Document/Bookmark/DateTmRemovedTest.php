@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\DateTmRemoved;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
-class DateTmRemovedTest extends \PHPUnit\Framework\TestCase
+final class DateTmRemovedTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -25,7 +25,7 @@ class DateTmRemovedTest extends \PHPUnit\Framework\TestCase
             'deletedDate' => '2026-03-04 10:11:12',
         ]);
 
-        $this->assertEquals('04/03/2026', $bookmark->render());
+        $this->assertSame('04/03/2026', $bookmark->render());
     }
 
     public function testRenderWhenDateIsDateTime(): void
@@ -35,7 +35,7 @@ class DateTmRemovedTest extends \PHPUnit\Framework\TestCase
             'deletedDate' => new \DateTime('2026-03-04 10:11:12'),
         ]);
 
-        $this->assertEquals('04/03/2026', $bookmark->render());
+        $this->assertSame('04/03/2026', $bookmark->render());
     }
 
     public function testRenderWhenDateIsNull(): void

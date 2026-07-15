@@ -18,9 +18,9 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EcmtPermitUsageRefDataSourceTest extends MockeryTestCase
+final class EcmtPermitUsageRefDataSourceTest extends MockeryTestCase
 {
-    public const OPTIONS = [
+    public const array OPTIONS = [
         'categoryId' => 5
     ];
 
@@ -32,10 +32,9 @@ class EcmtPermitUsageRefDataSourceTest extends MockeryTestCase
 
     private $optionList;
 
-    private $refDataSource;
-
     private $ecmtPermitUsageRefDataSource;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->optionListOption1 = m::mock(Option::class);
@@ -70,8 +69,8 @@ class EcmtPermitUsageRefDataSourceTest extends MockeryTestCase
 
         $this->optionList = m::mock(OptionList::class);
 
-        $this->refDataSource = m::mock(RefDataSource::class);
-        $this->refDataSource->shouldReceive('populateOptionList')
+        $refDataSource = m::mock(RefDataSource::class);
+        $refDataSource->shouldReceive('populateOptionList')
             ->with($this->optionList, self::OPTIONS)
             ->once();
 
@@ -89,7 +88,7 @@ class EcmtPermitUsageRefDataSourceTest extends MockeryTestCase
             ],
         ];
 
-        $this->ecmtPermitUsageRefDataSource = new EcmtPermitUsageRefDataSource($this->refDataSource, $transformations);
+        $this->ecmtPermitUsageRefDataSource = new EcmtPermitUsageRefDataSource($refDataSource, $transformations);
     }
 
     public function testPopulateOptionList(): void

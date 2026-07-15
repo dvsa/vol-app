@@ -12,7 +12,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class GetEventHistoryDetailsTest extends AbstractDbQueryTestCase
+final class GetEventHistoryDetailsTest extends AbstractDbQueryTestCase
 {
     protected $tableNameMap = [];
     protected $columnNameMap = [];
@@ -20,17 +20,15 @@ class GetEventHistoryDetailsTest extends AbstractDbQueryTestCase
     /**
      * Param provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function paramProvider(): array
+    public static function paramProvider(): \Iterator
     {
-        return [
-            [
-                [1, [1, 2]],
-                ['version' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY],
-                [1, [1, 2]],
-                ['version' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
-            ]
+        yield [
+            [1, [1, 2]],
+            ['version' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY],
+            [1, [1, 2]],
+            ['version' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
         ];
     }
 

@@ -18,9 +18,9 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ReadCaseTest extends AbstractCommandHandlerTestCase
+final class ReadCaseTest extends AbstractCommandHandlerTestCase
 {
-    public const USER_ID = 9999;
+    public const int USER_ID = 9999;
 
     /** @var m\MockInterface|User */
     private $mockUser;
@@ -65,7 +65,7 @@ class ReadCaseTest extends AbstractCommandHandlerTestCase
             ],
         ];
 
-        static::assertEquals($expected, $result->toArray());
+        $this->assertEquals($expected, $result->toArray());
     }
 
     public function testHandleCommand(): void
@@ -80,8 +80,8 @@ class ReadCaseTest extends AbstractCommandHandlerTestCase
             ->with(m::type(CasesReadAudit::class))
             ->andReturnUsing(
                 function (CasesReadAudit $record) use ($entity) {
-                    static::assertSame($this->mockUser, $record->getUser());
-                    static::assertSame($entity, $record->getCase());
+                    $this->assertSame($this->mockUser, $record->getUser());
+                    $this->assertSame($entity, $record->getCase());
                 }
             );
 
@@ -98,6 +98,6 @@ class ReadCaseTest extends AbstractCommandHandlerTestCase
             ],
         ];
 
-        static::assertEquals($expected, $result->toArray());
+        $this->assertEquals($expected, $result->toArray());
     }
 }

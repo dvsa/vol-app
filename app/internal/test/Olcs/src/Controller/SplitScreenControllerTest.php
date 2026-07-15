@@ -21,11 +21,12 @@ use Olcs\Controller\SplitScreenController;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class SplitScreenControllerTest extends MockeryTestCase
+final class SplitScreenControllerTest extends MockeryTestCase
 {
     protected $sut;
     protected $mockScriptFactory;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockScriptFactory = m::mock(ScriptFactory::class)->makePartial();

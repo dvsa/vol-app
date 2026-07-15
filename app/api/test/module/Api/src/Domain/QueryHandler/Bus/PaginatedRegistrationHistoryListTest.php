@@ -16,7 +16,7 @@ use Mockery as m;
 /**
  * PaginatedRegistrationHistoryList Test
  */
-class PaginatedRegistrationHistoryListTest extends QueryHandlerTestCase
+final class PaginatedRegistrationHistoryListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

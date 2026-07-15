@@ -18,13 +18,14 @@ use Mockery as m;
 use Laminas\View\Helper\Url;
 use Laminas\View\Model\ViewModel;
 
-class CasesFurnitureTest extends MockeryTestCase
+final class CasesFurnitureTest extends MockeryTestCase
 {
     /**
      * @var CasesFurniture
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new CasesFurniture();
@@ -199,28 +200,26 @@ class CasesFurnitureTest extends MockeryTestCase
         $this->assertEquals($expected, $method->invoke($this->sut, $case));
     }
 
-    public static function getStatusArrayProvider(): array
+    public static function getStatusArrayProvider(): \Iterator
     {
-        return [
-            // open
+        // open
+        yield [
             [
-                [
-                    'closedDate' => null
-                ],
-                [
-                    'colour' => 'Orange',
-                    'value' => 'Open',
-                ],
+                'closedDate' => null
             ],
-            // closed
             [
-                [
-                    'closedDate' => '2015-01-02'
-                ],
-                [
-                    'colour' => 'Grey',
-                    'value' => 'Closed',
-                ],
+                'colour' => 'Orange',
+                'value' => 'Open',
+            ],
+        ];
+        // closed
+        yield [
+            [
+                'closedDate' => '2015-01-02'
+            ],
+            [
+                'colour' => 'Grey',
+                'value' => 'Closed',
             ],
         ];
     }

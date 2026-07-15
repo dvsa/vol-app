@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Query\Licence\PsvLicenceSurrenderList;
 use Dvsa\Olcs\Cli\Command\Batch\CreatePsvLicenceSurrenderTasksCommand;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class CreatePsvLicenceSurrenderTasksCommandTest extends AbstractBatchCommandCases
+final class CreatePsvLicenceSurrenderTasksCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

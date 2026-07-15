@@ -43,20 +43,20 @@ class EncryptedStringTypeHandler extends AbstractTypeHandler
 
         // Add nullable option
         if ($column->isNullable()) {
-            $options[] = 'nullable=true';
+            $options[] = 'nullable: true';
         } else {
-            $options[] = 'nullable=false';
+            $options[] = 'nullable: false';
         }
 
         // Add length if specified
         if ($column->getLength() !== null) {
-            $options[] = 'length=' . $column->getLength();
+            $options[] = 'length: ' . $column->getLength();
         }
 
         $optionsStr = !empty($options) ? ', ' . implode(', ', $options) : '';
 
         return sprintf(
-            '@ORM\Column(type="encrypted_string", name="%s"%s)',
+            "#[ORM\Column(type: 'encrypted_string', name: '%s'%s)]",
             $column->getName(),
             $optionsStr
         );

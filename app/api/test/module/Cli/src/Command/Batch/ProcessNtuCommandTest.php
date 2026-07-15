@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use PHPUnit\Framework\TestCase;
 
-class ProcessNtuCommandTest extends TestCase
+final class ProcessNtuCommandTest extends TestCase
 {
     private $command;
     private $mockCommandHandlerManager;
@@ -40,7 +40,7 @@ class ProcessNtuCommandTest extends TestCase
         $fakeResult = ['result' => [['id' => 1], ['id' => 2]]];
         $this->mockQueryHandlerManager->expects($this->once())
             ->method('handleQuery')
-            ->with($this->equalTo(NotTakenUpList::create(['date' => (new DateTime())->format('Y-m-d')])))
+            ->with(NotTakenUpList::create(['date' => new DateTime()->format('Y-m-d')]))
             ->willReturn($fakeResult);
 
         $this->mockCommandHandlerManager->expects($this->never())

@@ -21,16 +21,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="doc_bookmark",
- *    indexes={
- *        @ORM\Index(name="ix_doc_bookmark_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_doc_bookmark_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'doc_bookmark')]
+#[ORM\Index(name: 'ix_doc_bookmark_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_doc_bookmark_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractDocBookmark implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -43,70 +39,63 @@ abstract class AbstractDocBookmark implements BundleSerializableInterface, JsonS
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Name of bookmark in any template
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=50, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 50, nullable: false)]
     protected $name = '';
 
     /**
      * Description displayed to user when bookmark has a fixed list of replacement values.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * DocParagraphBookmarks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\DocParagraphBookmark", mappedBy="docBookmark")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocParagraphBookmark::class, mappedBy: 'docBookmark')]
     protected $docParagraphBookmarks;
 
     /**

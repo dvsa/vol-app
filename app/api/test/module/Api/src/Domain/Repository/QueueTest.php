@@ -15,13 +15,14 @@ use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Mockery as m;
 
-class QueueTest extends RepositoryTestCase
+final class QueueTest extends RepositoryTestCase
 {
     /**
      * @var \Dvsa\Olcs\Api\Domain\Repository\Queue
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(QueueRepo::class, true);
@@ -286,11 +287,9 @@ class QueueTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public static function dpIsItemInQueue(): array
+    public static function dpIsItemInQueue(): \Iterator
     {
-        return [
-            'exists in the queue' => [['RESULTS'], true],
-            'not in the queue' => [[], false],
-        ];
+        yield 'exists in the queue' => [['RESULTS'], true];
+        yield 'not in the queue' => [[], false];
     }
 }

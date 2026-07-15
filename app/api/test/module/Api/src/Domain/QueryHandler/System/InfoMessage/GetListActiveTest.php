@@ -10,10 +10,8 @@ use Dvsa\Olcs\Transfer\Query;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\QueryHandler\System\InfoMessage\GetListActive
- */
-class GetListActiveTest extends QueryHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\System\InfoMessage\GetListActive::class)]
+final class GetListActiveTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -37,12 +35,9 @@ class GetListActiveTest extends QueryHandlerTestCase
 
         $actual = $this->sut->handleQuery($query);
 
-        static::assertSame(
-            [
-                'result' => [$mockItem, $mockItem],
-                'count' => 2,
-            ],
-            $actual
-        );
+        $this->assertSame([
+            'result' => [$mockItem, $mockItem],
+            'count' => 2,
+        ], $actual);
     }
 }

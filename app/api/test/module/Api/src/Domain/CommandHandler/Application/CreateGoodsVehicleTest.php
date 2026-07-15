@@ -18,11 +18,11 @@ use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Application\CreateGoodsVehicle::class)]
-class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
+final class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
 {
-    public const APP_ID = 9001;
-    public const LIC_ID = 8001;
-    public const LIC_VEHICLE_ID = 7001;
+    public const int APP_ID = 9001;
+    public const int LIC_ID = 8001;
+    public const int LIC_VEHICLE_ID = 7001;
 
     /** @var  CreateGoodsVehicle */
     protected $sut;
@@ -99,7 +99,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
             'licence' => self::LIC_ID,
             'applicationId' => self::APP_ID,
         ];
-        $result1 = (new Result())
+        $result1 = new Result()
             ->addId('licenceVehicle', self::LIC_VEHICLE_ID)
             ->addMessage('Goods Vehicle Created');
         $this->expectedSideEffect(DomainCmd\Vehicle\CreateGoodsVehicle::class, $data, $result1);
@@ -110,7 +110,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
         ];
 
         //  check application completion
-        $result2 = (new Result())
+        $result2 = new Result()
             ->addMessage('Section Updated');
         $this->expectedSideEffect(DomainCmd\Application\UpdateApplicationCompletion::class, $data, $result2);
 

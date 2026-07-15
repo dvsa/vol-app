@@ -21,23 +21,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irhp_permit_range",
- *    indexes={
- *        @ORM\Index(name="fk_irhp_permit_range_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_irhp_permit_range_emissions_category_ref_data_id", columns={"emissions_category"}),
- *        @ORM\Index(name="fk_irhp_permit_range_journey_ref_data_id", columns={"journey"}),
- *        @ORM\Index(name="fk_irhp_permit_range_last_modified_by_user_id", columns={"last_modified_by"}),
- *        @ORM\Index(name="fk_irhp_permit_stock_ranges_irhp_permit_stocks1_idx", columns={"irhp_permit_stock_id"}),
- *        @ORM\Index(name="uniqueRange", columns={"irhp_permit_stock_id", "prefix", "from_no", "to_no"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uniqueRange", columns={"irhp_permit_stock_id", "prefix", "from_no", "to_no"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_permit_range')]
+#[ORM\Index(name: 'fk_irhp_permit_range_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_irhp_permit_range_emissions_category_ref_data_id', columns: ['emissions_category'])]
+#[ORM\Index(name: 'fk_irhp_permit_range_journey_ref_data_id', columns: ['journey'])]
+#[ORM\Index(name: 'fk_irhp_permit_range_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'fk_irhp_permit_stock_ranges_irhp_permit_stocks1_idx', columns: ['irhp_permit_stock_id'])]
+#[ORM\Index(name: 'uniqueRange', columns: ['irhp_permit_stock_id', 'prefix', 'from_no', 'to_no'])]
+#[ORM\UniqueConstraint(name: 'uniqueRange', columns: ['irhp_permit_stock_id', 'prefix', 'from_no', 'to_no'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -50,179 +44,152 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * IrhpPermitStock
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_permit_stock_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irhp_permit_stock_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock::class, fetch: 'LAZY')]
     protected $irhpPermitStock;
 
     /**
      * EmissionsCategory
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="emissions_category", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'emissions_category', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $emissionsCategory;
 
     /**
      * Journey
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="journey", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'journey', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $journey;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Prefix
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="prefix", length=45, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'prefix', length: 45, nullable: true)]
     protected $prefix;
 
     /**
      * From no
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="from_no", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'from_no', nullable: true)]
     protected $fromNo;
 
     /**
      * To no
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="to_no", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'to_no', nullable: true)]
     protected $toNo;
 
     /**
      * Cabotage
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="cabotage", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'cabotage', nullable: true)]
     protected $cabotage;
 
     /**
      * Ss reserve
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="ss_reserve", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'ss_reserve', nullable: true)]
     protected $ssReserve;
 
     /**
      * Lost replacement
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="lost_replacement", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'lost_replacement', nullable: true)]
     protected $lostReplacement;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * IrhpPermitRangeAttributes
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="irhpPermitRanges", fetch="LAZY")
-     * @ORM\JoinTable(name="irhp_permit_range_attribute",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="irhp_permit_range_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="irhp_permit_range_attribute_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'irhp_permit_range_attribute')]
+    #[ORM\JoinColumn(name: 'irhp_permit_range_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'irhp_permit_range_attribute_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'irhpPermitRanges', fetch: 'LAZY')]
     protected $irhpPermitRangeAttributes;
 
     /**
      * Countrys
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", inversedBy="irhpPermitStockRanges", fetch="LAZY")
-     * @ORM\JoinTable(name="irhp_permit_range_country",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="irhp_permit_stock_range_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="country_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'irhp_permit_range_country')]
+    #[ORM\JoinColumn(name: 'irhp_permit_stock_range_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'country_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, inversedBy: 'irhpPermitStockRanges', fetch: 'LAZY')]
     protected $countrys;
 
     /**
      * IrhpCandidatePermits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit", mappedBy="irhpPermitRange")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit::class, mappedBy: 'irhpPermitRange')]
     protected $irhpCandidatePermits;
 
     /**
      * IrhpPermits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermit", mappedBy="irhpPermitRange")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit::class, mappedBy: 'irhpPermitRange')]
     protected $irhpPermits;
 
     /**

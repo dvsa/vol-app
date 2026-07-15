@@ -8,7 +8,7 @@ use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 use Olcs\Service\Data\Letter\LetterAppendix;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(LetterAppendix::class)]
-class LetterAppendixTest extends AbstractListDataServiceTestCase
+final class LetterAppendixTest extends AbstractListDataServiceTestCase
 {
     private LetterAppendix $sut;
 

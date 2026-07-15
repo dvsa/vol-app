@@ -67,7 +67,7 @@ class BusRegBrowseView extends AbstractRepository
                 ->setParameter('byStatus', $status);
         }
 
-        return $qb->getQuery()->iterate();
+        return $qb->getQuery()->toIterable();
     }
 
     /**

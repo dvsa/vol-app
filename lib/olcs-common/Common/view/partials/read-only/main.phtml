@@ -1,0 +1,21 @@
+<?php $id = (isset($id) ? 'id="' . $id . '"' : ''); ?>
+
+<div class="read-only" <?php echo $id; ?> >
+
+    <?php
+    if (isset($header) || isset($actions)) {
+        echo $this->render('partials/read-only/header');
+    }
+    if (isset($multiItems)) {
+        foreach ($multiItems as $items) {
+            echo $this->render('partials/read-only/list', ['items' => $items]);
+        }
+    } elseif (isset($items)) {
+        echo $this->render('partials/read-only/list', ['items' => $items]);
+    }
+    if (isset($freetext)) {
+        echo sprintf('<p>%s</p>', $freetext);
+    }
+    ?>
+
+</div>

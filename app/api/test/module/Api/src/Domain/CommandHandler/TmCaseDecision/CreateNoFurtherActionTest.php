@@ -19,7 +19,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 /**
  * Create NoFurtherAction Test
  */
-class CreateNoFurtherActionTest extends AbstractCommandHandlerTestCase
+final class CreateNoFurtherActionTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

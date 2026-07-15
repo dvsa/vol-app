@@ -17,13 +17,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ApplicationCountryUpdaterTest extends MockeryTestCase
+final class ApplicationCountryUpdaterTest extends MockeryTestCase
 {
-    public const COUNTRY_ID = 'DE';
+    public const string COUNTRY_ID = 'DE';
 
-    public const STOCK_ID = 44;
+    public const int STOCK_ID = 44;
 
-    public const REQUIRED_PERMITS = [
+    public const array REQUIRED_PERMITS = [
         'key1' => 'value1',
         'key2' => 'value2',
     ];
@@ -34,10 +34,9 @@ class ApplicationCountryUpdaterTest extends MockeryTestCase
 
     private $irhpPermitApplicationCreator;
 
-    private $existingIrhpPermitApplicationHandler;
-
     private $applicationCountryUpdater;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpApplication = m::mock(IrhpApplication::class);
@@ -46,14 +45,14 @@ class ApplicationCountryUpdaterTest extends MockeryTestCase
 
         $this->irhpPermitApplicationCreator = m::mock(IrhpPermitApplicationCreator::class);
 
-        $this->existingIrhpPermitApplicationHandler = m::mock(ExistingIrhpPermitApplicationHandler::class);
-        $this->existingIrhpPermitApplicationHandler->shouldReceive('handle')
+        $existingIrhpPermitApplicationHandler = m::mock(ExistingIrhpPermitApplicationHandler::class);
+        $existingIrhpPermitApplicationHandler->shouldReceive('handle')
             ->with($this->irhpPermitApplication, self::STOCK_ID, self::REQUIRED_PERMITS)
             ->once();
 
         $this->applicationCountryUpdater = new ApplicationCountryUpdater(
             $this->irhpPermitApplicationCreator,
-            $this->existingIrhpPermitApplicationHandler
+            $existingIrhpPermitApplicationHandler
         );
     }
 

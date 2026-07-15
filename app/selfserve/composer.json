@@ -15,10 +15,31 @@
       "options": {
         "symlink": true
       }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-transfer",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-common",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-auth",
+      "options": {
+        "symlink": true
+      }
     }
   ],
   "require": {
-    "php": "~8.3.0",
+    "php": "~8.4.0",
     "ext-redis": "*",
     "doctrine/doctrine-module": "^6.3",
     "dvsa/laminas-config-cloud-parameters": "^2.1",
@@ -40,23 +61,22 @@
     "laminas/laminas-validator": "^2.64",
     "laminas/laminas-view": "^2.44",
     "lm-commons/lmc-rbac-mvc": "^3.5",
-    "olcs/olcs-auth": "^9.0",
-    "olcs/olcs-common": "^9.22.0",
+    "olcs/olcs-auth": "*",
+    "olcs/olcs-common": "*",
     "olcs/olcs-logging": "*",
-    "olcs/olcs-transfer": "^8.6.1",
+    "olcs/olcs-transfer": "*",
     "olcs/olcs-utils": "*",
     "psr/container": "^1.1|^2",
-    "aws/aws-sdk-php": "^3.369",
+    "aws/aws-sdk-php": "^3.385",
     "symfony/filesystem": "^7.0"
   },
   "require-dev": {
     "laminas/laminas-developer-tools": "*",
     "mockery/mockery": "^1.6",
-    "phpunit/phpunit": "^12.5",
+    "phpunit/phpunit": "^13.0",
     "san/san-session-toolbar": "*",
     "rector/rector": "^2.3",
-    "squizlabs/php_codesniffer": "^3.7",
-    "dvsa/coding-standards": "^2.0",
+    "dvsa/coding-standards": "^2.1",
     "phpstan/phpstan": "^2.0",
     "vimeo/psalm": "^6.0"
   },

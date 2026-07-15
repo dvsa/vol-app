@@ -22,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class NamingModelTest extends MockeryTestCase
+final class NamingModelTest extends MockeryTestCase
 {
     /**
      * @var NamingService
@@ -43,7 +43,7 @@ class NamingModelTest extends MockeryTestCase
 
         $this->assertEquals($expected, substr($date, 0, 21));
         // can't actually test microseconds so let's test at least the length of returned date
-        $this->assertEquals(27, strlen($date));
+        $this->assertSame(27, strlen($date));
     }
 
     public function testGetDate(): void

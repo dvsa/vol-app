@@ -16,7 +16,7 @@ use Doctrine\ORM\Query as DoctrineQuery;
 /**
  * @see QueryHandler
  */
-class TeamListTest extends QueryHandlerTestCase
+final class TeamListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

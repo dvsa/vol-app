@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\OpDetails;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class OpDetailsTest extends \PHPUnit\Framework\TestCase
+final class OpDetailsTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -34,52 +34,50 @@ class OpDetailsTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function dpRenderValidDataProvider(): array
+    public static function dpRenderValidDataProvider(): \Iterator
     {
-        return [
+        yield [
+            "Mr Testy Test\nTesting Test Limited\nT/A: Trading Test Limited \n" .
+            "Test\nTest Place\nTest\nTesting\ntest",
             [
-                "Mr Testy Test\nTesting Test Limited\nT/A: Trading Test Limited \n" .
-                "Test\nTest Place\nTest\nTesting\ntest",
-                [
-                    'organisation' => [
-                        'name' => 'Testing Test Limited',
-                    ],
-                    'tradingNames' => [
-                        [
-                            'name' => 'Trading Test Limited'
-                        ]
-                    ],
-                    'correspondenceCd' => [
-                        'fao' => 'Mr Testy Test',
-                        'address' => [
-                            'addressLine1' => 'Test',
-                            'addressLine2' => 'Test Place',
-                            'addressLine3' => '',
-                            'addressLine4' => 'Test',
-                            'town' => 'Testing',
-                            'postcode' => 'test'
-                        ]
+                'organisation' => [
+                    'name' => 'Testing Test Limited',
+                ],
+                'tradingNames' => [
+                    [
+                        'name' => 'Trading Test Limited'
+                    ]
+                ],
+                'correspondenceCd' => [
+                    'fao' => 'Mr Testy Test',
+                    'address' => [
+                        'addressLine1' => 'Test',
+                        'addressLine2' => 'Test Place',
+                        'addressLine3' => '',
+                        'addressLine4' => 'Test',
+                        'town' => 'Testing',
+                        'postcode' => 'test'
                     ]
                 ]
-            ],
+            ]
+        ];
+        yield [
+            "Testing Test Limited\n" .
+            "Test\nTest Place\nTest\nTesting\ntest",
             [
-                "Testing Test Limited\n" .
-                "Test\nTest Place\nTest\nTesting\ntest",
-                [
-                    'organisation' => [
-                        'name' => 'Testing Test Limited',
-                    ],
-                    'tradingNames' => [],
-                    'correspondenceCd' => [
-                        'fao' => '',
-                        'address' => [
-                            'addressLine1' => 'Test',
-                            'addressLine2' => 'Test Place',
-                            'addressLine3' => '',
-                            'addressLine4' => 'Test',
-                            'town' => 'Testing',
-                            'postcode' => 'test'
-                        ]
+                'organisation' => [
+                    'name' => 'Testing Test Limited',
+                ],
+                'tradingNames' => [],
+                'correspondenceCd' => [
+                    'fao' => '',
+                    'address' => [
+                        'addressLine1' => 'Test',
+                        'addressLine2' => 'Test Place',
+                        'addressLine3' => '',
+                        'addressLine4' => 'Test',
+                        'town' => 'Testing',
+                        'postcode' => 'test'
                     ]
                 ]
             ]

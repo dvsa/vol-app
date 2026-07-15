@@ -23,7 +23,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
+final class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -57,22 +57,20 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
         parent::initReferences();
     }
 
-    public static function dataProviderHandleCommandOtherStatus(): array
+    public static function dataProviderHandleCommandOtherStatus(): \Iterator
     {
-        return [
-            [Licence::LICENCE_STATUS_CURTAILED],
-            [Licence::LICENCE_STATUS_SUSPENDED],
-            [Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT],
-            [Licence::LICENCE_STATUS_GRANTED],
-            [Licence::LICENCE_STATUS_NOT_SUBMITTED],
-            [Licence::LICENCE_STATUS_NOT_TAKEN_UP],
-            [Licence::LICENCE_STATUS_REFUSED],
-            [Licence::LICENCE_STATUS_REVOKED],
-            [Licence::LICENCE_STATUS_SURRENDERED],
-            [Licence::LICENCE_STATUS_TERMINATED],
-            [Licence::LICENCE_STATUS_UNDER_CONSIDERATION],
-            [Licence::LICENCE_STATUS_WITHDRAWN],
-        ];
+        yield [Licence::LICENCE_STATUS_CURTAILED];
+        yield [Licence::LICENCE_STATUS_SUSPENDED];
+        yield [Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT];
+        yield [Licence::LICENCE_STATUS_GRANTED];
+        yield [Licence::LICENCE_STATUS_NOT_SUBMITTED];
+        yield [Licence::LICENCE_STATUS_NOT_TAKEN_UP];
+        yield [Licence::LICENCE_STATUS_REFUSED];
+        yield [Licence::LICENCE_STATUS_REVOKED];
+        yield [Licence::LICENCE_STATUS_SURRENDERED];
+        yield [Licence::LICENCE_STATUS_TERMINATED];
+        yield [Licence::LICENCE_STATUS_UNDER_CONSIDERATION];
+        yield [Licence::LICENCE_STATUS_WITHDRAWN];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHandleCommandOtherStatus')]
@@ -117,7 +115,7 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
 
         $this->assertInstanceOf(\DateTime::class, $licenceStatueRules[0]->getStartProcessedDate());
         $this->assertSame(
-            (new \DateTime())->format('Y-m-d'),
+            new \DateTime()->format('Y-m-d'),
             $licenceStatueRules[0]->getStartProcessedDate()->format('Y-m-d')
         );
 
@@ -149,7 +147,7 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
 
         $this->assertInstanceOf(\DateTime::class, $licenceStatueRules[0]->getStartProcessedDate());
         $this->assertSame(
-            (new \DateTime())->format('Y-m-d'),
+            new \DateTime()->format('Y-m-d'),
             $licenceStatueRules[0]->getStartProcessedDate()->format('Y-m-d')
         );
 
@@ -181,7 +179,7 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
 
         $this->assertInstanceOf(\DateTime::class, $licenceStatueRules[0]->getStartProcessedDate());
         $this->assertSame(
-            (new \DateTime())->format('Y-m-d'),
+            new \DateTime()->format('Y-m-d'),
             $licenceStatueRules[0]->getStartProcessedDate()->format('Y-m-d')
         );
 
@@ -191,20 +189,18 @@ class ProcessToRevokeCurtailSuspendTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public static function dataProviderHandleCommandInvalidToLicence(): array
+    public static function dataProviderHandleCommandInvalidToLicence(): \Iterator
     {
-        return [
-            [Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT],
-            [Licence::LICENCE_STATUS_GRANTED],
-            [Licence::LICENCE_STATUS_NOT_SUBMITTED],
-            [Licence::LICENCE_STATUS_NOT_TAKEN_UP],
-            [Licence::LICENCE_STATUS_REFUSED],
-            [Licence::LICENCE_STATUS_SURRENDERED],
-            [Licence::LICENCE_STATUS_TERMINATED],
-            [Licence::LICENCE_STATUS_UNDER_CONSIDERATION],
-            [Licence::LICENCE_STATUS_VALID],
-            [Licence::LICENCE_STATUS_WITHDRAWN],
-        ];
+        yield [Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT];
+        yield [Licence::LICENCE_STATUS_GRANTED];
+        yield [Licence::LICENCE_STATUS_NOT_SUBMITTED];
+        yield [Licence::LICENCE_STATUS_NOT_TAKEN_UP];
+        yield [Licence::LICENCE_STATUS_REFUSED];
+        yield [Licence::LICENCE_STATUS_SURRENDERED];
+        yield [Licence::LICENCE_STATUS_TERMINATED];
+        yield [Licence::LICENCE_STATUS_UNDER_CONSIDERATION];
+        yield [Licence::LICENCE_STATUS_VALID];
+        yield [Licence::LICENCE_STATUS_WITHDRAWN];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderHandleCommandInvalidToLicence')]

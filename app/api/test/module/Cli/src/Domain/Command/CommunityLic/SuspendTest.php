@@ -11,7 +11,7 @@ use Dvsa\Olcs\Cli\Domain\Command\CommunityLic\Suspend;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class SuspendTest extends \PHPUnit\Framework\TestCase
+final class SuspendTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

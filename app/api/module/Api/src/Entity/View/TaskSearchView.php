@@ -22,10 +22,9 @@ use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 
 /**
  * Task Search View
- *
- * @ORM\Entity(readOnly=true)
- * @ORM\Table(name="task_search_view")
  */
+#[ORM\Table(name: 'task_search_view')]
+#[ORM\Entity(readOnly: true)]
 class TaskSearchView implements BundleSerializableInterface
 {
     use BundleSerializableTrait;
@@ -36,167 +35,150 @@ class TaskSearchView implements BundleSerializableInterface
      * @var int
      *
      * NOTE: The ID annotation here is to allow doctrine to create the table (Even though we remove it later)
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id')]
     protected $id;
 
     /**
      * Is closed
      *
      * @var int
-     *
-     * @ORM\Column(type="yesno", name="is_closed")
      */
+    #[ORM\Column(type: 'yesno', name: 'is_closed')]
     protected $isClosed = 0;
 
     /**
      * @var int
-     * @ORM\Column(type="yesno", name="messaging")
      */
+    #[ORM\Column(type: 'yesno', name: 'messaging')]
     protected $messaging = 0;
 
     /**
      * Is urgent
      *
      * @var int
-     *
-     * @ORM\Column(type="yesno", name="urgent")
      */
+    #[ORM\Column(type: 'yesno', name: 'urgent')]
     protected $urgent = 0;
 
     /**
      * Action date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="action_date")
      */
+    #[ORM\Column(type: 'date', name: 'action_date')]
     protected $actionDate;
 
     /**
      * Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name_display")
      */
+    #[ORM\Column(type: 'string', name: 'name_display')]
     protected $name;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description")
      */
+    #[ORM\Column(type: 'string', name: 'description')]
     protected $description;
 
     /**
      * Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="team_name")
      */
+    #[ORM\Column(type: 'string', name: 'team_name')]
     protected $teamName;
 
     /**
      * Operator name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="op_name")
      */
+    #[ORM\Column(type: 'string', name: 'op_name')]
     protected $opName;
 
     /**
      * IRFO operator name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="irfo_op_name")
      */
+    #[ORM\Column(type: 'string', name: 'irfo_op_name')]
     protected $irfoOpName;
 
     /**
      * Family name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="family_name")
      */
+    #[ORM\Column(type: 'string', name: 'family_name')]
     protected $familyName;
     /**
      * Category ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="category_id")
      */
+    #[ORM\Column(type: 'integer', name: 'category_id')]
     protected $category;
 
     /**
      * Category Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="category_name")
      */
+    #[ORM\Column(type: 'string', name: 'category_name')]
     protected $categoryName;
 
     /**
      * Sub Category ID
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="task_sub_category_id")
      */
+    #[ORM\Column(type: 'string', name: 'task_sub_category_id')]
     protected $taskSubCategory;
 
     /**
      * Sub Category Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="task_sub_category_name")
      */
+    #[ORM\Column(type: 'string', name: 'task_sub_category_name')]
     protected $taskSubCategoryName;
 
     /**
      * Sub type
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="task_sub_type")
      */
+    #[ORM\Column(type: 'string', name: 'task_sub_type')]
     protected $taskSubType;
 
     /**
      * Owner ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="assigned_to_user_id")
      */
+    #[ORM\Column(type: 'integer', name: 'assigned_to_user_id')]
     protected $assignedToUser;
 
     /**
      * Owner
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="user_name")
      */
+    #[ORM\Column(type: 'string', name: 'user_name')]
     protected $ownerName;
 
     /**
      * Team ID
      *
      * @var string
-     *
-     * @ORM\Column(type="integer", name="assigned_to_team_id")
      */
+    #[ORM\Column(type: 'integer', name: 'assigned_to_team_id')]
     protected $assignedToTeam;
 
     /**
@@ -206,93 +188,82 @@ class TaskSearchView implements BundleSerializableInterface
      * this will be the 'parent' licence id
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="lic_id")
      */
+    #[ORM\Column(type: 'integer', name: 'lic_id')]
     protected $licenceId;
 
     /**
      * Licence number
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="lic_no")
      */
+    #[ORM\Column(type: 'string', name: 'lic_no')]
     protected $licenceNo;
 
     /**
      * Application ID
      * @var int
-     *
-     * @ORM\Column(type="integer", name="application_id")
      */
+    #[ORM\Column(type: 'integer', name: 'application_id')]
     protected $applicationId;
 
     /**
      * Bus Reg ID
      * @var int
-     *
-     * @ORM\Column(type="integer", name="bus_reg_id")
      */
+    #[ORM\Column(type: 'integer', name: 'bus_reg_id')]
     protected $busRegId;
 
     /**
      * Case ID
      * @var int
-     *
-     * @ORM\Column(type="integer", name="case_id")
      */
+    #[ORM\Column(type: 'integer', name: 'case_id')]
     protected $caseId;
 
     /**
      * Transport Manager ID
      * @var int
-     *
-     * @ORM\Column(type="integer", name="tm_id")
      */
+    #[ORM\Column(type: 'integer', name: 'tm_id')]
     protected $transportManagerId;
 
     /**
      * IRFO Organisation ID
      * @var int
-     *
-     * @ORM\Column(type="integer", name="irfo_organisation_id")
      */
+    #[ORM\Column(type: 'integer', name: 'irfo_organisation_id')]
     protected $irfoOrganisationId;
 
     /**
      * Submission ID
      * @var int
-     *
-     * @ORM\Column(type="integer", name="submission_id")
      */
+    #[ORM\Column(type: 'integer', name: 'submission_id')]
     protected $submissionId;
 
     /**
      * Name
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="link_id")
      */
+    #[ORM\Column(type: 'integer', name: 'link_id')]
     protected $linkId;
 
     /**
      * Link display
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="link_display")
      */
+    #[ORM\Column(type: 'string', name: 'link_display')]
     protected $linkDisplay;
 
     /**
      * Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="link_type")
      */
+    #[ORM\Column(type: 'string', name: 'link_type')]
     protected $linkType;
 
     /**

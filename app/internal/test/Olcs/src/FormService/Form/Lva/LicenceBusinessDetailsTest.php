@@ -8,7 +8,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\LicenceBusinessDetails;
 
-class LicenceBusinessDetailsTest extends MockeryTestCase
+final class LicenceBusinessDetailsTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -16,6 +16,7 @@ class LicenceBusinessDetailsTest extends MockeryTestCase
 
     protected $fsm;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class)->makePartial();

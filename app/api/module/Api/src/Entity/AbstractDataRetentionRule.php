@@ -22,18 +22,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="data_retention_rule",
- *    indexes={
- *        @ORM\Index(name="fk_data_retention_rule_action_type_ref_data_id", columns={"action_type"}),
- *        @ORM\Index(name="fk_data_retention_rule_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_data_retention_rule_last_modified_by_user_id", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'data_retention_rule')]
+#[ORM\Index(name: 'fk_data_retention_rule_action_type_ref_data_id', columns: ['action_type'])]
+#[ORM\Index(name: 'fk_data_retention_rule_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_data_retention_rule_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractDataRetentionRule implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -47,105 +43,94 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
      * Primary key
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
     protected $id = 0;
 
     /**
      * ActionType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="action_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'action_type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $actionType;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: false)]
     protected $description = '';
 
     /**
      * Primary Record Retention Period (in MONTHS) following record closure
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="retention_period", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'retention_period', nullable: false)]
     protected $retentionPeriod = 0;
 
     /**
      * max rows of population dataset.
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="max_data_set", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'max_data_set', nullable: true)]
     protected $maxDataSet;
 
     /**
      * Is enabled
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_enabled", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_enabled', nullable: false, options: ['default' => 0])]
     protected $isEnabled = 0;
 
     /**
      * Is custom rule
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_custom_rule", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_custom_rule', nullable: false, options: ['default' => 0])]
     protected $isCustomRule = 0;
 
     /**
      * procedure to populate rule data set
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="populate_procedure", length=64, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'populate_procedure', length: 64, nullable: false)]
     protected $populateProcedure = '';
 
     /**
      * Custom procedure
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="custom_procedure", length=64, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'custom_procedure', length: 64, nullable: true)]
     protected $customProcedure;
 
     /**

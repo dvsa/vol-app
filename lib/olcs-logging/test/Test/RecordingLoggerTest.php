@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Logging\Test;
 
 use Olcs\Logging\Test\RecordingLogger;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 
-class RecordingLoggerTest extends TestCase
+final class RecordingLoggerTest extends TestCase
 {
     public function testCapturesLogCallsViaPsrInterface(): void
     {

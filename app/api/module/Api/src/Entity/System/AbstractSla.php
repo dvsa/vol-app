@@ -16,17 +16,11 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\Table(name="sla",
- *    indexes={
- *        @ORM\Index(name="uniqueCategoryFieldCompare", columns={"category", "field", "compare_to"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uniqueCategoryFieldCompare", columns={"category", "field", "compare_to"})
- *    }
- * )
  */
+#[ORM\Table(name: 'sla')]
+#[ORM\Index(name: 'uniqueCategoryFieldCompare', columns: ['category', 'field', 'compare_to'])]
+#[ORM\UniqueConstraint(name: 'uniqueCategoryFieldCompare', columns: ['category', 'field', 'compare_to'])]
+#[ORM\MappedSuperclass]
 abstract class AbstractSla implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -37,83 +31,74 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * e.g. PI
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="category", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'category', length: 32, nullable: true)]
     protected $category;
 
     /**
      * Field holding source of sla
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="field", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'field', length: 32, nullable: true)]
     protected $field;
 
     /**
      * Field holding result
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="compare_to", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'compare_to', length: 32, nullable: true)]
     protected $compareTo;
 
     /**
      * Number of days between source and result for succes. Can be negative
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="days", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'days', nullable: true)]
     protected $days;
 
     /**
      * Effective from
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="effective_from", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'effective_from', nullable: true)]
     protected $effectiveFrom;
 
     /**
      * Effective to
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="effective_to", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'effective_to', nullable: true)]
     protected $effectiveTo;
 
     /**
      * Include public holidays in SLA calculation
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="public_holiday", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'public_holiday', nullable: false, options: ['default' => 0])]
     protected $publicHoliday = 0;
 
     /**
      * Include weekends in SLA calculation
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="weekend", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'weekend', nullable: false, options: ['default' => 0])]
     protected $weekend = 0;
 
 

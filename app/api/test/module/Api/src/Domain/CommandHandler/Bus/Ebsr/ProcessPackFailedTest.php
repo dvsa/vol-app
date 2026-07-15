@@ -14,7 +14,7 @@ use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Command\Queue\Create as CreateQueue;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class ProcessPackFailedTest extends ProcessPackTestCase
+final class ProcessPackFailedTest extends ProcessPackTestCase
 {
     public function setUp(): void
     {

@@ -9,7 +9,7 @@ use Dvsa\Olcs\Cli\Domain\Command\Permits\CloseExpiredWindows;
 use Dvsa\OlcsTest\Cli\Command\Batch\AbstractBatchCommandCases;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class CloseExpiredWindowsCommandTest extends AbstractBatchCommandCases
+final class CloseExpiredWindowsCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

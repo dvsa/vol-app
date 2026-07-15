@@ -6,16 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * FeatureToggle Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="feature_toggle",
- *    indexes={
- *        @ORM\Index(name="ix_feature_toggle_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_feature_toggle_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_feature_toggle_status", columns={"status"})
- *    }
- * )
  */
+#[ORM\Table(name: 'feature_toggle')]
+#[ORM\Index(name: 'ix_feature_toggle_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_feature_toggle_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_feature_toggle_status', columns: ['status'])]
+#[ORM\Entity]
 class FeatureToggle extends AbstractFeatureToggle
 {
     public const ACTIVE_STATUS = 'always-active';
@@ -28,6 +24,9 @@ class FeatureToggle extends AbstractFeatureToggle
     public const USE_NEW_ADDRESS_SERVICE = 'use_new_address_service';
     public const TRANSPORT_CONSULTANT_ROLE = 'transport_consultant_role';
     public const LETTERS_DATABASE_DRIVEN = 'letters_database_driven';
+    public const INTERNAL_WEBDAV = 'internal_webdav';
+    public const S3_BUCKET_BROWSER = 's3_bucket_browser';
+    public const S3_BUCKET_BROWSER_OVERWRITE = 's3_bucket_browser_overwrite';
 
     public static function create(/*string*/ $configName, /*string*/ $friendlyName, RefData $status)/*: FeatureToggle */
     {

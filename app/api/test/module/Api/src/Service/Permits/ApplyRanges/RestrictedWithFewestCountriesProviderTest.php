@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class RestrictedWithFewestCountriesProviderTest extends MockeryTestCase
+final class RestrictedWithFewestCountriesProviderTest extends MockeryTestCase
 {
     public function testGetRanges(): void
     {

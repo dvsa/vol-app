@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * AdvertPublicationRange test
  */
-class AdvertPublicationRangeTest extends TestCase
+final class AdvertPublicationRangeTest extends TestCase
 {
     public function testGetQuery(): void
     {

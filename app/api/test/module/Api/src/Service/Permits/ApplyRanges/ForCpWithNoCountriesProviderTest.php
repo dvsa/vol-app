@@ -20,7 +20,7 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ForCpWithNoCountriesProviderTest extends MockeryTestCase
+final class ForCpWithNoCountriesProviderTest extends MockeryTestCase
 {
     private $result;
 
@@ -40,6 +40,7 @@ class ForCpWithNoCountriesProviderTest extends MockeryTestCase
 
     private $forCpWithNoCountriesProvider;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->result = new Result();

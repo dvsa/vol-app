@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TachographDetailsTest extends MockeryTestCase
+final class TachographDetailsTest extends MockeryTestCase
 {
     public function testGetQuery(): void
     {

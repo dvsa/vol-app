@@ -21,7 +21,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class UpdateSlaTargetDateTest extends AbstractCommandHandlerTestCase
+final class UpdateSlaTargetDateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

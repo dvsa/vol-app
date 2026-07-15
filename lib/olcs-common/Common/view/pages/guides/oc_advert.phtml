@@ -1,0 +1,17 @@
+<?php
+
+switch ($guide) {
+    case 'advertising-your-operating-centre-gb-var': // Advert_template_GB_Var.pdf
+    case 'advertising-your-operating-centre-ni-new': // Advert_Template_NI_New.pdf
+    case 'advertising-your-operating-centre-ni-var': // Advert_template_NI_Var.pdf
+        $identifier = $guide;
+        break;
+    default: // Advert_Template_GB_New.pdf
+        $identifier = 'default-guide-oc-advert-gb-new';
+}
+
+$url = $this->url('getfile', ['identifier' => base64_encode($identifier)], ['query' => ['slug' => 1]]);
+
+$this->placeholder('ADVERT_TEMPLATE_LINK')->set($url);
+
+echo $this->partial('pages/guides/default', ['guide' => 'advertising-your-operating-centre']);

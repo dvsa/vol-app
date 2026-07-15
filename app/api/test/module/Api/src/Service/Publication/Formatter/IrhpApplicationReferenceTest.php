@@ -10,7 +10,7 @@ use Dvsa\OlcsTest\Api\Service\Document\Bookmark\SingleValueTestAbstract;
 /**
  * IrhpApplicationReferenceTest
  */
-class IrhpApplicationReferenceTest extends SingleValueTestAbstract
+final class IrhpApplicationReferenceTest extends SingleValueTestAbstract
 {
     public const SUT_CLASS_NAME = IrhpApplicationReference::class;
 }

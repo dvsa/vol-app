@@ -23,7 +23,7 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
+final class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
 {
     private $connection;
 
@@ -39,6 +39,7 @@ class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
 
     private $emissionsCategoryAvailabilityCounter;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->connection = m::mock(Connection::class);
@@ -225,12 +226,10 @@ class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
         $this->emissionsCategoryAvailabilityCounter->getCount(47, RefData::EMISSIONS_CATEGORY_EURO6_REF);
     }
 
-    public static function dpTestExceptionOnUnexpectedIsolationLevel(): array
+    public static function dpTestExceptionOnUnexpectedIsolationLevel(): \Iterator
     {
-        return [
-            [TransactionIsolationLevel::READ_UNCOMMITTED],
-            [TransactionIsolationLevel::READ_COMMITTED],
-            [TransactionIsolationLevel::SERIALIZABLE],
-        ];
+        yield [TransactionIsolationLevel::READ_UNCOMMITTED];
+        yield [TransactionIsolationLevel::READ_COMMITTED];
+        yield [TransactionIsolationLevel::SERIALIZABLE];
     }
 }

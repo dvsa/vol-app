@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class Text3Test extends MockeryTestCase
+final class Text3Test extends MockeryTestCase
 {
     /**
      * @var \Dvsa\Olcs\Api\Service\Publication\Process\Variation\Text2
@@ -76,11 +76,11 @@ class Text3Test extends MockeryTestCase
         $publicationLink->getApplication()->addS4s($s4);
 
         $oc1 = new \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre();
-        $oc1->setAddress((new \Dvsa\Olcs\Api\Entity\ContactDetails\Address())->setAddressLine1('OC1 ADD1'));
+        $oc1->setAddress(new \Dvsa\Olcs\Api\Entity\ContactDetails\Address()->setAddressLine1('OC1 ADD1'));
         $oc2 = new \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre();
-        $oc2->setAddress((new \Dvsa\Olcs\Api\Entity\ContactDetails\Address())->setAddressLine1('OC2 ADD1'));
+        $oc2->setAddress(new \Dvsa\Olcs\Api\Entity\ContactDetails\Address()->setAddressLine1('OC2 ADD1'));
         $oc3 = new \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre();
-        $oc3->setAddress((new \Dvsa\Olcs\Api\Entity\ContactDetails\Address())->setAddressLine1('OC3 ADD1'));
+        $oc3->setAddress(new \Dvsa\Olcs\Api\Entity\ContactDetails\Address()->setAddressLine1('OC3 ADD1'));
 
         $aoc1 = new \Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre(
             $publicationLink->getApplication(),
@@ -144,11 +144,11 @@ The operating centre(s) being removed from D12345 as part of this application.";
         $publicationLink->getApplication()->addS4s($s4);
 
         $oc1 = new \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre();
-        $oc1->setAddress((new \Dvsa\Olcs\Api\Entity\ContactDetails\Address())->setAddressLine1('OC1 ADD1'));
+        $oc1->setAddress(new \Dvsa\Olcs\Api\Entity\ContactDetails\Address()->setAddressLine1('OC1 ADD1'));
         $oc2 = new \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre();
-        $oc2->setAddress((new \Dvsa\Olcs\Api\Entity\ContactDetails\Address())->setAddressLine1('OC2 ADD1'));
+        $oc2->setAddress(new \Dvsa\Olcs\Api\Entity\ContactDetails\Address()->setAddressLine1('OC2 ADD1'));
         $oc3 = new \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre();
-        $oc3->setAddress((new \Dvsa\Olcs\Api\Entity\ContactDetails\Address())->setAddressLine1('OC3 ADD1'));
+        $oc3->setAddress(new \Dvsa\Olcs\Api\Entity\ContactDetails\Address()->setAddressLine1('OC3 ADD1'));
 
         $aoc1 = new \Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre(
             $publicationLink->getApplication(),

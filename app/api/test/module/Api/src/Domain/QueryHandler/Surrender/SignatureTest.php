@@ -12,7 +12,7 @@ use Dvsa\Olcs\Transfer\Query\Surrender\GetSignature;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class SignatureTest extends QueryHandlerTestCase
+final class SignatureTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

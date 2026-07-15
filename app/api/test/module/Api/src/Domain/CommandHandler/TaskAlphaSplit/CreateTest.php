@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule as TaskAllocationRuleEntity;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -63,7 +63,7 @@ class CreateTest extends AbstractCommandHandlerTestCase
 
         $this->repoMap['TaskAllocationRule']->shouldReceive('save')->once()->andReturnUsing(
             function (TaskAllocationRuleEntity $tar) {
-                $this->assertSame(null, $tar->getUser());
+                $this->assertNull($tar->getUser());
             }
         );
 

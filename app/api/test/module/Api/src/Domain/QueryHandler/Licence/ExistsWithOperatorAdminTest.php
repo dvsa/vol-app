@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Query\Licence\ExistsWithOperatorAdmin as Query;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class ExistsWithOperatorAdminTest extends QueryHandlerTestCase
+final class ExistsWithOperatorAdminTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -60,11 +60,9 @@ class ExistsWithOperatorAdminTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $this->sut->handleQuery($query));
     }
 
-    public static function dpHandleQuery(): array
+    public static function dpHandleQuery(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 }

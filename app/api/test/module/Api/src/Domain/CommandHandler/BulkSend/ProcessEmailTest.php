@@ -22,7 +22,7 @@ use Mockery as m;
 /**
  * Test Bulk Send email
  */
-class ProcessEmailTest extends AbstractCommandHandlerTestCase
+final class ProcessEmailTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -110,13 +110,11 @@ class ProcessEmailTest extends AbstractCommandHandlerTestCase
         $this->assertSame($subject, $message->getSubject());
     }
 
-    public static function dpTestHandleCommand(): array
+    public static function dpTestHandleCommand(): \Iterator
     {
-        return [
-            ['unknown-template', 'Important information about your vehicle operator licence'],
-            ['report-gv-r', 'Important information about your goods vehicle licence'],
-            ['report-psv-r', 'Important information about your PSV licence']
-        ];
+        yield ['unknown-template', 'Important information about your vehicle operator licence'];
+        yield ['report-gv-r', 'Important information about your goods vehicle licence'];
+        yield ['report-psv-r', 'Important information about your PSV licence'];
     }
 
     /**
@@ -153,7 +151,7 @@ class ProcessEmailTest extends AbstractCommandHandlerTestCase
             'category' => Category::CATEGORY_PERMITS,
             'subCategory' => Category::TASK_SUB_CATEGORY_PERMITS_GENERAL_TASK,
             'description' => 'Unable to send email - no organisation recipients found for Org: SOME ORG - Please update the organisation admin user contacts to ensure at least one has a valid email address.',
-            'actionDate' => (new DateTime())->format('Y-m-d'),
+            'actionDate' => new DateTime()->format('Y-m-d'),
         ];
 
         $this->expectedSideEffect(CreateTask::class, $expectedData, new Result());

@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Domain\Command\Vehicle\ProcessDuplicateVehicleWarnings;
 use Dvsa\Olcs\Cli\Command\Batch\DuplicateVehicleWarningCommand;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class DuplicateVehicleWarningCommandTest extends AbstractBatchCommandCases
+final class DuplicateVehicleWarningCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

@@ -16,9 +16,9 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader::class)]
-class ContentStoreFileUploaderTest extends MockeryTestCase
+final class ContentStoreFileUploaderTest extends MockeryTestCase
 {
-    public const IDENTIFIER = 'unit_Identifier';
+    public const string IDENTIFIER = 'unit_Identifier';
 
     /** @var ContentStoreFileUploader */
     protected $sut;
@@ -26,6 +26,7 @@ class ContentStoreFileUploaderTest extends MockeryTestCase
     /** @var m\MockInterface  */
     protected $mockContentStoreCli;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new ContentStoreFileUploader();
@@ -46,7 +47,7 @@ class ContentStoreFileUploaderTest extends MockeryTestCase
         $sm->setService('ContentStore', $this->mockContentStoreCli);
         $sm->setService('Logger', $this->createStub(\Psr\Log\LoggerInterface::class));
 
-        static::assertSame($this->sut, $this->sut->__invoke($sm, null));
+        $this->assertSame($this->sut, $this->sut->__invoke($sm, null));
     }
 
     public function testDownload(): void
@@ -57,17 +58,20 @@ class ContentStoreFileUploaderTest extends MockeryTestCase
             ->with(self::IDENTIFIER)
             ->andReturn($returnedFile);
 
-        static::assertEquals($returnedFile, $this->sut->download(self::IDENTIFIER));
+        $this->assertEquals($returnedFile, $this->sut->download(self::IDENTIFIER));
     }
 
     public function testRemove(): void
     {
+        $response = new \Laminas\Http\Response();
+        $response->setStatusCode(200);
+
         $this->mockContentStoreCli->shouldReceive('remove')
             ->once()
             ->with(self::IDENTIFIER)
-            ->andReturn(true);
+            ->andReturn($response);
 
-        static::assertTrue($this->sut->remove(self::IDENTIFIER));
+        $this->assertSame($response, $this->sut->remove(self::IDENTIFIER));
     }
 
     public function testUpload(): void
@@ -89,9 +93,9 @@ class ContentStoreFileUploaderTest extends MockeryTestCase
         //  call & check
         $actual = $this->sut->upload(self::IDENTIFIER, $file);
 
-        static::assertSame($file, $actual);
-        static::assertEquals($expectContent, $actual->getContent());
-        static::assertEquals(self::IDENTIFIER, $actual->getIdentifier());
+        $this->assertSame($file, $actual);
+        $this->assertEquals($expectContent, $actual->getContent());
+        $this->assertEquals(self::IDENTIFIER, $actual->getIdentifier());
     }
 
     public function testUploadFail(): void

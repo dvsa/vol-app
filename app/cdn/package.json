@@ -14,16 +14,16 @@
   ],
   "dependencies": {
     "@dvsa/cookie-manager": "^1.1.2",
-    "autoprefixer": "^10.4.20",
-    "chosen-npm": "^1.4.2",
-    "govuk-frontend": "^6.1.0",
-    "jquery": "^3.7.1",
-    "pace-progress": "^1.0.2",
     "@editorjs/editorjs": "^2.31.0",
     "@editorjs/header": "^2.7.0",
     "@editorjs/list": "^1.8.0",
     "@editorjs/paragraph": "^2.10.0",
-    "@editorjs/underline": "^1.2.1"
+    "@editorjs/underline": "^1.2.1",
+    "autoprefixer": "^10.4.20",
+    "chosen-npm": "^1.4.2",
+    "govuk-frontend": "^6.3.0",
+    "jquery": "^3.7.1",
+    "pace-progress": "^1.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.18.2",

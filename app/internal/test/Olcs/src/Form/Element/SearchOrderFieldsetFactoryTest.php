@@ -11,7 +11,7 @@ use Olcs\Form\Element\SearchOrderFieldsetFactory;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-class SearchOrderFieldsetFactoryTest extends TestCase
+final class SearchOrderFieldsetFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {

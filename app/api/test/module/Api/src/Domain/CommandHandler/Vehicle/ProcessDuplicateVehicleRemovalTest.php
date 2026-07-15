@@ -23,7 +23,7 @@ use Dvsa\Olcs\Email\Service\TemplateRenderer;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ProcessDuplicateVehicleRemovalTest extends AbstractCommandHandlerTestCase
+final class ProcessDuplicateVehicleRemovalTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

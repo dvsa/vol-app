@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
  *
  * Initially auto-generated but won't be overridden
  */
-class QueueEntityTest extends EntityTester
+final class QueueEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -62,12 +62,10 @@ class QueueEntityTest extends EntityTester
         $sut->validateQueue($type, $status, $date);
     }
 
-    public static function queueDataProvider(): array
+    public static function queueDataProvider(): \Iterator
     {
-        return [
-            [Entity::TYPE_ACCEPT_ECMT_SCORING, 'foo', null],
-            ['bar', Entity::STATUS_QUEUED, ''],
-            [Entity::TYPE_ACCEPT_ECMT_SCORING, Entity::STATUS_QUEUED, 'date not valid']
-        ];
+        yield [Entity::TYPE_ACCEPT_ECMT_SCORING, 'foo', null];
+        yield ['bar', Entity::STATUS_QUEUED, ''];
+        yield [Entity::TYPE_ACCEPT_ECMT_SCORING, Entity::STATUS_QUEUED, 'date not valid'];
     }
 }

@@ -15,7 +15,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class TmEmploymentEntityTest extends EntityTester
+final class TmEmploymentEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\QueryPartial\With;
 /**
  * WithTest
  */
-class WithTest extends QueryPartialTestCase
+final class WithTest extends QueryPartialTestCase
 {
     /**
      * @var With
@@ -33,21 +33,19 @@ class WithTest extends QueryPartialTestCase
         );
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
-            [
-                'SELECT a, w0 FROM foo a LEFT JOIN ENTITY.PROPERTY w0',
-                ['ENTITY.PROPERTY']
-            ],
-            [
-                'SELECT a, ALIAS FROM foo a LEFT JOIN ENTITY.PROPERTY ALIAS',
-                ['ENTITY.PROPERTY', 'ALIAS']
-            ],
-            [
-                'SELECT a, ALIAS FROM foo a LEFT JOIN a.PROPERTY ALIAS',
-                ['PROPERTY', 'ALIAS']
-            ],
+        yield [
+            'SELECT a, w0 FROM foo a LEFT JOIN ENTITY.PROPERTY w0',
+            ['ENTITY.PROPERTY']
+        ];
+        yield [
+            'SELECT a, ALIAS FROM foo a LEFT JOIN ENTITY.PROPERTY ALIAS',
+            ['ENTITY.PROPERTY', 'ALIAS']
+        ];
+        yield [
+            'SELECT a, ALIAS FROM foo a LEFT JOIN a.PROPERTY ALIAS',
+            ['PROPERTY', 'ALIAS']
         ];
     }
 }

@@ -16,10 +16,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use OlcsTest\FormService\Form\Lva\Stub\AbstractOverviewSubmissionStub;
 
-/**
- * @covers Olcs\FormService\Form\Lva\AbstractOverviewSubmission
- */
-class AbstractOverviewSubmissionTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\FormService\Form\Lva\AbstractOverviewSubmission::class)]
+final class AbstractOverviewSubmissionTest extends MockeryTestCase
 {
     /** @var  AbstractOverviewSubmissionStub */
     private $sut;
@@ -32,6 +30,7 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
     private $mockTranslationHelper;
 
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockForm = m::mock(\Laminas\Form\FormInterface::class);
@@ -64,7 +63,7 @@ class AbstractOverviewSubmissionTest extends MockeryTestCase
             ->shouldReceive('alterForm')->once()->with($this->mockForm, $data, $params)
             ->getMock();
 
-        static::assertSame($this->mockForm, $sut->getForm($data, $params));
+        $this->assertSame($this->mockForm, $sut->getForm($data, $params));
     }
 
     public function testAlterFormReadySubmitWithFee(): void

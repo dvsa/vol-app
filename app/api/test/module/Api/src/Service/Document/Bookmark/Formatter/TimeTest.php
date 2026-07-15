@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter;
 /**
  * Time formatter test
  */
-class TimeTest extends \PHPUnit\Framework\TestCase
+final class TimeTest extends \PHPUnit\Framework\TestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('nameProvider')]
     public function testFormat(mixed $input, mixed $expected): void
@@ -20,12 +20,10 @@ class TimeTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function nameProvider(): array
+    public static function nameProvider(): \Iterator
     {
-        return [
-            ['XX', null],
-            ['2017-01-10T12:45:22+00:00', '12:45'],
-            ['2017-06-10T12:45:22+00:00', '13:45'],
-        ];
+        yield ['XX', null];
+        yield ['2017-01-10T12:45:22+00:00', '12:45'];
+        yield ['2017-06-10T12:45:22+00:00', '13:45'];
     }
 }

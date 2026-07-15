@@ -21,7 +21,7 @@ class PaymentSubmissionControllerFactory implements FactoryInterface
      * @return PaymentSubmissionController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PaymentSubmissionController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): PaymentSubmissionController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

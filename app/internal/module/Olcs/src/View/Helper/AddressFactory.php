@@ -18,7 +18,7 @@ class AddressFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Address
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Address
     {
         $addressFormatter = $container->get(FormatterPluginManager::class)->get(AddressFormatter::class);
         return new Address($addressFormatter);

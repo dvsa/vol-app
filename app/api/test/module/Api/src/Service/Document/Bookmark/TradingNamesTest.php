@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\TradingNames;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TradingNamesTest extends \PHPUnit\Framework\TestCase
+final class TradingNamesTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

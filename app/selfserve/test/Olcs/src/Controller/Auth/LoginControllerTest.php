@@ -27,7 +27,7 @@ use Olcs\Controller\Auth\LoginController;
 use Olcs\Form\Model\Form\Auth\Login;
 use Olcs\Logging\Log\Logger;
 
-class LoginControllerTest extends MockeryTestCase
+final class LoginControllerTest extends MockeryTestCase
 {
     /**
      * @var SelfserveCommandAdapter
@@ -61,19 +61,19 @@ class LoginControllerTest extends MockeryTestCase
      */
     protected $authChallengeContainerMock;
 
-    public const EMPTY_FORM_DATA = [
+    public const array EMPTY_FORM_DATA = [
         'username' => null,
         'password' => null,
         'csrf' => null,
     ];
 
-    public const AUTHENTICATION_RESULT_SUCCESSFUL = [
+    public const array AUTHENTICATION_RESULT_SUCCESSFUL = [
         Result::SUCCESS,
         [],
         []
     ];
 
-    public const AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED = [
+    public const array AUTHENTICATION_RESULT_CHALLENGE_NEW_PASSWORD_REQUIRED = [
         LoginController::AUTH_SUCCESS_WITH_CHALLENGE,
         [],
         [
@@ -84,23 +84,24 @@ class LoginControllerTest extends MockeryTestCase
             'challengeSession' => 'challengeSession'
         ]
     ];
-    public const AUTHENTICATION_RESULT_CHALLENGE_UNSUPPORTED = [
+    public const array AUTHENTICATION_RESULT_CHALLENGE_UNSUPPORTED = [
         LoginController::AUTH_SUCCESS_WITH_CHALLENGE,
         [],
         [
             'challengeName' => 'UnsupportedChallenge',
         ]
     ];
-    public const AUTHENTICATION_RESULT_FAILURE = [Result::FAILURE, [], ['failed']];
-    public const AUTHENTICATION_RESULT_USER_NOT_EXIST = [Result::FAILURE_IDENTITY_NOT_FOUND, [], ['Authentication Failed']];
-    public const AUTHENTICATION_RESULT_CREDENTIAL_INVALID = [Result::FAILURE_CREDENTIAL_INVALID, [], ['Authentication Failed']];
-    public const AUTHENTICATION_RESULT_FAILURE_ACCOUNT_DISABLED = [LoginController::AUTH_FAILURE_ACCOUNT_DISABLED, [], ['account-disabled']];
+    public const array AUTHENTICATION_RESULT_FAILURE = [Result::FAILURE, [], ['failed']];
+    public const array AUTHENTICATION_RESULT_USER_NOT_EXIST = [Result::FAILURE_IDENTITY_NOT_FOUND, [], ['Authentication Failed']];
+    public const array AUTHENTICATION_RESULT_CREDENTIAL_INVALID = [Result::FAILURE_CREDENTIAL_INVALID, [], ['Authentication Failed']];
+    public const array AUTHENTICATION_RESULT_FAILURE_ACCOUNT_DISABLED = [LoginController::AUTH_FAILURE_ACCOUNT_DISABLED, [], ['account-disabled']];
 
     /**
      * @var LoginController
      */
     protected $sut;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->authenticationAdapterMock = m::mock(SelfserveCommandAdapter::class);
@@ -579,7 +580,7 @@ class LoginControllerTest extends MockeryTestCase
      * @param array|null $data
      * @return Request
      */
-    protected function postRequest(array $data = null, array $query = null): Request
+    protected function postRequest(?array $data = null, ?array $query = null): Request
     {
         $request = new Request();
         $request->setMethod(Request::METHOD_POST);

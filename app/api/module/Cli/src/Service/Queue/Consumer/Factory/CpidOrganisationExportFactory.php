@@ -24,7 +24,7 @@ class CpidOrganisationExportFactory implements FactoryInterface
      * @return CpidOrganisationExport
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CpidOrganisationExport
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CpidOrganisationExport
     {
         return new CpidOrganisationExport(
             $container->get(AbstractConsumerServices::class),

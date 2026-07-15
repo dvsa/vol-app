@@ -18,9 +18,9 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ReadTransportManagerTest extends AbstractCommandHandlerTestCase
+final class ReadTransportManagerTest extends AbstractCommandHandlerTestCase
 {
-    public const USER_ID = 9999;
+    public const int USER_ID = 9999;
 
     /** @var m\MockInterface|User */
     private $mockUser;
@@ -65,7 +65,7 @@ class ReadTransportManagerTest extends AbstractCommandHandlerTestCase
             ],
         ];
 
-        static::assertEquals($expected, $result->toArray());
+        $this->assertEquals($expected, $result->toArray());
     }
 
     public function testHandleCommand(): void
@@ -80,8 +80,8 @@ class ReadTransportManagerTest extends AbstractCommandHandlerTestCase
             ->with(m::type(TransportManagerReadAudit::class))
             ->andReturnUsing(
                 function (TransportManagerReadAudit $record) use ($entity) {
-                    static::assertSame($this->mockUser, $record->getUser());
-                    static::assertSame($entity, $record->getTransportManager());
+                    $this->assertSame($this->mockUser, $record->getUser());
+                    $this->assertSame($entity, $record->getTransportManager());
                 }
             );
 
@@ -98,6 +98,6 @@ class ReadTransportManagerTest extends AbstractCommandHandlerTestCase
             ],
         ];
 
-        static::assertEquals($expected, $result->toArray());
+        $this->assertEquals($expected, $result->toArray());
     }
 }

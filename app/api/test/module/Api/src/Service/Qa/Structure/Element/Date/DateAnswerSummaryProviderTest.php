@@ -15,10 +15,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class DateAnswerSummaryProviderTest extends MockeryTestCase
+final class DateAnswerSummaryProviderTest extends MockeryTestCase
 {
     private $dateAnswerSummaryProvider;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->dateAnswerSummaryProvider = new DateAnswerSummaryProvider();
@@ -52,11 +53,9 @@ class DateAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public static function dpSnapshot(): array
+    public static function dpSnapshot(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 }

@@ -1,0 +1,18 @@
+<?php
+    // For backwards compatibility, we will continue to access the "element" variable if no "content" variable is provided.
+    $this->content = $this->content ?? $this->element ?? null;
+?>
+
+<?php if ($this->content) { ?>
+    <div id="<?php echo $this->escapeHtmlAttr($this->id); ?>" class="<?php echo $this->escapeHtmlAttr($this->class); ?>">
+        <?php if ($this->content instanceof \Laminas\Form\Fieldset) { ?>
+            <?php echo $this->formCollection($this->content); ?>
+        <?php } elseif (is_string($this->content)) { ?>
+            <?php echo $this->escapeHtml($this->translate($this->content)); ?>
+        <?php } elseif ($this->content instanceof \Laminas\View\Model\ViewModel) { ?>
+            <?php echo $this->partial($this->content); ?>
+        <?php } else { ?>
+            <?php echo $this->formRow($this->content); ?>
+        <?php } ?>
+    </div>
+<?php } ?>

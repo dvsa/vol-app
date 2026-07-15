@@ -15,7 +15,7 @@ class AnswersSummaryRowGeneratorFactory implements FactoryInterface
      * @return AnswersSummaryRowGenerator
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AnswersSummaryRowGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): AnswersSummaryRowGenerator
     {
         return new AnswersSummaryRowGenerator(
             $container->get('PermitsAnswersSummaryRowFactory'),

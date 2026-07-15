@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 /**
  * @see Repo
  */
-class UserTest extends RepositoryTestCase
+final class UserTest extends RepositoryTestCase
 {
     /** @var  m\MockInterface | Repository\Role */
     private $roleRepo;
@@ -29,6 +29,7 @@ class UserTest extends RepositoryTestCase
     /** @var  Repo */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);
@@ -366,7 +367,7 @@ class UserTest extends RepositoryTestCase
 
         $actual = $sut->findUserNameAvailable($base);
 
-        static::assertEquals('unitLogin3', $actual);
+        $this->assertEquals('unitLogin3', $actual);
     }
 
     public function testFindUserNameCantGenerateSpecifiedTimes(): void
@@ -381,7 +382,7 @@ class UserTest extends RepositoryTestCase
             ->times(10)
             ->andReturn([m::mock(Entity\User\User::class)]);
 
-        static::assertNull($sut->findUserNameAvailable('unitLogin', null, 10));
+        $this->assertNull($sut->findUserNameAvailable('unitLogin', null, 10));
     }
 
     public function testFindUserNameCustomSfxGen(): void
@@ -398,10 +399,7 @@ class UserTest extends RepositoryTestCase
             ->shouldReceive('fetchByLoginId')->times(3)->andReturn([$mockUserE])
             ->shouldReceive('fetchByLoginId')->andReturn([]);
 
-        static::assertEquals(
-            'unitLogin-D',
-            $sut->findUserNameAvailable('unitLogin', $fnc)
-        );
+        $this->assertEquals('unitLogin-D', $sut->findUserNameAvailable('unitLogin', $fnc));
     }
 
     public function testFetchByLoginId(): void
@@ -415,8 +413,8 @@ class UserTest extends RepositoryTestCase
 
         $actual = $this->sut->fetchByLoginId($userName);
 
-        static::assertEquals('QUERY AND u.loginId = [[' . $userName . ']]', $this->query);
-        static::assertEquals('EXPECT', $actual);
+        $this->assertEquals('QUERY AND u.loginId = [[' . $userName . ']]', $this->query);
+        $this->assertEquals('EXPECT', $actual);
     }
 
     public function testFetchUsersCountByRole(): void
@@ -428,13 +426,10 @@ class UserTest extends RepositoryTestCase
 
         $actual = $this->sut->fetchUsersCountByRole(RoleEntity::ROLE_SYSTEM_ADMIN);
 
-        static::assertEquals(
-            'QUERY '
-            . 'SELECT COUNT(DISTINCT u.id) '
-            . 'INNER JOIN u.roles r '
-            . 'AND r.role = [[' . RoleEntity::ROLE_SYSTEM_ADMIN . ']]',
-            $this->query
-        );
-        static::assertEquals('EXPECT', $actual);
+        $this->assertEquals('QUERY '
+        . 'SELECT COUNT(DISTINCT u.id) '
+        . 'INNER JOIN u.roles r '
+        . 'AND r.role = [[' . RoleEntity::ROLE_SYSTEM_ADMIN . ']]', $this->query);
+        $this->assertEquals('EXPECT', $actual);
     }
 }

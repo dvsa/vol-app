@@ -17,7 +17,7 @@ use Mockery as m;
 /**
  * MarkExpiredPermits test
  */
-class MarkExpiredPermitsTest extends AbstractCommandHandlerTestCase
+final class MarkExpiredPermitsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

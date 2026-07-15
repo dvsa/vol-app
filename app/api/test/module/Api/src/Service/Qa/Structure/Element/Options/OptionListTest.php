@@ -15,41 +15,40 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class OptionListTest extends MockeryTestCase
+final class OptionListTest extends MockeryTestCase
 {
-    public const ITEM_1_VALUE = '1';
-    public const ITEM_1_LABEL = 'Food';
-    public const ITEM_1_HINT = 'Hint for the Food item';
+    public const string ITEM_1_VALUE = '1';
+    public const string ITEM_1_LABEL = 'Food';
+    public const string ITEM_1_HINT = 'Hint for the Food item';
 
-    public const ITEM_2_VALUE = '3';
-    public const ITEM_2_LABEL = 'Metals';
-    public const ITEM_2_HINT = 'Hint for the Metals item';
+    public const string ITEM_2_VALUE = '3';
+    public const string ITEM_2_LABEL = 'Metals';
+    public const string ITEM_2_HINT = 'Hint for the Metals item';
 
     private $option1;
 
     private $option2;
 
-    private $optionFactory;
-
     private $optionList;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->option1 = m::mock(Option::class);
 
         $this->option2 = m::mock(Option::class);
 
-        $this->optionFactory = m::mock(OptionFactory::class);
-        $this->optionFactory->shouldReceive('create')
+        $optionFactory = m::mock(OptionFactory::class);
+        $optionFactory->shouldReceive('create')
             ->with(self::ITEM_1_VALUE, self::ITEM_1_LABEL, self::ITEM_1_HINT)
             ->once()
             ->andReturn($this->option1);
-        $this->optionFactory->shouldReceive('create')
+        $optionFactory->shouldReceive('create')
             ->with(self::ITEM_2_VALUE, self::ITEM_2_LABEL, self::ITEM_2_HINT)
             ->once()
             ->andReturn($this->option2);
 
-        $this->optionList = new OptionList($this->optionFactory);
+        $this->optionList = new OptionList($optionFactory);
         $this->optionList->add(self::ITEM_1_VALUE, self::ITEM_1_LABEL, self::ITEM_1_HINT);
         $this->optionList->add(self::ITEM_2_VALUE, self::ITEM_2_LABEL, self::ITEM_2_HINT);
     }

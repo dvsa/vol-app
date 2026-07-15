@@ -11,13 +11,12 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers ProcessPluginManager
- */
-class PluginManagerTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Publication\Process\PluginManager::class)]
+final class PluginManagerTest extends MockeryTestCase
 {
     private ProcessPluginManager $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new ProcessPluginManager($this->createStub(ContainerInterface::class));

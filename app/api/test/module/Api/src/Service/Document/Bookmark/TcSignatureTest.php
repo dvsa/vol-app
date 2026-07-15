@@ -14,7 +14,7 @@ use Dvsa\Olcs\DocumentShare\Service\DocumentStoreInterface;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class TcSignatureTest extends \PHPUnit\Framework\TestCase
+final class TcSignatureTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -41,7 +41,7 @@ class TcSignatureTest extends \PHPUnit\Framework\TestCase
             ->method('getContent')
             ->willReturn('content');
 
-        $fileStoreMock = $this->createPartialMock(DocumentStoreInterface::class, ['read', 'write', 'remove']);
+        $fileStoreMock = $this->createMock(DocumentStoreInterface::class);
         $fileStoreMock->expects($this->once())
             ->method('read')
             ->with('/templates/Image/' . $image . '.jpg')
@@ -62,18 +62,16 @@ class TcSignatureTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
-            ['B', 'TC_SIG_NORTHEASTERN'],
-            ['C', 'TC_SIG_NORTHWESTERN'],
-            ['D', 'TC_SIG_WESTMIDLANDS'],
-            ['F', 'TC_SIG_EASTERN'],
-            ['G', 'TC_SIG_WELSH'],
-            ['H', 'TC_SIG_WESTERN'],
-            ['K', 'TC_SIG_SE_MET'],
-            ['M', 'TC_SIG_SCOTTISH'],
-            ['N', 'TC_SIG_NORTHERNIRELAND']
-        ];
+        yield ['B', 'TC_SIG_NORTHEASTERN'];
+        yield ['C', 'TC_SIG_NORTHWESTERN'];
+        yield ['D', 'TC_SIG_WESTMIDLANDS'];
+        yield ['F', 'TC_SIG_EASTERN'];
+        yield ['G', 'TC_SIG_WELSH'];
+        yield ['H', 'TC_SIG_WESTERN'];
+        yield ['K', 'TC_SIG_SE_MET'];
+        yield ['M', 'TC_SIG_SCOTTISH'];
+        yield ['N', 'TC_SIG_NORTHERNIRELAND'];
     }
 }

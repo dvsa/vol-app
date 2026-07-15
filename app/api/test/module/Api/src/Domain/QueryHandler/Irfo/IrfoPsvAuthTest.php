@@ -20,7 +20,7 @@ use Mockery as m;
 /**
  * IrfoPsvAuth Test
  */
-class IrfoPsvAuthTest extends QueryHandlerTestCase
+final class IrfoPsvAuthTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

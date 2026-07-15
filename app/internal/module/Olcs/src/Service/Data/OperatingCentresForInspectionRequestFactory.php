@@ -17,7 +17,7 @@ class OperatingCentresForInspectionRequestFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatingCentresForInspectionRequest
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): OperatingCentresForInspectionRequest
     {
         return new OperatingCentresForInspectionRequest(
             $container->get(AbstractDataServiceServices::class),

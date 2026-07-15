@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Logging\Listener;
 
 use Laminas\EventManager\EventManagerInterface;
@@ -13,7 +15,7 @@ use Olcs\Logging\Listener\LogRequest;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
-class LogRequestTest extends TestCase
+final class LogRequestTest extends TestCase
 {
     private function getMockLog()
     {
@@ -50,9 +52,7 @@ class LogRequestTest extends TestCase
         $this->assertSame($sut, $service);
     }
 
-    /**
-     * @dataProvider httpOnDispatchProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('httpOnDispatchProvider')]
     public function testHttpOnRoute(string $content, bool $shouldLogContent): void
     {
         $route = ['controller' => 'index', 'action' => 'index'];
@@ -102,12 +102,10 @@ class LogRequestTest extends TestCase
         $sut->onRoute($mockEvent);
     }
 
-    public static function httpOnDispatchProvider(): array
+    public static function httpOnDispatchProvider(): \Iterator
     {
-        return [
-            'acceptable content size' => ['foo', true],
-            'content too large' => [str_pad('foo', 3000), false],
-        ];
+        yield 'acceptable content size' => ['foo', true];
+        yield 'content too large' => [str_pad('foo', 3000), false];
     }
 
     public function testHttpOnDispatchEnd(): void
@@ -138,7 +136,7 @@ class LogRequestTest extends TestCase
         $mockController = m::mock();
 
         $params = [
-            'controller' => get_class($mockController),
+            'controller' => $mockController::class,
             'action' => 'foo',
         ];
 

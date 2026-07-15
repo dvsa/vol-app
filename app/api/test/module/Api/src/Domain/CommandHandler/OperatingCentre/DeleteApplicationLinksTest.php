@@ -24,7 +24,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class DeleteApplicationLinksTest extends AbstractCommandHandlerTestCase
+final class DeleteApplicationLinksTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

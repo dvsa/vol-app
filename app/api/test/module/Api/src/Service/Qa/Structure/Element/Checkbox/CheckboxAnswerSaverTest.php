@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class CheckboxAnswerSaverTest extends MockeryTestCase
+final class CheckboxAnswerSaverTest extends MockeryTestCase
 {
     private $fieldsetName;
 
@@ -33,6 +33,7 @@ class CheckboxAnswerSaverTest extends MockeryTestCase
 
     private $checkboxAnswerSaver;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->fieldsetName = 'fields123';

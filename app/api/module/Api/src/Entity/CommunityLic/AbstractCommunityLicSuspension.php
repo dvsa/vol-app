@@ -22,22 +22,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="community_lic_suspension",
- *    indexes={
- *        @ORM\Index(name="ix_community_lic_suspension_community_lic_id", columns={"community_lic_id"}),
- *        @ORM\Index(name="ix_community_lic_suspension_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_community_lic_suspension_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_community_lic_suspension_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_community_lic_suspension_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'community_lic_suspension')]
+#[ORM\Index(name: 'ix_community_lic_suspension_community_lic_id', columns: ['community_lic_id'])]
+#[ORM\Index(name: 'ix_community_lic_suspension_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_community_lic_suspension_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'uk_community_lic_suspension_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_community_lic_suspension_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractCommunityLicSuspension implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -51,98 +45,88 @@ abstract class AbstractCommunityLicSuspension implements BundleSerializableInter
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to community_lic
      *
      * @var \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic", fetch="LAZY", cascade={"persist"})
-     * @ORM\JoinColumn(name="community_lic_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'community_lic_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic::class, fetch: 'LAZY', cascade: ['persist'])]
     protected $communityLic;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Start date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="start_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'start_date', nullable: true)]
     protected $startDate;
 
     /**
      * End date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="end_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'end_date', nullable: true)]
     protected $endDate;
 
     /**
      * Possibly not required. In legacy as part of batch job.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_actioned", nullable=true, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesnonull', name: 'is_actioned', nullable: true, options: ['default' => 0])]
     protected $isActioned = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * CommunityLicSuspensionReasons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicSuspensionReason", mappedBy="communityLicSuspension")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicSuspensionReason::class, mappedBy: 'communityLicSuspension')]
     protected $communityLicSuspensionReasons;
 
     /**

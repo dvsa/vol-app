@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\PhoneContact;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\CaseworkerDetails;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\CaseworkerDetails::class)]
-class CaseworkerDetailsTest extends \PHPUnit\Framework\TestCase
+final class CaseworkerDetailsTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -38,168 +38,166 @@ class CaseworkerDetailsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
-            // testRenderWithContactDetailsAddress
+        // testRenderWithContactDetailsAddress
+        yield [
             [
                 [
-                    [
-                        'contactDetails' => [
-                            'emailAddress' => 'a@user.com',
-                            'address' => [
-                                'addressLine1' => 'Line 1'
-                            ],
-                            'person' => [
-                                'forename' => 'A',
-                                'familyName' => 'User',
-                            ]
+                    'contactDetails' => [
+                        'emailAddress' => 'a@user.com',
+                        'address' => [
+                            'addressLine1' => 'Line 1'
+                        ],
+                        'person' => [
+                            'forename' => 'A',
+                            'familyName' => 'User',
                         ]
-                    ],
-                    []
+                    ]
                 ],
-                "A User\nLine 1\nDirect Line: \ne-mail: a@user.com"
+                []
             ],
-            // testRenderWithContactDetailsAddressAndDirectDial
+            "A User\nLine 1\nDirect Line: \ne-mail: a@user.com"
+        ];
+        // testRenderWithContactDetailsAddressAndDirectDial
+        yield [
             [
                 [
-                    [
-                        'contactDetails' => [
-                            'emailAddress' => 'a@user.com',
-                            'address' => [
-                                'addressLine1' => 'Line 1'
+                    'contactDetails' => [
+                        'emailAddress' => 'a@user.com',
+                        'address' => [
+                            'addressLine1' => 'Line 1'
+                        ],
+                        'phoneContacts' => [
+                            [
+                                'phoneContactType' => ['id' => PhoneContact::TYPE_SECONDARY],
+                                'phoneNumber' => '0113 222 2222'
                             ],
-                            'phoneContacts' => [
-                                [
-                                    'phoneContactType' => ['id' => PhoneContact::TYPE_SECONDARY],
-                                    'phoneNumber' => '0113 222 2222'
+                            [
+                                'phoneContactType' => ['id' => PhoneContact::TYPE_PRIMARY],
+                                'phoneNumber' => '0113 111 1111'
+                            ]
+                        ],
+                        'person' => [
+                            'forename' => 'A',
+                            'familyName' => 'User',
+                        ]
+                    ]
+                ],
+                []
+            ],
+            "A User\nLine 1\nDirect Line: 0113 111 1111\ne-mail: a@user.com"
+        ];
+        // testRenderWithTrafficAreaContactDetailsAddress
+        yield [
+            [
+                [
+                    'contactDetails' => [
+                        'emailAddress' => 'a@user.com',
+                        'address' => [],
+                        'person' => [
+                            'forename' => 'A',
+                            'familyName' => 'User',
+                        ],
+                        'phoneContacts' => [
+                            [
+                                'phoneContactType' => [
+                                    'id' => 'INVALID_TYPE',
                                 ],
-                                [
-                                    'phoneContactType' => ['id' => PhoneContact::TYPE_PRIMARY],
-                                    'phoneNumber' => '0113 111 1111'
-                                ]
-                            ],
-                            'person' => [
-                                'forename' => 'A',
-                                'familyName' => 'User',
                             ]
-                        ]
-                    ],
-                    []
-                ],
-                "A User\nLine 1\nDirect Line: 0113 111 1111\ne-mail: a@user.com"
-            ],
-            // testRenderWithTrafficAreaContactDetailsAddress
-            [
-                [
-                    [
-                        'contactDetails' => [
-                            'emailAddress' => 'a@user.com',
-                            'address' => [],
-                            'person' => [
-                                'forename' => 'A',
-                                'familyName' => 'User',
-                            ],
-                            'phoneContacts' => [
-                                [
-                                    'phoneContactType' => [
-                                        'id' => 'INVALID_TYPE',
-                                    ],
-                                ]
-                            ],
                         ],
-                        'team' => [
-                            'trafficArea' => [
-                                'name' => 'An Area',
-                                'contactDetails' => [
-                                    'address' => [
-                                        'addressLine1' => 'TA 11'
-                                    ]
+                    ],
+                    'team' => [
+                        'trafficArea' => [
+                            'name' => 'An Area',
+                            'contactDetails' => [
+                                'address' => [
+                                    'addressLine1' => 'TA 11'
                                 ]
                             ]
-                        ]
-                    ],
-                    [
-                        'trafficArea' => [
-                            'name' => 'North East of England',
-                            'isNi' => false,
                         ]
                     ]
                 ],
-                "A User\nOffice of the Traffic Commissioner\n"
-                . "North East of England\nTA 11\nDirect Line: \ne-mail: a@user.com",
+                [
+                    'trafficArea' => [
+                        'name' => 'North East of England',
+                        'isNi' => false,
+                    ]
+                ]
             ],
-            // testRenderWithTrafficAreaContactDetailsAddress for NI
+            "A User\nOffice of the Traffic Commissioner\n"
+            . "North East of England\nTA 11\nDirect Line: \ne-mail: a@user.com",
+        ];
+        // testRenderWithTrafficAreaContactDetailsAddress for NI
+        yield [
             [
                 [
-                    [
-                        'contactDetails' => [
-                            'emailAddress' => 'a@user.com',
-                            'address' => [],
-                            'person' => [
-                                'forename' => 'A',
-                                'familyName' => 'User',
-                            ],
-                            'phoneContacts' => [
-                                [
-                                    'phoneContactType' => [
-                                        'id' => 'INVALID_TYPE',
-                                    ],
-                                ]
-                            ],
+                    'contactDetails' => [
+                        'emailAddress' => 'a@user.com',
+                        'address' => [],
+                        'person' => [
+                            'forename' => 'A',
+                            'familyName' => 'User',
                         ],
-                        'team' => [
-                            'trafficArea' => [
-                                'name' => 'An Area',
-                                'contactDetails' => [
-                                    'address' => [
-                                        'addressLine1' => 'TA 11'
-                                    ]
+                        'phoneContacts' => [
+                            [
+                                'phoneContactType' => [
+                                    'id' => 'INVALID_TYPE',
+                                ],
+                            ]
+                        ],
+                    ],
+                    'team' => [
+                        'trafficArea' => [
+                            'name' => 'An Area',
+                            'contactDetails' => [
+                                'address' => [
+                                    'addressLine1' => 'TA 11'
                                 ]
                             ]
-                        ]
-                    ],
-                    [
-                        'trafficArea' => [
-                            'name' => 'Northern Ireland',
-                            'isNi' => true,
                         ]
                     ]
                 ],
-                "A User\nNorthern Ireland\nTA 11\nDirect Line: \ne-mail: a@user.com",
+                [
+                    'trafficArea' => [
+                        'name' => 'Northern Ireland',
+                        'isNi' => true,
+                    ]
+                ]
             ],
+            "A User\nNorthern Ireland\nTA 11\nDirect Line: \ne-mail: a@user.com",
+        ];
+        yield [
             [
                 [
-                    [
-                        'contactDetails' => [
-                            'emailAddress' => 'a@user.com',
-                            'address' => [],
-                            'person' => [
-                                'forename' => 'A',
-                                'familyName' => 'User',
-                            ],
-                            'phoneContacts' => [
-                                [
-                                    'phoneContactType' => [
-                                        'id' => 'INVALID_TYPE',
-                                    ],
-                                ]
-                            ],
+                    'contactDetails' => [
+                        'emailAddress' => 'a@user.com',
+                        'address' => [],
+                        'person' => [
+                            'forename' => 'A',
+                            'familyName' => 'User',
                         ],
-                        'team' => [
-                            'trafficArea' => [
-                                'name' => 'An Area',
-                                'contactDetails' => [
-                                    'address' => [
-                                        'addressLine1' => 'TA 11'
-                                    ]
+                        'phoneContacts' => [
+                            [
+                                'phoneContactType' => [
+                                    'id' => 'INVALID_TYPE',
+                                ],
+                            ]
+                        ],
+                    ],
+                    'team' => [
+                        'trafficArea' => [
+                            'name' => 'An Area',
+                            'contactDetails' => [
+                                'address' => [
+                                    'addressLine1' => 'TA 11'
                                 ]
                             ]
                         ]
-                    ],
+                    ]
                 ],
-                "A User\nTA 11\nDirect Line: \ne-mail: a@user.com",
             ],
+            "A User\nTA 11\nDirect Line: \ne-mail: a@user.com",
         ];
     }
 }

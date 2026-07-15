@@ -24,32 +24,30 @@ use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking as ConditionUndertakingEntit
 /**
  * CreatorTest
  */
-class CreatorTest extends MockeryTestCase
+final class CreatorTest extends MockeryTestCase
 {
     public $sut;
-    private $authService;
 
     private $eventHistoryRepo;
 
     private $eventHistoryTypeRepo;
 
-    private $user;
-
+    #[\Override]
     public function setUp(): void
     {
-        $this->user = m::mock(UserEntity::class);
+        $user = m::mock(UserEntity::class);
 
-        $this->authService = m::mock(AuthorizationService::class);
-        $this->authService->shouldReceive('getIdentity->getUser')
+        $authService = m::mock(AuthorizationService::class);
+        $authService->shouldReceive('getIdentity->getUser')
             ->withNoArgs()
-            ->andReturn($this->user);
+            ->andReturn($user);
 
         $this->eventHistoryRepo = m::mock(EventHistoryRepo::class);
 
         $this->eventHistoryTypeRepo = m::mock(EventHistoryTypeRepo::class);
 
         $this->sut = new Creator(
-            $this->authService,
+            $authService,
             $this->eventHistoryRepo,
             $this->eventHistoryTypeRepo
         );

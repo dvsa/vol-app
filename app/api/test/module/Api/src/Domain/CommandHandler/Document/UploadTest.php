@@ -21,11 +21,11 @@ use Mockery as m;
 use org\bovigo\vfs\vfsStream;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Document\Upload::class)]
-class UploadTest extends AbstractCommandHandlerTestCase
+final class UploadTest extends AbstractCommandHandlerTestCase
 {
-    public const BODY = 'expect_body';
-    public const IDENTIFIER = '/some/identifier.pdf';
-    public const USER_ID = 7001;
+    public const string BODY = 'expect_body';
+    public const string IDENTIFIER = '/some/identifier.pdf';
+    public const int USER_ID = 7001;
 
     /** @var Upload */
     protected $sut;
@@ -128,8 +128,8 @@ class UploadTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('upload')
             ->andReturnUsing(
                 function ($fileName, DsFile $file) {
-                    static::assertSame(self::IDENTIFIER, $fileName);
-                    static::assertEquals(self::BODY, $file->getContent());
+                    $this->assertSame(self::IDENTIFIER, $fileName);
+                    $this->assertEquals(self::BODY, $file->getContent());
 
                     $file->setIdentifier(self::IDENTIFIER);
 
@@ -166,49 +166,47 @@ class UploadTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dpLinkedEntity(): array
+    public static function dpLinkedEntity(): \Iterator
     {
-        return [
-            [
-                'key' => 'licence',
-                'id' => 111,
-                'entityClass' => Entity\Licence\Licence::class,
-            ],
-            [
-                'application',
-                222,
-                Entity\Application\Application::class
-            ],
-            [
-                'case',
-                333,
-                Entity\Cases\Cases::class
-            ],
-            [
-                'transportManager',
-                444,
-                Entity\Tm\TransportManager::class
-            ],
-            [
-                'busReg',
-                555,
-                Entity\Bus\BusReg::class
-            ],
-            [
-                'irfoOrganisation',
-                666,
-                Entity\Organisation\Organisation::class
-            ],
-            [
-                'surrender',
-                777,
-                Entity\Surrender::class
-            ],
-            [
-                'irhpApplication',
-                888,
-                Entity\Permits\IrhpApplication::class,
-            ]
+        yield [
+            'key' => 'licence',
+            'id' => 111,
+            'entityClass' => Entity\Licence\Licence::class,
+        ];
+        yield [
+            'application',
+            222,
+            Entity\Application\Application::class
+        ];
+        yield [
+            'case',
+            333,
+            Entity\Cases\Cases::class
+        ];
+        yield [
+            'transportManager',
+            444,
+            Entity\Tm\TransportManager::class
+        ];
+        yield [
+            'busReg',
+            555,
+            Entity\Bus\BusReg::class
+        ];
+        yield [
+            'irfoOrganisation',
+            666,
+            Entity\Organisation\Organisation::class
+        ];
+        yield [
+            'surrender',
+            777,
+            Entity\Surrender::class
+        ];
+        yield [
+            'irhpApplication',
+            888,
+            Entity\Permits\IrhpApplication::class,
         ];
     }
 
@@ -253,10 +251,10 @@ class UploadTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('upload')
             ->andReturnUsing(
                 function ($fileName, DsFile $file) use ($expectMimeType) {
-                    static::assertSame(self::IDENTIFIER, $fileName);
+                    $this->assertSame(self::IDENTIFIER, $fileName);
 
-                    static::assertEquals(self::BODY, gzuncompress($file->getContent()));
-                    static::assertEquals($expectMimeType, $file->getMimeType());
+                    $this->assertSame(self::BODY, gzuncompress($file->getContent()));
+                    $this->assertEquals($expectMimeType, $file->getMimeType());
 
                     $file->setIdentifier(self::IDENTIFIER);
                     return $file;
@@ -429,8 +427,8 @@ class UploadTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('upload')
             ->andReturnUsing(
                 function ($fileName, DsFile $file) {
-                    static::assertSame(self::IDENTIFIER, $fileName);
-                    static::assertEquals(self::BODY, $file->getContent());
+                    $this->assertSame(self::IDENTIFIER, $fileName);
+                    $this->assertEquals(self::BODY, $file->getContent());
 
                     $file->setIdentifier(self::IDENTIFIER);
 

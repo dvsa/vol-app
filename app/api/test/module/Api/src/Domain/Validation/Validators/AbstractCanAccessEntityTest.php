@@ -8,16 +8,15 @@ use Dvsa\Olcs\Api\Domain\Validation\Validators\AbstractCanAccessEntity;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Validation\Validators\AbstractCanAccessEntity
- */
-class AbstractCanAccessEntityTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Validators\AbstractCanAccessEntity::class)]
+final class AbstractCanAccessEntityTest extends MockeryTestCase
 {
     /**
      * @var AbstractCanAccessEntity|m\Mock
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(AbstractCanAccessEntity::class)->makePartial()->shouldAllowMockingProtectedMethods();

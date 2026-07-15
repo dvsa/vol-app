@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="legacy_recommendation_pi_reason",
- *    indexes={
- *        @ORM\Index(name="ix_legacy_recommendation_pi_reason_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_legacy_recommendation_pi_reason_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_legacy_recommendation_pi_reason_legacy_pi_reason_id", columns={"legacy_pi_reason_id"}),
- *        @ORM\Index(name="ix_legacy_recommendation_pi_reason_legacy_recommendation_id", columns={"legacy_recommendation_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'legacy_recommendation_pi_reason')]
+#[ORM\Index(name: 'ix_legacy_recommendation_pi_reason_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_legacy_recommendation_pi_reason_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_legacy_recommendation_pi_reason_legacy_pi_reason_id', columns: ['legacy_pi_reason_id'])]
+#[ORM\Index(name: 'ix_legacy_recommendation_pi_reason_legacy_recommendation_id', columns: ['legacy_recommendation_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLegacyRecommendationPiReason implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,71 +41,64 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
      * Primary key
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
     protected $id = 0;
 
     /**
      * Foreign Key to legacy_recommendation
      *
      * @var \Dvsa\Olcs\Api\Entity\Legacy\LegacyRecommendation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Legacy\LegacyRecommendation", fetch="LAZY")
-     * @ORM\JoinColumn(name="legacy_recommendation_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'legacy_recommendation_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Legacy\LegacyRecommendation::class, fetch: 'LAZY')]
     protected $legacyRecommendation;
 
     /**
      * Foreign Key to legacy_pi_reason
      *
      * @var \Dvsa\Olcs\Api\Entity\Legacy\LegacyPiReason
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Legacy\LegacyPiReason", fetch="LAZY")
-     * @ORM\JoinColumn(name="legacy_pi_reason_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'legacy_pi_reason_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Legacy\LegacyPiReason::class, fetch: 'LAZY')]
     protected $legacyPiReason;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Comment
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="comment", length=30, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'comment', length: 30, nullable: true)]
     protected $comment;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

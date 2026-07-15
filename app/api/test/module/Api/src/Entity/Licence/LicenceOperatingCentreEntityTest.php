@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Entity\Application\S4;
  *
  * Initially auto-generated but won't be overridden
  */
-class LicenceOperatingCentreEntityTest extends EntityTester
+final class LicenceOperatingCentreEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

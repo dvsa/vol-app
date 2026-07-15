@@ -23,7 +23,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TransactioningCommandHandlerTest extends MockeryTestCase
+final class TransactioningCommandHandlerTest extends MockeryTestCase
 {
     private $wrapped;
 
@@ -34,6 +34,7 @@ class TransactioningCommandHandlerTest extends MockeryTestCase
      */
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->wrapped = m::mock(CommandHandlerInterface::class);

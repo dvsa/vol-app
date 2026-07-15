@@ -28,7 +28,7 @@ use Mockery as m;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class Schedule41ApproveTest extends AbstractCommandHandlerTestCase
+final class Schedule41ApproveTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -103,22 +103,20 @@ class Schedule41ApproveTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dataProviderTestHandleCommand(): array
+    public static function dataProviderTestHandleCommand(): \Iterator
     {
-        return [
-            // expectedSection, isNew, isNi, isTrueS4
-            'New application' => [16, true, false, 'Y'],
-            'New application2' => [16, true, false, 'N'],
-            'New application2' => [16, true, false, null],
-            'New application NI' => [29, true, true, 'Y'],
-            'New application2 NI' => [29, true, true, 'N'],
-            'New application2 NI' => [29, true, true, null],
-            'Variation untrue S4' => [17, false, false, 'N'],
-            'Variation untrue S4' => [17, false, false, null],
-            'Variation untrue S4 NI' => [30, false, true, 'N'],
-            'Variation untrue S4 NI' => [30, false, true, null],
-            'Variation true S4' => [18, false, false, 'Y'],
-            'Variation true S4 NI' => [31, false, true, 'Y'],
-        ];
+        // expectedSection, isNew, isNi, isTrueS4
+        yield 'New application' => [16, true, false, 'Y'];
+        yield 'New application2' => [16, true, false, 'N'];
+        yield 'New application2 null' => [16, true, false, null];
+        yield 'New application NI' => [29, true, true, 'Y'];
+        yield 'New application2 NI' => [29, true, true, 'N'];
+        yield 'New application2 NI null' => [29, true, true, null];
+        yield 'Variation untrue S4' => [17, false, false, 'N'];
+        yield 'Variation untrue S4 null' => [17, false, false, null];
+        yield 'Variation untrue S4 NI' => [30, false, true, 'N'];
+        yield 'Variation untrue S4 NI null' => [30, false, true, null];
+        yield 'Variation true S4' => [18, false, false, 'Y'];
+        yield 'Variation true S4 NI' => [31, false, true, 'Y'];
     }
 }

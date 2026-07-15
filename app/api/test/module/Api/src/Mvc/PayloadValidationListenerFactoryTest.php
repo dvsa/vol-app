@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * PayloadValidationListenerFactory Test
  */
-class PayloadValidationListenerFactoryTest extends MockeryTestCase
+final class PayloadValidationListenerFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

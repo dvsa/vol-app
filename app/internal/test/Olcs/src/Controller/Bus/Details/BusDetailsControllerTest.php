@@ -19,23 +19,20 @@ use Laminas\Navigation\Navigation;
 /**
  * Bus Details Controller Test
  */
-class BusDetailsControllerTest extends MockeryTestCase
+final class BusDetailsControllerTest extends MockeryTestCase
 {
     protected $sut;
-    protected $translationHelper;
-    protected $formHelper;
-    protected $flashMessengerHelper;
-    protected $navigation;
 
+    #[\Override]
     public function setUp(): void
     {
-        $this->translationHelper = m::mock(TranslationHelperService::class);
+        $translationHelper = m::mock(TranslationHelperService::class);
 
-        $this->formHelper = m::mock(FormHelperService::class);
-        $this->flashMessengerHelper =  m::mock(FlashMessengerHelperService::class);
-        $this->navigation = m::mock(Navigation::class);
+        $formHelper = m::mock(FormHelperService::class);
+        $flashMessengerHelper =  m::mock(FlashMessengerHelperService::class);
+        $navigation = m::mock(Navigation::class);
 
-        $this->sut = new Sut($this->translationHelper, $this->formHelper, $this->flashMessengerHelper, $this->navigation);
+        $this->sut = new Sut($translationHelper, $formHelper, $flashMessengerHelper, $navigation);
     }
 
     /**
@@ -133,21 +130,19 @@ class BusDetailsControllerTest extends MockeryTestCase
         return $mockForm;
     }
 
-    public static function alterFormProvider(): array
+    public static function alterFormProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'isReadOnly' => true,
-                ],
-                true,
+                'isReadOnly' => true,
             ],
+            true,
+        ];
+        yield [
             [
-                [
-                    'isReadOnly' => false,
-                ],
-                false,
+                'isReadOnly' => false,
             ],
+            false,
         ];
     }
 }

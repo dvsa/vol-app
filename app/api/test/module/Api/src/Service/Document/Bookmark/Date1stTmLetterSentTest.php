@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Date1stTmLetterSent;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
-class Date1stTmLetterSentTest extends \PHPUnit\Framework\TestCase
+final class Date1stTmLetterSentTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -25,7 +25,7 @@ class Date1stTmLetterSentTest extends \PHPUnit\Framework\TestCase
             'lastTmFirstEmailDate' => '2026-03-04 10:11:12',
         ]);
 
-        $this->assertEquals('04/03/2026', $bookmark->render());
+        $this->assertSame('04/03/2026', $bookmark->render());
     }
 
     public function testRenderWhenDateIsDateTime(): void
@@ -35,7 +35,7 @@ class Date1stTmLetterSentTest extends \PHPUnit\Framework\TestCase
             'lastTmFirstEmailDate' => new \DateTime('2026-03-04 10:11:12'),
         ]);
 
-        $this->assertEquals('04/03/2026', $bookmark->render());
+        $this->assertSame('04/03/2026', $bookmark->render());
     }
 
     public function testRenderWhenDateIsNull(): void

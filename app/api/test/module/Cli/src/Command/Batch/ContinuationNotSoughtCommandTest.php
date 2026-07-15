@@ -12,7 +12,7 @@ use Dvsa\Olcs\Cli\Command\Batch\ContinuationNotSoughtCommand;
 use Symfony\Component\Console\Command\Command;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class ContinuationNotSoughtCommandTest extends AbstractBatchCommandCases
+final class ContinuationNotSoughtCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

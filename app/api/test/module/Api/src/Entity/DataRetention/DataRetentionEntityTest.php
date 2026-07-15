@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime as CustomDateTime;
  *
  * Initially auto-generated but won't be overridden
  */
-class DataRetentionEntityTest extends EntityTester
+final class DataRetentionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

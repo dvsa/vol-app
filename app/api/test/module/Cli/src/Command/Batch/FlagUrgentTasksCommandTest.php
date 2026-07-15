@@ -8,7 +8,7 @@ use Dvsa\Olcs\Cli\Command\Batch\FlagUrgentTasksCommand;
 use Dvsa\Olcs\Transfer\Command\Task\FlagUrgentTasks;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class FlagUrgentTasksCommandTest extends AbstractBatchCommandCases
+final class FlagUrgentTasksCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Application\UpdateMainOccupationUndertak
 use Dvsa\Olcs\Transfer\Command\Application\UpdateMainOccupationUndertakings as Command;
 use Mockery as m;
 
-class UpdateMainOccupationUndertakingsTest extends AbstractUpdateApplicationTestCase
+final class UpdateMainOccupationUndertakingsTest extends AbstractUpdateApplicationTestCase
 {
     protected string $handlerClass = Handler::class;
     protected string $commandClass = Command::class;

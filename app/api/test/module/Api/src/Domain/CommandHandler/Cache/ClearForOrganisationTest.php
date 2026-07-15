@@ -17,7 +17,7 @@ use Mockery as m;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ClearForOrganisationTest extends AbstractCommandHandlerTestCase
+final class ClearForOrganisationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

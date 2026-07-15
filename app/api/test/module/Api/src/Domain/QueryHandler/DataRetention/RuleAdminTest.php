@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * Rule Admin Test
  */
-class RuleAdminTest extends QueryHandlerTestCase
+final class RuleAdminTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

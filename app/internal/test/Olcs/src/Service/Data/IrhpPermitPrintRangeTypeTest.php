@@ -15,13 +15,10 @@ use Mockery as m;
 /**
  * Class IrhpPermitPrintRangeType Test
  */
-class IrhpPermitPrintRangeTypeTest extends AbstractDataServiceTestCase
+final class IrhpPermitPrintRangeTypeTest extends AbstractDataServiceTestCase
 {
     /** @var IrhpPermitPrintRangeType */
     private $sut;
-
-    /** @var TranslationHelperService */
-    protected $translationHelper;
 
     /** @var Response */
     protected $response;
@@ -37,15 +34,15 @@ class IrhpPermitPrintRangeTypeTest extends AbstractDataServiceTestCase
         $this->response = m::mock(Response::class);
         $this->mockHandleQuery($this->response);
 
-        $this->translationHelper = m::mock(TranslationHelperService::class);
-        $this->translationHelper->shouldReceive('translate')
+        $translationHelper = m::mock(TranslationHelperService::class);
+        $translationHelper->shouldReceive('translate')
             ->andReturnUsing(
                 fn($text) => $text . '-translated'
             );
 
         $this->sut = new IrhpPermitPrintRangeType(
             $this->abstractDataServiceServices,
-            $this->translationHelper
+            $translationHelper
         );
     }
 
@@ -66,27 +63,25 @@ class IrhpPermitPrintRangeTypeTest extends AbstractDataServiceTestCase
         $this->assertEquals($irhpPermitStockId, $this->sut->getIrhpPermitStock());
     }
 
-    public static function dpTestFetchListOptions(): array
+    public static function dpTestFetchListOptions(): \Iterator
     {
-        return [
-            'with data' => [
+        yield 'with data' => [
+            'results' => [
                 'results' => [
-                    'results' => [
-                        'range.type.1',
-                        'range.type.2',
-                        'range.type.3',
-                    ]
-                ],
-                'expected' => [
-                    'range.type.1' => 'permits.irhp.range.type.range.type.1-translated',
-                    'range.type.2' => 'permits.irhp.range.type.range.type.2-translated',
-                    'range.type.3' => 'permits.irhp.range.type.range.type.3-translated',
+                    'range.type.1',
+                    'range.type.2',
+                    'range.type.3',
                 ]
             ],
-            'no data' => [
-                'results' => null,
-                'expected' => []
+            'expected' => [
+                'range.type.1' => 'permits.irhp.range.type.range.type.1-translated',
+                'range.type.2' => 'permits.irhp.range.type.range.type.2-translated',
+                'range.type.3' => 'permits.irhp.range.type.range.type.3-translated',
             ]
+        ];
+        yield 'no data' => [
+            'results' => null,
+            'expected' => []
         ];
     }
 

@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class SuccessfulCandidatePermitsGeneratorTest extends MockeryTestCase
+final class SuccessfulCandidatePermitsGeneratorTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
     public function testGenerate(mixed $euro5PermitsRemaining, mixed $euro6PermitsRemaining, array $expectedSuccessful): void
@@ -71,46 +71,44 @@ class SuccessfulCandidatePermitsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestGenerate(): array
+    public static function dpTestGenerate(): \Iterator
     {
-        return [
-            'more euro 6 than euro 5 remaining' => [
-                5,
-                10,
-                [
-                    ['id' => 1, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
-                    ['id' => 2, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
-                    ['id' => 3, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
-                    ['id' => 4, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
-                    ['id' => 5, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
-                    ['id' => 6, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
-                    ['id' => 7, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
-                    ['id' => 8, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
-                    ['id' => 9, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
-                    ['id' => 10, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
-                    ['id' => 12, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
-                    ['id' => 14, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
-                    ['id' => 18, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
-                ]
-            ],
-            'more euro 5 than euro 6 remaining' => [
-                10,
-                5,
-                [
-                    ['id' => 1, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
-                    ['id' => 2, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
-                    ['id' => 3, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
-                    ['id' => 4, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
-                    ['id' => 5, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
-                    ['id' => 6, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
-                    ['id' => 7, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
-                    ['id' => 8, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
-                    ['id' => 9, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
-                    ['id' => 10, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
-                    ['id' => 11, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
-                    ['id' => 12, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
-                    ['id' => 13, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
-                ]
+        yield 'more euro 6 than euro 5 remaining' => [
+            5,
+            10,
+            [
+                ['id' => 1, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
+                ['id' => 2, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
+                ['id' => 3, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
+                ['id' => 4, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
+                ['id' => 5, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
+                ['id' => 6, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
+                ['id' => 7, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
+                ['id' => 8, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
+                ['id' => 9, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
+                ['id' => 10, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
+                ['id' => 12, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
+                ['id' => 14, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
+                ['id' => 18, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
+            ]
+        ];
+        yield 'more euro 5 than euro 6 remaining' => [
+            10,
+            5,
+            [
+                ['id' => 1, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
+                ['id' => 2, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
+                ['id' => 3, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
+                ['id' => 4, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
+                ['id' => 5, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
+                ['id' => 6, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
+                ['id' => 7, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
+                ['id' => 8, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
+                ['id' => 9, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
+                ['id' => 10, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO6_REF],
+                ['id' => 11, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
+                ['id' => 12, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
+                ['id' => 13, 'emissions_category' => RefData::EMISSIONS_CATEGORY_EURO5_REF],
             ]
         ];
     }

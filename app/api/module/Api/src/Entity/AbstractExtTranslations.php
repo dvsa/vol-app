@@ -16,18 +16,12 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\Table(name="ext_translations",
- *    indexes={
- *        @ORM\Index(name="ix_ext_translations_locale_object_class_foreign_key", columns={"locale", "object_class", "foreign_key"}),
- *        @ORM\Index(name="uk_ext_translations_locale_object_class_field_foreign_key", columns={"locale", "object_class", "field", "foreign_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_ext_translations_locale_object_class_field_foreign_key", columns={"locale", "object_class", "field", "foreign_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'ext_translations')]
+#[ORM\Index(name: 'ix_ext_translations_locale_object_class_foreign_key', columns: ['locale', 'object_class', 'foreign_key'])]
+#[ORM\Index(name: 'uk_ext_translations_locale_object_class_field_foreign_key', columns: ['locale', 'object_class', 'field', 'foreign_key'])]
+#[ORM\UniqueConstraint(name: 'uk_ext_translations_locale_object_class_field_foreign_key', columns: ['locale', 'object_class', 'field', 'foreign_key'])]
+#[ORM\MappedSuperclass]
 abstract class AbstractExtTranslations implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -38,56 +32,50 @@ abstract class AbstractExtTranslations implements BundleSerializableInterface, J
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Locale
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="locale", length=8, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'locale', length: 8, nullable: false)]
     protected $locale = '';
 
     /**
      * Object class
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="object_class", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'object_class', length: 255, nullable: false)]
     protected $objectClass = '';
 
     /**
      * Field
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="field", length=32, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'field', length: 32, nullable: false)]
     protected $field = '';
 
     /**
      * Foreign key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="foreign_key", length=64, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'foreign_key', length: 64, nullable: false)]
     protected $foreignKey = '';
 
     /**
      * Content
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="content", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'content', nullable: true)]
     protected $content;
 
 

@@ -101,7 +101,7 @@ class XmlNodeBuilder extends \DOMDocument
      *
      * @return \DOMElement|null
      */
-    private function createFromArray(array $data, \DOMElement $domElement = null): ?\DOMElement
+    private function createFromArray(array $data, ?\DOMElement $domElement = null): ?\DOMElement
     {
         foreach ($data as $values) {
             //create the element, and give it a value is it has one

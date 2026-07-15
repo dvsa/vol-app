@@ -21,20 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="application_organisation_person",
- *    indexes={
- *        @ORM\Index(name="ix_application_organisation_person_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_application_organisation_person_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_application_organisation_person_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_application_organisation_person_organisation_id", columns={"organisation_id"}),
- *        @ORM\Index(name="ix_application_organisation_person_original_person_id", columns={"original_person_id"}),
- *        @ORM\Index(name="ix_application_organisation_person_person_id", columns={"person_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'application_organisation_person')]
+#[ORM\Index(name: 'ix_application_organisation_person_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_application_organisation_person_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_application_organisation_person_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_application_organisation_person_organisation_id', columns: ['organisation_id'])]
+#[ORM\Index(name: 'ix_application_organisation_person_original_person_id', columns: ['original_person_id'])]
+#[ORM\Index(name: 'ix_application_organisation_person_person_id', columns: ['person_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractApplicationOrganisationPerson implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -47,101 +43,91 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to person
      *
      * @var \Dvsa\Olcs\Api\Entity\Person\Person
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Person\Person", fetch="LAZY")
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, fetch: 'LAZY')]
     protected $person;
 
     /**
      * Populated if change is an edit of a person record on a licence.
      *
      * @var \Dvsa\Olcs\Api\Entity\Person\Person
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Person\Person", fetch="LAZY")
-     * @ORM\JoinColumn(name="original_person_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'original_person_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, fetch: 'LAZY')]
     protected $originalPerson;
 
     /**
      * Foreign Key to organisation
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
     protected $application;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Action
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="action", length=1, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'action', length: 1, nullable: false)]
     protected $action = '';
 
     /**
      * Populated if org type is other.  For Ltd companies derived from company type.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="position", length=45, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'position', length: 45, nullable: true)]
     protected $position;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

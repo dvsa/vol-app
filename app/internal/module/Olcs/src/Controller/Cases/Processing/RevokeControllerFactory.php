@@ -12,7 +12,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class RevokeControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RevokeController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): RevokeController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         assert($translationHelper instanceof TranslationHelperService);

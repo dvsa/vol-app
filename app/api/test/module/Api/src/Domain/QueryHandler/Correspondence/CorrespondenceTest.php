@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * @author Joshua Curtis <josh.curtis@valtech.co.uk>
  */
-class CorrespondenceTest extends QueryHandlerTestCase
+final class CorrespondenceTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -47,7 +47,7 @@ class CorrespondenceTest extends QueryHandlerTestCase
         /** @var QueryHandler\Result $actual */
         $actual = $this->sut->handleQuery($query);
 
-        static::assertInstanceOf(QueryHandler\Result::class, $actual);
-        static::assertEquals($expect, $actual->serialize());
+        $this->assertInstanceOf(QueryHandler\Result::class, $actual);
+        $this->assertEquals($expect, $actual->serialize());
     }
 }

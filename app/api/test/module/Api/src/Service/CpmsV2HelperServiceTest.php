@@ -28,9 +28,9 @@ use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Olcs\Logging\Log\Logger;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\CpmsV2HelperService::class)]
-class CpmsV2HelperServiceTest extends MockeryTestCase
+final class CpmsV2HelperServiceTest extends MockeryTestCase
 {
-    public const CHEQUE_NR = 100001;
+    public const int CHEQUE_NR = 100001;
 
     /** @var CpmsV2HelperService */
     protected $sut;
@@ -43,11 +43,9 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
 
     protected $identity;
 
-    protected $options;
-
     public function setUp(): void
     {
-        $this->options = m::mock()
+        $options = m::mock()
             ->shouldReceive('getDomain')
             ->andReturn('fake-domain')
             ->getMock();
@@ -55,7 +53,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         // Mock the CPMS client
         $this->cpmsClient = m::mock()
             ->shouldReceive('getOptions')
-            ->andReturn($this->options)
+            ->andReturn($options)
             ->getMock();
 
         $this->feesHelper = m::mock(FeesHelperService::class);
@@ -115,7 +113,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
             ->with('/api/gateway/' . $ref . '/complete', ApiService::SCOPE_CARD, $data)
             ->andReturn('EXPECTED');
 
-        static::assertEquals('EXPECTED', $this->sut->handleResponse($ref, $data));
+        $this->assertEquals('EXPECTED', $this->sut->handleResponse($ref, $data));
     }
 
     public function testHanldeResponseWithNi(): void
@@ -144,7 +142,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
             ->andReturn('EXPECTED')
             ->shouldReceive('getIdenity')->andReturn(4);
 
-        static::assertEquals('EXPECTED', $this->sut->handleResponse($ref, $data, $mockFee));
+        $this->assertEquals('EXPECTED', $this->sut->handleResponse($ref, $data, $mockFee));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetPaymentStatus')]
@@ -161,24 +159,22 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
             ->andReturn($response)
             ->getMock();
 
-        static::assertEquals($expect, $sut->getPaymentStatus($ref, 'fee'));
+        $this->assertEquals($expect, $sut->getPaymentStatus($ref, 'fee'));
     }
 
-    public static function dpTestGetPaymentStatus(): array
+    public static function dpTestGetPaymentStatus(): \Iterator
     {
-        return [
-            [
-                'response' => [
-                    'payment_status' => [
-                        'code' => 'EXPECT',
-                    ],
+        yield [
+            'response' => [
+                'payment_status' => [
+                    'code' => 'EXPECT',
                 ],
-                'expect' => ['code' => 'EXPECT', 'message' => 'No error message from CPMS, no error code from CPMS'],
             ],
-            [
-                'response' => [],
-                'expect' => ['code' => null, 'message' => 'No error message from CPMS, no error code from CPMS'],
-            ],
+            'expect' => ['code' => 'EXPECT', 'message' => 'No error message from CPMS, no error code from CPMS'],
+        ];
+        yield [
+            'response' => [],
+            'expect' => ['code' => null, 'message' => 'No error message from CPMS, no error code from CPMS'],
         ];
     }
 
@@ -204,7 +200,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
             'message' => 'Payment not found, code: 701'
         ];
 
-        static::assertEquals($expected, $sut->getPaymentStatus($ref, 'fee'));
+        $this->assertEquals($expected, $sut->getPaymentStatus($ref, 'fee'));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('miscParamsProvider')]
@@ -220,7 +216,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
 
         $this->mockSchemaIdChange();
 
-        $now = (new DateTime())->format('Y-m-d');
+        $now = new DateTime()->format('Y-m-d');
 
         $expectedParams = array_merge(
             $expectedCustomer,
@@ -292,75 +288,73 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    public static function miscParamsProvider(): array
+    public static function miscParamsProvider(): \Iterator
     {
-        return [
-            'mics payment' => [
-                [
-                    'customer_reference' => 'foo',
-                    'customer_name' => 'bar',
-                    'customer_address' => [
-                        'addressLine1' => 'line1',
-                        'addressLine2' => 'line2',
-                        'addressLine3' => 'line3',
-                        'addressLine4' => 'line4',
-                        'town' => 'town',
-                        'postcode' => 'pc'
-                    ]
-                ],
-                [
-                    'customer_reference' => 'foo',
-                    'customer_name' => 'bar',
-                    'customer_manager_name' => 'bar',
-                    'customer_address' => [
-                        'line_1' => 'line1',
-                        'line_2' => 'line2',
-                        'line_3' => 'line3',
-                        'line_4' => 'line4',
-                        'city' => 'town',
-                        'postcode' => 'pc'
-                    ]
-                ],
-                [
-                    'receiver_reference' => 'foo',
-                    'receiver_name' => 'bar',
-                    'receiver_address' => [
-                        'line_1' => 'line1',
-                        'line_2' => 'line2',
-                        'line_3' => 'line3',
-                        'line_4' => 'line4',
-                        'city' => 'town',
-                        'postcode' => 'pc'
-                    ]
+        yield 'mics payment' => [
+            [
+                'customer_reference' => 'foo',
+                'customer_name' => 'bar',
+                'customer_address' => [
+                    'addressLine1' => 'line1',
+                    'addressLine2' => 'line2',
+                    'addressLine3' => 'line3',
+                    'addressLine4' => 'line4',
+                    'town' => 'town',
+                    'postcode' => 'pc'
                 ]
             ],
-            'usual payment' => [
-                [],
-                [
-                    'customer_reference' => 99,
-                    'customer_name' => 'some organisation',
-                    'customer_manager_name' => 'some organisation',
-                    'customer_address' => [
-                        'line_1' => 'Foo',
-                        'line_2' => null,
-                        'line_3' => null,
-                        'line_4' => null,
-                        'city' => 'Bar',
-                        'postcode' => 'LS9 6NF',
-                    ],
-                ],
-                [
-                    'receiver_reference' => 'OB1234567',
-                    'receiver_name' => 'some organisation',
-                    'receiver_address' => [
-                        'line_1' => 'Foo',
-                        'line_2' => null,
-                        'line_3' => null,
-                        'line_4' => null,
-                        'city' => 'Bar',
-                        'postcode' => 'LS9 6NF',
-                    ],
+            [
+                'customer_reference' => 'foo',
+                'customer_name' => 'bar',
+                'customer_manager_name' => 'bar',
+                'customer_address' => [
+                    'line_1' => 'line1',
+                    'line_2' => 'line2',
+                    'line_3' => 'line3',
+                    'line_4' => 'line4',
+                    'city' => 'town',
+                    'postcode' => 'pc'
                 ]
+            ],
+            [
+                'receiver_reference' => 'foo',
+                'receiver_name' => 'bar',
+                'receiver_address' => [
+                    'line_1' => 'line1',
+                    'line_2' => 'line2',
+                    'line_3' => 'line3',
+                    'line_4' => 'line4',
+                    'city' => 'town',
+                    'postcode' => 'pc'
+                ]
+            ]
+        ];
+        yield 'usual payment' => [
+            [],
+            [
+                'customer_reference' => 99,
+                'customer_name' => 'some organisation',
+                'customer_manager_name' => 'some organisation',
+                'customer_address' => [
+                    'line_1' => 'Foo',
+                    'line_2' => null,
+                    'line_3' => null,
+                    'line_4' => null,
+                    'city' => 'Bar',
+                    'postcode' => 'LS9 6NF',
+                ],
+            ],
+            [
+                'receiver_reference' => 'OB1234567',
+                'receiver_name' => 'some organisation',
+                'receiver_address' => [
+                    'line_1' => 'Foo',
+                    'line_2' => null,
+                    'line_3' => null,
+                    'line_4' => null,
+                    'city' => 'Bar',
+                    'postcode' => 'LS9 6NF',
+                ],
             ]
         ];
     }
@@ -378,7 +372,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
 
         $this->mockSchemaIdChange();
 
-        $now = (new DateTime())->format('Y-m-d');
+        $now = new DateTime()->format('Y-m-d');
 
         $expectedParams = array_merge(
             $expectedCustomer,
@@ -494,7 +488,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
 
         $this->mockSchemaIdChange();
 
-        $now = (new DateTime())->format('Y-m-d');
+        $now = new DateTime()->format('Y-m-d');
 
         $expectedParams = array_merge(
             $expectedCustomer,
@@ -599,7 +593,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
 
         $this->mockSchemaIdChange();
 
-        $now = (new DateTime())->format('Y-m-d');
+        $now = new DateTime()->format('Y-m-d');
 
         $expectedParams = array_merge(
             $expectedCustomer,
@@ -713,7 +707,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
 
         $this->mockSchemaIdChange();
 
-        $now = (new DateTime())->format('Y-m-d');
+        $now = new DateTime()->format('Y-m-d');
 
         $expectedParams = array_merge(
             $expectedCustomer,
@@ -823,12 +817,10 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($authCode, $result);
     }
 
-    public static function authCodeProvider(): array
+    public static function authCodeProvider(): \Iterator
     {
-        return [
-            ['AUTH123'],
-            [null]
-        ];
+        yield ['AUTH123'];
+        yield [null];
     }
 
     public function testGetPaymentAuthCodeWithNi(): void
@@ -900,115 +892,113 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
         $this->assertSame($response, $result);
     }
 
-    public static function reversalProvider(): array
+    public static function reversalProvider(): \Iterator
     {
-        return [
-            'cheque' => [
-                FeeEntity::METHOD_CHEQUE,
-                'CHEQUE_RD',
-                'reversal',
-                [
-                    'customer_reference' => 'foo',
-                    'customer_name' => 'bar',
-                    'customer_manager_name' => 'bar',
-                    'customer_address' => [
-                        'line_1' => 'line1',
-                        'line_2' => 'line2',
-                        'line_3' => 'line3',
-                        'line_4' => 'line4',
-                        'city' => 'town',
-                        'postcode' => 'postcode',
-                    ]
-                ],
-                [
-                    'customer_reference' => 'foo',
-                    'customer_name' => 'bar',
-                    'customer_address' => [
-                        'addressLine1' => 'line1',
-                        'addressLine2' => 'line2',
-                        'addressLine3' => 'line3',
-                        'addressLine4' => 'line4',
-                        'town' => 'town',
-                        'postcode' => 'postcode',
-                    ]
+        yield 'cheque' => [
+            FeeEntity::METHOD_CHEQUE,
+            'CHEQUE_RD',
+            'reversal',
+            [
+                'customer_reference' => 'foo',
+                'customer_name' => 'bar',
+                'customer_manager_name' => 'bar',
+                'customer_address' => [
+                    'line_1' => 'line1',
+                    'line_2' => 'line2',
+                    'line_3' => 'line3',
+                    'line_4' => 'line4',
+                    'city' => 'town',
+                    'postcode' => 'postcode',
                 ]
             ],
-            'cash' => [
-                FeeEntity::METHOD_CASH,
-                'CASH',
-                'reversal',
-                [
-                    'customer_reference' => 99,
-                    'customer_name' => 'some organisation',
-                    'customer_manager_name' => 'some organisation',
-                    'customer_address' => [
-                        'line_1' => 'Foo',
-                        'line_2' => null,
-                        'line_3' => null,
-                        'line_4' => null,
-                        'city' => 'Bar',
-                        'postcode' => 'LS9 6NF',
-                    ],
+            [
+                'customer_reference' => 'foo',
+                'customer_name' => 'bar',
+                'customer_address' => [
+                    'addressLine1' => 'line1',
+                    'addressLine2' => 'line2',
+                    'addressLine3' => 'line3',
+                    'addressLine4' => 'line4',
+                    'town' => 'town',
+                    'postcode' => 'postcode',
+                ]
+            ]
+        ];
+        yield 'cash' => [
+            FeeEntity::METHOD_CASH,
+            'CASH',
+            'reversal',
+            [
+                'customer_reference' => 99,
+                'customer_name' => 'some organisation',
+                'customer_manager_name' => 'some organisation',
+                'customer_address' => [
+                    'line_1' => 'Foo',
+                    'line_2' => null,
+                    'line_3' => null,
+                    'line_4' => null,
+                    'city' => 'Bar',
+                    'postcode' => 'LS9 6NF',
                 ],
-                []
             ],
-            'po' => [
-                FeeEntity::METHOD_POSTAL_ORDER,
-                'POSTAL_ORDER',
-                'reversal',
-                [
-                    'customer_reference' => 99,
-                    'customer_name' => 'some organisation',
-                    'customer_manager_name' => 'some organisation',
-                    'customer_address' => [
-                        'line_1' => 'Foo',
-                        'line_2' => null,
-                        'line_3' => null,
-                        'line_4' => null,
-                        'city' => 'Bar',
-                        'postcode' => 'LS9 6NF',
-                    ],
+            []
+        ];
+        yield 'po' => [
+            FeeEntity::METHOD_POSTAL_ORDER,
+            'POSTAL_ORDER',
+            'reversal',
+            [
+                'customer_reference' => 99,
+                'customer_name' => 'some organisation',
+                'customer_manager_name' => 'some organisation',
+                'customer_address' => [
+                    'line_1' => 'Foo',
+                    'line_2' => null,
+                    'line_3' => null,
+                    'line_4' => null,
+                    'city' => 'Bar',
+                    'postcode' => 'LS9 6NF',
                 ],
-                []
             ],
-            'card digital' => [
-                FeeEntity::METHOD_CARD_ONLINE,
-                'CHARGE_BACK',
-                'chargeback',
-                [
-                    'customer_reference' => 99,
-                    'customer_name' => 'some organisation',
-                    'customer_manager_name' => 'some organisation',
-                    'customer_address' => [
-                        'line_1' => 'Foo',
-                        'line_2' => null,
-                        'line_3' => null,
-                        'line_4' => null,
-                        'city' => 'Bar',
-                        'postcode' => 'LS9 6NF',
-                    ],
+            []
+        ];
+        yield 'card digital' => [
+            FeeEntity::METHOD_CARD_ONLINE,
+            'CHARGE_BACK',
+            'chargeback',
+            [
+                'customer_reference' => 99,
+                'customer_name' => 'some organisation',
+                'customer_manager_name' => 'some organisation',
+                'customer_address' => [
+                    'line_1' => 'Foo',
+                    'line_2' => null,
+                    'line_3' => null,
+                    'line_4' => null,
+                    'city' => 'Bar',
+                    'postcode' => 'LS9 6NF',
                 ],
-                []
             ],
-            'card assisted digital' => [
-                FeeEntity::METHOD_CARD_OFFLINE,
-                'CHARGE_BACK',
-                'chargeback',
-                [
-                    'customer_reference' => 99,
-                    'customer_name' => 'some organisation',
-                    'customer_manager_name' => 'some organisation',
-                    'customer_address' => [
-                        'line_1' => 'Foo',
-                        'line_2' => null,
-                        'line_3' => null,
-                        'line_4' => null,
-                        'city' => 'Bar',
-                        'postcode' => 'LS9 6NF',
-                    ],
+            []
+        ];
+        yield 'card assisted digital' => [
+            FeeEntity::METHOD_CARD_OFFLINE,
+            'CHARGE_BACK',
+            'chargeback',
+            [
+                'customer_reference' => 99,
+                'customer_name' => 'some organisation',
+                'customer_manager_name' => 'some organisation',
+                'customer_address' => [
+                    'line_1' => 'Foo',
+                    'line_2' => null,
+                    'line_3' => null,
+                    'line_4' => null,
+                    'city' => 'Bar',
+                    'postcode' => 'LS9 6NF',
                 ],
-                []
             ],
+            []
         ];
     }
 
@@ -1904,7 +1894,7 @@ class CpmsV2HelperServiceTest extends MockeryTestCase
 
     public function testGetSetInvoicePrefix(): void
     {
-        $this->assertSame(null, $this->sut->getInvoicePrefix());
+        $this->assertNull($this->sut->getInvoicePrefix());
         $this->sut->setInvoicePrefix('PREFIX');
         $this->assertSame('PREFIX', $this->sut->getInvoicePrefix());
     }

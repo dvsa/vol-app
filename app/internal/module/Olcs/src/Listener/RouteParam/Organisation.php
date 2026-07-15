@@ -118,7 +118,7 @@ class Organisation implements ListenerAggregateInterface, FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Organisation
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Organisation
     {
         $this->annotationBuilder = $container->get('TransferAnnotationBuilder');
         $this->queryService = $container->get('QueryService');

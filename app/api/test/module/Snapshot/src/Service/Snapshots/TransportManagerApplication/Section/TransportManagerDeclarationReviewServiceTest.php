@@ -18,13 +18,14 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class TransportManagerDeclarationReviewServiceTest extends MockeryTestCase
+final class TransportManagerDeclarationReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
     /** @var TranslatorInterface */
     protected $mockTranslator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);
@@ -80,73 +81,71 @@ class TransportManagerDeclarationReviewServiceTest extends MockeryTestCase
         $this->assertEquals(['markup' => $expectedMarkup], $this->sut->getConfig($tma));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [
-                true,
-                'Y',
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                'markup-tma-declaration-internal-ni',
-                'tma-declaration.residency-clause.lcat_gv',
-                'tma-declaration.role-clause.lcat_gv'
-            ],
-            [
-                true,
-                'N',
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                'markup-tma-declaration-internal-gb',
-                'tma-declaration.residency-clause.lcat_gv',
-                'tma-declaration.role-clause.lcat_gv'
-            ],
-            [
-                false,
-                'Y',
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                'markup-tma-declaration-external-ni',
-                'tma-declaration.residency-clause.lcat_gv',
-                'tma-declaration.role-clause.lcat_gv'
-            ],
-            [
-                false,
-                'N',
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                'markup-tma-declaration-external-gb',
-                'tma-declaration.residency-clause.lcat_gv',
-                'tma-declaration.role-clause.lcat_gv'
-            ],
-            [
-                true,
-                'Y',
-                Licence::LICENCE_CATEGORY_PSV,
-                'markup-tma-declaration-internal-ni',
-                'tma-declaration.residency-clause.lcat_psv',
-                'tma-declaration.role-clause.lcat_psv'
-            ],
-            [
-                true,
-                'N',
-                Licence::LICENCE_CATEGORY_PSV,
-                'markup-tma-declaration-internal-gb',
-                'tma-declaration.residency-clause.lcat_psv',
-                'tma-declaration.role-clause.lcat_psv'
-            ],
-            [
-                false,
-                'Y',
-                Licence::LICENCE_CATEGORY_PSV,
-                'markup-tma-declaration-external-ni',
-                'tma-declaration.residency-clause.lcat_psv',
-                'tma-declaration.role-clause.lcat_psv'
-            ],
-            [
-                false,
-                'N',
-                Licence::LICENCE_CATEGORY_PSV,
-                'markup-tma-declaration-external-gb',
-                'tma-declaration.residency-clause.lcat_psv',
-                'tma-declaration.role-clause.lcat_psv'
-            ],
+        yield [
+            true,
+            'Y',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            'markup-tma-declaration-internal-ni',
+            'tma-declaration.residency-clause.lcat_gv',
+            'tma-declaration.role-clause.lcat_gv'
+        ];
+        yield [
+            true,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            'markup-tma-declaration-internal-gb',
+            'tma-declaration.residency-clause.lcat_gv',
+            'tma-declaration.role-clause.lcat_gv'
+        ];
+        yield [
+            false,
+            'Y',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            'markup-tma-declaration-external-ni',
+            'tma-declaration.residency-clause.lcat_gv',
+            'tma-declaration.role-clause.lcat_gv'
+        ];
+        yield [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            'markup-tma-declaration-external-gb',
+            'tma-declaration.residency-clause.lcat_gv',
+            'tma-declaration.role-clause.lcat_gv'
+        ];
+        yield [
+            true,
+            'Y',
+            Licence::LICENCE_CATEGORY_PSV,
+            'markup-tma-declaration-internal-ni',
+            'tma-declaration.residency-clause.lcat_psv',
+            'tma-declaration.role-clause.lcat_psv'
+        ];
+        yield [
+            true,
+            'N',
+            Licence::LICENCE_CATEGORY_PSV,
+            'markup-tma-declaration-internal-gb',
+            'tma-declaration.residency-clause.lcat_psv',
+            'tma-declaration.role-clause.lcat_psv'
+        ];
+        yield [
+            false,
+            'Y',
+            Licence::LICENCE_CATEGORY_PSV,
+            'markup-tma-declaration-external-ni',
+            'tma-declaration.residency-clause.lcat_psv',
+            'tma-declaration.role-clause.lcat_psv'
+        ];
+        yield [
+            false,
+            'N',
+            Licence::LICENCE_CATEGORY_PSV,
+            'markup-tma-declaration-external-gb',
+            'tma-declaration.residency-clause.lcat_psv',
+            'tma-declaration.role-clause.lcat_psv'
         ];
     }
 }

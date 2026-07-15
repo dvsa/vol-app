@@ -19,7 +19,7 @@ use Mockery as m;
 /**
  * @see ResetPassword
  */
-class ResetPasswordTest extends AbstractCommandHandlerTestCase
+final class ResetPasswordTest extends AbstractCommandHandlerTestCase
 {
     private m\MockInterface $adapter;
     private m\MockInterface $eventHistoryCreator;

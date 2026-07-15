@@ -13,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class PreviousApplicationPublicationNoTest
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PreviousLicencePublicationNoTest extends MockeryTestCase
+final class PreviousLicencePublicationNoTest extends MockeryTestCase
 {
     public function testProvide(): void
     {

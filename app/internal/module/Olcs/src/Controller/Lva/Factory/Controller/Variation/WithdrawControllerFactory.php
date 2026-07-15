@@ -22,7 +22,7 @@ class WithdrawControllerFactory implements FactoryInterface
      * @return WithdrawController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): WithdrawController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): WithdrawController
     {
 
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

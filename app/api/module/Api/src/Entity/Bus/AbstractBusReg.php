@@ -22,30 +22,24 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="bus_reg",
- *    indexes={
- *        @ORM\Index(name="ix_bus_reg_bus_notice_period_id", columns={"bus_notice_period_id"}),
- *        @ORM\Index(name="ix_bus_reg_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_bus_reg_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_bus_reg_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_bus_reg_parent_id", columns={"parent_id"}),
- *        @ORM\Index(name="ix_bus_reg_revert_status", columns={"revert_status"}),
- *        @ORM\Index(name="ix_bus_reg_status", columns={"status"}),
- *        @ORM\Index(name="ix_bus_reg_subsidised", columns={"subsidised"}),
- *        @ORM\Index(name="ix_bus_reg_withdrawn_reason", columns={"withdrawn_reason"}),
- *        @ORM\Index(name="uk_bus_reg_olbs_key", columns={"olbs_key"}),
- *        @ORM\Index(name="uk_bus_reg_reg_no_variation_no_deleted_date", columns={"reg_no", "variation_no", "deleted_date"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_bus_reg_olbs_key", columns={"olbs_key"}),
- *        @ORM\UniqueConstraint(name="uk_bus_reg_reg_no_variation_no_deleted_date", columns={"reg_no", "variation_no", "deleted_date"})
- *    }
- * )
  */
+#[ORM\Table(name: 'bus_reg')]
+#[ORM\Index(name: 'ix_bus_reg_bus_notice_period_id', columns: ['bus_notice_period_id'])]
+#[ORM\Index(name: 'ix_bus_reg_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_bus_reg_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_bus_reg_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_bus_reg_parent_id', columns: ['parent_id'])]
+#[ORM\Index(name: 'ix_bus_reg_revert_status', columns: ['revert_status'])]
+#[ORM\Index(name: 'ix_bus_reg_status', columns: ['status'])]
+#[ORM\Index(name: 'ix_bus_reg_subsidised', columns: ['subsidised'])]
+#[ORM\Index(name: 'ix_bus_reg_withdrawn_reason', columns: ['withdrawn_reason'])]
+#[ORM\Index(name: 'uk_bus_reg_olbs_key', columns: ['olbs_key'])]
+#[ORM\Index(name: 'uk_bus_reg_reg_no_variation_no_deleted_date', columns: ['reg_no', 'variation_no', 'deleted_date'])]
+#[ORM\UniqueConstraint(name: 'uk_bus_reg_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_bus_reg_reg_no_variation_no_deleted_date', columns: ['reg_no', 'variation_no', 'deleted_date'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -59,676 +53,586 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Parent
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
     protected $parent;
 
     /**
      * Status
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * RevertStatus
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="revert_status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'revert_status', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $revertStatus;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Scottish or other
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusNoticePeriod
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusNoticePeriod", fetch="LAZY")
-     * @ORM\JoinColumn(name="bus_notice_period_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'bus_notice_period_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusNoticePeriod::class, fetch: 'LAZY')]
     protected $busNoticePeriod;
 
     /**
      * Yes, No, In-Part
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="subsidised", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'subsidised', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $subsidised;
 
     /**
      * WithdrawnReason
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="withdrawn_reason", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'withdrawn_reason', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $withdrawnReason;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Used for reporting on SLAs. Updated whenever state changes.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="status_change_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'status_change_date', nullable: true)]
     protected $statusChangeDate;
 
     /**
      * Increases by one for each registration added to licence
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="route_no", nullable=false)
      */
+    #[ORM\Column(type: 'smallint', name: 'route_no', nullable: false)]
     protected $routeNo = 0;
 
     /**
      * lic_no plus slash plus route_no
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="reg_no", length=70, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'reg_no', length: 70, nullable: false)]
     protected $regNo = '';
 
     /**
      * Number on front of bus
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="service_no", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'service_no', length: 70, nullable: true)]
     protected $serviceNo;
 
     /**
      * Start point
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="start_point", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'start_point', length: 100, nullable: true)]
     protected $startPoint;
 
     /**
      * Finish point
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="finish_point", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'finish_point', length: 100, nullable: true)]
     protected $finishPoint;
 
     /**
      * Via
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="via", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'via', length: 255, nullable: true)]
     protected $via;
 
     /**
      * Other details
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="other_details", length=800, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'other_details', length: 800, nullable: true)]
     protected $otherDetails;
 
     /**
      * Received date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="received_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'received_date', nullable: true)]
     protected $receivedDate;
 
     /**
      * Effective date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="effective_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'effective_date', nullable: true)]
     protected $effectiveDate;
 
     /**
      * End date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="end_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'end_date', nullable: true)]
     protected $endDate;
 
     /**
      * Application complete date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="application_complete_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'application_complete_date', nullable: true)]
     protected $applicationCompleteDate;
 
     /**
      * Application late.  Enables short notice detail entry
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_short_notice", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_short_notice', nullable: false, options: ['default' => 0])]
     protected $isShortNotice = 0;
 
     /**
      * useAllStops
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="use_all_stops", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'use_all_stops', nullable: false, options: ['default' => 0])]
     protected $useAllStops = 0;
 
     /**
      * Service reverses, turns around etc.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="has_manoeuvre", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'has_manoeuvre', nullable: false, options: ['default' => 0])]
     protected $hasManoeuvre = 0;
 
     /**
      * Manoeuvre detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="manoeuvre_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'manoeuvre_detail', length: 255, nullable: true)]
     protected $manoeuvreDetail;
 
     /**
      * Needs a new bus stop
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="need_new_stop", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'need_new_stop', nullable: false, options: ['default' => 0])]
     protected $needNewStop = 0;
 
     /**
      * New stop detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="new_stop_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'new_stop_detail', length: 255, nullable: true)]
     protected $newStopDetail;
 
     /**
      * Stops at not predefined stop.  i.e. waved down by user
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="has_not_fixed_stop", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'has_not_fixed_stop', nullable: false, options: ['default' => 0])]
     protected $hasNotFixedStop = 0;
 
     /**
      * Not fixed stop detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="not_fixed_stop_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'not_fixed_stop_detail', length: 255, nullable: true)]
     protected $notFixedStopDetail;
 
     /**
      * Subsidy detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="subsidy_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'subsidy_detail', length: 255, nullable: true)]
     protected $subsidyDetail;
 
     /**
      * timetableAcceptable
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="timetable_acceptable", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'timetable_acceptable', nullable: false, options: ['default' => 0])]
     protected $timetableAcceptable = 0;
 
     /**
      * mapSupplied
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="map_supplied", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'map_supplied', nullable: false, options: ['default' => 0])]
     protected $mapSupplied = 0;
 
     /**
      * Route description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="route_description", length=1000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'route_description', length: 1000, nullable: true)]
     protected $routeDescription;
 
     /**
      * copiedToLaPte
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="copied_to_la_pte", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'copied_to_la_pte', nullable: false, options: ['default' => 0])]
     protected $copiedToLaPte = 0;
 
     /**
      * laShortNote
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="la_short_note", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'la_short_note', nullable: false, options: ['default' => 0])]
     protected $laShortNote = 0;
 
     /**
      * applicationSigned
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="application_signed", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'application_signed', nullable: false, options: ['default' => 0])]
     protected $applicationSigned = 0;
 
     /**
      * Increments for each variation
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="variation_no", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'smallint', name: 'variation_no', nullable: false, options: ['default' => 0])]
     protected $variationNo = 0;
 
     /**
      * opNotifiedLaPte
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="op_notified_la_pte", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'op_notified_la_pte', nullable: false, options: ['default' => 0])]
     protected $opNotifiedLaPte = 0;
 
     /**
      * Stopping arrangements
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="stopping_arrangements", length=800, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'stopping_arrangements', length: 800, nullable: true)]
     protected $stoppingArrangements;
 
     /**
      * trcConditionChecked
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="trc_condition_checked", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'trc_condition_checked', nullable: false, options: ['default' => 0])]
     protected $trcConditionChecked = 0;
 
     /**
      * Trc notes
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="trc_notes", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'trc_notes', length: 255, nullable: true)]
     protected $trcNotes;
 
     /**
      * Organisation email
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="organisation_email", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'organisation_email', length: 255, nullable: true)]
     protected $organisationEmail;
 
     /**
      * Was created through transxchange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_txc_app", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_txc_app', nullable: false, options: ['default' => 0])]
     protected $isTxcApp = 0;
 
     /**
      * ebsrRefresh
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="ebsr_refresh", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'ebsr_refresh', nullable: false, options: ['default' => 0])]
     protected $ebsrRefresh = 0;
 
     /**
      * Txc app type
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="txc_app_type", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'txc_app_type', length: 20, nullable: true)]
     protected $txcAppType;
 
     /**
      * Reason cancelled
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="reason_cancelled", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'reason_cancelled', length: 255, nullable: true)]
     protected $reasonCancelled;
 
     /**
      * Reason refused
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="reason_refused", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'reason_refused', length: 255, nullable: true)]
     protected $reasonRefused;
 
     /**
      * Reason sn refused
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="reason_sn_refused", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'reason_sn_refused', length: 255, nullable: true)]
     protected $reasonSnRefused;
 
     /**
      * shortNoticeRefused
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="short_notice_refused", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'short_notice_refused', nullable: false, options: ['default' => 0])]
     protected $shortNoticeRefused = 0;
 
     /**
      * isQualityPartnership
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_quality_partnership", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_quality_partnership', nullable: false, options: ['default' => 0])]
     protected $isQualityPartnership = 0;
 
     /**
      * Quality partnership details
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="quality_partnership_details", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'quality_partnership_details', length: 4000, nullable: true)]
     protected $qualityPartnershipDetails;
 
     /**
      * qualityPartnershipFacilitiesUsed
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="quality_partnership_facilities_used", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'quality_partnership_facilities_used', nullable: false, options: ['default' => 0])]
     protected $qualityPartnershipFacilitiesUsed = 0;
 
     /**
      * isQualityContract
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_quality_contract", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_quality_contract', nullable: false, options: ['default' => 0])]
     protected $isQualityContract = 0;
 
     /**
      * Quality contract details
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="quality_contract_details", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'quality_contract_details', length: 4000, nullable: true)]
     protected $qualityContractDetails;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * BusServiceTypes
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusServiceType", inversedBy="busRegs", fetch="LAZY")
-     * @ORM\JoinTable(name="bus_reg_bus_service_type",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="bus_service_type_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'bus_reg_bus_service_type')]
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'bus_service_type_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusServiceType::class, inversedBy: 'busRegs', fetch: 'LAZY')]
     protected $busServiceTypes;
 
     /**
      * LocalAuthoritys
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Bus\LocalAuthority", inversedBy="busRegs", fetch="LAZY")
-     * @ORM\JoinTable(name="bus_reg_local_auth",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="local_authority_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'bus_reg_local_auth')]
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'local_authority_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority::class, inversedBy: 'busRegs', fetch: 'LAZY')]
     protected $localAuthoritys;
 
     /**
      * TrafficAreas
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", inversedBy="busRegs", fetch="LAZY")
-     * @ORM\JoinTable(name="bus_reg_traffic_area",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'bus_reg_traffic_area')]
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'traffic_area_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, inversedBy: 'busRegs', fetch: 'LAZY')]
     protected $trafficAreas;
 
     /**
      * VariationReasons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="busRegs", fetch="LAZY")
-     * @ORM\JoinTable(name="bus_reg_variation_reason",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="variation_reason_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'bus_reg_variation_reason')]
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'variation_reason_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'busRegs', fetch: 'LAZY')]
     protected $variationReasons;
 
     /**
      * OtherServices
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusRegOtherService", mappedBy="busReg", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusRegOtherService::class, mappedBy: 'busReg', cascade: ['persist'])]
     protected $otherServices;
 
     /**
      * ReadAudits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusRegReadAudit", mappedBy="busReg")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusRegReadAudit::class, mappedBy: 'busReg')]
     protected $readAudits;
 
     /**
      * ShortNotice
      *
      * @var \Dvsa\Olcs\Api\Entity\BusShortNotice
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusShortNotice", mappedBy="busReg", cascade={"persist"})
      */
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusShortNotice::class, mappedBy: 'busReg', cascade: ['persist'])]
     protected $shortNotice;
 
     /**
      * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", mappedBy="busReg")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'busReg')]
     protected $documents;
 
     /**
      * EbsrSubmissions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission", mappedBy="busReg")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission::class, mappedBy: 'busReg')]
     protected $ebsrSubmissions;
 
     /**
      * Fees
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Fee\Fee", mappedBy="busReg")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, mappedBy: 'busReg')]
     protected $fees;
 
     /**
      * PublicationLinks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Publication\PublicationLink", mappedBy="busReg")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationLink::class, mappedBy: 'busReg')]
     protected $publicationLinks;
 
     /**
      * Tasks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Task\Task", mappedBy="busReg")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, mappedBy: 'busReg')]
     protected $tasks;
 
     /**
      * TxcInboxs
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Ebsr\TxcInbox", mappedBy="busReg", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Ebsr\TxcInbox::class, mappedBy: 'busReg', cascade: ['persist'])]
     protected $txcInboxs;
 
     /**

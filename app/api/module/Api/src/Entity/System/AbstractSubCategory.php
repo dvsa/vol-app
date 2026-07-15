@@ -21,17 +21,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="sub_category",
- *    indexes={
- *        @ORM\Index(name="ix_sub_category_category_id", columns={"category_id"}),
- *        @ORM\Index(name="ix_sub_category_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_sub_category_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'sub_category')]
+#[ORM\Index(name: 'ix_sub_category_category_id', columns: ['category_id'])]
+#[ORM\Index(name: 'ix_sub_category_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_sub_category_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractSubCategory implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -44,106 +40,95 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
      * Primary key
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
     protected $id = 0;
 
     /**
      * Foreign Key to category
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Category
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Category", fetch="LAZY")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Category::class, fetch: 'LAZY')]
     protected $category;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * e.g. GV79 Form is a sub cat of application category
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="sub_category_name", length=64, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'sub_category_name', length: 64, nullable: false)]
     protected $subCategoryName = '';
 
     /**
      * Category used for scanning documents
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_scan", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_scan', nullable: false, options: ['default' => 0])]
     protected $isScan = 0;
 
     /**
      * Is a valid document category
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_doc", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_doc', nullable: false, options: ['default' => 0])]
     protected $isDoc = 0;
 
     /**
      * Is a valid task category
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_task", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_task', nullable: false, options: ['default' => 0])]
     protected $isTask = 0;
 
     /**
      * User can enter freetext description - applied to task etc when creating.
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_free_text", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_free_text', nullable: false, options: ['default' => 0])]
     protected $isFreeText = 0;
 
     /**
      * Is messaging
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_messaging", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_messaging', nullable: false, options: ['default' => 0])]
     protected $isMessaging = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

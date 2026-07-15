@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class UpdateOperatingCentresStatusTest extends AbstractUpdateStatusTestCase
+final class UpdateOperatingCentresStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'OperatingCentres';
 

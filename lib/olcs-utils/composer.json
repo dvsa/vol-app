@@ -13,7 +13,7 @@
     }
   ],
   "require": {
-    "php": "~8.2.0 || ~8.3.0",
+    "php": "~8.4.0",
     "laminas/laminas-view": "^2.41",
     "laminas/laminas-servicemanager": "^3.23",
     "laminas/laminas-i18n": "^2.30",
@@ -34,9 +34,9 @@
   },
   "require-dev": {
     "olcs/olcs-logging": "^9",
-    "phpunit/phpunit": "^9.6",
-    "johnkary/phpunit-speedtrap": "^4.0",
-    "bamarni/composer-bin-plugin": "^1.8.2"
+    "phpunit/phpunit": "^13.0",
+    "bamarni/composer-bin-plugin": "^1.8.2",
+    "rector/rector": "^2.3"
   },
   "minimum-stability": "dev",
   "prefer-stable": true,

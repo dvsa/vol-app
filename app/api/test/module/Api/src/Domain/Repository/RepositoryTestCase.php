@@ -414,7 +414,7 @@ class RepositoryTestCase extends MockeryTestCase
      */
     protected function setUpServiceManager(): ServiceManager
     {
-        return (new ServiceManagerBuilder($this->setUpDefaultServices(...)))->build();
+        return new ServiceManagerBuilder($this->setUpDefaultServices(...))->build();
     }
 
     /**

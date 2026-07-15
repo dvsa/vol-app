@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpApplication\ApplicationStep as ApplicationStepQ
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class ApplicationStepTest extends QueryHandlerTestCase
+final class ApplicationStepTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

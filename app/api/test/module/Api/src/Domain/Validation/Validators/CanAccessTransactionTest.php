@@ -9,10 +9,8 @@ use Dvsa\Olcs\Api\Entity\Fee\Transaction;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Validation\Validators\CanAccessTransaction
- */
-class CanAccessTransactionTest extends AbstractValidatorsTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Validators\CanAccessTransaction::class)]
+final class CanAccessTransactionTest extends AbstractValidatorsTestCase
 {
     /**
      * @var CanAccessTransaction

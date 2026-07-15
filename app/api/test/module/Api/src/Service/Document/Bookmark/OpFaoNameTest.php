@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\OpFaoName;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class OpFaoNameTest extends \PHPUnit\Framework\TestCase
+final class OpFaoNameTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

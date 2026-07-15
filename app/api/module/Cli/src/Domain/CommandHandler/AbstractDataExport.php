@@ -66,11 +66,11 @@ abstract class AbstractDataExport extends AbstractCommandHandler
 
         while (($row = $dbalResult->fetchAssociative()) !== false) {
             if (!$firstRow) {
-                fputcsv($fh, array_keys($row));
+                fputcsv($fh, array_keys($row), ',', '"', '\\');
                 $firstRow = true;
             }
 
-            fputcsv($fh, $row);
+            fputcsv($fh, $row, ',', '"', '\\');
         }
 
         fclose($fh);
@@ -103,8 +103,8 @@ abstract class AbstractDataExport extends AbstractCommandHandler
                 $this->result->addMessage('Creating CSV file: ' . $filePath);
                 $fh = fopen($filePath, 'w');
 
-                fputcsv($fh, array_keys($row));
-                fputcsv($fh, $row);
+                fputcsv($fh, array_keys($row), ',', '"', '\\');
+                fputcsv($fh, $row, ',', '"', '\\');
 
                 $fileHandles[$key] = $fh;
                 $filePaths[$key] = $filePath;
@@ -113,7 +113,7 @@ abstract class AbstractDataExport extends AbstractCommandHandler
             }
 
             $fh = $fileHandles[$key];
-            fputcsv($fh, $row);
+            fputcsv($fh, $row, ',', '"', '\\');
         }
 
         foreach ($fileHandles as $key => $fh) {
@@ -141,11 +141,11 @@ abstract class AbstractDataExport extends AbstractCommandHandler
         while (($row = $dbalResult->fetchAssociative()) !== false) {
             if (!$titleAdded) {
                 //  add title & first row
-                fputcsv($handle, array_keys($row));
+                fputcsv($handle, array_keys($row), ',', '"', '\\');
                 $titleAdded = true;
             }
 
-            fputcsv($handle, $row);
+            fputcsv($handle, $row, ',', '"', '\\');
         }
 
         rewind($handle);
@@ -221,15 +221,18 @@ abstract class AbstractDataExport extends AbstractCommandHandler
     protected function uploadToS3($filePath)
     {
         $fileName = basename((string) $filePath);
-        $fileResource = fopen($filePath, 'r');
 
+        // Hand the SDK the file path rather than an open resource: since the
+        // guzzlehttp/psr7 2.12 / aws-sdk bump, a resource passed as Body is
+        // closed by the SDK when the request completes, so a caller-side
+        // fclose() fatals with a TypeError (killed the monthly DfT
+        // international goods export). With SourceFile the SDK opens and
+        // closes the file itself.
         $this->s3Client->putObject([
-            'Bucket' => $this->s3Bucket,
-            'Key'    => $this->path . '/' . $fileName,
-            'Body'   => $fileResource,
+            'Bucket'     => $this->s3Bucket,
+            'Key'        => $this->path . '/' . $fileName,
+            'SourceFile' => $filePath,
         ]);
-
-        fclose($fileResource);
 
         $this->result->addMessage('Uploaded file to S3: ' . $fileName);
     }

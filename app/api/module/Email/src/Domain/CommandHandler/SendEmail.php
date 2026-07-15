@@ -205,8 +205,12 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
         $bcc = $command->getBcc();
         $docs = $command->getDocs();
 
-        if ($this->getSendAllMailTo()) {
-            $to = $this->getSendAllMailTo();
+        // Treat a blank/whitespace-only value or the literal "null" sentinel as "disabled": SSM String
+        // params cannot be empty, so non-prod envs opt out with " " or "null" rather than an empty
+        // string — without trimming, those truthy values would become the redirect recipient (VOL-7240).
+        $sendAllMailTo = trim((string)$this->getSendAllMailTo());
+        if ($sendAllMailTo !== '' && strcasecmp($sendAllMailTo, 'null') !== 0) {
+            $to = $sendAllMailTo;
             /**
              * IMPORTANT CC gets emptied when we have configured emails to be sent to 1 email address
              */
@@ -226,7 +230,7 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
 
         $plainBody = $command->getPlainBody() !== null
             ? $this->replaceUris($command->getPlainBody())
-            : ($hasMarkdownBody ? $command->getMarkdownBody() : '');
+            : ($hasMarkdownBody ? $this->replaceUris((string) $command->getMarkdownBody()) : '');
         $htmlBody = $command->getHtmlBody();
 
         if ($htmlBody !== null) {
@@ -290,7 +294,9 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
             'templateKey' => $command->getTemplateKey(),
             'locale' => $command->getLocale(),
             'personalisation' => $command->getPersonalisation(),
-            'markdownBody' => $command->getMarkdownBody(),
+            'markdownBody' => $command->getMarkdownBody() !== null
+                ? $this->replaceUris($command->getMarkdownBody())
+                : null,
             'attachments' => $attachments,
         ];
     }
@@ -344,7 +350,7 @@ class SendEmail extends AbstractCommandHandler implements UploaderAwareInterface
         );
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $config = $container->get('config');
         if (isset($config['email']['from_name'])) {

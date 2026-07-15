@@ -20,8 +20,9 @@ use Mockery as m;
  *
  * @author Jason de Jonge <jason.de-jonge@capgemini.co.uk>
  */
-class IrhpPermitStockTest extends RepositoryTestCase
+final class IrhpPermitStockTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(IrhpPermitStock::class);
@@ -154,13 +155,11 @@ class IrhpPermitStockTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public static function dpFetchOpenBilateralStocksByCountryNotMorocco(): array
+    public static function dpFetchOpenBilateralStocksByCountryNotMorocco(): \Iterator
     {
-        return [
-            [Country::ID_NORWAY],
-            [Country::ID_BELARUS],
-            [Country::ID_GEORGIA],
-        ];
+        yield [Country::ID_NORWAY];
+        yield [Country::ID_BELARUS];
+        yield [Country::ID_GEORGIA];
     }
 
     public function testFetchOpenBilateralStocksByCountryMorocco(): void

@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\Result;
 /**
  * Class GetProcessedListTest
  */
-class GetProcessedListTest extends QueryHandlerTestCase
+final class GetProcessedListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

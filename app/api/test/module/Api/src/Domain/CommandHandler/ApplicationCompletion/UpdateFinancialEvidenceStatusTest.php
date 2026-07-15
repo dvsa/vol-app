@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateFinancialEvidenceStatusTest extends AbstractUpdateStatusTestCase
+final class UpdateFinancialEvidenceStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'FinancialEvidence';
 

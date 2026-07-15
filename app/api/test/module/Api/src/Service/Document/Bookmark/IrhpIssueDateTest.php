@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\IrhpIssueDate;
  *
  * @author Henry White <henry.white@capgemini.com>
  */
-class IrhpIssueDateTest extends SingleValueTestAbstract
+final class IrhpIssueDateTest extends SingleValueTestAbstract
 {
     public const SUT_CLASS_NAME = IrhpIssueDate::class;
 }

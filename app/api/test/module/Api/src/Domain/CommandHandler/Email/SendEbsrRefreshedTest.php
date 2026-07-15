@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrRefreshed;
  * @author Craig R <uk@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
-class SendEbsrRefreshedTest extends SendEbsrEmailTestAbstract
+final class SendEbsrRefreshedTest extends SendEbsrEmailTestAbstract
 {
     protected $template = 'ebsr-refreshed';
     protected $sutClass = \Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendEbsrRefreshed::class;

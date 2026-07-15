@@ -45,21 +45,21 @@ class DefaultTypeHandler extends AbstractTypeHandler
         $annotations = [];
 
         // Add type
-        $options[] = 'type="' . $type . '"';
+        $options[] = "type: '" . $type . "'";
 
         // Add name
-        $options[] = 'name="' . $column->getName() . '"';
+        $options[] = "name: '" . $column->getName() . "'";
 
         // Add length for string types
         if (in_array($type, ['string']) && $column->getLength() !== null) {
-            $options[] = 'length=' . $column->getLength();
+            $options[] = 'length: ' . $column->getLength();
         }
 
         // Add nullable
         if ($column->isNullable()) {
-            $options[] = 'nullable=true';
+            $options[] = 'nullable: true';
         } else {
-            $options[] = 'nullable=false';
+            $options[] = 'nullable: false';
         }
 
         // Add default value as option
@@ -71,39 +71,43 @@ class DefaultTypeHandler extends AbstractTypeHandler
             if ($doctrineType === 'boolean' && is_string($default)) {
                 // For boolean columns, use numeric values (0 or 1) for compatibility
                 $defaultValue = ($default === '1' || $default === 'true') ? '1' : '0';
-            } elseif (in_array($doctrineType, ['integer', 'smallint', 'bigint', 'decimal', 'float']) && is_numeric($default)) {
-                // For numeric types, don't quote the default value in options
+            } elseif (in_array($doctrineType, ['integer', 'smallint', 'bigint']) && is_numeric($default)) {
+                // For integer types, don't quote the default value in options
                 $defaultValue = (string) $default;
+            } elseif (in_array($doctrineType, ['decimal', 'float']) && is_numeric($default)) {
+                // Keep decimal defaults as strings: a float literal loses trailing zeros
+                // (0.00 renders as DEFAULT '0'), causing spurious schema diffs against
+                // MySQL's introspected '0.00'
+                $defaultValue = var_export((string) $default, true);
             } elseif (is_string($default)) {
-                // For string types in options array, use double quotes escaped for PHP
-                $defaultValue = '"' . addslashes($default) . '"';
+                $defaultValue = var_export($default, true);
             } else {
                 $defaultValue = $this->generateDefaultValue($default);
             }
 
-            $options[] = 'options={"default": ' . $defaultValue . '}';
+            $options[] = 'options: [\'default\' => ' . $defaultValue . ']';
         }
 
         // Add precision and scale for decimal types
         if ($type === 'decimal' && $column->getLength() !== null) {
-            $options[] = 'precision=' . $column->getLength();
+            $options[] = 'precision: ' . $column->getLength();
             if ($column->getOption('scale') !== null) {
-                $options[] = 'scale=' . $column->getOption('scale');
+                $options[] = 'scale: ' . $column->getOption('scale');
             }
         }
 
         // Build the column annotation
-        $annotations[] = '@ORM\Column(' . implode(', ', $options) . ')';
+        $annotations[] = '#[ORM\Column(' . implode(', ', $options) . ')]';
 
         // Check if field is translatable from EntityConfig
-        $columnConfig = $config[$column->getName()] ?? null;
+        $columnConfig = $config['fieldConfig'] ?? ($config[$column->getName()] ?? null);
         if ($columnConfig instanceof \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig && $columnConfig->translatable) {
-            $annotations[] = '@Gedmo\Translatable';
+            $annotations[] = '#[Gedmo\Translatable]';
         } elseif (is_array($columnConfig) && ($columnConfig['translatable'] ?? false)) {
-            $annotations[] = '@Gedmo\Translatable';
+            $annotations[] = '#[Gedmo\Translatable]';
         }
 
-        return implode("\n     * ", $annotations);
+        return implode("\n    ", $annotations);
     }
 
     /**

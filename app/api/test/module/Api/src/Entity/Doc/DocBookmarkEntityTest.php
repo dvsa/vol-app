@@ -8,11 +8,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Entity\Doc\DocBookmark as Entity;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Doc\DocBookmark
- * @covers Dvsa\Olcs\Api\Entity\Doc\AbstractDocBookmark
- */
-class DocBookmarkEntityTest extends EntityTester
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Doc\DocBookmark::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Doc\AbstractDocBookmark::class)]
+final class DocBookmarkEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -26,7 +24,7 @@ class DocBookmarkEntityTest extends EntityTester
         $sut = new Entity();
 
         $actual = $sut->getDocParagraphBookmarks();
-        static::assertInstanceOf(ArrayCollection::class, $actual);
-        static::assertEmpty($actual);
+        $this->assertInstanceOf(ArrayCollection::class, $actual);
+        $this->assertEmpty($actual);
     }
 }

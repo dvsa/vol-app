@@ -28,7 +28,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class GenerateLicenceNumberTest extends AbstractCommandHandlerTestCase
+final class GenerateLicenceNumberTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

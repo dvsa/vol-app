@@ -14,7 +14,7 @@ use Olcs\Service\Data\Cases;
  * Class CasesTest
  * @package OlcsTest\Service\Data
  */
-class CasesTest extends AbstractDataServiceTestCase
+final class CasesTest extends AbstractDataServiceTestCase
 {
     /** @var Cases */
     private $sut;

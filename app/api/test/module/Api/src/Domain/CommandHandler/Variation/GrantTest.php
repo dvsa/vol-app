@@ -34,7 +34,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class GrantTest extends AbstractCommandHandlerTestCase
+final class GrantTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -75,7 +75,7 @@ class GrantTest extends AbstractCommandHandlerTestCase
         $licence = m::mock(Licence::class)->makePartial();
         $licence->setLicenceType($this->refData[Licence::LICENCE_TYPE_STANDARD_NATIONAL]);
         $licence->updateTotAuthHgvVehicles(10);
-        $licence->setTrafficArea((new \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea())->setId('TA'));
+        $licence->setTrafficArea(new \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea()->setId('TA'));
 
         $vehicle = m::mock();
 

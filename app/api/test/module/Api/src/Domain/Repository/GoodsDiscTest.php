@@ -23,7 +23,7 @@ use Doctrine\DBAL\Connection;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class GoodsDiscTest extends RepositoryTestCase
+final class GoodsDiscTest extends RepositoryTestCase
 {
     /**
      * @var m\MockInterface|GoodsDiscRepo
@@ -32,6 +32,7 @@ class GoodsDiscTest extends RepositoryTestCase
 
     protected $activeStatuses;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->activeStatuses = [
@@ -393,7 +394,7 @@ class GoodsDiscTest extends RepositoryTestCase
 
         $expectedQuery = '{QUERY} SELECT count(gd) INNER JOIN gd.licenceVehicle lv AND lv.licence = [[' . $licenceId . ']] AND gd.ceasedDate IS NULL LIMIT 1';
 
-        self::assertEquals($expectedQuery, $this->query);
+        $this->assertEquals($expectedQuery, $this->query);
     }
 
     public function testCountForLicenceNoResult(): void

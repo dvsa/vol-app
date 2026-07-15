@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Reset BusReg Test
  */
-class ResetBusRegTest extends AbstractCommandHandlerTestCase
+final class ResetBusRegTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

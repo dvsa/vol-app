@@ -32,7 +32,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class UpdateUnlicensedTest extends AbstractCommandHandlerTestCase
+final class UpdateUnlicensedTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

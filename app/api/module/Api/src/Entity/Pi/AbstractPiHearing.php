@@ -21,24 +21,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="pi_hearing",
- *    indexes={
- *        @ORM\Index(name="ix_pi_hearing_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_pi_hearing_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_pi_hearing_pi_id", columns={"pi_id"}),
- *        @ORM\Index(name="ix_pi_hearing_presided_by_role", columns={"presided_by_role"}),
- *        @ORM\Index(name="ix_pi_hearing_presiding_tc_id", columns={"presiding_tc_id"}),
- *        @ORM\Index(name="ix_pi_hearing_venue_id", columns={"venue_id"}),
- *        @ORM\Index(name="uk_pi_hearing_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_pi_hearing_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'pi_hearing')]
+#[ORM\Index(name: 'ix_pi_hearing_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_pi_hearing_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_pi_hearing_pi_id', columns: ['pi_id'])]
+#[ORM\Index(name: 'ix_pi_hearing_presided_by_role', columns: ['presided_by_role'])]
+#[ORM\Index(name: 'ix_pi_hearing_presiding_tc_id', columns: ['presiding_tc_id'])]
+#[ORM\Index(name: 'ix_pi_hearing_venue_id', columns: ['venue_id'])]
+#[ORM\Index(name: 'uk_pi_hearing_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\UniqueConstraint(name: 'uk_pi_hearing_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -51,218 +45,195 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to pi
      *
      * @var \Dvsa\Olcs\Api\Entity\Pi\Pi
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Pi", fetch="LAZY")
-     * @ORM\JoinColumn(name="pi_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, fetch: 'LAZY')]
     protected $pi;
 
     /**
      * Foreign Key to presiding_tc
      *
      * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PresidingTc", fetch="LAZY")
-     * @ORM\JoinColumn(name="presiding_tc_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'presiding_tc_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\PresidingTc::class, fetch: 'LAZY')]
     protected $presidingTc;
 
     /**
      * PresidedByRole
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="presided_by_role", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'presided_by_role', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $presidedByRole;
 
     /**
      * The venue at the time of selection is stored in venue_other. If venue data changes, other still stores data at time of selection.
      *
      * @var \Dvsa\Olcs\Api\Entity\Venue
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Venue", fetch="LAZY")
-     * @ORM\JoinColumn(name="venue_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'venue_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Venue::class, fetch: 'LAZY')]
     protected $venue;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Hearing date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="hearing_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'hearing_date', nullable: true)]
     protected $hearingDate;
 
     /**
      * Half day / Full day
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_full_day", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'is_full_day', nullable: true)]
     protected $isFullDay;
 
     /**
      * Presiding tc other
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="presiding_tc_other", length=45, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'presiding_tc_other', length: 45, nullable: true)]
     protected $presidingTcOther;
 
     /**
      * Venue other
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="venue_other", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'venue_other', length: 255, nullable: true)]
     protected $venueOther;
 
     /**
      * Witnesses
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="witnesses", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'witnesses', nullable: true)]
     protected $witnesses;
 
     /**
      * Drivers
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="drivers", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'drivers', nullable: true)]
     protected $drivers;
 
     /**
      * isCancelled
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_cancelled", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_cancelled', nullable: false, options: ['default' => 0])]
     protected $isCancelled = 0;
 
     /**
      * Cancelled reason
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="cancelled_reason", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'cancelled_reason', length: 4000, nullable: true)]
     protected $cancelledReason;
 
     /**
      * Cancelled date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="cancelled_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'cancelled_date', nullable: true)]
     protected $cancelledDate;
 
     /**
      * isAdjourned
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_adjourned", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_adjourned', nullable: false, options: ['default' => 0])]
     protected $isAdjourned = 0;
 
     /**
      * Adjourned date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="adjourned_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'adjourned_date', nullable: true)]
     protected $adjournedDate;
 
     /**
      * Adjourned reason
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="adjourned_reason", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'adjourned_reason', length: 4000, nullable: true)]
     protected $adjournedReason;
 
     /**
      * Details
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="details", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'details', length: 4000, nullable: true)]
     protected $details;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;
 
     /**

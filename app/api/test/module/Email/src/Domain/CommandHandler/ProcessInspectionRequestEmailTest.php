@@ -27,7 +27,7 @@ use Olcs\Logging\Test\RecordingLogger;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class ProcessInspectionRequestEmailTest extends AbstractCommandHandlerTestCase
+final class ProcessInspectionRequestEmailTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var ProcessInspectionRequestEmail

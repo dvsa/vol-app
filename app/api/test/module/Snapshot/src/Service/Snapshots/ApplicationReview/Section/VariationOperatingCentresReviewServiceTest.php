@@ -27,12 +27,9 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationOperatingCentresReviewServiceTest extends MockeryTestCase
+final class VariationOperatingCentresReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
-
-    /** @var TranslatorInterface */
-    protected $mockTranslator;
 
     /** @var PsvOperatingCentreReviewService */
     private $psvOperatingCentreReviewService;
@@ -46,6 +43,7 @@ class VariationOperatingCentresReviewServiceTest extends MockeryTestCase
     /** @var VariationGoodsOcTotalAuthReviewService */
     private $variationGoodsOcTotalAuthReviewService;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);
@@ -183,19 +181,17 @@ class VariationOperatingCentresReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public static function psvProvider(): array
+    public static function psvProvider(): \Iterator
     {
-        return [
-            [
-                true,
-                'goodsOperatingCentreReviewService',
-                'variationGoodsOcTotalAuthReviewService'
-            ],
-            [
-                false,
-                'psvOperatingCentreReviewService',
-                'variationPsvOcTotalAuthReviewService'
-            ]
+        yield [
+            true,
+            'goodsOperatingCentreReviewService',
+            'variationGoodsOcTotalAuthReviewService'
+        ];
+        yield [
+            false,
+            'psvOperatingCentreReviewService',
+            'variationPsvOcTotalAuthReviewService'
         ];
     }
 
@@ -214,13 +210,11 @@ class VariationOperatingCentresReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public static function dpGetHeaderTranslationKey(): array
+    public static function dpGetHeaderTranslationKey(): \Iterator
     {
-        return [
-            [RefData::APP_VEHICLE_TYPE_PSV, 'review-section-key'],
-            [RefData::APP_VEHICLE_TYPE_HGV, 'review-section-key'],
-            [RefData::APP_VEHICLE_TYPE_MIXED, 'review-section-key'],
-            [RefData::APP_VEHICLE_TYPE_LGV, 'review-authorisation'],
-        ];
+        yield [RefData::APP_VEHICLE_TYPE_PSV, 'review-section-key'];
+        yield [RefData::APP_VEHICLE_TYPE_HGV, 'review-section-key'];
+        yield [RefData::APP_VEHICLE_TYPE_MIXED, 'review-section-key'];
+        yield [RefData::APP_VEHICLE_TYPE_LGV, 'review-authorisation'];
     }
 }

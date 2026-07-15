@@ -21,7 +21,7 @@ use Mockery as m;
  *
  * @author Richard Ward <richard.ward@bjss.com>
  */
-class PublishedListTest extends QueryHandlerTestCase
+final class PublishedListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

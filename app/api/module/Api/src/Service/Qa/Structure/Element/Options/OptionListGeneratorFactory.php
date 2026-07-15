@@ -18,7 +18,7 @@ class OptionListGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OptionListGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): OptionListGenerator
     {
         $optionListGenerator = new OptionListGenerator(
             $container->get('QaOptionListFactory'),

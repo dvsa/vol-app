@@ -21,7 +21,7 @@ use Mockery as m;
 /**
  * Update Conviction Test
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var UpdateCommandHandler

@@ -39,14 +39,14 @@ class OlcsEntityListener implements EventSubscriber, AuthAwareInterface, Factory
     /**
      * Process event - preSoftDelete
      *
-     * @param LifecycleEventArgs $args Event arguments
+     * @param \Doctrine\Persistence\Event\LifecycleEventArgs $args Event arguments
      *
      * @return void
      */
-    public function preSoftDelete(LifecycleEventArgs $args)
+    public function preSoftDelete(\Doctrine\Persistence\Event\LifecycleEventArgs $args)
     {
-        $object = $args->getEntity();
-        $om = $args->getEntityManager();
+        $object = $args->getObject();
+        $om = $args->getObjectManager();
 
         $meta = $om->getClassMetadata($object::class);
 
@@ -123,7 +123,7 @@ class OlcsEntityListener implements EventSubscriber, AuthAwareInterface, Factory
         );
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->sl = $container;
         return $this;

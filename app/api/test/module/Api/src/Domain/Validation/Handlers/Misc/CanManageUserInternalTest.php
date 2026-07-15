@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanManageUserInternal;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CanManageUserInternalTest extends AbstractHandlerTestCase
+final class CanManageUserInternalTest extends AbstractHandlerTestCase
 {
     protected $sut;
 

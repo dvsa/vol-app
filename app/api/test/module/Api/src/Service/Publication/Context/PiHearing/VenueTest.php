@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class VenueTest
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class VenueTest extends MockeryTestCase
+final class VenueTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\Group('publicationFilter
 Test the pi venue filter')]

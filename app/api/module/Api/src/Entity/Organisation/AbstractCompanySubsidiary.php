@@ -22,22 +22,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="company_subsidiary",
- *    indexes={
- *        @ORM\Index(name="ix_company_subsidiary_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_company_subsidiary_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_company_subsidiary_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="uk_company_subsidiary_olbs_key_licence_id", columns={"olbs_key", "licence_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_company_subsidiary_olbs_key_licence_id", columns={"olbs_key", "licence_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'company_subsidiary')]
+#[ORM\Index(name: 'ix_company_subsidiary_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_company_subsidiary_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_company_subsidiary_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'uk_company_subsidiary_olbs_key_licence_id', columns: ['olbs_key', 'licence_id'])]
+#[ORM\UniqueConstraint(name: 'uk_company_subsidiary_olbs_key_licence_id', columns: ['olbs_key', 'licence_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractCompanySubsidiary implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -51,80 +45,72 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 70, nullable: true)]
     protected $name;
 
     /**
      * Company no
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="company_no", length=12, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'company_no', length: 12, nullable: true)]
     protected $companyNo;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**

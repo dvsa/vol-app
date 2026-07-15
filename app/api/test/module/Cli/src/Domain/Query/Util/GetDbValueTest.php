@@ -6,7 +6,7 @@ namespace Dvsa\OlcsTest\Cli\Domain\Query\Util;
 
 use Dvsa\Olcs\Cli\Domain\Query\Util\GetDbValue;
 
-class GetDbValueTest extends \PHPUnit\Framework\TestCase
+final class GetDbValueTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

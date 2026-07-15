@@ -24,8 +24,9 @@ use Doctrine\ORM\EntityRepository;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class LegacyOffenceTest extends RepositoryTestCase
+final class LegacyOffenceTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

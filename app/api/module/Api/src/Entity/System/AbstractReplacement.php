@@ -21,20 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="replacement",
- *    indexes={
- *        @ORM\Index(name="fk_replacement_users_created_by", columns={"created_by"}),
- *        @ORM\Index(name="fk_replacement_users_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="placeholder", columns={"placeholder"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="placeholder", columns={"placeholder"})
- *    }
- * )
  */
+#[ORM\Table(name: 'replacement')]
+#[ORM\Index(name: 'fk_replacement_users_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_replacement_users_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'placeholder', columns: ['placeholder'])]
+#[ORM\UniqueConstraint(name: 'placeholder', columns: ['placeholder'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractReplacement implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -47,61 +41,55 @@ abstract class AbstractReplacement implements BundleSerializableInterface, JsonS
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Placeholder
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="placeholder", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'placeholder', length: 255, nullable: false)]
     protected $placeholder = '';
 
     /**
      * Replacement text
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="replacement_text", length=2048, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'replacement_text', length: 2048, nullable: true)]
     protected $replacementText;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=true, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: true, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

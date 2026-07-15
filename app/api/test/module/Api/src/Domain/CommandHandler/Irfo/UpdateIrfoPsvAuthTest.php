@@ -28,7 +28,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 /**
  * Update IrfoPsvAuth Test
  */
-class UpdateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
+final class UpdateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -175,9 +175,9 @@ class UpdateIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
         );
 
         $this->assertEquals($data['validityPeriod'], $savedIrfoPsvAuth->getValidityPeriod());
-        $this->assertEquals($data['inForceDate'], $savedIrfoPsvAuth->getInForceDate()->format('Y-m-d'));
-        $this->assertEquals($data['expiryDate'], $savedIrfoPsvAuth->getExpiryDate()->format('Y-m-d'));
-        $this->assertEquals($data['applicationSentDate'], $savedIrfoPsvAuth->getApplicationSentDate()->format('Y-m-d'));
+        $this->assertSame($data['inForceDate'], $savedIrfoPsvAuth->getInForceDate()->format('Y-m-d'));
+        $this->assertSame($data['expiryDate'], $savedIrfoPsvAuth->getExpiryDate()->format('Y-m-d'));
+        $this->assertSame($data['applicationSentDate'], $savedIrfoPsvAuth->getApplicationSentDate()->format('Y-m-d'));
         $this->assertEquals($data['serviceRouteFrom'], $savedIrfoPsvAuth->getServiceRouteFrom());
         $this->assertEquals($data['serviceRouteTo'], $savedIrfoPsvAuth->getServiceRouteTo());
         $this->assertEquals($data['isFeeExemptApplication'], $savedIrfoPsvAuth->getIsFeeExemptApplication());

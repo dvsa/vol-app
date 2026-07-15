@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class FilteredTranslateableTextGeneratorTest extends MockeryTestCase
+final class FilteredTranslateableTextGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

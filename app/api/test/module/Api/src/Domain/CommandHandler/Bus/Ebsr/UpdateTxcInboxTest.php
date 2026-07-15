@@ -21,7 +21,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * Update TxcInbox Test
  */
-class UpdateTxcInboxTest extends AbstractCommandHandlerTestCase
+final class UpdateTxcInboxTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

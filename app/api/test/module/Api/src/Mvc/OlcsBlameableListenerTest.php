@@ -18,7 +18,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * OlcsBlameableListener Test
  */
-class OlcsBlameableListenerTest extends MockeryTestCase
+final class OlcsBlameableListenerTest extends MockeryTestCase
 {
     /**
      * Holds the SUT
@@ -35,6 +35,7 @@ class OlcsBlameableListenerTest extends MockeryTestCase
     /**
      * Setup the sut
      */
+    #[\Override]
     protected function setUp(): void
     {
         $this->serviceLocator = m::mock(ContainerInterface::class);
@@ -146,18 +147,15 @@ class OlcsBlameableListenerTest extends MockeryTestCase
         );
     }
 
-    public static function getFieldValueDataProvider(): array
+    public static function getFieldValueDataProvider(): \Iterator
     {
         $mockUser = User::create(
             'abc',
             User::USER_TYPE_OPERATOR,
             ['loginId' => 'loginId']
         );
-
-        return [
-            [$mockUser, $mockUser],
-            [User::anon(), null],
-            [null, null],
-        ];
+        yield [$mockUser, $mockUser];
+        yield [User::anon(), null];
+        yield [null, null];
     }
 }

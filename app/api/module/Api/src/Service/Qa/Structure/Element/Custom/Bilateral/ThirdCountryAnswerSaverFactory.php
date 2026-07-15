@@ -18,7 +18,7 @@ class ThirdCountryAnswerSaverFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ThirdCountryAnswerSaver
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ThirdCountryAnswerSaver
     {
         return new ThirdCountryAnswerSaver(
             $container->get('QaBilateralCountryDeletingAnswerSaver')

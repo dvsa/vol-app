@@ -29,7 +29,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendPublication;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class SendPublicationTest extends AbstractCommandHandlerTestCase
+final class SendPublicationTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var CommandInterface
@@ -123,13 +123,11 @@ class SendPublicationTest extends AbstractCommandHandlerTestCase
     /**
      * Data provider for testHandleCommand
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function handleCommandProvider(): array
+    public static function handleCommandProvider(): \Iterator
     {
-        return [
-            ['Y', 1, 0, SendPublication::EMAIL_POLICE_SUBJECT],
-            ['N', 0, 1, SendPublication::EMAIL_SUBJECT]
-        ];
+        yield ['Y', 1, 0, SendPublication::EMAIL_POLICE_SUBJECT];
+        yield ['N', 0, 1, SendPublication::EMAIL_SUBJECT];
     }
 }

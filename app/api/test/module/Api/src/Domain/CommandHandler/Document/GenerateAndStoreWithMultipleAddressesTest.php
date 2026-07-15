@@ -27,7 +27,7 @@ use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class GenerateAndStoreWithMultipleAddressesTest extends AbstractCommandHandlerTestCase
+final class GenerateAndStoreWithMultipleAddressesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -240,73 +240,71 @@ class GenerateAndStoreWithMultipleAddressesTest extends AbstractCommandHandlerTe
             ->shouldReceive('getSendToAddresses')->andReturn($this->getAddresses());
     }
 
-    public static function insolvencyPractitioners(): array
+    public static function insolvencyPractitioners(): \Iterator
     {
-        return [
-            'One practitioner' => [
-                'practitioners' => [
-                    [
-                        'name' => 'Jim',
-                        'addressLine1' => 'Address Line 1',
-                        'addressLine2' => 'Address Line 2',
-                        'addressLine3' => 'Address Line 3',
-                        'locality' => 'Somewhere',
-                        'postalCode' => 'AB1 2CE',
-                    ]
-                ],
-                'expected' => 1
+        yield 'One practitioner' => [
+            'practitioners' => [
+                [
+                    'name' => 'Jim',
+                    'addressLine1' => 'Address Line 1',
+                    'addressLine2' => 'Address Line 2',
+                    'addressLine3' => 'Address Line 3',
+                    'locality' => 'Somewhere',
+                    'postalCode' => 'AB1 2CE',
+                ]
+            ],
+            'expected' => 1
 
-            ],
-            'Two practitioners' => [
-                'practitioners' => [
-                    [
-                        'name' => 'Jim Carrey',
-                        'addressLine1' => 'Address Line 1',
-                        'addressLine2' => 'Address Line 2',
-                        'addressLine3' => 'Address Line 3',
-                        'locality' => 'Somewhere',
-                        'postalCode' => 'AB1 2CE',
-                    ],
-                    [
-                        'name' => 'Bob Hoskins',
-                        'addressLine1' => 'Address Line 1',
-                        'addressLine2' => 'Address Line 2',
-                        'addressLine3' => 'Address Line 3',
-                        'locality' => 'Somewhere',
-                        'postalCode' => 'AB1 2CE',
-                    ]
+        ];
+        yield 'Two practitioners' => [
+            'practitioners' => [
+                [
+                    'name' => 'Jim Carrey',
+                    'addressLine1' => 'Address Line 1',
+                    'addressLine2' => 'Address Line 2',
+                    'addressLine3' => 'Address Line 3',
+                    'locality' => 'Somewhere',
+                    'postalCode' => 'AB1 2CE',
                 ],
-                'expected' => 2
+                [
+                    'name' => 'Bob Hoskins',
+                    'addressLine1' => 'Address Line 1',
+                    'addressLine2' => 'Address Line 2',
+                    'addressLine3' => 'Address Line 3',
+                    'locality' => 'Somewhere',
+                    'postalCode' => 'AB1 2CE',
+                ]
             ],
-            'Three practitioners with a same entry' => [
-                'practitioners' => [
-                    [
-                        'name' => 'Jim Carrey',
-                        'addressLine1' => 'Address Line 1',
-                        'addressLine2' => 'Address Line 2',
-                        'addressLine3' => 'Address Line 3',
-                        'locality' => 'Somewhere',
-                        'postalCode' => 'AB1 2CE',
-                    ],
-                    [
-                        'name' => 'Jim Carrey',
-                        'addressLine1' => 'Address Line 1',
-                        'addressLine2' => 'Address Line 2',
-                        'addressLine3' => 'Address Line 3',
-                        'locality' => 'Somewhere',
-                        'postalCode' => 'AB1 2CE',
-                    ],
-                    [
-                        'name' => 'Bob Hoskins',
-                        'addressLine1' => 'Address Line 1',
-                        'addressLine2' => 'Address Line 2',
-                        'addressLine3' => 'Address Line 3',
-                        'locality' => 'Somewhere',
-                        'postalCode' => 'AB1 2CE',
-                    ]
+            'expected' => 2
+        ];
+        yield 'Three practitioners with a same entry' => [
+            'practitioners' => [
+                [
+                    'name' => 'Jim Carrey',
+                    'addressLine1' => 'Address Line 1',
+                    'addressLine2' => 'Address Line 2',
+                    'addressLine3' => 'Address Line 3',
+                    'locality' => 'Somewhere',
+                    'postalCode' => 'AB1 2CE',
                 ],
-                'expected' => 2
-            ]
+                [
+                    'name' => 'Jim Carrey',
+                    'addressLine1' => 'Address Line 1',
+                    'addressLine2' => 'Address Line 2',
+                    'addressLine3' => 'Address Line 3',
+                    'locality' => 'Somewhere',
+                    'postalCode' => 'AB1 2CE',
+                ],
+                [
+                    'name' => 'Bob Hoskins',
+                    'addressLine1' => 'Address Line 1',
+                    'addressLine2' => 'Address Line 2',
+                    'addressLine3' => 'Address Line 3',
+                    'locality' => 'Somewhere',
+                    'postalCode' => 'AB1 2CE',
+                ]
+            ],
+            'expected' => 2
         ];
     }
 }

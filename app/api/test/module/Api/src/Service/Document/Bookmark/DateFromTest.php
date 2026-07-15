@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\DateFrom;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DateFromTest extends \PHPUnit\Framework\TestCase
+final class DateFromTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -44,12 +44,10 @@ class DateFromTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function specifiedDateProvider(): array
+    public static function specifiedDateProvider(): \Iterator
     {
-        return [
-            [new \DateTime('2014-02-03 11:12:34')],
-            ['2014-02-03 11:12:34']
-        ];
+        yield [new \DateTime('2014-02-03 11:12:34')];
+        yield ['2014-02-03 11:12:34'];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('interimStartDateProvider')]
@@ -76,11 +74,9 @@ class DateFromTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function interimStartDateProvider(): array
+    public static function interimStartDateProvider(): \Iterator
     {
-        return [
-            [new \DateTime('2011-01-01 10:10:10')],
-            ['2011-01-01 10:10:10']
-        ];
+        yield [new \DateTime('2011-01-01 10:10:10')];
+        yield ['2011-01-01 10:10:10'];
     }
 }

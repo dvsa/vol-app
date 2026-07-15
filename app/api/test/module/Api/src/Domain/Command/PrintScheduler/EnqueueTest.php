@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Command\PrintScheduler\Enqueue;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class EnqueueTest extends \PHPUnit\Framework\TestCase
+final class EnqueueTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

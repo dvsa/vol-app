@@ -16,10 +16,10 @@ use Olcs\Logging\Log\Logger;
 use org\bovigo\vfs\vfsStream;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\DocumentShare\Service\WebDavClient::class)]
-class WebDavClientTest extends MockeryTestCase
+final class WebDavClientTest extends MockeryTestCase
 {
-    public const BASE_URI = 'http://testing';
-    public const WORKSPACE = 'unit_Workspace';
+    public const string BASE_URI = 'http://testing';
+    public const string WORKSPACE = 'unit_Workspace';
 
     /** @var  Client */
     protected $sut;
@@ -27,23 +27,18 @@ class WebDavClientTest extends MockeryTestCase
     /** @var  m\MockInterface | FilesystemInterface */
     private $mockFileSystem;
 
-    /** @var  m\MockInterface|DsFile */
-    private $mockFile;
-
-    /** @var  m\MockInterface|\Psr\Log\LoggerInterface */
-    private $logger;
-
+    #[\Override]
     public function setUp(): void
     {
         $this->mockFileSystem = m::mock(FilesystemInterface::class);
 
         $this->sut = new Client($this->mockFileSystem, $this->createStub(\Psr\Log\LoggerInterface::class));
 
-        $this->mockFile = m::mock(DsFile::class);
+        $mockFile = m::mock(DsFile::class);
 
-        $this->logger = m::mock(\Psr\Log\LoggerInterface::class)->shouldIgnoreMissing();
+        $logger = m::mock(\Psr\Log\LoggerInterface::class)->shouldIgnoreMissing();
 
-        Logger::setLogger($this->logger);
+        Logger::setLogger($logger);
     }
 
     public function testReadSuccess(): void
@@ -57,7 +52,7 @@ class WebDavClientTest extends MockeryTestCase
         $actual = $this->sut->read($testPath);
 
         $this->assertInstanceOf(DsFile::class, $actual);
-        $this->assertEquals($expectContent, file_get_contents($actual->getResource()));
+        $this->assertSame($expectContent, file_get_contents($actual->getResource()));
     }
 
     public function testReadFail(): void
@@ -100,7 +95,7 @@ class WebDavClientTest extends MockeryTestCase
 
         $actual = $this->sut->write($expectPath, $mockFile);
 
-        static::assertEquals(true, $actual->isSuccess());
+        $this->assertEquals(true, $actual->isSuccess());
     }
 
     public function testWriteFail(): void
@@ -122,7 +117,7 @@ class WebDavClientTest extends MockeryTestCase
 
         $actual = $this->sut->write($expectPath, $mockFile);
 
-        static::assertEquals(false, $actual->isSuccess());
+        $this->assertEquals(false, $actual->isSuccess());
     }
 
     public function testWriteFileAlreadyExists(): void
@@ -146,7 +141,72 @@ class WebDavClientTest extends MockeryTestCase
 
         $actual = $this->sut->write($expectPath, $mockFile);
 
-        static::assertEquals(false, $actual->isSuccess());
+        $this->assertEquals(false, $actual->isSuccess());
+    }
+
+    public function testUpdateSuccess(): void
+    {
+        $expectPath = 'unit_Path';
+
+        $res = vfsStream::newFile('res')
+            ->withContent('unit_ABCDE123')
+            ->at(vfsStream::setup('temp'))
+            ->url();
+
+        /** @var DsFile $mockFile */
+        $mockFile = m::mock(DsFile::class)
+            ->shouldReceive('getResource')->andReturn($res)
+            ->getMock();
+
+        $this->mockFileSystem->expects('updateStream')->with($expectPath, new IsTypeOf('resource'))->andReturn(true);
+
+        $actual = $this->sut->update($expectPath, $mockFile);
+
+        $this->assertTrue($actual->isSuccess());
+    }
+
+    public function testUpdateFail(): void
+    {
+        $expectPath = 'unit_Path';
+
+        $res = vfsStream::newFile('res')
+            ->withContent('unit_ABCDE123')
+            ->at(vfsStream::setup('temp'))
+            ->url();
+
+        /** @var DsFile $mockFile */
+        $mockFile = m::mock(DsFile::class)
+            ->shouldReceive('getResource')->andReturn($res)
+            ->getMock();
+
+        $this->mockFileSystem->expects('updateStream')->with($expectPath, new IsTypeOf('resource'))->andReturn(false);
+
+        $actual = $this->sut->update($expectPath, $mockFile);
+
+        $this->assertFalse($actual->isSuccess());
+    }
+
+    public function testUpdateFileNotFound(): void
+    {
+        $expectPath = 'unit_Path';
+
+        $res = vfsStream::newFile('res')
+            ->withContent('unit_ABCDE123')
+            ->at(vfsStream::setup('temp'))
+            ->url();
+
+        /** @var DsFile $mockFile */
+        $mockFile = m::mock(DsFile::class)
+            ->shouldReceive('getResource')->andReturn($res)
+            ->getMock();
+
+        $this->mockFileSystem->expects('updateStream')->with($expectPath, new IsTypeOf('resource'))->andThrow(
+            new FileNotFoundException($expectPath)
+        );
+
+        $actual = $this->sut->update($expectPath, $mockFile);
+
+        $this->assertFalse($actual->isSuccess());
     }
 
     public function testRemoveSuccess(): void
@@ -155,7 +215,8 @@ class WebDavClientTest extends MockeryTestCase
 
         $result = $this->sut->remove('testFileToUnlink');
 
-        static::assertEquals(true, $result);
+        $this->assertTrue($result->isOk());
+        $this->assertSame(200, $result->getStatusCode());
     }
 
     public function testRemoveFail(): void
@@ -164,7 +225,8 @@ class WebDavClientTest extends MockeryTestCase
 
         $result = $this->sut->remove('testFileToUnlink');
 
-        static::assertEquals(false, $result);
+        $this->assertFalse($result->isSuccess());
+        $this->assertSame(500, $result->getStatusCode());
     }
 
     public function testRemoveFileNotFound(): void
@@ -175,6 +237,7 @@ class WebDavClientTest extends MockeryTestCase
 
         $result = $this->sut->remove('testFileToUnlink');
 
-        static::assertEquals(false, $result);
+        $this->assertTrue($result->isNotFound());
+        $this->assertSame(404, $result->getStatusCode());
     }
 }

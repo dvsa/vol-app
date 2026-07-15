@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_phone_contact;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_phone_contact()
@@ -23,24 +22,24 @@ BEGIN
 
     SELECT COUNT(*)
     INTO @total
-    FROM phone_contact
-    WHERE contact_details_id NOT IN (
-        SELECT id
-		FROM contact_details);
+    FROM phone_contact pc
+    LEFT JOIN contact_details cd ON pc.contact_details_id = cd.id
+    WHERE cd.id IS NULL;
         
     SELECT CONCAT(@total,' phone_contact rows to delete.') AS '' ;
 
     SET @total:=0;
     SET @rowcount:=10000;
     
+    START TRANSACTION;
+
     WHILE(@rowcount = 10000) DO
 
 
     
-        DELETE FROM phone_contact
-        WHERE contact_details_id NOT IN (
-        SELECT id
-		FROM contact_details)
+        DELETE pc FROM phone_contact pc
+        LEFT JOIN contact_details cd ON pc.contact_details_id = cd.id
+        WHERE cd.id IS NULL
         LIMIT 10000;
 
         SET @rowcount := row_count();
@@ -50,13 +49,15 @@ BEGIN
     
         SELECT CONCAT(@total,' phone_contact rows deleted.') AS '';
 
+        COMMIT;
+        START TRANSACTION;
+
     END WHILE;
+
+    COMMIT;
 
     SELECT CONCAT('delete phone_contact finished at ',now()) AS '' ; 
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

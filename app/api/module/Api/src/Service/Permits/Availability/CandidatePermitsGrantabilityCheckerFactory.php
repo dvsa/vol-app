@@ -18,7 +18,7 @@ class CandidatePermitsGrantabilityCheckerFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CandidatePermitsGrantabilityChecker
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CandidatePermitsGrantabilityChecker
     {
         return new CandidatePermitsGrantabilityChecker(
             $container->get('PermitsAvailabilityCandidatePermitsAvailableCountCalculator')

@@ -30,7 +30,7 @@ use Mockery as m;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class Schedule41ResetTest extends AbstractCommandHandlerTestCase
+final class Schedule41ResetTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -59,12 +59,12 @@ class Schedule41ResetTest extends AbstractCommandHandlerTestCase
         $publicationLink1 = new \Dvsa\Olcs\Api\Entity\Publication\PublicationLink();
         $publicationLink1
             ->setId(11)
-            ->setPublicationSection((new PublicationSection())->setId(PublicationSection:: APP_NEW_SECTION))
+            ->setPublicationSection(new PublicationSection()->setId(PublicationSection:: APP_NEW_SECTION))
             ->setPublication($publication);
         $publicationLink2 = new \Dvsa\Olcs\Api\Entity\Publication\PublicationLink();
         $publicationLink2
             ->setId(12)
-            ->setPublicationSection((new PublicationSection())->setId(PublicationSection:: SCHEDULE_4_NEW))
+            ->setPublicationSection(new PublicationSection()->setId(PublicationSection:: SCHEDULE_4_NEW))
             ->setPublication($publication);
 
         $application = m::mock(Application::class)
@@ -124,12 +124,12 @@ class Schedule41ResetTest extends AbstractCommandHandlerTestCase
         $publicationLink1 = new \Dvsa\Olcs\Api\Entity\Publication\PublicationLink();
         $publicationLink1
             ->setId(11)
-            ->setPublicationSection((new PublicationSection())->setId(PublicationSection:: APP_NEW_SECTION))
+            ->setPublicationSection(new PublicationSection()->setId(PublicationSection:: APP_NEW_SECTION))
             ->setPublication($publication);
         $publicationLink2 = new \Dvsa\Olcs\Api\Entity\Publication\PublicationLink();
         $publicationLink2
             ->setId(12)
-            ->setPublicationSection((new PublicationSection())->setId(PublicationSection:: SCHEDULE_4_NEW))
+            ->setPublicationSection(new PublicationSection()->setId(PublicationSection:: SCHEDULE_4_NEW))
             ->setPublication($publication);
 
         $application = m::mock(Application::class)
@@ -183,12 +183,12 @@ class Schedule41ResetTest extends AbstractCommandHandlerTestCase
         $publicationLink1 = new \Dvsa\Olcs\Api\Entity\Publication\PublicationLink();
         $publicationLink1
             ->setId(11)
-            ->setPublicationSection((new PublicationSection())->setId(PublicationSection:: APP_NEW_SECTION))
+            ->setPublicationSection(new PublicationSection()->setId(PublicationSection:: APP_NEW_SECTION))
             ->setPublication($publication);
         $publicationLink2 = new \Dvsa\Olcs\Api\Entity\Publication\PublicationLink();
         $publicationLink2
             ->setId(12)
-            ->setPublicationSection((new PublicationSection())->setId(PublicationSection:: SCHEDULE_4_NEW))
+            ->setPublicationSection(new PublicationSection()->setId(PublicationSection:: SCHEDULE_4_NEW))
             ->setPublication($publication);
 
         $application = m::mock(Application::class)

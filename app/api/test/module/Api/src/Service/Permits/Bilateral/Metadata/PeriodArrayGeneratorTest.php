@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class PeriodArrayGeneratorTest extends MockeryTestCase
+final class PeriodArrayGeneratorTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate(mixed $irhpPermitApplication): void
@@ -88,11 +88,9 @@ class PeriodArrayGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpGenerate(): array
+    public static function dpGenerate(): \Iterator
     {
-        return [
-            [m::mock(IrhpPermitApplication::class)],
-            [null]
-        ];
+        yield [m::mock(IrhpPermitApplication::class)];
+        yield [null];
     }
 }

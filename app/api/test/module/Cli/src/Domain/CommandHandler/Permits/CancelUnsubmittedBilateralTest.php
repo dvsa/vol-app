@@ -25,7 +25,7 @@ use Mockery as m;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class CancelUnsubmittedBilateralTest extends AbstractCommandHandlerTestCase
+final class CancelUnsubmittedBilateralTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

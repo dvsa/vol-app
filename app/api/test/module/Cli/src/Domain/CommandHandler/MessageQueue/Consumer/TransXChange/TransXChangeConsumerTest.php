@@ -39,7 +39,7 @@ use RuntimeException;
 #[\PHPUnit\Framework\Attributes\PreserveGlobalState(false)]
 #[\PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses]
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
+final class TransXChangeConsumerTest extends AbstractCommandHandlerTestCase
 {
     protected array $config = [
         'message_queue' => [

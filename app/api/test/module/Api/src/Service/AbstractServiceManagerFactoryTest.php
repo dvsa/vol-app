@@ -10,10 +10,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\AbstractServiceManagerFactory
- */
-class AbstractServiceManagerFactoryTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\AbstractServiceManagerFactory::class)]
+final class AbstractServiceManagerFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {
@@ -32,8 +30,8 @@ class AbstractServiceManagerFactoryTest extends MockeryTestCase
             )
             ->getMock();
 
-        $actual = (new AbstractServiceManagerFactoryStub())->__invoke($mockSl, ServiceManagerStub::class);
+        $actual = new AbstractServiceManagerFactoryStub()->__invoke($mockSl, ServiceManagerStub::class);
 
-        static::assertInstanceOf(ServiceManagerStub::class, $actual);
+        $this->assertInstanceOf(ServiceManagerStub::class, $actual);
     }
 }

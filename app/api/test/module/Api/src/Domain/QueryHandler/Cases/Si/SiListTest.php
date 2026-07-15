@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class SiListTest extends QueryHandlerTestCase
+final class SiListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

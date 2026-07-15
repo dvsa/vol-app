@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_disqualification;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_disqualification()
@@ -29,23 +28,32 @@ BEGIN
 
     SELECT CONCAT(@total,' disqualification rows to delete.') AS '' ;
 
+    SET @total_deleted := 0;
+    SET @rowcount := 10000;
 
-    
-    DELETE FROM disqualification
-    WHERE organisation_id IS NULL
-    AND person_id IS NULL;
+    START TRANSACTION;
 
-    SET @rowcount := row_count();
+    WHILE(@rowcount = 10000) DO
     
+        DELETE FROM disqualification
+        WHERE organisation_id IS NULL
+        AND person_id IS NULL
+        LIMIT 10000;
 
+        SET @rowcount := row_count();
+        SET @total_deleted := @total_deleted + @rowcount;
     
-    SELECT CONCAT(@rowcount,' disqualification rows deleted.') AS '';
+        SELECT CONCAT(@total_deleted,' disqualification rows deleted.') AS '';
+
+        COMMIT;
+        START TRANSACTION;
+
+    END WHILE;
+    
+    COMMIT;
     
     SELECT CONCAT('delete disqualification finished at ',now()) AS '' ; 
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

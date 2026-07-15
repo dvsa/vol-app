@@ -9,69 +9,44 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * LetterType Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="letter_type")
  */
+#[ORM\Table(name: 'letter_type')]
+#[ORM\Entity]
 class LetterType extends AbstractLetterType
 {
     /**
      * Letter type sections
      *
      * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection",
-     *     mappedBy="letterType",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"displayOrder" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection::class, mappedBy: 'letterType', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
     protected $letterTypeSections;
 
     /**
      * Letter type issues
      *
      * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterTypeIssue",
-     *     mappedBy="letterType",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTypeIssue::class, mappedBy: 'letterType', cascade: ['persist'], orphanRemoval: true)]
     protected $letterTypeIssues;
 
     /**
      * Letter type appendices
      *
      * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterTypeAppendix",
-     *     mappedBy="letterType",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"displayOrder" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTypeAppendix::class, mappedBy: 'letterType', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
     protected $letterTypeAppendices;
 
     /**
      * Letter type choices (which choices appear on the creation modal)
      *
      * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterTypeChoice",
-     *     mappedBy="letterType",
-     *     cascade={"persist"},
-     *     orphanRemoval=true
-     * )
-     * @ORM\OrderBy({"displayOrder" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTypeChoice::class, mappedBy: 'letterType', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OrderBy(['displayOrder' => 'ASC'])]
     protected $letterTypeChoices;
 
     /**

@@ -2,8 +2,8 @@
 
 #####################################################################
 #                                                                   #
-# anonymise publication_police_data table			    #
-#								    #
+# anonymise publication_police_data table                           #
+#                                                                   #
 #####################################################################
 
 connection=$1
@@ -12,6 +12,8 @@ ANON_DATA_DIR=$3
 POLICE_DATA_FILE=$4
 POLICE_ANON_DATA_FILE=$5
 NAMES_CSV_FILE=$6
+
+# Removed global Bash associative array declarations
 
 log () {
 printf "\n%s %s\n" "$(date "+%Y-%m-%d %H:%M:%S")" "$1"
@@ -30,40 +32,57 @@ mysql --local-infile=1 -sNB $conn -e "SELECT * FROM $ANON_DB.publication_police_
 
 anonymise_publication_police_data () {
 
-foreNames=( $(awk -F"," '{ print $1 }' $NAMES_CSV_FILE) )
-familyNames=( $(awk -F"," '{ print $2 }' $NAMES_CSV_FILE) )
-
 [ -e $ANON_DATA_DIR/$POLICE_ANON_DATA_FILE ] && rm $ANON_DATA_DIR/$POLICE_ANON_DATA_FILE
 
 OLDIFS=$IFS
 
-while IFS=$'^' read id publication_link_id person_id forename family_name birth_date olbs_dob created_by last_modified_by created_on last_modified_on version olbs_key; do
+# Replaced slow Bash loop with high-speed awk.
+awk -F'^' '
+BEGIN {
+    srand(); # Seed the random number generator
+    
+    # Pre-populate short month names array for the legacy OLBS date format string
+    split("Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec", months, " ");
+}
+# Pass 1: Parse the Comma-Separated Names Reference File
+NR==FNR {
+    split($0, csv, ",");
+    fore[FNR] = csv[1];
+    fam[FNR]  = csv[2];
+    total_ref = FNR;
+    next;
+}
+# Pass 2: Stream through the Main Caret-Separated Database Data File
+{
+    # Generate random indices for masking substitutions
+    r1 = int(rand() * total_ref) + 1;
+    r2 = int(rand() * total_ref) + 1;
 
-foreName=
-familyName=
-birthDate=
-olbsDOB=
+    # Conditional mask substitution matching your original database column indexes
+    # $4=forename, $5=family_name, $6=birth_date, $7=olbs_dob
+    if ($4 != "") $4 = fore[r1];
+    if ($5 != "") $5 = fam[r2];
 
-if [[ ! -z $forename ]]; then
-    foreName=${foreNames[$((RANDOM%${#foreNames[@]}))]}
-fi
+    # Mimics original random birth date format calculation natively in awk: YYYY-MM-DD
+    if ($6 != "") {
+        r_year  = 1970 + int(rand() * 30);
+        r_month = 1 + int(rand() * 12);
+        r_day   = 1 + int(rand() * 28);
+        $6 = sprintf("%04d-%02d-%02d", r_year, r_month, r_day);
+    }
 
-if [[ ! -z $family_name ]]; then
-    familyName=${familyNames[$((RANDOM%${#familyNames[@]}))]}
-fi
+    # Mimics custom legacy date format calculation natively in awk: "Mmm DD YYYY 12:00AM"
+    if ($7 != "") {
+        r_year  = 1970 + int(rand() * 30);
+        r_month = 1 + int(rand() * 12);
+        r_day   = 1 + int(rand() * 28);
+        $7 = sprintf("%s %02d %04d 12:00AM", months[r_month], r_day, r_year);
+    }
 
-if [[ ! -z $birth_date ]]; then
-    birthDate=$( date -d "$((RANDOM%30+1970))-$((RANDOM%12+1))-$((RANDOM%28+1))" '+%Y-%m-%d')
-fi
-
-if [[ ! -z $olbs_dob ]]; then
-    olbsDOB=$( date -d "$((RANDOM%30+1970))-$((RANDOM%12+1))-$((RANDOM%28+1)) $((RANDOM%23+1)):$((RANDOM%59+1)):$((RANDOM%59+1))" '+%b %d %Y 12:00AM'
-)
-fi
-
-printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" "$id" "$publication_link_id" "$person_id" "$foreName" "$familyName" "$birthDate" "$olbsDOB" "$created_by" "$last_modified_by" "$created_on" "$last_modified_on" "$version" "$olbs_key"
-
-done < $ANON_DATA_DIR/$POLICE_DATA_FILE >> $ANON_DATA_DIR/$POLICE_ANON_DATA_FILE || log_error "anonymise_publication_police_data FAILED!"
+    # Stream out the modified line record using tab-separated fields
+    $1 = $1; # force $0 rebuild using OFS even when no fields are modified
+    print $0;
+}' OFS='\t' "$NAMES_CSV_FILE" "$ANON_DATA_DIR/$POLICE_DATA_FILE" >> $ANON_DATA_DIR/$POLICE_ANON_DATA_FILE || log_error "anonymise_publication_police_data FAILED!"
 
 iconv -f utf-8 -t utf-8 -c $ANON_DATA_DIR/$POLICE_ANON_DATA_FILE > $ANON_DATA_DIR/tmp-$POLICE_ANON_DATA_FILE
 mv $ANON_DATA_DIR/tmp-$POLICE_ANON_DATA_FILE $ANON_DATA_DIR/$POLICE_ANON_DATA_FILE
@@ -81,6 +100,9 @@ SET FOREIGN_KEY_CHECKS = 0;
 SET @DISABLE_TRIGGERS = 1;
 
 truncate table publication_police_data;
+
+-- Added index disable command to maximize speed during execution of the data pipeline load.
+ALTER TABLE publication_police_data DISABLE KEYS;
 
 LOAD DATA LOCAL INFILE '$ANON_DATA_DIR/$POLICE_ANON_DATA_FILE' INTO table publication_police_data FIELDS TERMINATED BY '\t'
 (id
@@ -112,6 +134,9 @@ LOAD DATA LOCAL INFILE '$ANON_DATA_DIR/$POLICE_ANON_DATA_FILE' INTO table public
 UPDATE publication_police_data
 SET person_id = ( SELECT id FROM person WHERE forename='ETL' AND family_name='ETL')
 WHERE person_id=0;
+
+-- Re-enable indexes cleanly in a single fast block operation after the data finishes writing.
+ALTER TABLE publication_police_data ENABLE KEYS;
 
 SET @DISABLE_TRIGGERS = null;
 SET FOREIGN_KEY_CHECKS = 1;" || log_error "reload_publication_police_data FAILED!"

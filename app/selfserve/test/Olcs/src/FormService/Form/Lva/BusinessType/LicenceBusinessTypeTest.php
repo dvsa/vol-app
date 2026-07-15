@@ -14,7 +14,7 @@ use Laminas\Form\Form;
 use Laminas\Form\Element;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class LicenceBusinessTypeTest extends MockeryTestCase
+final class LicenceBusinessTypeTest extends MockeryTestCase
 {
     /**
      * @var LicenceBusinessType
@@ -27,15 +27,14 @@ class LicenceBusinessTypeTest extends MockeryTestCase
 
     private $guidanceHelper;
 
-    private $authService;
-
+    #[\Override]
     public function setUp(): void
     {
         $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->authService = m::mock(AuthorizationService::class);
+        $authService = m::mock(AuthorizationService::class);
         $this->guidanceHelper = m::mock(\Common\Service\Helper\GuidanceHelperService::class);
-        $this->sut = new LicenceBusinessType($this->fh, $this->authService, $this->guidanceHelper, $this->fsm);
+        $this->sut = new LicenceBusinessType($this->fh, $authService, $this->guidanceHelper, $this->fsm);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetForm')]
@@ -99,25 +98,23 @@ class LicenceBusinessTypeTest extends MockeryTestCase
     }
 
     /**
-     * @return bool[][]
+     * @return \Iterator<(int | string), array<bool>>
      *
      * @psalm-return list{list{true, true}, list{true, false}, list{false, true}, list{false, false}}
      */
-    public static function dpGetForm(): array
+    public static function dpGetForm(): \Iterator
     {
-        return [
-            [
-                true, true
-            ],
-            [
-                true, false
-            ],
-            [
-                false, true
-            ],
-            [
-                false, false
-            ]
+        yield [
+            true, true
+        ];
+        yield [
+            true, false
+        ];
+        yield [
+            false, true
+        ];
+        yield [
+            false, false
         ];
     }
 }

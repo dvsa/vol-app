@@ -6,15 +6,11 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * RefData Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="ref_data",
- *    indexes={
- *        @ORM\Index(name="ix_ref_data_parent_id", columns={"parent_id"}),
- *        @ORM\Index(name="ix_ref_data_ref_data_category_id", columns={"ref_data_category_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'ref_data')]
+#[ORM\Index(name: 'ix_ref_data_parent_id', columns: ['parent_id'])]
+#[ORM\Index(name: 'ix_ref_data_ref_data_category_id', columns: ['ref_data_category_id'])]
+#[ORM\Entity]
 class RefData extends AbstractRefData
 {
     public const FEE_TYPE_APP = 'APP';

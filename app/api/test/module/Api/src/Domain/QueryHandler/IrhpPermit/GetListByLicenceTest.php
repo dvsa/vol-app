@@ -17,7 +17,7 @@ use Mockery as m;
 /**
  * GetListByLicence Test
  */
-class GetListByLicenceTest extends QueryHandlerTestCase
+final class GetListByLicenceTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

@@ -10,10 +10,11 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class QueryPartialServiceManagerTest extends MockeryTestCase
+final class QueryPartialServiceManagerTest extends MockeryTestCase
 {
     protected QueryPartialServiceManager $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $container = m::mock(ContainerInterface::class);

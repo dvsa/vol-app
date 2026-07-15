@@ -30,7 +30,7 @@ use Mockery as m;
  * @author Dan Eggleston <dan@stolenegg.com>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class PayFeeTest extends AbstractCommandHandlerTestCase
+final class PayFeeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -383,20 +383,18 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function licenceStatusNotAllowed(): array
+    public static function licenceStatusNotAllowed(): \Iterator
     {
-        return [
-            [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT],
-            [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_GRANTED],
-            [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_NOT_SUBMITTED],
-            [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_NOT_TAKEN_UP],
-            [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_REFUSED],
-            [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_REVOKED],
-            [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_SURRENDERED],
-            [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_TERMINATED],
-            [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_UNDER_CONSIDERATION],
-            [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_WITHDRAWN],
-        ];
+        yield [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT];
+        yield [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_GRANTED];
+        yield [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_NOT_SUBMITTED];
+        yield [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_NOT_TAKEN_UP];
+        yield [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_REFUSED];
+        yield [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_REVOKED];
+        yield [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_SURRENDERED];
+        yield [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_TERMINATED];
+        yield [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_UNDER_CONSIDERATION];
+        yield [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_WITHDRAWN];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('licenceStatusNotAllowed')]
@@ -463,13 +461,11 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function licenceStatusAllowed(): array
+    public static function licenceStatusAllowed(): \Iterator
     {
-        return [
-            [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_CURTAILED],
-            [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_SUSPENDED],
-            [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_VALID],
-        ];
+        yield [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_CURTAILED];
+        yield [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_SUSPENDED];
+        yield [\Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_VALID];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('licenceStatusAllowed')]
@@ -520,7 +516,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             \Dvsa\Olcs\Transfer\Command\Licence\ContinueLicence::class,
             ['id' => 717, 'version' => null],
-            (new Result())->addMessage('XXX')
+            new Result()->addMessage('XXX')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -645,18 +641,18 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\Application\CloseTexTask::class,
             ['id' => 222],
-            (new Result())->addMessage('CLOSE_TEX_TASK')
+            new Result()->addMessage('CLOSE_TEX_TASK')
         );
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\Application\CloseFeeDueTask::class,
             ['id' => 222],
-            (new Result())->addMessage('CLOSE_FEEDUE_TASK')
+            new Result()->addMessage('CLOSE_FEEDUE_TASK')
         );
 
         $this->expectedSideEffect(
             EndInterimCmd::class,
             ['id' => 222],
-            (new Result())->addMessage('EndInterim')
+            new Result()->addMessage('EndInterim')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -691,7 +687,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             CloseTasksCmd::class,
             ['ids' => [222]],
-            (new Result())->addMessage('TASK_CLOSED')
+            new Result()->addMessage('TASK_CLOSED')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -738,7 +734,7 @@ class PayFeeTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             InForceInterim::class,
             ['id' => 222],
-            (new Result())->addMessage('IN-FORCE-INTERIM')
+            new Result()->addMessage('IN-FORCE-INTERIM')
         );
 
         $result = $this->sut->handleCommand($command);

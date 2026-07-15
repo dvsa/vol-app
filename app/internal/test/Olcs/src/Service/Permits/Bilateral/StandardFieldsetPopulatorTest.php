@@ -23,7 +23,7 @@ use Laminas\Form\Fieldset;
  *
  * @author Jonathan Thomas <jonthan@opalise.co.uk>
  */
-class StandardFieldsetPopulatorTest extends TestCase
+final class StandardFieldsetPopulatorTest extends TestCase
 {
     public function testPopulate(): void
     {

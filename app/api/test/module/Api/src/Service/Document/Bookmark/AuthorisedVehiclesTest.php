@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class AuthorisedVehiclesTest extends MockeryTestCase
+final class AuthorisedVehiclesTest extends MockeryTestCase
 {
     public function testGetQuery(): void
     {
@@ -38,108 +38,106 @@ class AuthorisedVehiclesTest extends MockeryTestCase
         );
     }
 
-    public static function dpRender(): array
+    public static function dpRender(): \Iterator
     {
-        return [
-            'mixed' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_MIXED,
-                    ],
-                    'totAuthVehicles' => 10,
-                    'totAuthHgvVehicles' => 7,
-                    'totAuthLgvVehicles' => 3,
+        yield 'mixed' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_MIXED,
                 ],
-                'expected' => "7 Heavy goods vehicles\n\n3 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+                'totAuthVehicles' => 10,
+                'totAuthHgvVehicles' => 7,
+                'totAuthLgvVehicles' => 3,
             ],
-            'mixed - one vehicle each' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_MIXED,
-                    ],
-                    'totAuthVehicles' => 2,
-                    'totAuthHgvVehicles' => 1,
-                    'totAuthLgvVehicles' => 1,
+            'expected' => "7 Heavy goods vehicles\n\n3 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+        ];
+        yield 'mixed - one vehicle each' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_MIXED,
                 ],
-                'expected' => "1 Heavy goods vehicles\n\n1 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+                'totAuthVehicles' => 2,
+                'totAuthHgvVehicles' => 1,
+                'totAuthLgvVehicles' => 1,
             ],
-            'mixed - hgv vehicle only' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_MIXED,
-                    ],
-                    'totAuthVehicles' => 1,
-                    'totAuthHgvVehicles' => 1,
-                    'totAuthLgvVehicles' => 0,
+            'expected' => "1 Heavy goods vehicles\n\n1 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+        ];
+        yield 'mixed - hgv vehicle only' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_MIXED,
                 ],
-                'expected' => "1 Heavy goods vehicles\n\n0 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+                'totAuthVehicles' => 1,
+                'totAuthHgvVehicles' => 1,
+                'totAuthLgvVehicles' => 0,
             ],
-            'mixed - lgv vehicle only' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_MIXED,
-                    ],
-                    'totAuthVehicles' => 1,
-                    'totAuthHgvVehicles' => 0,
-                    'totAuthLgvVehicles' => 1,
+            'expected' => "1 Heavy goods vehicles\n\n0 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+        ];
+        yield 'mixed - lgv vehicle only' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_MIXED,
                 ],
-                'expected' => "0 Heavy goods vehicles\n\n1 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+                'totAuthVehicles' => 1,
+                'totAuthHgvVehicles' => 0,
+                'totAuthLgvVehicles' => 1,
             ],
-            'mixed - lgv not set' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_MIXED,
-                    ],
-                    'totAuthVehicles' => 1,
-                    'totAuthHgvVehicles' => 1,
-                    'totAuthLgvVehicles' => null,
+            'expected' => "0 Heavy goods vehicles\n\n1 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+        ];
+        yield 'mixed - lgv not set' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_MIXED,
                 ],
-                'expected' => 1,
+                'totAuthVehicles' => 1,
+                'totAuthHgvVehicles' => 1,
+                'totAuthLgvVehicles' => null,
             ],
-            'lgv' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_LGV,
-                    ],
-                    'totAuthVehicles' => 10,
-                    'totAuthHgvVehicles' => null,
-                    'totAuthLgvVehicles' => 10,
+            'expected' => 1,
+        ];
+        yield 'lgv' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_LGV,
                 ],
-                'expected' => "10 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+                'totAuthVehicles' => 10,
+                'totAuthHgvVehicles' => null,
+                'totAuthLgvVehicles' => 10,
             ],
-            'lgv - one vehicle' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_LGV,
-                    ],
-                    'totAuthVehicles' => 1,
-                    'totAuthHgvVehicles' => null,
-                    'totAuthLgvVehicles' => 1,
+            'expected' => "10 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+        ];
+        yield 'lgv - one vehicle' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_LGV,
                 ],
-                'expected' => "1 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+                'totAuthVehicles' => 1,
+                'totAuthHgvVehicles' => null,
+                'totAuthLgvVehicles' => 1,
             ],
-            'hgv' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_HGV,
-                    ],
-                    'totAuthVehicles' => 10,
-                    'totAuthHgvVehicles' => 10,
-                    'totAuthLgvVehicles' => null,
+            'expected' => "1 Light goods vehicles\n\nlight_goods_vehicle.undertakings.vehicle-bookmark_translated",
+        ];
+        yield 'hgv' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_HGV,
                 ],
-                'expected' => 10,
+                'totAuthVehicles' => 10,
+                'totAuthHgvVehicles' => 10,
+                'totAuthLgvVehicles' => null,
             ],
-            'psv' => [
-                'data' => [
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_PSV,
-                    ],
-                    'totAuthVehicles' => 10,
-                    'totAuthHgvVehicles' => 10,
-                    'totAuthLgvVehicles' => null,
+            'expected' => 10,
+        ];
+        yield 'psv' => [
+            'data' => [
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_PSV,
                 ],
-                'expected' => 10,
+                'totAuthVehicles' => 10,
+                'totAuthHgvVehicles' => 10,
+                'totAuthLgvVehicles' => null,
             ],
+            'expected' => 10,
         ];
     }
 }

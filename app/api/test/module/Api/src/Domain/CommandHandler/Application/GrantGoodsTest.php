@@ -29,7 +29,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\CancelAllInterimFees;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class GrantGoodsTest extends AbstractCommandHandlerTestCase
+final class GrantGoodsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -126,12 +126,12 @@ class GrantGoodsTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffectAsSystemUser(
             \Dvsa\Olcs\Api\Domain\Command\Application\CloseTexTask::class,
             ['id' => 111],
-            (new Result())->addMessage('CLOSE_TEX_TASK')
+            new Result()->addMessage('CLOSE_TEX_TASK')
         );
         $this->expectedSideEffectAsSystemUser(
             \Dvsa\Olcs\Api\Domain\Command\Application\CloseFeeDueTask::class,
             ['id' => 111],
-            (new Result())->addMessage('CLOSE_FEEDUE_TASK')
+            new Result()->addMessage('CLOSE_FEEDUE_TASK')
         );
 
         $result1 = new Result();
