@@ -1,0 +1,144 @@
+name: DB Refresh
+
+on:
+  workflow_dispatch:
+    inputs:
+      platformEnv:
+        description: "Determines the environment we want to target"
+        required: true
+        type: choice
+        options:
+          - dev
+          - reg
+          - da
+          - int
+          - demo
+          - ps
+      rdsSnap:
+        description: "To restore from a specific RDS snapshot value, define here, otherwise leave blank to restore from most recent automated snapshot from the source instance."
+        required: false
+        default: ""
+        type: string
+      rdsSnapSource:
+        description: "Source RDS instance to use latest automated snapshot if not explicitly defining a snapshot to use"
+        required: false
+        default: "app-olcs-rds-anondb-temp"
+        type: string
+      rdsFinalSnap:
+        description: "Take a final snapshot of the original RDS instance?"
+        required: true
+        default: true
+        type: boolean
+      shutdownEnv:
+        description: "Shutting down environment? If true, ReadReplica will not be recreated"
+        required: true
+        default: false
+        type: boolean
+      MultiAZ:
+        description: "Multi AZ the DB"
+        required: true
+        default: false
+        type: boolean
+
+env:
+  HTTPS_PROXY: http://proxy.ci.olcs.dev-dvsacloud.uk:3128
+  SLACK_CHAN: "#platform_alerts"
+  SLACK_COMPLETED: "#36A64F"
+  SLACK_FAIL: "#FF9FA1"
+  SLACK_WARN: "#DAA038"
+
+jobs:
+  db-refresh:
+    name: db refresh - ${{ inputs.platformEnv }} - ${{ github.run_number }}
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Send start notification to Slack
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          payload: |
+            {
+              "channel": "${{ env.SLACK_CHAN }}",
+              "attachments": [
+                {
+                  "color": "${{ env.SLACK_COMPLETED }}",
+                  "text": "Starting refresh of OLCSDB from anonymised PROD db into ${{ inputs.platformEnv }}"
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: DB refresh
+        id: db_refresh
+        shell: bash
+        env:
+          PLATFORM_ENV: ${{ inputs.platformEnv }}
+          RDS_SNAP: ${{ inputs.rdsSnap }}
+          RDS_SNAP_SOURCE: ${{ inputs.rdsSnapSource }}
+          RDS_FINAL_SNAP: ${{ inputs.rdsFinalSnap }}
+          SHUTDOWN_ENV: ${{ inputs.shutdownEnv }}
+          MULTI_AZ: ${{ inputs.MultiAZ }}
+        run: |
+          set -euo pipefail
+
+          echo "Running aurora DB refresh with:"
+          echo "  platformEnv=${PLATFORM_ENV}"
+          echo "  rdsSnap=${RDS_SNAP}"
+          echo "  rdsSnapSource=${RDS_SNAP_SOURCE}"
+          echo "  rdsFinalSnap=${RDS_FINAL_SNAP}"
+          echo "  shutdownEnv=${SHUTDOWN_ENV}"
+          echo "  MultiAZ=${MULTI_AZ}"
+
+          # TODO:
+          # Replace this section with the actual implementation from shdlb_common's auroraDbRefresh
+          # (e.g. call a script, aws cli, lambda, or shared action).
+          # Example:
+          # ./scripts/aurora-db-refresh.sh \
+          #   "${PLATFORM_ENV}" "${RDS_SNAP}" "${RDS_SNAP_SOURCE}" "${RDS_FINAL_SNAP}" \
+          #   "${SLACK_CHAN}" "${SLACK_COMPLETED}" "${SLACK_WARN}" "${HTTPS_PROXY}" \
+          #   "${SHUTDOWN_ENV}" "${MULTI_AZ}"
+
+          echo "auroraDbRefresh placeholder complete"
+
+      - name: Send failure notification to Slack
+        if: failure()
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          payload: |
+            {
+              "channel": "${{ env.SLACK_CHAN }}",
+              "attachments": [
+                {
+                  "color": "${{ env.SLACK_FAIL }}",
+                  "text": "DB refresh failed for ${{ inputs.platformEnv }}. Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Send success notification to Slack
+        if: success()
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          payload: |
+            {
+              "channel": "${{ env.SLACK_CHAN }}",
+              "attachments": [
+                {
+                  "color": "${{ env.SLACK_COMPLETED }}",
+                  "text": "Refresh of OLCSDB from anonymised PROD db into ${{ inputs.platformEnv }} completed successfully"
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Cleanup workspace
+        if: always()
+        run: |
+          git clean -fdx || true
