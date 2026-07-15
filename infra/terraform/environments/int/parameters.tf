@@ -64,7 +64,7 @@ module "parameters" {
     olcs_imap_user                               = "svc_vol_maintreq_nonprod@dvsa.gov.uk"
     olcs_iu_cookie                               = "qa.olcs.dev-dvsacloud.uk"
     olcs_iu_uri                                  = "https://iuweb.qa.olcs.dev-dvsacloud.uk"
-    olcs_mail_dsn                                = " "
+    olcs_mail_dsn                                = "smtp://selenium-mail.olcs.dev-dvsacloud.uk:1025"
     olcs_natreg_client_id                        = "f7dfe3f7-9d46-4fab-a113-7083d3c86a39"
     olcs_natreg_client_scope                     = "api://f7dfe3f7-9d46-4fab-a113-7083d3c86a39/.default"
     olcs_natreg_repute                           = "https://outbound-int.inr.dev-dvsacloud.uk"
