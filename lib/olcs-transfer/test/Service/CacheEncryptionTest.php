@@ -205,7 +205,6 @@ final class CacheEncryptionTest extends MockeryTestCase
 
         $cache = m::mock(CacheItemPoolInterface::class);
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
-        
         $sut->removeCustomItems('cache key', []);
     }
 
