@@ -57,11 +57,11 @@ final class AbstractGoodsVehiclesExportTest extends QueryHandlerTestCase
             'ceasedDate' => 'unit_CeasedDate',
         ];
 
-        $mockDbIterator = m::mock(\Doctrine\ORM\Internal\Hydration\IterableResult::class)
-            ->shouldReceive('next')->once()->andReturn([$dbRow1])
-            ->shouldReceive('next')->once()->andReturn([$dbRow2])
-            ->shouldReceive('next')->once()->andReturn(false)
-            ->getMock();
+        // Query::toIterable() yields each hydrated row directly (no [0 => ...] wrapper)
+        $mockDbIterator = (static function () use ($dbRow1, $dbRow2): \Generator {
+            yield $dbRow1;
+            yield $dbRow2;
+        })();
 
         $this->repoMap['LicenceVehicle']
             ->shouldReceive('fetchForExport')->once()->with($qb)->andReturn($mockDbIterator);
