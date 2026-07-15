@@ -1,6 +1,6 @@
-DELIMITER $$
+DROP PROCEDURE IF EXISTS sp_drop_constraints;
 
-DROP PROCEDURE IF EXISTS sp_drop_constraints$$
+DELIMITER $$
 
 CREATE PROCEDURE sp_drop_constraints()
 
