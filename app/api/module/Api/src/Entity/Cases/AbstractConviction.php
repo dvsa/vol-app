@@ -22,25 +22,19 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="conviction",
- *    indexes={
- *        @ORM\Index(name="ix_conviction_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_conviction_conviction_category", columns={"conviction_category"}),
- *        @ORM\Index(name="ix_conviction_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_conviction_defendant_type", columns={"defendant_type"}),
- *        @ORM\Index(name="ix_conviction_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_conviction_transport_manager_id", columns={"transport_manager_id"}),
- *        @ORM\Index(name="uk_conviction_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_conviction_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'conviction')]
+#[ORM\Index(name: 'ix_conviction_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_conviction_conviction_category', columns: ['conviction_category'])]
+#[ORM\Index(name: 'ix_conviction_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_conviction_defendant_type', columns: ['defendant_type'])]
+#[ORM\Index(name: 'ix_conviction_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_conviction_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\Index(name: 'uk_conviction_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_conviction_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractConviction implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -54,227 +48,203 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * DefendantType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="defendant_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'defendant_type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $defendantType;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * ConvictionCategory
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="conviction_category", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'conviction_category', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $convictionCategory;
 
     /**
      * Foreign Key to transport_manager
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
     protected $transportManager;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Offence date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="offence_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'offence_date', nullable: true)]
     protected $offenceDate;
 
     /**
      * Conviction date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="conviction_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'conviction_date', nullable: true)]
     protected $convictionDate;
 
     /**
      * Court
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="court", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'court', length: 70, nullable: true)]
     protected $court;
 
     /**
      * Penalty
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="penalty", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'penalty', length: 255, nullable: true)]
     protected $penalty;
 
     /**
      * New olcs field?
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="costs", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'costs', length: 255, nullable: true)]
     protected $costs;
 
     /**
      * msi
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="msi", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'msi', nullable: true)]
     protected $msi;
 
     /**
      * isDealtWith
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_dealt_with", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_dealt_with', nullable: false, options: ['default' => 0])]
     protected $isDealtWith = 0;
 
     /**
      * Declared to TC
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_declared", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_declared', nullable: false, options: ['default' => 0])]
     protected $isDeclared = 0;
 
     /**
      * Birth date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="birth_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'birth_date', nullable: true)]
     protected $birthDate;
 
     /**
      * Person firstname
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="person_firstname", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'person_firstname', length: 70, nullable: true)]
     protected $personFirstname;
 
     /**
      * Length 70 because of ETL. Will hold some org names from legacy data.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="person_lastname", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'person_lastname', length: 70, nullable: true)]
     protected $personLastname;
 
     /**
      * Notes
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="notes", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'notes', length: 4000, nullable: true)]
     protected $notes;
 
     /**
      * Taken into consideration
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="taken_into_consideration", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'taken_into_consideration', length: 4000, nullable: true)]
     protected $takenIntoConsideration;
 
     /**
      * user entered category for non act
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="category_text", length=1024, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'category_text', length: 1024, nullable: true)]
     protected $categoryText;
 
     /**
      * Set if defendant type is operator. Copy of op name at time of conviction.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="operator_name", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'operator_name', length: 70, nullable: true)]
     protected $operatorName;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**

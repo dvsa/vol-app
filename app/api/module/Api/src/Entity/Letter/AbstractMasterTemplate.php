@@ -21,17 +21,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="master_template",
- *    indexes={
- *        @ORM\Index(name="ix_master_template_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_master_template_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_master_template_locale", columns={"locale"})
- *    }
- * )
  */
+#[ORM\Table(name: 'master_template')]
+#[ORM\Index(name: 'ix_master_template_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_master_template_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_master_template_locale', columns: ['locale'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractMasterTemplate implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -44,60 +40,54 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 255, nullable: false)]
     protected $name = '';
 
     /**
      * HTML template with content placeholder
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="template_content", nullable=false)
      */
+    #[ORM\Column(type: 'text', name: 'template_content', nullable: false)]
     protected $templateContent = '';
 
     /**
      * Is default
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_default", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_default', nullable: false, options: ['default' => 0])]
     protected $isDefault = 0;
 
     /**
@@ -106,9 +96,8 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
      * time by MasterTemplateResolver from the letter context (currently isNi).
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="locale", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'locale', length: 20, nullable: true)]
     protected $locale;
 
     /**
@@ -116,9 +105,8 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
      * the {{HEADER_LEFT_CONTENT}} placeholder in template_content at render time.
      *
      * @var array|null
-     *
-     * @ORM\Column(type="json", name="header_left_content", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'header_left_content', nullable: true)]
     protected $headerLeftContent;
 
     /**
@@ -126,9 +114,8 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
      * Replaces the {{HEADER_RIGHT_CONTENT}} placeholder at render time.
      *
      * @var array|null
-     *
-     * @ORM\Column(type="json", name="header_right_content", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'header_right_content', nullable: true)]
     protected $headerRightContent;
 
     /**
@@ -136,9 +123,8 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
      * Replaces the {{SIGNOFF_CONTENT}} placeholder at render time.
      *
      * @var array|null
-     *
-     * @ORM\Column(type="json", name="signoff_content", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'signoff_content', nullable: true)]
     protected $signoffContent;
 
     /**
@@ -146,19 +132,17 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
      * Replaces the {{FOOTER_CONTENT}} placeholder at render time.
      *
      * @var array|null
-     *
-     * @ORM\Column(type="json", name="footer_content", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'footer_content', nullable: true)]
     protected $footerContent;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

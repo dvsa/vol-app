@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irhp_permit_request",
- *    indexes={
- *        @ORM\Index(name="ix_irhp_permit_request_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_irhp_permit_request_irhp_application_id", columns={"irhp_application_id"}),
- *        @ORM\Index(name="ix_irhp_permit_request_irhp_permit_application_id", columns={"irhp_permit_application_id"}),
- *        @ORM\Index(name="ix_irhp_permit_request_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_permit_request')]
+#[ORM\Index(name: 'ix_irhp_permit_request_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_irhp_permit_request_irhp_application_id', columns: ['irhp_application_id'])]
+#[ORM\Index(name: 'ix_irhp_permit_request_irhp_permit_application_id', columns: ['irhp_permit_application_id'])]
+#[ORM\Index(name: 'ix_irhp_permit_request_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,89 +41,76 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * IrhpApplication
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**
      * IrhpPermitApplication
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_permit_application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, fetch: 'LAZY')]
     protected $irhpPermitApplication;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Permits required
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="permits_required", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'permits_required', nullable: false)]
     protected $permitsRequired = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * IrhpPermitRequestAttributes
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="irhpPermitRequests", fetch="LAZY")
-     * @ORM\JoinTable(name="irhp_permit_request_attribute",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="irhp_permit_request_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="irhp_permit_request_attribute_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'irhp_permit_request_attribute')]
+    #[ORM\JoinColumn(name: 'irhp_permit_request_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'irhp_permit_request_attribute_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'irhpPermitRequests', fetch: 'LAZY')]
     protected $irhpPermitRequestAttributes;
 
     /**

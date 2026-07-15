@@ -21,21 +21,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_section",
- *    indexes={
- *        @ORM\Index(name="fk_letter_section_current_version_id", columns={"current_version_id"}),
- *        @ORM\Index(name="ix_letter_section_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_section_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_letter_section_key", columns={"section_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_letter_section_key", columns={"section_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_section')]
+#[ORM\Index(name: 'fk_letter_section_current_version_id', columns: ['current_version_id'])]
+#[ORM\Index(name: 'ix_letter_section_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_section_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'uk_letter_section_key', columns: ['section_key'])]
+#[ORM\UniqueConstraint(name: 'uk_letter_section_key', columns: ['section_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterSection implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -48,62 +42,56 @@ abstract class AbstractLetterSection implements BundleSerializableInterface, Jso
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Points to latest version
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion", fetch="LAZY")
-     * @ORM\JoinColumn(name="current_version_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'current_version_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion::class, fetch: 'LAZY')]
     protected $currentVersion;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Business identifier
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="section_key", length=100, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'section_key', length: 100, nullable: false)]
     protected $sectionKey = '';
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

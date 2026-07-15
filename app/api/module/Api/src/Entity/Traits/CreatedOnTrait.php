@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Api\Entity\Traits;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * CreatedOn Trait
  */
@@ -11,18 +13,16 @@ trait CreatedOnTrait
      * Created on
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="created_on", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'created_on', nullable: true)]
     protected $createdOn;
 
     /**
      * Set the createdOn field on persist
      *
-     * @ORM\PrePersist
-     *
      * @return void
      */
+    #[ORM\PrePersist]
     public function setCreatedOnBeforePersist()
     {
         $this->createdOn = new \DateTime();

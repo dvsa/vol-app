@@ -18,19 +18,13 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\Table(name="organisation_type",
- *    indexes={
- *        @ORM\Index(name="ix_organisation_type_org_person_type_id", columns={"org_person_type_id"}),
- *        @ORM\Index(name="ix_organisation_type_org_type_id", columns={"org_type_id"}),
- *        @ORM\Index(name="uk_organisation_type_org_type_id_org_person_type_id", columns={"org_type_id", "org_person_type_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_organisation_type_org_type_id_org_person_type_id", columns={"org_type_id", "org_person_type_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'organisation_type')]
+#[ORM\Index(name: 'ix_organisation_type_org_person_type_id', columns: ['org_person_type_id'])]
+#[ORM\Index(name: 'ix_organisation_type_org_type_id', columns: ['org_type_id'])]
+#[ORM\Index(name: 'uk_organisation_type_org_type_id_org_person_type_id', columns: ['org_type_id', 'org_person_type_id'])]
+#[ORM\UniqueConstraint(name: 'uk_organisation_type_org_type_id_org_person_type_id', columns: ['org_type_id', 'org_person_type_id'])]
+#[ORM\MappedSuperclass]
 abstract class AbstractOrganisationType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -41,31 +35,28 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * LTD, Partnership etc.
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="org_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'org_type_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $orgType;
 
     /**
      * Type if officers in org. Partners, directors etc.
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="org_person_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'org_person_type_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $orgPersonType;
 
     /**

@@ -21,21 +21,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="postcode_enforcement_area",
- *    indexes={
- *        @ORM\Index(name="ix_postcode_enforcement_area_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_postcode_enforcement_area_enforcement_area_id", columns={"enforcement_area_id"}),
- *        @ORM\Index(name="ix_postcode_enforcement_area_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_postcode_enforcement_area_enforcement_area_id_postcode_id", columns={"enforcement_area_id", "postcode_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_postcode_enforcement_area_enforcement_area_id_postcode_id", columns={"enforcement_area_id", "postcode_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'postcode_enforcement_area')]
+#[ORM\Index(name: 'ix_postcode_enforcement_area_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_postcode_enforcement_area_enforcement_area_id', columns: ['enforcement_area_id'])]
+#[ORM\Index(name: 'ix_postcode_enforcement_area_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'uk_postcode_enforcement_area_enforcement_area_id_postcode_id', columns: ['enforcement_area_id', 'postcode_id'])]
+#[ORM\UniqueConstraint(name: 'uk_postcode_enforcement_area_enforcement_area_id_postcode_id', columns: ['enforcement_area_id', 'postcode_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractPostcodeEnforcementArea implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -48,62 +42,56 @@ abstract class AbstractPostcodeEnforcementArea implements BundleSerializableInte
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to enforcement_area
      *
      * @var \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="enforcement_area_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'enforcement_area_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea::class, fetch: 'LAZY')]
     protected $enforcementArea;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Postcode in the area.  Just the first part of the postcode.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="postcode_id", length=8, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'postcode_id', length: 8, nullable: false)]
     protected $postcodeId = '';
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

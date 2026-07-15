@@ -21,17 +21,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_todo_version",
- *    indexes={
- *        @ORM\Index(name="ix_letter_todo_version_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_todo_version_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_todo_version_letter_todo_id", columns={"letter_todo_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_todo_version')]
+#[ORM\Index(name: 'ix_letter_todo_version_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_todo_version_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_todo_version_letter_todo_id', columns: ['letter_todo_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterTodoVersion implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -44,98 +40,88 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * LetterTodo
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterTodo
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterTodo", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_todo_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_todo_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTodo::class, fetch: 'LAZY')]
     protected $letterTodo;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * EditorJS format
      *
      * @var array
-     *
-     * @ORM\Column(type="json", name="description", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'description', nullable: true)]
     protected $description;
 
     /**
      * Help text for users
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="help_text", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'help_text', nullable: true)]
     protected $helpText;
 
     /**
      * Is locked
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_locked", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_locked', nullable: false, options: ['default' => 0])]
     protected $isLocked = 0;
 
     /**
      * Embargo until this date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="publish_from", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'publish_from', nullable: true)]
     protected $publishFrom;
 
     /**
      * Version number
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="version_number", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'version_number', nullable: false)]
     protected $versionNumber = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

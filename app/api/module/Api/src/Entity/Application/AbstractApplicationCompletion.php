@@ -21,21 +21,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="application_completion",
- *    indexes={
- *        @ORM\Index(name="ix_application_completion_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_application_completion_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_application_completion_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_application_completion_application_id", columns={"application_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_application_completion_application_id", columns={"application_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'application_completion')]
+#[ORM\Index(name: 'ix_application_completion_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_application_completion_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_application_completion_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'uk_application_completion_application_id', columns: ['application_id'])]
+#[ORM\UniqueConstraint(name: 'uk_application_completion_application_id', columns: ['application_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractApplicationCompletion implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -48,332 +42,296 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id')]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
     protected $application;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Type of licence status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="type_of_licence_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'type_of_licence_status', nullable: true)]
     protected $typeOfLicenceStatus;
 
     /**
      * Business type status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="business_type_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'business_type_status', nullable: true)]
     protected $businessTypeStatus;
 
     /**
      * Business details status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="business_details_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'business_details_status', nullable: true)]
     protected $businessDetailsStatus;
 
     /**
      * Addresses status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="addresses_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'addresses_status', nullable: true)]
     protected $addressesStatus;
 
     /**
      * People status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="people_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'people_status', nullable: true)]
     protected $peopleStatus;
 
     /**
      * Taxi phv status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="taxi_phv_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'taxi_phv_status', nullable: true)]
     protected $taxiPhvStatus;
 
     /**
      * Operating centres status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="operating_centres_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'operating_centres_status', nullable: true)]
     protected $operatingCentresStatus;
 
     /**
      * Financial evidence status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="financial_evidence_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'financial_evidence_status', nullable: true)]
     protected $financialEvidenceStatus;
 
     /**
      * Transport managers status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="transport_managers_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'transport_managers_status', nullable: true)]
     protected $transportManagersStatus;
 
     /**
      * Vehicles status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="vehicles_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'vehicles_status', nullable: true)]
     protected $vehiclesStatus;
 
     /**
      * Vehicles psv status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="vehicles_psv_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'vehicles_psv_status', nullable: true)]
     protected $vehiclesPsvStatus;
 
     /**
      * Vehicles size status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="vehicles_size_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'vehicles_size_status', nullable: true)]
     protected $vehiclesSizeStatus;
 
     /**
      * Psv operate small status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_operate_small_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_operate_small_status', nullable: true)]
     protected $psvOperateSmallStatus;
 
     /**
      * Psv operate large status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_operate_large_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_operate_large_status', nullable: true)]
     protected $psvOperateLargeStatus;
 
     /**
      * Psv small conditions status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_small_conditions_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_small_conditions_status', nullable: true)]
     protected $psvSmallConditionsStatus;
 
     /**
      * Psv operate novelty status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_operate_novelty_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_operate_novelty_status', nullable: true)]
     protected $psvOperateNoveltyStatus;
 
     /**
      * Psv small part written status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_small_part_written_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_small_part_written_status', nullable: true)]
     protected $psvSmallPartWrittenStatus;
 
     /**
      * Psv documentary evidence small status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_documentary_evidence_small_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_documentary_evidence_small_status', nullable: true)]
     protected $psvDocumentaryEvidenceSmallStatus;
 
     /**
      * Psv documentary evidence large status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_documentary_evidence_large_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_documentary_evidence_large_status', nullable: true)]
     protected $psvDocumentaryEvidenceLargeStatus;
 
     /**
      * Psv main occupation undertakings status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="psv_main_occupation_undertakings_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'psv_main_occupation_undertakings_status', nullable: true)]
     protected $psvMainOccupationUndertakingsStatus;
 
     /**
      * Vehicles declarations status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="vehicles_declarations_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'vehicles_declarations_status', nullable: true)]
     protected $vehiclesDeclarationsStatus;
 
     /**
      * Discs status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="discs_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'discs_status', nullable: true)]
     protected $discsStatus;
 
     /**
      * Community licences status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="community_licences_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'community_licences_status', nullable: true)]
     protected $communityLicencesStatus;
 
     /**
      * Safety status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="safety_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'safety_status', nullable: true)]
     protected $safetyStatus;
 
     /**
      * Conditions undertakings status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="conditions_undertakings_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'conditions_undertakings_status', nullable: true)]
     protected $conditionsUndertakingsStatus;
 
     /**
      * Financial history status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="financial_history_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'financial_history_status', nullable: true)]
     protected $financialHistoryStatus;
 
     /**
      * Licence history status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="licence_history_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'licence_history_status', nullable: true)]
     protected $licenceHistoryStatus;
 
     /**
      * Convictions penalties status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="convictions_penalties_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'convictions_penalties_status', nullable: true)]
     protected $convictionsPenaltiesStatus;
 
     /**
      * Undertakings status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="undertakings_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'undertakings_status', nullable: true)]
     protected $undertakingsStatus;
 
     /**
      * Declarations internal status
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="declarations_internal_status", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'declarations_internal_status', nullable: true)]
     protected $declarationsInternalStatus;
 
     /**
      * Last section
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="last_section", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'last_section', length: 255, nullable: true)]
     protected $lastSection;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

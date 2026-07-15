@@ -54,51 +54,51 @@ class RelationshipTypeHandler extends AbstractTypeHandler
         $relationType = $isOneToOne ? 'OneToOne' : 'ManyToOne';
 
         $options = [
-            'targetEntity="' . $targetEntity . '"',
-            'fetch="LAZY"'
+            'targetEntity: \\' . ltrim($targetEntity, '\\') . '::class',
+            "fetch: 'LAZY'"
         ];
 
         $joinOptions = [
-            'name="' . $column->getName() . '"',
-            'referencedColumnName="' . $referencedColumn . '"'
+            "name: '" . $column->getName() . "'",
+            "referencedColumnName: '" . $referencedColumn . "'"
         ];
 
         if ($column->isNullable()) {
-            $joinOptions[] = 'nullable=true';
+            $joinOptions[] = 'nullable: true';
         }
 
         // Check for cascade options in config
         $cascadeOptions = $this->getCascadeOptions($column, $config);
         if (!empty($cascadeOptions)) {
-            $options[] = 'cascade={' . implode(', ', array_map(fn($c) => '"' . $c . '"', $cascadeOptions)) . '}';
+            $options[] = 'cascade: [' . implode(', ', array_map(fn($c) => "'" . $c . "'", $cascadeOptions)) . ']';
         }
 
         // Check for orphanRemoval
         $orphanRemoval = $this->getOrphanRemoval($column, $config);
         if ($orphanRemoval) {
-            $options[] = 'orphanRemoval=true';
+            $options[] = 'orphanRemoval: true';
         }
 
         // Check for indexBy
         $indexBy = $this->getIndexBy($column, $config);
         if ($indexBy !== null) {
-            $options[] = 'indexBy="' . $indexBy . '"';
+            $options[] = "indexBy: '$indexBy'";
         }
 
         $annotations = [];
 
-        // Add @ORM\Id if this column is part of the primary key (composite key with FK)
+        // Add #[ORM\Id] if this column is part of the primary key (composite key with FK)
         if ($column->isPrimary()) {
-            $annotations[] = '@ORM\Id';
+            $annotations[] = '#[ORM\Id]';
         }
 
+        $annotations[] = sprintf("#[ORM\JoinColumn(%s)]", implode(', ', $joinOptions));
+
         $annotations[] = sprintf(
-            "@ORM\%s(%s)",
+            "#[ORM\%s(%s)]",
             $relationType,
             implode(', ', $options)
         );
-
-        $annotations[] = sprintf("@ORM\JoinColumn(%s)", implode(', ', $joinOptions));
 
         // Add OrderBy annotation if specified (only for collections)
         if ($relationType === 'OneToMany' || $relationType === 'ManyToMany') {
@@ -106,13 +106,13 @@ class RelationshipTypeHandler extends AbstractTypeHandler
             if (!empty($orderBy)) {
                 $orderByPairs = [];
                 foreach ($orderBy as $field => $direction) {
-                    $orderByPairs[] = sprintf('"%s" = "%s"', $field, strtoupper((string) $direction));
+                    $orderByPairs[] = sprintf("'%s' => '%s'", $field, strtoupper((string) $direction));
                 }
-                $annotations[] = sprintf('@ORM\OrderBy({%s})', implode(', ', $orderByPairs));
+                $annotations[] = sprintf('#[ORM\OrderBy([%s])]', implode(', ', $orderByPairs));
             }
         }
 
-        return implode("\n     * ", $annotations);
+        return implode("\n    ", $annotations);
     }
 
     /**

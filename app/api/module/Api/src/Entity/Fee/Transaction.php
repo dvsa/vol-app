@@ -7,25 +7,19 @@ use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
 
 /**
  * Transaction Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="txn",
- *    indexes={
- *        @ORM\Index(name="ix_txn_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_txn_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_txn_status", columns={"status"}),
- *        @ORM\Index(name="ix_txn_waive_recommender_user_id", columns={"waive_recommender_user_id"}),
- *        @ORM\Index(name="ix_txn_processed_by_user_id", columns={"processed_by_user_id"}),
- *        @ORM\Index(name="ix_txn_olbs_key", columns={"olbs_key"}),
- *        @ORM\Index(name="ix_txn_payment_method", columns={"payment_method"}),
- *        @ORM\Index(name="ix_txn_type", columns={"type"}),
- *        @ORM\Index(name="ix_txn_reference", columns={"reference"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_txn_receipt_document_id", columns={"receipt_document_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'txn')]
+#[ORM\Index(name: 'ix_txn_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_txn_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_txn_status', columns: ['status'])]
+#[ORM\Index(name: 'ix_txn_waive_recommender_user_id', columns: ['waive_recommender_user_id'])]
+#[ORM\Index(name: 'ix_txn_processed_by_user_id', columns: ['processed_by_user_id'])]
+#[ORM\Index(name: 'ix_txn_olbs_key', columns: ['olbs_key'])]
+#[ORM\Index(name: 'ix_txn_payment_method', columns: ['payment_method'])]
+#[ORM\Index(name: 'ix_txn_type', columns: ['type'])]
+#[ORM\Index(name: 'ix_txn_reference', columns: ['reference'])]
+#[ORM\UniqueConstraint(name: 'uk_txn_receipt_document_id', columns: ['receipt_document_id'])]
+#[ORM\Entity]
 class Transaction extends AbstractTransaction implements OrganisationProviderInterface
 {
     public const STATUS_OUTSTANDING = 'pay_s_os';

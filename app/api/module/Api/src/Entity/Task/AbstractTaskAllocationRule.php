@@ -21,22 +21,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="task_allocation_rule",
- *    indexes={
- *        @ORM\Index(name="fk_task_allocation_rule_sub_category_id_sub_category_id", columns={"sub_category_id"}),
- *        @ORM\Index(name="ix_task_allocation_rule_category_id", columns={"category_id"}),
- *        @ORM\Index(name="ix_task_allocation_rule_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_task_allocation_rule_goods_or_psv", columns={"goods_or_psv"}),
- *        @ORM\Index(name="ix_task_allocation_rule_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_task_allocation_rule_team_id", columns={"team_id"}),
- *        @ORM\Index(name="ix_task_allocation_rule_traffic_area_id", columns={"traffic_area_id"}),
- *        @ORM\Index(name="ix_task_allocation_rule_user_id", columns={"user_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'task_allocation_rule')]
+#[ORM\Index(name: 'fk_task_allocation_rule_sub_category_id_sub_category_id', columns: ['sub_category_id'])]
+#[ORM\Index(name: 'ix_task_allocation_rule_category_id', columns: ['category_id'])]
+#[ORM\Index(name: 'ix_task_allocation_rule_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_task_allocation_rule_goods_or_psv', columns: ['goods_or_psv'])]
+#[ORM\Index(name: 'ix_task_allocation_rule_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_task_allocation_rule_team_id', columns: ['team_id'])]
+#[ORM\Index(name: 'ix_task_allocation_rule_traffic_area_id', columns: ['traffic_area_id'])]
+#[ORM\Index(name: 'ix_task_allocation_rule_user_id', columns: ['user_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractTaskAllocationRule implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,121 +45,109 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to category
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Category
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Category", fetch="LAZY")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Category::class, fetch: 'LAZY')]
     protected $category;
 
     /**
      * SubCategory
      *
      * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SubCategory", fetch="LAZY")
-     * @ORM\JoinColumn(name="sub_category_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SubCategory::class, fetch: 'LAZY')]
     protected $subCategory;
 
     /**
      * Foreign Key to team
      *
      * @var \Dvsa\Olcs\Api\Entity\User\Team
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\Team", fetch="LAZY")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'team_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\Team::class, fetch: 'LAZY')]
     protected $team;
 
     /**
      * Foreign Key to user
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 
     /**
      * GoodsOrPsv
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $goodsOrPsv;
 
     /**
      * Foreign Key to traffic_area
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Is mlh
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_mlh", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'is_mlh', nullable: true)]
     protected $isMlh;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * TaskAlphaSplits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Task\TaskAlphaSplit", mappedBy="taskAllocationRule")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Task\TaskAlphaSplit::class, mappedBy: 'taskAllocationRule')]
     protected $taskAlphaSplits;
 
     /**

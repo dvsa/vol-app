@@ -58,14 +58,6 @@ return [
                 'params' => $doctrine_connection_params,
             ],
         ],
-        'driver' => [
-            'EntityDriver' => [
-                'cache' => 'redis'
-            ],
-            'translatable_metadata_driver' => [
-                'cache' => 'redis',
-            ]
-        ],
         'configuration' => [
             'orm_default' => [
                 'metadata_cache' => 'redis',

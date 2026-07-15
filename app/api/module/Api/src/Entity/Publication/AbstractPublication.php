@@ -21,21 +21,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="publication",
- *    indexes={
- *        @ORM\Index(name="ix_publication_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_publication_doc_template_id", columns={"doc_template_id"}),
- *        @ORM\Index(name="ix_publication_document_id", columns={"document_id"}),
- *        @ORM\Index(name="ix_publication_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_publication_police_document_id", columns={"police_document_id"}),
- *        @ORM\Index(name="ix_publication_pub_status", columns={"pub_status"}),
- *        @ORM\Index(name="ix_publication_traffic_area_id", columns={"traffic_area_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'publication')]
+#[ORM\Index(name: 'ix_publication_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_publication_doc_template_id', columns: ['doc_template_id'])]
+#[ORM\Index(name: 'ix_publication_document_id', columns: ['document_id'])]
+#[ORM\Index(name: 'ix_publication_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_publication_police_document_id', columns: ['police_document_id'])]
+#[ORM\Index(name: 'ix_publication_pub_status', columns: ['pub_status'])]
+#[ORM\Index(name: 'ix_publication_traffic_area_id', columns: ['traffic_area_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractPublication implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -48,138 +44,124 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to traffic_area
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
     /**
      * Foreign Key to document
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
     protected $document;
 
     /**
      * Foreign Key to police version of the document
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="police_document_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'police_document_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
     protected $policeDocument;
 
     /**
      * Foreign Key to doc_template
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\DocTemplate
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\DocTemplate", fetch="LAZY")
-     * @ORM\JoinColumn(name="doc_template_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'doc_template_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocTemplate::class, fetch: 'LAZY')]
     protected $docTemplate;
 
     /**
      * PubStatus
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="pub_status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'pub_status', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $pubStatus;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Publication no
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="publication_no", nullable=false)
      */
+    #[ORM\Column(type: 'smallint', name: 'publication_no', nullable: false)]
     protected $publicationNo = 0;
 
     /**
      * Either A&D or N&P
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="pub_type", length=3, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'pub_type', length: 3, nullable: false)]
     protected $pubType = '';
 
     /**
      * Pub date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="pub_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'pub_date', nullable: true)]
     protected $pubDate;
 
     /**
      * Doc name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="doc_name", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'doc_name', length: 255, nullable: true)]
     protected $docName;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * PublicationLinks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Publication\PublicationLink", mappedBy="publication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationLink::class, mappedBy: 'publication')]
     protected $publicationLinks;
 
     /**

@@ -7,11 +7,9 @@ use Dvsa\Olcs\Api\Service\GovUkAccount\Data\Attributes;
 
 /**
  * DigitalSignature Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="digital_signature",
- * )
  */
+#[ORM\Table(name: 'digital_signature')]
+#[ORM\Entity]
 class DigitalSignature extends AbstractDigitalSignature
 {
     public const ERR_INVALID_SIG = 'Signature attributes missing name or birth date information';

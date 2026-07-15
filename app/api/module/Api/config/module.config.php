@@ -938,15 +938,13 @@ return [
     'doctrine' => [
         'driver' => [
             'EntityDriver' => [
-                'class' => \Doctrine\ORM\Mapping\Driver\AnnotationDriver::class,
-                'cache' => 'array',
+                'class' => \Doctrine\ORM\Mapping\Driver\AttributeDriver::class,
                 'paths' => [
                     __DIR__ . '/../src/Entity'
                 ]
             ],
             'translatable_metadata_driver' => [
-                'class' => \Doctrine\ORM\Mapping\Driver\AnnotationDriver::class,
-                'cache' => 'array',
+                'class' => \Doctrine\ORM\Mapping\Driver\AttributeDriver::class,
                 'paths' => [
                     'vendor/gedmo/doctrine-extensions/src/Translatable/Entity'
                 ],

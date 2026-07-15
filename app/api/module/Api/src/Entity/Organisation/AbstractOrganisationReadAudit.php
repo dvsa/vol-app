@@ -19,21 +19,15 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="organisation_read_audit",
- *    indexes={
- *        @ORM\Index(name="ix_organisation_read_audit_created_on", columns={"created_on"}),
- *        @ORM\Index(name="ix_organisation_read_audit_organisation_id", columns={"organisation_id"}),
- *        @ORM\Index(name="ix_organisation_read_audit_user_id", columns={"user_id"}),
- *        @ORM\Index(name="uk_organisation_read_audit_organisation_id_user_id_created_on", columns={"organisation_id", "user_id", "created_on"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_organisation_read_audit_organisation_id_user_id_created_on", columns={"organisation_id", "user_id", "created_on"})
- *    }
- * )
  */
+#[ORM\Table(name: 'organisation_read_audit')]
+#[ORM\Index(name: 'ix_organisation_read_audit_created_on', columns: ['created_on'])]
+#[ORM\Index(name: 'ix_organisation_read_audit_organisation_id', columns: ['organisation_id'])]
+#[ORM\Index(name: 'ix_organisation_read_audit_user_id', columns: ['user_id'])]
+#[ORM\Index(name: 'uk_organisation_read_audit_organisation_id_user_id_created_on', columns: ['organisation_id', 'user_id', 'created_on'])]
+#[ORM\UniqueConstraint(name: 'uk_organisation_read_audit_organisation_id_user_id_created_on', columns: ['organisation_id', 'user_id', 'created_on'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractOrganisationReadAudit implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,31 +39,28 @@ abstract class AbstractOrganisationReadAudit implements BundleSerializableInterf
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to organisation
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 
     /**
      * Foreign Key to user
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 
     /**

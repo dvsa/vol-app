@@ -21,20 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irfo_gv_permit",
- *    indexes={
- *        @ORM\Index(name="ix_irfo_gv_permit_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_irfo_gv_permit_irfo_gv_permit_type_id", columns={"irfo_gv_permit_type_id"}),
- *        @ORM\Index(name="ix_irfo_gv_permit_irfo_permit_status", columns={"irfo_permit_status"}),
- *        @ORM\Index(name="ix_irfo_gv_permit_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_irfo_gv_permit_organisation_id", columns={"organisation_id"}),
- *        @ORM\Index(name="ix_irfo_gv_permit_withdrawn_reason", columns={"withdrawn_reason"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irfo_gv_permit')]
+#[ORM\Index(name: 'ix_irfo_gv_permit_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_irfo_gv_permit_irfo_gv_permit_type_id', columns: ['irfo_gv_permit_type_id'])]
+#[ORM\Index(name: 'ix_irfo_gv_permit_irfo_permit_status', columns: ['irfo_permit_status'])]
+#[ORM\Index(name: 'ix_irfo_gv_permit_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_irfo_gv_permit_organisation_id', columns: ['organisation_id'])]
+#[ORM\Index(name: 'ix_irfo_gv_permit_withdrawn_reason', columns: ['withdrawn_reason'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -47,164 +43,147 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to organisation
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 
     /**
      * Foreign Key to irfo_gv_permit_type
      *
      * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermitType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermitType", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_gv_permit_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irfo_gv_permit_type_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermitType::class, fetch: 'LAZY')]
     protected $irfoGvPermitType;
 
     /**
      * IrfoPermitStatus
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_permit_status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irfo_permit_status', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $irfoPermitStatus;
 
     /**
      * WithdrawnReason
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="withdrawn_reason", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'withdrawn_reason', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $withdrawnReason;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Irfo fee id
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="irfo_fee_id", length=10, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'irfo_fee_id', length: 10, nullable: true)]
     protected $irfoFeeId;
 
     /**
      * Exemption details
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="exemption_details", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'exemption_details', length: 255, nullable: true)]
     protected $exemptionDetails;
 
     /**
      * Expiry date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="expiry_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'expiry_date', nullable: true)]
     protected $expiryDate;
 
     /**
      * isFeeExempt
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_fee_exempt", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_fee_exempt', nullable: false, options: ['default' => 0])]
     protected $isFeeExempt = 0;
 
     /**
      * In force date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="in_force_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'in_force_date', nullable: true)]
     protected $inForceDate;
 
     /**
      * No of copies
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="no_of_copies", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'smallint', name: 'no_of_copies', nullable: false, options: ['default' => 0])]
     protected $noOfCopies = 0;
 
     /**
      * Note
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="note", length=2000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'note', length: 2000, nullable: true)]
     protected $note;
 
     /**
      * permitPrinted
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="permit_printed", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'permit_printed', nullable: false, options: ['default' => 0])]
     protected $permitPrinted = 0;
 
     /**
      * Year required
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="year_required", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'year_required', nullable: true)]
     protected $yearRequired;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

@@ -9,17 +9,12 @@ use RuntimeException;
 
 /**
  * IrhpPermitType Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="irhp_permit_type",
- *    indexes={
- *        @ORM\Index(name="irhp_permit_type_ref_data_id_fk", columns={"name"}),
- *        @ORM\Index(name="fk_irhp_permit_type_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_irhp_permit_type_last_modified_by_user_id",
-     *     columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_permit_type')]
+#[ORM\Index(name: 'irhp_permit_type_ref_data_id_fk', columns: ['name'])]
+#[ORM\Index(name: 'fk_irhp_permit_type_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_irhp_permit_type_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Entity]
 class IrhpPermitType extends AbstractIrhpPermitType
 {
     public const IRHP_PERMIT_TYPE_ID_ECMT = 1;

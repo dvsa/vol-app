@@ -19,21 +19,15 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="cases_read_audit",
- *    indexes={
- *        @ORM\Index(name="ix_cases_read_audit_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_cases_read_audit_created_on", columns={"created_on"}),
- *        @ORM\Index(name="ix_cases_read_audit_user_id", columns={"user_id"}),
- *        @ORM\Index(name="uk_cases_read_audit_case_id_user_id_created_on", columns={"case_id", "user_id", "created_on"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_cases_read_audit_case_id_user_id_created_on", columns={"case_id", "user_id", "created_on"})
- *    }
- * )
  */
+#[ORM\Table(name: 'cases_read_audit')]
+#[ORM\Index(name: 'ix_cases_read_audit_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_cases_read_audit_created_on', columns: ['created_on'])]
+#[ORM\Index(name: 'ix_cases_read_audit_user_id', columns: ['user_id'])]
+#[ORM\Index(name: 'uk_cases_read_audit_case_id_user_id_created_on', columns: ['case_id', 'user_id', 'created_on'])]
+#[ORM\UniqueConstraint(name: 'uk_cases_read_audit_case_id_user_id_created_on', columns: ['case_id', 'user_id', 'created_on'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractCasesReadAudit implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,31 +39,28 @@ abstract class AbstractCasesReadAudit implements BundleSerializableInterface, Js
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * Foreign Key to user
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 
     /**

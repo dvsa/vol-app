@@ -16,10 +16,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Task Search View
- *
- * @ORM\Entity(readOnly=true)
- * @ORM\Table(name="vehicle_history_view")
  */
+#[ORM\Table(name: 'vehicle_history_view')]
+#[ORM\Entity(readOnly: true)]
 class VehicleHistoryView
 {
     /**
@@ -28,72 +27,65 @@ class VehicleHistoryView
      * @var int
      *
      * NOTE: The ID annotation here is to allow doctrine to create the table (Even though we remove it later)
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id')]
     protected $id;
 
     /**
      * Vrm
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="vrm", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'vrm', length: 20, nullable: true)]
     protected $vrm;
 
     /**
      * Licence Number
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="lic_no")
      */
+    #[ORM\Column(type: 'string', name: 'lic_no')]
     protected $licenceNo;
 
     /**
      * Specified date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="specified_date")
      */
+    #[ORM\Column(type: 'datetime', name: 'specified_date')]
     protected $specifiedDate;
 
     /**
      * Removal date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="removal_date")
      */
+    #[ORM\Column(type: 'datetime', name: 'removal_date')]
     protected $removalDate;
 
     /**
      * Issued date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="issued_date")
      */
+    #[ORM\Column(type: 'datetime', name: 'issued_date')]
     protected $issuedDate;
 
     /**
      * Ceased date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="ceased_date")
      */
+    #[ORM\Column(type: 'datetime', name: 'ceased_date')]
     protected $ceasedDate;
 
     /**
      * Disc No
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="disc_no", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'disc_no', length: 20, nullable: true)]
     protected $discNo;
 
     /**

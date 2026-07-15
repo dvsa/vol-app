@@ -21,20 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="legacy_recommendation",
- *    indexes={
- *        @ORM\Index(name="ix_legacy_recommendation_action_id", columns={"action_id"}),
- *        @ORM\Index(name="ix_legacy_recommendation_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_legacy_recommendation_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_legacy_recommendation_from_user_id", columns={"from_user_id"}),
- *        @ORM\Index(name="ix_legacy_recommendation_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_legacy_recommendation_to_user_id", columns={"to_user_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'legacy_recommendation')]
+#[ORM\Index(name: 'ix_legacy_recommendation_action_id', columns: ['action_id'])]
+#[ORM\Index(name: 'ix_legacy_recommendation_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_legacy_recommendation_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_legacy_recommendation_from_user_id', columns: ['from_user_id'])]
+#[ORM\Index(name: 'ix_legacy_recommendation_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_legacy_recommendation_to_user_id', columns: ['to_user_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLegacyRecommendation implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -47,173 +43,155 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * Action
      *
      * @var \Dvsa\Olcs\Api\Entity\Legacy\LegacyCaseAction
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Legacy\LegacyCaseAction", fetch="LAZY")
-     * @ORM\JoinColumn(name="action_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'action_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Legacy\LegacyCaseAction::class, fetch: 'LAZY')]
     protected $action;
 
     /**
      * FromUser
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="from_user_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'from_user_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $fromUser;
 
     /**
      * ToUser
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="to_user_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'to_user_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $toUser;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Rec date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="rec_date", nullable=false)
      */
+    #[ORM\Column(type: 'datetime', name: 'rec_date', nullable: false)]
     protected $recDate;
 
     /**
      * Pi reason
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="pi_reason", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'pi_reason', length: 255, nullable: true)]
     protected $piReason;
 
     /**
      * Comment
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="comment", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'comment', length: 4000, nullable: true)]
     protected $comment;
 
     /**
      * Effective date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="effective_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'effective_date', nullable: true)]
     protected $effectiveDate;
 
     /**
      * Notes
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="notes", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'notes', nullable: true)]
     protected $notes;
 
     /**
      * Pi decision
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="pi_decision", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'pi_decision', length: 255, nullable: true)]
     protected $piDecision;
 
     /**
      * Request
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="request", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'request', length: 20, nullable: true)]
     protected $request;
 
     /**
      * revokeLic
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="revoke_lic", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'revoke_lic', nullable: true)]
     protected $revokeLic;
 
     /**
      * status
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="status", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'status', nullable: true)]
     protected $status;
 
     /**
      * Total points
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="total_points", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'total_points', nullable: true)]
     protected $totalPoints;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

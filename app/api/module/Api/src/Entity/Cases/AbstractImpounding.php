@@ -21,21 +21,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="impounding",
- *    indexes={
- *        @ORM\Index(name="ix_impounding_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_impounding_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_impounding_impounding_type", columns={"impounding_type"}),
- *        @ORM\Index(name="ix_impounding_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_impounding_outcome", columns={"outcome"}),
- *        @ORM\Index(name="ix_impounding_presiding_tc_id", columns={"presiding_tc_id"}),
- *        @ORM\Index(name="ix_impounding_venue_id", columns={"venue_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'impounding')]
+#[ORM\Index(name: 'ix_impounding_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_impounding_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_impounding_impounding_type', columns: ['impounding_type'])]
+#[ORM\Index(name: 'ix_impounding_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_impounding_outcome', columns: ['outcome'])]
+#[ORM\Index(name: 'ix_impounding_presiding_tc_id', columns: ['presiding_tc_id'])]
+#[ORM\Index(name: 'ix_impounding_venue_id', columns: ['venue_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractImpounding implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -48,173 +44,151 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * ImpoundingType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="impounding_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'impounding_type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $impoundingType;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * Foreign Key to presiding_tc
      *
      * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\PresidingTc", fetch="LAZY")
-     * @ORM\JoinColumn(name="presiding_tc_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'presiding_tc_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\PresidingTc::class, fetch: 'LAZY')]
     protected $presidingTc;
 
     /**
      * Vehicle(s) returned or not returned
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="outcome", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'outcome', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $outcome;
 
     /**
      * Foreign Key to venue
      *
      * @var \Dvsa\Olcs\Api\Entity\Venue
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Venue", fetch="LAZY")
-     * @ORM\JoinColumn(name="venue_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'venue_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Venue::class, fetch: 'LAZY')]
     protected $venue;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Hearing date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="hearing_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'hearing_date', nullable: true)]
     protected $hearingDate;
 
     /**
      * Application receipt date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="application_receipt_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'application_receipt_date', nullable: true)]
     protected $applicationReceiptDate;
 
     /**
      * Outcome sent date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="outcome_sent_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'outcome_sent_date', nullable: true)]
     protected $outcomeSentDate;
 
     /**
      * Notes
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="notes", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'notes', length: 4000, nullable: true)]
     protected $notes;
 
     /**
      * Close date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="close_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'close_date', nullable: true)]
     protected $closeDate;
 
     /**
      * Venue other
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="venue_other", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'venue_other', length: 255, nullable: true)]
     protected $venueOther;
 
     /**
      * Vrm
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="vrm", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'vrm', length: 20, nullable: true)]
     protected $vrm;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * ImpoundingLegislationTypes
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="impoundings", fetch="LAZY")
-     * @ORM\JoinTable(name="impounding_legislation_type",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="impounding_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="impounding_legislation_type_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'impounding_legislation_type')]
+    #[ORM\JoinColumn(name: 'impounding_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'impounding_legislation_type_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'impoundings', fetch: 'LAZY')]
     protected $impoundingLegislationTypes;
 
     /**

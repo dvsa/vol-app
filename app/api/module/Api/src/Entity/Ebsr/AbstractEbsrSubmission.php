@@ -20,24 +20,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="ebsr_submission",
- *    indexes={
- *        @ORM\Index(name="ix_ebsr_submission_bus_reg_id", columns={"bus_reg_id"}),
- *        @ORM\Index(name="ix_ebsr_submission_ebsr_submission_status_id", columns={"ebsr_submission_status_id"}),
- *        @ORM\Index(name="ix_ebsr_submission_ebsr_submission_type_id", columns={"ebsr_submission_type_id"}),
- *        @ORM\Index(name="ix_ebsr_submission_organisation_id", columns={"organisation_id"}),
- *        @ORM\Index(name="uk_ebsr_submission_document_id", columns={"document_id"}),
- *        @ORM\Index(name="uk_ebsr_submission_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_ebsr_submission_document_id", columns={"document_id"}),
- *        @ORM\UniqueConstraint(name="uk_ebsr_submission_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'ebsr_submission')]
+#[ORM\Index(name: 'ix_ebsr_submission_bus_reg_id', columns: ['bus_reg_id'])]
+#[ORM\Index(name: 'ix_ebsr_submission_ebsr_submission_status_id', columns: ['ebsr_submission_status_id'])]
+#[ORM\Index(name: 'ix_ebsr_submission_ebsr_submission_type_id', columns: ['ebsr_submission_type_id'])]
+#[ORM\Index(name: 'ix_ebsr_submission_organisation_id', columns: ['organisation_id'])]
+#[ORM\Index(name: 'uk_ebsr_submission_document_id', columns: ['document_id'])]
+#[ORM\Index(name: 'uk_ebsr_submission_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_ebsr_submission_document_id', columns: ['document_id'])]
+#[ORM\UniqueConstraint(name: 'uk_ebsr_submission_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractEbsrSubmission implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,242 +43,216 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * EbsrSubmissionStatus
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="ebsr_submission_status_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'ebsr_submission_status_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $ebsrSubmissionStatus;
 
     /**
      * EbsrSubmissionType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="ebsr_submission_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'ebsr_submission_type_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $ebsrSubmissionType;
 
     /**
      * Foreign Key to document
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
     protected $document;
 
     /**
      * Foreign Key to bus_reg
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
-     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
     protected $busReg;
 
     /**
      * Foreign Key to organisation
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 
     /**
      * Submitted date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="submitted_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'submitted_date', nullable: true)]
     protected $submittedDate;
 
     /**
      * Licence no
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="licence_no", length=9, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'licence_no', length: 9, nullable: true)]
     protected $licenceNo;
 
     /**
      * Organisation email address
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="organisation_email_address", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'organisation_email_address', length: 255, nullable: true)]
     protected $organisationEmailAddress;
 
     /**
      * Application classification
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="application_classification", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'application_classification', length: 32, nullable: true)]
     protected $applicationClassification;
 
     /**
      * Variation no
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="variation_no", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'variation_no', nullable: true)]
     protected $variationNo;
 
     /**
      * Registration no
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="registration_no", length=4, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'registration_no', length: 4, nullable: true)]
     protected $registrationNo;
 
     /**
      * Validation start
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="validation_start", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'validation_start', nullable: true)]
     protected $validationStart;
 
     /**
      * Validation end
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="validation_end", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'validation_end', nullable: true)]
     protected $validationEnd;
 
     /**
      * Publish start
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="publish_start", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'publish_start', nullable: true)]
     protected $publishStart;
 
     /**
      * Publish end
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="publish_end", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'publish_end', nullable: true)]
     protected $publishEnd;
 
     /**
      * Process start
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="process_start", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'process_start', nullable: true)]
     protected $processStart;
 
     /**
      * Process end
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="process_end", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'process_end', nullable: true)]
     protected $processEnd;
 
     /**
      * Ebsr submission result
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="ebsr_submission_result", length=10000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'ebsr_submission_result', length: 10000, nullable: true)]
     protected $ebsrSubmissionResult;
 
     /**
      * Distribute start
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="distribute_start", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'distribute_start', nullable: true)]
     protected $distributeStart;
 
     /**
      * Distribute end
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="distribute_end", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'distribute_end', nullable: true)]
     protected $distributeEnd;
 
     /**
      * Distribute expire
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="distribute_expire", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'distribute_expire', nullable: true)]
     protected $distributeExpire;
 
     /**
      * isFromFtp
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_from_ftp", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_from_ftp', nullable: false, options: ['default' => 0])]
     protected $isFromFtp = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'integer', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Txc version
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="txc_version", length=10, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'txc_version', length: 10, nullable: true)]
     protected $txcVersion;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**

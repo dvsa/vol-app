@@ -18,15 +18,11 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\Table(name="companies_house_alert_reason",
- *    indexes={
- *        @ORM\Index(name="ix_companies_house_alert_reason_companies_house_alert_id", columns={"companies_house_alert_id"}),
- *        @ORM\Index(name="ix_companies_house_alert_reason_reason_type", columns={"reason_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'companies_house_alert_reason')]
+#[ORM\Index(name: 'ix_companies_house_alert_reason_companies_house_alert_id', columns: ['companies_house_alert_id'])]
+#[ORM\Index(name: 'ix_companies_house_alert_reason_reason_type', columns: ['reason_type'])]
+#[ORM\MappedSuperclass]
 abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -37,41 +33,37 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to companies_house_alert
      *
      * @var \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert", fetch="LAZY")
-     * @ORM\JoinColumn(name="companies_house_alert_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'companies_house_alert_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert::class, fetch: 'LAZY')]
     protected $companiesHouseAlert;
 
     /**
      * ReasonType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="reason_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'reason_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $reasonType;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

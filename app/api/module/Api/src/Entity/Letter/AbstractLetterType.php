@@ -21,20 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_type",
- *    indexes={
- *        @ORM\Index(name="ix_letter_type_category_id", columns={"category_id"}),
- *        @ORM\Index(name="ix_letter_type_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_type_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_type_letter_test_data_id", columns={"letter_test_data_id"}),
- *        @ORM\Index(name="ix_letter_type_master_template_id", columns={"master_template_id"}),
- *        @ORM\Index(name="ix_letter_type_sub_category_id", columns={"sub_category_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_type')]
+#[ORM\Index(name: 'ix_letter_type_category_id', columns: ['category_id'])]
+#[ORM\Index(name: 'ix_letter_type_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_type_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_type_letter_test_data_id', columns: ['letter_test_data_id'])]
+#[ORM\Index(name: 'ix_letter_type_master_template_id', columns: ['master_template_id'])]
+#[ORM\Index(name: 'ix_letter_type_sub_category_id', columns: ['sub_category_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -47,110 +43,99 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * MasterTemplate
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\MasterTemplate
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\MasterTemplate", fetch="LAZY")
-     * @ORM\JoinColumn(name="master_template_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'master_template_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\MasterTemplate::class, fetch: 'LAZY')]
     protected $masterTemplate;
 
     /**
      * LetterTestData
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterTestData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterTestData", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_test_data_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'letter_test_data_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTestData::class, fetch: 'LAZY')]
     protected $letterTestData;
 
     /**
      * Category
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Category
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Category", fetch="LAZY")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Category::class, fetch: 'LAZY')]
     protected $category;
 
     /**
      * SubCategory
      *
      * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SubCategory", fetch="LAZY")
-     * @ORM\JoinColumn(name="sub_category_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SubCategory::class, fetch: 'LAZY')]
     protected $subCategory;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 255, nullable: false)]
     protected $name = '';
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
 
     /**
      * Is active
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_active", nullable=false, options={"default": 1})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_active', nullable: false, options: ['default' => 1])]
     protected $isActive = 1;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="application_step",
- *    indexes={
- *        @ORM\Index(name="fk_application_step_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_application_step_last_modified_by_user_id", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_application_step_application_path_id", columns={"application_path_id"}),
- *        @ORM\Index(name="ix_application_step_question_id", columns={"question_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'application_step')]
+#[ORM\Index(name: 'fk_application_step_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_application_step_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_application_step_application_path_id', columns: ['application_path_id'])]
+#[ORM\Index(name: 'ix_application_step_question_id', columns: ['question_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractApplicationStep implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,117 +41,105 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * ApplicationPath
      *
      * @var \Dvsa\Olcs\Api\Entity\Generic\ApplicationPath
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationPath", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_path_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'application_path_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationPath::class, fetch: 'LAZY')]
     protected $applicationPath;
 
     /**
      * Question
      *
      * @var \Dvsa\Olcs\Api\Entity\Generic\Question
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Generic\Question", fetch="LAZY")
-     * @ORM\JoinColumn(name="question_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\Question::class, fetch: 'LAZY')]
     protected $question;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Weight
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="weight", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'weight', nullable: true)]
     protected $weight;
 
     /**
      * Only on yes
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="only_on_yes", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'only_on_yes', nullable: true)]
     protected $onlyOnYes;
 
     /**
      * Ignore question validation
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="ignore_question_validation", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'ignore_question_validation', nullable: true)]
     protected $ignoreQuestionValidation;
 
     /**
      * Break on failure
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="break_on_failure", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'break_on_failure', nullable: true)]
     protected $breakOnFailure;
 
     /**
      * Enabled after submission
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="enabled_after_submission", nullable=true, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'enabled_after_submission', nullable: true, options: ['default' => 0])]
     protected $enabledAfterSubmission = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * ApplicationValidations
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationValidation", mappedBy="applicationStep")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationValidation::class, mappedBy: 'applicationStep')]
     protected $applicationValidations;
 
     /**

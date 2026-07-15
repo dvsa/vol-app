@@ -21,20 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="erru_request_failure",
- *    indexes={
- *        @ORM\Index(name="ix_erru_request_failure_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_erru_request_failure_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_erru_request_failure_document_id", columns={"document_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_erru_request_failure_document_id", columns={"document_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'erru_request_failure')]
+#[ORM\Index(name: 'ix_erru_request_failure_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_erru_request_failure_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'uk_erru_request_failure_document_id', columns: ['document_id'])]
+#[ORM\UniqueConstraint(name: 'uk_erru_request_failure_document_id', columns: ['document_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractErruRequestFailure implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -47,71 +41,64 @@ abstract class AbstractErruRequestFailure implements BundleSerializableInterface
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to document for the incoming erru xml
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
     protected $document;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Input data saved as JSON
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="input", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'input', nullable: true)]
     protected $input;
 
     /**
      * Error data saved as JSON
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="errors", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'errors', nullable: true)]
     protected $errors;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

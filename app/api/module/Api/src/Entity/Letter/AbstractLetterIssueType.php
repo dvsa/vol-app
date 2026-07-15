@@ -21,18 +21,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_issue_type",
- *    indexes={
- *        @ORM\Index(name="code", columns={"code"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="code", columns={"code"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_issue_type')]
+#[ORM\Index(name: 'code', columns: ['code'])]
+#[ORM\UniqueConstraint(name: 'code', columns: ['code'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterIssueType implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,88 +39,79 @@ abstract class AbstractLetterIssueType implements BundleSerializableInterface, J
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Short code: AD, FI, TM, etc.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="code", length=10, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'code', length: 10, nullable: false)]
     protected $code = '';
 
     /**
      * Display name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=100, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 100, nullable: false)]
     protected $name = '';
 
     /**
      * Full description for UI
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
 
     /**
      * Display order
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="display_order", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false)]
     protected $displayOrder = 0;
 
     /**
      * Is active
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_active", nullable=false, options={"default": 1})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_active', nullable: false, options: ['default' => 1])]
     protected $isActive = 1;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

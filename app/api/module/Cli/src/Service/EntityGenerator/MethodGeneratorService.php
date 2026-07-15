@@ -152,10 +152,10 @@ final readonly class MethodGeneratorService
      */
     public function getTargetEntity(array $field): string
     {
-        // Extract from annotation like @ORM\ManyToOne(targetEntity="\Dvsa\Olcs\Api\Entity\User\User")
+        // Extract from attribute like #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class)]
         $annotation = $field['annotation'] ?? '';
-        if (preg_match('/targetEntity="([^"]+)"/', $annotation, $matches)) {
-            return $matches[1];
+        if (preg_match('/targetEntity:\s*\\\\?([\w\\\\]+)::class/', $annotation, $matches)) {
+            return ltrim($matches[1], '\\');
         }
 
         // Fallback - extract from type hint in property

@@ -293,7 +293,7 @@ class EntityGenerator implements EntityGeneratorInterface
                 'column' => null, // No direct column for inverse relationships
                 'handler' => null,
                 'fieldConfig' => null,
-                'annotation' => implode("\n     * ", $annotations),
+                'annotation' => implode("\n    ", $annotations),
                 'property' => [
                     'name' => $relationship['property'],
                     'type' => $propertyType,
@@ -626,22 +626,17 @@ class EntityGenerator implements EntityGeneratorInterface
     private function buildOwningManyToManyAnnotation(string $targetEntity, string $inversePropertyName, array $relationship): string
     {
         return sprintf(
-            '@ORM\ManyToMany(targetEntity="%s", inversedBy="%s", fetch="LAZY")' . "\n" .
-            '     * @ORM\JoinTable(name="%s",' . "\n" .
-            '     *     joinColumns={' . "\n" .
-            '     *         @ORM\JoinColumn(name="%s", referencedColumnName="%s")' . "\n" .
-            '     *     },' . "\n" .
-            '     *     inverseJoinColumns={' . "\n" .
-            '     *         @ORM\JoinColumn(name="%s", referencedColumnName="%s")' . "\n" .
-            '     *     }' . "\n" .
-            '     * )',
-            $targetEntity,
-            $inversePropertyName,
+            "#[ORM\\JoinTable(name: '%s')]\n    " .
+            "#[ORM\\JoinColumn(name: '%s', referencedColumnName: '%s')]\n    " .
+            "#[ORM\\InverseJoinColumn(name: '%s', referencedColumnName: '%s')]\n    " .
+            "#[ORM\\ManyToMany(targetEntity: \\%s::class, inversedBy: '%s', fetch: 'LAZY')]",
             $relationship['join_table'],
             $relationship['join_columns'][0],
             $relationship['local_columns'][0],
             $relationship['inverse_join_columns'][0],
-            $relationship['foreign_columns'][0]
+            $relationship['foreign_columns'][0],
+            ltrim($targetEntity, '\\'),
+            $inversePropertyName
         );
     }
 
@@ -651,8 +646,8 @@ class EntityGenerator implements EntityGeneratorInterface
     private function buildInverseManyToManyAnnotation(string $targetEntity, string $propertyName): string
     {
         return sprintf(
-            '@ORM\ManyToMany(targetEntity="%s", mappedBy="%s", fetch="LAZY")',
-            $targetEntity,
+            "#[ORM\\ManyToMany(targetEntity: \\%s::class, mappedBy: '%s', fetch: 'LAZY')]",
+            ltrim($targetEntity, '\\'),
             $propertyName
         );
     }
