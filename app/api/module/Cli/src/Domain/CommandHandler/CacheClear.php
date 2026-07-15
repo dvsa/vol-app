@@ -6,7 +6,6 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Cli\Domain\Command\CacheClear as CacheClearCmd;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
-use Dvsa\Olcs\Transfer\Service\CacheEncryption;
 use Dvsa\Olcs\Api\Domain\RedisAwareInterface;
 use Dvsa\Olcs\Api\Domain\RedisAwareTrait;
 
