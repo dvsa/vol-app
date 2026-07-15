@@ -17,7 +17,7 @@ final class RedisConnectionFactory
         $host = $options['server']['host'] ?? 'redis';
         $port = $options['server']['port'] ?? 6379;
 
-        /** @psalm-suppress UndefinedDocblockClass */
+        /** @psalm-suppress UndefinedDocblockClass Symfony PHPDoc references optional Predis classes */
         $connection = RedisAdapter::createConnection(
             sprintf('redis://%s:%d', $host, $port)
         );
