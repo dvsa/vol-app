@@ -1,6 +1,6 @@
-DELIMITER $$
+DROP PROCEDURE IF EXISTS sp_drop_indices;
 
-DROP PROCEDURE IF EXISTS sp_drop_indices$$
+DELIMITER $$
 
 CREATE PROCEDURE sp_drop_indices()
 
