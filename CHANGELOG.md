@@ -1,5 +1,12 @@
 # Changelog
 
+## [8.1.4](https://github.com/dvsa/vol-app/compare/v8.1.3...v8.1.4) (2026-07-16)
+
+
+### Bug Fixes
+
+* restore CSV exports broken by toIterable() migration (VOL-7445) ([#1652](https://github.com/dvsa/vol-app/issues/1652)) ([e099689](https://github.com/dvsa/vol-app/commit/e0996895d9259a545aa9b9ba9803879ddbef4bb5))
+
 ## [8.1.3](https://github.com/dvsa/vol-app/compare/v8.1.2...v8.1.3) (2026-07-07)
 
 
