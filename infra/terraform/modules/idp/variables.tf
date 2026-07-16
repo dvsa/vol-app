@@ -43,3 +43,49 @@ variable "lambda_memory_size" {
   description = "Memory in MB for the classify-document Lambda. 512 MB gives headroom for base64-encoding a multi-MB PDF in memory."
   default     = 512
 }
+
+# ============================================================
+# Extraction SM — Bedrock Data Automation (BDA) configuration
+# ============================================================
+
+variable "bda_project_arn" {
+  type        = string
+  description = "ARN of the Bedrock Data Automation project used for bank statement extraction."
+}
+
+variable "bda_project_stage" {
+  type        = string
+  description = "BDA project stage to invoke. LIVE uses the latest published blueprint version."
+  default     = "LIVE"
+}
+
+# ============================================================
+# Extraction SM — Routing policy thresholds
+# Mirror the values in vol-idp-poc/config/routing-policy.json.
+# Documents that do not satisfy ALL conditions are not forwarded
+# to the Extraction SM (filtered by the EventBridge rule).
+# ============================================================
+
+variable "extraction_classifications" {
+  type        = list(string)
+  description = "Classification labels that are eligible for BDA extraction."
+  default     = ["BANK_STATEMENT", "TRANSACTION_REPORT"]
+}
+
+variable "classification_confidence_threshold" {
+  type        = number
+  description = "Minimum classification confidence score (0–1) required to trigger extraction."
+  default     = 0.75
+}
+
+variable "classification_max_pages" {
+  type        = number
+  description = "Maximum total page count for a document to be sent to BDA extraction."
+  default     = 100
+}
+
+variable "classification_max_bytes" {
+  type        = number
+  description = "Maximum document size in bytes for BDA extraction (default 200 MB)."
+  default     = 209715200
+}
