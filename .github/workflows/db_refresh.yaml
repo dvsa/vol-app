@@ -119,7 +119,7 @@ jobs:
             local fn="$3"
             local outfile
             outfile="$(mktemp)"
-
+            trap 'rm -f "${outfile}"' RETURN
             local status
             status="$(aws lambda invoke \
               --cli-binary-format raw-in-base64-out \
