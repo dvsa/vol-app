@@ -1,6 +1,6 @@
-DELIMITER $$
-
 DROP PROCEDURE IF EXISTS sp_drop_triggers;
+
+DELIMITER $$
 
 CREATE PROCEDURE sp_drop_triggers()
 
