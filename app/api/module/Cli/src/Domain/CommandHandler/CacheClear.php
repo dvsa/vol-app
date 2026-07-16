@@ -8,14 +8,19 @@ use Dvsa\Olcs\Cli\Domain\Command\CacheClear as CacheClearCmd;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\RedisAwareInterface;
 use Dvsa\Olcs\Api\Domain\RedisAwareTrait;
+use Dvsa\Olcs\Api\Domain\ConfigAwareInterface;
+use Dvsa\Olcs\Api\Domain\ConfigAwareTrait;
 
 /**
  * Cache Clear Command Handler
  *
  */
-class CacheClear extends AbstractCommandHandler implements RedisAwareInterface
+class CacheClear extends AbstractCommandHandler implements
+    RedisAwareInterface,
+    ConfigAwareInterface
 {
     use RedisAwareTrait;
+    use ConfigAwareTrait;
 
     /**
      * Valid cache namespace identifiers from CacheEncryption service
@@ -208,6 +213,10 @@ class CacheClear extends AbstractCommandHandler implements RedisAwareInterface
      */
     private function getNamespacePrefix(string $namespace): string
     {
-        return 'zfcache:' . $namespace;
+        $cacheNamespace =
+            $this->getConfig()['caches']['default-cache']['options']['namespace']
+            ?? 'zfcache';
+
+        return $cacheNamespace . ':' . $namespace;
     }
 }

@@ -25,6 +25,16 @@ final class CacheClearTest extends AbstractCommandHandlerTestCase
 
         $this->sut = new CacheClear();
 
+        $this->mockedSmServices['config'] = [
+            'caches' => [
+                'default-cache' => [
+                    'options' => [
+                        'namespace' => 'zfcache',
+                    ],
+                ],
+            ],
+        ];
+
         $this->mockedSmServices['cache.redis.connection'] = $this->redis;
 
         parent::setUp();
@@ -126,6 +136,50 @@ final class CacheClearTest extends AbstractCommandHandlerTestCase
 
         self::assertSame(
             ['Error clearing cache: Redis unavailable'],
+            $result->toArray()['messages']
+        );
+    }
+
+    public function testNamespaceUsesConfiguredCachePrefix(): void
+    {
+        $this->sut->setConfig([
+            'caches' => [
+                'default-cache' => [
+                    'options' => [
+                        'namespace' => 'custom-cache',
+                    ],
+                ],
+            ],
+        ]);
+
+        $this->redis
+            ->shouldReceive('scan')
+            ->once()
+            ->withArgs(
+                static function (&$iterator, string $pattern, int $count): bool {
+                    $iterator = 0;
+
+                    return $pattern === 'custom-cache:user_account*'
+                        && $count === 100;
+                }
+            )
+            ->andReturnFalse();
+
+        $this->redis->shouldNotReceive('del');
+
+        $command = Cmd::create([
+            'namespace' => 'user_account',
+            'dryRun' => true,
+        ]);
+
+        $result = $this->sut->handleCommand($command);
+
+        self::assertSame(
+            [
+                '[DRY RUN] Would delete 0 keys from namespace "user_account" '
+                    . '(pattern: custom-cache:user_account*)',
+                '[DRY RUN] Total: would delete 0 keys',
+            ],
             $result->toArray()['messages']
         );
     }

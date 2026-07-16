@@ -35,21 +35,31 @@ final class CacheEncryptionTest extends MockeryTestCase
         // First set the item so we capture what the cache would store
         $storedValue = null;
         $setItem = m::mock(CacheItemInterface::class);
+        $getItem = m::mock(CacheItemInterface::class);
 
-        $cache->expects('getItem')->with($cacheKey)->andReturn($setItem);
-        $setItem->expects('set')->with(m::on(function ($val) use (&$storedValue) {
-            $storedValue = $val;
-            return true;
-        }))->andReturnSelf();
+        $cache
+            ->expects('getItem')
+            ->with($cacheKey)
+            ->twice()
+            ->andReturn($setItem, $getItem);
+
+        $setItem
+            ->expects('set')
+            ->with(m::on(function ($val) use (&$storedValue): bool {
+                $storedValue = $val;
+                return true;
+            }))
+            ->andReturnSelf();
+
         $setItem->expects('expiresAfter')->with(3600)->andReturnSelf();
         $cache->expects('save')->with($setItem)->andReturnTrue();
 
         $sut->setItem($this->cacheIdentifier, $encryptionMode, $unserialisedValue);
 
-        $getItem = m::mock(CacheItemInterface::class);
-        $cache->expects('getItem')->with($cacheKey)->andReturn($getItem);
         $getItem->expects('isHit')->andReturnTrue();
-        $getItem->expects('get')->andReturn($storedValue);
+        $getItem
+            ->expects('get')
+            ->andReturnUsing(static fn () => $storedValue);
 
         $this->assertEquals($unserialisedValue, $sut->getItem($this->cacheIdentifier, $encryptionMode));
     }
@@ -289,22 +299,30 @@ final class CacheEncryptionTest extends MockeryTestCase
 
         $cache = m::mock(CacheItemPoolInterface::class);
         $setItem = m::mock(CacheItemInterface::class);
+        $getItem = m::mock(CacheItemInterface::class);
 
-        $cache->expects('getItem')->with($cacheKey)->andReturn($setItem);
-        $setItem->expects('set')->with(m::on(function ($val) use (&$storedValue) {
-            $storedValue = $val;
-            return true;
-        }))->andReturnSelf();
+        $cache
+            ->expects('getItem')
+            ->with($cacheKey)
+            ->twice()
+            ->andReturn($setItem, $getItem);
+        $setItem
+            ->expects('set')
+            ->with(m::on(function ($val) use (&$storedValue): bool {
+                $storedValue = $val;
+                return true;
+            }))
+            ->andReturnSelf();
         $setItem->expects('expiresAfter')->with(3600)->andReturnSelf();
         $cache->expects('save')->with($setItem)->andReturnTrue();
 
         $sut = new CacheEncryption($cache, self::NODE_KEY, self::SHARED_KEY, self::NODE_SUFFIX);
         $sut->setItem($this->cacheIdentifier, $encryptionMode, $originalValue);
 
-        $getItem = m::mock(CacheItemInterface::class);
-        $cache->expects('getItem')->with($cacheKey)->andReturn($getItem);
         $getItem->expects('isHit')->andReturnTrue();
-        $getItem->expects('get')->andReturn($storedValue);
+        $getItem
+            ->expects('get')
+            ->andReturnUsing(static fn () => $storedValue);
 
         $this->assertEquals($originalValue, $sut->getItem($this->cacheIdentifier, $encryptionMode));
     }
