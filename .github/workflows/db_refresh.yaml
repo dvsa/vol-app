@@ -55,7 +55,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      # You may replace this with your org-standard auth method (OIDC / credentials)
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v5
         with:
