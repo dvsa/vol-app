@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer;
 
-use Doctrine\ORM\Internal\Hydration\IterableResult;
 use Dvsa\Olcs\Api\Domain\CommandHandlerManager;
 use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Entity;
@@ -40,12 +39,10 @@ final class CpidOrganisationExportTest extends AbstractConsumerTestCase
         $this->organisationRepo->shouldReceive('fetchAllByStatusForCpidExport')
             ->with('unit_Status')
             ->andReturn(
-                m::mock(IterableResult::class)
-                    ->makePartial()
-                    ->shouldReceive('next')
-                    ->twice()
-                    ->andReturn([$row], false)
-                    ->getMock()
+                // Query::toIterable() yields each row directly (no [0 => ...] wrapper)
+                (static function () use ($row): \Generator {
+                    yield $row;
+                })()
             );
 
         parent::setUp();
