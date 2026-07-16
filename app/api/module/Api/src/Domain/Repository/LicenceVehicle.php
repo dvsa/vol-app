@@ -482,7 +482,7 @@ class LicenceVehicle extends AbstractRepository
      *
      * @param QueryBuilder $qb Prepared Query Builder
      *
-     * @return \Doctrine\ORM\Internal\Hydration\IterableResult
+     * @return iterable<array<string, mixed>>
      */
     public function fetchForExport(QueryBuilder $qb)
     {
