@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - prerelease
+      - release-8.1.x
 
 permissions:
   contents: read
@@ -297,7 +298,11 @@ jobs:
 
   deploy_dev:
     name: (dev)
+    # Disabled on the release-8.1.x hotfix branch: dev tracks main and must not
+    # be rolled back to 8.1.x builds. deploy_int accepts a skipped deploy_dev on
+    # release runs, so the release flow (int -> prod ECR -> prep/prod) is unaffected.
     if: |
+      false &&
       always() &&
       !cancelled() &&
       !failure() &&
