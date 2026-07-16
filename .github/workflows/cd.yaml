@@ -281,7 +281,13 @@ jobs:
 
   terraform-account-nonprod:
     name: Account (nonprod)
-    if: ${{ needs.orchestrator.outputs.should-apply-account-terraform }}
+    # Disabled on the release-8.1.x hotfix branch: the account-nonprod GitHub
+    # environment only permits main/prerelease deploys (the job would fail and,
+    # via the transitive needs chain, skip deploy_int and the whole release),
+    # and applying v8.1.3-era account terraform would revert account-level
+    # resources main has since applied to nonprod. Skipped != failed, so the
+    # release chain is unaffected.
+    if: ${{ false && needs.orchestrator.outputs.should-apply-account-terraform }}
     concurrency:
       group: terraform-account-nonprod
     needs:
