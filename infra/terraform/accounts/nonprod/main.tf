@@ -32,6 +32,7 @@ module "account" {
     [
       "dvsa/vol-app:ref:refs/heads/main", # `.github/workflows/docker.yaml` & `.github/workflows/assets.yaml`.
       "dvsa/vol-app:ref:refs/heads/prerelease",
+      "dvsa/vol-app:ref:refs/heads/release-8.1.x", # VOL-7445 hotfix release branch (temporary).
       "dvsa/vol-app:environment:account-nonprod",
       "dvsa/vol-app:pull_request", # `.github/workflows/deploy-account.yaml`.
     ],
