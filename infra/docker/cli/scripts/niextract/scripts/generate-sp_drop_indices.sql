@@ -1,4 +1,7 @@
-SELECT CONCAT('DROP PROCEDURE IF EXISTS sp_drop_indices', CHAR(10), '$$', CHAR(10), 'CREATE PROCEDURE sp_drop_indices()', CHAR(10), 'BEGIN') AS '';
+SELECT 'DROP PROCEDURE IF EXISTS sp_drop_indices;' AS '';
+SELECT 'DELIMITER $$' AS '';
+SELECT 'CREATE PROCEDURE sp_drop_indices()' AS '';
+SELECT 'BEGIN' AS '';
 
 # drop indices on olbs_key and olbs_type only
 
@@ -62,4 +65,5 @@ WHERE i.TABLE_SCHEMA = DATABASE()
   )
 GROUP BY i.TABLE_NAME, i.INDEX_NAME;
 
-SELECT CONCAT('END', CHAR(10), '$$') AS '';
+SELECT 'END$$' AS '';
+SELECT 'DELIMITER ;' AS '';
