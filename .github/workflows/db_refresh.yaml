@@ -48,7 +48,7 @@ env:
 jobs:
   db-refresh:
     name: db refresh - ${{ inputs.platformEnv }} - ${{ github.run_number }}
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     timeout-minutes: 360
 
     steps:
