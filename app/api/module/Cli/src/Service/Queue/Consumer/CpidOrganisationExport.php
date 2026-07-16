@@ -49,8 +49,8 @@ class CpidOrganisationExport extends AbstractConsumer
         //  create csv file in memory
         $fh = fopen("php://temp", 'w');
 
-        while (false !== ($row = $iterableResult->next())) {
-            fputcsv($fh, current($row));
+        foreach ($iterableResult as $row) {
+            fputcsv($fh, $row);
         }
 
         rewind($fh);
