@@ -37,14 +37,18 @@ BEGIN
 
     WHILE(@rowcount = 10000) DO
 
-
-
-        DELETE oc FROM operating_centre oc
-        LEFT JOIN application_operating_centre aoc ON oc.id = aoc.operating_centre_id
-        LEFT JOIN licence_operating_centre loc     ON oc.id = loc.operating_centre_id
-        WHERE aoc.operating_centre_id IS NULL
-          AND loc.operating_centre_id IS NULL
-        LIMIT 10000;
+        DELETE FROM operating_centre
+        WHERE id IN (
+            SELECT id FROM (
+                SELECT oc.id
+                FROM operating_centre oc
+                LEFT JOIN application_operating_centre aoc ON oc.id = aoc.operating_centre_id
+                LEFT JOIN licence_operating_centre loc     ON oc.id = loc.operating_centre_id
+                WHERE aoc.operating_centre_id IS NULL
+                  AND loc.operating_centre_id IS NULL
+                LIMIT 10000
+            ) AS batch
+        );
     
         SET @rowcount := row_count();
         SET @total := @total + @rowcount;
