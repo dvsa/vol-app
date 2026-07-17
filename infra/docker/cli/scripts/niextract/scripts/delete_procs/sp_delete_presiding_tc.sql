@@ -45,20 +45,26 @@ BEGIN
 
     WHILE(@rowcount = 10000) DO
     
-        DELETE pt FROM presiding_tc pt
-        LEFT JOIN hearing h         ON pt.id = h.presiding_tc_id
-        LEFT JOIN impounding i      ON pt.id = i.presiding_tc_id
-        LEFT JOIN pi p1             ON pt.id = p1.agreed_by_tc_id
-        LEFT JOIN pi p2             ON pt.id = p2.decided_by_tc_id
-        LEFT JOIN pi_hearing ph     ON pt.id = ph.presiding_tc_id
-        LEFT JOIN propose_to_revoke ptr ON pt.id = ptr.presiding_tc_id
-        WHERE h.presiding_tc_id IS NULL
-          AND i.presiding_tc_id IS NULL
-          AND p1.agreed_by_tc_id IS NULL
-          AND p2.decided_by_tc_id IS NULL
-          AND ph.presiding_tc_id IS NULL
-          AND ptr.presiding_tc_id IS NULL
-        LIMIT 10000;
+        DELETE FROM presiding_tc
+        WHERE id IN (
+            SELECT id FROM (
+                SELECT pt.id
+                FROM presiding_tc pt
+                LEFT JOIN hearing h         ON pt.id = h.presiding_tc_id
+                LEFT JOIN impounding i      ON pt.id = i.presiding_tc_id
+                LEFT JOIN pi p1             ON pt.id = p1.agreed_by_tc_id
+                LEFT JOIN pi p2             ON pt.id = p2.decided_by_tc_id
+                LEFT JOIN pi_hearing ph     ON pt.id = ph.presiding_tc_id
+                LEFT JOIN propose_to_revoke ptr ON pt.id = ptr.presiding_tc_id
+                WHERE h.presiding_tc_id IS NULL
+                  AND i.presiding_tc_id IS NULL
+                  AND p1.agreed_by_tc_id IS NULL
+                  AND p2.decided_by_tc_id IS NULL
+                  AND ph.presiding_tc_id IS NULL
+                  AND ptr.presiding_tc_id IS NULL
+                LIMIT 10000
+            ) AS batch
+        );
 
         SET @rowcount := row_count();
         SET @total_deleted := @total_deleted + @rowcount;

@@ -35,12 +35,16 @@ BEGIN
 
     WHILE(@rowcount = 10000) DO
 
-
-    
-        DELETE lv FROM licence_vehicle lv
-        LEFT JOIN licence l ON lv.licence_id = l.id
-        WHERE l.id IS NULL
-        LIMIT 10000;
+        DELETE FROM licence_vehicle
+        WHERE id IN (
+            SELECT id FROM (
+                SELECT lv.id
+                FROM licence_vehicle lv
+                LEFT JOIN licence l ON lv.licence_id = l.id
+                WHERE l.id IS NULL
+                LIMIT 10000
+            ) AS batch
+        );
 
         SET @rowcount := row_count();
         SET @total := @total + @rowcount;
