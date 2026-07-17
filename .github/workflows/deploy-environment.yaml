@@ -147,8 +147,6 @@ jobs:
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_wrapper: false
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v5
@@ -193,7 +191,7 @@ jobs:
         if: ${{ !inputs.apply }}
         id: show
         run: |
-          echo "changes=$(terraform show -json -no-color tfplan | jq -r -c '[.resource_changes[] | select(.change.actions[0] != "no-op") | {action: .change.actions[0], address: .address}] | group_by(.action) | map({(.[0].action): map(.address)}) | add')" >> $GITHUB_OUTPUT
+          echo "changes=$(terraform-bin show -json -no-color tfplan | jq -r -c '[.resource_changes[] | select(.change.actions[0] != "no-op") | {action: .change.actions[0], address: .address}] | group_by(.action) | map({(.[0].action): map(.address)}) | add')" >> $GITHUB_OUTPUT
 
       # The maximum input size is ~64KB.
       # The maximum PR comment size is ~64KB.
@@ -321,4 +319,4 @@ jobs:
         if: ${{ always() && !cancelled() && !failure() && !inputs.destroy }}
         id: terraform-output
         run: |
-          echo "json=$(terraform output -json -no-color | jq -r -c 'to_entries | map({(.key): .value.value}) | add')" >> $GITHUB_OUTPUT
+          echo "json=$(terraform-bin output -json -no-color | jq -r -c 'to_entries | map({(.key): .value.value}) | add')" >> $GITHUB_OUTPUT
