@@ -32,7 +32,7 @@ Adopt **Mezzio + PSR-15** as the replacement HTTP runtime, migrated route-by-rou
 - **Actively maintained, same ecosystem.** Mezzio is the Laminas project's own middleware runtime (3.28.1 released June 2026, supporting PHP 8.2–8.5, with a 4.0 branch in development). It already clears the PHP 8.5 wall that laminas-mvc never will.
 - **Smallest rewrite surface.** Mezzio reuses everything we keep: the ServiceManager v3 container, laminas-view, laminas-form, laminas-validator/filter, and — via `mezzio-laminasrouter` — the existing route definitions verbatim. Only the dispatch glue (controllers, MVC event listeners, controller plugins) changes.
 - **The RBAC gap has closed.** `lmc-rbac-mezzio` reached a stable 1.0.1 in May 2026 (PHP 8.3–8.5), giving a like-for-like replacement for `lmc-rbac-mvc`'s route guards. Both wrap the same `lm-commons/rbac` core, so roles and permissions are unchanged.
-- **The monorepo makes it cheaper.** A strangler-fig migration requires repeated lock-step changes to the shared libraries and the apps. Since the library absorption (RFC-001's successor work), `lib/olcs-common`, `lib/olcs-auth` and `lib/olcs-logging` are in-tree, so every such change is a single atomic PR with library and app CI in one pipeline run — no coordinated releases, and rollback is a plain revert.
+- **The monorepo makes it cheaper.** A strangler-fig migration requires repeated lock-step changes to the shared libraries and the apps. Since the library absorption (RFC-011), `lib/olcs-common`, `lib/olcs-auth` and `lib/olcs-logging` are in-tree, so every such change is a single atomic PR with library and app CI in one pipeline run — no coordinated releases, and rollback is a plain revert.
 
 ### Alternatives considered
 
