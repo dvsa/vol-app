@@ -78,7 +78,7 @@ abstract class AbstractSubCategoryDescription implements BundleSerializableInter
      *
      * @param int $id new value being set
      *
-     * @return SubCategoryDescription
+     * @return static
      */
     public function setId($id)
     {
@@ -102,7 +102,7 @@ abstract class AbstractSubCategoryDescription implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory new value being set
      *
-     * @return SubCategoryDescription
+     * @return static
      */
     public function setSubCategory($subCategory)
     {
@@ -126,7 +126,7 @@ abstract class AbstractSubCategoryDescription implements BundleSerializableInter
      *
      * @param string $description new value being set
      *
-     * @return SubCategoryDescription
+     * @return static
      */
     public function setDescription($description)
     {

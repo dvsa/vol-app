@@ -35,7 +35,7 @@ class VehicleHistoryView
     /**
      * Vrm
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'vrm', length: 20, nullable: true)]
     protected $vrm;
@@ -83,7 +83,7 @@ class VehicleHistoryView
     /**
      * Disc No
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'disc_no', length: 20, nullable: true)]
     protected $discNo;

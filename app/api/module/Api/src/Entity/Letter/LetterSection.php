@@ -17,7 +17,7 @@ class LetterSection extends AbstractLetterSection
     /**
      * Letter section variants
      *
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, LetterSectionVariant>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant::class, mappedBy: 'letterSection', cascade: ['persist'], orphanRemoval: false)]
     #[ORM\OrderBy(['displayOrder' => 'ASC'])]

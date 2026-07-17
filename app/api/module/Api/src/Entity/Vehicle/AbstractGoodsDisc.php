@@ -173,7 +173,7 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
      *
      * @param int $id new value being set
      *
-     * @return GoodsDisc
+     * @return static
      */
     public function setId($id)
     {
@@ -197,7 +197,7 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle $licenceVehicle new value being set
      *
-     * @return GoodsDisc
+     * @return static
      */
     public function setLicenceVehicle($licenceVehicle)
     {
@@ -221,7 +221,7 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return GoodsDisc
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -245,7 +245,7 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return GoodsDisc
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -269,7 +269,7 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
      *
      * @param string $discNo new value being set
      *
-     * @return GoodsDisc
+     * @return static
      */
     public function setDiscNo($discNo)
     {
@@ -293,7 +293,7 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
      *
      * @param \DateTime $issuedDate new value being set
      *
-     * @return GoodsDisc
+     * @return static
      */
     public function setIssuedDate($issuedDate)
     {
@@ -323,7 +323,7 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
      *
      * @param \DateTime $ceasedDate new value being set
      *
-     * @return GoodsDisc
+     * @return static
      */
     public function setCeasedDate($ceasedDate)
     {
@@ -353,7 +353,7 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
      *
      * @param string $isCopy new value being set
      *
-     * @return GoodsDisc
+     * @return static
      */
     public function setIsCopy($isCopy)
     {
@@ -377,7 +377,7 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
      *
      * @param string $isInterim new value being set
      *
-     * @return GoodsDisc
+     * @return static
      */
     public function setIsInterim($isInterim)
     {
@@ -401,7 +401,7 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
      *
      * @param string $reprintRequired new value being set
      *
-     * @return GoodsDisc
+     * @return static
      */
     public function setReprintRequired($reprintRequired)
     {
@@ -425,7 +425,7 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
      *
      * @param string $isPrinting new value being set
      *
-     * @return GoodsDisc
+     * @return static
      */
     public function setIsPrinting($isPrinting)
     {
@@ -449,7 +449,7 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
      *
      * @param int $version new value being set
      *
-     * @return GoodsDisc
+     * @return static
      */
     public function setVersion($version)
     {
@@ -473,7 +473,7 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
      *
      * @param int $olbsKey new value being set
      *
-     * @return GoodsDisc
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

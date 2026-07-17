@@ -191,7 +191,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param int $id new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setId($id)
     {
@@ -215,7 +215,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\Generic\QuestionText $questionText new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setQuestionText($questionText)
     {
@@ -239,7 +239,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setIrhpApplication($irhpApplication)
     {
@@ -263,7 +263,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication $irhpPermitApplication new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setIrhpPermitApplication($irhpPermitApplication)
     {
@@ -287,7 +287,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -311,7 +311,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -335,7 +335,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param int $ansInteger new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setAnsInteger($ansInteger)
     {
@@ -359,7 +359,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param string $ansString new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setAnsString($ansString)
     {
@@ -383,7 +383,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param string $ansDecimal new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setAnsDecimal($ansDecimal)
     {
@@ -407,7 +407,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $ansDate new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setAnsDate($ansDate)
     {
@@ -437,7 +437,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $ansDatetime new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setAnsDatetime($ansDatetime)
     {
@@ -467,7 +467,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $ansBoolean new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setAnsBoolean($ansBoolean)
     {
@@ -491,7 +491,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param string $ansText new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setAnsText($ansText)
     {
@@ -515,7 +515,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param string $ansArray new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setAnsArray($ansArray)
     {
@@ -539,7 +539,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param int $version new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setVersion($version)
     {

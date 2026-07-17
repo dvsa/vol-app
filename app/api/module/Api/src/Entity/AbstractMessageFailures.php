@@ -80,7 +80,7 @@ abstract class AbstractMessageFailures implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return MessageFailures
+     * @return static
      */
     public function setId($id)
     {
@@ -104,7 +104,7 @@ abstract class AbstractMessageFailures implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return MessageFailures
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -128,7 +128,7 @@ abstract class AbstractMessageFailures implements BundleSerializableInterface, J
      *
      * @param string $queueType new value being set
      *
-     * @return MessageFailures
+     * @return static
      */
     public function setQueueType($queueType)
     {

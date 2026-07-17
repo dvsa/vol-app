@@ -42,8 +42,8 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion
      */
-    #[ORM\JoinColumn(name: 'letter_issue_version_id', referencedColumnName: 'id')]
     #[ORM\Id]
+    #[ORM\JoinColumn(name: 'letter_issue_version_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion::class, fetch: 'LAZY')]
     protected $letterIssueVersion;
 
@@ -52,8 +52,8 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion
      */
-    #[ORM\JoinColumn(name: 'letter_todo_version_id', referencedColumnName: 'id')]
     #[ORM\Id]
+    #[ORM\JoinColumn(name: 'letter_todo_version_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion::class, fetch: 'LAZY')]
     protected $letterTodoVersion;
 
@@ -106,7 +106,7 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion $letterIssueVersion new value being set
      *
-     * @return LetterIssueTodo
+     * @return static
      */
     public function setLetterIssueVersion($letterIssueVersion)
     {
@@ -130,7 +130,7 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion $letterTodoVersion new value being set
      *
-     * @return LetterIssueTodo
+     * @return static
      */
     public function setLetterTodoVersion($letterTodoVersion)
     {
@@ -154,7 +154,7 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterIssueTodo
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -178,7 +178,7 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterIssueTodo
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -202,7 +202,7 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
      *
      * @param int $displayOrder new value being set
      *
-     * @return LetterIssueTodo
+     * @return static
      */
     public function setDisplayOrder($displayOrder)
     {
@@ -227,6 +227,6 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
     #[\Override]
     public function __toString(): string
     {
-        return (string) $this->getId();
+        return implode('-', [(string) $this->letterIssueVersion, (string) $this->letterTodoVersion]);
     }
 }

@@ -165,7 +165,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
      *
      * @param int $id new value being set
      *
-     * @return Stay
+     * @return static
      */
     public function setId($id)
     {
@@ -189,7 +189,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return Stay
+     * @return static
      */
     public function setCase($case)
     {
@@ -213,7 +213,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $outcome new value being set
      *
-     * @return Stay
+     * @return static
      */
     public function setOutcome($outcome)
     {
@@ -237,7 +237,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $stayType new value being set
      *
-     * @return Stay
+     * @return static
      */
     public function setStayType($stayType)
     {
@@ -261,7 +261,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Stay
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -285,7 +285,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Stay
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -309,7 +309,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
      *
      * @param \DateTime $requestDate new value being set
      *
-     * @return Stay
+     * @return static
      */
     public function setRequestDate($requestDate)
     {
@@ -339,7 +339,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
      *
      * @param \DateTime $withdrawnDate new value being set
      *
-     * @return Stay
+     * @return static
      */
     public function setWithdrawnDate($withdrawnDate)
     {
@@ -369,7 +369,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
      *
      * @param \DateTime $decisionDate new value being set
      *
-     * @return Stay
+     * @return static
      */
     public function setDecisionDate($decisionDate)
     {
@@ -399,7 +399,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
      *
      * @param string $notes new value being set
      *
-     * @return Stay
+     * @return static
      */
     public function setNotes($notes)
     {
@@ -423,7 +423,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
      *
      * @param string $dvsaNotified new value being set
      *
-     * @return Stay
+     * @return static
      */
     public function setDvsaNotified($dvsaNotified)
     {
@@ -447,7 +447,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
      *
      * @param int $version new value being set
      *
-     * @return Stay
+     * @return static
      */
     public function setVersion($version)
     {

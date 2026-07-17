@@ -47,11 +47,18 @@ The generator supports special VOL field types that are configured in EntityConf
 
 ### Basic Usage (Recommended)
 
+The command introspects the live database schema, so it must run somewhere with
+database access — with the local Docker stack up, run it inside the `cli` container.
 The standard workflow is to regenerate entities in place:
 
 ```bash
-php app/api/bin/console entity:generate --replace
+docker compose exec -w /var/www/html cli \
+  vendor/bin/laminas --container=config/container-cli.php entity:generate --replace
 ```
+
+(From within the container, or any environment with a `db` host, the command is
+`vendor/bin/laminas --container=config/container-cli.php entity:generate --replace`
+run from `app/api`.)
 
 This will:
 
@@ -72,12 +79,15 @@ This will:
 
 ### Common Scenarios
 
+The examples below use `entity:generate` as shorthand for the full invocation shown
+in Basic Usage.
+
 #### 1. Standard Regeneration
 
 After database schema changes:
 
 ```bash
-php app/api/bin/console entity:generate --replace
+entity:generate --replace
 ```
 
 #### 2. Preview Changes
@@ -85,7 +95,7 @@ php app/api/bin/console entity:generate --replace
 See what would be generated without making changes:
 
 ```bash
-php app/api/bin/console entity:generate --dry-run
+entity:generate --dry-run
 ```
 
 #### 3. Generate for Review
@@ -93,7 +103,7 @@ php app/api/bin/console entity:generate --dry-run
 If you want to review changes before applying:
 
 ```bash
-php app/api/bin/console entity:generate -o /tmp/review-entities
+entity:generate -o /tmp/review-entities
 # Then compare with existing:
 diff -r /tmp/review-entities app/api/module/Api/src/Entity
 ```
@@ -110,7 +120,17 @@ Generated 125 entities in 2.34 seconds
 ## Important Notes
 
 - **Always commit your code before regenerating** - while concrete entities are safe, it's good practice
+- **Never hand-edit abstract entities** - anything written there (including docblock
+  documentation) is silently lost on the next regeneration. Document entity behaviour
+  in the concrete class; column descriptions belong in the database column comments
+  (managed in olcs-etl), which the generator copies into the generated docblocks
+- **Regeneration output reflects your local database schema** - make sure your local
+  database is up to date with the latest olcs-etl changesets before regenerating,
+  otherwise the diff will mix schema drift with your intended changes
 - The generator automatically detects join tables for ManyToMany relationships and excludes them
+  (tables marked with `_owner` in EntityConfig.php); it will not generate or refresh an
+  entity class for such tables
 - Tables with `@settings['ignore']` in their database comment will be skipped
 - The generator preserves the inheritance structure: abstract entities contain generated code, concrete entities contain custom logic
 - After regenerating, run your test suite to ensure everything still works correctly
+  (`vendor/bin/phpunit test/module/Api/src/Entity` plus `composer run-script phpstan`)

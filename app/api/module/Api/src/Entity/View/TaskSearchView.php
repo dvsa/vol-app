@@ -176,9 +176,9 @@ class TaskSearchView implements BundleSerializableInterface
     /**
      * Team ID
      *
-     * @var string
+     * @var int|null
      */
-    #[ORM\Column(type: 'integer', name: 'assigned_to_team_id')]
+    #[ORM\Column(type: 'integer', name: 'assigned_to_team_id', nullable: true)]
     protected $assignedToTeam;
 
     /**

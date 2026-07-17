@@ -119,7 +119,7 @@ abstract class AbstractBusNoticePeriod implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return BusNoticePeriod
+     * @return static
      */
     public function setId($id)
     {
@@ -143,7 +143,7 @@ abstract class AbstractBusNoticePeriod implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return BusNoticePeriod
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -167,7 +167,7 @@ abstract class AbstractBusNoticePeriod implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return BusNoticePeriod
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -191,7 +191,7 @@ abstract class AbstractBusNoticePeriod implements BundleSerializableInterface, J
      *
      * @param string $noticeArea new value being set
      *
-     * @return BusNoticePeriod
+     * @return static
      */
     public function setNoticeArea($noticeArea)
     {
@@ -215,7 +215,7 @@ abstract class AbstractBusNoticePeriod implements BundleSerializableInterface, J
      *
      * @param int $standardPeriod new value being set
      *
-     * @return BusNoticePeriod
+     * @return static
      */
     public function setStandardPeriod($standardPeriod)
     {
@@ -239,7 +239,7 @@ abstract class AbstractBusNoticePeriod implements BundleSerializableInterface, J
      *
      * @param int $cancellationPeriod new value being set
      *
-     * @return BusNoticePeriod
+     * @return static
      */
     public function setCancellationPeriod($cancellationPeriod)
     {
@@ -263,7 +263,7 @@ abstract class AbstractBusNoticePeriod implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return BusNoticePeriod
+     * @return static
      */
     public function setVersion($version)
     {

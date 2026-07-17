@@ -206,7 +206,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param int $id new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setId($id)
     {
@@ -230,7 +230,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant $letterSectionVariant new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setLetterSectionVariant($letterSectionVariant)
     {
@@ -254,7 +254,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $sectionType new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setSectionType($sectionType)
     {
@@ -278,7 +278,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -302,7 +302,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -326,7 +326,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -350,7 +350,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param string $name new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setName($name)
     {
@@ -374,7 +374,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param array $defaultContent new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setDefaultContent($defaultContent)
     {
@@ -398,7 +398,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param string $helpText new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setHelpText($helpText)
     {
@@ -422,7 +422,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param int $minLength new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setMinLength($minLength)
     {
@@ -446,7 +446,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param int $maxLength new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setMaxLength($maxLength)
     {
@@ -470,7 +470,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param bool $isLocked new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setIsLocked($isLocked)
     {
@@ -494,7 +494,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param bool $requiresInput new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setRequiresInput($requiresInput)
     {
@@ -518,7 +518,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param bool $isNi new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setIsNi($isNi)
     {
@@ -542,7 +542,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param \DateTime $publishFrom new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setPublishFrom($publishFrom)
     {
@@ -572,7 +572,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param int $versionNumber new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setVersionNumber($versionNumber)
     {
@@ -596,7 +596,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param int $version new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setVersion($version)
     {

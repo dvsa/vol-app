@@ -103,7 +103,7 @@ abstract class AbstractIrfoCountry implements BundleSerializableInterface, JsonS
      *
      * @param int $id new value being set
      *
-     * @return IrfoCountry
+     * @return static
      */
     public function setId($id)
     {
@@ -127,7 +127,7 @@ abstract class AbstractIrfoCountry implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrfoCountry
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -151,7 +151,7 @@ abstract class AbstractIrfoCountry implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrfoCountry
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -175,7 +175,7 @@ abstract class AbstractIrfoCountry implements BundleSerializableInterface, JsonS
      *
      * @param string $description new value being set
      *
-     * @return IrfoCountry
+     * @return static
      */
     public function setDescription($description)
     {
@@ -199,7 +199,7 @@ abstract class AbstractIrfoCountry implements BundleSerializableInterface, JsonS
      *
      * @param int $version new value being set
      *
-     * @return IrfoCountry
+     * @return static
      */
     public function setVersion($version)
     {

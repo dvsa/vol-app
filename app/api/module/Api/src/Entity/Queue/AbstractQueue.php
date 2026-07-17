@@ -160,7 +160,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @param int $id new value being set
      *
-     * @return Queue
+     * @return static
      */
     public function setId($id)
     {
@@ -184,7 +184,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $type new value being set
      *
-     * @return Queue
+     * @return static
      */
     public function setType($type)
     {
@@ -208,7 +208,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return Queue
+     * @return static
      */
     public function setStatus($status)
     {
@@ -232,7 +232,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Queue
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -256,7 +256,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Queue
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -280,7 +280,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @param int $entityId new value being set
      *
-     * @return Queue
+     * @return static
      */
     public function setEntityId($entityId)
     {
@@ -304,7 +304,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @param string $options new value being set
      *
-     * @return Queue
+     * @return static
      */
     public function setOptions($options)
     {
@@ -328,7 +328,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @param \DateTime $processAfterDate new value being set
      *
-     * @return Queue
+     * @return static
      */
     public function setProcessAfterDate($processAfterDate)
     {
@@ -358,7 +358,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @param int $attempts new value being set
      *
-     * @return Queue
+     * @return static
      */
     public function setAttempts($attempts)
     {
@@ -382,7 +382,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @param string $lastError new value being set
      *
-     * @return Queue
+     * @return static
      */
     public function setLastError($lastError)
     {
@@ -406,7 +406,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @param int $version new value being set
      *
-     * @return Queue
+     * @return static
      */
     public function setVersion($version)
     {

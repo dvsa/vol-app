@@ -257,7 +257,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param int $id new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setId($id)
     {
@@ -281,7 +281,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\Pi\Pi $pi new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setPi($pi)
     {
@@ -305,7 +305,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $presidingTc new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setPresidingTc($presidingTc)
     {
@@ -329,7 +329,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $presidedByRole new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setPresidedByRole($presidedByRole)
     {
@@ -353,7 +353,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\Venue $venue new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setVenue($venue)
     {
@@ -377,7 +377,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -401,7 +401,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -425,7 +425,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param \DateTime $hearingDate new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setHearingDate($hearingDate)
     {
@@ -455,7 +455,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param string $isFullDay new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setIsFullDay($isFullDay)
     {
@@ -479,7 +479,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param string $presidingTcOther new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setPresidingTcOther($presidingTcOther)
     {
@@ -503,7 +503,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param string $venueOther new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setVenueOther($venueOther)
     {
@@ -527,7 +527,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param int $witnesses new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setWitnesses($witnesses)
     {
@@ -551,7 +551,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param int $drivers new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setDrivers($drivers)
     {
@@ -575,7 +575,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param string $isCancelled new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setIsCancelled($isCancelled)
     {
@@ -599,7 +599,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param string $cancelledReason new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setCancelledReason($cancelledReason)
     {
@@ -623,7 +623,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param \DateTime $cancelledDate new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setCancelledDate($cancelledDate)
     {
@@ -653,7 +653,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param string $isAdjourned new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setIsAdjourned($isAdjourned)
     {
@@ -677,7 +677,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param \DateTime $adjournedDate new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setAdjournedDate($adjournedDate)
     {
@@ -707,7 +707,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param string $adjournedReason new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setAdjournedReason($adjournedReason)
     {
@@ -731,7 +731,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param string $details new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setDetails($details)
     {
@@ -755,7 +755,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param int $version new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setVersion($version)
     {
@@ -779,7 +779,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param int $olbsKey new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -803,7 +803,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      *
      * @param string $olbsType new value being set
      *
-     * @return PiHearing
+     * @return static
      */
     public function setOlbsType($olbsType)
     {

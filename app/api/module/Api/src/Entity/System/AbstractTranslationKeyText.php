@@ -125,7 +125,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @param int $id new value being set
      *
-     * @return TranslationKeyText
+     * @return static
      */
     public function setId($id)
     {
@@ -149,7 +149,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\Language $language new value being set
      *
-     * @return TranslationKeyText
+     * @return static
      */
     public function setLanguage($language)
     {
@@ -173,7 +173,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\TranslationKey $translationKey new value being set
      *
-     * @return TranslationKeyText
+     * @return static
      */
     public function setTranslationKey($translationKey)
     {
@@ -197,7 +197,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return TranslationKeyText
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -221,7 +221,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return TranslationKeyText
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -245,7 +245,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @param string $translatedText new value being set
      *
-     * @return TranslationKeyText
+     * @return static
      */
     public function setTranslatedText($translatedText)
     {
@@ -269,7 +269,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @param int $version new value being set
      *
-     * @return TranslationKeyText
+     * @return static
      */
     public function setVersion($version)
     {

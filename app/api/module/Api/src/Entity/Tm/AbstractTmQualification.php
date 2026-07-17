@@ -154,7 +154,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return TmQualification
+     * @return static
      */
     public function setId($id)
     {
@@ -178,7 +178,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return TmQualification
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -202,7 +202,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Country $countryCode new value being set
      *
-     * @return TmQualification
+     * @return static
      */
     public function setCountryCode($countryCode)
     {
@@ -226,7 +226,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $qualificationType new value being set
      *
-     * @return TmQualification
+     * @return static
      */
     public function setQualificationType($qualificationType)
     {
@@ -250,7 +250,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return TmQualification
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -274,7 +274,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return TmQualification
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -298,7 +298,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      *
      * @param \DateTime $issuedDate new value being set
      *
-     * @return TmQualification
+     * @return static
      */
     public function setIssuedDate($issuedDate)
     {
@@ -328,7 +328,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      *
      * @param string $serialNo new value being set
      *
-     * @return TmQualification
+     * @return static
      */
     public function setSerialNo($serialNo)
     {
@@ -352,7 +352,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return TmQualification
+     * @return static
      */
     public function setVersion($version)
     {
@@ -376,7 +376,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      *
      * @param int $olbsKey new value being set
      *
-     * @return TmQualification
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

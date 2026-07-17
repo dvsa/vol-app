@@ -188,7 +188,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return ContactDetails
+     * @return static
      */
     public function setId($id)
     {
@@ -212,7 +212,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $contactType new value being set
      *
-     * @return ContactDetails
+     * @return static
      */
     public function setContactType($contactType)
     {
@@ -236,7 +236,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Address $address new value being set
      *
-     * @return ContactDetails
+     * @return static
      */
     public function setAddress($address)
     {
@@ -260,7 +260,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Person\Person $person new value being set
      *
-     * @return ContactDetails
+     * @return static
      */
     public function setPerson($person)
     {
@@ -284,7 +284,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ContactDetails
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -308,7 +308,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ContactDetails
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -332,7 +332,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @param string $emailAddress new value being set
      *
-     * @return ContactDetails
+     * @return static
      */
     public function setEmailAddress($emailAddress)
     {
@@ -356,7 +356,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @param string $fao new value being set
      *
-     * @return ContactDetails
+     * @return static
      */
     public function setFao($fao)
     {
@@ -380,7 +380,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @param string $description new value being set
      *
-     * @return ContactDetails
+     * @return static
      */
     public function setDescription($description)
     {
@@ -404,7 +404,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @param string $writtenPermissionToEngage new value being set
      *
-     * @return ContactDetails
+     * @return static
      */
     public function setWrittenPermissionToEngage($writtenPermissionToEngage)
     {
@@ -428,7 +428,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return ContactDetails
+     * @return static
      */
     public function setVersion($version)
     {
@@ -452,7 +452,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @param int $olbsKey new value being set
      *
-     * @return ContactDetails
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -476,7 +476,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @param string $olbsType new value being set
      *
-     * @return ContactDetails
+     * @return static
      */
     public function setOlbsType($olbsType)
     {
@@ -500,7 +500,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $phoneContacts collection being set as the value
      *
-     * @return ContactDetails
+     * @return static
      */
     public function setPhoneContacts($phoneContacts)
     {
@@ -524,7 +524,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $phoneContacts collection being added
      *
-     * @return ContactDetails
+     * @return static
      */
     public function addPhoneContacts($phoneContacts)
     {
@@ -547,7 +547,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $phoneContacts collection being removed
      *
-     * @return ContactDetails
+     * @return static
      */
     public function removePhoneContacts($phoneContacts)
     {

@@ -133,7 +133,7 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
      *
      * @param int $id new value being set
      *
-     * @return Opposer
+     * @return static
      */
     public function setId($id)
     {
@@ -157,7 +157,7 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails new value being set
      *
-     * @return Opposer
+     * @return static
      */
     public function setContactDetails($contactDetails)
     {
@@ -181,7 +181,7 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $opposerType new value being set
      *
-     * @return Opposer
+     * @return static
      */
     public function setOpposerType($opposerType)
     {
@@ -205,7 +205,7 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Opposer
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -229,7 +229,7 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Opposer
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -253,7 +253,7 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
      *
      * @param int $version new value being set
      *
-     * @return Opposer
+     * @return static
      */
     public function setVersion($version)
     {
@@ -277,7 +277,7 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
      *
      * @param int $olbsKey new value being set
      *
-     * @return Opposer
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -301,7 +301,7 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
      *
      * @param string $olbsType new value being set
      *
-     * @return Opposer
+     * @return static
      */
     public function setOlbsType($olbsType)
     {

@@ -145,7 +145,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setId($id)
     {
@@ -169,7 +169,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\Submission\Submission $submission new value being set
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setSubmission($submission)
     {
@@ -193,7 +193,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -217,7 +217,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -241,7 +241,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param string $isDecision new value being set
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setIsDecision($isDecision)
     {
@@ -265,7 +265,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param string $comment new value being set
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setComment($comment)
     {
@@ -289,7 +289,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param int $version new value being set
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setVersion($version)
     {
@@ -313,7 +313,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $reasons collection being set as the value
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setReasons($reasons)
     {
@@ -337,7 +337,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $reasons collection being added
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function addReasons($reasons)
     {
@@ -360,7 +360,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $reasons collection being removed
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function removeReasons($reasons)
     {
@@ -376,7 +376,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $actionTypes collection being set as the value
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setActionTypes($actionTypes)
     {
@@ -400,7 +400,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $actionTypes collection being added
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function addActionTypes($actionTypes)
     {
@@ -423,7 +423,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $actionTypes collection being removed
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function removeActionTypes($actionTypes)
     {

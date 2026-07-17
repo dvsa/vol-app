@@ -206,7 +206,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param int $id new value being set
      *
-     * @return Hearing
+     * @return static
      */
     public function setId($id)
     {
@@ -230,7 +230,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return Hearing
+     * @return static
      */
     public function setCase($case)
     {
@@ -254,7 +254,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\Venue $venue new value being set
      *
-     * @return Hearing
+     * @return static
      */
     public function setVenue($venue)
     {
@@ -278,7 +278,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $presidingTc new value being set
      *
-     * @return Hearing
+     * @return static
      */
     public function setPresidingTc($presidingTc)
     {
@@ -302,7 +302,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $hearingType new value being set
      *
-     * @return Hearing
+     * @return static
      */
     public function setHearingType($hearingType)
     {
@@ -326,7 +326,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $outcome new value being set
      *
-     * @return Hearing
+     * @return static
      */
     public function setOutcome($outcome)
     {
@@ -350,7 +350,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Hearing
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -374,7 +374,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Hearing
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -398,7 +398,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param string $venueOther new value being set
      *
-     * @return Hearing
+     * @return static
      */
     public function setVenueOther($venueOther)
     {
@@ -422,7 +422,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param string $presidingStaffName new value being set
      *
-     * @return Hearing
+     * @return static
      */
     public function setPresidingStaffName($presidingStaffName)
     {
@@ -446,7 +446,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param \DateTime $hearingDate new value being set
      *
-     * @return Hearing
+     * @return static
      */
     public function setHearingDate($hearingDate)
     {
@@ -476,7 +476,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param \DateTime $agreedByTcDate new value being set
      *
-     * @return Hearing
+     * @return static
      */
     public function setAgreedByTcDate($agreedByTcDate)
     {
@@ -506,7 +506,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param int $witnessCount new value being set
      *
-     * @return Hearing
+     * @return static
      */
     public function setWitnessCount($witnessCount)
     {
@@ -530,7 +530,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param int $version new value being set
      *
-     * @return Hearing
+     * @return static
      */
     public function setVersion($version)
     {
@@ -554,7 +554,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param int $olbsKey new value being set
      *
-     * @return Hearing
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -578,7 +578,7 @@ abstract class AbstractHearing implements BundleSerializableInterface, JsonSeria
      *
      * @param string $olbsType new value being set
      *
-     * @return Hearing
+     * @return static
      */
     public function setOlbsType($olbsType)
     {

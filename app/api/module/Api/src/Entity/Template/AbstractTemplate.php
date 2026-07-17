@@ -165,7 +165,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param int $id new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setId($id)
     {
@@ -189,7 +189,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Template\TemplateTestData $templateTestData new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setTemplateTestData($templateTestData)
     {
@@ -213,7 +213,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\System\Category $category new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setCategory($category)
     {
@@ -237,7 +237,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -261,7 +261,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -285,7 +285,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param string $categoryName new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setCategoryName($categoryName)
     {
@@ -309,7 +309,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param string $locale new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setLocale($locale)
     {
@@ -333,7 +333,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param string $format new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setFormat($format)
     {
@@ -357,7 +357,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param string $name new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setName($name)
     {
@@ -381,7 +381,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param string $description new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setDescription($description)
     {
@@ -405,7 +405,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param string $source new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setSource($source)
     {
@@ -429,7 +429,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @param int $version new value being set
      *
-     * @return Template
+     * @return static
      */
     public function setVersion($version)
     {

@@ -314,7 +314,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setId($id)
     {
@@ -338,7 +338,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -362,7 +362,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $internationalJourneys new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setInternationalJourneys($internationalJourneys)
     {
@@ -386,7 +386,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $source new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setSource($source)
     {
@@ -410,7 +410,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setStatus($status)
     {
@@ -434,7 +434,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\Sectors $sectors new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setSectors($sectors)
     {
@@ -458,7 +458,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType $irhpPermitType new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setIrhpPermitType($irhpPermitType)
     {
@@ -482,7 +482,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $withdrawReason new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setWithdrawReason($withdrawReason)
     {
@@ -506,7 +506,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -530,7 +530,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -554,7 +554,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param bool $inScope new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setInScope($inScope)
     {
@@ -578,7 +578,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param bool $checkedAnswers new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setCheckedAnswers($checkedAnswers)
     {
@@ -602,7 +602,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param bool $declaration new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setDeclaration($declaration)
     {
@@ -626,7 +626,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \DateTime $dateReceived new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setDateReceived($dateReceived)
     {
@@ -656,7 +656,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \DateTime $cancellationDate new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setCancellationDate($cancellationDate)
     {
@@ -686,7 +686,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \DateTime $withdrawnDate new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setWithdrawnDate($withdrawnDate)
     {
@@ -716,7 +716,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \DateTime $expiryDate new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setExpiryDate($expiryDate)
     {
@@ -746,7 +746,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param bool $checked new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setChecked($checked)
     {
@@ -770,7 +770,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param string $corCertificateNumber new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setCorCertificateNumber($corCertificateNumber)
     {
@@ -794,7 +794,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setVersion($version)
     {
@@ -818,7 +818,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being set as the value
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setCountrys($countrys)
     {
@@ -842,7 +842,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $countrys collection being added
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function addCountrys($countrys)
     {
@@ -865,7 +865,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being removed
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function removeCountrys($countrys)
     {
@@ -881,7 +881,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $answers collection being set as the value
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setAnswers($answers)
     {
@@ -905,7 +905,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $answers collection being added
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function addAnswers($answers)
     {
@@ -928,7 +928,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $answers collection being removed
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function removeAnswers($answers)
     {
@@ -944,7 +944,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being set as the value
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setDocuments($documents)
     {
@@ -968,7 +968,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documents collection being added
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function addDocuments($documents)
     {
@@ -991,7 +991,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being removed
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function removeDocuments($documents)
     {
@@ -1007,7 +1007,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $fees collection being set as the value
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setFees($fees)
     {
@@ -1031,7 +1031,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $fees collection being added
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function addFees($fees)
     {
@@ -1054,7 +1054,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $fees collection being removed
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function removeFees($fees)
     {
@@ -1070,7 +1070,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitApplications collection being set as the value
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setIrhpPermitApplications($irhpPermitApplications)
     {
@@ -1094,7 +1094,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitApplications collection being added
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function addIrhpPermitApplications($irhpPermitApplications)
     {
@@ -1117,7 +1117,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitApplications collection being removed
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function removeIrhpPermitApplications($irhpPermitApplications)
     {
@@ -1133,7 +1133,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRequests collection being set as the value
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setIrhpPermitRequests($irhpPermitRequests)
     {
@@ -1157,7 +1157,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitRequests collection being added
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function addIrhpPermitRequests($irhpPermitRequests)
     {
@@ -1180,7 +1180,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRequests collection being removed
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function removeIrhpPermitRequests($irhpPermitRequests)
     {
@@ -1196,7 +1196,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $notes collection being set as the value
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setNotes($notes)
     {
@@ -1220,7 +1220,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $notes collection being added
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function addNotes($notes)
     {
@@ -1243,7 +1243,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $notes collection being removed
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function removeNotes($notes)
     {
@@ -1259,7 +1259,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tasks collection being set as the value
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function setTasks($tasks)
     {
@@ -1283,7 +1283,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tasks collection being added
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function addTasks($tasks)
     {
@@ -1306,7 +1306,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tasks collection being removed
      *
-     * @return IrhpApplication
+     * @return static
      */
     public function removeTasks($tasks)
     {

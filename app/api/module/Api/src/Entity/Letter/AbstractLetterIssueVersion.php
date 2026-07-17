@@ -233,7 +233,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param int $id new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setId($id)
     {
@@ -257,7 +257,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterIssue $letterIssue new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setLetterIssue($letterIssue)
     {
@@ -281,7 +281,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterIssueType $letterIssueType new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setLetterIssueType($letterIssueType)
     {
@@ -305,7 +305,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\Category $category new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setCategory($category)
     {
@@ -329,7 +329,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setSubCategory($subCategory)
     {
@@ -353,7 +353,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -377,7 +377,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -401,7 +401,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -425,7 +425,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param string $heading new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setHeading($heading)
     {
@@ -449,7 +449,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param string $modalLabel new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setModalLabel($modalLabel)
     {
@@ -473,7 +473,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param array $defaultBodyContent new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setDefaultBodyContent($defaultBodyContent)
     {
@@ -497,7 +497,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param string $helpText new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setHelpText($helpText)
     {
@@ -521,7 +521,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param int $minLength new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setMinLength($minLength)
     {
@@ -545,7 +545,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param int $maxLength new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setMaxLength($maxLength)
     {
@@ -569,7 +569,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param bool $isLocked new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setIsLocked($isLocked)
     {
@@ -593,7 +593,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param bool $requiresInput new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setRequiresInput($requiresInput)
     {
@@ -617,7 +617,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param bool $isNi new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setIsNi($isNi)
     {
@@ -641,7 +641,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param \DateTime $publishFrom new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setPublishFrom($publishFrom)
     {
@@ -671,7 +671,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param int $versionNumber new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setVersionNumber($versionNumber)
     {
@@ -695,7 +695,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @param int $version new value being set
      *
-     * @return LetterIssueVersion
+     * @return static
      */
     public function setVersion($version)
     {

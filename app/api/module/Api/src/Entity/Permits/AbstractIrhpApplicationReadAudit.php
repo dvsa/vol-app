@@ -84,7 +84,7 @@ abstract class AbstractIrhpApplicationReadAudit implements BundleSerializableInt
      *
      * @param int $id new value being set
      *
-     * @return IrhpApplicationReadAudit
+     * @return static
      */
     public function setId($id)
     {
@@ -108,7 +108,7 @@ abstract class AbstractIrhpApplicationReadAudit implements BundleSerializableInt
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication new value being set
      *
-     * @return IrhpApplicationReadAudit
+     * @return static
      */
     public function setIrhpApplication($irhpApplication)
     {
@@ -132,7 +132,7 @@ abstract class AbstractIrhpApplicationReadAudit implements BundleSerializableInt
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return IrhpApplicationReadAudit
+     * @return static
      */
     public function setUser($user)
     {

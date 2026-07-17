@@ -80,7 +80,7 @@ abstract class AbstractPresidingTc implements BundleSerializableInterface, JsonS
      *
      * @param int $id new value being set
      *
-     * @return PresidingTc
+     * @return static
      */
     public function setId($id)
     {
@@ -104,7 +104,7 @@ abstract class AbstractPresidingTc implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return PresidingTc
+     * @return static
      */
     public function setUser($user)
     {
@@ -128,7 +128,7 @@ abstract class AbstractPresidingTc implements BundleSerializableInterface, JsonS
      *
      * @param string $name new value being set
      *
-     * @return PresidingTc
+     * @return static
      */
     public function setName($name)
     {

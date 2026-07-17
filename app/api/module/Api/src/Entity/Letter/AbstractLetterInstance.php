@@ -216,7 +216,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setId($id)
     {
@@ -240,7 +240,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterType $letterType new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setLetterType($letterType)
     {
@@ -264,7 +264,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -288,7 +288,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setApplication($application)
     {
@@ -312,7 +312,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setCase($case)
     {
@@ -336,7 +336,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -360,7 +360,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $irfoOrganisation new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setIrfoOrganisation($irfoOrganisation)
     {
@@ -384,7 +384,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -408,7 +408,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -432,7 +432,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setStatus($status)
     {
@@ -456,7 +456,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setDocument($document)
     {
@@ -480,7 +480,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -504,7 +504,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -528,7 +528,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param string $reference new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setReference($reference)
     {
@@ -552,7 +552,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \DateTime $sentOn new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setSentOn($sentOn)
     {
@@ -582,7 +582,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setVersion($version)
     {

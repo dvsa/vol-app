@@ -267,7 +267,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param int $id new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setId($id)
     {
@@ -291,7 +291,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setApplication($application)
     {
@@ -315,7 +315,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -339,7 +339,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre $operatingCentre new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setOperatingCentre($operatingCentre)
     {
@@ -363,7 +363,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setCase($case)
     {
@@ -387,7 +387,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking $licConditionVariation new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setLicConditionVariation($licConditionVariation)
     {
@@ -411,7 +411,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $conditionType new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setConditionType($conditionType)
     {
@@ -435,7 +435,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $conditionCategory new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setConditionCategory($conditionCategory)
     {
@@ -459,7 +459,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\S4 $s4 new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setS4($s4)
     {
@@ -483,7 +483,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $addedVia new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setAddedVia($addedVia)
     {
@@ -507,7 +507,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $attachedTo new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setAttachedTo($attachedTo)
     {
@@ -531,7 +531,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $approvalUser new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setApprovalUser($approvalUser)
     {
@@ -555,7 +555,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -579,7 +579,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -603,7 +603,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param string $action new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setAction($action)
     {
@@ -627,7 +627,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param string $isDraft new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setIsDraft($isDraft)
     {
@@ -651,7 +651,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param string $isFulfilled new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setIsFulfilled($isFulfilled)
     {
@@ -675,7 +675,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param string $notes new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setNotes($notes)
     {
@@ -699,7 +699,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param int $version new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setVersion($version)
     {
@@ -723,7 +723,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param int $olbsKey new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -747,7 +747,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param string $olbsType new value being set
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setOlbsType($olbsType)
     {
@@ -771,7 +771,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $variationRecords collection being set as the value
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function setVariationRecords($variationRecords)
     {
@@ -795,7 +795,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $variationRecords collection being added
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function addVariationRecords($variationRecords)
     {
@@ -818,7 +818,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $variationRecords collection being removed
      *
-     * @return ConditionUndertaking
+     * @return static
      */
     public function removeVariationRecords($variationRecords)
     {

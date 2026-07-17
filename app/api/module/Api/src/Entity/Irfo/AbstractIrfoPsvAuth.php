@@ -302,7 +302,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param int $id new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setId($id)
     {
@@ -326,7 +326,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -350,7 +350,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType $irfoPsvAuthType new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setIrfoPsvAuthType($irfoPsvAuthType)
     {
@@ -374,7 +374,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setStatus($status)
     {
@@ -398,7 +398,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $journeyFrequency new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setJourneyFrequency($journeyFrequency)
     {
@@ -422,7 +422,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $withdrawnReason new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setWithdrawnReason($withdrawnReason)
     {
@@ -446,7 +446,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -470,7 +470,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -494,7 +494,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param string $exemptionDetails new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setExemptionDetails($exemptionDetails)
     {
@@ -518,7 +518,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $expiryDate new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setExpiryDate($expiryDate)
     {
@@ -548,7 +548,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param string $isFeeExemptApplication new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setIsFeeExemptApplication($isFeeExemptApplication)
     {
@@ -572,7 +572,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param string $isFeeExemptAnnual new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setIsFeeExemptAnnual($isFeeExemptAnnual)
     {
@@ -596,7 +596,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $inForceDate new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setInForceDate($inForceDate)
     {
@@ -626,7 +626,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param string $irfoFeeId new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setIrfoFeeId($irfoFeeId)
     {
@@ -650,7 +650,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param string $irfoFileNo new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setIrfoFileNo($irfoFileNo)
     {
@@ -674,7 +674,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param int $copiesIssued new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setCopiesIssued($copiesIssued)
     {
@@ -698,7 +698,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param int $copiesRequired new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setCopiesRequired($copiesRequired)
     {
@@ -722,7 +722,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param int $copiesRequiredTotal new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setCopiesRequiredTotal($copiesRequiredTotal)
     {
@@ -746,7 +746,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param int $copiesIssuedTotal new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setCopiesIssuedTotal($copiesIssuedTotal)
     {
@@ -770,7 +770,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $lastDateCopiesReq new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setLastDateCopiesReq($lastDateCopiesReq)
     {
@@ -800,7 +800,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $renewalDate new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setRenewalDate($renewalDate)
     {
@@ -830,7 +830,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param string $serviceRouteFrom new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setServiceRouteFrom($serviceRouteFrom)
     {
@@ -854,7 +854,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param string $serviceRouteTo new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setServiceRouteTo($serviceRouteTo)
     {
@@ -878,7 +878,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param int $validityPeriod new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setValidityPeriod($validityPeriod)
     {
@@ -902,7 +902,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $applicationSentDate new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setApplicationSentDate($applicationSentDate)
     {
@@ -932,7 +932,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param int $version new value being set
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setVersion($version)
     {
@@ -956,7 +956,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being set as the value
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setCountrys($countrys)
     {
@@ -980,7 +980,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $countrys collection being added
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function addCountrys($countrys)
     {
@@ -1003,7 +1003,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being removed
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function removeCountrys($countrys)
     {
@@ -1019,7 +1019,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irfoPsvAuthNumbers collection being set as the value
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function setIrfoPsvAuthNumbers($irfoPsvAuthNumbers)
     {
@@ -1043,7 +1043,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irfoPsvAuthNumbers collection being added
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function addIrfoPsvAuthNumbers($irfoPsvAuthNumbers)
     {
@@ -1066,7 +1066,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irfoPsvAuthNumbers collection being removed
      *
-     * @return IrfoPsvAuth
+     * @return static
      */
     public function removeIrfoPsvAuthNumbers($irfoPsvAuthNumbers)
     {

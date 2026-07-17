@@ -149,7 +149,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return PhoneContact
+     * @return static
      */
     public function setId($id)
     {
@@ -173,7 +173,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $phoneContactType new value being set
      *
-     * @return PhoneContact
+     * @return static
      */
     public function setPhoneContactType($phoneContactType)
     {
@@ -197,7 +197,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails new value being set
      *
-     * @return PhoneContact
+     * @return static
      */
     public function setContactDetails($contactDetails)
     {
@@ -221,7 +221,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return PhoneContact
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -245,7 +245,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return PhoneContact
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -269,7 +269,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      *
      * @param string $phoneNumber new value being set
      *
-     * @return PhoneContact
+     * @return static
      */
     public function setPhoneNumber($phoneNumber)
     {
@@ -293,7 +293,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      *
      * @param string $details new value being set
      *
-     * @return PhoneContact
+     * @return static
      */
     public function setDetails($details)
     {
@@ -317,7 +317,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      *
      * @param int $version new value being set
      *
-     * @return PhoneContact
+     * @return static
      */
     public function setVersion($version)
     {
@@ -341,7 +341,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      *
      * @param int $olbsKey new value being set
      *
-     * @return PhoneContact
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -365,7 +365,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      *
      * @param string $olbsType new value being set
      *
-     * @return PhoneContact
+     * @return static
      */
     public function setOlbsType($olbsType)
     {

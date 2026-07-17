@@ -56,7 +56,7 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return LegacyCaseAction
+     * @return static
      */
     public function setId($id)
     {
@@ -80,7 +80,7 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
      *
      * @param string $description new value being set
      *
-     * @return LegacyCaseAction
+     * @return static
      */
     public function setDescription($description)
     {
@@ -104,7 +104,7 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
      *
      * @param string $isDriver new value being set
      *
-     * @return LegacyCaseAction
+     * @return static
      */
     public function setIsDriver($isDriver)
     {

@@ -117,7 +117,7 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
      *
      * @param int $id new value being set
      *
-     * @return DocParagraphBookmark
+     * @return static
      */
     public function setId($id)
     {
@@ -141,7 +141,7 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\DocBookmark $docBookmark new value being set
      *
-     * @return DocParagraphBookmark
+     * @return static
      */
     public function setDocBookmark($docBookmark)
     {
@@ -165,7 +165,7 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\DocParagraph $docParagraph new value being set
      *
-     * @return DocParagraphBookmark
+     * @return static
      */
     public function setDocParagraph($docParagraph)
     {
@@ -189,7 +189,7 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return DocParagraphBookmark
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -213,7 +213,7 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return DocParagraphBookmark
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -237,7 +237,7 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
      *
      * @param int $version new value being set
      *
-     * @return DocParagraphBookmark
+     * @return static
      */
     public function setVersion($version)
     {

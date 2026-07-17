@@ -197,12 +197,14 @@ final readonly class MethodGeneratorService
     }
 
     /**
-     * Get the return type for fluent interface (usually the entity class name)
+     * Get the return type for fluent interface
+     *
+     * 'static' rather than the concrete class name: fluent methods return $this,
+     * which in the abstract class is not provably the concrete type (PHPStan return.type).
      */
-    public function getFluidReturnType(string $className): string
+    public function getFluidReturnType(): string
     {
-        // Remove "Abstract" prefix if present
-        return str_replace('Abstract', '', $className);
+        return 'static';
     }
 
     /**

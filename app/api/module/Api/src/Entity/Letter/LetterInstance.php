@@ -23,7 +23,7 @@ class LetterInstance extends AbstractLetterInstance
     /**
      * Letter instance sections
      *
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceSection>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['displayOrder' => 'ASC'])]
@@ -32,7 +32,7 @@ class LetterInstance extends AbstractLetterInstance
     /**
      * Letter instance issues
      *
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceIssue>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['displayOrder' => 'ASC'])]
@@ -41,7 +41,7 @@ class LetterInstance extends AbstractLetterInstance
     /**
      * Letter instance todos
      *
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceTodo>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['displayOrder' => 'ASC'])]
@@ -50,7 +50,7 @@ class LetterInstance extends AbstractLetterInstance
     /**
      * Letter instance appendices
      *
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceAppendix>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceAppendix::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
     #[ORM\OrderBy(['displayOrder' => 'ASC'])]
@@ -59,7 +59,7 @@ class LetterInstance extends AbstractLetterInstance
     /**
      * Letter instance choices (selected by caseworker)
      *
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceChoice>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceChoice::class, mappedBy: 'letterInstance', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected $letterInstanceChoices;

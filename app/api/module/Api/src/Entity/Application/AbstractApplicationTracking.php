@@ -339,7 +339,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $id new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setId($id)
     {
@@ -363,7 +363,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setApplication($application)
     {
@@ -387,7 +387,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -411,7 +411,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -435,7 +435,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $typeOfLicenceStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setTypeOfLicenceStatus($typeOfLicenceStatus)
     {
@@ -459,7 +459,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $businessTypeStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setBusinessTypeStatus($businessTypeStatus)
     {
@@ -483,7 +483,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $businessDetailsStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setBusinessDetailsStatus($businessDetailsStatus)
     {
@@ -507,7 +507,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $addressesStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setAddressesStatus($addressesStatus)
     {
@@ -531,7 +531,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $peopleStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setPeopleStatus($peopleStatus)
     {
@@ -555,7 +555,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $taxiPhvStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setTaxiPhvStatus($taxiPhvStatus)
     {
@@ -579,7 +579,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $operatingCentresStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setOperatingCentresStatus($operatingCentresStatus)
     {
@@ -603,7 +603,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $financialEvidenceStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setFinancialEvidenceStatus($financialEvidenceStatus)
     {
@@ -627,7 +627,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $transportManagersStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setTransportManagersStatus($transportManagersStatus)
     {
@@ -651,7 +651,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $vehiclesStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setVehiclesStatus($vehiclesStatus)
     {
@@ -675,7 +675,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $vehiclesPsvStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setVehiclesPsvStatus($vehiclesPsvStatus)
     {
@@ -699,7 +699,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $vehiclesSizeStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setVehiclesSizeStatus($vehiclesSizeStatus)
     {
@@ -723,7 +723,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $psvOperateSmallStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setPsvOperateSmallStatus($psvOperateSmallStatus)
     {
@@ -747,7 +747,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $psvOperateLargeStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setPsvOperateLargeStatus($psvOperateLargeStatus)
     {
@@ -771,7 +771,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $psvSmallConditionsStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setPsvSmallConditionsStatus($psvSmallConditionsStatus)
     {
@@ -795,7 +795,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $psvOperateNoveltyStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setPsvOperateNoveltyStatus($psvOperateNoveltyStatus)
     {
@@ -819,7 +819,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $psvSmallPartWrittenStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setPsvSmallPartWrittenStatus($psvSmallPartWrittenStatus)
     {
@@ -843,7 +843,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $psvDocumentaryEvidenceSmallStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setPsvDocumentaryEvidenceSmallStatus($psvDocumentaryEvidenceSmallStatus)
     {
@@ -867,7 +867,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $psvDocumentaryEvidenceLargeStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setPsvDocumentaryEvidenceLargeStatus($psvDocumentaryEvidenceLargeStatus)
     {
@@ -891,7 +891,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $psvMainOccupationUndertakingsStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setPsvMainOccupationUndertakingsStatus($psvMainOccupationUndertakingsStatus)
     {
@@ -915,7 +915,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $vehiclesDeclarationsStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setVehiclesDeclarationsStatus($vehiclesDeclarationsStatus)
     {
@@ -939,7 +939,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $discsStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setDiscsStatus($discsStatus)
     {
@@ -963,7 +963,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $communityLicencesStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setCommunityLicencesStatus($communityLicencesStatus)
     {
@@ -987,7 +987,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $safetyStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setSafetyStatus($safetyStatus)
     {
@@ -1011,7 +1011,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $conditionsUndertakingsStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setConditionsUndertakingsStatus($conditionsUndertakingsStatus)
     {
@@ -1035,7 +1035,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $financialHistoryStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setFinancialHistoryStatus($financialHistoryStatus)
     {
@@ -1059,7 +1059,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $licenceHistoryStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setLicenceHistoryStatus($licenceHistoryStatus)
     {
@@ -1083,7 +1083,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $convictionsPenaltiesStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setConvictionsPenaltiesStatus($convictionsPenaltiesStatus)
     {
@@ -1107,7 +1107,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $declarationsInternalStatus new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setDeclarationsInternalStatus($declarationsInternalStatus)
     {
@@ -1131,7 +1131,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @param int $version new value being set
      *
-     * @return ApplicationTracking
+     * @return static
      */
     public function setVersion($version)
     {

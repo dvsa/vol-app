@@ -215,7 +215,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param int $id new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setId($id)
     {
@@ -239,7 +239,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setCase($case)
     {
@@ -263,7 +263,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Legacy\LegacyCaseAction $action new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setAction($action)
     {
@@ -287,7 +287,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $fromUser new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setFromUser($fromUser)
     {
@@ -311,7 +311,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $toUser new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setToUser($toUser)
     {
@@ -335,7 +335,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -359,7 +359,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -383,7 +383,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param \DateTime $recDate new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setRecDate($recDate)
     {
@@ -413,7 +413,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param string $piReason new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setPiReason($piReason)
     {
@@ -437,7 +437,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param string $comment new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setComment($comment)
     {
@@ -461,7 +461,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param \DateTime $effectiveDate new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setEffectiveDate($effectiveDate)
     {
@@ -491,7 +491,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param string $notes new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setNotes($notes)
     {
@@ -515,7 +515,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param string $piDecision new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setPiDecision($piDecision)
     {
@@ -539,7 +539,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param string $request new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setRequest($request)
     {
@@ -563,7 +563,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param string $revokeLic new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setRevokeLic($revokeLic)
     {
@@ -587,7 +587,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param string $status new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setStatus($status)
     {
@@ -611,7 +611,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param int $totalPoints new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setTotalPoints($totalPoints)
     {
@@ -635,7 +635,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @param int $version new value being set
      *
-     * @return LegacyRecommendation
+     * @return static
      */
     public function setVersion($version)
     {

@@ -42,8 +42,8 @@ abstract class AbstractLetterTypeIssue implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
      */
-    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id')]
     #[ORM\Id]
+    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, fetch: 'LAZY')]
     protected $letterType;
 
@@ -52,8 +52,8 @@ abstract class AbstractLetterTypeIssue implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion
      */
-    #[ORM\JoinColumn(name: 'letter_issue_version_id', referencedColumnName: 'id')]
     #[ORM\Id]
+    #[ORM\JoinColumn(name: 'letter_issue_version_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion::class, fetch: 'LAZY')]
     protected $letterIssueVersion;
 
@@ -98,7 +98,7 @@ abstract class AbstractLetterTypeIssue implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterType $letterType new value being set
      *
-     * @return LetterTypeIssue
+     * @return static
      */
     public function setLetterType($letterType)
     {
@@ -122,7 +122,7 @@ abstract class AbstractLetterTypeIssue implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion $letterIssueVersion new value being set
      *
-     * @return LetterTypeIssue
+     * @return static
      */
     public function setLetterIssueVersion($letterIssueVersion)
     {
@@ -146,7 +146,7 @@ abstract class AbstractLetterTypeIssue implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterTypeIssue
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -170,7 +170,7 @@ abstract class AbstractLetterTypeIssue implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterTypeIssue
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -195,6 +195,6 @@ abstract class AbstractLetterTypeIssue implements BundleSerializableInterface, J
     #[\Override]
     public function __toString(): string
     {
-        return (string) $this->getId();
+        return implode('-', [(string) $this->letterType, (string) $this->letterIssueVersion]);
     }
 }

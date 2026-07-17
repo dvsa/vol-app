@@ -115,7 +115,7 @@ abstract class AbstractPostcodeEnforcementArea implements BundleSerializableInte
      *
      * @param int $id new value being set
      *
-     * @return PostcodeEnforcementArea
+     * @return static
      */
     public function setId($id)
     {
@@ -139,7 +139,7 @@ abstract class AbstractPostcodeEnforcementArea implements BundleSerializableInte
      *
      * @param \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea $enforcementArea new value being set
      *
-     * @return PostcodeEnforcementArea
+     * @return static
      */
     public function setEnforcementArea($enforcementArea)
     {
@@ -163,7 +163,7 @@ abstract class AbstractPostcodeEnforcementArea implements BundleSerializableInte
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return PostcodeEnforcementArea
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -187,7 +187,7 @@ abstract class AbstractPostcodeEnforcementArea implements BundleSerializableInte
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return PostcodeEnforcementArea
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -211,7 +211,7 @@ abstract class AbstractPostcodeEnforcementArea implements BundleSerializableInte
      *
      * @param string $postcodeId new value being set
      *
-     * @return PostcodeEnforcementArea
+     * @return static
      */
     public function setPostcodeId($postcodeId)
     {
@@ -235,7 +235,7 @@ abstract class AbstractPostcodeEnforcementArea implements BundleSerializableInte
      *
      * @param int $version new value being set
      *
-     * @return PostcodeEnforcementArea
+     * @return static
      */
     public function setVersion($version)
     {

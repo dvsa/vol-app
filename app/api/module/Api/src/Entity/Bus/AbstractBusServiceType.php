@@ -82,7 +82,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return BusServiceType
+     * @return static
      */
     public function setId($id)
     {
@@ -106,7 +106,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
      *
      * @param string $description new value being set
      *
-     * @return BusServiceType
+     * @return static
      */
     public function setDescription($description)
     {
@@ -130,7 +130,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
      *
      * @param string $txcName new value being set
      *
-     * @return BusServiceType
+     * @return static
      */
     public function setTxcName($txcName)
     {
@@ -154,7 +154,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being set as the value
      *
-     * @return BusServiceType
+     * @return static
      */
     public function setBusRegs($busRegs)
     {
@@ -178,7 +178,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $busRegs collection being added
      *
-     * @return BusServiceType
+     * @return static
      */
     public function addBusRegs($busRegs)
     {
@@ -201,7 +201,7 @@ abstract class AbstractBusServiceType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being removed
      *
-     * @return BusServiceType
+     * @return static
      */
     public function removeBusRegs($busRegs)
     {

@@ -76,7 +76,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return DocumentToDelete
+     * @return static
      */
     public function setId($id)
     {
@@ -100,7 +100,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
      *
      * @param string $documentStoreId new value being set
      *
-     * @return DocumentToDelete
+     * @return static
      */
     public function setDocumentStoreId($documentStoreId)
     {
@@ -124,7 +124,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
      *
      * @param int $documentId new value being set
      *
-     * @return DocumentToDelete
+     * @return static
      */
     public function setDocumentId($documentId)
     {
@@ -148,7 +148,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
      *
      * @param int $attempts new value being set
      *
-     * @return DocumentToDelete
+     * @return static
      */
     public function setAttempts($attempts)
     {
@@ -172,7 +172,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
      *
      * @param \DateTime $processAfterDate new value being set
      *
-     * @return DocumentToDelete
+     * @return static
      */
     public function setProcessAfterDate($processAfterDate)
     {

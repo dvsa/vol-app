@@ -119,7 +119,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
      *
      * @param int $id new value being set
      *
-     * @return PublicationSection
+     * @return static
      */
     public function setId($id)
     {
@@ -143,7 +143,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return PublicationSection
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -167,7 +167,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return PublicationSection
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -191,7 +191,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
      *
      * @param string $description new value being set
      *
-     * @return PublicationSection
+     * @return static
      */
     public function setDescription($description)
     {
@@ -215,7 +215,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
      *
      * @param string $adSection new value being set
      *
-     * @return PublicationSection
+     * @return static
      */
     public function setAdSection($adSection)
     {
@@ -239,7 +239,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
      *
      * @param string $npSection new value being set
      *
-     * @return PublicationSection
+     * @return static
      */
     public function setNpSection($npSection)
     {
@@ -263,7 +263,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
      *
      * @param int $version new value being set
      *
-     * @return PublicationSection
+     * @return static
      */
     public function setVersion($version)
     {

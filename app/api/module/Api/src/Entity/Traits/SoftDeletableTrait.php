@@ -46,4 +46,14 @@ trait SoftDeletableTrait
 
         return $this->deletedDate;
     }
+
+    /**
+     * Check whether the record is soft-deleted
+     *
+     * @return bool
+     */
+    public function isDeleted()
+    {
+        return $this->deletedDate !== null;
+    }
 }

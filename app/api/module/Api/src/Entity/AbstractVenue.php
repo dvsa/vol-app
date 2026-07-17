@@ -149,7 +149,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
      *
      * @param int $id new value being set
      *
-     * @return Venue
+     * @return static
      */
     public function setId($id)
     {
@@ -173,7 +173,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Address $address new value being set
      *
-     * @return Venue
+     * @return static
      */
     public function setAddress($address)
     {
@@ -197,7 +197,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
-     * @return Venue
+     * @return static
      */
     public function setTrafficArea($trafficArea)
     {
@@ -221,7 +221,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Venue
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -245,7 +245,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Venue
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -269,7 +269,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
      *
      * @param string $name new value being set
      *
-     * @return Venue
+     * @return static
      */
     public function setName($name)
     {
@@ -293,7 +293,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
      *
      * @param \DateTime $startDate new value being set
      *
-     * @return Venue
+     * @return static
      */
     public function setStartDate($startDate)
     {
@@ -323,7 +323,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
      *
      * @param \DateTime $endDate new value being set
      *
-     * @return Venue
+     * @return static
      */
     public function setEndDate($endDate)
     {
@@ -353,7 +353,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
      *
      * @param int $version new value being set
      *
-     * @return Venue
+     * @return static
      */
     public function setVersion($version)
     {
@@ -377,7 +377,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
      *
      * @param int $olbsKey new value being set
      *
-     * @return Venue
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

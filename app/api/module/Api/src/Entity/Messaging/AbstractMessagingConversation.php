@@ -145,7 +145,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setId($id)
     {
@@ -169,7 +169,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Task\Task $task new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setTask($task)
     {
@@ -193,7 +193,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -217,7 +217,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -241,7 +241,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param string $subject new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setSubject($subject)
     {
@@ -265,7 +265,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param bool $isAttachmentsEnabled new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setIsAttachmentsEnabled($isAttachmentsEnabled)
     {
@@ -289,7 +289,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param \DateTime $lastReadAt new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setLastReadAt($lastReadAt)
     {
@@ -319,7 +319,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param bool $isClosed new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setIsClosed($isClosed)
     {
@@ -343,7 +343,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param bool $isArchived new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setIsArchived($isArchived)
     {
@@ -367,7 +367,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return MessagingConversation
+     * @return static
      */
     public function setVersion($version)
     {

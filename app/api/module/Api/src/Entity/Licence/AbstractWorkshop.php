@@ -160,7 +160,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param int $id new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setId($id)
     {
@@ -184,7 +184,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -208,7 +208,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setContactDetails($contactDetails)
     {
@@ -232,7 +232,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -256,7 +256,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -280,7 +280,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param string $isExternal new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setIsExternal($isExternal)
     {
@@ -304,7 +304,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param string $maintenance new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setMaintenance($maintenance)
     {
@@ -328,7 +328,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param string $safetyInspection new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setSafetyInspection($safetyInspection)
     {
@@ -352,7 +352,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param \DateTime $removedDate new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setRemovedDate($removedDate)
     {
@@ -382,7 +382,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param int $version new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setVersion($version)
     {
@@ -406,7 +406,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param int $olbsKey new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

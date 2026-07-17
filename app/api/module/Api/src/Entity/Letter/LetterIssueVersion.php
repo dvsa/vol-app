@@ -17,7 +17,7 @@ class LetterIssueVersion extends AbstractLetterIssueVersion
     /**
      * Letter issue todos
      *
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, LetterIssueTodo>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssueTodo::class, mappedBy: 'letterIssueVersion', cascade: ['persist'], orphanRemoval: true)]
     #[ORM\OrderBy(['displayOrder' => 'ASC'])]

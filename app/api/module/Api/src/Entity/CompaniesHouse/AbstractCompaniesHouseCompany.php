@@ -187,7 +187,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setId($id)
     {
@@ -211,7 +211,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $companyNumber new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setCompanyNumber($companyNumber)
     {
@@ -235,7 +235,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $companyName new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setCompanyName($companyName)
     {
@@ -259,7 +259,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $companyStatus new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setCompanyStatus($companyStatus)
     {
@@ -283,7 +283,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $addressLine1 new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setAddressLine1($addressLine1)
     {
@@ -307,7 +307,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $addressLine2 new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setAddressLine2($addressLine2)
     {
@@ -331,7 +331,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $country new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setCountry($country)
     {
@@ -355,7 +355,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $locality new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setLocality($locality)
     {
@@ -379,7 +379,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $poBox new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setPoBox($poBox)
     {
@@ -403,7 +403,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $postalCode new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setPostalCode($postalCode)
     {
@@ -427,7 +427,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $premises new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setPremises($premises)
     {
@@ -451,7 +451,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $region new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setRegion($region)
     {
@@ -475,7 +475,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param bool $insolvencyProcessed new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setInsolvencyProcessed($insolvencyProcessed)
     {
@@ -499,7 +499,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setVersion($version)
     {
@@ -523,7 +523,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $insolvencyPractitioners collection being set as the value
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setInsolvencyPractitioners($insolvencyPractitioners)
     {
@@ -547,7 +547,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $insolvencyPractitioners collection being added
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function addInsolvencyPractitioners($insolvencyPractitioners)
     {
@@ -570,7 +570,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $insolvencyPractitioners collection being removed
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function removeInsolvencyPractitioners($insolvencyPractitioners)
     {
@@ -586,7 +586,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $officers collection being set as the value
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setOfficers($officers)
     {
@@ -610,7 +610,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $officers collection being added
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function addOfficers($officers)
     {
@@ -633,7 +633,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $officers collection being removed
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function removeOfficers($officers)
     {

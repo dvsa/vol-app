@@ -115,7 +115,7 @@ abstract class AbstractPiSlaException implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return PiSlaException
+     * @return static
      */
     public function setId($id)
     {
@@ -139,7 +139,7 @@ abstract class AbstractPiSlaException implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Pi\Pi $pi new value being set
      *
-     * @return PiSlaException
+     * @return static
      */
     public function setPi($pi)
     {
@@ -163,7 +163,7 @@ abstract class AbstractPiSlaException implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Pi\SlaException $slaException new value being set
      *
-     * @return PiSlaException
+     * @return static
      */
     public function setSlaException($slaException)
     {
@@ -187,7 +187,7 @@ abstract class AbstractPiSlaException implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return PiSlaException
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -211,7 +211,7 @@ abstract class AbstractPiSlaException implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return PiSlaException
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -235,7 +235,7 @@ abstract class AbstractPiSlaException implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return PiSlaException
+     * @return static
      */
     public function setVersion($version)
     {

@@ -144,7 +144,7 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
      *
      * @param int $id new value being set
      *
-     * @return TradingName
+     * @return static
      */
     public function setId($id)
     {
@@ -168,7 +168,7 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return TradingName
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -192,7 +192,7 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return TradingName
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -216,7 +216,7 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return TradingName
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -240,7 +240,7 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return TradingName
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -264,7 +264,7 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
      *
      * @param string $name new value being set
      *
-     * @return TradingName
+     * @return static
      */
     public function setName($name)
     {
@@ -288,7 +288,7 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
      *
      * @param string $viAction new value being set
      *
-     * @return TradingName
+     * @return static
      */
     public function setViAction($viAction)
     {
@@ -312,7 +312,7 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
      *
      * @param int $version new value being set
      *
-     * @return TradingName
+     * @return static
      */
     public function setVersion($version)
     {
@@ -336,7 +336,7 @@ abstract class AbstractTradingName implements BundleSerializableInterface, JsonS
      *
      * @param int $olbsKey new value being set
      *
-     * @return TradingName
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

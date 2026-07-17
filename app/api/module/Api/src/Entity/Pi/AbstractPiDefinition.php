@@ -145,7 +145,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setId($id)
     {
@@ -169,7 +169,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -193,7 +193,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -217,7 +217,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -241,7 +241,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param string $piDefinitionCategory new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setPiDefinitionCategory($piDefinitionCategory)
     {
@@ -265,7 +265,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param string $sectionCode new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setSectionCode($sectionCode)
     {
@@ -289,7 +289,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param string $description new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setDescription($description)
     {
@@ -313,7 +313,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param string $isNi new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setIsNi($isNi)
     {
@@ -337,7 +337,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param int $version new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setVersion($version)
     {
@@ -361,7 +361,7 @@ abstract class AbstractPiDefinition implements BundleSerializableInterface, Json
      *
      * @param bool $isVisibleInInternal new value being set
      *
-     * @return PiDefinition
+     * @return static
      */
     public function setIsVisibleInInternal($isVisibleInInternal)
     {

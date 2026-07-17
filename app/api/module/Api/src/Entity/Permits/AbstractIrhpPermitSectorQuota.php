@@ -123,7 +123,7 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return IrhpPermitSectorQuota
+     * @return static
      */
     public function setId($id)
     {
@@ -147,7 +147,7 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\Sectors $sector new value being set
      *
-     * @return IrhpPermitSectorQuota
+     * @return static
      */
     public function setSector($sector)
     {
@@ -171,7 +171,7 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock $irhpPermitStock new value being set
      *
-     * @return IrhpPermitSectorQuota
+     * @return static
      */
     public function setIrhpPermitStock($irhpPermitStock)
     {
@@ -195,7 +195,7 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrhpPermitSectorQuota
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -219,7 +219,7 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrhpPermitSectorQuota
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -243,7 +243,7 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
      *
      * @param int $quotaNumber new value being set
      *
-     * @return IrhpPermitSectorQuota
+     * @return static
      */
     public function setQuotaNumber($quotaNumber)
     {
@@ -267,7 +267,7 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return IrhpPermitSectorQuota
+     * @return static
      */
     public function setVersion($version)
     {

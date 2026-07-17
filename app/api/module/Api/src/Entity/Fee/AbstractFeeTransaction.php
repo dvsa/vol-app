@@ -142,7 +142,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setId($id)
     {
@@ -166,7 +166,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Fee\Fee $fee new value being set
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setFee($fee)
     {
@@ -190,7 +190,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Fee\Transaction $transaction new value being set
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setTransaction($transaction)
     {
@@ -214,7 +214,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction $reversedFeeTransaction new value being set
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setReversedFeeTransaction($reversedFeeTransaction)
     {
@@ -238,7 +238,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -262,7 +262,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -286,7 +286,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param string $amount new value being set
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setAmount($amount)
     {
@@ -310,7 +310,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setVersion($version)
     {
@@ -334,7 +334,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $reversingFeeTransactions collection being set as the value
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setReversingFeeTransactions($reversingFeeTransactions)
     {
@@ -358,7 +358,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $reversingFeeTransactions collection being added
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function addReversingFeeTransactions($reversingFeeTransactions)
     {
@@ -381,7 +381,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $reversingFeeTransactions collection being removed
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function removeReversingFeeTransactions($reversingFeeTransactions)
     {

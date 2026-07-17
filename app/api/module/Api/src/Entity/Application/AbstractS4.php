@@ -166,7 +166,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
      *
      * @param int $id new value being set
      *
-     * @return S4
+     * @return static
      */
     public function setId($id)
     {
@@ -190,7 +190,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return S4
+     * @return static
      */
     public function setApplication($application)
     {
@@ -214,7 +214,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return S4
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -238,7 +238,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $outcome new value being set
      *
-     * @return S4
+     * @return static
      */
     public function setOutcome($outcome)
     {
@@ -262,7 +262,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return S4
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -286,7 +286,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return S4
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -310,7 +310,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
      *
      * @param \DateTime $agreedDate new value being set
      *
-     * @return S4
+     * @return static
      */
     public function setAgreedDate($agreedDate)
     {
@@ -340,7 +340,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
      *
      * @param \DateTime $receivedDate new value being set
      *
-     * @return S4
+     * @return static
      */
     public function setReceivedDate($receivedDate)
     {
@@ -370,7 +370,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
      *
      * @param string $surrenderLicence new value being set
      *
-     * @return S4
+     * @return static
      */
     public function setSurrenderLicence($surrenderLicence)
     {
@@ -394,7 +394,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
      *
      * @param string $isTrueS4 new value being set
      *
-     * @return S4
+     * @return static
      */
     public function setIsTrueS4($isTrueS4)
     {
@@ -418,7 +418,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
      *
      * @param int $version new value being set
      *
-     * @return S4
+     * @return static
      */
     public function setVersion($version)
     {
@@ -442,7 +442,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $aocs collection being set as the value
      *
-     * @return S4
+     * @return static
      */
     public function setAocs($aocs)
     {
@@ -466,7 +466,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $aocs collection being added
      *
-     * @return S4
+     * @return static
      */
     public function addAocs($aocs)
     {
@@ -489,7 +489,7 @@ abstract class AbstractS4 implements BundleSerializableInterface, JsonSerializab
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $aocs collection being removed
      *
-     * @return S4
+     * @return static
      */
     public function removeAocs($aocs)
     {

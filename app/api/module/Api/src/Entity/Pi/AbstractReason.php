@@ -182,7 +182,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param int $id new value being set
      *
-     * @return Reason
+     * @return static
      */
     public function setId($id)
     {
@@ -206,7 +206,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
-     * @return Reason
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -230,7 +230,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Reason
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -254,7 +254,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Reason
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -278,7 +278,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param string $sectionCode new value being set
      *
-     * @return Reason
+     * @return static
      */
     public function setSectionCode($sectionCode)
     {
@@ -302,7 +302,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param string $description new value being set
      *
-     * @return Reason
+     * @return static
      */
     public function setDescription($description)
     {
@@ -326,7 +326,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param string $isReadOnly new value being set
      *
-     * @return Reason
+     * @return static
      */
     public function setIsReadOnly($isReadOnly)
     {
@@ -350,7 +350,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param string $isNi new value being set
      *
-     * @return Reason
+     * @return static
      */
     public function setIsNi($isNi)
     {
@@ -374,7 +374,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param string $isProposeToRevoke new value being set
      *
-     * @return Reason
+     * @return static
      */
     public function setIsProposeToRevoke($isProposeToRevoke)
     {
@@ -398,7 +398,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param int $version new value being set
      *
-     * @return Reason
+     * @return static
      */
     public function setVersion($version)
     {
@@ -422,7 +422,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $isVisibleInInternal new value being set
      *
-     * @return Reason
+     * @return static
      */
     public function setIsVisibleInInternal($isVisibleInInternal)
     {
@@ -446,7 +446,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $pis collection being set as the value
      *
-     * @return Reason
+     * @return static
      */
     public function setPis($pis)
     {
@@ -470,7 +470,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $pis collection being added
      *
-     * @return Reason
+     * @return static
      */
     public function addPis($pis)
     {
@@ -493,7 +493,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $pis collection being removed
      *
-     * @return Reason
+     * @return static
      */
     public function removePis($pis)
     {
@@ -509,7 +509,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $proposeToRevokes collection being set as the value
      *
-     * @return Reason
+     * @return static
      */
     public function setProposeToRevokes($proposeToRevokes)
     {
@@ -533,7 +533,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $proposeToRevokes collection being added
      *
-     * @return Reason
+     * @return static
      */
     public function addProposeToRevokes($proposeToRevokes)
     {
@@ -556,7 +556,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $proposeToRevokes collection being removed
      *
-     * @return Reason
+     * @return static
      */
     public function removeProposeToRevokes($proposeToRevokes)
     {
@@ -572,7 +572,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $submissionActions collection being set as the value
      *
-     * @return Reason
+     * @return static
      */
     public function setSubmissionActions($submissionActions)
     {
@@ -596,7 +596,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $submissionActions collection being added
      *
-     * @return Reason
+     * @return static
      */
     public function addSubmissionActions($submissionActions)
     {
@@ -619,7 +619,7 @@ abstract class AbstractReason implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $submissionActions collection being removed
      *
-     * @return Reason
+     * @return static
      */
     public function removeSubmissionActions($submissionActions)
     {

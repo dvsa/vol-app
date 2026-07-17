@@ -122,7 +122,7 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return TranslationKey
+     * @return static
      */
     public function setId($id)
     {
@@ -146,7 +146,7 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return TranslationKey
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -170,7 +170,7 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return TranslationKey
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -194,7 +194,7 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
      *
      * @param string $translationKey new value being set
      *
-     * @return TranslationKey
+     * @return static
      */
     public function setTranslationKey($translationKey)
     {
@@ -218,7 +218,7 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
      *
      * @param string $description new value being set
      *
-     * @return TranslationKey
+     * @return static
      */
     public function setDescription($description)
     {
@@ -242,7 +242,7 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return TranslationKey
+     * @return static
      */
     public function setVersion($version)
     {
@@ -266,7 +266,7 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $translationKeyTexts collection being set as the value
      *
-     * @return TranslationKey
+     * @return static
      */
     public function setTranslationKeyTexts($translationKeyTexts)
     {
@@ -290,7 +290,7 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $translationKeyTexts collection being added
      *
-     * @return TranslationKey
+     * @return static
      */
     public function addTranslationKeyTexts($translationKeyTexts)
     {
@@ -313,7 +313,7 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $translationKeyTexts collection being removed
      *
-     * @return TranslationKey
+     * @return static
      */
     public function removeTranslationKeyTexts($translationKeyTexts)
     {

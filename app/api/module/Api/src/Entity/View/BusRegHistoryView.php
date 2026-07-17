@@ -18,7 +18,7 @@ namespace Dvsa\Olcs\Api\Entity\View;
 
 use Doctrine\ORM\Mapping as ORM;
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
-use Dvsa\Olcs\Api\Entity\EventHistory\EventHistory;
+use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType;
 use Dvsa\Olcs\Api\Entity\User\User;
 use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
@@ -52,7 +52,7 @@ class BusRegHistoryView implements BundleSerializableInterface, JsonSerializable
     /**
      * Change made by
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'change_made_by', nullable: true)]
     protected $changeMadeBy;
@@ -68,7 +68,7 @@ class BusRegHistoryView implements BundleSerializableInterface, JsonSerializable
     /**
      * Event data
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'event_data', length: 255, nullable: true)]
     protected $eventData;
@@ -76,7 +76,7 @@ class BusRegHistoryView implements BundleSerializableInterface, JsonSerializable
     /**
      * Event history type
      *
-     * @var EventHistory
+     * @var EventHistoryType
      */
     #[ORM\JoinColumn(name: 'event_history_type_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType::class)]
@@ -85,7 +85,7 @@ class BusRegHistoryView implements BundleSerializableInterface, JsonSerializable
     /**
      * User
      *
-     * @var User
+     * @var User|null
      */
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class)]
@@ -94,7 +94,7 @@ class BusRegHistoryView implements BundleSerializableInterface, JsonSerializable
     /**
      * Event description
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'event_description', length: 255, nullable: true)]
     protected $eventDescription;
@@ -140,7 +140,7 @@ class BusRegHistoryView implements BundleSerializableInterface, JsonSerializable
     }
 
     /**
-     * @return EventHistory
+     * @return EventHistoryType
      */
     public function getEventHistoryType()
     {

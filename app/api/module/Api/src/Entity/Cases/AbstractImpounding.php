@@ -213,7 +213,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param int $id new value being set
      *
-     * @return Impounding
+     * @return static
      */
     public function setId($id)
     {
@@ -237,7 +237,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $impoundingType new value being set
      *
-     * @return Impounding
+     * @return static
      */
     public function setImpoundingType($impoundingType)
     {
@@ -261,7 +261,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return Impounding
+     * @return static
      */
     public function setCase($case)
     {
@@ -285,7 +285,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $presidingTc new value being set
      *
-     * @return Impounding
+     * @return static
      */
     public function setPresidingTc($presidingTc)
     {
@@ -309,7 +309,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $outcome new value being set
      *
-     * @return Impounding
+     * @return static
      */
     public function setOutcome($outcome)
     {
@@ -333,7 +333,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Venue $venue new value being set
      *
-     * @return Impounding
+     * @return static
      */
     public function setVenue($venue)
     {
@@ -357,7 +357,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Impounding
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -381,7 +381,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Impounding
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -405,7 +405,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $hearingDate new value being set
      *
-     * @return Impounding
+     * @return static
      */
     public function setHearingDate($hearingDate)
     {
@@ -435,7 +435,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $applicationReceiptDate new value being set
      *
-     * @return Impounding
+     * @return static
      */
     public function setApplicationReceiptDate($applicationReceiptDate)
     {
@@ -465,7 +465,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $outcomeSentDate new value being set
      *
-     * @return Impounding
+     * @return static
      */
     public function setOutcomeSentDate($outcomeSentDate)
     {
@@ -495,7 +495,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param string $notes new value being set
      *
-     * @return Impounding
+     * @return static
      */
     public function setNotes($notes)
     {
@@ -519,7 +519,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $closeDate new value being set
      *
-     * @return Impounding
+     * @return static
      */
     public function setCloseDate($closeDate)
     {
@@ -549,7 +549,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param string $venueOther new value being set
      *
-     * @return Impounding
+     * @return static
      */
     public function setVenueOther($venueOther)
     {
@@ -573,7 +573,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param string $vrm new value being set
      *
-     * @return Impounding
+     * @return static
      */
     public function setVrm($vrm)
     {
@@ -597,7 +597,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param int $version new value being set
      *
-     * @return Impounding
+     * @return static
      */
     public function setVersion($version)
     {
@@ -621,7 +621,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $impoundingLegislationTypes collection being set as the value
      *
-     * @return Impounding
+     * @return static
      */
     public function setImpoundingLegislationTypes($impoundingLegislationTypes)
     {
@@ -645,7 +645,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $impoundingLegislationTypes collection being added
      *
-     * @return Impounding
+     * @return static
      */
     public function addImpoundingLegislationTypes($impoundingLegislationTypes)
     {
@@ -668,7 +668,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $impoundingLegislationTypes collection being removed
      *
-     * @return Impounding
+     * @return static
      */
     public function removeImpoundingLegislationTypes($impoundingLegislationTypes)
     {

@@ -192,7 +192,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param int $id new value being set
      *
-     * @return PreviousConviction
+     * @return static
      */
     public function setId($id)
     {
@@ -216,7 +216,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return PreviousConviction
+     * @return static
      */
     public function setApplication($application)
     {
@@ -240,7 +240,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return PreviousConviction
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -264,7 +264,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $title new value being set
      *
-     * @return PreviousConviction
+     * @return static
      */
     public function setTitle($title)
     {
@@ -288,7 +288,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return PreviousConviction
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -312,7 +312,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return PreviousConviction
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -336,7 +336,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param \DateTime $convictionDate new value being set
      *
-     * @return PreviousConviction
+     * @return static
      */
     public function setConvictionDate($convictionDate)
     {
@@ -366,7 +366,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param string $forename new value being set
      *
-     * @return PreviousConviction
+     * @return static
      */
     public function setForename($forename)
     {
@@ -390,7 +390,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param string $familyName new value being set
      *
-     * @return PreviousConviction
+     * @return static
      */
     public function setFamilyName($familyName)
     {
@@ -414,7 +414,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param \DateTime $birthDate new value being set
      *
-     * @return PreviousConviction
+     * @return static
      */
     public function setBirthDate($birthDate)
     {
@@ -444,7 +444,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param string $categoryText new value being set
      *
-     * @return PreviousConviction
+     * @return static
      */
     public function setCategoryText($categoryText)
     {
@@ -468,7 +468,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param string $notes new value being set
      *
-     * @return PreviousConviction
+     * @return static
      */
     public function setNotes($notes)
     {
@@ -492,7 +492,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param string $courtFpn new value being set
      *
-     * @return PreviousConviction
+     * @return static
      */
     public function setCourtFpn($courtFpn)
     {
@@ -516,7 +516,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param string $penalty new value being set
      *
-     * @return PreviousConviction
+     * @return static
      */
     public function setPenalty($penalty)
     {
@@ -540,7 +540,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      *
      * @param int $version new value being set
      *
-     * @return PreviousConviction
+     * @return static
      */
     public function setVersion($version)
     {

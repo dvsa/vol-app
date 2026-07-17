@@ -157,7 +157,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setId($id)
     {
@@ -181,7 +181,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Publication\PublicationLink $publicationLink new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setPublicationLink($publicationLink)
     {
@@ -205,7 +205,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Person\Person $person new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setPerson($person)
     {
@@ -229,7 +229,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -253,7 +253,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -277,7 +277,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param string $forename new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setForename($forename)
     {
@@ -301,7 +301,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param string $familyName new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setFamilyName($familyName)
     {
@@ -325,7 +325,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param \DateTime $birthDate new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setBirthDate($birthDate)
     {
@@ -355,7 +355,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param string $olbsDob new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setOlbsDob($olbsDob)
     {
@@ -379,7 +379,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setVersion($version)
     {
@@ -403,7 +403,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param int $olbsKey new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

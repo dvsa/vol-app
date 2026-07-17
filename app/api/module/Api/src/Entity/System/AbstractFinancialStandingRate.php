@@ -152,7 +152,7 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return FinancialStandingRate
+     * @return static
      */
     public function setId($id)
     {
@@ -176,7 +176,7 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $licenceType new value being set
      *
-     * @return FinancialStandingRate
+     * @return static
      */
     public function setLicenceType($licenceType)
     {
@@ -200,7 +200,7 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
-     * @return FinancialStandingRate
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -224,7 +224,7 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $vehicleType new value being set
      *
-     * @return FinancialStandingRate
+     * @return static
      */
     public function setVehicleType($vehicleType)
     {
@@ -248,7 +248,7 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return FinancialStandingRate
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -272,7 +272,7 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return FinancialStandingRate
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -296,7 +296,7 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
      *
      * @param int $additionalVehicleRate new value being set
      *
-     * @return FinancialStandingRate
+     * @return static
      */
     public function setAdditionalVehicleRate($additionalVehicleRate)
     {
@@ -320,7 +320,7 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
      *
      * @param int $firstVehicleRate new value being set
      *
-     * @return FinancialStandingRate
+     * @return static
      */
     public function setFirstVehicleRate($firstVehicleRate)
     {
@@ -344,7 +344,7 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
      *
      * @param \DateTime $effectiveFrom new value being set
      *
-     * @return FinancialStandingRate
+     * @return static
      */
     public function setEffectiveFrom($effectiveFrom)
     {
@@ -374,7 +374,7 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return FinancialStandingRate
+     * @return static
      */
     public function setVersion($version)
     {

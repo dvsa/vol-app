@@ -132,7 +132,7 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
      *
      * @param int $id new value being set
      *
-     * @return UserPasswordReset
+     * @return static
      */
     public function setId($id)
     {
@@ -156,7 +156,7 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return UserPasswordReset
+     * @return static
      */
     public function setUser($user)
     {
@@ -180,7 +180,7 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return UserPasswordReset
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -204,7 +204,7 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return UserPasswordReset
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -228,7 +228,7 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
      *
      * @param string $confirmation new value being set
      *
-     * @return UserPasswordReset
+     * @return static
      */
     public function setConfirmation($confirmation)
     {
@@ -252,7 +252,7 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
      *
      * @param \DateTime $validTo new value being set
      *
-     * @return UserPasswordReset
+     * @return static
      */
     public function setValidTo($validTo)
     {
@@ -282,7 +282,7 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
      *
      * @param bool $success new value being set
      *
-     * @return UserPasswordReset
+     * @return static
      */
     public function setSuccess($success)
     {
@@ -306,7 +306,7 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
      *
      * @param int $version new value being set
      *
-     * @return UserPasswordReset
+     * @return static
      */
     public function setVersion($version)
     {

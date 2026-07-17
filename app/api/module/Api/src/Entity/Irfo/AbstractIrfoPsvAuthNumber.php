@@ -116,7 +116,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      *
      * @param int $id new value being set
      *
-     * @return IrfoPsvAuthNumber
+     * @return static
      */
     public function setId($id)
     {
@@ -140,7 +140,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth $irfoPsvAuth new value being set
      *
-     * @return IrfoPsvAuthNumber
+     * @return static
      */
     public function setIrfoPsvAuth($irfoPsvAuth)
     {
@@ -164,7 +164,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrfoPsvAuthNumber
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -188,7 +188,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrfoPsvAuthNumber
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -212,7 +212,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      *
      * @param string $name new value being set
      *
-     * @return IrfoPsvAuthNumber
+     * @return static
      */
     public function setName($name)
     {
@@ -236,7 +236,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      *
      * @param int $version new value being set
      *
-     * @return IrfoPsvAuthNumber
+     * @return static
      */
     public function setVersion($version)
     {
