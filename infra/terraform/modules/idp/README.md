@@ -6,6 +6,7 @@
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
 | <a name="requirement_archive"></a> [archive](#requirement\_archive) | >= 2.0.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
+| <a name="requirement_awscc"></a> [awscc](#requirement\_awscc) | >= 1.32.0 |
 
 ## Providers
 
@@ -13,6 +14,7 @@
 | ---- | ------- |
 | <a name="provider_archive"></a> [archive](#provider\_archive) | 2.8.0 |
 | <a name="provider_aws"></a> [aws](#provider\_aws) | 6.53.0 |
+| <a name="provider_awscc"></a> [awscc](#provider\_awscc) | 1.93.0 |
 
 ## Modules
 
@@ -46,6 +48,8 @@ No modules.
 | [aws_s3_bucket_server_side_encryption_configuration.idp_output](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_server_side_encryption_configuration) | resource |
 | [aws_sfn_state_machine.classification](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sfn_state_machine) | resource |
 | [aws_sfn_state_machine.extraction](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/sfn_state_machine) | resource |
+| [awscc_bedrock_blueprint.bank_statement](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_blueprint) | resource |
+| [awscc_bedrock_data_automation_project.idp](https://registry.terraform.io/providers/hashicorp/awscc/latest/docs/resources/bedrock_data_automation_project) | resource |
 | [archive_file.classify_document](https://registry.terraform.io/providers/hashicorp/archive/latest/docs/data-sources/file) | data source |
 | [aws_caller_identity.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity) | data source |
 | [aws_iam_policy_document.classification_sm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
@@ -63,7 +67,6 @@ No modules.
 
 | Name | Description | Type | Default | Required |
 | ---- | ----------- | ---- | ------- | :------: |
-| <a name="input_bda_project_arn"></a> [bda\_project\_arn](#input\_bda\_project\_arn) | ARN of the Bedrock Data Automation project used for bank statement extraction. | `string` | n/a | yes |
 | <a name="input_bda_project_stage"></a> [bda\_project\_stage](#input\_bda\_project\_stage) | BDA project stage to invoke. LIVE uses the latest published blueprint version. | `string` | `"LIVE"` | no |
 | <a name="input_bedrock_region"></a> [bedrock\_region](#input\_bedrock\_region) | AWS region for Bedrock API calls | `string` | `"eu-west-1"` | no |
 | <a name="input_bedrock_region_prefix"></a> [bedrock\_region\_prefix](#input\_bedrock\_region\_prefix) | Cross-region inference profile prefix, e.g. 'eu' or 'us' | `string` | `"eu"` | no |
@@ -82,6 +85,8 @@ No modules.
 
 | Name | Description |
 | ---- | ----------- |
+| <a name="output_bda_blueprint_arn"></a> [bda\_blueprint\_arn](#output\_bda\_blueprint\_arn) | ARN of the bank statement BDA blueprint |
+| <a name="output_bda_project_arn"></a> [bda\_project\_arn](#output\_bda\_project\_arn) | ARN of the Bedrock Data Automation project |
 | <a name="output_classification_sm_arn"></a> [classification\_sm\_arn](#output\_classification\_sm\_arn) | ARN of the Classification Step Functions state machine |
 | <a name="output_classification_sm_name"></a> [classification\_sm\_name](#output\_classification\_sm\_name) | Name of the Classification Step Functions state machine |
 | <a name="output_classify_document_lambda_arn"></a> [classify\_document\_lambda\_arn](#output\_classify\_document\_lambda\_arn) | ARN of the classify-document Lambda |

@@ -33,6 +33,16 @@ output "idp_output_bucket_name" {
   value       = aws_s3_bucket.idp_output.bucket
 }
 
+output "bda_project_arn" {
+  description = "ARN of the Bedrock Data Automation project"
+  value       = awscc_bedrock_data_automation_project.idp.project_arn
+}
+
+output "bda_blueprint_arn" {
+  description = "ARN of the bank statement BDA blueprint"
+  value       = awscc_bedrock_blueprint.bank_statement.blueprint_arn
+}
+
 output "idp_output_bucket_arn" {
   description = "ARN of the BDA output S3 bucket"
   value       = aws_s3_bucket.idp_output.arn

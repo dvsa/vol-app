@@ -148,7 +148,7 @@ resource "aws_cloudwatch_event_target" "classification" {
       version_id = "$.detail.object.version-id"
     }
 
-    input_template = "{\"bucket\":\"<bucket>\",\"key\":\"<key>\",\"object\":{\"size\":<size>,\"versionId\":\"<version_id>\"},\"config\":{\"outputBucket\":\"${aws_s3_bucket.idp_output.bucket}\",\"bedrockProjectArn\":\"${var.bda_project_arn}\",\"bedrockProfileArn\":\"${local.bda_profile_arn}\",\"bedrockProjectStage\":\"${var.bda_project_stage}\"}}"
+    input_template = "{\"bucket\":\"<bucket>\",\"key\":\"<key>\",\"object\":{\"size\":<size>,\"versionId\":\"<version_id>\"},\"config\":{\"outputBucket\":\"${aws_s3_bucket.idp_output.bucket}\",\"bedrockProjectArn\":\"${awscc_bedrock_data_automation_project.idp.project_arn}\",\"bedrockProfileArn\":\"${local.bda_profile_arn}\",\"bedrockProjectStage\":\"${var.bda_project_stage}\"}}"
   }
 }
 

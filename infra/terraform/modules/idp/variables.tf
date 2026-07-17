@@ -48,11 +48,6 @@ variable "lambda_memory_size" {
 # Extraction SM — Bedrock Data Automation (BDA) configuration
 # ============================================================
 
-variable "bda_project_arn" {
-  type        = string
-  description = "ARN of the Bedrock Data Automation project used for bank statement extraction."
-}
-
 variable "bda_project_stage" {
   type        = string
   description = "BDA project stage to invoke. LIVE uses the latest published blueprint version."

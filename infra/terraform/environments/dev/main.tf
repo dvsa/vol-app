@@ -743,10 +743,6 @@ module "idp" {
 
   environment           = "dev"
   documents_bucket_name = "olcs-devappdev-base-sabredav"
-
-  # BDA project created separately (CDK POC or manual).
-  # Set to the ARN of the Bedrock Data Automation project for this environment.
-  bda_project_arn = var.idp_bda_project_arn
 }
 
 resource "null_resource" "deployed_versions" {
