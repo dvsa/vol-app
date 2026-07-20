@@ -98,36 +98,33 @@ log "starting NI_Extract (Database: $DB)..."
 
 if [ "$CONTINUE_NI_EXTRACT" -eq 0 ] ; then
     log "generate procedures..."
-    ./generate_procedure_scripts.sh "$CONNECTION" "$DB" || log_error "generate_procedure_scripts.sh FAILED!"
+    "$HOME_DIR/generate_procedure_scripts.sh" "$CONNECTION" "$DB" || log_error "generate_procedure_scripts.sh FAILED!"
 
     log "create database objects for NI Extract..."
-    ./install_NI_Extract_db_objects.sh "$CONNECTION" "$DB" || log_error "install_NI_Extract_db_objects.sh FAILED!"
+    "$HOME_DIR/install_NI_Extract_db_objects.sh" "$CONNECTION" "$DB" || log_error "install_NI_Extract_db_objects.sh FAILED!"
 
     log "run pre NI Extract procedures..."
-    ./run-pre-NI-Extract.sh "$CONNECTION" "$DB" || log_error "run-pre-NI-Extract.sh FAILED!"
+    "$HOME_DIR/run-pre-NI-Extract.sh" "$CONNECTION" "$DB" || log_error "run-pre-NI-Extract.sh FAILED!"
 fi
 
 log "calling $DB.$NI_EXTRACT_PROC($CONTINUE_NI_EXTRACT)..."
 mysql -q $CONNECTION -e "CALL \`$DB\`.\`$NI_EXTRACT_PROC\`($CONTINUE_NI_EXTRACT);" || log_error "$DB.$NI_EXTRACT_PROC($CONTINUE_NI_EXTRACT) FAILED!"
 
 log "run post NI Extract..."
-./run-post-NI-Extract.sh "$CONNECTION" "$DB" || log_error "run-post-NI-Extract.sh FAILED!"
+    "$HOME_DIR/run-post-NI-Extract.sh" "$CONNECTION" "$DB" || log_error "run-post-NI-Extract.sh FAILED!"
 
 log "...NI_Extract completed OK"
 
 if $RUN_NI_ANONYMISATION ; then
     log "Running NI Anonymisation..."
-    cd "$ANON_HOME" || log_error "Could not jump to Anonymisation Home Directory"
 
     if [ ! -d "$ANON_DATA_DIR" ]; then
         mkdir -p "$ANON_DATA_DIR"
     fi
 
-    ./run_anonymisation.sh -c "$CONNECTION" -d "$DB" -f "$ANON_DATA_DIR" $ANONYMISE_NI_EXTRACT_SWITCH $DISABLE_SCHEMA_CHECK || log_error "NI Anonymisation FAILED!"
+    "$ANON_HOME/run_anonymisation.sh" -c "$CONNECTION" -d "$DB" -f "$ANON_DATA_DIR" "$ANONYMISE_NI_EXTRACT_SWITCH" "$DISABLE_SCHEMA_CHECK" || log_error "NI Anonymisation FAILED!"
     log "...NI Anonymisation completed OK"
 fi
-
-cd "$HOME_DIR" || exit 1
 
 log "validate NI Extract..."
 "$NIEXTRACT_ROOT/run_validate_NI_Extract.sh" "$CONNECTION" "$DB" || log_error "run_validate_NI_Extract.sh FAILED!"
