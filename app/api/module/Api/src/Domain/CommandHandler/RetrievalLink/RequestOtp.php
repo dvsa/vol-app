@@ -56,7 +56,7 @@ final class RequestOtp extends AbstractCommandHandler implements EmailAwareInter
             if ($this->withinRateLimit($link, $now)) {
                 $this->issueCode($link, $now, $ip);
             } else {
-                $this->recordRetrievalEvent($link, 'denied', null, $ip, 'otp rate limit');
+                $this->recordRetrievalEvent($link, 'denied', null, $ip, null, 'otp rate limit');
             }
         }
 

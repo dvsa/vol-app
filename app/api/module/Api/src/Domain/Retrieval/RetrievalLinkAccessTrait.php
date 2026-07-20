@@ -38,13 +38,17 @@ trait RetrievalLinkAccessTrait
         ?string $memberRef = null,
         ?string $ip = null,
         ?string $userAgent = null,
+        ?string $detail = null,
     ): void {
         $event = new RetrievalLinkEvent();
         $event->setRetrievalLink($link);
+        // Denormalise the link's source so the row stays meaningful after the link is purged.
+        $event->setSourceContext($link->getSourceContext());
         $event->setEventType($eventType);
         $event->setMemberRef($memberRef);
         $event->setIp($ip);
         $event->setUserAgent($userAgent !== null ? substr($userAgent, 0, 255) : null);
+        $event->setDetail($detail !== null ? substr($detail, 0, 255) : null);
 
         $this->getRepo('RetrievalLinkEvent')->save($event);
     }

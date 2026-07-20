@@ -57,12 +57,12 @@ final class Download extends AbstractDownload
         if ($link->getGateMode() === RetrievalPolicy::GATE_OTP) {
             $grant = (string) $query->getGrant();
             if ($grant === '' || !$this->sessionGrantService->isValid($grant, (string) $link->getToken(), $now)) {
-                $this->recordRetrievalEvent($link, 'denied', $member->getMemberRef());
+                $this->recordRetrievalEvent($link, 'denied', $member->getMemberRef(), null, null, 'invalid or missing session grant');
                 throw new NotFoundException();
             }
         }
 
-        $this->recordRetrievalEvent($link, 'downloaded', $member->getMemberRef());
+        $this->recordRetrievalEvent($link, 'downloaded', $member->getMemberRef(), null, null, $member->getDisplayFilename());
 
         return $this->download(
             (string) $member->getDocument()->getIdentifier(),

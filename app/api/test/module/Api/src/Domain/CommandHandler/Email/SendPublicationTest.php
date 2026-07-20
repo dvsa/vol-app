@@ -23,6 +23,10 @@ use Doctrine\ORM\Query;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\Command\Email\SendPublication as SendPublicationCmd;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendPublication;
+use Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink as RetrievalLinkEntity;
+use Dvsa\Olcs\Api\Entity\System\FeatureToggle;
+use Dvsa\Olcs\Api\Service\Retrieval\RetrievalLinkCreator;
+use Dvsa\Olcs\Api\Service\Toggle\ToggleService;
 
 /**
  * Send Publication Email Test
@@ -44,6 +48,8 @@ final class SendPublicationTest extends AbstractCommandHandlerTestCase
 
         $this->mockedSmServices = [
             TemplateRenderer::class => m::mock(TemplateRenderer::class),
+            RetrievalLinkCreator::class => m::mock(RetrievalLinkCreator::class),
+            ToggleService::class => m::mock(ToggleService::class),
         ];
 
         parent::setUp();
@@ -108,6 +114,12 @@ final class SendPublicationTest extends AbstractCommandHandlerTestCase
             'default'
         );
 
+        // Toggle off: legacy attachment path (document is attached, no retrieval link).
+        $this->mockedSmServices[ToggleService::class]
+            ->shouldReceive('isEnabled')
+            ->with(FeatureToggle::RETRIEVE_VIA_LINK)
+            ->andReturn(false);
+
         $result = new Result();
         $data = [
             'to' => SendPublication::TO_EMAIL,
@@ -116,6 +128,66 @@ final class SendPublicationTest extends AbstractCommandHandlerTestCase
         ];
 
         $this->expectedSideEffect(SendEmail::class, $data, $result);
+
+        $this->sut->handleCommand($command);
+    }
+
+    /**
+     * Toggle on + non-police publication: delivered via a secure retrieval link (no attachment).
+     */
+    public function testHandleCommandDeliversViaRetrievalLinkWhenEnabled(): void
+    {
+        $publicationId = 1234;
+        $filename = 'filename.rtf';
+        $documentId = 5678;
+        $pubType = 'A&D';
+        $token = 'opaque-token';
+
+        $command = SendPublicationCmd::create(['id' => $publicationId, 'isPolice' => 'N']);
+
+        $trafficArea = m::mock(TrafficAreaEntity::class);
+        $trafficArea->shouldReceive('getName')->once()->andReturn('Scotland');
+        $trafficArea->shouldReceive('getPublicationRecipients')->once()
+            ->with('N', $pubType)->andReturn(['foo@bar.com' => 'Recipient 1']);
+
+        $document = m::mock(DocumentEntity::class);
+        $document->shouldReceive('getFilename')->once()->andReturn('/path/to/' . $filename);
+        $document->shouldReceive('getId')->once()->andReturn($documentId);
+
+        $publication = m::mock(PublicationEntity::class);
+        $publication->shouldReceive('getTrafficArea')->once()->andReturn($trafficArea);
+        $publication->shouldReceive('getPubType')->once()->andReturn($pubType);
+        $publication->shouldReceive('getPublicationNo')->once()->andReturn(565464);
+        $publication->shouldReceive('getDocument')->once()->andReturn($document);
+        $publication->shouldReceive('getId')->andReturn($publicationId);
+
+        $this->repoMap['Publication']->shouldReceive('fetchUsingId')
+            ->with(m::type(CommandInterface::class))->once()->andReturn($publication);
+
+        $this->mockedSmServices[ToggleService::class]
+            ->shouldReceive('isEnabled')->with(FeatureToggle::RETRIEVE_VIA_LINK)->andReturn(true);
+
+        $link = m::mock(RetrievalLinkEntity::class);
+        $link->shouldReceive('getToken')->once()->andReturn($token);
+
+        $this->mockedSmServices[RetrievalLinkCreator::class]->shouldReceive('create')
+            ->with([$documentId], null, 'publication', 'publication:' . $publicationId)
+            ->once()
+            ->andReturn($link);
+
+        // Template data now carries the link; no document is attached.
+        $this->mockedSmServices[TemplateRenderer::class]->shouldReceive('renderBody')->with(
+            m::type(\Dvsa\Olcs\Email\Data\Message::class),
+            SendPublication::EMAIL_TEMPLATE,
+            ['filename' => $filename, 'retrievalLink' => 'http://selfserve/retrieve/' . $token],
+            'default'
+        );
+
+        $this->expectedSideEffect(
+            SendEmail::class,
+            ['to' => SendPublication::TO_EMAIL, 'locale' => 'en_GB', 'subject' => SendPublication::EMAIL_SUBJECT],
+            new Result()
+        );
 
         $this->sut->handleCommand($command);
     }

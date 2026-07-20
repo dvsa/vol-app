@@ -59,6 +59,15 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     protected $retrievalLink;
 
     /**
+     * Source context
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", name="source_context", length=255, nullable=true)
+     */
+    protected $sourceContext;
+
+    /**
      * Event type
      *
      * @var string
@@ -165,6 +174,30 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     public function getRetrievalLink()
     {
         return $this->retrievalLink;
+    }
+
+    /**
+     * Set the source context
+     *
+     * @param string $sourceContext new value being set
+     *
+     * @return RetrievalLinkEvent
+     */
+    public function setSourceContext($sourceContext)
+    {
+        $this->sourceContext = $sourceContext;
+
+        return $this;
+    }
+
+    /**
+     * Get the source context
+     *
+     * @return string
+     */
+    public function getSourceContext()
+    {
+        return $this->sourceContext;
     }
 
     /**

@@ -18,7 +18,7 @@ use Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLinkEvent;
  * rewriting turns into the real selfserve URL. Real document ids stay server-side — only the
  * link token and per-member opaque refs are ever exposed.
  */
-final class RetrievalLinkCreator
+class RetrievalLinkCreator
 {
     public function __construct(
         private readonly RepositoryServiceManager $repositoryServiceManager,
@@ -86,6 +86,7 @@ final class RetrievalLinkCreator
     {
         $event = new RetrievalLinkEvent();
         $event->setRetrievalLink($link);
+        $event->setSourceContext($link->getSourceContext());
         $event->setEventType('created');
         $event->setDetail($link->getFlowKey());
 

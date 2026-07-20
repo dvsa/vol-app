@@ -15,17 +15,25 @@ use Dvsa\Olcs\Api\Domain\Repository\Publication as PublicationRepository;
 use Dvsa\Olcs\Api\Domain\Command\Email\SendPublication as SendPublicationEmailCmd;
 use Dvsa\Olcs\Api\Domain\EmailAwareInterface;
 use Dvsa\Olcs\Api\Domain\EmailAwareTrait;
+use Dvsa\Olcs\Api\Domain\ToggleAwareInterface;
+use Dvsa\Olcs\Api\Domain\ToggleAwareTrait;
 use Dvsa\Olcs\Api\Entity\Publication\Publication as PublicationEntity;
+use Dvsa\Olcs\Api\Entity\System\FeatureToggle;
+use Dvsa\Olcs\Api\Service\Retrieval\RetrievalLinkCreator;
 use Dvsa\Olcs\Email\Data\Message;
+use Psr\Container\ContainerInterface;
 
 /**
  * Send Publication document via email
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-final class SendPublication extends AbstractCommandHandler implements EmailAwareInterface
+final class SendPublication extends AbstractCommandHandler implements EmailAwareInterface, ToggleAwareInterface
 {
     use EmailAwareTrait;
+    use ToggleAwareTrait;
+
+    private RetrievalLinkCreator $retrievalLinkCreator;
 
     protected $repoServiceName = 'Publication';
 
@@ -73,7 +81,22 @@ final class SendPublication extends AbstractCommandHandler implements EmailAware
 
         $message = new Message(self::TO_EMAIL, $subject);
         $message->setBcc($recipients);
-        $message->setDocs([$document->getId()]);
+
+        // Public Applications & Decisions publications are delivered via a secure download link
+        // (Notify caps attachments at 2MB) when the toggle is on. Police documents keep the legacy
+        // attachment path — their OTP-gated, per-recipient link delivery is a later change.
+        if ($isPolice !== 'Y' && $this->toggleService->isEnabled(FeatureToggle::RETRIEVE_VIA_LINK)) {
+            $retrievalLink = $this->retrievalLinkCreator->create(
+                [$document->getId()],
+                null,
+                'publication',
+                'publication:' . $publication->getId(),
+            );
+            // http://selfserve/ is rewritten to the real selfserve URL by SendEmail::replaceUris.
+            $templateData['retrievalLink'] = 'http://selfserve/retrieve/' . $retrievalLink->getToken();
+        } else {
+            $message->setDocs([$document->getId()]);
+        }
 
         $subjectVars = [
             $pubType,
@@ -90,5 +113,13 @@ final class SendPublication extends AbstractCommandHandler implements EmailAware
         $result->addMessage('Publication email sent');
 
         return $result;
+    }
+
+    #[\Override]
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    {
+        $this->retrievalLinkCreator = $container->get(RetrievalLinkCreator::class);
+
+        return parent::__invoke($container, $requestedName, $options);
     }
 }

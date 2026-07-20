@@ -433,6 +433,12 @@ module "service" {
 
     jobs = [
       {
+        name     = "retrieval-link-purge",
+        commands = ["batch:retrieval-link-purge"],
+        timeout  = 3600,
+        schedule = ["cron(30 03 * * ? *)"],
+      },
+      {
         name     = "cache-clear",
         commands = ["batch:cache-clear", "--flush-all", "--force"],
         timeout  = 300,
