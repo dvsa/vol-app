@@ -35,12 +35,16 @@ BEGIN
 
     WHILE(@rowcount = 10000) DO
 
-
-    
-        DELETE pc FROM phone_contact pc
-        LEFT JOIN contact_details cd ON pc.contact_details_id = cd.id
-        WHERE cd.id IS NULL
-        LIMIT 10000;
+        DELETE FROM phone_contact
+        WHERE id IN (
+            SELECT id FROM (
+                SELECT pc.id
+                FROM phone_contact pc
+                LEFT JOIN contact_details cd ON pc.contact_details_id = cd.id
+                WHERE cd.id IS NULL
+                LIMIT 10000
+            ) AS batch
+        );
 
         SET @rowcount := row_count();
         SET @total := @total + @rowcount;
