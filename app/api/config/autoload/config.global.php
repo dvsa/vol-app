@@ -46,14 +46,29 @@ return [
 
     // Doctrine
     'doctrine' => [
+        'entity_manager' => [
+            'orm_default' => [
+                'connection' => 'orm_default',
+                'configuration' => 'orm_default',
+            ],
+        ],
+        'cache' => [
+            'redis' => [
+                'class' => 'default-cache',
+            ],
+        ],
         'connection' => [
             'orm_default' => [
                 'driverClass' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
+                // Used by Roave
+                'driver_class' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
                 // Database connection details
                 'params' => $doctrine_connection_params,
             ],
             'export' => [
                 'driverClass' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
+                // Used by Roave
+                'driver_class' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
                 // Database connection details
                 'params' => $doctrine_connection_params,
             ],
@@ -62,6 +77,7 @@ return [
             'orm_default' => [
                 'metadata_cache' => 'redis',
                 'generate_proxies' => true,
+                'auto_generate_proxy_classes' => true,
                 'query_cache'       => 'redis',
                 'result_cache'      => 'redis',
                 'hydration_cache'   => 'redis',

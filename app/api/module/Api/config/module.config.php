@@ -937,6 +937,13 @@ return [
     ],
     'entity_namespaces' => include(__DIR__ . '/namespace.config.php'),
     'doctrine' => [
+        'types' => [
+            'yesno' => \Dvsa\Olcs\Api\Entity\Types\YesNoType::class,
+            'yesnonull' => \Dvsa\Olcs\Api\Entity\Types\YesNoNullType::class,
+            'date' => \Dvsa\Olcs\Api\Entity\Types\DateType::class,
+            'datetime' => \Dvsa\Olcs\Api\Entity\Types\DateTimeType::class,
+            'encrypted_string' => \Dvsa\Olcs\Api\Entity\Types\EncryptedStringType::class,
+        ],
         'driver' => [
             'EntityDriver' => [
                 'class' => \Doctrine\ORM\Mapping\Driver\AttributeDriver::class,
@@ -951,6 +958,7 @@ return [
                 ],
             ],
             'orm_default' => [
+                'class' => \Doctrine\Persistence\Mapping\Driver\MappingDriverChain::class,
                 'drivers' => [
                     'Dvsa\Olcs\Api\Entity' => 'EntityDriver',
                     'Gedmo\Translatable\Entity' => 'translatable_metadata_driver'
@@ -958,6 +966,16 @@ return [
             ]
         ],
         'eventmanager' => [
+            'orm_default' => [
+                'subscribers' => [
+                    \Dvsa\Olcs\Api\Listener\OlcsEntityListener::class,
+                    \Gedmo\SoftDeleteable\SoftDeleteableListener::class,
+                    \Gedmo\Translatable\TranslatableListener::class,
+                    \Dvsa\Olcs\Api\Mvc\OlcsBlameableListener::class,
+                ],
+            ],
+        ],
+        'event_manager' => [
             'orm_default' => [
                 'subscribers' => [
                     \Dvsa\Olcs\Api\Listener\OlcsEntityListener::class,
