@@ -3,6 +3,10 @@ permissions:
   id-token: write
   contents: read
 
+concurrency:
+  group: db-refresh-${{ inputs.platformEnv }}
+  cancel-in-progress: false
+
 on:
   workflow_dispatch:
     inputs:
