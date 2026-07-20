@@ -122,7 +122,7 @@ if $RUN_NI_ANONYMISATION ; then
         mkdir -p "$ANON_DATA_DIR"
     fi
 
-    "$ANON_HOME/run_anonymisation.sh" -c "$CONNECTION" -d "$DB" -f "$ANON_DATA_DIR" "$ANONYMISE_NI_EXTRACT_SWITCH" "$DISABLE_SCHEMA_CHECK" || log_error "NI Anonymisation FAILED!"
+    (cd "$ANON_HOME" && ./run_anonymisation.sh -c "$CONNECTION" -d "$DB" -f "$ANON_DATA_DIR" $ANONYMISE_NI_EXTRACT_SWITCH $DISABLE_SCHEMA_CHECK) || log_error "NI Anonymisation FAILED!"
     log "...NI Anonymisation completed OK"
 fi
 
