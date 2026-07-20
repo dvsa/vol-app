@@ -34,7 +34,7 @@ locals {
         "ssm:GetParametersByPath"
       ]
       resources = [
-        "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/dev/*"
+        "arn:aws:ssm:eu-west-1:054614622558:parameter/applicationparams/reg/*"
       ]
     },
     {
@@ -729,7 +729,7 @@ module "service" {
       },
       {
         name     = "data-refresh",
-        commands = ["/mnt/data/scripts/data_refresh/data_refresh.sh", "dev", "eu-west-1"],
+        commands = ["/mnt/data/scripts/data_refresh/data_refresh.sh", "reg", "eu-west-1"],
         type     = "scripts"
         cpu      = 2,
         memory   = 8192,
