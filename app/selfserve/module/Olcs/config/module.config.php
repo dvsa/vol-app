@@ -1463,6 +1463,7 @@ return [
             \Olcs\Controller\Ebsr\UploadsController::class => UploadsControllerFactory::class,
             Olcs\Controller\UserController::class => \Olcs\Controller\Factory\UserControllerFactory::class,
             UserForgotUsernameController::class => \Olcs\Controller\Factory\UserForgotUsernameControllerFactory::class,
+            \Olcs\Controller\RetrieveController::class => \Olcs\Controller\Factory\RetrieveControllerFactory::class,
             UserRegistrationController::class => \Olcs\Controller\Factory\UserRegistrationControllerFactory::class,
             ConsultantRegistrationController::class => \Olcs\Controller\Factory\ConsultantRegistrationControllerFactory::class,
             OperatorRegistrationController::class => \Olcs\Controller\Factory\OperatorRegistrationControllerFactory::class,
@@ -1810,6 +1811,13 @@ return [
                 'styles-assets' => ['*'],
                 'user-registration*' => ['*'],
                 'user-forgot-username' => ['*'],
+
+                // Anonymous "Retrieve a document" journey (emailed link, no login).
+                // MUST stay above the '*' => ['selfserve-user'] catch-all: the guard uses the
+                // first matching rule (RoutePermissionsGuard::isGranted breaks on first fnmatch).
+                'retrieve' => ['*'],
+                'retrieve/*' => ['*'],
+
                 'cookies*' => ['*'],
                 'privacy-notice' => ['*'],
                 'terms-and-conditions' => ['*'],

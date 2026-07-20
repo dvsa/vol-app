@@ -1084,6 +1084,11 @@ return [
     // Transfer - FeatureToggle
     TransferCommand\FeatureToggle\Create::class =>
         CommandHandler\FeatureToggle\Create::class,
+    // Retrieve-via-Link
+    TransferCommand\RetrievalLink\RequestOtp::class =>
+        CommandHandler\RetrievalLink\RequestOtp::class,
+    TransferCommand\RetrievalLink\VerifyOtp::class =>
+        CommandHandler\RetrievalLink\VerifyOtp::class,
     TransferCommand\FeatureToggle\Update::class =>
         CommandHandler\FeatureToggle\Update::class,
     TransferCommand\FeatureToggle\Delete::class                =>
