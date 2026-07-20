@@ -59,16 +59,16 @@ return [
         ],
         'connection' => [
             'orm_default' => [
-                'driverClass' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
                 // Used by Roave
                 'driver_class' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
                 // Database connection details
                 'params' => $doctrine_connection_params,
             ],
             'export' => [
-                'driverClass' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
                 // Used by Roave
                 'driver_class' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
+                'configuration' => 'orm_default',
+                'event_manager' => 'orm_default',
                 // Database connection details
                 'params' => $doctrine_connection_params,
             ],
@@ -76,7 +76,6 @@ return [
         'configuration' => [
             'orm_default' => [
                 'metadata_cache' => 'redis',
-                'generate_proxies' => true,
                 'auto_generate_proxy_classes' => true,
                 'query_cache'       => 'redis',
                 'result_cache'      => 'redis',

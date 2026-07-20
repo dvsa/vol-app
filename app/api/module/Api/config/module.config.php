@@ -147,9 +147,6 @@ return [
             'PermitsBilateralMetadataCurrentFieldValuesGenerator'
                 => ApiSrv\Permits\Bilateral\Metadata\CurrentFieldValuesGenerator::class,
         ],
-        'abstract_factories' => [
-            \Laminas\Cache\Service\StorageCacheAbstractServiceFactory::class,
-        ],
         'factories' => [
             \Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class => \Dvsa\Olcs\Api\Service\EditorJs\ConverterServiceFactory::class,
             \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLogger::class => \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLoggerFactory::class,
@@ -965,16 +962,6 @@ return [
                 ]
             ]
         ],
-        'eventmanager' => [
-            'orm_default' => [
-                'subscribers' => [
-                    \Dvsa\Olcs\Api\Listener\OlcsEntityListener::class,
-                    \Gedmo\SoftDeleteable\SoftDeleteableListener::class,
-                    \Gedmo\Translatable\TranslatableListener::class,
-                    \Dvsa\Olcs\Api\Mvc\OlcsBlameableListener::class,
-                ],
-            ],
-        ],
         'event_manager' => [
             'orm_default' => [
                 'subscribers' => [
@@ -990,13 +977,6 @@ return [
                 'filters' => [
                     'soft-deleteable' => \Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter::class,
                 ],
-                'types' => [
-                    'yesno' => \Dvsa\Olcs\Api\Entity\Types\YesNoType::class,
-                    'yesnonull' => \Dvsa\Olcs\Api\Entity\Types\YesNoNullType::class,
-                    'date' => \Dvsa\Olcs\Api\Entity\Types\DateType::class,
-                    'datetime' => \Dvsa\Olcs\Api\Entity\Types\DateTimeType::class,
-                    'encrypted_string' => \Dvsa\Olcs\Api\Entity\Types\EncryptedStringType::class
-                ]
             ]
         ]
     ],
