@@ -265,7 +265,6 @@ jobs:
           # 5. restore from snapshot
           if [[ -z "${RDS_SNAP}" ]]; then
             slack_send "${SLACK_WARN}" "No snapshot name supplied. Latest automated snapshot for ${RDS_SNAP_SOURCE} will be used to refresh ${ENV_NAME} environment"
-            RDS_SNAP="UnDefined"
           fi
 
           payload="{ \"EventType\":\"RestoreRDSInstanceFromSnapshot\", \"RDSName\":\"${RDS_CLUSTER_NAME}\", \"RDSOptionGroup\":\"${RDS_OPTION_GROUP}\", \"RDSCloudwatchLogsExportConfiguration\": ${RDS_LOG_EXPORTS}, \"RDSBaseSnap\":\"${RDS_SNAP}\", \"RDSSubnet\":\"${RDS_SUBNET}\", \"EngineVersion\":\"${ENGINE_VERSION}\", \"RDSSnapSource\":\"${RDS_SNAP_SOURCE}\", \"RDSTags\": ${RDS_TAGS}, \"MultiAZ\": ${MULTI_AZ} }"
