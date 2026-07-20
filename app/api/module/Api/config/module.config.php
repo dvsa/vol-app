@@ -26,6 +26,8 @@ return [
         // fails secure (OTP + short window) in RetrievalPolicyResolver.
         'policies' => [
             'publication' => ['gate' => 'none', 'expiry' => 'P42D'],
+            // Police copies are sensitive: OTP-gated, one link per recipient (tune the window as needed).
+            'publication-police' => ['gate' => 'otp', 'expiry' => 'P42D'],
         ],
         // HMAC secret (>=32 chars) for post-OTP session grants. Empty here so non-OTP envs boot
         // fine; OTP-enabled envs MUST override via secrets/local config, or the OTP path errors.

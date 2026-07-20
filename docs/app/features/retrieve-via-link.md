@@ -79,16 +79,19 @@ the link is gone.
 
 ## Publications integration
 
-`SendPublication` gates on the toggle: for **non-police** (public A&D) publications it creates a
-`gate=none` bundle and injects the download link; **police** documents keep the legacy attachment
-path. The `publication-published` email template is a Twig both-modes conditional
-(`{% if retrievalLink %}` download link `{% else %}` attached file), so one template serves both —
-police simply sends no `retrievalLink` and falls through to the attachment branch.
+`SendPublication` gates on the toggle:
+
+- **Non-police** (public A&D) — one shared `gate=none` link, BCC'd to all recipients.
+- **Police** — a `gate=otp` link **per recipient** (`publication-police` flow), each bound to that
+  recipient's address so the one-time code is emailed to their own mailbox (a shared link would have
+  nowhere to send it); one email per recipient.
+
+The `publication-published` email template is a Twig both-modes conditional
+(`{% if retrievalLink %}` download link `{% else %}` attached file), so the same template serves the
+link and legacy-attachment paths.
 
 ## Known follow-ups
 
-- **Police document link delivery** — police copies are sensitive and go to distribution lists, so
-  OTP-gated, _per-recipient_ links are needed; deferred (they stay as attachments for now).
 - **Translations** — the selfserve `retrieve-document.*` keys and the Welsh OTP-email / template
   copy are placeholders needing professional Welsh review + seeding into the translation store.
 - **Client IP** — behind the load balancer, selfserve needs `RemoteAddress::setUseProxy(true)` for
