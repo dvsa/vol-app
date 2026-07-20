@@ -3,6 +3,7 @@
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$SCRIPT_DIR" || exit 1
 
+NIEXTRACT_ROOT="$SCRIPT_DIR"
 HOME_DIR=$(pwd)
 
 # Verify if we are running directly inside the /scripts subdirectory context
@@ -129,10 +130,10 @@ fi
 cd "$HOME_DIR" || exit 1
 
 log "validate NI Extract..."
-./run_validate_NI_Extract.sh "$CONNECTION" "$DB" || log_error "run_validate_NI_Extract.sh FAILED!"
+$NIEXTRACT_ROOT/run_validate_NI_Extract.sh "$CONNECTION" "$DB" || log_error "run_validate_NI_Extract.sh FAILED!"
 
 log "drop NI Extract db objects..."
-./uninstall_NI_Extract_db_objects.sh "$CONNECTION" "$DB" || log_error "uninstall_NI_Extract_db_objects.sh FAILED!"
+$HOME_DIR/uninstall_NI_Extract_db_objects.sh "$CONNECTION" "$DB" || log_error "uninstall_NI_Extract_db_objects.sh FAILED!"
 
 if $CREATE_NI_XML_DUMP ; then
     FILE=${DVA_FILE_PREFIX}$(date "+%Y%m%d%H%M%S")
