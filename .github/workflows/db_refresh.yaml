@@ -127,17 +127,22 @@ jobs:
             local outfile
             outfile="$(mktemp)"
             trap 'rm -f "${outfile:-}"; trap - RETURN' RETURN
-            local status
-            status="$(aws lambda invoke \
+            local response status fn_error
+            if ! response="$(aws lambda invoke \
               --cli-binary-format raw-in-base64-out \
               --function-name "${fn}" \
               --payload "${payload}" \
               --region "${AWS_REGION}" \
-              "${outfile}" | jq -r .StatusCode)"
+              "${outfile}")"; then
+              return 1
+            fi
+
+            status="$(jq -r '.StatusCode // empty' <<<"${response}")"
+            fn_error="$(jq -r '.FunctionError // empty' <<<"${response}")"
 
             local body
-            body="$(sed 's/\\"//g' < "${outfile}")"
-            if [[ -z "${status}" ]] || [[ "${status}" != "200" ]] || [[ "${body}" != *"${expected}"* ]]; then
+            body="$(cat "${outfile}")"
+            if [[ "${status}" != "200" ]] || [[ -n "${fn_error}" ]] || [[ "${body}" != *"${expected}"* ]]; then
               return 1
             fi
             return 0
