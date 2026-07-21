@@ -103,7 +103,7 @@ jobs:
           RDS_SNAP_SOURCE: ${{ inputs.rdsSnapSource }}
           RDS_FINAL_SNAP: ${{ inputs.rdsFinalSnap }}
           SHUTDOWN_ENV: ${{ inputs.shutdownEnv }}
-          MULTI_AZ: ${{ inputs.MultiAZ }}
+          MULTI_AZ: ${{ inputs.multiAZ }}
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         run: |
           set -euo pipefail
