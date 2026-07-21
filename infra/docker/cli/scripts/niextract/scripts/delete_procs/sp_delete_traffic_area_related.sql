@@ -67,10 +67,16 @@ BEGIN
     START TRANSACTION;
 
     WHILE(@rowcount = 10000) DO
-        DELETE r FROM recipient r
-        LEFT JOIN recipient_traffic_area rta ON r.id = rta.recipient_id
-        WHERE rta.recipient_id IS NULL
-        LIMIT 10000;
+        DELETE FROM recipient
+        WHERE id IN (
+            SELECT id FROM (
+                SELECT r.id
+                FROM recipient r
+                LEFT JOIN recipient_traffic_area rta ON r.id = rta.recipient_id
+                WHERE rta.recipient_id IS NULL
+                LIMIT 10000
+            ) AS batch
+        );
         
         SET @rowcount := row_count();
         SET @total_deleted := @total_deleted + @rowcount;
