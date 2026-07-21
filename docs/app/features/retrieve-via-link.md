@@ -90,6 +90,14 @@ The `publication-published` email template is a Twig both-modes conditional
 (`{% if retrievalLink %}` download link `{% else %}` attached file), so the same template serves the
 link and legacy-attachment paths.
 
+**Multi-recipient delivery under Notify.** GOV.UK Notify has no Cc/Bcc and takes one address per
+send, so `GovUkNotifyTransport` fans out — one Notify send per distinct To/Cc/Bcc address, then
+Notify owns delivery and its retries. Transient (`429`/`5xx`) failures retry the whole message; a
+permanent per-recipient failure (e.g. a bad address) is logged and skipped so it can't fail — or
+endlessly re-duplicate — the batch. This is a general transport fix, not publications-specific: it
+restores the correct delivery that SMTP did natively for every multi-recipient flow (operator admin
+lists, EBSR Cc, publication Bcc).
+
 ## Known follow-ups
 
 - **Translations** — the selfserve `retrieve-document.*` keys and the Welsh OTP-email / template

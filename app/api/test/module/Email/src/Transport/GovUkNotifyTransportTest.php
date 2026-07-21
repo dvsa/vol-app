@@ -134,6 +134,123 @@ final class GovUkNotifyTransportTest extends MockeryTestCase
         $this->sut->send($email);
     }
 
+    public function testFansOutOneSendPerRecipient(): void
+    {
+        // To + Cc + Bcc — SMTP delivered to all four; Notify has no cc/bcc, so it's one send each.
+        $email = $this->buildMultiRecipientEmail(
+            ['a@example.com', 'b@example.com'],
+            ['c@example.com'],
+            ['d@example.com'],
+        );
+
+        $recipients = [];
+        $this->notifyClient->shouldReceive('sendEmail')
+            ->times(4)
+            ->andReturnUsing(function ($to) use (&$recipients) {
+                $recipients[] = $to;
+                return ['id' => 'x'];
+            });
+
+        $this->sut->send($email);
+
+        sort($recipients);
+        $this->assertSame(['a@example.com', 'b@example.com', 'c@example.com', 'd@example.com'], $recipients);
+    }
+
+    public function testDedupesRecipientsCaseInsensitively(): void
+    {
+        // Same mailbox in To and Bcc (different case) ⇒ a single Notify send, not two.
+        $email = $this->buildMultiRecipientEmail(['user@example.com'], [], ['USER@example.com']);
+
+        $this->notifyClient->shouldReceive('sendEmail')->once()->andReturn(['id' => 'x']);
+
+        $this->sut->send($email);
+    }
+
+    public function testPermanentlyFailedRecipientIsSkippedNotFatal(): void
+    {
+        // One bad address (permanent 400) must not fail the batch; the good recipient still gets it.
+        $email = $this->buildMultiRecipientEmail(['bad@example.com'], [], ['good@example.com']);
+
+        $this->notifyClient->shouldReceive('sendEmail')
+            ->with('bad@example.com', m::any(), m::any(), m::any(), m::any())
+            ->once()->andThrow(new NotifyException('bad request', 400));
+        $this->notifyClient->shouldReceive('sendEmail')
+            ->with('good@example.com', m::any(), m::any(), m::any(), m::any())
+            ->once()->andReturn(['id' => 'ok']);
+
+        $this->sut->send($email);
+
+        $this->addToAssertionCount(1); // reached here ⇒ no exception thrown
+    }
+
+    public function testTransientFailureRetriesWholeMessage(): void
+    {
+        $email = $this->buildMultiRecipientEmail(['a@example.com'], [], ['b@example.com']);
+
+        $this->notifyClient->shouldReceive('sendEmail')
+            ->with('a@example.com', m::any(), m::any(), m::any(), m::any())
+            ->andThrow(new NotifyException('rate limited', 429));
+        $this->notifyClient->shouldReceive('sendEmail')
+            ->with('b@example.com', m::any(), m::any(), m::any(), m::any())
+            ->andReturn(['id' => 'ok']);
+
+        $this->expectException(EmailNotSentException::class);
+        try {
+            $this->sut->send($email);
+        } catch (EmailNotSentException $e) {
+            // Retryable — not a permanent DomainException.
+            $this->assertNotInstanceOf(\DomainException::class, $e->getPrevious());
+            throw $e;
+        }
+    }
+
+    public function testAllRecipientsPermanentlyFailedIsFatal(): void
+    {
+        $email = $this->buildMultiRecipientEmail(['x@example.com', 'y@example.com']);
+
+        $this->notifyClient->shouldReceive('sendEmail')->andThrow(new NotifyException('bad', 400));
+
+        $this->expectException(EmailNotSentException::class);
+        try {
+            $this->sut->send($email);
+        } catch (EmailNotSentException $e) {
+            // Total non-delivery ⇒ permanent (DLQ) so ops sees it.
+            $this->assertInstanceOf(\DomainException::class, $e->getPrevious());
+            throw $e;
+        }
+    }
+
+    /**
+     * @param list<string> $to
+     * @param list<string> $cc
+     * @param list<string> $bcc
+     */
+    private function buildMultiRecipientEmail(array $to, array $cc = [], array $bcc = []): SymfonyEmail
+    {
+        $email = new SymfonyEmail()
+            ->from(new Address('from@example.com'))
+            ->subject('Subj')
+            ->text('plain body');
+
+        $toAddresses = array_map(static fn (string $a): Address => new Address($a), $to);
+        $email->to(...$toAddresses);
+
+        if ($cc !== []) {
+            $email->cc(...array_map(static fn (string $a): Address => new Address($a), $cc));
+        }
+        if ($bcc !== []) {
+            $email->bcc(...array_map(static fn (string $a): Address => new Address($a), $bcc));
+        }
+
+        $email->getHeaders()->addTextHeader(
+            GovUkNotifyTransport::PAYLOAD_HEADER,
+            json_encode(['markdownBody' => 'x'], JSON_THROW_ON_ERROR),
+        );
+
+        return $email;
+    }
+
     /**
      * @param array<string, mixed> $payload
      */
