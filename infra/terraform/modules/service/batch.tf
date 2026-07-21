@@ -9,7 +9,7 @@ data "aws_secretsmanager_secret" "infra" {
 }
 
 data "aws_ssm_parameter" "dva_ni_export_s3uri" {
-  name = "/applicationparams/${var.environment}/data-dva-ni-export-s3uri"
+  name = "/applicationparams/${var.legacy_environment}/data-dva-ni-export-s3uri"
 }
 
 locals {
