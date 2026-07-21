@@ -48,7 +48,7 @@ env:
   SLACK_FAIL: "#FF9FA1"
   SLACK_WARN: "#DAA038"
   AWS_REGION: eu-west-1
-  AWS_OIDC_ROLE: ${{ inputs.platformEnv == 'prep' && vars.ACCOUNT_PROD_TF_OIDC_ROLE || vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
+  AWS_OIDC_ROLE: ${{ vars[inputs.platformEnv == 'prep' && 'ACCOUNT_PROD_TF_OIDC_ROLE' || 'ACCOUNT_NONPROD_TF_OIDC_ROLE'] }}
   LAMBDA_DB_REFRESH_FUNCTION: Aurora-DBRefresh-L
   LAMBDA_INIT_DB_FUNCTION: OLCS-OLCSDBRefresh-InitDB-L
   ENGINE_VERSION: 8.0.mysql_aurora.3.12.0
