@@ -96,7 +96,6 @@ jobs:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
 
       - name: Run DB refresh flow
-        id: refresh
         shell: bash
         env:
           PLATFORM_ENV: ${{ inputs.platformEnv }}
