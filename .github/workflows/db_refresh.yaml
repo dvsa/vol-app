@@ -181,7 +181,7 @@ jobs:
               PREFIX="${ENV_NAME}"
               ACCOUNT="054614622558"
               RDS_DB_INSTANCE_CLASS="db.serverless"
-              RDS_OPTION_GROUP="default:mysql-8-0"
+              RDS_OPTION_GROUP="default:aurora-mysql-8-0"
               RDS_LOG_EXPORTS='{ "EnableLogTypes":["error"], "DisableLogTypes":[] }'
               S3_CONFIG_BUCKET="devapp-shd-pri-olcsci-build-s3"
               RUN_INIT_SQL="false"
