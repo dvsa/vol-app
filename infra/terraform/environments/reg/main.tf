@@ -738,6 +738,8 @@ module "service" {
       },
     ]
   }
+
+  depends_on = [module.parameters]
 }
 
 resource "null_resource" "deployed_versions" {

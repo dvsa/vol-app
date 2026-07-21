@@ -738,6 +738,8 @@ module "service" {
       },
     ]
   }
+
+  depends_on = [module.parameters]
 }
 
 module "idp" {
