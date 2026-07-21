@@ -300,25 +300,24 @@ class RetrieveController extends AbstractController
     {
         $httpResponse = $response->getHttpResponse();
 
-        $allowedHeaders = ['Content-Disposition', 'Content-Encoding', 'Content-Type', 'Content-Length'];
+        // Forward only content-framing headers. We deliberately DROP the API's Content-Disposition:
+        // the shared API downloader emits `inline` (+ text/html) for html files, which on this
+        // unauthenticated public origin would let a bundled .html document execute script (stored
+        // XSS). Force `attachment` ourselves — always — and stop content-type sniffing.
+        $allowedHeaders = ['Content-Encoding', 'Content-Type', 'Content-Length'];
 
         $headers = new Headers();
-        $hasDisposition = false;
         foreach ($httpResponse->getHeaders() as $header) {
             if (in_array($header->getFieldName(), $allowedHeaders, true)) {
                 $headers->addHeader($header);
-                if ($header->getFieldName() === 'Content-Disposition') {
-                    $hasDisposition = true;
-                }
             }
         }
 
-        if (!$hasDisposition) {
-            $filename = ($displayFilename !== null && $displayFilename !== '') ? $displayFilename : 'document';
-            // Strip anything that could break the header / path-traversal in the filename.
-            $filename = str_replace(['"', '\\', "\r", "\n", '/'], '', $filename);
-            $headers->addHeaderLine('Content-Disposition', 'attachment; filename="' . $filename . '"');
-        }
+        $filename = ($displayFilename !== null && $displayFilename !== '') ? $displayFilename : 'document';
+        // Strip anything that could break the header / traverse the path.
+        $filename = str_replace(['"', '\\', "\r", "\n", '/'], '', $filename);
+        $headers->addHeaderLine('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        $headers->addHeaderLine('X-Content-Type-Options', 'nosniff');
 
         $httpResponse->setHeaders($headers);
 

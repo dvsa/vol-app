@@ -27,9 +27,10 @@ class RetrievalLink extends AbstractRepository
     }
 
     /**
-     * Bulk-delete links whose validity window has passed. The database-level ON DELETE CASCADE
-     * foreign keys remove the associated member, OTP and audit-event rows. Returns the number of
-     * links deleted.
+     * Bulk-delete links whose validity window has passed. The database foreign keys remove the
+     * associated member and OTP rows (ON DELETE CASCADE); audit-event rows are RETAINED — their
+     * link reference is nulled (ON DELETE SET NULL) so the trail survives the purge. Returns the
+     * number of links deleted.
      */
     public function deleteExpired(\DateTimeInterface $now): int
     {

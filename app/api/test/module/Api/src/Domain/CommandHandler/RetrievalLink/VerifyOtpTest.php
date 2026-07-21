@@ -43,13 +43,12 @@ final class VerifyOtpTest extends AbstractCommandHandlerTestCase
         $this->repoMap['RetrievalLink']->shouldReceive('fetchByToken')->with('tok')->once()->andReturn($this->usableOtpLink());
 
         $otp = m::mock(RetrievalOtpEntity::class);
-        $otp->shouldReceive('getAttempts')->andReturn(0);
-        $otp->shouldReceive('setAttempts')->with(1)->once();
+        $otp->shouldReceive('getId')->andReturn(1);
         $otp->shouldReceive('getCodeHash')->andReturn($this->otpService->hash('123456'));
-        $otp->shouldReceive('setConsumedAt')->with(m::type(\DateTime::class))->once();
 
         $this->repoMap['RetrievalOtp']->shouldReceive('fetchLatestActive')->once()->andReturn($otp);
-        $this->repoMap['RetrievalOtp']->shouldReceive('save')->with($otp)->once();
+        $this->repoMap['RetrievalOtp']->shouldReceive('claimAttempt')->with(1)->once()->andReturn(4);
+        $this->repoMap['RetrievalOtp']->shouldReceive('consume')->with(1, m::type(\DateTime::class))->once()->andReturn(true);
         $this->repoMap['RetrievalLinkEvent']->shouldReceive('save')->once();
 
         $result = $this->sut->handleCommand(VerifyOtpCmd::create(['token' => 'tok', 'code' => '123456', 'ip' => '1.2.3.4']));
@@ -63,13 +62,12 @@ final class VerifyOtpTest extends AbstractCommandHandlerTestCase
         $this->repoMap['RetrievalLink']->shouldReceive('fetchByToken')->andReturn($this->usableOtpLink());
 
         $otp = m::mock(RetrievalOtpEntity::class);
-        $otp->shouldReceive('getAttempts')->andReturn(0);
-        $otp->shouldReceive('setAttempts')->with(1)->once();
-        $otp->shouldReceive('getMaxAttempts')->andReturn(5);
+        $otp->shouldReceive('getId')->andReturn(1);
         $otp->shouldReceive('getCodeHash')->andReturn($this->otpService->hash('123456'));
 
         $this->repoMap['RetrievalOtp']->shouldReceive('fetchLatestActive')->andReturn($otp);
-        $this->repoMap['RetrievalOtp']->shouldReceive('save')->once();
+        $this->repoMap['RetrievalOtp']->shouldReceive('claimAttempt')->with(1)->once()->andReturn(4);
+        $this->repoMap['RetrievalOtp']->shouldReceive('consume')->never();
         $this->repoMap['RetrievalLinkEvent']->shouldReceive('save')->once();
 
         $result = $this->sut->handleCommand(VerifyOtpCmd::create(['token' => 'tok', 'code' => '999999', 'ip' => '1.2.3.4']));
@@ -79,19 +77,17 @@ final class VerifyOtpTest extends AbstractCommandHandlerTestCase
         self::assertSame(4, $result->getFlag('attemptsRemaining'));
     }
 
-    public function testExhaustedAttemptsInvalidatesCode(): void
+    public function testExhaustedAttemptsAreRejectedWithoutVerifying(): void
     {
         $this->repoMap['RetrievalLink']->shouldReceive('fetchByToken')->andReturn($this->usableOtpLink());
 
         $otp = m::mock(RetrievalOtpEntity::class);
-        $otp->shouldReceive('getAttempts')->andReturn(4);
-        $otp->shouldReceive('setAttempts')->with(5)->once();
-        $otp->shouldReceive('getMaxAttempts')->andReturn(5);
-        $otp->shouldReceive('getCodeHash')->andReturn($this->otpService->hash('123456'));
-        $otp->shouldReceive('setInvalidatedAt')->with(m::type(\DateTime::class))->once();
+        $otp->shouldReceive('getId')->andReturn(1);
 
         $this->repoMap['RetrievalOtp']->shouldReceive('fetchLatestActive')->andReturn($otp);
-        $this->repoMap['RetrievalOtp']->shouldReceive('save')->once();
+        // No attempt slot left → the code is never verified and cannot be consumed.
+        $this->repoMap['RetrievalOtp']->shouldReceive('claimAttempt')->with(1)->once()->andReturn(-1);
+        $this->repoMap['RetrievalOtp']->shouldReceive('consume')->never();
         $this->repoMap['RetrievalLinkEvent']->shouldReceive('save')->once();
 
         $result = $this->sut->handleCommand(VerifyOtpCmd::create(['token' => 'tok', 'code' => 'wrong!', 'ip' => '1.2.3.4']));

@@ -14,7 +14,7 @@ class RetrievalLinkPurgeCommand extends AbstractBatchCommand
     #[\Override]
     protected function configure()
     {
-        $this->setDescription('Delete expired Retrieve-via-Link links (members, OTP codes and audit cascade).');
+        $this->setDescription('Delete expired Retrieve-via-Link links (members + OTP codes cascade; audit events retained).');
     }
 
     #[\Override]

@@ -52,24 +52,23 @@ final class VerifyOtp extends AbstractCommandHandler
             $otp = $this->getRepo('RetrievalOtp')->fetchLatestActive($link->getId(), \DateTime::createFromInterface($now));
 
             if ($otp !== null) {
-                $attempts = $otp->getAttempts() + 1;
-                $otp->setAttempts($attempts);
+                $nowDt = \DateTime::createFromInterface($now);
 
-                if ($this->otpService->verify((string) $command->getCode(), (string) $otp->getCodeHash())) {
-                    $otp->setConsumedAt(\DateTime::createFromInterface($now));
-                    $this->getRepo('RetrievalOtp')->save($otp);
+                // Atomically claim an attempt against the cap (race-safe); -1 = no slot left.
+                $remaining = $this->getRepo('RetrievalOtp')->claimAttempt($otp->getId());
 
-                    $verified = true;
-                    $grant = $this->sessionGrantService->issue((string) $link->getToken(), $now);
-                    $this->recordRetrievalEvent($link, 'otp_succeeded', null, $ip);
-                } else {
-                    if ($attempts >= $otp->getMaxAttempts()) {
-                        // Exhausted — retire the code so a fresh one must be requested.
-                        $otp->setInvalidatedAt(\DateTime::createFromInterface($now));
+                if ($remaining >= 0 && $this->otpService->verify((string) $command->getCode(), (string) $otp->getCodeHash())) {
+                    // Correct code — consume single-use atomically so a concurrent replay can't reuse it.
+                    if ($this->getRepo('RetrievalOtp')->consume($otp->getId(), $nowDt)) {
+                        $verified = true;
+                        $grant = $this->sessionGrantService->issue((string) $link->getToken(), $now);
+                        $this->recordRetrievalEvent($link, 'otp_succeeded', null, $ip);
+                    } else {
+                        // Lost the consume race (already used) — treat as a failure.
+                        $this->recordRetrievalEvent($link, 'otp_failed', null, $ip);
                     }
-                    $this->getRepo('RetrievalOtp')->save($otp);
-
-                    $attemptsRemaining = max(0, $otp->getMaxAttempts() - $attempts);
+                } else {
+                    $attemptsRemaining = max(0, $remaining);
                     $this->recordRetrievalEvent($link, 'otp_failed', null, $ip);
                 }
             }

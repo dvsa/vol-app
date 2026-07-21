@@ -10,8 +10,8 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Olcs\Logging\Log\Logger;
 
 /**
- * Deletes expired retrieval links. Child rows (documents, OTPs, audit events) are removed by the
- * database ON DELETE CASCADE foreign keys, so a single bulk delete is enough.
+ * Deletes expired retrieval links. Member and OTP rows are removed by ON DELETE CASCADE; audit
+ * events are RETAINED (their link FK is ON DELETE SET NULL). A single bulk delete is enough.
  */
 final class PurgeExpired extends AbstractCommandHandler
 {

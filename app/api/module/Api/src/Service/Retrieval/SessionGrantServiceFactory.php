@@ -14,8 +14,9 @@ final class SessionGrantServiceFactory implements FactoryInterface
     {
         $config = $container->get('config');
 
-        // Constructing with an empty/short secret throws — but only lazily, when an OTP flow
-        // actually needs a grant. Non-OTP envs never instantiate this, so they boot fine.
+        // Constructs with whatever secret is configured (possibly empty). SessionGrantService
+        // validates the secret at use time, so gate=none flows that construct but never use it
+        // (e.g. the shared Download handler) work with no secret; OTP flows fail loudly if unset.
         return new SessionGrantService((string) ($config['retrieval']['session_secret'] ?? ''));
     }
 }

@@ -25,16 +25,26 @@ final class SessionGrantService
 
     public function __construct(string $secret)
     {
-        if (strlen($secret) < self::MIN_SECRET_LENGTH) {
-            throw new \InvalidArgumentException(
-                sprintf('Retrieval session grant secret must be at least %d characters', self::MIN_SECRET_LENGTH),
-            );
-        }
+        // No validation here on purpose: gate=none flows construct this service (the Download
+        // handler is shared by both gate modes) but never use it, so it MUST be constructable with
+        // an empty/unset secret. The secret is validated at use time instead (issue/isValid).
         $this->secret = $secret;
+    }
+
+    private function hasUsableSecret(): bool
+    {
+        return strlen($this->secret) >= self::MIN_SECRET_LENGTH;
     }
 
     public function issue(string $linkToken, \DateTimeImmutable $now): string
     {
+        if (!$this->hasUsableSecret()) {
+            throw new \RuntimeException(sprintf(
+                'Retrieval session grant secret must be at least %d characters — set retrieval.session_secret',
+                self::MIN_SECRET_LENGTH,
+            ));
+        }
+
         $payload = self::b64UrlEncode((string) json_encode([
             't' => $linkToken,
             'exp' => $now->getTimestamp() + self::TTL_SECONDS,
@@ -48,6 +58,11 @@ final class SessionGrantService
      */
     public function isValid(string $grant, string $linkToken, \DateTimeImmutable $now): bool
     {
+        // Without a usable secret no grant can ever be valid (fail closed).
+        if (!$this->hasUsableSecret()) {
+            return false;
+        }
+
         $parts = explode('.', $grant);
         if (count($parts) !== 2) {
             return false;

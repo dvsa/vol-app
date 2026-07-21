@@ -4,12 +4,15 @@ namespace Dvsa\Olcs\Transfer\Command\RetrievalLink;
 
 use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
+use Dvsa\Olcs\Transfer\Command\LoggerOmitContentInterface;
 
 /**
+ * Carries the plaintext one-time code, so its content is kept out of the request logs.
+ *
  * @Transfer\RouteName("backend/retrieval-link/verify-otp")
  * @Transfer\Method("POST")
  */
-class VerifyOtp extends AbstractCommand
+class VerifyOtp extends AbstractCommand implements LoggerOmitContentInterface
 {
     /**
      * @var string

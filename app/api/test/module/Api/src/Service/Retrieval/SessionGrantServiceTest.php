@@ -18,10 +18,18 @@ final class SessionGrantServiceTest extends TestCase
         $this->sut = new SessionGrantService(self::SECRET);
     }
 
-    public function testRejectsShortSecret(): void
+    public function testShortSecretIsConstructableButUnusable(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
-        new SessionGrantService('too-short');
+        // gate=none flows construct this but never use it, so construction must not throw.
+        $svc = new SessionGrantService('too-short');
+        $now = new \DateTimeImmutable('2026-07-20 09:00:00');
+
+        // Validation fails closed with no usable secret...
+        self::assertFalse($svc->isValid('anything', 'link', $now));
+
+        // ...and issuing a grant fails loudly (surfaces an OTP-flow misconfiguration).
+        $this->expectException(\RuntimeException::class);
+        $svc->issue('link', $now);
     }
 
     public function testIssuedGrantIsValidForItsLink(): void

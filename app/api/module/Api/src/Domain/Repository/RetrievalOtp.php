@@ -34,6 +34,59 @@ class RetrievalOtp extends AbstractRepository
     }
 
     /**
+     * Atomically claim one verification attempt against the cap. Returns the attempts REMAINING
+     * after the claim, or -1 if no attempt could be claimed (cap reached, or already
+     * consumed/invalidated). The single conditional UPDATE makes the cap race-safe: concurrent
+     * verifications cannot all slip under the limit (a plain read-increment-write can).
+     */
+    public function claimAttempt(int $otpId): int
+    {
+        $em = $this->getEntityManager();
+
+        $affected = $em->createQueryBuilder()
+            ->update($this->entity, 'ro')
+            ->set('ro.attempts', 'ro.attempts + 1')
+            ->where('ro.id = :id')->setParameter('id', $otpId)
+            ->andWhere('ro.attempts < ro.maxAttempts')
+            ->andWhere('ro.consumedAt IS NULL')
+            ->andWhere('ro.invalidatedAt IS NULL')
+            ->getQuery()
+            ->execute();
+
+        if ($affected < 1) {
+            return -1;
+        }
+
+        // Best-effort remaining for the UI (approximate under concurrency — NOT a security control;
+        // the cap itself is enforced atomically above).
+        $row = $em->createQueryBuilder()
+            ->select('ro.attempts AS a', 'ro.maxAttempts AS m')
+            ->from($this->entity, 'ro')
+            ->where('ro.id = :id')->setParameter('id', $otpId)
+            ->getQuery()
+            ->getSingleResult();
+
+        return max(0, (int) $row['m'] - (int) $row['a']);
+    }
+
+    /**
+     * Atomically consume the code (single-use), iff still usable. Returns true only if THIS call
+     * consumed it, so a concurrent double-submit cannot both succeed.
+     */
+    public function consume(int $otpId, \DateTimeInterface $now): bool
+    {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->update($this->entity, 'ro')
+            ->set('ro.consumedAt', ':now')->setParameter('now', $now)
+            ->where('ro.id = :id')->setParameter('id', $otpId)
+            ->andWhere('ro.consumedAt IS NULL')
+            ->andWhere('ro.invalidatedAt IS NULL')
+            ->andWhere('ro.expiresAt > :now2')->setParameter('now2', $now)
+            ->getQuery()
+            ->execute() > 0;
+    }
+
+    /**
      * How many codes have been requested for a link since a cut-off — the basis of send
      * rate-limiting.
      */
