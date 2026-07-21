@@ -17,6 +17,7 @@ final class RedisConnectionFactory
         $host = $options['server']['host'] ?? 'redis';
         $port = $options['server']['port'] ?? 6379;
 
+        /** @psalm-suppress UndefinedClass */
         $connection = RedisAdapter::createConnection(
             sprintf('redis://%s:%d', $host, $port)
         );
