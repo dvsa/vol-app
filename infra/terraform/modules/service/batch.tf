@@ -17,7 +17,7 @@ locals {
   account_prefix = contains(["DEV", "QA", "REG"], var.legacy_environment) ? "DEV" : ""
   env_prefix     = var.legacy_environment == "APP" ? "APP" : "APP${var.legacy_environment}"
 
-  dva_ni_export_bucket = regex("^s3://([^/]+)", data.aws_ssm_parameter.dva_ni_export_s3uri.value)[0]
+  dva_ni_export_bucket = nonsensitive(regex("^s3://([^/]+)", data.aws_ssm_parameter.dva_ni_export_s3uri.value)[0])
 
   default_retry_policy = {
     attempts = 1
