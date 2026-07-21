@@ -112,10 +112,12 @@ jobs:
           slack_send() {
             local color="$1"
             local msg="$2"
-            curl -sS -X POST "https://slack.com/api/chat.postMessage" \
-              -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \
-              -H "Content-Type: application/json; charset=utf-8" \
-              --data "{\"channel\":\"${SLACK_CHAN}\",\"attachments\":[{\"color\":\"${color}\",\"text\":\"${msg}\"}]}" >/dev/null || true
+            jq -n --arg channel "${SLACK_CHAN}" --arg color "${color}" --arg text "${msg}" \
+              '{channel:$channel, attachments:[{color:$color, text:$text}]}' \
+              | curl -sS -X POST "https://slack.com/api/chat.postMessage" \
+                  -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \
+                  -H "Content-Type: application/json; charset=utf-8" \
+                  --data @- >/dev/null || true
           }
 
           invoke_lambda() {
