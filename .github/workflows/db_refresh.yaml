@@ -136,8 +136,7 @@ jobs:
               "${outfile}" | jq -r .StatusCode)"
 
             local body
-            body="$(cat "${outfile}" | sed 's/\\"//g')"
-
+            body="$(sed 's/\\"//g' < "${outfile}")"
             if [[ -z "${status}" ]] || [[ "${status}" != "200" ]] || [[ "${body}" != *"${expected}"* ]]; then
               return 1
             fi
