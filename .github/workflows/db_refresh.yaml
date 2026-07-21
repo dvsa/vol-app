@@ -269,7 +269,19 @@ jobs:
             slack_send "${SLACK_WARN}" "No snapshot name supplied. Latest automated snapshot for ${RDS_SNAP_SOURCE} will be used to refresh ${ENV_NAME} environment"
           fi
 
-          payload="{ \"EventType\":\"RestoreRDSInstanceFromSnapshot\", \"RDSName\":\"${RDS_CLUSTER_NAME}\", \"RDSOptionGroup\":\"${RDS_OPTION_GROUP}\", \"RDSCloudwatchLogsExportConfiguration\": ${RDS_LOG_EXPORTS}, \"RDSBaseSnap\":\"${RDS_SNAP}\", \"RDSSubnet\":\"${RDS_SUBNET}\", \"EngineVersion\":\"${ENGINE_VERSION}\", \"RDSSnapSource\":\"${RDS_SNAP_SOURCE}\", \"RDSTags\": ${RDS_TAGS}, \"MultiAZ\": ${MULTI_AZ} }"
+          payload="$(jq -cn \
+            --arg eventType "RestoreRDSInstanceFromSnapshot" \
+            --arg rdsName "${RDS_CLUSTER_NAME}" \
+            --arg optionGroup "${RDS_OPTION_GROUP}" \
+            --arg baseSnap "${RDS_SNAP}" \
+            --arg subnet "${RDS_SUBNET}" \
+            --arg engineVersion "${ENGINE_VERSION}" \
+            --arg snapSource "${RDS_SNAP_SOURCE}" \
+            --argjson logs "${RDS_LOG_EXPORTS}" \
+            --argjson tags "${RDS_TAGS}" \
+            --argjson multiAz "${MULTI_AZ}" \
+            '{EventType:$eventType,RDSName:$rdsName,RDSOptionGroup:$optionGroup,RDSCloudwatchLogsExportConfiguration:logs,RDSBaseSnap:$baseSnap,RDSSubnet:$subnet,EngineVersion:$engineVersion,RDSSnapSource:$snapSource,RDSTags:tags,MultiAZ:multiAz}'
+          )"
           invoke_lambda "${payload}" "RestoreDBComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || { slack_send "${SLACK_FAIL}" "Error. Build failed restoring from DB snapshot"; exit 1; }
           wait_cluster_status "${RDS_CLUSTER_NAME}" "available" 60 60 || { slack_send "${SLACK_FAIL}" "Error. Build failed getting DB status after restore"; exit 1; }
           slack_send "${SLACK_COMPLETED}" "Restore of ${RDS_CLUSTER_NAME} from DB snapshot succeeded"
