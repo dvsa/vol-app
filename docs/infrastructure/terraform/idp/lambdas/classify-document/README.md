@@ -250,7 +250,6 @@ Read access to the source documents:
 
 ```text
 s3:GetObject
-s3:HeadObject
 ```
 
 ### Bedrock
