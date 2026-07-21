@@ -16,9 +16,11 @@ RDS_HOST="olcsanondb-rds.${DOMAIN}"
 DB_USER="master"
 
 # ===== PROXY =====
-export http_proxy="http://${PROXY}:3128"
-export https_proxy="http://${PROXY}:3128"
-export NO_PROXY="169.254.169.254"
+export http_proxy="http://${PROXY}"
+export https_proxy="http://${PROXY}"
+export AWS_STS_REGIONAL_ENDPOINTS=regional
+export AWS_DEFAULT_REGION="eu-west-1"
+export NO_PROXY="169.254.169.254,169.254.170.2,localhost,127.0.0.1,.s3.eu-west-1.amazonaws.com,.s3.amazonaws.com,sts.eu-west-1.amazonaws.com,sts.amazonaws.com"
 
 # ===== LOGGING =====
 log_msg() {
@@ -31,25 +33,6 @@ log_err() {
 
 # ===== DYNAMIC PATH DETECTION =====
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-# ===== AWS REGION DETECTION =====
-# Check if running in ECS/Batch container with AWS_REGION already set; fallback to metadata
-if [[ -n "${AWS_REGION:-}" ]]; then
-  REGION="${AWS_REGION}"
-else
-  TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
-    -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" || echo "")
-
-  if [[ -n "${TOKEN}" ]]; then
-    AZ=$(curl -s -H "X-aws-ec2-metadata-token: ${TOKEN}" \
-      http://169.254.169.254/latest/meta-data/placement/availability-zone || echo "")
-    REGION="${AZ%[a-z]}"
-  else
-    REGION="eu-west-1"
-  fi
-fi
-
-export AWS_DEFAULT_REGION="${REGION}"
 
 # ===== ASSUME ROLE =====
 log_msg "Assuming cross-account role"
