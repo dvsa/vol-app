@@ -159,20 +159,20 @@ wait_cluster_status() {
   return 1
 }
 
-          wait_instance_status() {
-            local rds_name="$1" expected="$2" sleep_s="$3" retry_limit="$4"
-            local i=0
-            while [[ $i -lt $retry_limit ]]; do
-              sleep "${sleep_s}"
-              local payload
-              payload="{ \"EventType\": \"GetRDSInstanceStatus\", \"RDSName\": \"${rds_name}\" }"
-              if invoke_lambda "${payload}" "${expected}" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
-                return 0
-              fi
-              i=$((i+1))
-            done
-            return 1
-          }
+wait_instance_status() {
+  local rds_name="$1" expected="$2" sleep_s="$3" retry_limit="$4"
+  local i=0
+  while [[ $i -lt $retry_limit ]]; do
+    local payload
+    payload="{ \"EventType\": \"GetRDSInstanceStatus\", \"RDSName\": \"${rds_name}\" }"
+    if invoke_lambda "${payload}" "${expected}" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+      return 0
+    fi
+    i=$((i+1))
+    sleep "${sleep_s}"
+  done
+  return 1
+}
 
           # configureParams equivalent
           case "${PLATFORM_ENV}" in
