@@ -144,7 +144,7 @@ jobs:
             local body
             body="$(cat "${outfile}")"
             if [[ "${status}" != "200" ]] || [[ -n "${fn_error}" ]] || [[ "${body}" != *"${expected}"* ]]; then
-              return 1
+              echo "Lambda invoke failed (fn=${fn}, status=${status}, functionError=${fn_error}, expected=${expected}). Body: ${body}" >&2; return 1
             fi
             return 0
           }
