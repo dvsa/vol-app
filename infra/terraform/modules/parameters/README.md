@@ -29,5 +29,7 @@ No resources.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_dva_ni_export_s3uri"></a> [dva\_ni\_export\_s3uri](#output\_dva\_ni\_export\_s3uri) | The value of the data-dva-ni-export-s3uri SSM parameter |
 <!-- END_TF_DOCS -->

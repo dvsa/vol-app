@@ -271,6 +271,8 @@ module "service" {
 
   legacy_environment = "QA"
 
+  dva_ni_export_s3uri = module.parameters.dva_ni_export_s3uri
+
   domain_env = "qa"
 
   domain_name    = "dev-dvsacloud.uk"
@@ -736,8 +738,6 @@ module "service" {
       },
     ]
   }
-
-  depends_on = [module.parameters]
 }
 
 resource "null_resource" "deployed_versions" {
