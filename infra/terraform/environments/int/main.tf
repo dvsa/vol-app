@@ -102,7 +102,9 @@ locals {
       ]
       resources = [
         "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3",
-        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*"
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*",
+        "arn:aws:s3:::devapp-olcs-pri-integration-dva-s3",
+        "arn:aws:s3:::devapp-olcs-pri-integration-dva-s3/*"
       ]
     },
     {
