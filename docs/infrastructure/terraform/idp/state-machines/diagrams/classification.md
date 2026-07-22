@@ -112,7 +112,12 @@ The full `pageBreakdown` (including UNCLASSIFIED) is still emitted for caseworke
         "bucket": "...",
         "key": "...",
         "object": { "size": 7390634, "versionId": "..." },
-        "config": {},
+        "config": {
+            "outputBucket": "vol-idp-dev-output",
+            "bedrockProjectArn": "arn:aws:bedrock:eu-west-1:...:data-automation-project/...",
+            "bedrockProfileArn": "arn:aws:bedrock:eu-west-1:...:data-automation-profile/eu.data-automation-v1",
+            "bedrockProjectStage": "LIVE"
+        },
         "classification": "BANK_STATEMENT",
         "classificationConfidence": 0.75,
         "totalPages": 47,
