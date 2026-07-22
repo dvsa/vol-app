@@ -54,7 +54,8 @@ return [
         ],
         'cache' => [
             'redis' => [
-                'class' => 'default-cache',
+                // Resolved from the container by Roave's CacheFactory, so this is a service name
+                'class' => 'doctrine-cache',
             ],
         ],
         'connection' => [
@@ -561,6 +562,14 @@ return [
                 ],
                 'ttl' => 3600, //one hour, likely to be overridden based on use case
                 'namespace' => 'zfcache',
+            ]
+        ],
+        // Keeps Doctrine ORM cache keys isolated from the general app cache (shares the
+        // same Redis connection, separate key namespace) so each can be cleared independently
+        'doctrine-cache' => [
+            'options' => [
+                'ttl' => 3600,
+                'namespace' => 'doctrine',
             ]
         ],
     ],

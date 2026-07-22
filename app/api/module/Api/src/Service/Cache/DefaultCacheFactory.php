@@ -10,10 +10,10 @@ use Symfony\Component\Cache\Adapter\RedisAdapter;
 
 class DefaultCacheFactory
 {
-    public function __invoke(ContainerInterface $container): CacheItemPoolInterface
+    public function __invoke(ContainerInterface $container, string $requestedName = 'default-cache'): CacheItemPoolInterface
     {
         $config = $container->get('Config');
-        $options = $config['caches']['default-cache']['options'] ?? [];
+        $options = $config['caches'][$requestedName]['options'] ?? [];
 
         $namespace = $options['namespace'] ?? 'zfcache';
         $ttl = $options['ttl'] ?? 3600;
