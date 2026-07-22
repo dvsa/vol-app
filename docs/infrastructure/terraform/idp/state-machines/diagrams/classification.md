@@ -70,9 +70,9 @@ $contains($states.input.key, $substring($now(), 0, 4) & '/' & $substring($now(),
 
 `$now()` returns an ISO 8601 timestamp (e.g. `2026-07-06T14:00:00Z`), so:
 
-- `$substring($now(), 0, 4)` → `"2026"`
-- `$substring($now(), 5, 2)` → `"07"`
-- Combined check → key must contain `"2026/07"`
+-   `$substring($now(), 0, 4)` → `"2026"`
+-   `$substring($now(), 5, 2)` → `"07"`
+-   Combined check → key must contain `"2026/07"`
 
 Documents uploaded to an old or future year/month path hit `SkipOutOfWindowDocument` (a `Succeed` state) — no event emitted, no Lambda invoked, no Bedrock call made.
 
@@ -95,8 +95,8 @@ This mirrors the JSONata logic from the prior Textract-based SM so the emitted e
 
 `UNCLASSIFIED` means "couldn't confidently classify these pages", not "a different document type". For a 47-page doc with 15 `BANK_STATEMENT` + 5 `TRANSACTION_REPORT` + 27 `UNCLASSIFIED` pages:
 
-- **If UNCLASSIFIED counted**: dominant would be UNCLASSIFIED (27 &gt; 15) — doc fails routing.
-- **With UNCLASSIFIED filtered**: dominant is BANK_STATEMENT (15 of 20 classified pages → 0.75 confidence), routes correctly.
+-   **If UNCLASSIFIED counted**: dominant would be UNCLASSIFIED (27 &gt; 15) — doc fails routing.
+-   **With UNCLASSIFIED filtered**: dominant is BANK_STATEMENT (15 of 20 classified pages → 0.75 confidence), routes correctly.
 
 The full `pageBreakdown` (including UNCLASSIFIED) is still emitted for caseworker visibility.
 
@@ -131,8 +131,8 @@ The full `pageBreakdown` (including UNCLASSIFIED) is still emitted for caseworke
 
 ### Failure
 
-- `DocumentProcessing-ClassificationFailed` — Lambda error, Bedrock error, S3 error, or document too large for inline classification (&gt;14 MB).
-- `DocumentProcessing-ClassificationFailed` — file content-type is not `application/pdf`.
+-   `DocumentProcessing-ClassificationFailed` — Lambda error, Bedrock error, S3 error, or document too large for inline classification (&gt;14 MB).
+-   `DocumentProcessing-ClassificationFailed` — file content-type is not `application/pdf`.
 
 ## EventBridge routing
 

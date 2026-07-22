@@ -38,12 +38,12 @@ claude-analysis.asl.json         Bedrock managed prompt + forced tool use, persi
 
 Textract Lending Analysis. Reports the dominant document type + numeric confidence. EventBridge routes downstream based on type and the numeric thresholds in `config/routing-policy.json`.
 
-- **Polling strategy**: uses `getLendingAnalysisSummary` (small response, returns `JobStatus` + Summary) for both polling and final fetch. Deliberately does **not** call `getLendingAnalysis` — that endpoint returns the full `Documents[]` extraction payload which can exceed Step Functions' 256 KB state limit on multi-page docs.
-- **JSONata `ExtractClassification`**: filters UNCLASSIFIED as noise, picks dominant from classified pages only, confidence = `dominantTypePages / classifiedPages`. Comparator is boolean (`$a.pageCount < $b.pageCount`), not numeric — JSONata's `$sort` quirk.
-- **S3 tag preservation**: reads existing tags and appends the `Classification` tag, preserving `ApplicationNumber`, `LicenceNumber`, etc.
-- **Emits**: `DocumentProcessing-Classified` with `{ classification, classificationConfidence, totalPages, classifiedPages, dominantTypePages, pageBreakdown, documentSizeBytes, textractJobId }`. One event regardless of doc type — routing is per-rule at the bus.
-- **Failure mode**: `INVALID_IMAGE_TYPE` (HEIC, WebP, DOCX) or other Textract job failure → routes to caseworker-review path (currently emits a typed failure event the test harness picks up).
-- **Timeout**: 15 minutes.
+-   **Polling strategy**: uses `getLendingAnalysisSummary` (small response, returns `JobStatus` + Summary) for both polling and final fetch. Deliberately does **not** call `getLendingAnalysis` — that endpoint returns the full `Documents[]` extraction payload which can exceed Step Functions' 256 KB state limit on multi-page docs.
+-   **JSONata `ExtractClassification`**: filters UNCLASSIFIED as noise, picks dominant from classified pages only, confidence = `dominantTypePages / classifiedPages`. Comparator is boolean (`$a.pageCount < $b.pageCount`), not numeric — JSONata's `$sort` quirk.
+-   **S3 tag preservation**: reads existing tags and appends the `Classification` tag, preserving `ApplicationNumber`, `LicenceNumber`, etc.
+-   **Emits**: `DocumentProcessing-Classified` with `{ classification, classificationConfidence, totalPages, classifiedPages, dominantTypePages, pageBreakdown, documentSizeBytes, textractJobId }`. One event regardless of doc type — routing is per-rule at the bus.
+-   **Failure mode**: `INVALID_IMAGE_TYPE` (HEIC, WebP, DOCX) or other Textract job failure → routes to caseworker-review path (currently emits a typed failure event the test harness picks up).
+-   **Timeout**: 15 minutes.
 
 [//]: # "### 3. `extraction.asl.json`"
 [//]: # "📊 **[Diagram](./diagrams/extraction.md)**"
@@ -163,6 +163,6 @@ aws stepfunctions validate-state-machine-definition \
 
 ## References
 
-- [Amazon States Language Specification](https://states-language.net/spec.html)
-- [Step Functions JSONata support](https://docs.aws.amazon.com/step-functions/latest/dg/transforming-data.html)
-- [EventBridge PutEvents integration](https://docs.aws.amazon.com/step-functions/latest/dg/connect-eventbridge.html)
+-   [Amazon States Language Specification](https://states-language.net/spec.html)
+-   [Step Functions JSONata support](https://docs.aws.amazon.com/step-functions/latest/dg/transforming-data.html)
+-   [EventBridge PutEvents integration](https://docs.aws.amazon.com/step-functions/latest/dg/connect-eventbridge.html)

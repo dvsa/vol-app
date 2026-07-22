@@ -59,10 +59,10 @@ Because personalisation values are rendered as Markdown, this collapses to **two
 
 Why this is the right call:
 
-- Template source-of-truth stays inside vol-app — diffable, reviewable, rollbackable, testable
-- Welsh parity is nearly free: same passthrough templates, content driven from the cy_GB variants through the same locale-resolution logic
-- The handlers' branching logic (PSV vs Goods, ECMT scoring tables, etc.) stays in PHP where it already works — Notify's lack of conditionals/loops in templates is irrelevant
-- Two manually-created Notify templates per service instead of 82
+-   Template source-of-truth stays inside vol-app — diffable, reviewable, rollbackable, testable
+-   Welsh parity is nearly free: same passthrough templates, content driven from the cy_GB variants through the same locale-resolution logic
+-   The handlers' branching logic (PSV vs Goods, ECMT scoring tables, etc.) stays in PHP where it already works — Notify's lack of conditionals/loops in templates is irrelevant
+-   Two manually-created Notify templates per service instead of 82
 
 **Why Notify's Markdown-injection warning doesn't apply:** that warning targets services piping user-submitted input straight into personalisation variables. vol-app is the sole author of the body Markdown — where user-supplied values appear (operator names, references) they are escaped at the point of insertion, as the renderer already did for HTML.
 
@@ -84,19 +84,19 @@ To de-risk the flip, a dedicated `NotifyTestMailer` (separate DSN, `email.notify
 
 The existing Mailpit workflow is preserved. A `DevNotifyTransport`, selected by `govuknotify+mailpit://`, renders the Markdown body to HTML via `league/commonmark`, wraps it in a static GOV.UK-alike chrome (`NotifyChrome`), and hands the message to Mailpit over SMTP. Developers still trigger an email and inspect it in the Mailpit UI.
 
-- ✅ Zero change to developer experience; zero new infrastructure; works offline, no API key
-- ✅ Unit tests mock `\Alphagov\Notifications\Client` directly
-- ⚠️ The local renderer is a CommonMark approximation of Notify's rendering, not the real thing — bounded by using a well-maintained library, and mitigated by the admin test-send and CLI checks against a real test-mode key
+-   ✅ Zero change to developer experience; zero new infrastructure; works offline, no API key
+-   ✅ Unit tests mock `\Alphagov\Notifications\Client` directly
+-   ⚠️ The local renderer is a CommonMark approximation of Notify's rendering, not the real thing — bounded by using a well-maintained library, and mitigated by the admin test-send and CLI checks against a real test-mode key
 
 ### Design evolution during implementation
 
 Decisions taken while building that refine the original proposal:
 
-- **Central switch, not per-handler migration.** The original plan migrated handlers in groups, each populating Notify fields with SMTP fallback per handler. As built, the renderer switches centrally on the DSN and the cutover unit is the environment (see above) — no handler changes, and no mixed state where some emails in one environment go via Notify and others via SMTP.
-- **Notify payload travels in a MIME header.** The Notify-specific payload (markdown body, personalisation, attachments, reference, reply-to) is attached to the `Symfony\Component\Mime\Email` as a JSON custom header (`X-Olcs-Notify-Payload`) by the `SendEmail` handler and extracted (and removed) by the transport. This keeps the standard `TransportInterface` contract — the same message object still works on the SMTP transport.
-- **Attachment validation is explicit.** `NotifyAttachmentValidator` enforces Notify's file-type allow-list and 2 MB limit before `prepareUpload()`, answering the draft's open question about attachment types.
-- **Link rewriting.** The `SendEmail` handler rewrites internal placeholder URIs (`http://selfserve/`, `http://internal/`) in the Markdown body to the environment's public URLs — Markdown bodies are composed environment-agnostically.
-- **`send_all_mail_to` retained** and driven by configuration value, so non-production redirect behaviour is unchanged under Notify.
+-   **Central switch, not per-handler migration.** The original plan migrated handlers in groups, each populating Notify fields with SMTP fallback per handler. As built, the renderer switches centrally on the DSN and the cutover unit is the environment (see above) — no handler changes, and no mixed state where some emails in one environment go via Notify and others via SMTP.
+-   **Notify payload travels in a MIME header.** The Notify-specific payload (markdown body, personalisation, attachments, reference, reply-to) is attached to the `Symfony\Component\Mime\Email` as a JSON custom header (`X-Olcs-Notify-Payload`) by the `SendEmail` handler and extracted (and removed) by the transport. This keeps the standard `TransportInterface` contract — the same message object still works on the SMTP transport.
+-   **Attachment validation is explicit.** `NotifyAttachmentValidator` enforces Notify's file-type allow-list and 2 MB limit before `prepareUpload()`, answering the draft's open question about attachment types.
+-   **Link rewriting.** The `SendEmail` handler rewrites internal placeholder URIs (`http://selfserve/`, `http://internal/`) in the Markdown body to the environment's public URLs — Markdown bodies are composed environment-agnostically.
+-   **`send_all_mail_to` retained** and driven by configuration value, so non-production redirect behaviour is unchanged under Notify.
 
 ## Alternatives Considered
 
@@ -121,22 +121,22 @@ Faithfully re-create each email type per language in the Notify admin UI. Reject
 
 ## Key files
 
-- `app/api/module/Email/src/Transport/GovUkNotifyTransport.php` — the production transport (passthrough dispatch, attachment upload, error mapping)
-- `app/api/module/Email/src/Transport/GovUkNotifyTransportFactory.php` + `Factory/GovUkNotifyTransportFactoryFactory.php` — DSN registration (`govuknotify://`, `govuknotify+mailpit://`)
-- `app/api/module/Email/src/Transport/DevNotifyTransport.php` + `src/View/NotifyChrome.php` — local Mailpit rendering
-- `app/api/module/Email/src/Transport/NotifyAttachmentValidator.php` — allow-list + size validation
-- `app/api/module/Email/src/Service/TemplateRenderer.php` — Notify-mode switch, `md` rendering, passthrough UUID stamping
-- `app/api/module/Email/src/Service/NotifyTestMailer.php` — admin "Send test via Notify" (VOL-7238)
-- `app/api/module/Email/src/Domain/CommandHandler/SendEmail.php` — payload header attachment, URI rewriting, `send_all_mail_to`
-- `app/api/module/Email/src/Data/Message.php` — `templateKey` / `personalisation` / `markdownBody` fields
-- `app/api/module/Cli/src/Command/Email/NotifyHelloWorldCommand.php` — end-to-end smoke CLI
-- `app/api/config/autoload/config.global.php` — `mail.dsn` + `email.notify.*` configuration
+-   `app/api/module/Email/src/Transport/GovUkNotifyTransport.php` — the production transport (passthrough dispatch, attachment upload, error mapping)
+-   `app/api/module/Email/src/Transport/GovUkNotifyTransportFactory.php` + `Factory/GovUkNotifyTransportFactoryFactory.php` — DSN registration (`govuknotify://`, `govuknotify+mailpit://`)
+-   `app/api/module/Email/src/Transport/DevNotifyTransport.php` + `src/View/NotifyChrome.php` — local Mailpit rendering
+-   `app/api/module/Email/src/Transport/NotifyAttachmentValidator.php` — allow-list + size validation
+-   `app/api/module/Email/src/Service/TemplateRenderer.php` — Notify-mode switch, `md` rendering, passthrough UUID stamping
+-   `app/api/module/Email/src/Service/NotifyTestMailer.php` — admin "Send test via Notify" (VOL-7238)
+-   `app/api/module/Email/src/Domain/CommandHandler/SendEmail.php` — payload header attachment, URI rewriting, `send_all_mail_to`
+-   `app/api/module/Email/src/Data/Message.php` — `templateKey` / `personalisation` / `markdownBody` fields
+-   `app/api/module/Cli/src/Command/Email/NotifyHelloWorldCommand.php` — end-to-end smoke CLI
+-   `app/api/config/autoload/config.global.php` — `mail.dsn` + `email.notify.*` configuration
 
 ## References
 
-- Parent spike: VOL-6877; parent epic: VOL-5578 (Amazon Linux 2 EOL); cutover enforcement/test-send: VOL-7238
-- GOV.UK Notify REST API docs: https://docs.notifications.service.gov.uk/rest-api.html
-- GOV.UK Notify PHP client docs: https://docs.notifications.service.gov.uk/php.html
-- alphagov/notifications-php-client: https://packagist.org/packages/alphagov/notifications-php-client
-- dvsa/dvsa-notify-service (the rejected Lambda starter): https://github.com/dvsa/dvsa-notify-service
-- league/commonmark (dev-mode renderer): https://commonmark.thephpleague.com/
+-   Parent spike: VOL-6877; parent epic: VOL-5578 (Amazon Linux 2 EOL); cutover enforcement/test-send: VOL-7238
+-   GOV.UK Notify REST API docs: https://docs.notifications.service.gov.uk/rest-api.html
+-   GOV.UK Notify PHP client docs: https://docs.notifications.service.gov.uk/php.html
+-   alphagov/notifications-php-client: https://packagist.org/packages/alphagov/notifications-php-client
+-   dvsa/dvsa-notify-service (the rejected Lambda starter): https://github.com/dvsa/dvsa-notify-service
+-   league/commonmark (dev-mode renderer): https://commonmark.thephpleague.com/

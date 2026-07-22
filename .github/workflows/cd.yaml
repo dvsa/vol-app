@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - prerelease
+      - release-8.1.x
 
 permissions:
   contents: read
@@ -280,7 +281,13 @@ jobs:
 
   terraform-account-nonprod:
     name: Account (nonprod)
-    if: ${{ needs.orchestrator.outputs.should-apply-account-terraform }}
+    # Disabled on the release-8.1.x hotfix branch: the account-nonprod GitHub
+    # environment only permits main/prerelease deploys (the job would fail and,
+    # via the transitive needs chain, skip deploy_int and the whole release),
+    # and applying v8.1.3-era account terraform would revert account-level
+    # resources main has since applied to nonprod. Skipped != failed, so the
+    # release chain is unaffected.
+    if: ${{ false && needs.orchestrator.outputs.should-apply-account-terraform }}
     concurrency:
       group: terraform-account-nonprod
     needs:
@@ -297,7 +304,11 @@ jobs:
 
   deploy_dev:
     name: (dev)
+    # Disabled on the release-8.1.x hotfix branch: dev tracks main and must not
+    # be rolled back to 8.1.x builds. deploy_int accepts a skipped deploy_dev on
+    # release runs, so the release flow (int -> prod ECR -> prep/prod) is unaffected.
     if: |
+      false &&
       always() &&
       !cancelled() &&
       !failure() &&

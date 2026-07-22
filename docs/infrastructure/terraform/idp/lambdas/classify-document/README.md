@@ -16,10 +16,10 @@ The previous Textract Lending Analysis step only recognised a fixed set of lendi
 
 This classifier supports configurable document types defined in `DOCUMENT_TYPES`, such as:
 
-- Bank statements
-- Transaction reports
-- Newspaper advertisements
-- Future document types added through configuration
+-   Bank statements
+-   Transaction reports
+-   Newspaper advertisements
+-   Future document types added through configuration
 
 Adding a new classification type should only require:
 
@@ -64,9 +64,9 @@ Amazon Bedrock Claude PDF requests require the document content to be supplied i
 
 There is no direct:
 
-- S3 document reference
-- URL source
-- Files API integration
+-   S3 document reference
+-   URL source
+-   Files API integration
 
 A PDF can become several MB after base64 encoding, which exceeds the Step Functions state payload limit.
 
@@ -95,15 +95,15 @@ Visual PDF understanding requires the model to analyse rendered document pages. 
 
 The model is responsible only for:
 
-- Identifying the document type for each page.
-- Returning page counts by document type.
-- Providing classification reasoning.
+-   Identifying the document type for each page.
+-   Returning page counts by document type.
+-   Providing classification reasoning.
 
 The Lambda calculates:
 
-- Dominant document type.
-- Classification confidence.
-- Classified page count.
+-   Dominant document type.
+-   Classification confidence.
+-   Classified page count.
 
 This keeps routing decisions deterministic and auditable.
 
@@ -269,8 +269,8 @@ No third-party dependencies are required.
 
 Uses AWS SDK v3 packages provided by the Lambda runtime:
 
-- `@aws-sdk/client-s3`
-- `@aws-sdk/client-bedrock-runtime`
+-   `@aws-sdk/client-s3`
+-   `@aws-sdk/client-bedrock-runtime`
 
 Runtime:
 
@@ -308,8 +308,8 @@ The Step Function should handle:
 
 ## Design Principles
 
-- Keep Step Function payloads small.
-- Keep classification decisions deterministic.
-- Keep document type definitions configurable.
-- Avoid infrastructure changes when new document types are introduced.
-- Use AI for document understanding, not workflow decisions.
+-   Keep Step Function payloads small.
+-   Keep classification decisions deterministic.
+-   Keep document type definitions configurable.
+-   Avoid infrastructure changes when new document types are introduced.
+-   Use AI for document understanding, not workflow decisions.

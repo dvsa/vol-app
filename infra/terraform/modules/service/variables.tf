@@ -95,3 +95,8 @@ variable "batch" {
     }))
   })
 }
+
+variable "dva_ni_export_s3uri" {
+  type        = string
+  description = "The S3 URI for the DVA NI export bucket, sourced from SSM parameters"
+}
