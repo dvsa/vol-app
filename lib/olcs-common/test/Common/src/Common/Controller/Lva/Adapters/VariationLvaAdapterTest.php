@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Controller\Lva\Adapters;
 
 use Common\Controller\Lva\Adapters\AbstractLvaAdapter;
@@ -8,7 +10,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Controller\Lva\Adapters\VariationLvaAdapter;
 
-class VariationLvaAdapterTest extends MockeryTestCase
+final class VariationLvaAdapterTest extends MockeryTestCase
 {
     protected $sut;
 

@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\ShortNotice\MissingSection;
  * Class RegisteredBusRouteTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator\ShortNotice
  */
-class MissingSectionTest extends \PHPUnit\Framework\TestCase
+final class MissingSectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * tests whether the short notice section exists correctly
@@ -36,19 +36,17 @@ class MissingSectionTest extends \PHPUnit\Framework\TestCase
     /**
      * Provider for testIsValid
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isValidProvider(): array
+    public static function isValidProvider(): \Iterator
     {
-        return [
-            ['N', [], true],
-            ['N', ['busShortNotice' => []], true],
-            ['N', ['busShortNotice' => null], true],
-            ['N', ['busShortNotice' => 'content'], true],
-            ['Y', [], false],
-            ['Y', ['busShortNotice' => []], false],
-            ['Y', ['busShortNotice' => null], false],
-            ['Y', ['busShortNotice' => 'content'], true]
-        ];
+        yield ['N', [], true];
+        yield ['N', ['busShortNotice' => []], true];
+        yield ['N', ['busShortNotice' => null], true];
+        yield ['N', ['busShortNotice' => 'content'], true];
+        yield ['Y', [], false];
+        yield ['Y', ['busShortNotice' => []], false];
+        yield ['Y', ['busShortNotice' => null], false];
+        yield ['Y', ['busShortNotice' => 'content'], true];
     }
 }

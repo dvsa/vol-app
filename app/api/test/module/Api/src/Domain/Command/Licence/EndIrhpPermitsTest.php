@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * EndIrhpPermits test
  */
-class EndIrhpPermitsTest extends TestCase
+final class EndIrhpPermitsTest extends TestCase
 {
     public function testStructure(): void
     {
@@ -25,14 +25,11 @@ class EndIrhpPermitsTest extends TestCase
             ]
         );
 
-        static::assertEquals($id, $sut->getId());
-        static::assertEquals($context, $sut->getContext());
-        static::assertEquals(
-            [
-                'id' => $id,
-                'context' => $context,
-            ],
-            $sut->getArrayCopy()
-        );
+        $this->assertEquals($id, $sut->getId());
+        $this->assertEquals($context, $sut->getContext());
+        $this->assertEquals([
+            'id' => $id,
+            'context' => $context,
+        ], $sut->getArrayCopy());
     }
 }

@@ -16,10 +16,11 @@ use Dvsa\Olcs\Email\Service\TemplateRendererFactory;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class TemplateRendererFactoryTest extends MockeryTestCase
+final class TemplateRendererFactoryTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new TemplateRendererFactory();

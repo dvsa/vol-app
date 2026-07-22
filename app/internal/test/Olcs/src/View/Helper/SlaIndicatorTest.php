@@ -8,11 +8,11 @@ use Olcs\View\Helper\SlaIndicator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-class SlaIndicatorTest extends TestCase
+final class SlaIndicatorTest extends TestCase
 {
-    public const INACTIVE_HTML = '<span class="status grey">Inactive</span>';
-    public const FAIL_HTML = '<span class="status red">Fail</span>';
-    public const PASS_HTML = '<span class="status green">Pass</span>';
+    public const string INACTIVE_HTML = '<span class="status grey">Inactive</span>';
+    public const string FAIL_HTML = '<span class="status red">Fail</span>';
+    public const string PASS_HTML = '<span class="status green">Pass</span>';
 
     /**
      * Tests the invoke method.

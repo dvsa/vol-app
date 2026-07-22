@@ -15,8 +15,9 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class PublicationPoliceDataEntityTest extends EntityTester
+final class PublicationPoliceDataEntityTest extends EntityTester
 {
+    #[\Override]
     public function setUp(): void
     {
         /** @var \Dvsa\Olcs\Api\Entity\Publication\PublicationPoliceData entity */
@@ -54,11 +55,9 @@ class PublicationPoliceDataEntityTest extends EntityTester
         $this->assertEquals($familyName, $sut->getFamilyName());
     }
 
-    public static function birthDateProvider(): array
+    public static function birthDateProvider(): \Iterator
     {
-        return [
-            [null],
-            [new \DateTime()]
-        ];
+        yield [null];
+        yield [new \DateTime()];
     }
 }

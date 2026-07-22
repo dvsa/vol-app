@@ -1,6 +1,6 @@
-DELIMITER $$
-
 DROP PROCEDURE IF EXISTS sp_NI_Extract_update_table_counts;
+
+DELIMITER $$
 
 CREATE PROCEDURE sp_NI_Extract_update_table_counts()
 

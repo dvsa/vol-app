@@ -27,7 +27,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateVehicleListDocumentTest extends AbstractCommandHandlerTestCase
+final class CreateVehicleListDocumentTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -107,14 +107,12 @@ class CreateVehicleListDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dataProviderTestHandleCommandAll(): array
+    public static function dataProviderTestHandleCommandAll(): \Iterator
     {
-        return [
-            // is DP type, is NI, Expected description, Expected template ID,
-            [true, true, Document::GV_DISC_LETTER_NI, 'New disc notification'],
-            [true, false, Document::GV_DISC_LETTER_GB, 'New disc notification'],
-            [false, true, Document::GV_VEHICLE_LIST_NI, 'Goods Vehicle List'],
-            [false, false, Document::GV_VEHICLE_LIST_GB, 'Goods Vehicle List'],
-        ];
+        // is DP type, is NI, Expected description, Expected template ID,
+        yield [true, true, Document::GV_DISC_LETTER_NI, 'New disc notification'];
+        yield [true, false, Document::GV_DISC_LETTER_GB, 'New disc notification'];
+        yield [false, true, Document::GV_VEHICLE_LIST_NI, 'Goods Vehicle List'];
+        yield [false, false, Document::GV_VEHICLE_LIST_GB, 'Goods Vehicle List'];
     }
 }

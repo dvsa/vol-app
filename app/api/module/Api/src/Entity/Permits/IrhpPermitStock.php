@@ -17,15 +17,10 @@ use RuntimeException;
 
 /**
  * IrhpPermitStock Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="irhp_permit_stock",
- *    indexes={
- *        @ORM\Index(name="fk_irhp_permit_stock_irhp_permit_types1_idx",
- *     columns={"irhp_permit_type_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_permit_stock')]
+#[ORM\Index(name: 'fk_irhp_permit_stock_irhp_permit_types1_idx', columns: ['irhp_permit_type_id'])]
+#[ORM\Entity]
 class IrhpPermitStock extends AbstractIrhpPermitStock implements DeletableInterface
 {
     public const STATUS_SCORING_NEVER_RUN = 'stock_scoring_never_run';

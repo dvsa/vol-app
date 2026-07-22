@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class ContinuationDetailTest extends QueryHandlerTestCase
+final class ContinuationDetailTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

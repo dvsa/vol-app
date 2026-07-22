@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class PermitStartDateGeneratorTest extends MockeryTestCase
+final class PermitStartDateGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

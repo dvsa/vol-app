@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\IrhpApplication;
 
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdatePeriod;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdatePeriod;
 /**
  * Update Period test
  */
-class UpdatePeriodTest extends \PHPUnit\Framework\TestCase
+final class UpdatePeriodTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

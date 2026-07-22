@@ -24,7 +24,7 @@ use Doctrine\ORM\Query;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class FinancialHistoryTest extends QueryHandlerTestCase
+final class FinancialHistoryTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

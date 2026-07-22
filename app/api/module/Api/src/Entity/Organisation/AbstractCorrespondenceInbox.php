@@ -21,22 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="correspondence_inbox",
- *    indexes={
- *        @ORM\Index(name="ix_correspondence_inbox_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_correspondence_inbox_document_id", columns={"document_id"}),
- *        @ORM\Index(name="ix_correspondence_inbox_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_correspondence_inbox_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="uk_correspondence_inbox_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_correspondence_inbox_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'correspondence_inbox')]
+#[ORM\Index(name: 'ix_correspondence_inbox_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_correspondence_inbox_document_id', columns: ['document_id'])]
+#[ORM\Index(name: 'ix_correspondence_inbox_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_correspondence_inbox_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'uk_correspondence_inbox_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_correspondence_inbox_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractCorrespondenceInbox implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,108 +43,97 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to document
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
     protected $document;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * archived
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="archived", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'archived', nullable: false, options: ['default' => 0])]
     protected $archived = 0;
 
     /**
      * Set true when external user has accessed the file.  If not accessed by x days email sent to user.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="accessed", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'accessed', nullable: false, options: ['default' => 0])]
     protected $accessed = 0;
 
     /**
      * An email has been sent to user to notify a file has not been accessed. Suppresses duplicate email send
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="email_reminder_sent", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'email_reminder_sent', nullable: false, options: ['default' => 0])]
     protected $emailReminderSent = 0;
 
     /**
      * User has printed the document.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="printed", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'printed', nullable: false, options: ['default' => 0])]
     protected $printed = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**

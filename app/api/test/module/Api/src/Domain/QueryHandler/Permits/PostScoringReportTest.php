@@ -12,7 +12,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\PostScoringReport as PostScoringReportQry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class PostScoringReportTest extends QueryHandlerTestCase
+final class PostScoringReportTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

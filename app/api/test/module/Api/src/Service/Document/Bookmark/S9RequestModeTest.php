@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase as TestCase;
  *
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class S9RequestModeTest extends TestCase
+final class S9RequestModeTest extends TestCase
 {
     public function testAlias(): void
     {

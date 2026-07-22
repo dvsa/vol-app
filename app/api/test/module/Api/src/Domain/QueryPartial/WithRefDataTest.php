@@ -13,20 +13,17 @@ use Mockery as m;
 /**
  * WithRefDataTest
  */
-class WithRefDataTest extends QueryPartialTestCase
+final class WithRefDataTest extends QueryPartialTestCase
 {
     /** @var m\Mock */
     private $em;
-
-    /** @var m\Mock */
-    private $with;
 
     public function setUp(): void
     {
         $this->em = m::mock(EntityManagerInterface::class);
         // Cannot mock With as it is Final
-        $this->with = new With();
-        $this->sut = new WithRefData($this->em, $this->with);
+        $with = new With();
+        $this->sut = new WithRefData($this->em, $with);
 
         parent::setUp();
     }
@@ -49,22 +46,20 @@ class WithRefDataTest extends QueryPartialTestCase
         );
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
-            [
-                'SELECT a, w0, w1 FROM foo a LEFT JOIN a.property2 w0 LEFT JOIN a.property3 w1',
-                []
-            ],
-            [
-                'SELECT a, w0, w1 FROM foo a LEFT JOIN a.property2 w0 LEFT JOIN a.property3 w1',
-                ['ENTITY']
-            ],
-            [
-                'SELECT a, w0, w1 FROM foo a LEFT JOIN ALIAS.property2 w0 LEFT JOIN ALIAS.property3 w1',
-                ['ENTITY', 'ALIAS'],
-                'ENTITY'
-            ],
+        yield [
+            'SELECT a, w0, w1 FROM foo a LEFT JOIN a.property2 w0 LEFT JOIN a.property3 w1',
+            []
+        ];
+        yield [
+            'SELECT a, w0, w1 FROM foo a LEFT JOIN a.property2 w0 LEFT JOIN a.property3 w1',
+            ['ENTITY']
+        ];
+        yield [
+            'SELECT a, w0, w1 FROM foo a LEFT JOIN ALIAS.property2 w0 LEFT JOIN ALIAS.property3 w1',
+            ['ENTITY', 'ALIAS'],
+            'ENTITY'
         ];
     }
 }

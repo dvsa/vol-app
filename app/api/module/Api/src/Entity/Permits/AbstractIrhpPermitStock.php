@@ -21,22 +21,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irhp_permit_stock",
- *    indexes={
- *        @ORM\Index(name="fk_irhp_permit_stock_application_path_group_id", columns={"application_path_group_id"}),
- *        @ORM\Index(name="fk_irhp_permit_stock_business_process_ref_data_id", columns={"business_process"}),
- *        @ORM\Index(name="fk_irhp_permit_stock_country_id", columns={"country_id"}),
- *        @ORM\Index(name="fk_irhp_permit_stock_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_irhp_permit_stock_irhp_permit_types1_idx", columns={"irhp_permit_type_id"}),
- *        @ORM\Index(name="fk_irhp_permit_stock_last_modified_by_user_id", columns={"last_modified_by"}),
- *        @ORM\Index(name="fk_irhp_permit_stock_permit_category_ref_data_id", columns={"permit_category"}),
- *        @ORM\Index(name="ix_irhp_permit_stock_status", columns={"status"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_permit_stock')]
+#[ORM\Index(name: 'fk_irhp_permit_stock_application_path_group_id', columns: ['application_path_group_id'])]
+#[ORM\Index(name: 'fk_irhp_permit_stock_business_process_ref_data_id', columns: ['business_process'])]
+#[ORM\Index(name: 'fk_irhp_permit_stock_country_id', columns: ['country_id'])]
+#[ORM\Index(name: 'fk_irhp_permit_stock_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_irhp_permit_stock_irhp_permit_types1_idx', columns: ['irhp_permit_type_id'])]
+#[ORM\Index(name: 'fk_irhp_permit_stock_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'fk_irhp_permit_stock_permit_category_ref_data_id', columns: ['permit_category'])]
+#[ORM\Index(name: 'ix_irhp_permit_stock_status', columns: ['status'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,184 +45,165 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * IrhpPermitType
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_permit_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irhp_permit_type_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType::class, fetch: 'LAZY')]
     protected $irhpPermitType;
 
     /**
      * ApplicationPathGroup
      *
      * @var \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_path_group_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'application_path_group_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup::class, fetch: 'LAZY')]
     protected $applicationPathGroup;
 
     /**
      * BusinessProcess
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="business_process", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'business_process', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $businessProcess;
 
     /**
      * Country
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", fetch="LAZY")
-     * @ORM\JoinColumn(name="country_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'country_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, fetch: 'LAZY')]
     protected $country;
 
     /**
      * PermitCategory
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="permit_category", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'permit_category', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $permitCategory;
 
     /**
      * Status
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Period name key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="period_name_key", length=512, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'period_name_key', length: 512, nullable: true)]
     protected $periodNameKey;
 
     /**
      * Valid from
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="valid_from", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'valid_from', nullable: true)]
     protected $validFrom;
 
     /**
      * Valid to
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="valid_to", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'valid_to', nullable: true)]
     protected $validTo;
 
     /**
      * Initial stock
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="initial_stock", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'initial_stock', nullable: true)]
     protected $initialStock;
 
     /**
      * Hidden ss
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="hidden_ss", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'hidden_ss', nullable: false, options: ['default' => 0])]
     protected $hiddenSs = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * IrhpPermitJurisdictionQuotas
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitJurisdictionQuota", mappedBy="irhpPermitStock")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitJurisdictionQuota::class, mappedBy: 'irhpPermitStock')]
     protected $irhpPermitJurisdictionQuotas;
 
     /**
      * IrhpPermitRanges
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange", mappedBy="irhpPermitStock")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange::class, mappedBy: 'irhpPermitStock')]
     protected $irhpPermitRanges;
 
     /**
      * IrhpPermitSectorQuotas
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitSectorQuota", mappedBy="irhpPermitStock")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitSectorQuota::class, mappedBy: 'irhpPermitStock')]
     protected $irhpPermitSectorQuotas;
 
     /**
      * IrhpPermitWindows
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow", mappedBy="irhpPermitStock")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow::class, mappedBy: 'irhpPermitStock')]
     protected $irhpPermitWindows;
 
     /**

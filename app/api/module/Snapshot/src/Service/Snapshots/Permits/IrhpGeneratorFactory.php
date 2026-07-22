@@ -19,7 +19,7 @@ class IrhpGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IrhpGenerator
     {
         return new IrhpGenerator(
             $container->get(AbstractGeneratorServices::class),

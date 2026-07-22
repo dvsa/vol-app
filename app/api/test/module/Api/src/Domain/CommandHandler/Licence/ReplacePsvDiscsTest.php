@@ -24,7 +24,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ReplacePsvDiscsTest extends AbstractCommandHandlerTestCase
+final class ReplacePsvDiscsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

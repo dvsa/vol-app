@@ -38,7 +38,7 @@ class InspectionRequestDueDate extends AbstractValidator
      * @return bool
      */
     #[\Override]
-    public function isValid($value, array $context = null)
+    public function isValid($value, ?array $context = null)
     {
         $dueDate = $value;
         $requestedDate = implode(

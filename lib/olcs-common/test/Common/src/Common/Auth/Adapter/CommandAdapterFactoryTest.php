@@ -12,7 +12,7 @@ use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class CommandAdapterFactoryTest extends MockeryTestCase
+final class CommandAdapterFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
@@ -27,9 +27,7 @@ class CommandAdapterFactoryTest extends MockeryTestCase
         $this->setUpServiceManager();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -39,10 +37,8 @@ class CommandAdapterFactoryTest extends MockeryTestCase
         $this->assertIsCallable(fn(\Psr\Container\ContainerInterface $container, string $requestedName, ?array $options = null): \Common\Auth\Adapter\CommandAdapter => $this->sut->__invoke($container, $requestedName, $options));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeReturnsAnInstanceOfCommandAdapter(): void
     {
         // Setup

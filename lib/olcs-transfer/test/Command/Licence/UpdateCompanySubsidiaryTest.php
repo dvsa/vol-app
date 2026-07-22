@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Licence;
 
 use Dvsa\Olcs\Transfer\Command\Licence\UpdateCompanySubsidiary;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Command\Licence\UpdateCompanySubsidiary
- */
-class UpdateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Licence\UpdateCompanySubsidiary::class)]
+final class UpdateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -17,6 +17,6 @@ class UpdateCompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals(7777, $command->getLicence());
+        $this->assertEquals(7777, $command->getLicence());
     }
 }

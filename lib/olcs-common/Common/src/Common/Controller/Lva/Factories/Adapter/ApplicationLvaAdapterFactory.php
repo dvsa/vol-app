@@ -11,7 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class ApplicationLvaAdapterFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationLvaAdapter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ApplicationLvaAdapter
     {
         return new ApplicationLvaAdapter($container);
     }

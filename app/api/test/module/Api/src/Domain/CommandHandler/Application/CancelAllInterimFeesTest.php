@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Application\CancelAllInterimFees;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CancelAllInterimFeesTest extends AbstractCommandHandlerTestCase
+final class CancelAllInterimFeesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

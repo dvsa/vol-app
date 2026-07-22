@@ -33,7 +33,7 @@ class Result
      *
      * @return void
      */
-    public function __construct(BundleSerializableInterface $object = null, array $bundle = [], array $values = [])
+    public function __construct(?BundleSerializableInterface $object = null, array $bundle = [], array $values = [])
     {
         $this->object = $object;
         $this->bundle = $bundle;

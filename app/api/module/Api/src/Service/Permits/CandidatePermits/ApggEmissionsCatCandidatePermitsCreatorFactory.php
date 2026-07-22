@@ -15,7 +15,7 @@ class ApggEmissionsCatCandidatePermitsCreatorFactory implements FactoryInterface
      * @return ApggEmissionsCatCandidatePermitsCreator
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApggEmissionsCatCandidatePermitsCreator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ApggEmissionsCatCandidatePermitsCreator
     {
         return new ApggEmissionsCatCandidatePermitsCreator(
             $container->get('PermitsCandidatePermitsApggCandidatePermitFactory'),

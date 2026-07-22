@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\InputFilters;
 
 use Common\Form\Elements\InputFilters\CompanyNumber;
@@ -8,9 +10,9 @@ use Laminas\Validator\StringLength;
 
 /**
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
- * @covers Common\Form\Elements\InputFilters\CompanyNumber
  */
-class CompanyNumberTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\Elements\InputFilters\CompanyNumber::class)]
+final class CompanyNumberTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  CompanyNumber */
     private $element;

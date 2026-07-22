@@ -24,7 +24,7 @@ class BadQueryResponseException extends Exception
     /**
      * @param Throwable|null $previous
      */
-    public function __construct(string $message, QueryInterface $query, Response $response, Throwable $previous = null)
+    public function __construct(string $message, QueryInterface $query, Response $response, ?Throwable $previous = null)
     {
         parent::__construct($message, 0, $previous);
         $this->query = $query;

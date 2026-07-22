@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Review;
 
 use Common\Service\Helper\DataHelperService;
@@ -22,7 +24,7 @@ use Common\Service\Review\LicenceConditionsUndertakingsReviewService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class LicenceConditionsUndertakingsReviewServiceTest extends MockeryTestCase
+final class LicenceConditionsUndertakingsReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 

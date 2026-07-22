@@ -17,7 +17,7 @@ class EbsrPackFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Input
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Input
     {
         $validator = $container->get('ValidatorManager')->get('FileMimeType');
         $validator->setOptions(['mimeType' => 'application/zip']);

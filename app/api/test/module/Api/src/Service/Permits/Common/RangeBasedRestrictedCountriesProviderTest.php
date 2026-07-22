@@ -22,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class RangeBasedRestrictedCountriesProviderTest extends MockeryTestCase
+final class RangeBasedRestrictedCountriesProviderTest extends MockeryTestCase
 {
     public function testGetList(): void
     {

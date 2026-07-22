@@ -16,13 +16,10 @@ use Mockery as m;
  * Class SlaExceptionTest
  * @package OlcsTest\Service\Data
  */
-class SlaExceptionTest extends AbstractDataServiceTestCase
+final class SlaExceptionTest extends AbstractDataServiceTestCase
 {
     /** @var SlaException */
     private $sut;
-
-    /** @var AbstractListDataServiceServices */
-    private $abstractListDataServiceServices;
 
     private $sampleData = [
         [
@@ -52,11 +49,11 @@ class SlaExceptionTest extends AbstractDataServiceTestCase
     {
         parent::setUp();
 
-        $this->abstractListDataServiceServices = new AbstractListDataServiceServices(
+        $abstractListDataServiceServices = new AbstractListDataServiceServices(
             $this->abstractDataServiceServices
         );
 
-        $this->sut = new SlaException($this->abstractListDataServiceServices);
+        $this->sut = new SlaException($abstractListDataServiceServices);
     }
 
     public function testFetchListData(): void

@@ -21,7 +21,7 @@ class AddDuplicateVehicleControllerFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AddDuplicateVehicleController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): AddDuplicateVehicleController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         $formHelper = $container->get(FormHelperService::class);

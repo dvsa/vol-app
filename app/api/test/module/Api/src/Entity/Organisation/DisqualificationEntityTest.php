@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Entity\Organisation\Disqualification as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class DisqualificationEntityTest extends EntityTester
+final class DisqualificationEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -79,9 +79,9 @@ class DisqualificationEntityTest extends EntityTester
             'N'
         );
         $this->assertSame('N', $this->sut->getIsDisqualified());
-        $this->assertSame(null, $this->sut->getStartDate());
-        $this->assertSame(null, $this->sut->getNotes());
-        $this->assertSame(null, $this->sut->getPeriod());
+        $this->assertNull($this->sut->getStartDate());
+        $this->assertNull($this->sut->getNotes());
+        $this->assertNull($this->sut->getPeriod());
     }
 
     public function testUpdateAllParams(): void
@@ -116,7 +116,7 @@ class DisqualificationEntityTest extends EntityTester
 
     public function testGetStatusN(): void
     {
-        $this->sut->setStartDate((new \Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime('-1 month'))->format('Y-m-d'));
+        $this->sut->setStartDate(new \Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime('-1 month')->format('Y-m-d'));
         $this->sut->setPeriod(12);
         $this->sut->setIsDisqualified('N');
 
@@ -126,29 +126,27 @@ class DisqualificationEntityTest extends EntityTester
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetStatus')]
     public function testGetStatus(mixed $expectedStatus, mixed $startDate, mixed $period): void
     {
-        $this->sut->setStartDate((new \Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime($startDate))->format('Y-m-d'));
+        $this->sut->setStartDate(new \Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime($startDate)->format('Y-m-d'));
         $this->sut->setPeriod($period);
         $this->sut->setIsDisqualified('Y');
 
         $this->assertSame($expectedStatus, $this->sut->getStatus());
     }
 
-    public static function dpGetStatus(): array
+    public static function dpGetStatus(): \Iterator
     {
-        return [
-            [Entity::STATUS_INACTIVE, '-2 month', 1],
-            [Entity::STATUS_INACTIVE, '-12 month', 11],
-            [Entity::STATUS_INACTIVE, '-1 year', 11],
-            [Entity::STATUS_INACTIVE, '+1 day', null],
-            [Entity::STATUS_INACTIVE, '+1 day', 0],
-            [Entity::STATUS_ACTIVE, '-1 month', 3],
-            [Entity::STATUS_ACTIVE, '-1 month', null],
-            [Entity::STATUS_ACTIVE, '-1 month', 0],
-            [Entity::STATUS_ACTIVE, '-1 year', null],
-            [Entity::STATUS_ACTIVE, '-1 year', 0],
-            [Entity::STATUS_ACTIVE, '', 0],
-            [Entity::STATUS_ACTIVE, '', 1],
-        ];
+        yield [Entity::STATUS_INACTIVE, '-2 month', 1];
+        yield [Entity::STATUS_INACTIVE, '-12 month', 11];
+        yield [Entity::STATUS_INACTIVE, '-1 year', 11];
+        yield [Entity::STATUS_INACTIVE, '+1 day', null];
+        yield [Entity::STATUS_INACTIVE, '+1 day', 0];
+        yield [Entity::STATUS_ACTIVE, '-1 month', 3];
+        yield [Entity::STATUS_ACTIVE, '-1 month', null];
+        yield [Entity::STATUS_ACTIVE, '-1 month', 0];
+        yield [Entity::STATUS_ACTIVE, '-1 year', null];
+        yield [Entity::STATUS_ACTIVE, '-1 year', 0];
+        yield [Entity::STATUS_ACTIVE, '', 0];
+        yield [Entity::STATUS_ACTIVE, '', 1];
     }
 
     public function testGetCalculatedBundleValues(): void

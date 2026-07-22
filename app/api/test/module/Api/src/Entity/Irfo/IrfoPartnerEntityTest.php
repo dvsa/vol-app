@@ -10,11 +10,9 @@ use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Dvsa\Olcs\Api\Entity\Irfo\IrfoPartner as Entity;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Irfo\IrfoPartner
- * @covers Dvsa\Olcs\Api\Entity\Irfo\AbstractIrfoPartner
- */
-class IrfoPartnerEntityTest extends EntityTester
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Irfo\IrfoPartner::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Irfo\AbstractIrfoPartner::class)]
+final class IrfoPartnerEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -39,13 +37,13 @@ class IrfoPartnerEntityTest extends EntityTester
 
         $sut = new Entity($this->mockOrg, $name);
 
-        static::assertEquals($this->mockOrg, $sut->getOrganisation());
-        static::assertEquals($name, $sut->getName());
+        $this->assertEquals($this->mockOrg, $sut->getOrganisation());
+        $this->assertEquals($name, $sut->getName());
     }
 
     public function testGetCalculatedValues(): void
     {
-        $actual = (new Entity($this->mockOrg, ''))->jsonSerialize();
-        static::assertNull($actual['organisation']);
+        $actual = new Entity($this->mockOrg, '')->jsonSerialize();
+        $this->assertNull($actual['organisation']);
     }
 }

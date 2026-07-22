@@ -8,13 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * MasterTemplate Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="master_template")
  */
+#[ORM\Table(name: 'master_template')]
+#[ORM\Entity]
 class MasterTemplate extends AbstractMasterTemplate
 {
     public const LOCALE_EN_GB = 'en_GB';
+    public const LOCALE_EN_NI = 'en_NI';
     public const LOCALE_CY_GB = 'cy_GB';
 
     /**

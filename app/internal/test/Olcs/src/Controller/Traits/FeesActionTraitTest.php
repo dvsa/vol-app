@@ -9,7 +9,7 @@ use Mockery as m;
 use OlcsTest\Controller\Traits\Stub\FeesActionTraitStub;
 
 #[\PHPUnit\Framework\Attributes\CoversTrait(\Olcs\Controller\Traits\FeesActionTrait::class)]
-class FeesActionTraitTest extends MockeryTestCase
+final class FeesActionTraitTest extends MockeryTestCase
 {
     /** @var FeesActionTraitStub | m\MockInterface */
     private $sut;
@@ -22,6 +22,7 @@ class FeesActionTraitTest extends MockeryTestCase
     /** @var \Common\Service\Helper\FormHelperService | m\MockInterface  */
     private $mockFormHlpr;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockForm = m::mock(\Laminas\Form\FormInterface::class);
@@ -45,6 +46,6 @@ class FeesActionTraitTest extends MockeryTestCase
             ->shouldReceive('createForm')->once()->with('FeeFilter', false)->andReturn($this->mockForm)
             ->shouldReceive('setFormActionFromRequest')->once()->with($this->mockForm, $this->mockReq)->andReturnSelf();
 
-        static::assertSame($this->mockForm, $this->sut->getFeeFilterForm($filters));
+        $this->assertSame($this->mockForm, $this->sut->getFeeFilterForm($filters));
     }
 }

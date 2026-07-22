@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class UserPasswordResetEntityTest extends EntityTester
+final class UserPasswordResetEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -95,14 +95,12 @@ class UserPasswordResetEntityTest extends EntityTester
         $validTo->modify('+10 seconds');
         $sut->setValidTo($validTo);
 
-        $this->assertEquals($canResetPassword, $sut->isValid($loginId));
+        $this->assertSame($canResetPassword, $sut->isValid($loginId));
     }
 
-    public static function dpTrueFalseProvider(): array
+    public static function dpTrueFalseProvider(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 }

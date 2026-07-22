@@ -13,7 +13,7 @@ class DashboardApplicationLinkFactory implements FactoryInterface
      * @return DashboardApplicationLink
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $urlHelper = $container->get('Helper\Url');
         return new DashboardApplicationLink($urlHelper);

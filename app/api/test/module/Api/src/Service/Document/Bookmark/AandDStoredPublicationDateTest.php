@@ -12,10 +12,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class AandDStoredPublicationDateTest extends MockeryTestCase
+final class AandDStoredPublicationDateTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new AandDStoredPublicationDate();
@@ -34,34 +35,32 @@ class AandDStoredPublicationDateTest extends MockeryTestCase
         $this->assertEquals($result, $this->sut->render());
     }
 
-    public static function publicationsProvider(): array
+    public static function publicationsProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'publicationLinks' => [
-                        [
-                            'publication' => [
-                                'pubDate' => '2015-10-31',
-                                'id' => 2,
-                                'publicationNo' => '4'
-                            ],
-                            'publicationSection' => [
-                                'id' => 1
-                            ]
+                'publicationLinks' => [
+                    [
+                        'publication' => [
+                            'pubDate' => '2015-10-31',
+                            'id' => 2,
+                            'publicationNo' => '4'
                         ],
+                        'publicationSection' => [
+                            'id' => 1
+                        ]
                     ],
                 ],
-                '31/10/2015'
             ],
-            [
-                ['publicationLinks' => []],
-                ''
-            ],
-            [
-                [],
-                ''
-            ]
+            '31/10/2015'
+        ];
+        yield [
+            ['publicationLinks' => []],
+            ''
+        ];
+        yield [
+            [],
+            ''
         ];
     }
 }

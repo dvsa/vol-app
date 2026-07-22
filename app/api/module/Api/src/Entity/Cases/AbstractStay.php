@@ -21,19 +21,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="stay",
- *    indexes={
- *        @ORM\Index(name="ix_stay_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_stay_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_stay_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_stay_outcome", columns={"outcome"}),
- *        @ORM\Index(name="ix_stay_stay_type", columns={"stay_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'stay')]
+#[ORM\Index(name: 'ix_stay_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_stay_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_stay_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_stay_outcome', columns: ['outcome'])]
+#[ORM\Index(name: 'ix_stay_stay_type', columns: ['stay_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractStay implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -46,118 +42,106 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * Outcome
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="outcome", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'outcome', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $outcome;
 
     /**
      * TC or UT
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="stay_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'stay_type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $stayType;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Request date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="request_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'request_date', nullable: true)]
     protected $requestDate;
 
     /**
      * Withdrawn date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="withdrawn_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'withdrawn_date', nullable: true)]
     protected $withdrawnDate;
 
     /**
      * Decision date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="decision_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'decision_date', nullable: true)]
     protected $decisionDate;
 
     /**
      * Notes
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="notes", length=1100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'notes', length: 1100, nullable: true)]
     protected $notes;
 
     /**
      * dvsaNotified
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="dvsa_notified", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'dvsa_notified', nullable: false, options: ['default' => 0])]
     protected $dvsaNotified = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

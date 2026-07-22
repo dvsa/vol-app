@@ -12,7 +12,7 @@ use RunTimeException;
 class QueryServiceFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): QueryService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): QueryService
     {
         $config = $container->get('Config');
 

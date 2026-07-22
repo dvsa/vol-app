@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -7,10 +9,8 @@ use Common\Service\Table\Formatter\EbsrRegNumberLink;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Common\Service\Table\Formatter\EbsrRegNumberLink
- */
-class EbsrRegNumberLinkTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Formatter\EbsrRegNumberLink::class)]
+final class EbsrRegNumberLinkTest extends MockeryTestCase
 {
     protected $urlHelper;
 
@@ -40,10 +40,10 @@ class EbsrRegNumberLinkTest extends MockeryTestCase
     /**
      * Tests the formatting for the different possible input array formats
      *
-     * @dataProvider formatProvider
      *
      * @param $data
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('formatProvider')]
     public function testFormat($data): void
     {
         $id = 1234;
@@ -62,9 +62,9 @@ class EbsrRegNumberLinkTest extends MockeryTestCase
     /**
      * Data provider for testFormat
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function formatProvider()
+    public static function formatProvider(): \Iterator
     {
         $id = 1234;
         $regNo = 5678;
@@ -77,10 +77,7 @@ class EbsrRegNumberLinkTest extends MockeryTestCase
         $ebsrSubmissionFormat = [
             'busReg' => $txcInboxFormat
         ];
-
-        return [
-            [$txcInboxFormat],
-            [$ebsrSubmissionFormat],
-        ];
+        yield [$txcInboxFormat];
+        yield [$ebsrSubmissionFormat];
     }
 }

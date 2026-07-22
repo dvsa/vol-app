@@ -28,7 +28,7 @@ use RuntimeException;
  *
  * Initially auto-generated but won't be overridden
  */
-class IrhpPermitStockEntityTest extends EntityTester
+final class IrhpPermitStockEntityTest extends EntityTester
 {
     use ProcessDateTrait;
 
@@ -303,19 +303,17 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionRaised);
     }
 
-    public static function dpBilateralMoroccoException(): array
+    public static function dpBilateralMoroccoException(): \Iterator
     {
-        return [
-            [
-                Country::ID_MOROCCO,
-                null,
-                'Permit category must be specified for Bilateral Morocco stocks'
-            ],
-            [
-                Country::ID_BELARUS,
-                m::mock(RefData::class),
-                'Permit category is only applicable for Bilateral Morocco stocks'
-            ],
+        yield [
+            Country::ID_MOROCCO,
+            null,
+            'Permit category must be specified for Bilateral Morocco stocks'
+        ];
+        yield [
+            Country::ID_BELARUS,
+            m::mock(RefData::class),
+            'Permit category is only applicable for Bilateral Morocco stocks'
         ];
     }
 
@@ -364,12 +362,10 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public static function dpHasOpenWindow(): array
+    public static function dpHasOpenWindow(): \Iterator
     {
-        return [
-            [null, false],
-            [m::mock(IrhpPermitWindow::class), true],
-        ];
+        yield [null, false];
+        yield [m::mock(IrhpPermitWindow::class), true];
     }
 
     public function testGetStatusDescription(): void
@@ -574,39 +570,37 @@ class IrhpPermitStockEntityTest extends EntityTester
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function canDeleteProvider(): array
+    public static function canDeleteProvider(): \Iterator
     {
-        return [
-            'valid delete' => [
-                [
-                    'irhpPermitRanges' => [],
-                    'irhpPermitWindows' => [],
-                ],
-                true,
+        yield 'valid delete' => [
+            [
+                'irhpPermitRanges' => [],
+                'irhpPermitWindows' => [],
             ],
-            'existing range' => [
-                [
-                    'irhpPermitRanges' => [m::mock(IrhpPermitRange::class)],
-                    'irhpPermitWindows' => [],
-                ],
-                false,
+            true,
+        ];
+        yield 'existing range' => [
+            [
+                'irhpPermitRanges' => [m::mock(IrhpPermitRange::class)],
+                'irhpPermitWindows' => [],
             ],
-            'existing window' => [
-                [
-                    'irhpPermitRanges' => [],
-                    'irhpPermitWindows' => [m::mock(IrhpPermitWindow::class)],
-                ],
-                false,
+            false,
+        ];
+        yield 'existing window' => [
+            [
+                'irhpPermitRanges' => [],
+                'irhpPermitWindows' => [m::mock(IrhpPermitWindow::class)],
             ],
-            'existing window and range' => [
-                [
-                    'irhpPermitRanges' => [m::mock(IrhpPermitRange::class)],
-                    'irhpPermitWindows' => [m::mock(IrhpPermitWindow::class)],
-                ],
-                false,
-            ]
+            false,
+        ];
+        yield 'existing window and range' => [
+            [
+                'irhpPermitRanges' => [m::mock(IrhpPermitRange::class)],
+                'irhpPermitWindows' => [m::mock(IrhpPermitWindow::class)],
+            ],
+            false,
         ];
     }
 
@@ -621,21 +615,19 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public static function statusAllowsQueueRunScoringProvider(): array
+    public static function statusAllowsQueueRunScoringProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_SCORING_NEVER_RUN, true],
-            [Entity::STATUS_SCORING_PENDING, false],
-            [Entity::STATUS_SCORING_IN_PROGRESS, false],
-            [Entity::STATUS_SCORING_SUCCESSFUL, true],
-            [Entity::STATUS_SCORING_PREREQUISITE_FAIL, true],
-            [Entity::STATUS_SCORING_UNEXPECTED_FAIL, true],
-            [Entity::STATUS_ACCEPT_PENDING, false],
-            [Entity::STATUS_ACCEPT_IN_PROGRESS, false],
-            [Entity::STATUS_ACCEPT_SUCCESSFUL, true],
-            [Entity::STATUS_ACCEPT_PREREQUISITE_FAIL, true],
-            [Entity::STATUS_ACCEPT_UNEXPECTED_FAIL, false],
-        ];
+        yield [Entity::STATUS_SCORING_NEVER_RUN, true];
+        yield [Entity::STATUS_SCORING_PENDING, false];
+        yield [Entity::STATUS_SCORING_IN_PROGRESS, false];
+        yield [Entity::STATUS_SCORING_SUCCESSFUL, true];
+        yield [Entity::STATUS_SCORING_PREREQUISITE_FAIL, true];
+        yield [Entity::STATUS_SCORING_UNEXPECTED_FAIL, true];
+        yield [Entity::STATUS_ACCEPT_PENDING, false];
+        yield [Entity::STATUS_ACCEPT_IN_PROGRESS, false];
+        yield [Entity::STATUS_ACCEPT_SUCCESSFUL, true];
+        yield [Entity::STATUS_ACCEPT_PREREQUISITE_FAIL, true];
+        yield [Entity::STATUS_ACCEPT_UNEXPECTED_FAIL, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('statusAllowsRunScoringProvider')]
@@ -649,21 +641,19 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public static function statusAllowsRunScoringProvider(): array
+    public static function statusAllowsRunScoringProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_SCORING_NEVER_RUN, false],
-            [Entity::STATUS_SCORING_PENDING, true],
-            [Entity::STATUS_SCORING_IN_PROGRESS, false],
-            [Entity::STATUS_SCORING_SUCCESSFUL, false],
-            [Entity::STATUS_SCORING_PREREQUISITE_FAIL, false],
-            [Entity::STATUS_SCORING_UNEXPECTED_FAIL, false],
-            [Entity::STATUS_ACCEPT_PENDING, false],
-            [Entity::STATUS_ACCEPT_IN_PROGRESS, false],
-            [Entity::STATUS_ACCEPT_SUCCESSFUL, false],
-            [Entity::STATUS_ACCEPT_PREREQUISITE_FAIL, false],
-            [Entity::STATUS_ACCEPT_UNEXPECTED_FAIL, false],
-        ];
+        yield [Entity::STATUS_SCORING_NEVER_RUN, false];
+        yield [Entity::STATUS_SCORING_PENDING, true];
+        yield [Entity::STATUS_SCORING_IN_PROGRESS, false];
+        yield [Entity::STATUS_SCORING_SUCCESSFUL, false];
+        yield [Entity::STATUS_SCORING_PREREQUISITE_FAIL, false];
+        yield [Entity::STATUS_SCORING_UNEXPECTED_FAIL, false];
+        yield [Entity::STATUS_ACCEPT_PENDING, false];
+        yield [Entity::STATUS_ACCEPT_IN_PROGRESS, false];
+        yield [Entity::STATUS_ACCEPT_SUCCESSFUL, false];
+        yield [Entity::STATUS_ACCEPT_PREREQUISITE_FAIL, false];
+        yield [Entity::STATUS_ACCEPT_UNEXPECTED_FAIL, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('statusAllowsQueueAcceptScoringAndPostScoringReportProvider')]
@@ -677,21 +667,19 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public static function statusAllowsQueueAcceptScoringAndPostScoringReportProvider(): array
+    public static function statusAllowsQueueAcceptScoringAndPostScoringReportProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_SCORING_NEVER_RUN, false],
-            [Entity::STATUS_SCORING_PENDING, false],
-            [Entity::STATUS_SCORING_IN_PROGRESS, false],
-            [Entity::STATUS_SCORING_SUCCESSFUL, true],
-            [Entity::STATUS_SCORING_PREREQUISITE_FAIL, false],
-            [Entity::STATUS_SCORING_UNEXPECTED_FAIL, false],
-            [Entity::STATUS_ACCEPT_PENDING, false],
-            [Entity::STATUS_ACCEPT_IN_PROGRESS, false],
-            [Entity::STATUS_ACCEPT_SUCCESSFUL, true],
-            [Entity::STATUS_ACCEPT_PREREQUISITE_FAIL, true],
-            [Entity::STATUS_ACCEPT_UNEXPECTED_FAIL, true],
-        ];
+        yield [Entity::STATUS_SCORING_NEVER_RUN, false];
+        yield [Entity::STATUS_SCORING_PENDING, false];
+        yield [Entity::STATUS_SCORING_IN_PROGRESS, false];
+        yield [Entity::STATUS_SCORING_SUCCESSFUL, true];
+        yield [Entity::STATUS_SCORING_PREREQUISITE_FAIL, false];
+        yield [Entity::STATUS_SCORING_UNEXPECTED_FAIL, false];
+        yield [Entity::STATUS_ACCEPT_PENDING, false];
+        yield [Entity::STATUS_ACCEPT_IN_PROGRESS, false];
+        yield [Entity::STATUS_ACCEPT_SUCCESSFUL, true];
+        yield [Entity::STATUS_ACCEPT_PREREQUISITE_FAIL, true];
+        yield [Entity::STATUS_ACCEPT_UNEXPECTED_FAIL, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('statusAllowsAcceptScoringProvider')]
@@ -705,21 +693,19 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public static function statusAllowsAcceptScoringProvider(): array
+    public static function statusAllowsAcceptScoringProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_SCORING_NEVER_RUN, false],
-            [Entity::STATUS_SCORING_PENDING, false],
-            [Entity::STATUS_SCORING_IN_PROGRESS, false],
-            [Entity::STATUS_SCORING_SUCCESSFUL, false],
-            [Entity::STATUS_SCORING_PREREQUISITE_FAIL, false],
-            [Entity::STATUS_SCORING_UNEXPECTED_FAIL, false],
-            [Entity::STATUS_ACCEPT_PENDING, true],
-            [Entity::STATUS_ACCEPT_IN_PROGRESS, false],
-            [Entity::STATUS_ACCEPT_SUCCESSFUL, false],
-            [Entity::STATUS_ACCEPT_PREREQUISITE_FAIL, false],
-            [Entity::STATUS_ACCEPT_UNEXPECTED_FAIL, false],
-        ];
+        yield [Entity::STATUS_SCORING_NEVER_RUN, false];
+        yield [Entity::STATUS_SCORING_PENDING, false];
+        yield [Entity::STATUS_SCORING_IN_PROGRESS, false];
+        yield [Entity::STATUS_SCORING_SUCCESSFUL, false];
+        yield [Entity::STATUS_SCORING_PREREQUISITE_FAIL, false];
+        yield [Entity::STATUS_SCORING_UNEXPECTED_FAIL, false];
+        yield [Entity::STATUS_ACCEPT_PENDING, true];
+        yield [Entity::STATUS_ACCEPT_IN_PROGRESS, false];
+        yield [Entity::STATUS_ACCEPT_SUCCESSFUL, false];
+        yield [Entity::STATUS_ACCEPT_PREREQUISITE_FAIL, false];
+        yield [Entity::STATUS_ACCEPT_UNEXPECTED_FAIL, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('proceedToScoringPendingProvider')]
@@ -732,16 +718,14 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    public static function proceedToScoringPendingProvider(): array
+    public static function proceedToScoringPendingProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_SCORING_NEVER_RUN],
-            [Entity::STATUS_SCORING_SUCCESSFUL],
-            [Entity::STATUS_SCORING_PREREQUISITE_FAIL],
-            [Entity::STATUS_SCORING_UNEXPECTED_FAIL],
-            [Entity::STATUS_ACCEPT_PREREQUISITE_FAIL],
-            [Entity::STATUS_ACCEPT_SUCCESSFUL],
-        ];
+        yield [Entity::STATUS_SCORING_NEVER_RUN];
+        yield [Entity::STATUS_SCORING_SUCCESSFUL];
+        yield [Entity::STATUS_SCORING_PREREQUISITE_FAIL];
+        yield [Entity::STATUS_SCORING_UNEXPECTED_FAIL];
+        yield [Entity::STATUS_ACCEPT_PREREQUISITE_FAIL];
+        yield [Entity::STATUS_ACCEPT_SUCCESSFUL];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('proceedToScoringPendingExceptionProvider')]
@@ -760,34 +744,32 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public static function proceedToScoringPendingExceptionProvider(): array
+    public static function proceedToScoringPendingExceptionProvider(): \Iterator
     {
-        return [
-            [
-                Entity::STATUS_SCORING_PENDING,
-                'Scoring pending',
-                ['This stock is not in the correct status to proceed to scoring pending (Scoring pending)']
-            ],
-            [
-                Entity::STATUS_SCORING_IN_PROGRESS,
-                'Scoring in progress',
-                ['This stock is not in the correct status to proceed to scoring pending (Scoring in progress)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_PENDING,
-                'Accept pending',
-                ['This stock is not in the correct status to proceed to scoring pending (Accept pending)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_IN_PROGRESS,
-                'Accept in progress',
-                ['This stock is not in the correct status to proceed to scoring pending (Accept in progress)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
-                'Accept unexpected fail',
-                ['This stock is not in the correct status to proceed to scoring pending (Accept unexpected fail)']
-            ],
+        yield [
+            Entity::STATUS_SCORING_PENDING,
+            'Scoring pending',
+            ['This stock is not in the correct status to proceed to scoring pending (Scoring pending)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_IN_PROGRESS,
+            'Scoring in progress',
+            ['This stock is not in the correct status to proceed to scoring pending (Scoring in progress)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_PENDING,
+            'Accept pending',
+            ['This stock is not in the correct status to proceed to scoring pending (Accept pending)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_IN_PROGRESS,
+            'Accept in progress',
+            ['This stock is not in the correct status to proceed to scoring pending (Accept in progress)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
+            'Accept unexpected fail',
+            ['This stock is not in the correct status to proceed to scoring pending (Accept unexpected fail)']
         ];
     }
 
@@ -816,59 +798,57 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public static function proceedToScoringPrerequisiteFailExceptionProvider(): array
+    public static function proceedToScoringPrerequisiteFailExceptionProvider(): \Iterator
     {
-        return [
-            [
-                Entity::STATUS_SCORING_NEVER_RUN,
-                'Scoring never run',
-                ['This stock is not in the correct status to proceed to scoring prerequisite fail (Scoring never run)']
-            ],
-            [
-                Entity::STATUS_SCORING_IN_PROGRESS,
-                'Scoring in progress',
-                ['This stock is not in the correct status to proceed to scoring prerequisite fail (Scoring in progress)']
-            ],
-            [
-                Entity::STATUS_SCORING_SUCCESSFUL,
-                'Scoring successful',
-                ['This stock is not in the correct status to proceed to scoring prerequisite fail (Scoring successful)']
-            ],
-            [
-                Entity::STATUS_SCORING_PREREQUISITE_FAIL,
-                'Scoring prerequisite fail',
-                ['This stock is not in the correct status to proceed to scoring prerequisite fail (Scoring prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_SCORING_UNEXPECTED_FAIL,
-                'Scoring unexpected fail',
-                ['This stock is not in the correct status to proceed to scoring prerequisite fail (Scoring unexpected fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_PENDING,
-                'Accept pending',
-                ['This stock is not in the correct status to proceed to scoring prerequisite fail (Accept pending)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_IN_PROGRESS,
-                'Accept in progress',
-                ['This stock is not in the correct status to proceed to scoring prerequisite fail (Accept in progress)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_SUCCESSFUL,
-                'Accept successful',
-                ['This stock is not in the correct status to proceed to scoring prerequisite fail (Accept successful)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_PREREQUISITE_FAIL,
-                'Accept prerequisite fail',
-                ['This stock is not in the correct status to proceed to scoring prerequisite fail (Accept prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
-                'Accept unexpected fail',
-                ['This stock is not in the correct status to proceed to scoring prerequisite fail (Accept unexpected fail)']
-            ],
+        yield [
+            Entity::STATUS_SCORING_NEVER_RUN,
+            'Scoring never run',
+            ['This stock is not in the correct status to proceed to scoring prerequisite fail (Scoring never run)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_IN_PROGRESS,
+            'Scoring in progress',
+            ['This stock is not in the correct status to proceed to scoring prerequisite fail (Scoring in progress)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_SUCCESSFUL,
+            'Scoring successful',
+            ['This stock is not in the correct status to proceed to scoring prerequisite fail (Scoring successful)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_PREREQUISITE_FAIL,
+            'Scoring prerequisite fail',
+            ['This stock is not in the correct status to proceed to scoring prerequisite fail (Scoring prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_UNEXPECTED_FAIL,
+            'Scoring unexpected fail',
+            ['This stock is not in the correct status to proceed to scoring prerequisite fail (Scoring unexpected fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_PENDING,
+            'Accept pending',
+            ['This stock is not in the correct status to proceed to scoring prerequisite fail (Accept pending)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_IN_PROGRESS,
+            'Accept in progress',
+            ['This stock is not in the correct status to proceed to scoring prerequisite fail (Accept in progress)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_SUCCESSFUL,
+            'Accept successful',
+            ['This stock is not in the correct status to proceed to scoring prerequisite fail (Accept successful)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_PREREQUISITE_FAIL,
+            'Accept prerequisite fail',
+            ['This stock is not in the correct status to proceed to scoring prerequisite fail (Accept prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
+            'Accept unexpected fail',
+            ['This stock is not in the correct status to proceed to scoring prerequisite fail (Accept unexpected fail)']
         ];
     }
 
@@ -897,59 +877,57 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public static function proceedToScoringInProgressExceptionProvider(): array
+    public static function proceedToScoringInProgressExceptionProvider(): \Iterator
     {
-        return [
-            [
-                Entity::STATUS_SCORING_NEVER_RUN,
-                'Scoring never run',
-                ['This stock is not in the correct status to proceed to scoring in progress (Scoring never run)']
-            ],
-            [
-                Entity::STATUS_SCORING_IN_PROGRESS,
-                'Scoring in progress',
-                ['This stock is not in the correct status to proceed to scoring in progress (Scoring in progress)']
-            ],
-            [
-                Entity::STATUS_SCORING_SUCCESSFUL,
-                'Scoring successful',
-                ['This stock is not in the correct status to proceed to scoring in progress (Scoring successful)']
-            ],
-            [
-                Entity::STATUS_SCORING_PREREQUISITE_FAIL,
-                'Scoring prerequisite fail',
-                ['This stock is not in the correct status to proceed to scoring in progress (Scoring prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_SCORING_UNEXPECTED_FAIL,
-                'Scoring unexpected fail',
-                ['This stock is not in the correct status to proceed to scoring in progress (Scoring unexpected fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_PENDING,
-                'Accept pending',
-                ['This stock is not in the correct status to proceed to scoring in progress (Accept pending)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_IN_PROGRESS,
-                'Accept in progress',
-                ['This stock is not in the correct status to proceed to scoring in progress (Accept in progress)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_SUCCESSFUL,
-                'Accept successful',
-                ['This stock is not in the correct status to proceed to scoring in progress (Accept successful)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_PREREQUISITE_FAIL,
-                'Accept prerequisite fail',
-                ['This stock is not in the correct status to proceed to scoring in progress (Accept prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
-                'Accept unexpected fail',
-                ['This stock is not in the correct status to proceed to scoring in progress (Accept unexpected fail)']
-            ],
+        yield [
+            Entity::STATUS_SCORING_NEVER_RUN,
+            'Scoring never run',
+            ['This stock is not in the correct status to proceed to scoring in progress (Scoring never run)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_IN_PROGRESS,
+            'Scoring in progress',
+            ['This stock is not in the correct status to proceed to scoring in progress (Scoring in progress)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_SUCCESSFUL,
+            'Scoring successful',
+            ['This stock is not in the correct status to proceed to scoring in progress (Scoring successful)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_PREREQUISITE_FAIL,
+            'Scoring prerequisite fail',
+            ['This stock is not in the correct status to proceed to scoring in progress (Scoring prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_UNEXPECTED_FAIL,
+            'Scoring unexpected fail',
+            ['This stock is not in the correct status to proceed to scoring in progress (Scoring unexpected fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_PENDING,
+            'Accept pending',
+            ['This stock is not in the correct status to proceed to scoring in progress (Accept pending)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_IN_PROGRESS,
+            'Accept in progress',
+            ['This stock is not in the correct status to proceed to scoring in progress (Accept in progress)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_SUCCESSFUL,
+            'Accept successful',
+            ['This stock is not in the correct status to proceed to scoring in progress (Accept successful)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_PREREQUISITE_FAIL,
+            'Accept prerequisite fail',
+            ['This stock is not in the correct status to proceed to scoring in progress (Accept prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
+            'Accept unexpected fail',
+            ['This stock is not in the correct status to proceed to scoring in progress (Accept unexpected fail)']
         ];
     }
 
@@ -978,59 +956,57 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public static function proceedToScoringSuccessfulExceptionProvider(): array
+    public static function proceedToScoringSuccessfulExceptionProvider(): \Iterator
     {
-        return [
-            [
-                Entity::STATUS_SCORING_NEVER_RUN,
-                'Scoring never run',
-                ['This stock is not in the correct status to proceed to scoring successful (Scoring never run)']
-            ],
-            [
-                Entity::STATUS_SCORING_PENDING,
-                'Scoring pending',
-                ['This stock is not in the correct status to proceed to scoring successful (Scoring pending)']
-            ],
-            [
-                Entity::STATUS_SCORING_SUCCESSFUL,
-                'Scoring successful',
-                ['This stock is not in the correct status to proceed to scoring successful (Scoring successful)']
-            ],
-            [
-                Entity::STATUS_SCORING_PREREQUISITE_FAIL,
-                'Scoring prerequisite fail',
-                ['This stock is not in the correct status to proceed to scoring successful (Scoring prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_SCORING_UNEXPECTED_FAIL,
-                'Scoring unexpected fail',
-                ['This stock is not in the correct status to proceed to scoring successful (Scoring unexpected fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_PENDING,
-                'Accept pending',
-                ['This stock is not in the correct status to proceed to scoring successful (Accept pending)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_IN_PROGRESS,
-                'Accept in progress',
-                ['This stock is not in the correct status to proceed to scoring successful (Accept in progress)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_SUCCESSFUL,
-                'Accept successful',
-                ['This stock is not in the correct status to proceed to scoring successful (Accept successful)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_PREREQUISITE_FAIL,
-                'Accept prerequisite fail',
-                ['This stock is not in the correct status to proceed to scoring successful (Accept prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
-                'Accept unexpected fail',
-                ['This stock is not in the correct status to proceed to scoring successful (Accept unexpected fail)']
-            ],
+        yield [
+            Entity::STATUS_SCORING_NEVER_RUN,
+            'Scoring never run',
+            ['This stock is not in the correct status to proceed to scoring successful (Scoring never run)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_PENDING,
+            'Scoring pending',
+            ['This stock is not in the correct status to proceed to scoring successful (Scoring pending)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_SUCCESSFUL,
+            'Scoring successful',
+            ['This stock is not in the correct status to proceed to scoring successful (Scoring successful)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_PREREQUISITE_FAIL,
+            'Scoring prerequisite fail',
+            ['This stock is not in the correct status to proceed to scoring successful (Scoring prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_UNEXPECTED_FAIL,
+            'Scoring unexpected fail',
+            ['This stock is not in the correct status to proceed to scoring successful (Scoring unexpected fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_PENDING,
+            'Accept pending',
+            ['This stock is not in the correct status to proceed to scoring successful (Accept pending)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_IN_PROGRESS,
+            'Accept in progress',
+            ['This stock is not in the correct status to proceed to scoring successful (Accept in progress)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_SUCCESSFUL,
+            'Accept successful',
+            ['This stock is not in the correct status to proceed to scoring successful (Accept successful)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_PREREQUISITE_FAIL,
+            'Accept prerequisite fail',
+            ['This stock is not in the correct status to proceed to scoring successful (Accept prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
+            'Accept unexpected fail',
+            ['This stock is not in the correct status to proceed to scoring successful (Accept unexpected fail)']
         ];
     }
 
@@ -1059,59 +1035,57 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public static function proceedToScoringUnexpectedFailExceptionProvider(): array
+    public static function proceedToScoringUnexpectedFailExceptionProvider(): \Iterator
     {
-        return [
-            [
-                Entity::STATUS_SCORING_NEVER_RUN,
-                'Scoring never run',
-                ['This stock is not in the correct status to proceed to scoring unexpected fail (Scoring never run)']
-            ],
-            [
-                Entity::STATUS_SCORING_PENDING,
-                'Scoring pending',
-                ['This stock is not in the correct status to proceed to scoring unexpected fail (Scoring pending)']
-            ],
-            [
-                Entity::STATUS_SCORING_SUCCESSFUL,
-                'Scoring successful',
-                ['This stock is not in the correct status to proceed to scoring unexpected fail (Scoring successful)']
-            ],
-            [
-                Entity::STATUS_SCORING_PREREQUISITE_FAIL,
-                'Scoring prerequisite fail',
-                ['This stock is not in the correct status to proceed to scoring unexpected fail (Scoring prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_SCORING_UNEXPECTED_FAIL,
-                'Scoring unexpected fail',
-                ['This stock is not in the correct status to proceed to scoring unexpected fail (Scoring unexpected fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_PENDING,
-                'Accept pending',
-                ['This stock is not in the correct status to proceed to scoring unexpected fail (Accept pending)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_IN_PROGRESS,
-                'Accept in progress',
-                ['This stock is not in the correct status to proceed to scoring unexpected fail (Accept in progress)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_SUCCESSFUL,
-                'Accept successful',
-                ['This stock is not in the correct status to proceed to scoring unexpected fail (Accept successful)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_PREREQUISITE_FAIL,
-                'Accept prerequisite fail',
-                ['This stock is not in the correct status to proceed to scoring unexpected fail (Accept prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
-                'Accept unexpected fail',
-                ['This stock is not in the correct status to proceed to scoring unexpected fail (Accept unexpected fail)']
-            ],
+        yield [
+            Entity::STATUS_SCORING_NEVER_RUN,
+            'Scoring never run',
+            ['This stock is not in the correct status to proceed to scoring unexpected fail (Scoring never run)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_PENDING,
+            'Scoring pending',
+            ['This stock is not in the correct status to proceed to scoring unexpected fail (Scoring pending)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_SUCCESSFUL,
+            'Scoring successful',
+            ['This stock is not in the correct status to proceed to scoring unexpected fail (Scoring successful)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_PREREQUISITE_FAIL,
+            'Scoring prerequisite fail',
+            ['This stock is not in the correct status to proceed to scoring unexpected fail (Scoring prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_UNEXPECTED_FAIL,
+            'Scoring unexpected fail',
+            ['This stock is not in the correct status to proceed to scoring unexpected fail (Scoring unexpected fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_PENDING,
+            'Accept pending',
+            ['This stock is not in the correct status to proceed to scoring unexpected fail (Accept pending)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_IN_PROGRESS,
+            'Accept in progress',
+            ['This stock is not in the correct status to proceed to scoring unexpected fail (Accept in progress)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_SUCCESSFUL,
+            'Accept successful',
+            ['This stock is not in the correct status to proceed to scoring unexpected fail (Accept successful)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_PREREQUISITE_FAIL,
+            'Accept prerequisite fail',
+            ['This stock is not in the correct status to proceed to scoring unexpected fail (Accept prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
+            'Accept unexpected fail',
+            ['This stock is not in the correct status to proceed to scoring unexpected fail (Accept unexpected fail)']
         ];
     }
 
@@ -1125,14 +1099,12 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($newStatus, $stock->getStatus());
     }
 
-    public static function proceedToAcceptPendingProvider(): array
+    public static function proceedToAcceptPendingProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_SCORING_SUCCESSFUL],
-            [Entity::STATUS_ACCEPT_PREREQUISITE_FAIL],
-            [Entity::STATUS_ACCEPT_UNEXPECTED_FAIL],
-            [Entity::STATUS_ACCEPT_SUCCESSFUL],
-        ];
+        yield [Entity::STATUS_SCORING_SUCCESSFUL];
+        yield [Entity::STATUS_ACCEPT_PREREQUISITE_FAIL];
+        yield [Entity::STATUS_ACCEPT_UNEXPECTED_FAIL];
+        yield [Entity::STATUS_ACCEPT_SUCCESSFUL];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('proceedToAcceptPendingExceptionProvider')]
@@ -1151,44 +1123,42 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public static function proceedToAcceptPendingExceptionProvider(): array
+    public static function proceedToAcceptPendingExceptionProvider(): \Iterator
     {
-        return [
-            [
-                Entity::STATUS_SCORING_NEVER_RUN,
-                'Scoring never run',
-                ['This stock is not in the correct status to proceed to accept pending (Scoring never run)']
-            ],
-            [
-                Entity::STATUS_SCORING_PENDING,
-                'Scoring pending',
-                ['This stock is not in the correct status to proceed to accept pending (Scoring pending)']
-            ],
-            [
-                Entity::STATUS_SCORING_IN_PROGRESS,
-                'Scoring in progress',
-                ['This stock is not in the correct status to proceed to accept pending (Scoring in progress)']
-            ],
-            [
-                Entity::STATUS_SCORING_PREREQUISITE_FAIL,
-                'Scoring prerequisite fail',
-                ['This stock is not in the correct status to proceed to accept pending (Scoring prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_SCORING_UNEXPECTED_FAIL,
-                'Scoring unexpected fail',
-                ['This stock is not in the correct status to proceed to accept pending (Scoring unexpected fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_PENDING,
-                'Accept pending',
-                ['This stock is not in the correct status to proceed to accept pending (Accept pending)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_IN_PROGRESS,
-                'Accept in progress',
-                ['This stock is not in the correct status to proceed to accept pending (Accept in progress)']
-            ],
+        yield [
+            Entity::STATUS_SCORING_NEVER_RUN,
+            'Scoring never run',
+            ['This stock is not in the correct status to proceed to accept pending (Scoring never run)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_PENDING,
+            'Scoring pending',
+            ['This stock is not in the correct status to proceed to accept pending (Scoring pending)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_IN_PROGRESS,
+            'Scoring in progress',
+            ['This stock is not in the correct status to proceed to accept pending (Scoring in progress)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_PREREQUISITE_FAIL,
+            'Scoring prerequisite fail',
+            ['This stock is not in the correct status to proceed to accept pending (Scoring prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_UNEXPECTED_FAIL,
+            'Scoring unexpected fail',
+            ['This stock is not in the correct status to proceed to accept pending (Scoring unexpected fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_PENDING,
+            'Accept pending',
+            ['This stock is not in the correct status to proceed to accept pending (Accept pending)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_IN_PROGRESS,
+            'Accept in progress',
+            ['This stock is not in the correct status to proceed to accept pending (Accept in progress)']
         ];
     }
 
@@ -1217,59 +1187,57 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public static function proceedToAcceptPrerequisiteFailExceptionProvider(): array
+    public static function proceedToAcceptPrerequisiteFailExceptionProvider(): \Iterator
     {
-        return [
-            [
-                Entity::STATUS_SCORING_NEVER_RUN,
-                'Scoring never run',
-                ['This stock is not in the correct status to proceed to accept prerequisite fail (Scoring never run)']
-            ],
-            [
-                Entity::STATUS_SCORING_PENDING,
-                'Scoring pending',
-                ['This stock is not in the correct status to proceed to accept prerequisite fail (Scoring pending)']
-            ],
-            [
-                Entity::STATUS_SCORING_IN_PROGRESS,
-                'Scoring in progress',
-                ['This stock is not in the correct status to proceed to accept prerequisite fail (Scoring in progress)']
-            ],
-            [
-                Entity::STATUS_SCORING_SUCCESSFUL,
-                'Scoring successful',
-                ['This stock is not in the correct status to proceed to accept prerequisite fail (Scoring successful)']
-            ],
-            [
-                Entity::STATUS_SCORING_PREREQUISITE_FAIL,
-                'Scoring prerequisite fail',
-                ['This stock is not in the correct status to proceed to accept prerequisite fail (Scoring prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_SCORING_UNEXPECTED_FAIL,
-                'Scoring unexpected fail',
-                ['This stock is not in the correct status to proceed to accept prerequisite fail (Scoring unexpected fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_IN_PROGRESS,
-                'Accept in progress',
-                ['This stock is not in the correct status to proceed to accept prerequisite fail (Accept in progress)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_SUCCESSFUL,
-                'Accept successful',
-                ['This stock is not in the correct status to proceed to accept prerequisite fail (Accept successful)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_PREREQUISITE_FAIL,
-                'Accept prerequisite fail',
-                ['This stock is not in the correct status to proceed to accept prerequisite fail (Accept prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
-                'Accept unexpected fail',
-                ['This stock is not in the correct status to proceed to accept prerequisite fail (Accept unexpected fail)']
-            ],
+        yield [
+            Entity::STATUS_SCORING_NEVER_RUN,
+            'Scoring never run',
+            ['This stock is not in the correct status to proceed to accept prerequisite fail (Scoring never run)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_PENDING,
+            'Scoring pending',
+            ['This stock is not in the correct status to proceed to accept prerequisite fail (Scoring pending)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_IN_PROGRESS,
+            'Scoring in progress',
+            ['This stock is not in the correct status to proceed to accept prerequisite fail (Scoring in progress)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_SUCCESSFUL,
+            'Scoring successful',
+            ['This stock is not in the correct status to proceed to accept prerequisite fail (Scoring successful)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_PREREQUISITE_FAIL,
+            'Scoring prerequisite fail',
+            ['This stock is not in the correct status to proceed to accept prerequisite fail (Scoring prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_UNEXPECTED_FAIL,
+            'Scoring unexpected fail',
+            ['This stock is not in the correct status to proceed to accept prerequisite fail (Scoring unexpected fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_IN_PROGRESS,
+            'Accept in progress',
+            ['This stock is not in the correct status to proceed to accept prerequisite fail (Accept in progress)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_SUCCESSFUL,
+            'Accept successful',
+            ['This stock is not in the correct status to proceed to accept prerequisite fail (Accept successful)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_PREREQUISITE_FAIL,
+            'Accept prerequisite fail',
+            ['This stock is not in the correct status to proceed to accept prerequisite fail (Accept prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
+            'Accept unexpected fail',
+            ['This stock is not in the correct status to proceed to accept prerequisite fail (Accept unexpected fail)']
         ];
     }
 
@@ -1298,59 +1266,57 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public static function proceedToAcceptInProgressExceptionProvider(): array
+    public static function proceedToAcceptInProgressExceptionProvider(): \Iterator
     {
-        return [
-            [
-                Entity::STATUS_SCORING_PENDING,
-                'Scoring pending',
-                ['This stock is not in the correct status to proceed to accept in progress (Scoring pending)']
-            ],
-            [
-                Entity::STATUS_SCORING_NEVER_RUN,
-                'Scoring never run',
-                ['This stock is not in the correct status to proceed to accept in progress (Scoring never run)']
-            ],
-            [
-                Entity::STATUS_SCORING_IN_PROGRESS,
-                'Scoring in progress',
-                ['This stock is not in the correct status to proceed to accept in progress (Scoring in progress)']
-            ],
-            [
-                Entity::STATUS_SCORING_SUCCESSFUL,
-                'Scoring successful',
-                ['This stock is not in the correct status to proceed to accept in progress (Scoring successful)']
-            ],
-            [
-                Entity::STATUS_SCORING_PREREQUISITE_FAIL,
-                'Scoring prerequisite fail',
-                ['This stock is not in the correct status to proceed to accept in progress (Scoring prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_SCORING_UNEXPECTED_FAIL,
-                'Scoring unexpected fail',
-                ['This stock is not in the correct status to proceed to accept in progress (Scoring unexpected fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_IN_PROGRESS,
-                'Accept in progress',
-                ['This stock is not in the correct status to proceed to accept in progress (Accept in progress)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_SUCCESSFUL,
-                'Accept successful',
-                ['This stock is not in the correct status to proceed to accept in progress (Accept successful)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_PREREQUISITE_FAIL,
-                'Accept prerequisite fail',
-                ['This stock is not in the correct status to proceed to accept in progress (Accept prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
-                'Accept unexpected fail',
-                ['This stock is not in the correct status to proceed to accept in progress (Accept unexpected fail)']
-            ],
+        yield [
+            Entity::STATUS_SCORING_PENDING,
+            'Scoring pending',
+            ['This stock is not in the correct status to proceed to accept in progress (Scoring pending)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_NEVER_RUN,
+            'Scoring never run',
+            ['This stock is not in the correct status to proceed to accept in progress (Scoring never run)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_IN_PROGRESS,
+            'Scoring in progress',
+            ['This stock is not in the correct status to proceed to accept in progress (Scoring in progress)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_SUCCESSFUL,
+            'Scoring successful',
+            ['This stock is not in the correct status to proceed to accept in progress (Scoring successful)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_PREREQUISITE_FAIL,
+            'Scoring prerequisite fail',
+            ['This stock is not in the correct status to proceed to accept in progress (Scoring prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_UNEXPECTED_FAIL,
+            'Scoring unexpected fail',
+            ['This stock is not in the correct status to proceed to accept in progress (Scoring unexpected fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_IN_PROGRESS,
+            'Accept in progress',
+            ['This stock is not in the correct status to proceed to accept in progress (Accept in progress)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_SUCCESSFUL,
+            'Accept successful',
+            ['This stock is not in the correct status to proceed to accept in progress (Accept successful)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_PREREQUISITE_FAIL,
+            'Accept prerequisite fail',
+            ['This stock is not in the correct status to proceed to accept in progress (Accept prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
+            'Accept unexpected fail',
+            ['This stock is not in the correct status to proceed to accept in progress (Accept unexpected fail)']
         ];
     }
 
@@ -1379,59 +1345,57 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public static function proceedToAcceptSuccessfulExceptionProvider(): array
+    public static function proceedToAcceptSuccessfulExceptionProvider(): \Iterator
     {
-        return [
-            [
-                Entity::STATUS_SCORING_NEVER_RUN,
-                'Scoring never run',
-                ['This stock is not in the correct status to proceed to accept successful (Scoring never run)']
-            ],
-            [
-                Entity::STATUS_SCORING_PENDING,
-                'Scoring pending',
-                ['This stock is not in the correct status to proceed to accept successful (Scoring pending)']
-            ],
-            [
-                Entity::STATUS_SCORING_IN_PROGRESS,
-                'Scoring in progress',
-                ['This stock is not in the correct status to proceed to accept successful (Scoring in progress)']
-            ],
-            [
-                Entity::STATUS_SCORING_SUCCESSFUL,
-                'Scoring successful',
-                ['This stock is not in the correct status to proceed to accept successful (Scoring successful)']
-            ],
-            [
-                Entity::STATUS_SCORING_PREREQUISITE_FAIL,
-                'Scoring prerequisite fail',
-                ['This stock is not in the correct status to proceed to accept successful (Scoring prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_SCORING_UNEXPECTED_FAIL,
-                'Scoring unexpected fail',
-                ['This stock is not in the correct status to proceed to accept successful (Scoring unexpected fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_PENDING,
-                'Accept pending',
-                ['This stock is not in the correct status to proceed to accept successful (Accept pending)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_SUCCESSFUL,
-                'Accept successful',
-                ['This stock is not in the correct status to proceed to accept successful (Accept successful)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_PREREQUISITE_FAIL,
-                'Accept prerequisite fail',
-                ['This stock is not in the correct status to proceed to accept successful (Accept prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
-                'Accept unexpected fail',
-                ['This stock is not in the correct status to proceed to accept successful (Accept unexpected fail)']
-            ],
+        yield [
+            Entity::STATUS_SCORING_NEVER_RUN,
+            'Scoring never run',
+            ['This stock is not in the correct status to proceed to accept successful (Scoring never run)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_PENDING,
+            'Scoring pending',
+            ['This stock is not in the correct status to proceed to accept successful (Scoring pending)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_IN_PROGRESS,
+            'Scoring in progress',
+            ['This stock is not in the correct status to proceed to accept successful (Scoring in progress)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_SUCCESSFUL,
+            'Scoring successful',
+            ['This stock is not in the correct status to proceed to accept successful (Scoring successful)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_PREREQUISITE_FAIL,
+            'Scoring prerequisite fail',
+            ['This stock is not in the correct status to proceed to accept successful (Scoring prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_UNEXPECTED_FAIL,
+            'Scoring unexpected fail',
+            ['This stock is not in the correct status to proceed to accept successful (Scoring unexpected fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_PENDING,
+            'Accept pending',
+            ['This stock is not in the correct status to proceed to accept successful (Accept pending)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_SUCCESSFUL,
+            'Accept successful',
+            ['This stock is not in the correct status to proceed to accept successful (Accept successful)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_PREREQUISITE_FAIL,
+            'Accept prerequisite fail',
+            ['This stock is not in the correct status to proceed to accept successful (Accept prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
+            'Accept unexpected fail',
+            ['This stock is not in the correct status to proceed to accept successful (Accept unexpected fail)']
         ];
     }
 
@@ -1460,59 +1424,57 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertTrue($exceptionThrown);
     }
 
-    public static function proceedToAcceptUnexpectedFailExceptionProvider(): array
+    public static function proceedToAcceptUnexpectedFailExceptionProvider(): \Iterator
     {
-        return [
-            [
-                Entity::STATUS_SCORING_NEVER_RUN,
-                'Scoring never run',
-                ['This stock is not in the correct status to proceed to accept unexpected fail (Scoring never run)']
-            ],
-            [
-                Entity::STATUS_SCORING_PENDING,
-                'Scoring pending',
-                ['This stock is not in the correct status to proceed to accept unexpected fail (Scoring pending)']
-            ],
-            [
-                Entity::STATUS_SCORING_IN_PROGRESS,
-                'Scoring in progress',
-                ['This stock is not in the correct status to proceed to accept unexpected fail (Scoring in progress)']
-            ],
-            [
-                Entity::STATUS_SCORING_SUCCESSFUL,
-                'Scoring successful',
-                ['This stock is not in the correct status to proceed to accept unexpected fail (Scoring successful)']
-            ],
-            [
-                Entity::STATUS_SCORING_PREREQUISITE_FAIL,
-                'Scoring prerequisite fail',
-                ['This stock is not in the correct status to proceed to accept unexpected fail (Scoring prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_SCORING_UNEXPECTED_FAIL,
-                'Scoring unexpected fail',
-                ['This stock is not in the correct status to proceed to accept unexpected fail (Scoring unexpected fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_PENDING,
-                'Accept pending',
-                ['This stock is not in the correct status to proceed to accept unexpected fail (Accept pending)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_SUCCESSFUL,
-                'Accept successful',
-                ['This stock is not in the correct status to proceed to accept unexpected fail (Accept successful)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_PREREQUISITE_FAIL,
-                'Accept prerequisite fail',
-                ['This stock is not in the correct status to proceed to accept unexpected fail (Accept prerequisite fail)']
-            ],
-            [
-                Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
-                'Accept unexpected fail',
-                ['This stock is not in the correct status to proceed to accept unexpected fail (Accept unexpected fail)']
-            ],
+        yield [
+            Entity::STATUS_SCORING_NEVER_RUN,
+            'Scoring never run',
+            ['This stock is not in the correct status to proceed to accept unexpected fail (Scoring never run)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_PENDING,
+            'Scoring pending',
+            ['This stock is not in the correct status to proceed to accept unexpected fail (Scoring pending)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_IN_PROGRESS,
+            'Scoring in progress',
+            ['This stock is not in the correct status to proceed to accept unexpected fail (Scoring in progress)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_SUCCESSFUL,
+            'Scoring successful',
+            ['This stock is not in the correct status to proceed to accept unexpected fail (Scoring successful)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_PREREQUISITE_FAIL,
+            'Scoring prerequisite fail',
+            ['This stock is not in the correct status to proceed to accept unexpected fail (Scoring prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_SCORING_UNEXPECTED_FAIL,
+            'Scoring unexpected fail',
+            ['This stock is not in the correct status to proceed to accept unexpected fail (Scoring unexpected fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_PENDING,
+            'Accept pending',
+            ['This stock is not in the correct status to proceed to accept unexpected fail (Accept pending)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_SUCCESSFUL,
+            'Accept successful',
+            ['This stock is not in the correct status to proceed to accept unexpected fail (Accept successful)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_PREREQUISITE_FAIL,
+            'Accept prerequisite fail',
+            ['This stock is not in the correct status to proceed to accept unexpected fail (Accept prerequisite fail)']
+        ];
+        yield [
+            Entity::STATUS_ACCEPT_UNEXPECTED_FAIL,
+            'Accept unexpected fail',
+            ['This stock is not in the correct status to proceed to accept unexpected fail (Accept unexpected fail)']
         ];
     }
 
@@ -1782,117 +1744,115 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public static function dpGetAllocationMode(): array
+    public static function dpGetAllocationMode(): \Iterator
     {
-        return [
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
-                RefData::BUSINESS_PROCESS_APSG,
-                2019,
-                Entity::ALLOCATION_MODE_CANDIDATE_PERMITS,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
-                RefData::BUSINESS_PROCESS_APG,
-                2019,
-                Entity::ALLOCATION_MODE_BILATERAL,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL,
-                RefData::BUSINESS_PROCESS_APG,
-                2019,
-                Entity::ALLOCATION_MODE_STANDARD,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                RefData::BUSINESS_PROCESS_APGG,
-                2019,
-                Entity::ALLOCATION_MODE_EMISSIONS_CATEGORIES,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                RefData::BUSINESS_PROCESS_APSG,
-                2019,
-                Entity::ALLOCATION_MODE_CANDIDATE_PERMITS,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                RefData::BUSINESS_PROCESS_APG,
-                2019,
-                Entity::ALLOCATION_MODE_STANDARD_WITH_EXPIRY,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
-                RefData::BUSINESS_PROCESS_APG,
-                2020,
-                Entity::ALLOCATION_MODE_BILATERAL,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL,
-                RefData::BUSINESS_PROCESS_APG,
-                2020,
-                Entity::ALLOCATION_MODE_STANDARD,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                RefData::BUSINESS_PROCESS_APGG,
-                2020,
-                Entity::ALLOCATION_MODE_CANDIDATE_PERMITS,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                RefData::BUSINESS_PROCESS_APSG,
-                2020,
-                Entity::ALLOCATION_MODE_CANDIDATE_PERMITS,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                RefData::BUSINESS_PROCESS_APG,
-                2020,
-                Entity::ALLOCATION_MODE_STANDARD_WITH_EXPIRY,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
-                RefData::BUSINESS_PROCESS_APSG,
-                2019,
-                Entity::ALLOCATION_MODE_CANDIDATE_PERMITS,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
-                RefData::BUSINESS_PROCESS_APSG,
-                2020,
-                Entity::ALLOCATION_MODE_CANDIDATE_PERMITS,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE,
-                RefData::BUSINESS_PROCESS_AG,
-                2019,
-                Entity::ALLOCATION_MODE_NONE,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE,
-                RefData::BUSINESS_PROCESS_AG,
-                2020,
-                Entity::ALLOCATION_MODE_NONE,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER,
-                RefData::BUSINESS_PROCESS_AG,
-                2019,
-                Entity::ALLOCATION_MODE_NONE,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER,
-                RefData::BUSINESS_PROCESS_AG,
-                2020,
-                Entity::ALLOCATION_MODE_NONE,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
-                RefData::BUSINESS_PROCESS_APGG,
-                2021,
-                Entity::ALLOCATION_MODE_CANDIDATE_PERMITS,
-            ],
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
+            RefData::BUSINESS_PROCESS_APSG,
+            2019,
+            Entity::ALLOCATION_MODE_CANDIDATE_PERMITS,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
+            RefData::BUSINESS_PROCESS_APG,
+            2019,
+            Entity::ALLOCATION_MODE_BILATERAL,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL,
+            RefData::BUSINESS_PROCESS_APG,
+            2019,
+            Entity::ALLOCATION_MODE_STANDARD,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            RefData::BUSINESS_PROCESS_APGG,
+            2019,
+            Entity::ALLOCATION_MODE_EMISSIONS_CATEGORIES,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            RefData::BUSINESS_PROCESS_APSG,
+            2019,
+            Entity::ALLOCATION_MODE_CANDIDATE_PERMITS,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+            RefData::BUSINESS_PROCESS_APG,
+            2019,
+            Entity::ALLOCATION_MODE_STANDARD_WITH_EXPIRY,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
+            RefData::BUSINESS_PROCESS_APG,
+            2020,
+            Entity::ALLOCATION_MODE_BILATERAL,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL,
+            RefData::BUSINESS_PROCESS_APG,
+            2020,
+            Entity::ALLOCATION_MODE_STANDARD,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            RefData::BUSINESS_PROCESS_APGG,
+            2020,
+            Entity::ALLOCATION_MODE_CANDIDATE_PERMITS,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            RefData::BUSINESS_PROCESS_APSG,
+            2020,
+            Entity::ALLOCATION_MODE_CANDIDATE_PERMITS,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+            RefData::BUSINESS_PROCESS_APG,
+            2020,
+            Entity::ALLOCATION_MODE_STANDARD_WITH_EXPIRY,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
+            RefData::BUSINESS_PROCESS_APSG,
+            2019,
+            Entity::ALLOCATION_MODE_CANDIDATE_PERMITS,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
+            RefData::BUSINESS_PROCESS_APSG,
+            2020,
+            Entity::ALLOCATION_MODE_CANDIDATE_PERMITS,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE,
+            RefData::BUSINESS_PROCESS_AG,
+            2019,
+            Entity::ALLOCATION_MODE_NONE,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE,
+            RefData::BUSINESS_PROCESS_AG,
+            2020,
+            Entity::ALLOCATION_MODE_NONE,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER,
+            RefData::BUSINESS_PROCESS_AG,
+            2019,
+            Entity::ALLOCATION_MODE_NONE,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER,
+            RefData::BUSINESS_PROCESS_AG,
+            2020,
+            Entity::ALLOCATION_MODE_NONE,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
+            RefData::BUSINESS_PROCESS_APGG,
+            2021,
+            Entity::ALLOCATION_MODE_CANDIDATE_PERMITS,
         ];
     }
 
@@ -1948,39 +1908,37 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public static function dpGetCandidatePermitCreationMode(): array
+    public static function dpGetCandidatePermitCreationMode(): \Iterator
     {
-        return [
-            [
-                RefData::BUSINESS_PROCESS_APGG,
-                true,
-                2019,
-                Entity::CANDIDATE_MODE_NONE
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APGG,
-                true,
-                2020,
-                Entity::CANDIDATE_MODE_APGG
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APSG,
-                true,
-                2020,
-                Entity::CANDIDATE_MODE_APSG
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APG,
-                false,
-                2019,
-                Entity::CANDIDATE_MODE_NONE
-            ],
-            [
-                RefData::BUSINESS_PROCESS_APG,
-                false,
-                2020,
-                Entity::CANDIDATE_MODE_NONE
-            ],
+        yield [
+            RefData::BUSINESS_PROCESS_APGG,
+            true,
+            2019,
+            Entity::CANDIDATE_MODE_NONE
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APGG,
+            true,
+            2020,
+            Entity::CANDIDATE_MODE_APGG
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APSG,
+            true,
+            2020,
+            Entity::CANDIDATE_MODE_APSG
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APG,
+            false,
+            2019,
+            Entity::CANDIDATE_MODE_NONE
+        ];
+        yield [
+            RefData::BUSINESS_PROCESS_APG,
+            false,
+            2020,
+            Entity::CANDIDATE_MODE_NONE
         ];
     }
 
@@ -1997,63 +1955,60 @@ class IrhpPermitStockEntityTest extends EntityTester
         $this->assertSame($expected, $result);
     }
 
-    public static function dpGetPermitUsageList(): array
+    public static function dpGetPermitUsageList(): \Iterator
     {
-        $journeyMultiple = (new RefData(RefData::JOURNEY_MULTIPLE))->setDisplayOrder(10);
-        $journeySingle = (new RefData(RefData::JOURNEY_SINGLE))->setDisplayOrder(20);
-
-        return [
-            [
-                new ArrayCollection(
-                    [
-                        self::createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, null),
-                        self::createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
-                        self::createMockRange(false, true, 230, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
-                        self::createMockRange(true, false, 100, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
-                        self::createMockRange(true, true, 500, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
-                        self::createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
-                    ]
-                ),
+        $journeyMultiple = new RefData(RefData::JOURNEY_MULTIPLE)->setDisplayOrder(10);
+        $journeySingle = new RefData(RefData::JOURNEY_SINGLE)->setDisplayOrder(20);
+        yield [
+            new ArrayCollection(
                 [
-                    10 => $journeyMultiple,
-                    20 => $journeySingle,
-                ],
-            ],
+                    self::createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, null),
+                    self::createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
+                    self::createMockRange(false, true, 230, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
+                    self::createMockRange(true, false, 100, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
+                    self::createMockRange(true, true, 500, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
+                    self::createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
+                ]
+            ),
             [
-                new ArrayCollection(
-                    [
-                        self::createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
-                        self::createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
-                        self::createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeyMultiple),
-                    ]
-                ),
+                10 => $journeyMultiple,
+                20 => $journeySingle,
+            ],
+        ];
+        yield [
+            new ArrayCollection(
                 [
-                    10 => $journeyMultiple,
-                ],
-            ],
+                    self::createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
+                    self::createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
+                    self::createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeyMultiple),
+                ]
+            ),
             [
-                new ArrayCollection(
-                    [
-                        self::createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
-                        self::createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
-                        self::createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
-                    ]
-                ),
+                10 => $journeyMultiple,
+            ],
+        ];
+        yield [
+            new ArrayCollection(
                 [
-                    20 => $journeySingle,
-                ],
-            ],
+                    self::createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
+                    self::createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
+                    self::createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
+                ]
+            ),
             [
-                new ArrayCollection(
-                    [
-                        self::createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, null),
-                        self::createMockRange(false, true, 230, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
-                        self::createMockRange(true, false, 100, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
-                        self::createMockRange(true, true, 500, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
-                    ]
-                ),
-                [],
+                20 => $journeySingle,
             ],
+        ];
+        yield [
+            new ArrayCollection(
+                [
+                    self::createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, null),
+                    self::createMockRange(false, true, 230, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
+                    self::createMockRange(true, false, 100, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
+                    self::createMockRange(true, true, 500, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
+                ]
+            ),
+            [],
         ];
     }
 
@@ -2075,12 +2030,10 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsMorocco(): array
+    public static function dpIsMorocco(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetBilateralAnswerSummaryLabelKey')]
@@ -2097,13 +2050,11 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public static function dpGetBilateralAnswerSummaryLabelKey(): array
+    public static function dpGetBilateralAnswerSummaryLabelKey(): \Iterator
     {
-        return [
-            [true, false, 'permits.page.bilateral.permit-needed'],
-            [false, false, 'permits.page.bilateral.which-period-required'],
-            [false, true, 'permits.page.bilateral.which-period-required.multi-stock'],
-        ];
+        yield [true, false, 'permits.page.bilateral.permit-needed'];
+        yield [false, false, 'permits.page.bilateral.which-period-required'];
+        yield [false, true, 'permits.page.bilateral.which-period-required.multi-stock'];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetExcludedRestrictedCountryIds')]
@@ -2133,57 +2084,55 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public static function dpGetExcludedRestrictedCountryIds(): array
+    public static function dpGetExcludedRestrictedCountryIds(): \Iterator
     {
-        return [
-            [
-                'isEcmtAnnual' => false,
-                'hasEuro5Range' => false,
-                'hasEuro6Range' => false,
-                'expected' => [],
-            ],
-            [
-                'isEcmtAnnual' => false,
-                'hasEuro5Range' => true,
-                'hasEuro6Range' => false,
-                'expected' => [],
-            ],
-            [
-                'isEcmtAnnual' => false,
-                'hasEuro5Range' => false,
-                'hasEuro6Range' => true,
-                'expected' => [],
-            ],
-            [
-                'isEcmtAnnual' => false,
-                'hasEuro5Range' => true,
-                'hasEuro6Range' => true,
-                'expected' => [],
-            ],
-            [
-                'isEcmtAnnual' => true,
-                'hasEuro5Range' => false,
-                'hasEuro6Range' => false,
-                'expected' => [],
-            ],
-            [
-                'isEcmtAnnual' => true,
-                'hasEuro5Range' => true,
-                'hasEuro6Range' => false,
-                'expected' => [Country::ID_AUSTRIA],
-            ],
-            [
-                'isEcmtAnnual' => true,
-                'hasEuro5Range' => false,
-                'hasEuro6Range' => true,
-                'expected' => [],
-            ],
-            [
-                'isEcmtAnnual' => true,
-                'hasEuro5Range' => true,
-                'hasEuro6Range' => true,
-                'expected' => [],
-            ],
+        yield [
+            'isEcmtAnnual' => false,
+            'hasEuro5Range' => false,
+            'hasEuro6Range' => false,
+            'expected' => [],
+        ];
+        yield [
+            'isEcmtAnnual' => false,
+            'hasEuro5Range' => true,
+            'hasEuro6Range' => false,
+            'expected' => [],
+        ];
+        yield [
+            'isEcmtAnnual' => false,
+            'hasEuro5Range' => false,
+            'hasEuro6Range' => true,
+            'expected' => [],
+        ];
+        yield [
+            'isEcmtAnnual' => false,
+            'hasEuro5Range' => true,
+            'hasEuro6Range' => true,
+            'expected' => [],
+        ];
+        yield [
+            'isEcmtAnnual' => true,
+            'hasEuro5Range' => false,
+            'hasEuro6Range' => false,
+            'expected' => [],
+        ];
+        yield [
+            'isEcmtAnnual' => true,
+            'hasEuro5Range' => true,
+            'hasEuro6Range' => false,
+            'expected' => [Country::ID_AUSTRIA],
+        ];
+        yield [
+            'isEcmtAnnual' => true,
+            'hasEuro5Range' => false,
+            'hasEuro6Range' => true,
+            'expected' => [],
+        ];
+        yield [
+            'isEcmtAnnual' => true,
+            'hasEuro5Range' => true,
+            'hasEuro6Range' => true,
+            'expected' => [],
         ];
     }
 
@@ -2204,11 +2153,9 @@ class IrhpPermitStockEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsCertificateOfRoadworthiness(): array
+    public static function dpIsCertificateOfRoadworthiness(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 }

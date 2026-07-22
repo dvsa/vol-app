@@ -28,7 +28,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Class GenerateTest
  */
-class GenerateTest extends AbstractCommandHandlerTestCase
+final class GenerateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

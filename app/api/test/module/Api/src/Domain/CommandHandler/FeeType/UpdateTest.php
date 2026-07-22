@@ -16,7 +16,7 @@ use Dvsa\Olcs\Transfer\Command\FeeType\Update as UpdateCmd;
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -75,6 +75,6 @@ class UpdateTest extends AbstractCommandHandlerTestCase
             'messages' => ['Fee Type updated'],
         ];
 
-        self::assertEquals($expected, $result->toArray());
+        $this->assertEquals($expected, $result->toArray());
     }
 }

@@ -13,11 +13,12 @@ use Olcs\Controller\IndexController;
 /**
  * Class Index Controller Test
  */
-class IndexControllerTest extends MockeryTestCase
+final class IndexControllerTest extends MockeryTestCase
 {
     /** @var IndexController|\Mockery\MockInterface  */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(IndexController::class)
@@ -35,7 +36,7 @@ class IndexControllerTest extends MockeryTestCase
             ->once()
             ->andReturn('REDIRECT');
 
-        static::assertEquals('REDIRECT', $this->sut->indexAction());
+        $this->assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
     public function testIndexLoginAnon(): void
@@ -52,7 +53,7 @@ class IndexControllerTest extends MockeryTestCase
             ->once()
             ->andReturn('REDIRECT');
 
-        static::assertEquals('REDIRECT', $this->sut->indexAction());
+        $this->assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
     public function testIndexLoginNotIdentified(): void
@@ -88,7 +89,7 @@ class IndexControllerTest extends MockeryTestCase
             ->once()
             ->andReturn('REDIRECT');
 
-        static::assertEquals('REDIRECT', $this->sut->indexAction());
+        $this->assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
     public function testIndexPrompt(): void
@@ -110,7 +111,7 @@ class IndexControllerTest extends MockeryTestCase
             ->once()
             ->andReturn('REDIRECT');
 
-        static::assertEquals('REDIRECT', $this->sut->indexAction());
+        $this->assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
     public function testIndexBusReg(): void
@@ -131,7 +132,7 @@ class IndexControllerTest extends MockeryTestCase
             ->once()
             ->andReturn('REDIRECT');
 
-        static::assertEquals('REDIRECT', $this->sut->indexAction());
+        $this->assertEquals('REDIRECT', $this->sut->indexAction());
     }
 
     public function testIndexSearch(): void
@@ -152,6 +153,6 @@ class IndexControllerTest extends MockeryTestCase
             ->once()
             ->andReturn('REDIRECT');
 
-        static::assertEquals('REDIRECT', $this->sut->indexAction());
+        $this->assertEquals('REDIRECT', $this->sut->indexAction());
     }
 }

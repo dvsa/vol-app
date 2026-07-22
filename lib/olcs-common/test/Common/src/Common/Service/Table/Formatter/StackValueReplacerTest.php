@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\StackHelperService;
@@ -17,7 +19,7 @@ use Common\Service\Table\Formatter\StackValueReplacer;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class StackValueReplacerTest extends \PHPUnit\Framework\TestCase
+final class StackValueReplacerTest extends \PHPUnit\Framework\TestCase
 {
     public function testFormat(): void
     {
@@ -34,6 +36,6 @@ class StackValueReplacerTest extends \PHPUnit\Framework\TestCase
         ];
         $expected = '123 cake(s)';
 
-        $this->assertEquals($expected, (new StackValueReplacer(new StackValue(new StackHelperService())))->format($data, $column));
+        $this->assertEquals($expected, new StackValueReplacer(new StackValue(new StackHelperService()))->format($data, $column));
     }
 }

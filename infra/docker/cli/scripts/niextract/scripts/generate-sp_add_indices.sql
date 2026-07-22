@@ -1,4 +1,7 @@
-SELECT CONCAT('DROP PROCEDURE IF EXISTS sp_add_indices', CHAR(10), '$$', CHAR(10), 'CREATE PROCEDURE sp_add_indices()', CHAR(10), 'BEGIN') AS '';
+SELECT 'DROP PROCEDURE IF EXISTS sp_add_indices;' AS '';
+SELECT 'DELIMITER $$' AS '';
+SELECT 'CREATE PROCEDURE sp_add_indices()' AS '';
+SELECT 'BEGIN' AS '';
 
 SELECT CONCAT(
     'IF NOT EXISTS (SELECT 1 FROM information_schema.statistics WHERE table_schema = DATABASE() AND table_name = \'', SUBSTRING(t.NAME, LENGTH(DATABASE()) + 2), '\' AND index_name = \'', i.NAME, '\') THEN ',
@@ -17,4 +20,5 @@ WHERE t.NAME LIKE CONCAT(DATABASE(), '/%')
   AND i.TYPE != 3 # NOT PRIMARY
 ORDER BY t.NAME;
 
-SELECT CONCAT('END', CHAR(10), '$$') AS '';
+SELECT 'END$$' AS '';
+SELECT 'DELIMITER ;' AS '';

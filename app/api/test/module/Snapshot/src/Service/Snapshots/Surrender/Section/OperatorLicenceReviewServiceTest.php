@@ -13,11 +13,12 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Laminas\I18n\Translator\TranslatorInterface;
 
-class OperatorLicenceReviewServiceTest extends MockeryTestCase
+final class OperatorLicenceReviewServiceTest extends MockeryTestCase
 {
     /** @var OperatorLicenceReviewService review service */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);
@@ -48,76 +49,73 @@ class OperatorLicenceReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($mockEntity));
     }
 
-    public static function dpTestGetConfigFromData(): array
+    public static function dpTestGetConfigFromData(): \Iterator
     {
-        return [
-
-            0 => [
-                [
-                    'licDocDescription' => 'Document lost',
-                    'licDocStatus' => RefData::SURRENDER_DOC_STATUS_LOST,
-                    'licDocInfo' => 'Document lost',
-                    'licType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                ],
-                [
-
-                    'multiItems' => [
-                        [
-                            [
-                                'label' => 'surrender-review-documentation-operator-licence',
-                                'value' => 'Document lost'
-                            ],
-                            [
-                                'label' => 'surrender-review-additional-information',
-                                'value' => 'Document lost'
-                            ],
-                        ]
-                    ]
-                ]
+        yield 0 => [
+            [
+                'licDocDescription' => 'Document lost',
+                'licDocStatus' => RefData::SURRENDER_DOC_STATUS_LOST,
+                'licDocInfo' => 'Document lost',
+                'licType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
             ],
-            1 => [
-                [
-                    'licDocDescription' => 'Document destroyed',
-                    'licDocStatus' => RefData::SURRENDER_DOC_STATUS_DESTROYED,
-                    'licDocInfo' => null,
-                    'licType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    'commLicDescription' => null,
-                    'commLicStatus' => null,
-                    'commLicInfo' => null,
+            [
 
-                ],
-                [
-
-                    'multiItems' => [
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'surrender-review-documentation-operator-licence',
-                                'value' => 'Document destroyed'
-                            ]
-                        ]
+                            'label' => 'surrender-review-documentation-operator-licence',
+                            'value' => 'Document lost'
+                        ],
+                        [
+                            'label' => 'surrender-review-additional-information',
+                            'value' => 'Document lost'
+                        ],
                     ]
                 ]
-            ],
-            2 => [
-                [
-                    'licDocDescription' => 'Document destroyed',
-                    'licDocStatus' => RefData::SURRENDER_DOC_STATUS_DESTROYED,
-                    'licDocInfo' => null,
-                    'licType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                ],
-                [
-
-                    'multiItems' => [
-                        [
-                            [
-                                'label' => 'surrender-review-documentation-operator-licence',
-                                'value' => 'Document destroyed'
-                            ]
-                        ]
-                    ]
-                ]
-
             ]
+        ];
+        yield 1 => [
+            [
+                'licDocDescription' => 'Document destroyed',
+                'licDocStatus' => RefData::SURRENDER_DOC_STATUS_DESTROYED,
+                'licDocInfo' => null,
+                'licType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                'commLicDescription' => null,
+                'commLicStatus' => null,
+                'commLicInfo' => null,
+
+            ],
+            [
+
+                'multiItems' => [
+                    [
+                        [
+                            'label' => 'surrender-review-documentation-operator-licence',
+                            'value' => 'Document destroyed'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        yield 2 => [
+            [
+                'licDocDescription' => 'Document destroyed',
+                'licDocStatus' => RefData::SURRENDER_DOC_STATUS_DESTROYED,
+                'licDocInfo' => null,
+                'licType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            ],
+            [
+
+                'multiItems' => [
+                    [
+                        [
+                            'label' => 'surrender-review-documentation-operator-licence',
+                            'value' => 'Document destroyed'
+                        ]
+                    ]
+                ]
+            ]
+
         ];
     }
 }

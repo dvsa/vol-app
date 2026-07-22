@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity;
 /**
  * Hearing Bundle Test
  */
-class HearingBundleTest extends QueryHandlerTestCase
+final class HearingBundleTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

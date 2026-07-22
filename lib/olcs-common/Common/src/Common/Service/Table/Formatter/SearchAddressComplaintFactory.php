@@ -12,7 +12,7 @@ class SearchAddressComplaintFactory implements FactoryInterface
      * @param  array|null         $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchAddressComplaint
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SearchAddressComplaint
     {
         $urlHelper = $container->get('Helper\Url');
         return new SearchAddressComplaint($urlHelper);

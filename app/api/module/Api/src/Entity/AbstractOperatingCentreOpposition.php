@@ -16,19 +16,13 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\Table(name="operating_centre_opposition",
- *    indexes={
- *        @ORM\Index(name="ix_operating_centre_opposition_operating_centre_id", columns={"operating_centre_id"}),
- *        @ORM\Index(name="ix_operating_centre_opposition_opposition_id", columns={"opposition_id"}),
- *        @ORM\Index(name="uk_operating_centre_opposition_olbs_oc_id_olbs_opp_id_olbs_type", columns={"olbs_oc_id", "olbs_opp_id", "olbs_type"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_operating_centre_opposition_olbs_oc_id_olbs_opp_id_olbs_type", columns={"olbs_oc_id", "olbs_opp_id", "olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'operating_centre_opposition')]
+#[ORM\Index(name: 'ix_operating_centre_opposition_operating_centre_id', columns: ['operating_centre_id'])]
+#[ORM\Index(name: 'ix_operating_centre_opposition_opposition_id', columns: ['opposition_id'])]
+#[ORM\Index(name: 'uk_operating_centre_opposition_olbs_oc_id_olbs_opp_id_olbs_type', columns: ['olbs_oc_id', 'olbs_opp_id', 'olbs_type'])]
+#[ORM\UniqueConstraint(name: 'uk_operating_centre_opposition_olbs_oc_id_olbs_opp_id_olbs_type', columns: ['olbs_oc_id', 'olbs_opp_id', 'olbs_type'])]
+#[ORM\MappedSuperclass]
 abstract class AbstractOperatingCentreOpposition implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -39,47 +33,42 @@ abstract class AbstractOperatingCentreOpposition implements BundleSerializableIn
      * Primary key
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="opposition_id", nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'opposition_id', nullable: false)]
     protected $opposition_id = 0;
 
     /**
      * Primary key
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="operating_centre_id", nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'operating_centre_id', nullable: false)]
     protected $operating_centre_id = 0;
 
     /**
      * Olbs oc id
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_oc_id", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_oc_id', nullable: true)]
     protected $olbsOcId;
 
     /**
      * Olbs opp id
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_opp_id", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_opp_id', nullable: true)]
     protected $olbsOppId;
 
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;
 
 

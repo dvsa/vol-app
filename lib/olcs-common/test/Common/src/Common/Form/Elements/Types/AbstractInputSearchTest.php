@@ -8,7 +8,7 @@ use Common\Form\Elements\Custom\Vrm;
 use Common\Form\Elements\Types\AbstractInputSearch;
 use PHPUnit\Framework\TestCase;
 
-class AbstractInputSearchTest extends TestCase
+final class AbstractInputSearchTest extends TestCase
 {
     public function testEmptyMessages(): void
     {

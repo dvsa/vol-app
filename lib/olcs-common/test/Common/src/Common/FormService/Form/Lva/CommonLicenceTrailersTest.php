@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Mockery as m;
@@ -12,7 +14,7 @@ use Common\Service\Helper\FormHelperService;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CommonLicenceTrailersTest extends MockeryTestCase
+final class CommonLicenceTrailersTest extends MockeryTestCase
 {
     /**
      * @var CommonLicenceTrailers

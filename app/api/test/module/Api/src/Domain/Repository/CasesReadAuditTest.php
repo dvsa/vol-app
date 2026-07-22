@@ -16,11 +16,9 @@ use Mockery as m;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class CasesReadAuditTest extends AbstractReadAuditTestCase
+final class CasesReadAuditTest extends AbstractReadAuditTestCase
 {
-    /** @var CasesReadAudit|m\MockInterface */
-    protected $sut;
-
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(CasesReadAudit::class, true);

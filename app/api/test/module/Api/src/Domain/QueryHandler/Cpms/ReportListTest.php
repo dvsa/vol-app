@@ -22,7 +22,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ReportListTest extends QueryHandlerTestCase
+final class ReportListTest extends QueryHandlerTestCase
 {
     protected $mockCpmsService;
 

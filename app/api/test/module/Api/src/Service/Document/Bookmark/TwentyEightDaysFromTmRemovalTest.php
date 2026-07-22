@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\TwentyEightDaysFromTmRemoval;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
-class TwentyEightDaysFromTmRemovalTest extends \PHPUnit\Framework\TestCase
+final class TwentyEightDaysFromTmRemovalTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -41,7 +41,7 @@ class TwentyEightDaysFromTmRemovalTest extends \PHPUnit\Framework\TestCase
             'deletedDate' => '2026-03-04', // +28 days => 01/04/2026
         ]);
 
-        $this->assertEquals('01/04/2026', $bookmark->render());
+        $this->assertSame('01/04/2026', $bookmark->render());
     }
 
     public function testRenderWhenDeletedDateIsDateTimeAdds28Days(): void
@@ -51,6 +51,6 @@ class TwentyEightDaysFromTmRemovalTest extends \PHPUnit\Framework\TestCase
             'deletedDate' => new \DateTime('2026-03-04'), // +28 days => 01/04/2026
         ]);
 
-        $this->assertEquals('01/04/2026', $bookmark->render());
+        $this->assertSame('01/04/2026', $bookmark->render());
     }
 }

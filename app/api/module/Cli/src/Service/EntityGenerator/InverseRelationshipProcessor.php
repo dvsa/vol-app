@@ -191,37 +191,37 @@ readonly class InverseRelationshipProcessor
 
         $options = [];
         $options[] = sprintf(
-            'targetEntity="Dvsa\\Olcs\\Api\\Entity\\%s\\%s"',
+            'targetEntity: \Dvsa\Olcs\Api\Entity\%s\%s::class',
             $this->getEntityNamespace($sourceEntity),
             $sourceEntity
         );
-        $options[] = sprintf('mappedBy="%s"', $mappedBy);
+        $options[] = sprintf("mappedBy: '%s'", $mappedBy);
 
         // Add cascade if specified
         if (!empty($relationshipData['cascade'])) {
-            $cascadeOptions = array_map(fn($c) => '"' . $c . '"', $relationshipData['cascade']);
-            $options[] = 'cascade={' . implode(', ', $cascadeOptions) . '}';
+            $cascadeOptions = array_map(fn($c) => "'" . $c . "'", $relationshipData['cascade']);
+            $options[] = 'cascade: [' . implode(', ', $cascadeOptions) . ']';
         }
 
         // Add fetch strategy if specified
         if ($relationshipData['fetch'] !== null) {
-            $options[] = sprintf('fetch="%s"', strtoupper($relationshipData['fetch']));
+            $options[] = sprintf("fetch: '%s'", strtoupper($relationshipData['fetch']));
         }
 
         // Add indexBy if specified
         if ($relationshipData['indexBy'] !== null) {
-            $options[] = sprintf('indexBy="%s"', $relationshipData['indexBy']);
+            $options[] = sprintf("indexBy: '%s'", $relationshipData['indexBy']);
         }
 
         // Add orphanRemoval if specified
         if ($relationshipData['orphanRemoval']) {
-            $options[] = 'orphanRemoval=true';
+            $options[] = 'orphanRemoval: true';
         }
 
         $optionsStr = implode(', ', $options);
 
         return sprintf(
-            '@ORM\\%s(%s)',
+            '#[ORM\\%s(%s)]',
             ucfirst((string) $relationshipType->value),
             $optionsStr
         );
@@ -238,10 +238,10 @@ readonly class InverseRelationshipProcessor
 
         $orderPairs = [];
         foreach ($orderBy as $field => $direction) {
-            $orderPairs[] = sprintf('"%s" = "%s"', $field, strtoupper((string) $direction));
+            $orderPairs[] = sprintf("'%s' => '%s'", $field, strtoupper((string) $direction));
         }
 
-        return sprintf('@ORM\\OrderBy({%s})', implode(', ', $orderPairs));
+        return sprintf('#[ORM\\OrderBy([%s])]', implode(', ', $orderPairs));
     }
 
     /**

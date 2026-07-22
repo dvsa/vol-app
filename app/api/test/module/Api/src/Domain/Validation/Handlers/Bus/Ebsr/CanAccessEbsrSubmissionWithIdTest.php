@@ -9,10 +9,8 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Bus\Ebsr\CanAccessEbsrSubmissionWithId;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Validation\Handlers\Bus\Ebsr\CanAccessEbsrSubmissionWithId
- */
-class CanAccessEbsrSubmissionWithIdTest extends AbstractHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Handlers\Bus\Ebsr\CanAccessEbsrSubmissionWithId::class)]
+final class CanAccessEbsrSubmissionWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessEbsrSubmissionWithId
@@ -44,13 +42,11 @@ class CanAccessEbsrSubmissionWithIdTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

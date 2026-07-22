@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Fee;
 
 use Dvsa\Olcs\Transfer\Command\Fee\ApproveWaive;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Fee\ApproveWaive;
 /**
  * Approve Waive test
  */
-class ApproveWaiveTest extends \PHPUnit\Framework\TestCase
+final class ApproveWaiveTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

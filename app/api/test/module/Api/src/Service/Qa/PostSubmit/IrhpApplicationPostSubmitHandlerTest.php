@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class IrhpApplicationPostSubmitHandlerTest extends MockeryTestCase
+final class IrhpApplicationPostSubmitHandlerTest extends MockeryTestCase
 {
     private $irhpApplication;
 
@@ -24,6 +24,7 @@ class IrhpApplicationPostSubmitHandlerTest extends MockeryTestCase
 
     private $irhpApplicationPostSubmitHandler;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpApplication = m::mock(IrhpApplication::class);

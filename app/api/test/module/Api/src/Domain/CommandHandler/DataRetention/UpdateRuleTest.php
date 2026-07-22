@@ -15,7 +15,7 @@ use Mockery as m;
  * UpdateRule command handler test
  *
  */
-class UpdateRuleTest extends AbstractCommandHandlerTestCase
+final class UpdateRuleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

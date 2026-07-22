@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Cqrs;
 
 use Common\Service\Cqrs\RequestFactory;
@@ -9,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Logging\Log\Processor\RequestId;
 use Psr\Container\ContainerInterface;
 
-class RequestFactoryTest extends TestCase
+final class RequestFactoryTest extends TestCase
 {
     public function testInvokeWithoutSecureToken(): void
     {

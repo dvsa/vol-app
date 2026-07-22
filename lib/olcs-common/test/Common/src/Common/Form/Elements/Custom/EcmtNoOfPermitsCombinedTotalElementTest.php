@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Custom;
 
 use Common\Form\Elements\Custom\EcmtNoOfPermitsCombinedTotalElement;
@@ -12,7 +14,7 @@ use Laminas\Validator\Callback;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EcmtNoOfPermitsCombinedTotalElementTest extends MockeryTestCase
+final class EcmtNoOfPermitsCombinedTotalElementTest extends MockeryTestCase
 {
     public function testGetInputSpecification(): void
     {
@@ -26,7 +28,6 @@ class EcmtNoOfPermitsCombinedTotalElementTest extends MockeryTestCase
                 [
                     'name' => Callback::class,
                     'options' => [
-                        'callback' => static fn($value, array $context, int $maxValue): bool => \Common\Form\Elements\Validators\EcmtNoOfPermitsCombinedTotalValidator::validateMax($value, $context, $maxValue),
                         'callbackOptions' => [$maxPermitted],
                         'messages' => [
                             Callback::INVALID_VALUE => 'qanda.ecmt.number-of-permits.error.total-max-exceeded'
@@ -37,7 +38,6 @@ class EcmtNoOfPermitsCombinedTotalElementTest extends MockeryTestCase
                 [
                     'name' => Callback::class,
                     'options' => [
-                        'callback' => static fn($value, array $context): bool => \Common\Form\Elements\Validators\EcmtNoOfPermitsCombinedTotalValidator::validateMin($value, $context),
                         'messages' => [
                             Callback::INVALID_VALUE => 'qanda.ecmt.number-of-permits.error.total-min-exceeded'
                         ]
@@ -49,9 +49,22 @@ class EcmtNoOfPermitsCombinedTotalElementTest extends MockeryTestCase
         $ecmtNoOfPermitsCombinedTotalElement = new EcmtNoOfPermitsCombinedTotalElement($name);
         $ecmtNoOfPermitsCombinedTotalElement->setOption('maxPermitted', $maxPermitted);
 
-        $this->assertEquals(
-            $expectedInputSpecification,
-            $ecmtNoOfPermitsCombinedTotalElement->getInputSpecification()
-        );
+        $actual = $ecmtNoOfPermitsCombinedTotalElement->getInputSpecification();
+
+        // The callbacks are closures which cannot be reliably compared for equality;
+        // assert they delegate to the validator, then compare the rest of the structure.
+        $maxCallback = $actual['validators'][0]['options']['callback'];
+        $this->assertIsCallable($maxCallback);
+        $this->assertTrue($maxCallback('notused', ['euro5' => '10'], $maxPermitted));
+        $this->assertFalse($maxCallback('notused', ['euro5' => '56'], $maxPermitted));
+        unset($actual['validators'][0]['options']['callback']);
+
+        $minCallback = $actual['validators'][1]['options']['callback'];
+        $this->assertIsCallable($minCallback);
+        $this->assertTrue($minCallback('notused', ['euro5' => '1']));
+        $this->assertFalse($minCallback('notused', ['euro5' => '0']));
+        unset($actual['validators'][1]['options']['callback']);
+
+        $this->assertEquals($expectedInputSpecification, $actual);
     }
 }

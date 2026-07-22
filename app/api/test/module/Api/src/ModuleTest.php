@@ -24,11 +24,12 @@ use Psr\Log\LogLevel;
 /**
  * Tests the Api Module php
  */
-class ModuleTest extends MockeryTestCase
+final class ModuleTest extends MockeryTestCase
 {
     /** @var  Module */
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(Module::class)->makePartial()->shouldAllowMockingProtectedMethods();

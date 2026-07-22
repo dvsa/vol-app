@@ -136,11 +136,9 @@ abstract class SendEbsrRegCancelEmailTestAbstract extends AbstractCommandHandler
         $this->assertSame(['Email sent'], $result->getMessages());
     }
 
-    public static function handleCommandProvider(): array
+    public static function handleCommandProvider(): \Iterator
     {
-        return [
-            [static::CMD_CLASS],
-            [static::CMD_CLASS]
-        ];
+        yield [static::CMD_CLASS];
+        yield [static::CMD_CLASS];
     }
 }

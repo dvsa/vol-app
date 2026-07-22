@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Rbac\Navigation;
 
 use Common\Rbac\Navigation\IsAllowedListener;
@@ -12,10 +14,8 @@ use LmcRbacMvc\Guard\GuardInterface;
 use LmcRbacMvc\Options\ModuleOptions;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers \Common\Rbac\Navigation\IsAllowedListener
- */
-class IsAllowedListenerTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Rbac\Navigation\IsAllowedListener::class)]
+final class IsAllowedListenerTest extends MockeryTestCase
 {
     /** @var  m\MockInterface|ModuleOptions */
     private $mockModuleOptions;
@@ -43,7 +43,7 @@ class IsAllowedListenerTest extends MockeryTestCase
             ->getMock();
 
         $sut = new IsAllowedListener();
-        static::assertTrue($sut->accept($mockEvent));
+        $this->assertTrue($sut->accept($mockEvent));
     }
 
     public function testAcceptOk(): void
@@ -63,12 +63,10 @@ class IsAllowedListenerTest extends MockeryTestCase
             ->getMock();
 
         $sut = new IsAllowedListener();
-        static::assertFalse($sut->accept($mockEvent));
+        $this->assertFalse($sut->accept($mockEvent));
     }
 
-    /**
-     * @dataProvider  dataProviderTestIsGranted
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestIsGranted')]
     public function testIsGranted($route, $rules, $policy, $isGranted, $expect): void
     {
         if ($isGranted !== null) {
@@ -99,63 +97,61 @@ class IsAllowedListenerTest extends MockeryTestCase
             ->andReturn($route)
             ->getMock();
 
-        $sut = (new IsAllowedListener())
+        $sut = new IsAllowedListener()
             ->__invoke(
                 $this->mockServiceLocator(),
                 IsAllowedListener::class
             );
 
-        static::assertEquals($expect, $sut->isGranted($mockPage));
+        $this->assertEquals($expect, $sut->isGranted($mockPage));
     }
 
     /**
-     * @return (bool|null|string|string[][])[][]
+     * @return \Iterator<(int | string), array<(array<array<string>> | bool | string | null)>>
      *
      * @psalm-return list{array{route: 'unit_Route', rules: array{unit_RouteOther: array<never, never>}, policy: 'deny', isGranted: null, expect: false}, array{route: 'unit_Route', rules: array{unit_Route: list{'*'}}, policy: null, isGranted: null, expect: true}, array{route: 'unit_Route', rules: array{unit_Route: array<never, never>}, policy: null, isGranted: null, expect: true}, array{route: 'unit_Route', rules: array{unit_Route: list{'unit_Permission'}}, policy: null, isGranted: false, expect: false}}
      */
-    public function dataProviderTestIsGranted(): array
+    public static function dataProviderTestIsGranted(): \Iterator
     {
-        return [
-            //  rules not presented for route, policy DENY
-            [
-                'route' => 'unit_Route',
-                'rules' => [
-                    'unit_RouteOther' => [],
-                ],
-                'policy' => GuardInterface::POLICY_DENY,
-                'isGranted' => null,
-                'expect' => false,
+        //  rules not presented for route, policy DENY
+        yield [
+            'route' => 'unit_Route',
+            'rules' => [
+                'unit_RouteOther' => [],
             ],
-            //  rules presented with '*'
-            [
-                'route' => 'unit_Route',
-                'rules' => [
-                    'unit_Route' => ['*'],
-                ],
-                'policy' => null,
-                'isGranted' => null,
-                'expect' => true,
+            'policy' => GuardInterface::POLICY_DENY,
+            'isGranted' => null,
+            'expect' => false,
+        ];
+        //  rules presented with '*'
+        yield [
+            'route' => 'unit_Route',
+            'rules' => [
+                'unit_Route' => ['*'],
             ],
-            //  rules is empty
-            [
-                'route' => 'unit_Route',
-                'rules' => [
-                    'unit_Route' => [],
-                ],
-                'policy' => null,
-                'isGranted' => null,
-                'expect' => true,
+            'policy' => null,
+            'isGranted' => null,
+            'expect' => true,
+        ];
+        //  rules is empty
+        yield [
+            'route' => 'unit_Route',
+            'rules' => [
+                'unit_Route' => [],
             ],
-            //  rules has permission, but not Granted
-            [
-                'route' => 'unit_Route',
-                'rules' => [
-                    'unit_Route' => ['unit_Permission'],
-                ],
-                'policy' => null,
-                'isGranted' => false,
-                'expect' => false,
+            'policy' => null,
+            'isGranted' => null,
+            'expect' => true,
+        ];
+        //  rules has permission, but not Granted
+        yield [
+            'route' => 'unit_Route',
+            'rules' => [
+                'unit_Route' => ['unit_Permission'],
             ],
+            'policy' => null,
+            'isGranted' => false,
+            'expect' => false,
         ];
     }
 

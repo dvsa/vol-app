@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Licence;
 
 use Dvsa\Olcs\Transfer\Query\Licence\Vehicles;
@@ -7,7 +9,7 @@ use Dvsa\OlcsTest\Transfer\Query\QueryTest;
 use PHPUnit\Framework\TestCase;
 use Laminas\Stdlib\ArraySerializableInterface;
 
-class VehiclesTest extends TestCase
+final class VehiclesTest extends TestCase
 {
     use QueryTest;
 
@@ -178,9 +180,7 @@ class VehiclesTest extends TestCase
         ];
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function includeActiveIsOptional()
     {
         $sut = $this->createDtoContainer($this->createBlankDto());
@@ -190,9 +190,7 @@ class VehiclesTest extends TestCase
         $this->assertArrayNotHasKey('includeActive', $inputFilter->getMessages());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function includeActiveDefaultsToTrue()
     {
         $dto = $this->createBlankDto();

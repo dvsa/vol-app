@@ -10,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Qa\GuidanceTemplateVarsAdder;
 use RuntimeException;
 
-class GuidanceTemplateVarsAdderTest extends MockeryTestCase
+final class GuidanceTemplateVarsAdderTest extends MockeryTestCase
 {
     private $translateableTextHandler;
 
@@ -24,6 +24,7 @@ class GuidanceTemplateVarsAdderTest extends MockeryTestCase
 
     private $questionText;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->translateableTextHandler = m::mock(TranslateableTextHandler::class);

@@ -15,7 +15,7 @@ use Psr\Container\ContainerInterface;
 class DocumentStoreFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DocumentStoreInterface
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DocumentStoreInterface
     {
         $config = $container->get('config');
         $backend = $config['document_share']['backend'] ?? 'webdav';

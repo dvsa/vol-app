@@ -13,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see ValidatorDefaultMessageProvider
  */
-class ValidatorDefaultMessageProviderTest extends MockeryTestCase
+final class ValidatorDefaultMessageProviderTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {
@@ -30,7 +30,7 @@ class ValidatorDefaultMessageProviderTest extends MockeryTestCase
         $pluginManager->expects('get')->with($validatorName)->andReturn($validator);
 
         $sut = new ValidatorDefaultMessageProvider($pluginManager, $validatorName);
-        $this->assertEquals($messageValue, $sut->__invoke($messageKey));
+        $this->assertSame($messageValue, $sut->__invoke($messageKey));
     }
 
     public function testInvokeMissingKey(): void

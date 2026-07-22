@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ModifiedAnswerUpdaterTest extends MockeryTestCase
+final class ModifiedAnswerUpdaterTest extends MockeryTestCase
 {
     private $qaContext;
 
@@ -26,6 +26,7 @@ class ModifiedAnswerUpdaterTest extends MockeryTestCase
 
     private $modifiedAnswerUpdater;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->qaContext = m::mock(QaContext::class);
@@ -67,11 +68,9 @@ class ModifiedAnswerUpdaterTest extends MockeryTestCase
         $this->modifiedAnswerUpdater->update($this->qaContext, $oldAnswer, $newAnswer);
     }
 
-    public static function dpUpdateOldAnswerNullOrAnswerNotChanged(): array
+    public static function dpUpdateOldAnswerNullOrAnswerNotChanged(): \Iterator
     {
-        return [
-            ['answer'],
-            [null],
-        ];
+        yield ['answer'];
+        yield [null];
     }
 }

@@ -17,7 +17,7 @@ class CgrInputFactory implements FactoryInterface
     public const SCHEMA_PATH = '/../../../data/nr/xsd/CheckGoodRepute_Response.xsd';
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Input
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Input
     {
         $config = $container->get('config');
 

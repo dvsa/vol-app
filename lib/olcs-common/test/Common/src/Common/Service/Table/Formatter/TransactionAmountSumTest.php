@@ -6,6 +6,8 @@
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\RefData;
@@ -17,124 +19,122 @@ use Common\Service\Table\Formatter\TransactionAmountSum;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class TransactionAmountSumTest extends \PHPUnit\Framework\TestCase
+final class TransactionAmountSumTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the format method
      *
-     * @group Formatters
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $expected): void
     {
         $column = ['name' => 'amount'];
-        $this->assertSame($expected, (new TransactionAmountSum(new Money()))->format($data, $column));
+        $this->assertSame($expected, new TransactionAmountSum(new Money())->format($data, $column));
     }
 
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'no transactions' => [
-                [],
-                '£0.00'
-            ],
-            'invalid amounts' => [
+        yield 'no transactions' => [
+            [],
+            '£0.00'
+        ];
+        yield 'invalid amounts' => [
+            [
                 [
-                    [
-                        'status' => [
-                            'id' => RefData::TRANSACTION_STATUS_COMPLETE
-                        ],
-                        'amount' => 'A'
+                    'status' => [
+                        'id' => RefData::TRANSACTION_STATUS_COMPLETE
                     ],
-                    [
-                        'status' => [
-                            'id' => RefData::TRANSACTION_STATUS_COMPLETE
-                        ],
-                        'amount' => 'B'
-                    ],
+                    'amount' => 'A'
                 ],
-                '£0.00'
-            ],
-            'one complete transaction' => [
                 [
-                    [
-                        'status' => [
-                            'id' => RefData::TRANSACTION_STATUS_COMPLETE
-                        ],
-                        'amount' => 5
+                    'status' => [
+                        'id' => RefData::TRANSACTION_STATUS_COMPLETE
                     ],
+                    'amount' => 'B'
                 ],
-                '£5.00'
             ],
-            'two complete transactions' => [
+            '£0.00'
+        ];
+        yield 'one complete transaction' => [
+            [
                 [
-                    [
-                        'status' => [
-                            'id' => RefData::TRANSACTION_STATUS_COMPLETE
-                        ],
-                        'amount' => 5
+                    'status' => [
+                        'id' => RefData::TRANSACTION_STATUS_COMPLETE
                     ],
-                    [
-                        'status' => [
-                            'id' => RefData::TRANSACTION_STATUS_COMPLETE
-                        ],
-                        'amount' => 7
-                    ],
+                    'amount' => 5
                 ],
-                '£12.00'
             ],
-            'two complete one invalid' => [
+            '£5.00'
+        ];
+        yield 'two complete transactions' => [
+            [
                 [
-                    [
-                        'status' => [
-                            'id' => RefData::TRANSACTION_STATUS_COMPLETE
-                        ],
-                        'amount' => 5
+                    'status' => [
+                        'id' => RefData::TRANSACTION_STATUS_COMPLETE
                     ],
-                    [
-                        'status' => [
-                            'id' => RefData::TRANSACTION_STATUS_COMPLETE
-                        ],
-                        'amount' => 7
-                    ],
-                    [
-                        'status' => [
-                            'id' => RefData::TRANSACTION_STATUS_COMPLETE
-                        ],
-                        'amount' => 'A'
-                    ]
+                    'amount' => 5
                 ],
-                '£12.00'
-            ],
-            'one outstanding two complete' => [
                 [
-                    [
-                        'status' => [
-                            'id' => RefData::TRANSACTION_STATUS_OUTSTANDING
-                        ],
-                        'amount' => 5
+                    'status' => [
+                        'id' => RefData::TRANSACTION_STATUS_COMPLETE
                     ],
-                    [
-                        'status' => [
-                            'id' => RefData::TRANSACTION_STATUS_COMPLETE
-                        ],
-                        'amount' => 7
-                    ],
-                    [
-                        'status' => [
-                            'id' => RefData::TRANSACTION_STATUS_COMPLETE
-                        ],
-                        'amount' => 95
-                    ]
+                    'amount' => 7
                 ],
-                '£102.00'
             ],
+            '£12.00'
+        ];
+        yield 'two complete one invalid' => [
+            [
+                [
+                    'status' => [
+                        'id' => RefData::TRANSACTION_STATUS_COMPLETE
+                    ],
+                    'amount' => 5
+                ],
+                [
+                    'status' => [
+                        'id' => RefData::TRANSACTION_STATUS_COMPLETE
+                    ],
+                    'amount' => 7
+                ],
+                [
+                    'status' => [
+                        'id' => RefData::TRANSACTION_STATUS_COMPLETE
+                    ],
+                    'amount' => 'A'
+                ]
+            ],
+            '£12.00'
+        ];
+        yield 'one outstanding two complete' => [
+            [
+                [
+                    'status' => [
+                        'id' => RefData::TRANSACTION_STATUS_OUTSTANDING
+                    ],
+                    'amount' => 5
+                ],
+                [
+                    'status' => [
+                        'id' => RefData::TRANSACTION_STATUS_COMPLETE
+                    ],
+                    'amount' => 7
+                ],
+                [
+                    'status' => [
+                        'id' => RefData::TRANSACTION_STATUS_COMPLETE
+                    ],
+                    'amount' => 95
+                ]
+            ],
+            '£102.00'
         ];
     }
 }

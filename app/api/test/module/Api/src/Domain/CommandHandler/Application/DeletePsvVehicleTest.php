@@ -24,7 +24,7 @@ use Dvsa\Olcs\Transfer\Command\Vehicle\DeleteLicenceVehicle as VehicleCmd;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DeletePsvVehicleTest extends AbstractCommandHandlerTestCase
+final class DeletePsvVehicleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

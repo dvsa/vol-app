@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\AbstractConversationMessage;
@@ -9,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * ExternalConversationLinkLink test
  */
-class AbstractConversationMessageTest extends MockeryTestCase
+final class AbstractConversationMessageTest extends MockeryTestCase
 {
     /** @var AbstractConversationMessage */
     private $sut;
@@ -23,7 +25,6 @@ class AbstractConversationMessageTest extends MockeryTestCase
 
         $reflection = new \ReflectionClass($this->sut);
         $property = $reflection->getProperty('rowTemplate');
-        $property->setAccessible(true);
         $property->setValue($this->sut, '<<<HTML
 <div>
     <p>{senderName}</p>
@@ -38,9 +39,7 @@ HTML;');
         date_default_timezone_set('Europe/London');
     }
 
-    /**
-     * @dataProvider messageFormatProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('messageFormatProvider')]
     public function testFormatIncludesExpectedParts(
         array $row,
         string $expectedSenderName,
@@ -62,7 +61,7 @@ HTML;');
 
         $output = $this->sut->format($row);
 
-        $expectedDate = (new \DateTimeImmutable($row['createdOn']))
+        $expectedDate = new \DateTimeImmutable($row['createdOn'])
             ->setTimezone(new \DateTimeZone(date_default_timezone_get()))
             ->format('l j F Y \a\t H:ia');
 
@@ -75,77 +74,73 @@ HTML;');
         m::close();
     }
 
-    /**
-     * @dataProvider messageFormatProvider
-     */
-    public function messageFormatProvider(): array
+    #[\PHPUnit\Framework\Attributes\DataProvider('messageFormatProvider')]
+    public static function messageFormatProvider(): \Iterator
     {
-        return [
-            'external_user_message' => [
-                [
+        yield 'external_user_message' => [
+            [
+                'id' => 1,
+                'version' => 1,
+                'createdOn' => '2025-05-15T10:00:00+00:00', // Should convert to 11:00am in BST
+                'lastModifiedOn' => null,
+                'createdBy' => [
+                    'accountDisabled' => 'N',
+                    'disabledDate' => null,
                     'id' => 1,
+                    'lastLoginAt' => null,
+                    'loginId' => 'system',
+                    'pid' => 'bbc5e661e106c6dcd8dc6dd186454c2fcba3c710fb4d8e71a60c93eaf077f073',
+                    'translateToWelsh' => 'N',
+                    'termsAgreed' => false,
                     'version' => 1,
-                    'createdOn' => '2025-05-15T10:00:00+00:00', // Should convert to 11:00am in BST
-                    'lastModifiedOn' => null,
-                    'createdBy' => [
-                        'accountDisabled' => 'N',
-                        'disabledDate' => null,
-                        'id' => 1,
-                        'lastLoginAt' => null,
-                        'loginId' => 'system',
-                        'pid' => 'bbc5e661e106c6dcd8dc6dd186454c2fcba3c710fb4d8e71a60c93eaf077f073',
-                        'translateToWelsh' => 'N',
-                        'termsAgreed' => false,
-                        'version' => 1,
-                        'createdOn' => '2025-05-02T15:14:53+0000',
-                        'lastModifiedOn' => '2025-05-02T15:14:53+0000',
-                        'deletedDate' => null,
-                        'contactDetails' => null,
-                        'team' => null, // External user
-                    ],
-                    'lastModifiedBy' => null,
-                    'messagingContent' => [
-                        'id' => 1,
-                        'text' => 'Hello from Operator',
-                        'version' => 1,
-                        'createdOn' => '2023-11-06T12:12:12+0000',
-                        'lastModifiedOn' => null,
-                    ],
-                    'documents' => [],
+                    'createdOn' => '2025-05-02T15:14:53+0000',
+                    'lastModifiedOn' => '2025-05-02T15:14:53+0000',
+                    'deletedDate' => null,
+                    'contactDetails' => null,
+                    'team' => null, // External user
                 ],
-                'Jane Caseworker',           // getSenderName()
-                '',                          // getFileList()
-                '',                          // getFirstReadBy()
+                'lastModifiedBy' => null,
+                'messagingContent' => [
+                    'id' => 1,
+                    'text' => 'Hello from Operator',
+                    'version' => 1,
+                    'createdOn' => '2023-11-06T12:12:12+0000',
+                    'lastModifiedOn' => null,
+                ],
+                'documents' => [],
             ],
-            'internal_user_message_with_team' => [
-                [
+            'Jane Caseworker',           // getSenderName()
+            '',                          // getFileList()
+            '',                          // getFirstReadBy()
+        ];
+        yield 'internal_user_message_with_team' => [
+            [
+                'id' => 2,
+                'version' => 1,
+                'createdOn' => '2025-01-15T10:00:00+00:00', // UTC in winter
+                'lastModifiedOn' => null,
+                'createdBy' => [
                     'id' => 2,
+                    'team' => 'Licensing Team',
+                    'contactDetails' => null,
+                    'createdOn' => '2025-05-01T10:00:00+0000',
+                    'lastModifiedOn' => '2025-05-01T10:00:00+0000',
+                    'accountDisabled' => 'N',
                     'version' => 1,
-                    'createdOn' => '2025-01-15T10:00:00+00:00', // UTC in winter
-                    'lastModifiedOn' => null,
-                    'createdBy' => [
-                        'id' => 2,
-                        'team' => 'Licensing Team',
-                        'contactDetails' => null,
-                        'createdOn' => '2025-05-01T10:00:00+0000',
-                        'lastModifiedOn' => '2025-05-01T10:00:00+0000',
-                        'accountDisabled' => 'N',
-                        'version' => 1,
-                    ],
-                    'lastModifiedBy' => null,
-                    'messagingContent' => [
-                        'id' => 2,
-                        'text' => 'This is a caseworker message.',
-                        'version' => 1,
-                        'createdOn' => '2025-06-01T09:00:00+0000',
-                        'lastModifiedOn' => null,
-                    ],
-                    'documents' => [],
                 ],
-                'Alex Caseworker',          // getSenderName()
-                '',                         // getFileList()
-                '',                         // getFirstReadBy()
+                'lastModifiedBy' => null,
+                'messagingContent' => [
+                    'id' => 2,
+                    'text' => 'This is a caseworker message.',
+                    'version' => 1,
+                    'createdOn' => '2025-06-01T09:00:00+0000',
+                    'lastModifiedOn' => null,
+                ],
+                'documents' => [],
             ],
+            'Alex Caseworker',          // getSenderName()
+            '',                         // getFileList()
+            '',                         // getFirstReadBy()
         ];
     }
 }

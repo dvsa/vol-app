@@ -15,7 +15,7 @@ use Dvsa\Olcs\Transfer\Command\Application\UpdateAuthSignature as Cmd;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class UpdateAuthSignatureTest extends AbstractCommandHandlerTestCase
+final class UpdateAuthSignatureTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -47,7 +47,7 @@ class UpdateAuthSignatureTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\Application\UpdateApplicationCompletion::class,
             ['id' => 1066, 'section' => 'declarationsInternal'],
-            (new Result())->addMessage('UPDATE_APP_COMPLETION')
+            new Result()->addMessage('UPDATE_APP_COMPLETION')
         );
 
         $result = $this->sut->handleCommand($command);

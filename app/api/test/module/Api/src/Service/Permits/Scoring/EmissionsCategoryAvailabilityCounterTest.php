@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
+final class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetCount')]
     public function testGetCount(mixed $emissionsCategoryId): void
@@ -58,11 +58,9 @@ class EmissionsCategoryAvailabilityCounterTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestGetCount(): array
+    public static function dpTestGetCount(): \Iterator
     {
-        return [
-            [RefData::EMISSIONS_CATEGORY_EURO6_REF],
-            [RefData::EMISSIONS_CATEGORY_EURO5_REF],
-        ];
+        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF];
+        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF];
     }
 }

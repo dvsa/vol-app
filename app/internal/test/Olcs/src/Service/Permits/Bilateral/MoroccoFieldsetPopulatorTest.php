@@ -21,7 +21,7 @@ use Laminas\Form\Fieldset;
  *
  * @author Jonathan Thomas <jonthan@opalise.co.uk>
  */
-class MoroccoFieldsetPopulatorTest extends TestCase
+final class MoroccoFieldsetPopulatorTest extends TestCase
 {
     public function testPopulate(): void
     {

@@ -17,7 +17,7 @@ use Dvsa\Olcs\Transfer\Query\Cases\ByTransportManager;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Cases::class)]
-class CasesTest extends RepositoryTestCase
+final class CasesTest extends RepositoryTestCase
 {
     /** @var  Repository\Cases | m\MockInterface */
     protected $sut;
@@ -27,6 +27,7 @@ class CasesTest extends RepositoryTestCase
     /** @var  \Dvsa\Olcs\Transfer\Query\QueryInterface | m\MockInterface */
     private $mockQi;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repository\Cases::class, true);
@@ -114,7 +115,7 @@ class CasesTest extends RepositoryTestCase
 
         $this->sut->shouldReceive('fetchPaginatedList')->andReturn('EXPECT');
 
-        static::assertEquals('EXPECT', $this->sut->fetchList($mockQry));
+        $this->assertEquals('EXPECT', $this->sut->fetchList($mockQry));
 
         $expected = '{{QUERY}}' .
             ' SELECT CONCAT(ct.description, m.id) as HIDDEN caseType' .
@@ -124,7 +125,7 @@ class CasesTest extends RepositoryTestCase
             ' AND l.status = [[unit_LicStatus]]' .
             ' AND ta.id IN [[["unit_TA"]]]';
 
-        static::assertEquals($expected, $this->query);
+        $this->assertEquals($expected, $this->query);
     }
 
     public function testForReportOpenListQryOtherTa(): void
@@ -146,14 +147,14 @@ class CasesTest extends RepositoryTestCase
 
         $this->sut->shouldReceive('fetchPaginatedList')->andReturn('EXPECT');
 
-        static::assertEquals('EXPECT', $this->sut->fetchList($mockQry));
+        $this->assertEquals('EXPECT', $this->sut->fetchList($mockQry));
 
         $expected = '{{QUERY}}' .
             ' SELECT CONCAT(ct.description, m.id) as HIDDEN caseType' .
             ' AND m.closedDate IS NULL' .
             ' AND (ta.id IS NULL OR ta.id IN [[{"1":"A","2":"B"}]])';
 
-        static::assertEquals($expected, $this->query);
+        $this->assertEquals($expected, $this->query);
     }
 
     public function testFetchWithLicenceUsingId(): void

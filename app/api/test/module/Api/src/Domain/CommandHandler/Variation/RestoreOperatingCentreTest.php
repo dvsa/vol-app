@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\HandleOcVariationFees as HandleOcVa
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class RestoreOperatingCentreTest extends AbstractCommandHandlerTestCase
+final class RestoreOperatingCentreTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

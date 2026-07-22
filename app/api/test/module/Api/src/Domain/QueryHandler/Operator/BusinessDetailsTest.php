@@ -21,7 +21,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class BusinessDetailsTest extends QueryHandlerTestCase
+final class BusinessDetailsTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -53,6 +53,6 @@ class BusinessDetailsTest extends QueryHandlerTestCase
             ->getMock();
 
         $result = $this->sut->handleQuery($query);
-        $this->assertEquals($result, 'result');
+        $this->assertEquals('result', $result);
     }
 }

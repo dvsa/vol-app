@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * Operator tasks controller tests
  */
-class OperatorProcessingTasksControllerTest extends MockeryTestCase
+final class OperatorProcessingTasksControllerTest extends MockeryTestCase
 {
     protected $sut;
 

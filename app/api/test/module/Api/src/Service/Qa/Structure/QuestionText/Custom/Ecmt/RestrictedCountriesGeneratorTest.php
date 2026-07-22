@@ -22,9 +22,9 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class RestrictedCountriesGeneratorTest extends MockeryTestCase
+final class RestrictedCountriesGeneratorTest extends MockeryTestCase
 {
-    public const ECMT_ANNUAL_APP_PATH_GROUP_ID = 8;
+    public const int ECMT_ANNUAL_APP_PATH_GROUP_ID = 8;
 
     private $irhpApplicationEntity;
 
@@ -36,6 +36,7 @@ class RestrictedCountriesGeneratorTest extends MockeryTestCase
 
     private $restrictedCountriesGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpApplicationEntity = m::mock(IrhpApplicationEntity::class);
@@ -111,57 +112,55 @@ class RestrictedCountriesGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpGenerate(): array
+    public static function dpGenerate(): \Iterator
     {
-        return [
-            [
-                IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT,
-                self::ECMT_ANNUAL_APP_PATH_GROUP_ID,
-                [],
-                'qanda.ecmt-annual.restricted-countries.question',
-                'qanda.ecmt-annual.restricted-countries.question-summary',
-                'qanda.ecmt-annual.restricted-countries.guidance',
-            ],
-            [
-                IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT,
-                self::ECMT_ANNUAL_APP_PATH_GROUP_ID,
-                [CountryEntity::ID_AUSTRIA],
-                'qanda.ecmt-annual.restricted-countries.question.without.AT',
-                'qanda.ecmt-annual.restricted-countries.question-summary.without.AT',
-                'qanda.ecmt-annual.restricted-countries.guidance',
-            ],
-            [
-                IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT,
-                self::ECMT_ANNUAL_APP_PATH_GROUP_ID,
-                [CountryEntity::ID_AUSTRIA, CountryEntity::ID_GERMANY],
-                'qanda.ecmt-annual.restricted-countries.question.without.AT.DE',
-                'qanda.ecmt-annual.restricted-countries.question-summary.without.AT.DE',
-                'qanda.ecmt-annual.restricted-countries.guidance',
-            ],
-            [
-                IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                ApplicationPathGroupEntity::ECMT_SHORT_TERM_2020_APSG_WITHOUT_SECTORS_ID,
-                [],
-                'qanda.ecmt-short-term.restricted-countries.question.ecmt-short-term-2020-apsg-without-sectors',
-                'qanda.ecmt-short-term.restricted-countries.question-summary.ecmt-short-term-2020-apsg-without-sectors',
-                'qanda.ecmt-short-term.restricted-countries.guidance',
-            ],
-            [
-                IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                ApplicationPathGroupEntity::ECMT_SHORT_TERM_2020_APSG_WITH_SECTORS_ID,
-                [],
-                'qanda.ecmt-short-term.restricted-countries.question',
-                'qanda.ecmt-short-term.restricted-countries.question-summary',
-                'qanda.ecmt-short-term.restricted-countries.guidance',
-            ],
-            [
-                IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                ApplicationPathGroupEntity::ECMT_SHORT_TERM_2020_APGG,
-                [],
-                'qanda.ecmt-short-term.restricted-countries.question',
-                'qanda.ecmt-short-term.restricted-countries.question-summary',
-                'qanda.ecmt-short-term.restricted-countries.guidance',
-            ],
+        yield [
+            IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT,
+            self::ECMT_ANNUAL_APP_PATH_GROUP_ID,
+            [],
+            'qanda.ecmt-annual.restricted-countries.question',
+            'qanda.ecmt-annual.restricted-countries.question-summary',
+            'qanda.ecmt-annual.restricted-countries.guidance',
+        ];
+        yield [
+            IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT,
+            self::ECMT_ANNUAL_APP_PATH_GROUP_ID,
+            [CountryEntity::ID_AUSTRIA],
+            'qanda.ecmt-annual.restricted-countries.question.without.AT',
+            'qanda.ecmt-annual.restricted-countries.question-summary.without.AT',
+            'qanda.ecmt-annual.restricted-countries.guidance',
+        ];
+        yield [
+            IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT,
+            self::ECMT_ANNUAL_APP_PATH_GROUP_ID,
+            [CountryEntity::ID_AUSTRIA, CountryEntity::ID_GERMANY],
+            'qanda.ecmt-annual.restricted-countries.question.without.AT.DE',
+            'qanda.ecmt-annual.restricted-countries.question-summary.without.AT.DE',
+            'qanda.ecmt-annual.restricted-countries.guidance',
+        ];
+        yield [
+            IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            ApplicationPathGroupEntity::ECMT_SHORT_TERM_2020_APSG_WITHOUT_SECTORS_ID,
+            [],
+            'qanda.ecmt-short-term.restricted-countries.question.ecmt-short-term-2020-apsg-without-sectors',
+            'qanda.ecmt-short-term.restricted-countries.question-summary.ecmt-short-term-2020-apsg-without-sectors',
+            'qanda.ecmt-short-term.restricted-countries.guidance',
+        ];
+        yield [
+            IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            ApplicationPathGroupEntity::ECMT_SHORT_TERM_2020_APSG_WITH_SECTORS_ID,
+            [],
+            'qanda.ecmt-short-term.restricted-countries.question',
+            'qanda.ecmt-short-term.restricted-countries.question-summary',
+            'qanda.ecmt-short-term.restricted-countries.guidance',
+        ];
+        yield [
+            IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            ApplicationPathGroupEntity::ECMT_SHORT_TERM_2020_APGG,
+            [],
+            'qanda.ecmt-short-term.restricted-countries.question',
+            'qanda.ecmt-short-term.restricted-countries.question-summary',
+            'qanda.ecmt-short-term.restricted-countries.guidance',
         ];
     }
 
@@ -178,14 +177,12 @@ class RestrictedCountriesGeneratorTest extends MockeryTestCase
         $this->restrictedCountriesGenerator->generate($this->qaContext);
     }
 
-    public static function dpGenerateExceptionOnUnsupportedType(): array
+    public static function dpGenerateExceptionOnUnsupportedType(): \Iterator
     {
-        return [
-            [IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL],
-            [IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_BILATERAL],
-            [IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_MULTILATERAL],
-            [IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE],
-            [IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER],
-        ];
+        yield [IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL];
+        yield [IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_BILATERAL];
+        yield [IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_MULTILATERAL];
+        yield [IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE];
+        yield [IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER];
     }
 }

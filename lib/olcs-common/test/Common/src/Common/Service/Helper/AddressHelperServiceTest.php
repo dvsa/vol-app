@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Helper;
 
 use Common\Service\Helper\AddressHelperService;
@@ -15,7 +17,7 @@ use Common\Service\Helper\AddressHelperService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class AddressHelperServiceTest extends \PHPUnit\Framework\TestCase
+final class AddressHelperServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Holds the service
@@ -35,10 +37,9 @@ class AddressHelperServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test formatPostalAddress with simple parts
-     *
-     * @group helper_service
-     * @group address_helper_service
      */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('address_helper_service')]
     public function testFormatPostalAddressWithSimpleParts(): void
     {
         $address = [
@@ -69,10 +70,9 @@ class AddressHelperServiceTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test format addresses for select
-     *
-     * @group helper_service
-     * @group address_helper_service
      */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('address_helper_service')]
     public function testFormatAddressesForSelect(): void
     {
         $list = [

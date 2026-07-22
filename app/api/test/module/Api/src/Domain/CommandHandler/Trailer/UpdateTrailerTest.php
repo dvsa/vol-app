@@ -25,7 +25,7 @@ use Mockery as m;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class UpdateTrailerTest extends AbstractCommandHandlerTestCase
+final class UpdateTrailerTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -96,11 +96,9 @@ class UpdateTrailerTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dpIsLongerSemiTrailer(): array
+    public static function dpIsLongerSemiTrailer(): \Iterator
     {
-        return [
-            ['Y', true],
-            ['N', false],
-        ];
+        yield ['Y', true];
+        yield ['N', false];
     }
 }

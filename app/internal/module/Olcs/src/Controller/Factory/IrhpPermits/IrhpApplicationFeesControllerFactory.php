@@ -24,7 +24,7 @@ class IrhpApplicationFeesControllerFactory implements FactoryInterface
      * @return IrhpApplicationFeesController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpApplicationFeesController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IrhpApplicationFeesController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);

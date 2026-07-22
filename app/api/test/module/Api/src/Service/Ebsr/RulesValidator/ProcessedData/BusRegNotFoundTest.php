@@ -13,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class BusRegNotFoundTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator\ProcessedData
  */
-class BusRegNotFoundTest extends MockeryTestCase
+final class BusRegNotFoundTest extends MockeryTestCase
 {
     /**
      * tests whether a bus reg has been found
@@ -41,21 +41,18 @@ class BusRegNotFoundTest extends MockeryTestCase
     /**
      * Provider for testIsValid
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isValidProvider(): array
+    public static function isValidProvider(): \Iterator
     {
         $busMock = m::mock(BusRegEntity::class);
-
-        return [
-            [BusRegEntity::TXC_APP_NEW, $busMock, true],
-            [BusRegEntity::TXC_APP_NEW, null, true],
-            [BusRegEntity::TXC_APP_CANCEL, $busMock, true],
-            [BusRegEntity::TXC_APP_CANCEL, null, false],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, $busMock, true],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, null, false],
-            [BusRegEntity::TXC_APP_CHARGEABLE, $busMock, true],
-            [BusRegEntity::TXC_APP_CHARGEABLE, null, false],
-        ];
+        yield [BusRegEntity::TXC_APP_NEW, $busMock, true];
+        yield [BusRegEntity::TXC_APP_NEW, null, true];
+        yield [BusRegEntity::TXC_APP_CANCEL, $busMock, true];
+        yield [BusRegEntity::TXC_APP_CANCEL, null, false];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, $busMock, true];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, null, false];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, $busMock, true];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, null, false];
     }
 }

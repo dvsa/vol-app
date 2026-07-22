@@ -22,10 +22,11 @@ use Olcs\Listener\RouteParam\Conversation;
 use Mockery as m;
 use Olcs\Listener\RouteParams;
 
-class ConversationTest extends TestCase
+final class ConversationTest extends TestCase
 {
     protected Conversation $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(Conversation::class)

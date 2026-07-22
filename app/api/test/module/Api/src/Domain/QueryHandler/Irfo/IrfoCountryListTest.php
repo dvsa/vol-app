@@ -15,7 +15,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class IrfoCountryListTest extends QueryHandlerTestCase
+final class IrfoCountryListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -46,7 +46,7 @@ class IrfoCountryListTest extends QueryHandlerTestCase
 
         $actual = $this->sut->handleQuery($query);
 
-        static::assertEquals(2, $actual['count']);
-        static::assertEquals(['SERIALIZED'], $actual['result']);
+        $this->assertEquals(2, $actual['count']);
+        $this->assertEquals(['SERIALIZED'], $actual['result']);
     }
 }

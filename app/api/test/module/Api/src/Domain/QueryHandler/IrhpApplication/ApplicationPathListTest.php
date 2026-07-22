@@ -12,7 +12,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\AbstractListQueryHandlerTestCase;
 /**
  * ApplicationPathGroupList Test
  */
-class ApplicationPathListTest extends AbstractListQueryHandlerTestCase
+final class ApplicationPathListTest extends AbstractListQueryHandlerTestCase
 {
     protected $sutClass = ApplicationPathGroupListHandler::class;
     protected $sutRepo = 'ApplicationPathGroup';

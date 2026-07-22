@@ -21,22 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="bus_short_notice",
- *    indexes={
- *        @ORM\Index(name="ix_bus_short_notice_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_bus_short_notice_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_bus_short_notice_bus_reg_id", columns={"bus_reg_id"}),
- *        @ORM\Index(name="uk_bus_short_notice_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_bus_short_notice_bus_reg_id", columns={"bus_reg_id"}),
- *        @ORM\UniqueConstraint(name="uk_bus_short_notice_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'bus_short_notice')]
+#[ORM\Index(name: 'ix_bus_short_notice_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_bus_short_notice_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'uk_bus_short_notice_bus_reg_id', columns: ['bus_reg_id'])]
+#[ORM\Index(name: 'uk_bus_short_notice_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_bus_short_notice_bus_reg_id', columns: ['bus_reg_id'])]
+#[ORM\UniqueConstraint(name: 'uk_bus_short_notice_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractBusShortNotice implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,233 +43,208 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to bus_reg
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
-     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
     protected $busReg;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * bankHolidayChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="bank_holiday_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'bank_holiday_change', nullable: false, options: ['default' => 0])]
     protected $bankHolidayChange = 0;
 
     /**
      * unforseenChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="unforseen_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'unforseen_change', nullable: false, options: ['default' => 0])]
     protected $unforseenChange = 0;
 
     /**
      * Unforseen detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="unforseen_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'unforseen_detail', length: 255, nullable: true)]
     protected $unforseenDetail;
 
     /**
      * timetableChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="timetable_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'timetable_change', nullable: false, options: ['default' => 0])]
     protected $timetableChange = 0;
 
     /**
      * Timetable detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="timetable_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'timetable_detail', length: 255, nullable: true)]
     protected $timetableDetail;
 
     /**
      * replacementChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="replacement_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'replacement_change', nullable: false, options: ['default' => 0])]
     protected $replacementChange = 0;
 
     /**
      * Replacement detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="replacement_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'replacement_detail', length: 255, nullable: true)]
     protected $replacementDetail;
 
     /**
      * holidayChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="holiday_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'holiday_change', nullable: false, options: ['default' => 0])]
     protected $holidayChange = 0;
 
     /**
      * Holiday detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="holiday_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'holiday_detail', length: 255, nullable: true)]
     protected $holidayDetail;
 
     /**
      * trcChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="trc_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'trc_change', nullable: false, options: ['default' => 0])]
     protected $trcChange = 0;
 
     /**
      * Trc detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="trc_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'trc_detail', length: 255, nullable: true)]
     protected $trcDetail;
 
     /**
      * policeChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="police_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'police_change', nullable: false, options: ['default' => 0])]
     protected $policeChange = 0;
 
     /**
      * Police detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="police_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'police_detail', length: 255, nullable: true)]
     protected $policeDetail;
 
     /**
      * specialOccasionChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="special_occasion_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'special_occasion_change', nullable: false, options: ['default' => 0])]
     protected $specialOccasionChange = 0;
 
     /**
      * Special occasion detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="special_occasion_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'special_occasion_detail', length: 255, nullable: true)]
     protected $specialOccasionDetail;
 
     /**
      * connectionChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="connection_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'connection_change', nullable: false, options: ['default' => 0])]
     protected $connectionChange = 0;
 
     /**
      * Connection detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="connection_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'connection_detail', length: 255, nullable: true)]
     protected $connectionDetail;
 
     /**
      * notAvailableChange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="not_available_change", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'not_available_change', nullable: false, options: ['default' => 0])]
     protected $notAvailableChange = 0;
 
     /**
      * Not available detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="not_available_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'not_available_detail', length: 255, nullable: true)]
     protected $notAvailableDetail;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**

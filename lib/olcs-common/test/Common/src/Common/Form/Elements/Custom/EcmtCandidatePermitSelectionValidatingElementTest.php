@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Custom;
 
 use Common\Form\Elements\Custom\EcmtCandidatePermitSelectionValidatingElement;
@@ -14,9 +16,9 @@ use Laminas\Validator\Callback;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EcmtCandidatePermitSelectionValidatingElementTest extends MockeryTestCase
+final class EcmtCandidatePermitSelectionValidatingElementTest extends MockeryTestCase
 {
-    public const ELEMENT_NAME = 'elementName123';
+    public const string ELEMENT_NAME = 'elementName123';
 
     private $ecmtCandidatePermitSelectionValidatingElement;
 
@@ -37,7 +39,6 @@ class EcmtCandidatePermitSelectionValidatingElementTest extends MockeryTestCase
                 [
                     'name' => Callback::class,
                     'options' => [
-                        'callback' => static fn($value, array $context): bool => \Common\Form\Elements\Validators\EcmtCandidatePermitSelectionValidator::validate($value, $context),
                         'messages' => [
                             Callback::INVALID_VALUE => 'permits.page.irhp.candidate-permit-selection.error'
                         ]
@@ -46,10 +47,17 @@ class EcmtCandidatePermitSelectionValidatingElementTest extends MockeryTestCase
             ],
         ];
 
-        $this->assertEquals(
-            $expectedInputSpecification,
-            $this->ecmtCandidatePermitSelectionValidatingElement->getInputSpecification()
-        );
+        $actual = $this->ecmtCandidatePermitSelectionValidatingElement->getInputSpecification();
+
+        // The callback is a closure which cannot be reliably compared for equality;
+        // assert it delegates to the validator, then compare the rest of the structure.
+        $callback = $actual['validators'][0]['options']['callback'];
+        $this->assertIsCallable($callback);
+        $this->assertTrue($callback('notused', ['candidate-1' => '1']));
+        $this->assertFalse($callback('notused', ['candidate-1' => '0']));
+        unset($actual['validators'][0]['options']['callback']);
+
+        $this->assertEquals($expectedInputSpecification, $actual);
     }
 
     public function testInstanceOf(): void

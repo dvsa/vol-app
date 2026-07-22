@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Entity\Surrender;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 use Mockery as m;
 
-class CanAccessLicenceForSurrenderTest extends AbstractValidatorsTestCase
+final class CanAccessLicenceForSurrenderTest extends AbstractValidatorsTestCase
 {
     public function setUp(): void
     {
@@ -71,45 +71,43 @@ class CanAccessLicenceForSurrenderTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid($entityId));
     }
 
-    public static function dpLicencePermissions(): array
+    public static function dpLicencePermissions(): \Iterator
     {
-        return [
-            'selfservice-user-owner' => [
-                Permission::SELFSERVE_USER,
-                true,
-                Licence::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION,
-                Surrender::SURRENDER_STATUS_APPROVED,
-                false
-            ],
-            'selfservice-user-owner-not-surrendered' => [
-                Permission::SELFSERVE_USER,
-                true,
-                Licence::LICENCE_STATUS_VALID,
-                Surrender::SURRENDER_STATUS_DISCS_COMPLETE,
-                true
+        yield 'selfservice-user-owner' => [
+            Permission::SELFSERVE_USER,
+            true,
+            Licence::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION,
+            Surrender::SURRENDER_STATUS_APPROVED,
+            false
+        ];
+        yield 'selfservice-user-owner-not-surrendered' => [
+            Permission::SELFSERVE_USER,
+            true,
+            Licence::LICENCE_STATUS_VALID,
+            Surrender::SURRENDER_STATUS_DISCS_COMPLETE,
+            true
 
-            ],
-            'internal-user-not-surrendered' => [
-                Permission::INTERNAL_USER,
-                false,
-                Licence::LICENCE_STATUS_VALID,
-                Surrender::SURRENDER_STATUS_COMM_LIC_DOCS_COMPLETE,
-                true
-            ],
-            'internal-user-surrendered' => [
-                Permission::INTERNAL_USER,
-                false,
-                Licence::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION,
-                Surrender::SURRENDER_STATUS_SIGNED,
-                true
-            ],
-            'selfservice-user-surrender-submitted' => [
-                Permission::SELFSERVE_USER,
-                true,
-                Licence::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION,
-                Surrender::SURRENDER_STATUS_SUBMITTED,
-                false
-            ]
+        ];
+        yield 'internal-user-not-surrendered' => [
+            Permission::INTERNAL_USER,
+            false,
+            Licence::LICENCE_STATUS_VALID,
+            Surrender::SURRENDER_STATUS_COMM_LIC_DOCS_COMPLETE,
+            true
+        ];
+        yield 'internal-user-surrendered' => [
+            Permission::INTERNAL_USER,
+            false,
+            Licence::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION,
+            Surrender::SURRENDER_STATUS_SIGNED,
+            true
+        ];
+        yield 'selfservice-user-surrender-submitted' => [
+            Permission::SELFSERVE_USER,
+            true,
+            Licence::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION,
+            Surrender::SURRENDER_STATUS_SUBMITTED,
+            false
         ];
     }
 }

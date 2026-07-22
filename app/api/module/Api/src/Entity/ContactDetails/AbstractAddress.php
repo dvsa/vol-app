@@ -22,23 +22,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="address",
- *    indexes={
- *        @ORM\Index(name="ix_address_admin_area", columns={"admin_area"}),
- *        @ORM\Index(name="ix_address_country_code", columns={"country_code"}),
- *        @ORM\Index(name="ix_address_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_address_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_address_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_address_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'address')]
+#[ORM\Index(name: 'ix_address_admin_area', columns: ['admin_area'])]
+#[ORM\Index(name: 'ix_address_country_code', columns: ['country_code'])]
+#[ORM\Index(name: 'ix_address_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_address_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'uk_address_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\UniqueConstraint(name: 'uk_address_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractAddress implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -52,189 +46,169 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Local council name.Defines traffic area
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="admin_area", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'admin_area', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea::class, fetch: 'LAZY')]
     protected $adminArea;
 
     /**
      * ISO country code
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", fetch="LAZY")
-     * @ORM\JoinColumn(name="country_code", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'country_code', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, fetch: 'LAZY')]
     protected $countryCode;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Unique reference number.
      *
      * @var int
-     *
-     * @ORM\Column(type="bigint", name="uprn", nullable=true)
      */
+    #[ORM\Column(type: 'bigint', name: 'uprn', nullable: true)]
     protected $uprn;
 
     /**
      * Primary addressable object prefix
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="paon_start", length=5, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'paon_start', length: 5, nullable: true)]
     protected $paonStart;
 
     /**
      * Primary addressable object suffix end range. e.g. 10 in 1 to 10
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="paon_end", length=5, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'paon_end', length: 5, nullable: true)]
     protected $paonEnd;
 
     /**
      * Primary adressable object. Second line of address
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="paon_desc", length=90, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'paon_desc', length: 90, nullable: true)]
     protected $addressLine2;
 
     /**
      * secondary addressable object prefix start
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="saon_start", length=5, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'saon_start', length: 5, nullable: true)]
     protected $saonStart;
 
     /**
      * Secondary addressable object prefix end
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="saon_end", length=5, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'saon_end', length: 5, nullable: true)]
     protected $saonEnd;
 
     /**
      * Secondary addressable object. First line od address
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="saon_desc", length=90, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'saon_desc', length: 90, nullable: true)]
     protected $addressLine1;
 
     /**
      * street road etc
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="street", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'street', length: 100, nullable: true)]
     protected $addressLine3;
 
     /**
      * area of town
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="locality", length=35, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'locality', length: 35, nullable: true)]
     protected $addressLine4;
 
     /**
      * town village city name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="town", length=30, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'town', length: 30, nullable: true)]
     protected $town;
 
     /**
      * uk postcode
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="postcode", length=8, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'postcode', length: 8, nullable: true)]
     protected $postcode;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;
 
     /**
      * ContactDetails
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", mappedBy="address")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, mappedBy: 'address')]
     protected $contactDetails;
 
     /**

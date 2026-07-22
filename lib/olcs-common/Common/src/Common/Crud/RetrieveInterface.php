@@ -33,5 +33,5 @@ interface RetrieveInterface
      *
      * @return array|null
      */
-    public function getList(array $criteria = null);
+    public function getList(?array $criteria = null);
 }

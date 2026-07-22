@@ -22,7 +22,7 @@ class GrantControllerFactory implements FactoryInterface
      * @return GrantController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): GrantController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): GrantController
     {
 
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

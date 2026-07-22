@@ -4,6 +4,8 @@
  * PI Report Record Test
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -16,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @package CommonTest\Service\Table\Formatter
  */
-class PiReportRecordTest extends TestCase
+final class PiReportRecordTest extends TestCase
 {
     protected $urlHelper;
 
@@ -37,9 +39,8 @@ class PiReportRecordTest extends TestCase
 
     /**
      * Test the format method
-     *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $expected): void
     {
         $this->urlHelper
@@ -69,46 +70,44 @@ class PiReportRecordTest extends TestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'licence' => [
-                [
-                    'pi' => [
-                        'case' => [
-                            'licence' => [
-                                'id' => 123,
-                                'licNo' => 'AB1234567',
-                                'status' => [
-                                    'description' => 'lic status'
-                                ]
+        yield 'licence' => [
+            [
+                'pi' => [
+                    'case' => [
+                        'licence' => [
+                            'id' => 123,
+                            'licNo' => 'AB1234567',
+                            'status' => [
+                                'description' => 'lic status'
                             ]
                         ]
-                    ],
+                    ]
                 ],
-                '<a class="govuk-link" href="LIC_URL">AB1234567</a> (lic status)',
             ],
-            'tm' => [
-                [
-                    'pi' => [
-                        'case' => [
-                            'transportManager' => [
-                                'id' => 3,
-                                'tmStatus' => [
-                                    'description' => 'tm status'
-                                ]
+            '<a class="govuk-link" href="LIC_URL">AB1234567</a> (lic status)',
+        ];
+        yield 'tm' => [
+            [
+                'pi' => [
+                    'case' => [
+                        'transportManager' => [
+                            'id' => 3,
+                            'tmStatus' => [
+                                'description' => 'tm status'
                             ]
                         ]
-                    ],
+                    ]
                 ],
-                '<a class="govuk-link" href="TM_URL">TM 3</a> (tm status)',
             ],
-            'other' => [
-                [],
-                '',
-            ],
+            '<a class="govuk-link" href="TM_URL">TM 3</a> (tm status)',
+        ];
+        yield 'other' => [
+            [],
+            '',
         ];
     }
 }

@@ -19,13 +19,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class HeaderAnswersSummaryRowsAdderTest extends MockeryTestCase
+final class HeaderAnswersSummaryRowsAdderTest extends MockeryTestCase
 {
-    public const LIC_NO = 'AB1234567';
+    public const string LIC_NO = 'AB1234567';
 
-    public const TRAFFIC_AREA_NAME = 'Wales';
-
-    private $licence;
+    public const string TRAFFIC_AREA_NAME = 'Wales';
 
     private $irhpApplication;
 
@@ -35,19 +33,20 @@ class HeaderAnswersSummaryRowsAdderTest extends MockeryTestCase
 
     private $headerAnswersSummaryRowsAdder;
 
+    #[\Override]
     public function setUp(): void
     {
-        $this->licence = m::mock(LicenceEntity::class);
-        $this->licence->shouldReceive('getLicNo')
+        $licence = m::mock(LicenceEntity::class);
+        $licence->shouldReceive('getLicNo')
             ->withNoArgs()
             ->andReturn(self::LIC_NO);
-        $this->licence->shouldReceive('getTrafficArea->getName')
+        $licence->shouldReceive('getTrafficArea->getName')
             ->withNoArgs()
             ->andReturn(self::TRAFFIC_AREA_NAME);
 
         $this->irhpApplication = m::mock(IrhpApplicationEntity::class);
         $this->irhpApplication->shouldReceive('getLicence')
-            ->andReturn($this->licence);
+            ->andReturn($licence);
 
         $this->answersSummaryRowFactory = m::mock(AnswersSummaryRowFactory::class);
 

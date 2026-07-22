@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\ApplicationVehicleLimit;
  *
  * @author Alex Peskov <alex.peshkov@valtech.co.uk>
  */
-class ApplicationVehicleLimitTest extends \PHPUnit\Framework\TestCase
+final class ApplicationVehicleLimitTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

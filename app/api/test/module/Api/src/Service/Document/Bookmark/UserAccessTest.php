@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class UserAccessTest extends MockeryTestCase
+final class UserAccessTest extends MockeryTestCase
 {
     public function testGetQuery(): void
     {
@@ -268,17 +268,15 @@ class UserAccessTest extends MockeryTestCase
         $this->assertEquals('replacedstring', $bookmark->render());
     }
 
-    public static function selfServeMessageDataProvider(): array
+    public static function selfServeMessageDataProvider(): \Iterator
     {
-        return [
-            [
-                'Y',
-                "You can log in and select 'Manage users' to amend the current users."
-            ],
-            [
-                'N',
-                "You can register for a self-serve account to amend your licence details online."
-            ]
+        yield [
+            'Y',
+            "You can log in and select 'Manage users' to amend the current users."
+        ];
+        yield [
+            'N',
+            "You can register for a self-serve account to amend your licence details online."
         ];
     }
 }

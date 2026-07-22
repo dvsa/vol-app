@@ -20,7 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class MultilateralFeeBreakdownGeneratorTest extends MockeryTestCase
+final class MultilateralFeeBreakdownGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

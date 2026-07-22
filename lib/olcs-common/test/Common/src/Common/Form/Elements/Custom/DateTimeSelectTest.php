@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Custom;
 
 use Common\Form\Elements\Custom\DateTimeSelect;
@@ -7,7 +9,7 @@ use Common\Form\Elements\Custom\DateTimeSelect;
 /**
  * DateTimeSelect Test
  */
-class DateTimeSelectTest extends \PHPUnit\Framework\TestCase
+final class DateTimeSelectTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var DateTimeSelect
@@ -24,12 +26,12 @@ class DateTimeSelectTest extends \PHPUnit\Framework\TestCase
     public function testSetValueNull(): void
     {
         $this->sut->setValue(null);
-        $this->assertSame(null, $this->sut->getYearElement()->getValue());
-        $this->assertSame(null, $this->sut->getMonthElement()->getValue());
-        $this->assertSame(null, $this->sut->getDayElement()->getValue());
-        $this->assertSame(null, $this->sut->getHourElement()->getValue());
-        $this->assertSame(null, $this->sut->getMinuteElement()->getValue());
-        $this->assertSame(null, $this->sut->getSecondElement()->getValue());
+        $this->assertNull($this->sut->getYearElement()->getValue());
+        $this->assertNull($this->sut->getMonthElement()->getValue());
+        $this->assertNull($this->sut->getDayElement()->getValue());
+        $this->assertNull($this->sut->getHourElement()->getValue());
+        $this->assertNull($this->sut->getMinuteElement()->getValue());
+        $this->assertNull($this->sut->getSecondElement()->getValue());
     }
 
     public function testSetValueString(): void
@@ -59,7 +61,7 @@ class DateTimeSelectTest extends \PHPUnit\Framework\TestCase
         $this->expectException(\Laminas\Form\Exception\InvalidArgumentException::class);
 
         $this->sut->setValue('foo');
-        $this->assertSame(null, $this->sut->getYearElement()->getValue());
+        $this->assertNull($this->sut->getYearElement()->getValue());
     }
 
     public function testSetValueDateTime(): void

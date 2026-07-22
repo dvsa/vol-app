@@ -7,6 +7,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Type;
 
 use Mockery as m;
@@ -19,7 +21,7 @@ use Common\Service\Table\Type\Checkbox;
  * @author Rob Caiger <rob@clocal.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CheckboxTest extends MockeryTestCase
+final class CheckboxTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -37,9 +39,8 @@ class CheckboxTest extends MockeryTestCase
 
     /**
      * Test render with disabled attribute
-     *
-     * @group checkboxTest
      */
+    #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
     public function testRenderWithDisabledAttribute(): void
     {
         $fieldset = 'table';
@@ -67,9 +68,8 @@ class CheckboxTest extends MockeryTestCase
 
     /**
      * Test render
-     *
-     * @group checkboxTest
      */
+    #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
     public function testRender(): void
     {
         $fieldset = 'table';
@@ -91,9 +91,8 @@ class CheckboxTest extends MockeryTestCase
 
     /**
      * Test render
-     *
-     * @group checkboxTest
      */
+    #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
     public function testRenderWithAttributes(): void
     {
         $fieldset = 'table';

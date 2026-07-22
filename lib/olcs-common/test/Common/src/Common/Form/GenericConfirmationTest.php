@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper;
 
 use Laminas\Form\ElementInterface;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class GenericConfirmationTest extends TestCase
+final class GenericConfirmationTest extends TestCase
 {
     /**
      * @var \Common\Form\GenericConfirmation

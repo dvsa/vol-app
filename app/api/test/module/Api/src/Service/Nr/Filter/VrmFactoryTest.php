@@ -12,7 +12,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Psr\Container\ContainerInterface;
 
-class VrmFactoryTest extends TestCase
+final class VrmFactoryTest extends TestCase
 {
     public function testCreateService(): void
     {

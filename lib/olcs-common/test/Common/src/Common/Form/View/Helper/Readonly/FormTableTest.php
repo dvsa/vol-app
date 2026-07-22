@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper\Readonly;
 
 use Common\Form\View\Helper\Readonly\FormTable;
@@ -10,13 +12,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  * Class FormTableTest
  * @package CommonTest\Form\View\Helper\Readonly
  */
-class FormTableTest extends TestCase
+final class FormTableTest extends TestCase
 {
     /**
-     * @dataProvider provideTestInvoke
      * @param $element
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideTestInvoke')]
     public function testInvoke($element, $expected): void
     {
 
@@ -35,7 +37,7 @@ class FormTableTest extends TestCase
      *
      * @psalm-return list{list{null, null}, list{m\LegacyMockInterface&m\MockInterface&\Laminas\Form\ElementInterface, ''}, list{m\LegacyMockInterface&m\MockInterface&\Laminas\Form\ElementInterface, ''}, list{m\LegacyMockInterface&m\MockInterface&\Laminas\Form\ElementInterface, ''}, list{m\LegacyMockInterface&m\MockInterface&\Laminas\Form\Element\Select, ''}, list{m\LegacyMockInterface&m\MockInterface&\Common\Form\Elements\Types\Table, '<table></table>'}}
      */
-    public function provideTestInvoke(): array
+    public static function provideTestInvoke(): array
     {
         //need tests for Select, TextArea
 

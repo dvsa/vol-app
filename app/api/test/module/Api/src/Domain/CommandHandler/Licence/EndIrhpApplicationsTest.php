@@ -29,7 +29,7 @@ use Mockery as m;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EndIrhpApplicationsTest extends AbstractCommandHandlerTestCase
+final class EndIrhpApplicationsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -123,11 +123,9 @@ class EndIrhpApplicationsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            [WithdrawableInterface::WITHDRAWN_REASON_BY_USER],
-            [WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED],
-        ];
+        yield [WithdrawableInterface::WITHDRAWN_REASON_BY_USER];
+        yield [WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED];
     }
 }

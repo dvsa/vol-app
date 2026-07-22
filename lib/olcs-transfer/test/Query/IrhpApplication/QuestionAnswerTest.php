@@ -1,14 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\IrhpApplication;
 
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\QuestionAnswer;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Query\IrhpApplication\QuestionAnswer
- */
-
-class QuestionAnswerTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\IrhpApplication\QuestionAnswer::class)]
+final class QuestionAnswerTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

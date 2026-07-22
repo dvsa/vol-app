@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Command\IrhpPermit\GenerateCoverLetterDocument;
 /**
  * Generate Cover Letter Document Test
  */
-class GenerateCoverLetterDocumentTest extends \PHPUnit\Framework\TestCase
+final class GenerateCoverLetterDocumentTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

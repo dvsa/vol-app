@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\IrfoTaName as Sut;
 /**
  * IrfoTaName test
  */
-class IrfoTaNameTest extends \PHPUnit\Framework\TestCase
+final class IrfoTaNameTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -28,50 +28,48 @@ class IrfoTaNameTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function dpRenderValidDataProvider(): array
+    public static function dpRenderValidDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'tradingNames' => [
-                        [
-                            'name' => 'Trading Name 1',
-                        ],
-                        [
-                            'name' => 'Trading Name 2',
-                            'licence' => [
-                                'id' => 10
-                            ]
-                        ],
-                        [
-                            'name' => 'Trading Name 3',
-                        ],
-                        [
-                            'name' => 'Trading Name 4',
-                        ],
-                    ]
-                ],
-                'T/A: Trading Name 1 Trading Name 3 Trading Name 4',
+                'tradingNames' => [
+                    [
+                        'name' => 'Trading Name 1',
+                    ],
+                    [
+                        'name' => 'Trading Name 2',
+                        'licence' => [
+                            'id' => 10
+                        ]
+                    ],
+                    [
+                        'name' => 'Trading Name 3',
+                    ],
+                    [
+                        'name' => 'Trading Name 4',
+                    ],
+                ]
             ],
+            'T/A: Trading Name 1 Trading Name 3 Trading Name 4',
+        ];
+        yield [
             [
-                [
-                    'tradingNames' => [
-                        [
-                            'name' => 'Trading Name 2',
-                            'licence' => [
-                                'id' => 10
-                            ]
-                        ],
-                    ]
-                ],
-                '',
+                'tradingNames' => [
+                    [
+                        'name' => 'Trading Name 2',
+                        'licence' => [
+                            'id' => 10
+                        ]
+                    ],
+                ]
             ],
+            '',
+        ];
+        yield [
             [
-                [
-                    'tradingNames' => []
-                ],
-                '',
-            ]
+                'tradingNames' => []
+            ],
+            '',
         ];
     }
 }

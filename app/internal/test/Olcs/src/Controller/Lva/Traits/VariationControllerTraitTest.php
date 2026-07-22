@@ -22,24 +22,21 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationControllerTraitTest extends MockeryTestCase
+final class VariationControllerTraitTest extends MockeryTestCase
 {
     protected $sut;
-    protected $sm;
-    protected $mockNiTextTranslationUtil;
-    protected $mockAuthService;
-    protected $mockStringHelper;
 
 
+    #[\Override]
     public function setUp(): void
     {
-        $this->mockNiTextTranslationUtil = m::mock(NiTextTranslation::class);
-        $this->mockAuthService = m::mock(AuthorizationService::class);
-        $this->mockStringHelper = m::mock(StringHelperService::class)->makePartial();
+        $mockNiTextTranslationUtil = m::mock(NiTextTranslation::class);
+        $mockAuthService = m::mock(AuthorizationService::class);
+        $mockStringHelper = m::mock(StringHelperService::class)->makePartial();
         $this->sut = new Stubs\VariationControllerTraitStub(
-            $this->mockNiTextTranslationUtil,
-            $this->mockAuthService,
-            $this->mockStringHelper
+            $mockNiTextTranslationUtil,
+            $mockAuthService,
+            $mockStringHelper
         );
     }
 
@@ -137,21 +134,19 @@ class VariationControllerTraitTest extends MockeryTestCase
         $this->assertEquals($expected, $response);
     }
 
-    public static function dpGetSectionsForView(): array
+    public static function dpGetSectionsForView(): \Iterator
     {
-        return [
-            [
-                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
-                RefData::APP_VEHICLE_TYPE_HGV,
-                'community_licences',
-                'operating_centres',
-            ],
-            [
-                RefData::LICENCE_CATEGORY_PSV,
-                RefData::APP_VEHICLE_TYPE_LGV,
-                'community_licences.psv',
-                'operating_centres.lgv',
-            ],
+        yield [
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+            RefData::APP_VEHICLE_TYPE_HGV,
+            'community_licences',
+            'operating_centres',
+        ];
+        yield [
+            RefData::LICENCE_CATEGORY_PSV,
+            RefData::APP_VEHICLE_TYPE_LGV,
+            'community_licences.psv',
+            'operating_centres.lgv',
         ];
     }
 

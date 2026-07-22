@@ -78,7 +78,7 @@ final class Letter extends AbstractCommandHandler implements
         $this->docTemplateIdentifier = $template->getDocument()->getIdentifier();
 
         rewind($fp);
-        while (($row = fgetcsv($fp)) !== false) {
+        while (($row = fgetcsv($fp, null, ',', '"', '\\')) !== false) {
             $licenceId = $row[0];
             if ($licenceId != 'licence_id' && !in_array($licenceId, $this->licenceIds)) {
                 $this->licenceIds[] = $licenceId;

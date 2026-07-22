@@ -9,11 +9,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Document Search View
- *
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Entity(readOnly=true)
- * @ORM\Table(name="document_search_view")
  */
+#[ORM\Table(name: 'document_search_view')]
+#[ORM\Entity(readOnly: true)]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 class DocumentSearchView implements BundleSerializableInterface
 {
     use BundleSerializableTrait;
@@ -26,243 +25,217 @@ class DocumentSearchView implements BundleSerializableInterface
      * @var int
      *
      * NOTE: The ID annotation here is to allow doctrine to create the table (Even though we remove it later)
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id')]
     protected $id;
 
     /**
      * Issued date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="issued_date")
      */
+    #[ORM\Column(type: 'datetime', name: 'issued_date')]
     protected $issuedDate;
 
     /**
      * Category ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="category_id")
      */
+    #[ORM\Column(type: 'integer', name: 'category_id')]
     protected $category;
 
     /**
      * Sub Category ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="sub_category_id")
      */
+    #[ORM\Column(type: 'integer', name: 'sub_category_id')]
     protected $documentSubCategory;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description")
      */
+    #[ORM\Column(type: 'string', name: 'description')]
     protected $description;
 
     /**
      * Document Store Identifier
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="document_store_id")
      */
+    #[ORM\Column(type: 'string', name: 'document_store_id')]
     protected $documentStoreIdentifier;
 
     /**
      * Document ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="document_id")
      */
+    #[ORM\Column(type: 'integer', name: 'document_id')]
     protected $document;
 
     /**
      * Category Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="category_name")
      */
+    #[ORM\Column(type: 'string', name: 'category_name')]
     protected $categoryName;
 
     /**
      * Sub Category Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="document_sub_category_name")
      */
+    #[ORM\Column(type: 'string', name: 'document_sub_category_name')]
     protected $documentSubCategoryName;
 
     /**
      * Filename
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="filename")
      */
+    #[ORM\Column(type: 'string', name: 'filename')]
     protected $filename;
 
     /**
      * Is digital or not
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_external")
      */
+    #[ORM\Column(type: 'boolean', name: 'is_external')]
     protected $isExternal;
 
     /**
      * Identifier
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="id_col")
      */
+    #[ORM\Column(type: 'string', name: 'id_col')]
     protected $identifier;
 
     /**
      * Application Id
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="application_id")
      */
+    #[ORM\Column(type: 'integer', name: 'application_id')]
     protected $applicationId;
 
     /**
      * Licence number
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="lic_no")
      */
+    #[ORM\Column(type: 'string', name: 'lic_no')]
     protected $licenceNo;
 
     /**
      * Licence ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="licence_id")
      */
+    #[ORM\Column(type: 'integer', name: 'licence_id')]
     protected $licenceId;
 
     /**
      * Family name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="family_name")
      */
+    #[ORM\Column(type: 'string', name: 'family_name')]
     protected $familyName;
 
     /**
      * Case ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="case_id")
      */
+    #[ORM\Column(type: 'integer', name: 'case_id')]
     protected $caseId;
 
     /**
      * Bus Registration ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="bus_reg_id")
      */
+    #[ORM\Column(type: 'integer', name: 'bus_reg_id')]
     protected $busRegId;
 
     /**
      * Transport Manager ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="tm_id")
      */
+    #[ORM\Column(type: 'integer', name: 'tm_id')]
     protected $tmId;
 
     /**
      * Correspondence Inbox ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="ci_id")
      */
+    #[ORM\Column(type: 'integer', name: 'ci_id')]
     protected $ciId;
 
     /**
      * Organisation ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="irfo_organisation_id")
      */
+    #[ORM\Column(type: 'integer', name: 'irfo_organisation_id')]
     protected $irfoOrganisationId;
 
     /**
      * IRHP Application ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="irhp_application_id")
      */
+    #[ORM\Column(type: 'integer', name: 'irhp_application_id')]
     protected $irhpApplicationId;
 
     /**
      * Deleted date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="deleted_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'deleted_date', nullable: true)]
     protected $deletedDate;
 
     /**
      * Agreed date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="agreed_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'agreed_date', nullable: true)]
     protected $agreedDate;
 
     /**
      * Target date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="target_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'target_date', nullable: true)]
     protected $targetDate;
 
     /**
      * Sent date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="sent_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'sent_date', nullable: true)]
     protected $sentDate;
 
     /**
      * Format (ie file extension)
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="extension")
      */
+    #[ORM\Column(type: 'string', name: 'extension')]
     protected $extension;
 
     /**

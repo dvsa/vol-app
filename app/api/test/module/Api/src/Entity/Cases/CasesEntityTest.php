@@ -26,11 +26,12 @@ use Doctrine\Common\Collections\Criteria;
  * Initially auto-generated but won't be overridden
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Cases\Cases::class)]
-class CasesEntityTest extends EntityTester
+final class CasesEntityTest extends EntityTester
 {
     /** @var  \Dvsa\Olcs\Api\Entity\Cases\Cases */
     protected $entity;
 
+    #[\Override]
     public function setUp(): void
     {
         /** @var \Dvsa\Olcs\Api\Entity\Cases\Cases entity */

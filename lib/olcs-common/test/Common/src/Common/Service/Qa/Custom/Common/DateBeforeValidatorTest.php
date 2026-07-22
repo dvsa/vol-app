@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Common;
 
 use Common\Service\Qa\Custom\Common\DateBeforeValidator;
@@ -15,9 +17,9 @@ use Laminas\I18n\View\Helper\DateFormat;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class DateBeforeValidatorTest extends MockeryTestCase
+final class DateBeforeValidatorTest extends MockeryTestCase
 {
-    public const DATE_MUST_BE_BEFORE_DATE_STRING = '2020-01-03';
+    public const string DATE_MUST_BE_BEFORE_DATE_STRING = '2020-01-03';
 
     private $dateFormat;
 
@@ -43,9 +45,7 @@ class DateBeforeValidatorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpIsValidTrue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValidTrue')]
     public function testIsValidTrue($date): void
     {
         $this->assertTrue(
@@ -54,23 +54,19 @@ class DateBeforeValidatorTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return list{list{'2020-01-02'}, list{'2020-01-01'}, list{'2019-12-31'}, list{'2019-12-30'}}
      */
-    public function dpIsValidTrue(): array
+    public static function dpIsValidTrue(): \Iterator
     {
-        return [
-            ['2020-01-02'],
-            ['2020-01-01'],
-            ['2019-12-31'],
-            ['2019-12-30'],
-        ];
+        yield ['2020-01-02'];
+        yield ['2020-01-01'];
+        yield ['2019-12-31'];
+        yield ['2019-12-30'];
     }
 
-    /**
-     * @dataProvider dpIsValidFalse
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValidFalse')]
     public function testIsValidFalse($date): void
     {
         $dateMustBeBeforeDateTime = m::mock(DateTime::class);
@@ -107,19 +103,17 @@ class DateBeforeValidatorTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return list{list{'2020-01-03'}, list{'2020-01-04'}, list{'2020-01-05'}, list{'2020-02-01'}, list{'2021-03-28'}, list{'2022-01-01'}}
      */
-    public function dpIsValidFalse(): array
+    public static function dpIsValidFalse(): \Iterator
     {
-        return [
-            ['2020-01-03'],
-            ['2020-01-04'],
-            ['2020-01-05'],
-            ['2020-02-01'],
-            ['2021-03-28'],
-            ['2022-01-01'],
-        ];
+        yield ['2020-01-03'];
+        yield ['2020-01-04'];
+        yield ['2020-01-05'];
+        yield ['2020-02-01'];
+        yield ['2021-03-28'];
+        yield ['2022-01-01'];
     }
 }

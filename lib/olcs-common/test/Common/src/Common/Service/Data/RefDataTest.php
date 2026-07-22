@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Transfer\Query\RefData\RefDataList as Qry;
  * Class RefDataTest
  * @package CommonTest\Service
  */
-class RefDataTest extends RefDataTestCase
+final class RefDataTest extends RefDataTestCase
 {
     /** @var RefData */
     private $sut;
@@ -20,29 +22,26 @@ class RefDataTest extends RefDataTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->sut = new RefData($this->refDataServices);
     }
 
     public function testFormatData(): void
     {
-        $source = $this->getSingleSource();
-        $expected = $this->getSingleExpected();
+        $source = self::getSingleSource();
+        $expected = self::getSingleExpected();
 
         $this->assertEquals($expected, $this->sut->formatData($source));
     }
 
     public function testFormatDataForGroups(): void
     {
-        $source = $this->getGroupSource();
-        $expected = $this->getGroupExpected();
+        $source = self::getGroupSource();
+        $expected = self::getGroupExpected();
 
         $this->assertEquals($expected, $this->sut->formatDataForGroups($source));
     }
 
-    /**
-     * @dataProvider provideFetchListOptions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFetchListOptions')]
     public function testFetchListOptions($source, $expected, $useGroups): void
     {
         $this->sut->setData('test', $source);
@@ -51,23 +50,21 @@ class RefDataTest extends RefDataTestCase
     }
 
     /**
-     * @return (array|bool|mixed)[][]
+     * @return \Iterator<(int | string), array<mixed>>
      *
      * @psalm-return list{list{false, array<never, never>, false}, list{array, array, false}, list{mixed, array, true}}
      */
-    public function provideFetchListOptions(): array
+    public static function provideFetchListOptions(): \Iterator
     {
-        return [
-            [false, [], false],
-            [$this->getSingleSource(), $this->getSingleExpected(), false],
-            [$this->getGroupSource(), $this->getGroupExpected(), true],
-        ];
+        yield [false, [], false];
+        yield [self::getSingleSource(), self::getSingleExpected(), false];
+        yield [self::getGroupSource(), self::getGroupExpected(), true];
     }
 
     /**
      * @return array
      */
-    protected function getGroupExpected()
+    protected static function getGroupExpected()
     {
         return [
             'parent' =>  [
@@ -95,7 +92,7 @@ class RefDataTest extends RefDataTestCase
     /**
      * @return array
      */
-    protected function getSingleExpected()
+    protected static function getSingleExpected()
     {
         return [
             'val-1' => 'Value 1',
@@ -107,7 +104,7 @@ class RefDataTest extends RefDataTestCase
     /**
      * @return array
      */
-    protected function getSingleSource()
+    protected static function getSingleSource()
     {
         return [
             ['id' => 'val-1', 'description' => 'Value 1'],
@@ -121,7 +118,7 @@ class RefDataTest extends RefDataTestCase
      *
      * @psalm-return list{array{id: 'parent', description: 'Parent'}, array{id: 'val-1', description: 'Value 1', parent: array{id: 'p1', description: 'd1'}}, array{id: 'val-2', description: 'Value 2', parent: array{id: 'p2', description: 'd2'}}, array{id: 'val-3', description: 'Value 3', parent: array{id: 'p3', description: 'd3'}}}
      */
-    protected function getGroupSource(): array
+    protected static function getGroupSource(): array
     {
         return [
             ['id' => 'parent', 'description' => 'Parent'],

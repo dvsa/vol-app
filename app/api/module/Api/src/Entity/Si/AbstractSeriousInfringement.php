@@ -22,21 +22,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="serious_infringement",
- *    indexes={
- *        @ORM\Index(name="ix_serious_infringement_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_serious_infringement_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_serious_infringement_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_serious_infringement_member_state_code", columns={"member_state_code"}),
- *        @ORM\Index(name="ix_serious_infringement_si_category_id", columns={"si_category_id"}),
- *        @ORM\Index(name="ix_serious_infringement_si_category_type_id", columns={"si_category_type_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'serious_infringement')]
+#[ORM\Index(name: 'ix_serious_infringement_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_serious_infringement_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_serious_infringement_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_serious_infringement_member_state_code', columns: ['member_state_code'])]
+#[ORM\Index(name: 'ix_serious_infringement_si_category_id', columns: ['si_category_id'])]
+#[ORM\Index(name: 'ix_serious_infringement_si_category_type_id', columns: ['si_category_type_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractSeriousInfringement implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -50,164 +46,147 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * Two letter EU member state code
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", fetch="LAZY")
-     * @ORM\JoinColumn(name="member_state_code", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'member_state_code', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, fetch: 'LAZY')]
     protected $memberStateCode;
 
     /**
      * Foreign Key to si_category
      *
      * @var \Dvsa\Olcs\Api\Entity\Si\SiCategory
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiCategory", fetch="LAZY")
-     * @ORM\JoinColumn(name="si_category_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'si_category_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SiCategory::class, fetch: 'LAZY')]
     protected $siCategory;
 
     /**
      * Foreign Key to si_category_type
      *
      * @var \Dvsa\Olcs\Api\Entity\Si\SiCategoryType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiCategoryType", fetch="LAZY")
-     * @ORM\JoinColumn(name="si_category_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'si_category_type_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SiCategoryType::class, fetch: 'LAZY')]
     protected $siCategoryType;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * ERRU business case GUID
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="notification_number", length=36, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'notification_number', length: 36, nullable: true)]
     protected $notificationNumber;
 
     /**
      * Check date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="check_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'check_date', nullable: true)]
     protected $checkDate;
 
     /**
      * Infringement date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="infringement_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'infringement_date', nullable: true)]
     protected $infringementDate;
 
     /**
      * Reason
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="reason", length=500, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'reason', length: 500, nullable: true)]
     protected $reason;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * used to differentiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=48, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 48, nullable: true)]
     protected $olbsType;
 
     /**
      * AppliedPenalties
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenalty", mappedBy="seriousInfringement")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SiPenalty::class, mappedBy: 'seriousInfringement')]
     protected $appliedPenalties;
 
     /**
      * ImposedErrus
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruImposed", mappedBy="seriousInfringement", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruImposed::class, mappedBy: 'seriousInfringement', cascade: ['persist'])]
     protected $imposedErrus;
 
     /**
      * RequestedErrus
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested", mappedBy="seriousInfringement", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested::class, mappedBy: 'seriousInfringement', cascade: ['persist'])]
     protected $requestedErrus;
 
     /**

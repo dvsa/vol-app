@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service;
 
 use Common\Service\Cases;
@@ -8,7 +10,7 @@ use Common\Service\Cases;
  * Class CasesTest
  * @package CommonTest\Service
  */
-class CasesTest extends \PHPUnit\Framework\TestCase
+final class CasesTest extends \PHPUnit\Framework\TestCase
 {
     public function testCreateNrCase(): array
     {

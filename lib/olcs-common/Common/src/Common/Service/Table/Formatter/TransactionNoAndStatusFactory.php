@@ -17,7 +17,7 @@ class TransactionNoAndStatusFactory implements FactoryInterface
      * @throws NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $formatterPluginManager = $container->get(FormatterPluginManager::class);
         $transactionUrlFormatter = $formatterPluginManager->get(TransactionUrl::class);

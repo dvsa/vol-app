@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class PhoneNumbersTest extends MockeryTestCase
+final class PhoneNumbersTest extends MockeryTestCase
 {
     public function testGetQuery(): void
     {

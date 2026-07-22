@@ -23,7 +23,7 @@ use Psr\Container\ContainerInterface;
 final class GovUkNotifyTransportFactoryFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): GovUkNotifyTransportFactory
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): GovUkNotifyTransportFactory
     {
         $config = $container->get('config');
         $notifyConfig = $config['email']['notify'] ?? [];

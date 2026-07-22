@@ -109,7 +109,7 @@ trait ExternalControllerTrait
      *
      * @return ViewModel
      */
-    protected function render($titleSuffix, Form $form = null, $variables = [])
+    protected function render($titleSuffix, ?Form $form = null, $variables = [])
     {
         $this->attachCurrentMessages();
 

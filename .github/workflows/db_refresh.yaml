@@ -1,0 +1,399 @@
+name: DB Refresh
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: db-refresh-${{ inputs.platformEnv }}
+  cancel-in-progress: false
+
+on:
+  workflow_dispatch:
+    inputs:
+      platformEnv:
+        description: "Determines the environment we want to target"
+        required: true
+        type: choice
+        options: [dev, reg, da, int, demo, ps, prep]
+      rdsSnap:
+        description: "Optional explicit RDS snapshot name. Leave blank to use latest automated snapshot from source."
+        required: false
+        default: ""
+        type: string
+      rdsSnapSource:
+        description: "Source RDS instance used when rdsSnap is blank"
+        required: false
+        default: "app-olcs-rds-anondb-temp"
+        type: string
+      rdsFinalSnap:
+        description: "Take final snapshot of original RDS cluster on delete?"
+        required: true
+        default: true
+        type: boolean
+      shutdownEnv:
+        description: "If true, reader/writer recreation is skipped"
+        required: true
+        default: false
+        type: boolean
+      multiAZ:
+        description: "Restore DB as Multi-AZ"
+        required: true
+        default: false
+        type: boolean
+
+env:
+  HTTPS_PROXY: http://proxy.ci.olcs.dev-dvsacloud.uk:3128
+  SLACK_CHAN: "#platform_alerts"
+  SLACK_COMPLETED: "#36A64F"
+  SLACK_FAIL: "#FF9FA1"
+  SLACK_WARN: "#DAA038"
+  AWS_REGION: eu-west-1
+  AWS_OIDC_ROLE: ${{ vars[inputs.platformEnv == 'prep' && 'ACCOUNT_PROD_TF_OIDC_ROLE' || 'ACCOUNT_NONPROD_TF_OIDC_ROLE'] }}
+  LAMBDA_DB_REFRESH_FUNCTION: Aurora-DBRefresh-L
+  LAMBDA_INIT_DB_FUNCTION: OLCS-OLCSDBRefresh-InitDB-L
+  ENGINE_VERSION: 8.0.mysql_aurora.3.12.0
+
+jobs:
+  db-refresh:
+    name: db refresh - ${{ inputs.platformEnv }} - ${{ github.run_number }}
+    environment: ${{ inputs.platformEnv }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ env.AWS_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Install jq (if missing)
+        shell: bash
+        run: |
+          if ! command -v jq >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y jq
+          fi
+
+      - name: Send start notification to Slack
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          payload: |
+            {
+              "channel": "${{ env.SLACK_CHAN }}",
+              "attachments": [
+                {
+                  "color": "${{ env.SLACK_COMPLETED }}",
+                  "text": "Starting refresh of OLCSDB from anonymised PROD db into ${{ inputs.platformEnv }}"
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Run DB refresh flow
+        shell: bash
+        env:
+          PLATFORM_ENV: ${{ inputs.platformEnv }}
+          RDS_SNAP: ${{ inputs.rdsSnap }}
+          RDS_SNAP_SOURCE: ${{ inputs.rdsSnapSource }}
+          RDS_FINAL_SNAP: ${{ inputs.rdsFinalSnap }}
+          SHUTDOWN_ENV: ${{ inputs.shutdownEnv }}
+          MULTI_AZ: ${{ inputs.multiAZ }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          set -euo pipefail
+          export https_proxy="${HTTPS_PROXY}"
+          export HTTPS_PROXY="${HTTPS_PROXY}"
+          export no_proxy="169.254.169.254,localhost,127.0.0.1,s3.${AWS_REGION}.amazonaws.com"
+          export NO_PROXY="169.254.169.254,localhost,127.0.0.1,s3.${AWS_REGION}.amazonaws.com"
+          slack_send() {
+            local color="$1"
+            local msg="$2"
+            jq -n --arg channel "${SLACK_CHAN}" --arg color "${color}" --arg text "${msg}" \
+              '{channel:$channel, attachments:[{color:$color, text:$text}]}' \
+              | curl -sS -X POST "https://slack.com/api/chat.postMessage" \
+                  -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \
+                  -H "Content-Type: application/json; charset=utf-8" \
+                  --data @- >/dev/null || true
+          }
+
+          invoke_lambda() {
+            local payload="$1"
+            local expected="$2"
+            local fn="$3"
+            local outfile
+            outfile="$(mktemp)"
+            trap 'rm -f "${outfile:-}"; trap - RETURN' RETURN
+            local response status fn_error
+            if ! response="$(aws lambda invoke \
+              --cli-binary-format raw-in-base64-out \
+              --function-name "${fn}" \
+              --payload "${payload}" \
+              --region "${AWS_REGION}" \
+              "${outfile}")"; then
+              return 1
+            fi
+
+            status="$(jq -r '.StatusCode // empty' <<<"${response}")"
+            fn_error="$(jq -r '.FunctionError // empty' <<<"${response}")"
+
+            local body
+            body="$(cat "${outfile}")"
+            if [[ "${status}" != "200" ]] || [[ -n "${fn_error}" ]] || [[ "${body}" != *"${expected}"* ]]; then
+              echo "Lambda invoke failed (fn=${fn}, status=${status}, functionError=${fn_error}, expected=${expected}). Body: ${body}" >&2; return 1
+            fi
+            return 0
+          }
+
+          wait_cluster_status() {
+            local rds_name="$1" expected="$2" sleep_s="$3" retry_limit="$4"
+            local i=0
+            while [[ $i -lt $retry_limit ]]; do
+              local payload
+              payload="{ \"EventType\": \"GetRDSClusterStatus\", \"RDSName\": \"${rds_name}\" }"
+              if invoke_lambda "${payload}" "${expected}" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+                return 0
+              fi
+              i=$((i+1))
+              sleep "${sleep_s}"
+            done
+            return 1
+          }
+
+          wait_instance_status() {
+            local rds_name="$1" expected="$2" sleep_s="$3" retry_limit="$4"
+            local i=0
+            while [[ $i -lt $retry_limit ]]; do
+              local payload
+              payload="{ \"EventType\": \"GetRDSInstanceStatus\", \"RDSName\": \"${rds_name}\" }"
+              if invoke_lambda "${payload}" "${expected}" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+                return 0
+              fi
+              i=$((i+1))
+              sleep "${sleep_s}"
+            done
+            return 1
+          }
+
+          # configureParams equivalent
+          case "${PLATFORM_ENV}" in
+            dev|reg|da|int|demo|ps)
+              ENV_NAME="${PLATFORM_ENV}"
+              HOSTED_ZONE="${PLATFORM_ENV}.olcs.dev-dvsacloud.uk"
+              PREFIX="${ENV_NAME}"
+              ACCOUNT="054614622558"
+              RDS_DB_INSTANCE_CLASS="db.serverless"
+              RDS_OPTION_GROUP="default:aurora-mysql-8-0"
+              RDS_LOG_EXPORTS='{ "EnableLogTypes":["error"], "DisableLogTypes":[] }'
+              S3_CONFIG_BUCKET="devapp-shd-pri-olcsci-build-s3"
+              RUN_INIT_SQL="false"
+              ;;
+            prep)
+              ENV_NAME="${PLATFORM_ENV^^}"
+              HOSTED_ZONE="pre.olcs.dvsacloud.uk"
+              PREFIX="${ENV_NAME}"
+              ACCOUNT="146997448015"
+              RDS_DB_INSTANCE_CLASS="db.r6g.xlarge"
+              RDS_OPTION_GROUP="default:aurora-mysql-8-0"
+              RDS_LOG_EXPORTS='{ "EnableLogTypes":["audit","error","general","slowquery"], "DisableLogTypes":[] }'
+              S3_CONFIG_BUCKET="app-shd-pri-olcsci-build-s3"
+              RUN_INIT_SQL="true"
+              ;;
+            *)
+              echo "Unsupported platformEnv: ${PLATFORM_ENV}"
+              exit 1
+              ;;
+          esac
+
+          RDS_MONITORING_ROLE_ARN="arn:aws:iam::${ACCOUNT}:role/rds-monitoring-role"
+          LAMBDA_ARN="arn:aws:lambda:${AWS_REGION}:${ACCOUNT}"
+          R53_NAME="olcsdb-rds"
+          R53_READ_REPLICA_NAME="olcsreaddb-rds"
+          RDS_CLUSTER_NAME="$(echo "${PREFIX}" | tr '[:upper:]' '[:lower:]' | tr -d '/')-aurora-olcsdb-cluster"
+          RDS_WRITER_NAME="$(echo "${PREFIX}" | tr '[:upper:]' '[:lower:]' | tr -d '/')-aurora-olcsdb-writer"
+          RDS_READER_NAME="$(echo "${PREFIX}" | tr '[:upper:]' '[:lower:]' | tr -d '/')-aurora-olcsdb-reader"
+          RDS_MONITORING_INTERVAL=1
+          RDS_PARAM_GROUP="default.aurora-mysql8.0"
+          RDS_WRITER_SEC_GROUP="${PREFIX}-aurora-olcsdb-cluster"
+          RDS_SEC_GROUP="${PREFIX}-aurora-olcsdb-cluster"
+
+          if [[ "${PLATFORM_ENV}" == "int" ]]; then
+            SUBNET_PREFIX="qa"
+          elif [[ "${PLATFORM_ENV}" == "prep" ]]; then
+            SUBNET_PREFIX="pp"
+          else
+            SUBNET_PREFIX="$(echo "${PREFIX}" | tr '[:upper:]' '[:lower:]' | tr -d '/')"
+          fi
+          RDS_SUBNET="devapp${SUBNET_PREFIX}-olcs-rds-devapp${SUBNET_PREFIX}ew"
+
+          CLEAN_PREFIX="$(echo "${PREFIX}" | tr -d '/')"
+          RDS_READER_TAGS="[{ \"Key\": \"Name\", \"Value\": \"${CLEAN_PREFIX}-OLCS-RDS-OLCSREADDB-RDS\" }, { \"Key\": \"Environment\", \"Value\": \"${PREFIX}\" }, { \"Key\": \"StopOvernight\", \"Value\": \"1\" }, { \"Key\": \"Application\", \"Value\": \"OLCS\" }, { \"Key\": \"Tier\", \"Value\": \"RDS\" }]"
+          RDS_WRITER_TAGS="[{ \"Key\": \"Name\", \"Value\": \"${CLEAN_PREFIX}-OLCS-RDS-OLCSDB-RDS\" }, { \"Key\": \"Environment\", \"Value\": \"${PREFIX}\" }, { \"Key\": \"StopOvernight\", \"Value\": \"1\" }, { \"Key\": \"Application\", \"Value\": \"OLCS\" }, { \"Key\": \"Tier\", \"Value\": \"RDS\" }]"
+          RDS_TAGS="[{ \"Key\": \"Name\", \"Value\": \"${CLEAN_PREFIX}-OLCS-RDS-OLCSDB-RDS\" }, { \"Key\": \"Environment\", \"Value\": \"${PREFIX}\" }, { \"Key\": \"StopOvernight\", \"Value\": \"1\" }, { \"Key\": \"Application\", \"Value\": \"OLCS\" }, { \"Key\": \"Tier\", \"Value\": \"RDS\" }]"
+
+          # 1. get RDS status
+          payload="{ \"EventType\": \"GetRDSClusterStatus\", \"RDSName\": \"${RDS_CLUSTER_NAME}\" }"
+          invoke_lambda "${payload}" "available" "${LAMBDA_DB_REFRESH_FUNCTION}" || { slack_send "${SLACK_FAIL}" "Error. Build failed fetching RDS cluster status"; exit 1; }
+
+          # 2. rename existing Aurora cluster
+          RDS_NEW_NAME="${RDS_CLUSTER_NAME}-deploy"
+          payload="{ \"EventType\": \"RenameRDSInstance\", \"RDSName\": \"${RDS_CLUSTER_NAME}\", \"RDSNewName\": \"${RDS_NEW_NAME}\" }"
+          invoke_lambda "${payload}" "${RDS_NEW_NAME}" "${LAMBDA_DB_REFRESH_FUNCTION}" || { slack_send "${SLACK_FAIL}" "Error. RDS rename of ${RDS_CLUSTER_NAME} failed"; exit 1; }
+          wait_cluster_status "${RDS_CLUSTER_NAME}" "RDSInstanceDoesNotExist" 30 30 || { slack_send "${SLACK_FAIL}" "Error. Failed checking cluster after rename"; exit 1; }
+          wait_cluster_status "${RDS_NEW_NAME}" "available" 30 30 || { slack_send "${SLACK_FAIL}" "Error. Failed checking renamed cluster availability"; exit 1; }
+          slack_send "${SLACK_COMPLETED}" "RDS rename of ${RDS_CLUSTER_NAME} succeeded"
+
+          # 3. remove existing reader
+          payload="{ \"EventType\": \"GetRDSInstanceStatus\", \"RDSName\": \"${RDS_READER_NAME}\" }"
+          if invoke_lambda "${payload}" "RDSInstanceDoesNotExist" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+            slack_send "${SLACK_WARN}" "Warning. No existing ReadReplica found: ${RDS_READER_NAME}. Build will continue"
+          else
+            payload="{ \"EventType\":\"TerminateRDSInstance\", \"RDSName\":\"${RDS_READER_NAME}\", \"RDSFinalSnap\": false, \"RDSType\": \"reader\" }"
+            invoke_lambda "${payload}" "TerminateComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || { slack_send "${SLACK_FAIL}" "Error. Failed to delete original ReadReplica"; exit 1; }
+          fi
+          wait_instance_status "${RDS_READER_NAME}" "RDSInstanceDoesNotExist" 60 30 || { slack_send "${SLACK_FAIL}" "Error. Failed to delete original ReadReplica"; exit 1; }
+          slack_send "${SLACK_COMPLETED}" "Removal of original RDS ReadReplica instance succeeded"
+
+          # 4. remove existing writer
+          payload="{ \"EventType\": \"GetRDSInstanceStatus\", \"RDSName\": \"${RDS_WRITER_NAME}\" }"
+          if invoke_lambda "${payload}" "RDSInstanceDoesNotExist" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+            slack_send "${SLACK_WARN}" "Warning. No existing Writer instance found: ${RDS_WRITER_NAME}. Build will continue"
+          else
+            payload="{ \"EventType\":\"TerminateRDSInstance\", \"RDSName\":\"${RDS_WRITER_NAME}\", \"RDSFinalSnap\": false, \"RDSType\": \"writer\" }"
+            invoke_lambda "${payload}" "TerminateComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || { slack_send "${SLACK_FAIL}" "Error. Failed to delete original writer instance"; exit 1; }
+          fi
+          wait_instance_status "${RDS_WRITER_NAME}" "RDSInstanceDoesNotExist" 60 30 || { slack_send "${SLACK_FAIL}" "Error. Failed to delete original writer instance"; exit 1; }
+          slack_send "${SLACK_COMPLETED}" "Removal of original writer instance succeeded"
+
+          # 5. restore from snapshot
+          if [[ -z "${RDS_SNAP}" ]]; then
+            slack_send "${SLACK_WARN}" "No snapshot name supplied. Latest automated snapshot for ${RDS_SNAP_SOURCE} will be used to refresh ${ENV_NAME} environment"
+          fi
+
+          payload="$(jq -cn \
+            --arg eventType "RestoreRDSInstanceFromSnapshot" \
+            --arg rdsName "${RDS_CLUSTER_NAME}" \
+            --arg optionGroup "${RDS_OPTION_GROUP}" \
+            --arg baseSnap "${RDS_SNAP}" \
+            --arg subnet "${RDS_SUBNET}" \
+            --arg engineVersion "${ENGINE_VERSION}" \
+            --arg snapSource "${RDS_SNAP_SOURCE}" \
+            --argjson logs "${RDS_LOG_EXPORTS}" \
+            --argjson tags "${RDS_TAGS}" \
+            --argjson multiAz "${MULTI_AZ}" \
+            '{EventType:$eventType,RDSName:$rdsName,RDSOptionGroup:$optionGroup,RDSCloudwatchLogsExportConfiguration:logs,RDSBaseSnap:$baseSnap,RDSSubnet:$subnet,EngineVersion:$engineVersion,RDSSnapSource:$snapSource,RDSTags:tags,MultiAZ:multiAz}'
+          )"
+          invoke_lambda "${payload}" "RestoreDBComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || { slack_send "${SLACK_FAIL}" "Error. Build failed restoring from DB snapshot"; exit 1; }
+          wait_cluster_status "${RDS_CLUSTER_NAME}" "available" 60 60 || { slack_send "${SLACK_FAIL}" "Error. Build failed getting DB status after restore"; exit 1; }
+          slack_send "${SLACK_COMPLETED}" "Restore of ${RDS_CLUSTER_NAME} from DB snapshot succeeded"
+
+          # 6. modify master password
+          payload="{ \"EventType\": \"UpdateMasterPassword\", \"RDSName\": \"${RDS_CLUSTER_NAME}\", \"ConfigBucket\": \"${S3_CONFIG_BUCKET}\" }"
+          invoke_lambda "${payload}" "pass_update_success" "${LAMBDA_DB_REFRESH_FUNCTION}" || { slack_send "${SLACK_FAIL}" "Error. Build failed modifying master password"; exit 1; }
+          wait_cluster_status "${RDS_CLUSTER_NAME}" "available" 30 30 || { slack_send "${SLACK_FAIL}" "Error. Build failed validating cluster after password update"; exit 1; }
+          slack_send "${SLACK_COMPLETED}" "Master password reset for ${RDS_CLUSTER_NAME}"
+
+          # 7. modify restored instance
+          payload="{ \"EventType\":\"ModifyRestoredDB\", \"RDSName\":\"${RDS_CLUSTER_NAME}\", \"RDSSG\": \"${RDS_SEC_GROUP}\", \"RDSOptionGroup\": \"${RDS_OPTION_GROUP}\", \"RDSCloudwatchLogsExportConfiguration\": ${RDS_LOG_EXPORTS}, \"RDSParamGroup\": \"${RDS_PARAM_GROUP}\", \"RDSDBInstanceClass\": \"${RDS_DB_INSTANCE_CLASS}\", \"RDSMonitoringInterval\": ${RDS_MONITORING_INTERVAL}, \"RDSMonitoringRoleArn\": \"${RDS_MONITORING_ROLE_ARN}\" }"
+          invoke_lambda "${payload}" "LaunchComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || { slack_send "${SLACK_FAIL}" "Error. Lambda failed updating security and parameter groups"; exit 1; }
+          wait_cluster_status "${RDS_CLUSTER_NAME}" "available" 60 30 || { slack_send "${SLACK_FAIL}" "Error. Getting RDS status after modify"; exit 1; }
+          slack_send "${SLACK_COMPLETED}" "Modify of ${RDS_CLUSTER_NAME} security and parameter groups succeeded"
+
+          if [[ "${SHUTDOWN_ENV}" != "true" ]]; then
+            # 8. create writer
+            payload="{ \"EventType\":\"CreateWriter\", \"RDSDBInstanceClassWriter\":\"${RDS_DB_INSTANCE_CLASS}\", \"RDSName\":\"${RDS_CLUSTER_NAME}\", \"RDSWriterTags\": ${RDS_WRITER_TAGS}, \"RDSWriter\":\"${RDS_WRITER_NAME}\" }"
+            if ! invoke_lambda "${payload}" "CreateWriterSuccess" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+              slack_send "${SLACK_WARN}" "Warning. Failed to create Writer ${RDS_WRITER_NAME} for ${RDS_CLUSTER_NAME}. Build will continue - manually create Writer"
+            fi
+            if ! wait_instance_status "${RDS_WRITER_NAME}" "available" 60 30; then
+              slack_send "${SLACK_WARN}" "Warning. Failed to create Writer ${RDS_WRITER_NAME}. Build will continue - fix manually"
+            else
+              slack_send "${SLACK_COMPLETED}" "Writer ${RDS_WRITER_NAME} created for ${RDS_CLUSTER_NAME}"
+            fi
+
+            # 9. create reader
+            payload="{ \"EventType\":\"CreateReader\", \"RDSDBInstanceClassReader\":\"${RDS_DB_INSTANCE_CLASS}\", \"RDSName\":\"${RDS_CLUSTER_NAME}\", \"RDSReaderTags\": ${RDS_READER_TAGS}, \"RDSReader\":\"${RDS_READER_NAME}\" }"
+            if ! invoke_lambda "${payload}" "CreateReaderSuccess" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+              slack_send "${SLACK_WARN}" "Warning. Failed to create Reader ${RDS_READER_NAME} for ${RDS_CLUSTER_NAME}. Build will continue - manually create Reader"
+            fi
+            if ! wait_instance_status "${RDS_READER_NAME}" "available" 60 30; then
+              slack_send "${SLACK_WARN}" "Warning. Failed to create Reader ${RDS_READER_NAME}. Build will continue - fix manually"
+            else
+              slack_send "${SLACK_COMPLETED}" "Reader ${RDS_READER_NAME} created for ${RDS_CLUSTER_NAME}"
+            fi
+
+            # 10. update writer dns
+            payload="{ \"EventType\":\"UpdateRDSR53Record\", \"RDSName\":\"${RDS_WRITER_NAME}\", \"RDSRecord\":\"${R53_NAME}.${HOSTED_ZONE}\" }"
+            if ! invoke_lambda "${payload}" "UpdateR53Success" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+              slack_send "${SLACK_WARN}" "Warning. Failed to update route53 CNAME record for ${R53_NAME}.${HOSTED_ZONE}. Build will continue - manually create route53 CNAME record"
+            else
+              slack_send "${SLACK_COMPLETED}" "Route53 CNAME record successfully updated for ${R53_NAME}.${HOSTED_ZONE}"
+            fi
+
+            # 11. update reader dns
+            payload="{ \"EventType\":\"UpdateRDSR53Record\", \"RDSName\":\"${RDS_READER_NAME}\", \"RDSRecord\":\"${R53_READ_REPLICA_NAME}.${HOSTED_ZONE}\" }"
+            if ! invoke_lambda "${payload}" "UpdateR53Success" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+              slack_send "${SLACK_WARN}" "Warning. Failed to update route53 CNAME record for ${R53_READ_REPLICA_NAME}.${HOSTED_ZONE}. Build will continue - manually create route53 CNAME record"
+            else
+              slack_send "${SLACK_COMPLETED}" "Route53 CNAME record successfully updated for ${R53_READ_REPLICA_NAME}.${HOSTED_ZONE}"
+            fi
+          fi
+
+          # 12. delete original cluster
+          payload="{ \"EventType\":\"TerminateRDSInstance\", \"RDSName\":\"${RDS_CLUSTER_NAME}-deploy\", \"RDSFinalSnap\": ${RDS_FINAL_SNAP}, \"RDSType\": \"cluster\" }"
+          if ! invoke_lambda "${payload}" "TerminateComplete" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+            slack_send "${SLACK_WARN}" "Warning. Failed to delete original RDS instance. Build will continue - manually delete original RDS instance"
+          fi
+          if ! wait_cluster_status "${RDS_CLUSTER_NAME}-deploy" "RDSInstanceDoesNotExist" 60 30; then
+            slack_send "${SLACK_WARN}" "Warning. Failed to delete original RDS instance. Build will continue - manually delete original RDS instance"
+          else
+            slack_send "${SLACK_COMPLETED}" "Removal of original RDS instance succeeded"
+          fi
+
+          # 13. optional init sql for prep
+          if [[ "${RUN_INIT_SQL}" == "true" ]]; then
+            payload="{ \"EventType\":\"InitDB\", \"RDSName\":\"${RDS_CLUSTER_NAME}\", \"ConfigBucket\": \"${S3_CONFIG_BUCKET}\" }"
+            if ! invoke_lambda "${payload}" "pass_update_success" "${LAMBDA_INIT_DB_FUNCTION}"; then
+              slack_send "${SLACK_WARN}" "Warning. Initialise and Run SQL failed"
+            else
+              slack_send "${SLACK_COMPLETED}" "Initialise and Run SQL ${RDS_CLUSTER_NAME} succeeded"
+            fi
+          fi
+
+      - name: Final success notification
+        if: success()
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          payload: |
+            {
+              "channel": "${{ env.SLACK_CHAN }}",
+              "attachments": [
+                {
+                  "color": "${{ env.SLACK_COMPLETED }}",
+                  "text": "Refresh of OLCSDB from anonymised PROD db into ${{ inputs.platformEnv }} completed successfully"
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+
+      - name: Final failure notification
+        if: failure()
+        uses: slackapi/slack-github-action@v1.27.0
+        with:
+          payload: |
+            {
+              "channel": "${{ env.SLACK_CHAN }}",
+              "attachments": [
+                {
+                  "color": "${{ env.SLACK_FAIL }}",
+                  "text": "DB refresh failed for ${{ inputs.platformEnv }}. Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

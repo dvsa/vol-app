@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\IrhpCandidatePermit;
 
 use Dvsa\Olcs\Transfer\Command\IrhpCandidatePermit\Delete;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpCandidatePermit\Delete;
 /**
  * Delete test
  */
-class DeleteTest extends \PHPUnit\Framework\TestCase
+final class DeleteTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

@@ -37,7 +37,7 @@ use Mockery as m;
 /**
  * Create User Test
  */
-class CreateUserTest extends AbstractCommandHandlerTestCase
+final class CreateUserTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var ValidatableAdapterInterface|m\LegacyMockInterface|m\MockInterface
@@ -608,14 +608,12 @@ class CreateUserTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function handleCommandThrowsNoOrgExceptionProvider(): array
+    public static function handleCommandThrowsNoOrgExceptionProvider(): \Iterator
     {
-        return [
-            [UserEntity::USER_TYPE_OPERATOR],
-            [UserEntity::USER_TYPE_TRANSPORT_MANAGER]
-        ];
+        yield [UserEntity::USER_TYPE_OPERATOR];
+        yield [UserEntity::USER_TYPE_TRANSPORT_MANAGER];
     }
 
 

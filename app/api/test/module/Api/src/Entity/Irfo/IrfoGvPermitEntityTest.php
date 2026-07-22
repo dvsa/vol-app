@@ -18,7 +18,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class IrfoGvPermitEntityTest extends EntityTester
+final class IrfoGvPermitEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -27,6 +27,7 @@ class IrfoGvPermitEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
+    #[\Override]
     public function setUp(): void
     {
         /** @var Entity entity */
@@ -305,13 +306,11 @@ class IrfoGvPermitEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isGeneratable());
     }
 
-    public static function isGeneratableStates(): array
+    public static function isGeneratableStates(): \Iterator
     {
-        return [
-            [Entity::STATUS_APPROVED, true],
-            [Entity::STATUS_PENDING, false],
-            [Entity::STATUS_REFUSED, false],
-            [Entity::STATUS_WITHDRAWN, false],
-        ];
+        yield [Entity::STATUS_APPROVED, true];
+        yield [Entity::STATUS_PENDING, false];
+        yield [Entity::STATUS_REFUSED, false];
+        yield [Entity::STATUS_WITHDRAWN, false];
     }
 }

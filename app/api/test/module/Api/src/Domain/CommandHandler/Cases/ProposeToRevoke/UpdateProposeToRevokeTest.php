@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Update ProposeToRevoke Test
  */
-class UpdateProposeToRevokeTest extends AbstractCommandHandlerTestCase
+final class UpdateProposeToRevokeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -89,7 +89,7 @@ class UpdateProposeToRevokeTest extends AbstractCommandHandlerTestCase
                         $this->references[PresidingTc::class][$data['presidingTc']],
                         $savedProposeToRevoke->getPresidingTc()
                     );
-                    $this->assertEquals(
+                    $this->assertSame(
                         $data['ptrAgreedDate'],
                         $savedProposeToRevoke->getPtrAgreedDate()->format('Y-m-d')
                     );
@@ -97,7 +97,7 @@ class UpdateProposeToRevokeTest extends AbstractCommandHandlerTestCase
                         $this->references[User::class]['DUMMY-ASSIGNED-CASEWORKER-ID'],
                         $savedProposeToRevoke->getAssignedCaseworker()
                     );
-                    $this->assertEquals($data['closedDate'], $savedProposeToRevoke->getClosedDate()->format('Y-m-d'));
+                    $this->assertSame($data['closedDate'], $savedProposeToRevoke->getClosedDate()->format('Y-m-d'));
                     $this->assertEquals($data['comment'], $savedProposeToRevoke->getComment());
                 }
             );

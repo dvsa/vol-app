@@ -31,7 +31,7 @@ use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic as CommunityLicEntity;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateCommunityLicenceTest extends AbstractCommandHandlerTestCase
+final class CreateCommunityLicenceTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * Gv/Psv disc page-margin bookmarks
  */
-class DiscMarginsTest extends MockeryTestCase
+final class DiscMarginsTest extends MockeryTestCase
 {
     public function testGvRendersSystemParameterValues(): void
     {
@@ -43,7 +43,7 @@ class DiscMarginsTest extends MockeryTestCase
 
     public function testGvFallsBackWithoutRepoManager(): void
     {
-        $this->assertSame('\margt1094\margl1607', (new GvDiscMargins())->render());
+        $this->assertSame('\margt1094\margl1607', new GvDiscMargins()->render());
     }
 
     public function testPsvRendersSystemParameterValues(): void
@@ -59,7 +59,7 @@ class DiscMarginsTest extends MockeryTestCase
 
     public function testPsvFallsBackToCalibratedDefaults(): void
     {
-        $this->assertSame('\margt1128\margl1633', (new PsvDiscMargins())->render());
+        $this->assertSame('\margt1128\margl1633', new PsvDiscMargins()->render());
     }
 
     private function repoManagerWith(array $values): RepositoryServiceManager

@@ -12,7 +12,7 @@ class PluginManager extends AbstractPluginManager
 {
     protected $instanceOf = ContextInterface::class;
 
-    public function __construct(ContainerInterface $configuration = null)
+    public function __construct(?ContainerInterface $configuration = null)
     {
         parent::__construct($configuration);
         $this->addAbstractFactory(new AbstractFactory());

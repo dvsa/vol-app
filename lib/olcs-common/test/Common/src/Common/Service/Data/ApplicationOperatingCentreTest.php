@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Service\Data\Application as ApplicationDataService;
@@ -10,7 +12,7 @@ use Mockery as m;
  * Class ApplicationOperatingCentre Test
  * @package CommonTest\Service
  */
-class ApplicationOperatingCentreTest extends AbstractDataServiceTestCase
+final class ApplicationOperatingCentreTest extends AbstractDataServiceTestCase
 {
     /** @var ApplicationOperatingCentre */
     private $sut;
@@ -22,9 +24,7 @@ class ApplicationOperatingCentreTest extends AbstractDataServiceTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->applicationDataService = m::mock(ApplicationDataService::class);
-
         $this->sut = new ApplicationOperatingCentre(
             $this->abstractDataServiceServices,
             $this->applicationDataService

@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bus\PreviousVariationByRouteNo;
 /**
  * PreviousVariationByRouteNo test
  */
-class PreviousVariationByRouteNoTest extends \PHPUnit\Framework\TestCase
+final class PreviousVariationByRouteNoTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

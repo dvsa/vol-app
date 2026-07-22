@@ -73,7 +73,7 @@ class MarkSuccessfulSectorPermitApplications extends ScoringCommandHandler imple
         return $this->result;
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->successfulCandidatePermitsFacade = $container->get(
             'PermitsScoringSuccessfulCandidatePermitsFacade'

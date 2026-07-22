@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Preference;
 
 use Common\Preference\Language;
@@ -11,7 +13,7 @@ use Laminas\Http\Header\SetCookie;
 use Laminas\Http\Request;
 use Laminas\Http\Response;
 
-class LanguageTest extends MockeryTestCase
+final class LanguageTest extends MockeryTestCase
 {
     /**
      * @var Language
@@ -26,11 +28,6 @@ class LanguageTest extends MockeryTestCase
     protected $request;
 
     /**
-     * @var Response
-     */
-    protected $response;
-
-    /**
      * @var SetCookie
      */
     protected $setCookie;
@@ -43,9 +40,9 @@ class LanguageTest extends MockeryTestCase
         $this->sm = new ServiceManager();
 
         $this->request = m::mock(Request::class);
-        $this->response = m::mock(Response::class);
+        $response = m::mock(Response::class);
 
-        $this->response->shouldReceive('getHeaders->addHeader')
+        $response->shouldReceive('getHeaders->addHeader')
             ->once()
             ->with(m::type(SetCookie::class))
             ->andReturnUsing(
@@ -55,7 +52,7 @@ class LanguageTest extends MockeryTestCase
             );
 
         $this->sm->setService('Request', $this->request);
-        $this->sm->setService('Response', $this->response);
+        $this->sm->setService('Response', $response);
     }
 
     public function testInvoke(): void

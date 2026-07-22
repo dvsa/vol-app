@@ -22,25 +22,21 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="organisation",
- *    indexes={
- *        @ORM\Index(name="ix_organisation_contact_details_id", columns={"contact_details_id"}),
- *        @ORM\Index(name="ix_organisation_cpid", columns={"cpid"}),
- *        @ORM\Index(name="ix_organisation_cpid_name", columns={"cpid", "name"}),
- *        @ORM\Index(name="ix_organisation_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_organisation_irfo_contact_details_id", columns={"irfo_contact_details_id"}),
- *        @ORM\Index(name="ix_organisation_irfo_nationality", columns={"irfo_nationality"}),
- *        @ORM\Index(name="ix_organisation_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_organisation_lead_tc_area_id", columns={"lead_tc_area_id"}),
- *        @ORM\Index(name="ix_organisation_name", columns={"name"}),
- *        @ORM\Index(name="ix_organisation_type", columns={"type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'organisation')]
+#[ORM\Index(name: 'ix_organisation_contact_details_id', columns: ['contact_details_id'])]
+#[ORM\Index(name: 'ix_organisation_cpid', columns: ['cpid'])]
+#[ORM\Index(name: 'ix_organisation_cpid_name', columns: ['cpid', 'name'])]
+#[ORM\Index(name: 'ix_organisation_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_organisation_irfo_contact_details_id', columns: ['irfo_contact_details_id'])]
+#[ORM\Index(name: 'ix_organisation_irfo_nationality', columns: ['irfo_nationality'])]
+#[ORM\Index(name: 'ix_organisation_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_organisation_lead_tc_area_id', columns: ['lead_tc_area_id'])]
+#[ORM\Index(name: 'ix_organisation_name', columns: ['name'])]
+#[ORM\Index(name: 'ix_organisation_type', columns: ['type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractOrganisation implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -54,265 +50,237 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Registered office details
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
-     * @ORM\JoinColumn(name="contact_details_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'contact_details_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY')]
     protected $contactDetails;
 
     /**
      * Separate contact details for IRFO info.
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY", cascade={"persist"})
-     * @ORM\JoinColumn(name="irfo_contact_details_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irfo_contact_details_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY', cascade: ['persist'])]
     protected $irfoContactDetails;
 
     /**
      * LLP, LTD company, Sole trader etc.
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $type;
 
     /**
      * ISO country code of organisations nationality for International Road Freight.
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_nationality", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irfo_nationality', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, fetch: 'LAZY')]
     protected $irfoNationality;
 
     /**
      * For multi licence organisations the lead traffic area.  The one that will deal with the organisation.
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="lead_tc_area_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'lead_tc_area_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $leadTcArea;
 
     /**
      * Cpid
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="cpid", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'cpid', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $cpid;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Registered company number if applicable
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="company_or_llp_no", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'company_or_llp_no', length: 20, nullable: true)]
     protected $companyOrLlpNo;
 
     /**
      * Organisatin name.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=160, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 160, nullable: true)]
     protected $name;
 
     /**
      * Certificate of incorpoation has been provided.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="company_cert_seen", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'company_cert_seen', nullable: false, options: ['default' => 0])]
     protected $companyCertSeen = 0;
 
     /**
      * Is an International Road Freight Operator
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_irfo", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_irfo', nullable: false, options: ['default' => 0])]
     protected $isIrfo = 0;
 
     /**
      * Allow documents to be sent via email.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="allow_email", nullable=false, options={"default": 1})
      */
+    #[ORM\Column(type: 'yesno', name: 'allow_email', nullable: false, options: ['default' => 1])]
     protected $allowEmail = 1;
 
     /**
      * User has confirmed vehicle details can be used in dvsa reporting
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="confirm_share_vehicle_info", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'confirm_share_vehicle_info', nullable: false, options: ['default' => 0])]
     protected $confirmShareVehicleInfo = 0;
 
     /**
      * User has confirmed trailer details can be used in dvsa reporting
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="confirm_share_trailer_info", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'confirm_share_trailer_info', nullable: false, options: ['default' => 0])]
     protected $confirmShareTrailerInfo = 0;
 
     /**
      * Is unlicensed
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_unlicensed", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_unlicensed', nullable: false, options: ['default' => 0])]
     protected $isUnlicensed = 0;
 
     /**
      * Nature of business
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="nature_of_business", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'nature_of_business', length: 255, nullable: true)]
     protected $natureOfBusiness;
 
     /**
      * Is messaging disabled
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_messaging_disabled", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_messaging_disabled', nullable: false, options: ['default' => 0])]
     protected $isMessagingDisabled = 0;
 
     /**
      * Is messaging file upload enabled
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_messaging_file_upload_enabled", nullable=true, options={"default": 1})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_messaging_file_upload_enabled', nullable: true, options: ['default' => 1])]
     protected $isMessagingFileUploadEnabled = 1;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Disqualifications
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Disqualification", mappedBy="organisation")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Disqualification::class, mappedBy: 'organisation')]
     protected $disqualifications;
 
     /**
      * IrfoPartners
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoPartner", mappedBy="organisation", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoPartner::class, mappedBy: 'organisation', cascade: ['persist'])]
     protected $irfoPartners;
 
     /**
      * Licences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", mappedBy="organisation")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, mappedBy: 'organisation')]
     protected $licences;
 
     /**
      * OrganisationPersons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\OrganisationPerson", mappedBy="organisation")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\OrganisationPerson::class, mappedBy: 'organisation')]
     protected $organisationPersons;
 
     /**
      * ReadAudits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\OrganisationReadAudit", mappedBy="organisation")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\OrganisationReadAudit::class, mappedBy: 'organisation')]
     protected $readAudits;
 
     /**
      * OrganisationUsers
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser", mappedBy="organisation")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser::class, mappedBy: 'organisation')]
     protected $organisationUsers;
 
     /**
      * TradingNames
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\TradingName", mappedBy="organisation")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\TradingName::class, mappedBy: 'organisation')]
     protected $tradingNames;
 
     /**

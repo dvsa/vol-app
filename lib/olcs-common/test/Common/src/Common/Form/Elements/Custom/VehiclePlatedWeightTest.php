@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Custom;
 
 use Common\Form\Elements\Custom\VehiclePlatedWeight;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Common\Form\Elements\Custom\VehiclePlatedWeight
- */
-class VehiclePlatedWeightTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\Elements\Custom\VehiclePlatedWeight::class)]
+final class VehiclePlatedWeightTest extends MockeryTestCase
 {
     public function testGetInputSpecification(): void
     {
@@ -20,22 +20,17 @@ class VehiclePlatedWeightTest extends MockeryTestCase
 
         $actual = $sut->getInputSpecification();
 
-        static::assertEquals('unit_Name', $actual['name']);
-        static::assertEquals(
-            [
-                \Laminas\Validator\Digits::class,
-                \Laminas\Validator\Between::class,
-            ],
-            array_map(
-                static fn($item) => $item['name'],
-                $actual['validators']
-            )
-        );
+        $this->assertEquals('unit_Name', $actual['name']);
+        $this->assertSame([
+            \Laminas\Validator\Digits::class,
+            \Laminas\Validator\Between::class,
+        ], array_map(
+            static fn($item) => $item['name'],
+            $actual['validators']
+        ));
     }
 
-    /**
-     * @dataProvider dpTestGetInputSpecificationOptions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetInputSpecificationOptions')]
     public function testGetInputSpecificationOptions($options, $expect): void
     {
         /** @var VehiclePlatedWeight $sut */
@@ -44,27 +39,25 @@ class VehiclePlatedWeightTest extends MockeryTestCase
         $actual = $sut->getInputSpecification();
 
         foreach ($expect as $key => $val) {
-            static::assertEquals($val, $actual[$key]);
+            $this->assertEquals($val, $actual[$key]);
         }
     }
 
     /**
-     * @return true[][][]
+     * @return \Iterator<(int | string), array<array<true>>>
      *
      * @psalm-return list{array{options: array{required: true, allow_empty: true}, expect: array{required: true, allow_empty: true}}}
      */
-    public function dpTestGetInputSpecificationOptions(): array
+    public static function dpTestGetInputSpecificationOptions(): \Iterator
     {
-        return [
-            [
-                'options' => [
-                    'required' => true,
-                    'allow_empty' => true,
-                ],
-                'expect' => [
-                    'required' => true,
-                    'allow_empty' => true,
-                ]
+        yield [
+            'options' => [
+                'required' => true,
+                'allow_empty' => true,
+            ],
+            'expect' => [
+                'required' => true,
+                'allow_empty' => true,
             ]
         ];
     }

@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Lva;
 
 use Common\Data\Mapper\Lva\BusinessType;
@@ -15,7 +17,7 @@ use Common\Data\Mapper\Lva\BusinessType;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class BusinessTypeTest extends \PHPUnit\Framework\TestCase
+final class BusinessTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testMapFromResult(): void
     {

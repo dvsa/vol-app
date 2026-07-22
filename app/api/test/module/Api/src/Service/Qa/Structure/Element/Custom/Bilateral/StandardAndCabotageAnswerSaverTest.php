@@ -19,13 +19,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StandardAndCabotageAnswerSaverTest extends MockeryTestCase
+final class StandardAndCabotageAnswerSaverTest extends MockeryTestCase
 {
     private $postData;
 
     private $applicationStep;
-
-    private $irhpPermitApplication;
 
     private $qaContext;
 
@@ -35,6 +33,7 @@ class StandardAndCabotageAnswerSaverTest extends MockeryTestCase
 
     private $standardAndCabotageAnswerSaver;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->postData = [
@@ -44,7 +43,7 @@ class StandardAndCabotageAnswerSaverTest extends MockeryTestCase
 
         $this->applicationStep = m::mock(ApplicationStep::class);
 
-        $this->irhpPermitApplication = m::mock(IrhpPermitApplication::class);
+        $irhpPermitApplication = m::mock(IrhpPermitApplication::class);
 
         $this->qaContext = m::mock(QaContext::class);
         $this->qaContext->shouldReceive('getApplicationStepEntity')
@@ -52,7 +51,7 @@ class StandardAndCabotageAnswerSaverTest extends MockeryTestCase
             ->andReturn($this->applicationStep);
         $this->qaContext->shouldReceive('getQaEntity')
             ->withNoArgs()
-            ->andReturn($this->irhpPermitApplication);
+            ->andReturn($irhpPermitApplication);
 
         $this->namedAnswerFetcher = m::mock(NamedAnswerFetcher::class);
 
@@ -99,11 +98,9 @@ class StandardAndCabotageAnswerSaverTest extends MockeryTestCase
         $this->standardAndCabotageAnswerSaver->save($this->qaContext, $this->postData);
     }
 
-    public static function dpSaveCabotageRequired(): array
+    public static function dpSaveCabotageRequired(): \Iterator
     {
-        return [
-            [Answer::BILATERAL_STANDARD_AND_CABOTAGE],
-            [Answer::BILATERAL_CABOTAGE_ONLY],
-        ];
+        yield [Answer::BILATERAL_STANDARD_AND_CABOTAGE];
+        yield [Answer::BILATERAL_CABOTAGE_ONLY];
     }
 }

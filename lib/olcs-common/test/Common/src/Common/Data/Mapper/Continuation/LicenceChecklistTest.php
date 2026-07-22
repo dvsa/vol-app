@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Continuation;
 
 use Common\Data\Mapper\Continuation\LicenceChecklist;
@@ -13,7 +15,7 @@ use Common\RefData;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class LicenceChecklistTest extends MockeryTestCase
+final class LicenceChecklistTest extends MockeryTestCase
 {
     protected $mockTranslator;
 
@@ -28,9 +30,7 @@ class LicenceChecklistTest extends MockeryTestCase
             ->getMock();
     }
 
-    /**
-     * @dataProvider operatingFromProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('operatingFromProvider')]
     public function testMapFromResultToView($key, $code): void
     {
         $in = [
@@ -391,16 +391,14 @@ class LicenceChecklistTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return list{list{'continuations.type-of-licence.ni', 'N'}, list{'continuations.type-of-licence.gb', 'B'}}
      */
-    public function operatingFromProvider(): array
+    public static function operatingFromProvider(): \Iterator
     {
-        return [
-            ['continuations.type-of-licence.ni', RefData::NORTHERN_IRELAND_TRAFFIC_AREA_CODE],
-            ['continuations.type-of-licence.gb', 'B']
-        ];
+        yield ['continuations.type-of-licence.ni', RefData::NORTHERN_IRELAND_TRAFFIC_AREA_CODE];
+        yield ['continuations.type-of-licence.gb', 'B'];
     }
 
     public function testMapPeopleSectionToView(): void
@@ -577,9 +575,7 @@ class LicenceChecklistTest extends MockeryTestCase
         $this->assertEquals($out, LicenceChecklist::mapUsersSectionToView($in, $this->mockTranslator));
     }
 
-    /**
-     * @dataProvider dpMapOperatingCentresSectionToView
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMapOperatingCentresSectionToView')]
     public function testMapOperatingCentresSectionToView($canHaveTrailers, $isMixedWithLgv, $expected): void
     {
         $in = [
@@ -615,103 +611,101 @@ class LicenceChecklistTest extends MockeryTestCase
     }
 
     /**
-     * @return (((string|true)[][][]|string)[]|bool)[][]
+     * @return \Iterator<(int | string), array<(array<(array<array<array<(string | true)>>> | string)> | bool)>>
      *
      * @psalm-return array{'licence cannot have trailers, vehicle type not mixed with lgv': list{false, false, array{operatingCentres: list{list{array{value: 'continuations.oc-section.table.oc_translated', header: true}, array{value: 'continuations.oc-section.table.vehicles_translated', header: true}}, list{array{value: 'Baz, Cake'}, array{value: '3'}}, list{array{value: 'Foo, Bar'}, array{value: '1'}}}, totalOperatingCentresMessage: 'continuations.operating-centres.section-header_translated'}}, 'licence cannot have trailers, vehicle type mixed with lgv': list{false, true, array{operatingCentres: list{list{array{value: 'continuations.oc-section.table.oc_translated', header: true}, array{value: 'continuations.oc-section.table.heavy-goods-vehicles_translated', header: true}}, list{array{value: 'Baz, Cake'}, array{value: '3'}}, list{array{value: 'Foo, Bar'}, array{value: '1'}}}, totalOperatingCentresMessage: 'continuations.operating-centres.section-header_translated'}}, 'licence can have trailers, vehicle type not mixed with lgv': list{true, false, array{operatingCentres: list{list{array{value: 'continuations.oc-section.table.oc_translated', header: true}, array{value: 'continuations.oc-section.table.vehicles_translated', header: true}, array{value: 'continuations.oc-section.table.trailers_translated', header: true}}, list{array{value: 'Baz, Cake'}, array{value: '3'}, array{value: '4'}}, list{array{value: 'Foo, Bar'}, array{value: '1'}, array{value: '2'}}}, totalOperatingCentresMessage: 'continuations.operating-centres.section-header_translated'}}, 'licence can have trailers, vehicle type mixed with lgv': list{true, true, array{operatingCentres: list{list{array{value: 'continuations.oc-section.table.oc_translated', header: true}, array{value: 'continuations.oc-section.table.heavy-goods-vehicles_translated', header: true}, array{value: 'continuations.oc-section.table.trailers_translated', header: true}}, list{array{value: 'Baz, Cake'}, array{value: '3'}, array{value: '4'}}, list{array{value: 'Foo, Bar'}, array{value: '1'}, array{value: '2'}}}, totalOperatingCentresMessage: 'continuations.operating-centres.section-header_translated'}}}
      */
-    public function dpMapOperatingCentresSectionToView(): array
+    public static function dpMapOperatingCentresSectionToView(): \Iterator
     {
-        return [
-            'licence cannot have trailers, vehicle type not mixed with lgv' => [
-                false,
-                false,
-                [
-                    'operatingCentres' => [
-                        [
-                            ['value' => 'continuations.oc-section.table.oc_translated', 'header' => true],
-                            ['value' => 'continuations.oc-section.table.vehicles_translated', 'header' => true],
-                        ],
-                        [
-                            ['value' => 'Baz, Cake'],
-                            ['value' => '3'],
-                        ],
-                        [
-                            ['value' => 'Foo, Bar'],
-                            ['value' => '1'],
-                        ]
+        yield 'licence cannot have trailers, vehicle type not mixed with lgv' => [
+            false,
+            false,
+            [
+                'operatingCentres' => [
+                    [
+                        ['value' => 'continuations.oc-section.table.oc_translated', 'header' => true],
+                        ['value' => 'continuations.oc-section.table.vehicles_translated', 'header' => true],
                     ],
-                    'totalOperatingCentresMessage' => 'continuations.operating-centres.section-header_translated',
-                ]
-            ],
-            'licence cannot have trailers, vehicle type mixed with lgv' => [
-                false,
-                true,
-                [
-                    'operatingCentres' => [
-                        [
-                            ['value' => 'continuations.oc-section.table.oc_translated', 'header' => true],
-                            ['value' => 'continuations.oc-section.table.heavy-goods-vehicles_translated', 'header' => true],
-                        ],
-                        [
-                            ['value' => 'Baz, Cake'],
-                            ['value' => '3'],
-                        ],
-                        [
-                            ['value' => 'Foo, Bar'],
-                            ['value' => '1'],
-                        ]
+                    [
+                        ['value' => 'Baz, Cake'],
+                        ['value' => '3'],
                     ],
-                    'totalOperatingCentresMessage' => 'continuations.operating-centres.section-header_translated',
-                ]
-            ],
-            'licence can have trailers, vehicle type not mixed with lgv' => [
-                true,
-                false,
-                [
-                    'operatingCentres' => [
-                        [
-                            ['value' => 'continuations.oc-section.table.oc_translated', 'header' => true],
-                            ['value' => 'continuations.oc-section.table.vehicles_translated', 'header' => true],
-                            ['value' => 'continuations.oc-section.table.trailers_translated', 'header' => true],
-                        ],
-                        [
-                            ['value' => 'Baz, Cake'],
-                            ['value' => '3'],
-                            ['value' => '4'],
-                        ],
-                        [
-                            ['value' => 'Foo, Bar'],
-                            ['value' => '1'],
-                            ['value' => '2'],
-                        ]
+                    [
+                        ['value' => 'Foo, Bar'],
+                        ['value' => '1'],
+                    ]
+                ],
+                'totalOperatingCentresMessage' => 'continuations.operating-centres.section-header_translated',
+            ]
+        ];
+        yield 'licence cannot have trailers, vehicle type mixed with lgv' => [
+            false,
+            true,
+            [
+                'operatingCentres' => [
+                    [
+                        ['value' => 'continuations.oc-section.table.oc_translated', 'header' => true],
+                        ['value' => 'continuations.oc-section.table.heavy-goods-vehicles_translated', 'header' => true],
                     ],
-                    'totalOperatingCentresMessage' => 'continuations.operating-centres.section-header_translated',
-                ]
-            ],
-            'licence can have trailers, vehicle type mixed with lgv' => [
-                true,
-                true,
-                [
-                    'operatingCentres' => [
-                        [
-                            ['value' => 'continuations.oc-section.table.oc_translated', 'header' => true],
-                            ['value' => 'continuations.oc-section.table.heavy-goods-vehicles_translated', 'header' => true],
-                            ['value' => 'continuations.oc-section.table.trailers_translated', 'header' => true],
-                        ],
-                        [
-                            ['value' => 'Baz, Cake'],
-                            ['value' => '3'],
-                            ['value' => '4'],
-                        ],
-                        [
-                            ['value' => 'Foo, Bar'],
-                            ['value' => '1'],
-                            ['value' => '2'],
-                        ]
+                    [
+                        ['value' => 'Baz, Cake'],
+                        ['value' => '3'],
                     ],
-                    'totalOperatingCentresMessage' => 'continuations.operating-centres.section-header_translated',
-                ]
-            ],
+                    [
+                        ['value' => 'Foo, Bar'],
+                        ['value' => '1'],
+                    ]
+                ],
+                'totalOperatingCentresMessage' => 'continuations.operating-centres.section-header_translated',
+            ]
+        ];
+        yield 'licence can have trailers, vehicle type not mixed with lgv' => [
+            true,
+            false,
+            [
+                'operatingCentres' => [
+                    [
+                        ['value' => 'continuations.oc-section.table.oc_translated', 'header' => true],
+                        ['value' => 'continuations.oc-section.table.vehicles_translated', 'header' => true],
+                        ['value' => 'continuations.oc-section.table.trailers_translated', 'header' => true],
+                    ],
+                    [
+                        ['value' => 'Baz, Cake'],
+                        ['value' => '3'],
+                        ['value' => '4'],
+                    ],
+                    [
+                        ['value' => 'Foo, Bar'],
+                        ['value' => '1'],
+                        ['value' => '2'],
+                    ]
+                ],
+                'totalOperatingCentresMessage' => 'continuations.operating-centres.section-header_translated',
+            ]
+        ];
+        yield 'licence can have trailers, vehicle type mixed with lgv' => [
+            true,
+            true,
+            [
+                'operatingCentres' => [
+                    [
+                        ['value' => 'continuations.oc-section.table.oc_translated', 'header' => true],
+                        ['value' => 'continuations.oc-section.table.heavy-goods-vehicles_translated', 'header' => true],
+                        ['value' => 'continuations.oc-section.table.trailers_translated', 'header' => true],
+                    ],
+                    [
+                        ['value' => 'Baz, Cake'],
+                        ['value' => '3'],
+                        ['value' => '4'],
+                    ],
+                    [
+                        ['value' => 'Foo, Bar'],
+                        ['value' => '1'],
+                        ['value' => '2'],
+                    ]
+                ],
+                'totalOperatingCentresMessage' => 'continuations.operating-centres.section-header_translated',
+            ]
         ];
     }
 

@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\TransportManagerApplication\Snapshot;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class SnapshotTest extends \PHPUnit\Framework\TestCase
+final class SnapshotTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

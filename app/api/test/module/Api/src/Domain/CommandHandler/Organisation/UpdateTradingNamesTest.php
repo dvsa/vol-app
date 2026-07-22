@@ -28,7 +28,7 @@ use Dvsa\Olcs\Api\Entity\Organisation\TradingName as TradingNameEntity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateTradingNamesTest extends AbstractCommandHandlerTestCase
+final class UpdateTradingNamesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

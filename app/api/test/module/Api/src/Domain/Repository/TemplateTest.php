@@ -13,11 +13,12 @@ use Mockery as m;
 /**
  * TemplateTest
  */
-class TemplateTest extends RepositoryTestCase
+final class TemplateTest extends RepositoryTestCase
 {
     /** @var m\MockInterface|Repo */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);
@@ -169,7 +170,6 @@ class TemplateTest extends RepositoryTestCase
     private function callPrivate(string $method, array $args): mixed
     {
         $reflection = new \ReflectionMethod($this->sut, $method);
-        $reflection->setAccessible(true);
         return $reflection->invokeArgs($this->sut, $args);
     }
 

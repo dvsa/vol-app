@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Helper;
 
 use Common\Service\Helper\TranslationHelperService;
@@ -16,7 +18,8 @@ use Laminas\I18n\Translator\Translator;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TranslationHelperServiceTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+final class TranslationHelperServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Holds the SUT
@@ -34,9 +37,9 @@ class TranslationHelperServiceTest extends \PHPUnit\Framework\TestCase
     protected function setUp(): void
     {
         $this->mockTranslator = $this->createPartialMock(Translator::class, ['translate']);
-        $this->mockTranslator->expects($this->any())
+        $this->mockTranslator
             ->method('translate')
-            ->will($this->returnCallback(fn($message, $domain, $locale) => $this->translate($message, $domain, $locale)));
+            ->willReturnCallback(fn($message, $domain, $locale) => $this->translate($message, $domain, $locale));
 
         $this->sut = new TranslationHelperService($this->mockTranslator);
     }
@@ -53,28 +56,22 @@ class TranslationHelperServiceTest extends \PHPUnit\Framework\TestCase
         return $translation . ('*' . $message . '*');
     }
 
-    /**
-     * @group helper_service
-     * @group translation_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('translation_helper_service')]
     public function testGetTranslator(): void
     {
         $this->assertSame($this->mockTranslator, $this->sut->getTranslator());
     }
 
-    /**
-     * @group helper_service
-     * @group translation_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('translation_helper_service')]
     public function testTranslate(): void
     {
         $this->assertEquals('*foo*', $this->sut->translate('foo'));
     }
 
-    /**
-     * @group helper_service
-     * @group translation_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('translation_helper_service')]
     public function testWrapTranslation(): void
     {
         $format = 'This is a wrapped <div>%s</div>';
@@ -84,10 +81,8 @@ class TranslationHelperServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->sut->wrapTranslation($format, $translation));
     }
 
-    /**
-     * @group helper_service
-     * @group translation_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('translation_helper_service')]
     public function testFormatTranslation(): void
     {
         $format = 'This is a formatted <div>%s</div> message to %s multiple %s';
@@ -101,10 +96,8 @@ class TranslationHelperServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->sut->formatTranslation($format, $translations));
     }
 
-    /**
-     * @group helper_service
-     * @group translation_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('translation_helper_service')]
     public function testFormatTranslationWithSingleMessage(): void
     {
         $format = 'This is a formatted <div>%s</div>';

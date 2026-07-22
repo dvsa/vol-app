@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Logging\Helper;
 
 use Mockery as m;
@@ -8,7 +10,7 @@ use Olcs\Logging\Helper\LogError;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
-class LogErrorTest extends TestCase
+final class LogErrorTest extends TestCase
 {
     public function testInvoke(): void
     {

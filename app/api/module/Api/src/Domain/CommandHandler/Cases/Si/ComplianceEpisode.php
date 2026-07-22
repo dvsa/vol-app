@@ -543,7 +543,7 @@ final class ComplianceEpisode extends AbstractCommandHandler implements Transact
         return $this->errors;
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $fullContainer = $container;
 

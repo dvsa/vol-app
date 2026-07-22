@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Entity\Surrender;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence;
 use Mockery as m;
 
-class ByLicenceTest extends QueryHandlerTestCase
+final class ByLicenceTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

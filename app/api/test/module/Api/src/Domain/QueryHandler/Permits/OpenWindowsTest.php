@@ -16,7 +16,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 use DateTime;
 
-class OpenWindowsTest extends QueryHandlerTestCase
+final class OpenWindowsTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class PoliceTest extends MockeryTestCase
+final class PoliceTest extends MockeryTestCase
 {
     public function testProcessApplicationPeople(): void
     {
@@ -45,7 +45,7 @@ class PoliceTest extends MockeryTestCase
         ];
         $sut->process($publicationLink, new ImmutableArrayObject($input));
 
-        $this->assertSame($publicationLink->getPoliceDatas()->count(), 2);
+        $this->assertCount(2, $publicationLink->getPoliceDatas());
         $this->assertSame($publicationLink->getPoliceDatas()[0]->getPerson(), $person2);
         $this->assertSame($publicationLink->getPoliceDatas()[1]->getPerson(), $person3);
     }
@@ -80,21 +80,19 @@ class PoliceTest extends MockeryTestCase
         $sut->process($publicationLink, new ImmutableArrayObject($input));
 
         if ($expectTmAdded) {
-            $this->assertSame($publicationLink->getPoliceDatas()->count(), 1);
+            $this->assertCount(1, $publicationLink->getPoliceDatas());
         } else {
-            $this->assertSame($publicationLink->getPoliceDatas()->count(), 0);
+            $this->assertCount(0, $publicationLink->getPoliceDatas());
         }
     }
 
-    public static function dataProviderTestProcessNewApplication(): array
+    public static function dataProviderTestProcessNewApplication(): \Iterator
     {
-        return [
-            [true, PublicationSection::APP_NEW_SECTION],
-            [true, PublicationSection::APP_GRANTED_SECTION],
-            [false, PublicationSection::APP_GRANT_NOT_TAKEN_SECTION],
-            [false, PublicationSection::APP_REFUSED_SECTION],
-            [false, PublicationSection::APP_WITHDRAWN_SECTION],
-        ];
+        yield [true, PublicationSection::APP_NEW_SECTION];
+        yield [true, PublicationSection::APP_GRANTED_SECTION];
+        yield [false, PublicationSection::APP_GRANT_NOT_TAKEN_SECTION];
+        yield [false, PublicationSection::APP_REFUSED_SECTION];
+        yield [false, PublicationSection::APP_WITHDRAWN_SECTION];
     }
 
     public function testProcessTransportManagers(): void
@@ -128,7 +126,7 @@ class PoliceTest extends MockeryTestCase
         ];
         $sut->process($publicationLink, new ImmutableArrayObject($input));
 
-        $this->assertSame($publicationLink->getPoliceDatas()->count(), 3);
+        $this->assertCount(3, $publicationLink->getPoliceDatas());
         $this->assertSame($publicationLink->getPoliceDatas()[0]->getPerson(), $tm1->getHomeCd()->getPerson());
         $this->assertSame($publicationLink->getPoliceDatas()[1]->getPerson(), $tm2->getHomeCd()->getPerson());
         $this->assertSame($publicationLink->getPoliceDatas()[2]->getPerson(), $tm3->getHomeCd()->getPerson());

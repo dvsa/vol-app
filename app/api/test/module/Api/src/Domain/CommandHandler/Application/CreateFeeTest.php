@@ -29,7 +29,7 @@ use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea;
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class CreateFeeTest extends AbstractCommandHandlerTestCase
+final class CreateFeeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

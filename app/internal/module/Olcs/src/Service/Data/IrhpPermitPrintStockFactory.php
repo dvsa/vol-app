@@ -17,7 +17,7 @@ class IrhpPermitPrintStockFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpPermitPrintStock
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IrhpPermitPrintStock
     {
         return new IrhpPermitPrintStock(
             $container->get(AbstractDataServiceServices::class),

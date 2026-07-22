@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Form\Element;
 
 use PHPUnit\Framework\TestCase;

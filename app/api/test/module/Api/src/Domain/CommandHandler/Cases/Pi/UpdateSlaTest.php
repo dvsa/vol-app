@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Domain\Command\System\GenerateSlaTargetDate as GenerateSlaTarg
 /**
  * Update Sla Test
  */
-class UpdateSlaTest extends AbstractCommandHandlerTestCase
+final class UpdateSlaTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -87,15 +87,13 @@ class UpdateSlaTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function writtenOutcomeProvider(): array
+    public static function writtenOutcomeProvider(): \Iterator
     {
-        return [
-            [SlaEntity::VERBAL_DECISION_ONLY],
-            [SlaEntity::WRITTEN_OUTCOME_DECISION],
-            [SlaEntity::WRITTEN_OUTCOME_REASON],
-            [null]
-        ];
+        yield [SlaEntity::VERBAL_DECISION_ONLY];
+        yield [SlaEntity::WRITTEN_OUTCOME_DECISION];
+        yield [SlaEntity::WRITTEN_OUTCOME_REASON];
+        yield [null];
     }
 }

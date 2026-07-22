@@ -19,7 +19,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 /**
  * Renew IrfoPsvAuth Test
  */
-class RenewIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
+final class RenewIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -83,7 +83,7 @@ class RenewIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
 
         $this->assertEquals($expected, $result->toArray());
 
-        $this->assertEquals(2, sizeof($savedIrfoPsvAuths));
+        $this->assertCount(2, $savedIrfoPsvAuths);
 
         foreach ($savedIrfoPsvAuths as $savedIrfoPsvAuth) {
             $this->assertSame(

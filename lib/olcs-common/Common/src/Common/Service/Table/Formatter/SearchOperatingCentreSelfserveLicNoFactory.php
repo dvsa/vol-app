@@ -12,7 +12,7 @@ class SearchOperatingCentreSelfserveLicNoFactory implements FactoryInterface
      * @param  array|null         $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchOperatingCentreSelfserveLicNo
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SearchOperatingCentreSelfserveLicNo
     {
         $translator = $container->get('translator');
         return new SearchOperatingCentreSelfserveLicNo($translator);

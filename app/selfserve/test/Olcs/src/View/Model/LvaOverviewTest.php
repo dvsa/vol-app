@@ -11,20 +11,20 @@ use Olcs\View\Model\LvaOverviewSection;
 /**
  * @see LvaOverview
  */
-class LvaOverviewTest extends MockeryTestCase
+final class LvaOverviewTest extends MockeryTestCase
 {
-    protected const SECTIONS_VARIABLE_NAME = 'sections';
-    protected const EMPTY_DATA = [];
-    protected const SECTION_IDENTIFIER = 0;
-    protected const SECTION_IDENTIFIER_PLUS_1 = 1;
-    protected const DATA = ['id' => self::SECTION_IDENTIFIER, 'idIndex' => 2, 'organisation' => ['type' => ['id' => 'ORGANISATION TYPE']]];
-    protected const SECTION_NUMBER_DATA = ['sectionNumber' => self::SECTION_IDENTIFIER_PLUS_1];
-    protected const COLLECTION_OF_ONE_SECTION_FORMATTED_AS_AN_ARRAY = [self::FIRST_SECTION_ARRAY_KEY => ['SECTION DATA']];
-    protected const SECTION_REFERENCE = 'SECTION REFERENCE';
-    protected const COLLECTION_OF_ONE_SECTION_REFERENCE = [self::FIRST_SECTION_ARRAY_KEY => self::SECTION_REFERENCE];
-    protected const FIRST_SECTION_ARRAY_KEY = 'FIRST SECTION ARRAY KEY';
-    public const DEFAULT_MODE = 'DEFAULT MODE';
-    protected const ANCHOR_REF_VARIABLE = 'anchorRef';
+    protected const string SECTIONS_VARIABLE_NAME = 'sections';
+    protected const array EMPTY_DATA = [];
+    protected const int SECTION_IDENTIFIER = 0;
+    protected const int SECTION_IDENTIFIER_PLUS_1 = 1;
+    protected const array DATA = ['id' => self::SECTION_IDENTIFIER, 'idIndex' => 2, 'organisation' => ['type' => ['id' => 'ORGANISATION TYPE']]];
+    protected const array SECTION_NUMBER_DATA = ['sectionNumber' => self::SECTION_IDENTIFIER_PLUS_1];
+    protected const array COLLECTION_OF_ONE_SECTION_FORMATTED_AS_AN_ARRAY = [self::FIRST_SECTION_ARRAY_KEY => ['SECTION DATA']];
+    protected const string SECTION_REFERENCE = 'SECTION REFERENCE';
+    protected const array COLLECTION_OF_ONE_SECTION_REFERENCE = [self::FIRST_SECTION_ARRAY_KEY => self::SECTION_REFERENCE];
+    protected const string FIRST_SECTION_ARRAY_KEY = 'FIRST SECTION ARRAY KEY';
+    public const string DEFAULT_MODE = 'DEFAULT MODE';
+    protected const string ANCHOR_REF_VARIABLE = 'anchorRef';
 
     /**
      * @var LvaOverview

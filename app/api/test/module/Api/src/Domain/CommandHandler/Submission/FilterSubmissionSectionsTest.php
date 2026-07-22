@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\RepositoryServiceManager;
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 
-class FilterSubmissionSectionsTest extends AbstractCommandHandlerTestCase
+final class FilterSubmissionSectionsTest extends AbstractCommandHandlerTestCase
 {
     public $submissionConfig = [
         'submissions' => [

@@ -12,7 +12,7 @@ use RunTimeException;
 class CommandServiceFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CommandService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CommandService
     {
         $config = $container->get('Config');
 

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Cases\Statement;
 
 use Dvsa\Olcs\Transfer\Command\Cases\Statement\UpdateStatement;
 use Dvsa\OlcsTest\Transfer\Command\CommandTest;
 
-class UpdateStatementTest extends \PHPUnit\Framework\TestCase
+final class UpdateStatementTest extends \PHPUnit\Framework\TestCase
 {
     use CommandTest;
 

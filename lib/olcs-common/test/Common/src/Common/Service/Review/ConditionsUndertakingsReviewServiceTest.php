@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Review;
 
 use Common\RefData;
@@ -21,7 +23,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ConditionsUndertakingsReviewServiceTest extends \PHPUnit\Framework\TestCase
+final class ConditionsUndertakingsReviewServiceTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 

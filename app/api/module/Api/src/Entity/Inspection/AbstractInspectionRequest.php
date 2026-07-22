@@ -21,29 +21,23 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="inspection_request",
- *    indexes={
- *        @ORM\Index(name="ix_inspection_request_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_inspection_request_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_inspection_request_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_inspection_request_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_inspection_request_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_inspection_request_operating_centre_id", columns={"operating_centre_id"}),
- *        @ORM\Index(name="ix_inspection_request_report_type", columns={"report_type"}),
- *        @ORM\Index(name="ix_inspection_request_request_type", columns={"request_type"}),
- *        @ORM\Index(name="ix_inspection_request_requestor_user_id", columns={"requestor_user_id"}),
- *        @ORM\Index(name="ix_inspection_request_result_type", columns={"result_type"}),
- *        @ORM\Index(name="ix_inspection_request_task_id", columns={"task_id"}),
- *        @ORM\Index(name="uk_inspection_request_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_inspection_request_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'inspection_request')]
+#[ORM\Index(name: 'ix_inspection_request_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_inspection_request_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_inspection_request_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_inspection_request_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_inspection_request_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_inspection_request_operating_centre_id', columns: ['operating_centre_id'])]
+#[ORM\Index(name: 'ix_inspection_request_report_type', columns: ['report_type'])]
+#[ORM\Index(name: 'ix_inspection_request_request_type', columns: ['request_type'])]
+#[ORM\Index(name: 'ix_inspection_request_requestor_user_id', columns: ['requestor_user_id'])]
+#[ORM\Index(name: 'ix_inspection_request_result_type', columns: ['result_type'])]
+#[ORM\Index(name: 'ix_inspection_request_task_id', columns: ['task_id'])]
+#[ORM\Index(name: 'uk_inspection_request_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_inspection_request_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractInspectionRequest implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -56,241 +50,216 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
     protected $application;
 
     /**
      * Foreign Key to operating_centre
      *
      * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre", fetch="LAZY")
-     * @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'operating_centre_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre::class, fetch: 'LAZY')]
     protected $operatingCentre;
 
     /**
      * RequestorUser
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="requestor_user_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'requestor_user_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $requestorUser;
 
     /**
      * Foreign Key to task
      *
      * @var \Dvsa\Olcs\Api\Entity\Task\Task
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Task\Task", fetch="LAZY")
-     * @ORM\JoinColumn(name="task_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, fetch: 'LAZY')]
     protected $task;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * RequestType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="request_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'request_type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $requestType;
 
     /**
      * ResultType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="result_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'result_type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $resultType;
 
     /**
      * ReportType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="report_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'report_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $reportType;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Requestor notes
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="requestor_notes", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'requestor_notes', nullable: true)]
     protected $requestorNotes;
 
     /**
      * Inspector notes
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="inspector_notes", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'inspector_notes', nullable: true)]
     protected $inspectorNotes;
 
     /**
      * Due date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="due_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'due_date', nullable: true)]
     protected $dueDate;
 
     /**
      * From date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="from_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'from_date', nullable: true)]
     protected $fromDate;
 
     /**
      * To date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="to_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'to_date', nullable: true)]
     protected $toDate;
 
     /**
      * Request date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="request_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'request_date', nullable: true)]
     protected $requestDate;
 
     /**
      * Return date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="return_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'return_date', nullable: true)]
     protected $returnDate;
 
     /**
      * Deferred date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="deferred_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'deferred_date', nullable: true)]
     protected $deferredDate;
 
     /**
      * Inspector name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="inspector_name", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'inspector_name', length: 70, nullable: true)]
     protected $inspectorName;
 
     /**
      * Trailers examined no
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="trailers_examined_no", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'trailers_examined_no', nullable: true)]
     protected $trailersExaminedNo;
 
     /**
      * Vehicles examined no
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="vehicles_examined_no", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'vehicles_examined_no', nullable: true)]
     protected $vehiclesExaminedNo;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**

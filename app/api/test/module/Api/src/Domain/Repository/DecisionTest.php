@@ -22,8 +22,9 @@ use Dvsa\Olcs\Transfer\Query\Decision\DecisionList;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class DecisionTest extends RepositoryTestCase
+final class DecisionTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class, true);

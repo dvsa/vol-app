@@ -9,9 +9,7 @@ use PHPUnit\Framework\Assert as Assert;
  */
 trait DtoWithoutOptionalFieldsTest
 {
-    /**
-     * @doesNotPerformAssertions
-     */
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testDefaultValues()
     {
         // the test as defined by DtoTest is only relevant to Dto with optional fields

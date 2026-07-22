@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -13,7 +15,7 @@ use Dvsa\Olcs\Transfer\Query\Venue\VenueList as Qry;
  * Class Venue Test
  * @package CommonTest\Service
  */
-class VenueTest extends AbstractDataServiceTestCase
+final class VenueTest extends AbstractDataServiceTestCase
 {
     /** @var Venue */
     private $sut;
@@ -25,9 +27,7 @@ class VenueTest extends AbstractDataServiceTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->licenceDataService = m::mock(LicenceDataService::class);
-
         $this->sut = new Venue(
             $this->abstractDataServiceServices,
             $this->licenceDataService
@@ -36,17 +36,17 @@ class VenueTest extends AbstractDataServiceTestCase
 
     public function testFormatData(): void
     {
-        $source = $this->getSingleSource();
-        $expected = $this->getSingleExpected();
+        $source = self::getSingleSource();
+        $expected = self::getSingleExpected();
 
         $this->assertEquals($expected, $this->sut->formatData($source));
     }
 
     /**
-     * @dataProvider provideFetchListOptions
      * @param $input
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFetchListOptions')]
     public function testFetchListOptions($input, $expected): void
     {
         $this->licenceDataService->shouldReceive('fetchLicenceData')
@@ -66,23 +66,21 @@ class VenueTest extends AbstractDataServiceTestCase
     }
 
     /**
-     * @return (array|false)[][]
+     * @return \Iterator<(int | string), array<(array<mixed> | false)>>
      *
      * @psalm-return list{list{array, array}, list{false, array<never, never>}}
      */
-    public function provideFetchListOptions(): array
+    public static function provideFetchListOptions(): \Iterator
     {
-        return [
-            [$this->getSingleSource(), $this->getSingleExpected()],
-            [false, []]
-        ];
+        yield [self::getSingleSource(), self::getSingleExpected()];
+        yield [false, []];
     }
 
     /**
-     * @dataProvider provideFetchListData
      * @param $input
      * @param $expectedTrafficArea
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFetchListData')]
     public function testFetchListData($input, $expectedTrafficArea): void
     {
         $results = ['results' => 'results'];
@@ -112,16 +110,14 @@ class VenueTest extends AbstractDataServiceTestCase
     }
 
     /**
-     * @return (null|string|string[])[][]
+     * @return \Iterator<(int | string), array<(array<string> | string | null)>>
      *
      * @psalm-return list{list{array{trafficArea: 'B'}, 'B'}, list{array<never, never>, null}}
      */
-    public function provideFetchListData(): array
+    public static function provideFetchListData(): \Iterator
     {
-        return [
-            [['trafficArea' => 'B'], 'B'],
-            [[], null]
-        ];
+        yield [['trafficArea' => 'B'], 'B'];
+        yield [[], null];
     }
 
     public function testFetchLicenceDataWithException(): void
@@ -147,7 +143,7 @@ class VenueTest extends AbstractDataServiceTestCase
     /**
      * @return array
      */
-    protected function getSingleExpected()
+    protected static function getSingleExpected()
     {
         return [
             'val-1' => 'Value 1',
@@ -159,7 +155,7 @@ class VenueTest extends AbstractDataServiceTestCase
     /**
      * @return array
      */
-    protected function getSingleSource()
+    protected static function getSingleSource()
     {
         return [
             ['id' => 'val-1', 'name' => 'Value 1'],

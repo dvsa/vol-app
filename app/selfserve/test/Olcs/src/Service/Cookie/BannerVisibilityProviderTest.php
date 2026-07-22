@@ -12,7 +12,7 @@ use Olcs\Service\Cookie\CookieState;
 use Laminas\Http\Header\Cookie;
 use Laminas\Mvc\MvcEvent;
 
-class BannerVisibilityProviderTest extends MockeryTestCase
+final class BannerVisibilityProviderTest extends MockeryTestCase
 {
     private $cookieReader;
 
@@ -20,6 +20,7 @@ class BannerVisibilityProviderTest extends MockeryTestCase
 
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->cookieReader = m::mock(CookieReader::class);
@@ -42,15 +43,13 @@ class BannerVisibilityProviderTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return list{list{'cookies/settings'}}
      */
-    public static function dpFalseOnExemptRoute(): array
+    public static function dpFalseOnExemptRoute(): \Iterator
     {
-        return [
-            ['cookies/settings'],
-        ];
+        yield ['cookies/settings'];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpNonExemptRoute')]
@@ -82,15 +81,13 @@ class BannerVisibilityProviderTest extends MockeryTestCase
     }
 
     /**
-     * @return bool[][]
+     * @return \Iterator<(int | string), array<bool>>
      *
      * @psalm-return list{list{true, false}, list{false, true}}
      */
-    public static function dpNonExemptRoute(): array
+    public static function dpNonExemptRoute(): \Iterator
     {
-        return [
-            [true, false],
-            [false, true],
-        ];
+        yield [true, false];
+        yield [false, true];
     }
 }

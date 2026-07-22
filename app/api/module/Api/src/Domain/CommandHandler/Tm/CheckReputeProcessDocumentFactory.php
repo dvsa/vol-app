@@ -13,7 +13,7 @@ use Psr\Container\ContainerInterface;
 final class CheckReputeProcessDocumentFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CheckReputeProcessDocument
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CheckReputeProcessDocument
     {
         $fileUploader = $container->get('FileUploader');
         $cgrInputFilter = $container->get(CgrInputFactory::class);

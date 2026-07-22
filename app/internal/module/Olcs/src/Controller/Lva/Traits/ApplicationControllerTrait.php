@@ -52,7 +52,7 @@ trait ApplicationControllerTrait
      *
      * @return \Laminas\View\Model\ViewModel|null
      */
-    protected function render($content, Form $form = null, $variables = [])
+    protected function render($content, ?Form $form = null, $variables = [])
     {
         if (! ($content instanceof ViewModel)) {
             $sectionParams = array_merge(

@@ -12,7 +12,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Psr\Container\ContainerInterface;
 
-class ShortNoticeInputFactoryTest extends TestCase
+final class ShortNoticeInputFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {

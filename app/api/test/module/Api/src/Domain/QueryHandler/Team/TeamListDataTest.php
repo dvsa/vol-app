@@ -16,7 +16,7 @@ use Mockery as m;
 /**
  * @see QueryHandler
  */
-class TeamListDataTest extends QueryHandlerTestCase
+final class TeamListDataTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

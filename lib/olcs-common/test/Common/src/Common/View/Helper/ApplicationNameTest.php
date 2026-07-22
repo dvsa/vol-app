@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper;
 
 use Common\View\Helper\ApplicationName;
@@ -9,7 +11,7 @@ use Common\View\Helper\ApplicationName;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationNameTest extends \PHPUnit\Framework\TestCase
+final class ApplicationNameTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test render without version

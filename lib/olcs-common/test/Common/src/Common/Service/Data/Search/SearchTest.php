@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data\Search;
 
 use Common\Data\Object\Search\Aggregations\Terms\MergedStatus;
@@ -21,7 +23,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class SearchTest
  * @package OlcsTest\Service\Data\Search
  */
-class SearchTest extends MockeryTestCase
+final class SearchTest extends MockeryTestCase
 {
     /** @var  m\MockInterface */
     private $tableService;
@@ -49,9 +51,7 @@ class SearchTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider provideGetLimit
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideGetLimit')]
     public function testGetLimit($query, $expected): void
     {
         $this->sut->setQuery($query);
@@ -60,24 +60,19 @@ class SearchTest extends MockeryTestCase
     }
 
     /**
-     * @return (ArrayObject|\ArrayObject|int|null)[][]
+     * @return \Iterator<(int | string), array<(\ArrayObject | int | \Laminas\Stdlib\ArrayObject | null)>>
      *
      * @psalm-return list{list{\ArrayObject, 15}, list{ArrayObject<never, never>, 10}, list{null, 10}}
      */
-    public function provideGetLimit(): array
+    public static function provideGetLimit(): \Iterator
     {
         $stubQuery = new QueryStub(15);
-
-        return [
-            [$stubQuery, 15],
-            [new ArrayObject(), 10],
-            [null, 10]
-        ];
+        yield [$stubQuery, 15];
+        yield [new ArrayObject(), 10];
+        yield [null, 10];
     }
 
-    /**
-     * @dataProvider provideGetPage
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideGetPage')]
     public function testGetPage($query, $expected): void
     {
         $this->sut->setQuery($query);
@@ -86,19 +81,16 @@ class SearchTest extends MockeryTestCase
     }
 
     /**
-     * @return (ArrayObject|\ArrayObject|int|null)[][]
+     * @return \Iterator<(int | string), array<(\ArrayObject | int | \Laminas\Stdlib\ArrayObject | null)>>
      *
      * @psalm-return list{list{\ArrayObject, 3}, list{ArrayObject<never, never>, 1}, list{null, 1}}
      */
-    public function provideGetPage(): array
+    public static function provideGetPage(): \Iterator
     {
         $stubQuery = new QueryStub(15, 3);
-
-        return [
-            [$stubQuery, 3],
-            [new ArrayObject(), 1],
-            [null, 1]
-        ];
+        yield [$stubQuery, 3];
+        yield [new ArrayObject(), 1];
+        yield [null, 1];
     }
 
     public function testFetchResultsTable(): void

@@ -13,7 +13,7 @@ use Psr\Container\ContainerInterface;
 class FormLabelFactory implements FactoryInterface
 {
     #[Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FormLabel
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): FormLabel
     {
         $instance = new FormLabel();
         $translator = $container->get(TranslatorInterface::class);

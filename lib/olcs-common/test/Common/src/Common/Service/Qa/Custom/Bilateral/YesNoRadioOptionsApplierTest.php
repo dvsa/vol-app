@@ -9,9 +9,9 @@ use Common\Service\Qa\Custom\Bilateral\Radio;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class YesNoRadioOptionsApplierTest extends MockeryTestCase
+final class YesNoRadioOptionsApplierTest extends MockeryTestCase
 {
-    public const STANDARD_ATTRIBUTES = [
+    public const array STANDARD_ATTRIBUTES = [
         'id' => 'yesNoRadio',
         'radios_wrapper_attributes' => [
             'id' => 'yesNoRadio',
@@ -20,7 +20,7 @@ class YesNoRadioOptionsApplierTest extends MockeryTestCase
         ]
     ];
 
-    public const VALUE_OPTIONS = [
+    public const array VALUE_OPTIONS = [
         'yes' => [
             'label' => 'Yes',
             'value' => 'Y',
@@ -31,9 +31,9 @@ class YesNoRadioOptionsApplierTest extends MockeryTestCase
         ]
     ];
 
-    public const NOT_SELECTED_MESSAGE = 'not.selected.message';
+    public const string NOT_SELECTED_MESSAGE = 'not.selected.message';
 
-    public const RADIO_VALUE = 'radioValue';
+    public const string RADIO_VALUE = 'radioValue';
 
     public function testApplyTo(): void
     {

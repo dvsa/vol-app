@@ -24,7 +24,7 @@ use Mockery as m;
 /**
  * GenerateCoverLetterDocumentTest
  */
-class GenerateCoverLetterDocumentTest extends AbstractCommandHandlerTestCase
+final class GenerateCoverLetterDocumentTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -90,7 +90,7 @@ class GenerateCoverLetterDocumentTest extends AbstractCommandHandlerTestCase
                 'isExternal' => false,
                 'isScan' => false
             ],
-            (new Result())->addId('document', 100)->addMessage('Document generated')
+            new Result()->addId('document', 100)->addMessage('Document generated')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -106,48 +106,46 @@ class GenerateCoverLetterDocumentTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            'ECMT Annual' => [
-                'irhpPermitTypeId' => IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT,
-                'expectedTemplate' => DocumentEntity::IRHP_PERMIT_ECMT_COVER_LETTER,
-                'expectedDescription' => 'IRHP PERMIT ECMT COVERING LETTER 123',
-                'expectedMessages' => [
-                    'IRHP PERMIT ECMT COVERING LETTER 123 RTF created and stored',
-                ],
+        yield 'ECMT Annual' => [
+            'irhpPermitTypeId' => IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT,
+            'expectedTemplate' => DocumentEntity::IRHP_PERMIT_ECMT_COVER_LETTER,
+            'expectedDescription' => 'IRHP PERMIT ECMT COVERING LETTER 123',
+            'expectedMessages' => [
+                'IRHP PERMIT ECMT COVERING LETTER 123 RTF created and stored',
             ],
-            'ECMT Short-term' => [
-                'irhpPermitTypeId' => IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                'expectedTemplate' => DocumentEntity::IRHP_PERMIT_SHORT_TERM_ECMT_COVER_LETTER,
-                'expectedDescription' => 'IRHP PERMIT SHORT TERM ECMT COVER LETTER 123',
-                'expectedMessages' => [
-                    'IRHP PERMIT SHORT TERM ECMT COVER LETTER 123 RTF created and stored',
-                ],
+        ];
+        yield 'ECMT Short-term' => [
+            'irhpPermitTypeId' => IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            'expectedTemplate' => DocumentEntity::IRHP_PERMIT_SHORT_TERM_ECMT_COVER_LETTER,
+            'expectedDescription' => 'IRHP PERMIT SHORT TERM ECMT COVER LETTER 123',
+            'expectedMessages' => [
+                'IRHP PERMIT SHORT TERM ECMT COVER LETTER 123 RTF created and stored',
             ],
-            'ECMT Removal' => [
-                'irhpPermitTypeId' => IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
-                'expectedTemplate' => DocumentEntity::IRHP_PERMIT_ECMT_REMOVAL_COVERING_LETTER,
-                'expectedDescription' => 'IRHP PERMIT ECMT REMOVALS COVERING LETTER 123',
-                'expectedMessages' => [
-                    'IRHP PERMIT ECMT REMOVALS COVERING LETTER 123 RTF created and stored',
-                ],
+        ];
+        yield 'ECMT Removal' => [
+            'irhpPermitTypeId' => IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL,
+            'expectedTemplate' => DocumentEntity::IRHP_PERMIT_ECMT_REMOVAL_COVERING_LETTER,
+            'expectedDescription' => 'IRHP PERMIT ECMT REMOVALS COVERING LETTER 123',
+            'expectedMessages' => [
+                'IRHP PERMIT ECMT REMOVALS COVERING LETTER 123 RTF created and stored',
             ],
-            'IRHP Bilateral' => [
-                'irhpPermitTypeId' => IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_BILATERAL,
-                'expectedTemplate' => DocumentEntity::IRHP_PERMIT_ANN_BILAT_COVERING_LETTER,
-                'expectedDescription' => 'IRHP PERMIT ANN BILAT COVERING LETTER 123',
-                'expectedMessages' => [
-                    'IRHP PERMIT ANN BILAT COVERING LETTER 123 RTF created and stored',
-                ],
+        ];
+        yield 'IRHP Bilateral' => [
+            'irhpPermitTypeId' => IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_BILATERAL,
+            'expectedTemplate' => DocumentEntity::IRHP_PERMIT_ANN_BILAT_COVERING_LETTER,
+            'expectedDescription' => 'IRHP PERMIT ANN BILAT COVERING LETTER 123',
+            'expectedMessages' => [
+                'IRHP PERMIT ANN BILAT COVERING LETTER 123 RTF created and stored',
             ],
-            'IRHP Multilateral' => [
-                'irhpPermitTypeId' => IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_MULTILATERAL,
-                'expectedTemplate' => DocumentEntity::IRHP_PERMIT_ANN_MULTILAT_COVERING_LETTER,
-                'expectedDescription' => 'IRHP PERMIT ANN MULTILAT COVERING LETTER 123',
-                'expectedMessages' => [
-                    'IRHP PERMIT ANN MULTILAT COVERING LETTER 123 RTF created and stored',
-                ],
+        ];
+        yield 'IRHP Multilateral' => [
+            'irhpPermitTypeId' => IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_MULTILATERAL,
+            'expectedTemplate' => DocumentEntity::IRHP_PERMIT_ANN_MULTILAT_COVERING_LETTER,
+            'expectedDescription' => 'IRHP PERMIT ANN MULTILAT COVERING LETTER 123',
+            'expectedMessages' => [
+                'IRHP PERMIT ANN MULTILAT COVERING LETTER 123 RTF created and stored',
             ],
         ];
     }

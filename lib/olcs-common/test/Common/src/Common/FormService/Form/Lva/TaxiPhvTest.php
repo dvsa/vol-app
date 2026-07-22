@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\TaxiPhv;
@@ -13,12 +15,8 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TaxiPhvTest extends MockeryTestCase
+final class TaxiPhvTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $authService;
     /**
      * @var TaxiPhv
      */
@@ -33,9 +31,9 @@ class TaxiPhvTest extends MockeryTestCase
     protected function setUp(): void
     {
         $this->formHelper = m::mock(FormHelperService::class);
-        $this->authService = m::mock(AuthorizationService::class);
+        $authService = m::mock(AuthorizationService::class);
 
-        $this->sut = new TaxiPhv($this->formHelper, $this->authService);
+        $this->sut = new TaxiPhv($this->formHelper, $authService);
     }
 
     public function testGetForm(): void

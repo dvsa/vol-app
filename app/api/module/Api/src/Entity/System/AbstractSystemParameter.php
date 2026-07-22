@@ -16,10 +16,9 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\Table(name="system_parameter")
  */
+#[ORM\Table(name: 'system_parameter')]
+#[ORM\MappedSuperclass]
 abstract class AbstractSystemParameter implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -30,28 +29,25 @@ abstract class AbstractSystemParameter implements BundleSerializableInterface, J
      * Primary key
      *
      * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string", name="id", length=32, nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'string', name: 'id', length: 32, nullable: false)]
     protected $id = '';
 
     /**
      * Param value
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="param_value", length=1024, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'param_value', length: 1024, nullable: true)]
     protected $paramValue;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
 
 

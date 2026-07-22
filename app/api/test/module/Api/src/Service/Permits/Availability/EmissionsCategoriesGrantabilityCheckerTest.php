@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EmissionsCategoriesGrantabilityCheckerTest extends MockeryTestCase
+final class EmissionsCategoriesGrantabilityCheckerTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsGrantable')]
     public function testIsGrantable(mixed $requiredEuro5, mixed $availableEuro5, mixed $requiredEuro6, mixed $availableEuro6, mixed $isGrantable): void
@@ -54,17 +54,15 @@ class EmissionsCategoriesGrantabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestIsGrantable(): array
+    public static function dpTestIsGrantable(): \Iterator
     {
-        return [
-            [5, 5, 5, 5, true],
-            [6, 5, 5, 5, false],
-            [5, 5, 6, 5, false],
-            [6, 5, 6, 5, false],
-            [5, 6, 5, 5, true],
-            [5, 5, 5, 6, true],
-            [5, 6, 5, 6, true],
-            [5, 6, 6, 5, false],
-        ];
+        yield [5, 5, 5, 5, true];
+        yield [6, 5, 5, 5, false];
+        yield [5, 5, 6, 5, false];
+        yield [6, 5, 6, 5, false];
+        yield [5, 6, 5, 5, true];
+        yield [5, 5, 5, 6, true];
+        yield [5, 6, 5, 6, true];
+        yield [5, 6, 6, 5, false];
     }
 }

@@ -30,7 +30,7 @@ class OperatorFeesControllerFactory implements FactoryInterface
      * @return OperatorController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatorFeesController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): OperatorFeesController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);

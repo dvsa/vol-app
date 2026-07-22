@@ -6,6 +6,8 @@
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa;
 
 use Common\Service\Qa\FieldsetAdder;
@@ -21,11 +23,9 @@ use Laminas\Form\Fieldset;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class FieldsetPopulatorTest extends MockeryTestCase
+final class FieldsetPopulatorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestPopulate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestPopulate')]
     public function testPopulate($usageContext): void
     {
         $applicationStep1 = [
@@ -74,15 +74,13 @@ class FieldsetPopulatorTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return list{list{'USAGE_CONTEXT_SELFSERVE'}, list{'USAGE_CONTEXT_INTERNAL'}}
      */
-    public function dpTestPopulate(): array
+    public static function dpTestPopulate(): \Iterator
     {
-        return [
-            [UsageContext::CONTEXT_SELFSERVE],
-            [UsageContext::CONTEXT_INTERNAL],
-        ];
+        yield [UsageContext::CONTEXT_SELFSERVE];
+        yield [UsageContext::CONTEXT_INTERNAL];
     }
 }

@@ -18,7 +18,7 @@ class ElementGeneratorContextGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ElementGeneratorContextGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ElementGeneratorContextGenerator
     {
         return new ElementGeneratorContextGenerator(
             $container->get('QaValidatorListGenerator'),

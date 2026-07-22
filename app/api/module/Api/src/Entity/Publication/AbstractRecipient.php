@@ -22,21 +22,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="recipient",
- *    indexes={
- *        @ORM\Index(name="ix_recipient_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_recipient_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_recipient_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_recipient_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'recipient')]
+#[ORM\Index(name: 'ix_recipient_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_recipient_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'uk_recipient_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_recipient_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractRecipient implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -50,123 +44,106 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Recipient registered for AD, Applications and Decisions, publications
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="send_app_decision", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'send_app_decision', nullable: false, options: ['default' => 0])]
     protected $sendAppDecision = 0;
 
     /**
      * Recipient registered for NP, Notices and Procedures, publications
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="send_notices_procs", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'send_notices_procs', nullable: false, options: ['default' => 0])]
     protected $sendNoticesProcs = 0;
 
     /**
      * Recipient receives extra sensitive info. DOBs for people in publication.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_police", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_police', nullable: false, options: ['default' => 0])]
     protected $isPolice = 0;
 
     /**
      * Is objector or representor
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_objector", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_objector', nullable: false, options: ['default' => 0])]
     protected $isObjector = 0;
 
     /**
      * Contact name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="contact_name", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'contact_name', length: 100, nullable: true)]
     protected $contactName;
 
     /**
      * Email address
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="email_address", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'email_address', length: 255, nullable: true)]
     protected $emailAddress;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * TrafficAreas
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", inversedBy="recipients", fetch="LAZY")
-     * @ORM\JoinTable(name="recipient_traffic_area",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="recipient_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'recipient_traffic_area')]
+    #[ORM\JoinColumn(name: 'recipient_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'traffic_area_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, inversedBy: 'recipients', fetch: 'LAZY')]
     protected $trafficAreas;
 
     /**

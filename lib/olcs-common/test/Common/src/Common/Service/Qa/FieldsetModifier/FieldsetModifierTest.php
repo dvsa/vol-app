@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\FieldsetModifier;
 
 use Common\Service\Qa\FieldsetModifier\FieldsetModifier;
@@ -13,7 +15,7 @@ use Laminas\Form\Fieldset;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class FieldsetModifierTest extends MockeryTestCase
+final class FieldsetModifierTest extends MockeryTestCase
 {
     public function testModify(): void
     {

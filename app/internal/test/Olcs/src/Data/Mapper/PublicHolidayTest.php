@@ -8,12 +8,10 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\PublicHoliday;
 use Laminas\Form\FormInterface;
 
-/**
- * @covers Olcs\Data\Mapper\PublicHoliday
- */
-class PublicHolidayTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Data\Mapper\PublicHoliday::class)]
+final class PublicHolidayTest extends MockeryTestCase
 {
-    public const ID = 9999;
+    public const int ID = 9999;
 
     public function testMapFromResult(): void
     {
@@ -26,26 +24,20 @@ class PublicHolidayTest extends MockeryTestCase
             'publicHolidayDate' => 'unit_Date',
         ];
 
-        static::assertEquals(
-            [
-                PublicHoliday::FIELDS => [
-                    'id' => self::ID,
-                    'areas' => ['isEngland'],
-                    'holidayDate' => 'unit_Date',
-                ],
+        $this->assertEquals([
+            PublicHoliday::FIELDS => [
+                'id' => self::ID,
+                'areas' => ['isEngland'],
+                'holidayDate' => 'unit_Date',
             ],
-            PublicHoliday::mapFromResult($data)
-        );
+        ], PublicHoliday::mapFromResult($data));
     }
 
     public function testMapFromResultIsEmpty(): void
     {
-        static::assertEquals(
-            [
-                PublicHoliday::FIELDS => [],
-            ],
-            PublicHoliday::mapFromResult([])
-        );
+        $this->assertEquals([
+            PublicHoliday::FIELDS => [],
+        ], PublicHoliday::mapFromResult([]));
     }
 
     public function testMapFromForm(): void
@@ -59,16 +51,13 @@ class PublicHolidayTest extends MockeryTestCase
             ],
         ];
 
-        static::assertEquals(
-            [
-                'id' => self::ID,
-                'unit_Fld' => 'unit_Val',
-                'isEngland' => 'Y',
-                'isNi' => 'Y',
-                'holidayDate' => 'unit_Date',
-            ],
-            PublicHoliday::mapFromForm($data)
-        );
+        $this->assertEquals([
+            'id' => self::ID,
+            'unit_Fld' => 'unit_Val',
+            'isEngland' => 'Y',
+            'isNi' => 'Y',
+            'holidayDate' => 'unit_Date',
+        ], PublicHoliday::mapFromForm($data));
     }
 
     public function testMapFromError(): void
@@ -92,9 +81,6 @@ class PublicHolidayTest extends MockeryTestCase
             ->once()
             ->getMock();
 
-        static::assertEquals(
-            $errors,
-            PublicHoliday::mapFromErrors($mockForm, $errors)
-        );
+        $this->assertEquals($errors, PublicHoliday::mapFromErrors($mockForm, $errors));
     }
 }

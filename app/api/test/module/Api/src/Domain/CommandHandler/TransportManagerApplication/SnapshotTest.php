@@ -26,10 +26,8 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class SnapshotTest extends AbstractCommandHandlerTestCase
+final class SnapshotTest extends AbstractCommandHandlerTestCase
 {
-    protected $loggedInUser;
-
     public function setUp(): void
     {
         $this->sut = new CommandHandler();
@@ -97,21 +95,19 @@ class SnapshotTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dpTestHandleCommand(): array
+    public static function dpTestHandleCommand(): \Iterator
     {
-        return [
-            [
-                'tmaStatus' => TransportManagerApplication::STATUS_OPERATOR_SIGNED,
-                'expectedString' => 'submission'
-            ],
-            [
-                'tmaStatus' => TransportManagerApplication::STATUS_AWAITING_SIGNATURE,
-                'expectedString' => 'grant'
-            ],
-            [
-                'tmaStatus' => TransportManagerApplication::STATUS_INCOMPLETE,
-                'expectedString' => 'grant'
-            ]
+        yield [
+            'tmaStatus' => TransportManagerApplication::STATUS_OPERATOR_SIGNED,
+            'expectedString' => 'submission'
+        ];
+        yield [
+            'tmaStatus' => TransportManagerApplication::STATUS_AWAITING_SIGNATURE,
+            'expectedString' => 'grant'
+        ];
+        yield [
+            'tmaStatus' => TransportManagerApplication::STATUS_INCOMPLETE,
+            'expectedString' => 'grant'
         ];
     }
 }

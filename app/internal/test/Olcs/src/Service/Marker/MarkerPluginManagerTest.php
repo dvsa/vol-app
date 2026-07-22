@@ -16,7 +16,7 @@ use Olcs\Service\Marker\MarkerInterface;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class MarkerPluginManagerTest extends TestCase
+final class MarkerPluginManagerTest extends TestCase
 {
     /**
      * @var \Olcs\Service\Marker\MarkerPluginManager

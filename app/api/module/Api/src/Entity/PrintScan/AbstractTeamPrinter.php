@@ -20,18 +20,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="team_printer",
- *    indexes={
- *        @ORM\Index(name="ix_team_printer_printer_id", columns={"printer_id"}),
- *        @ORM\Index(name="ix_team_printer_sub_category_id", columns={"sub_category_id"}),
- *        @ORM\Index(name="ix_team_printer_team_id", columns={"team_id"}),
- *        @ORM\Index(name="ix_team_printer_user_id", columns={"user_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'team_printer')]
+#[ORM\Index(name: 'ix_team_printer_printer_id', columns: ['printer_id'])]
+#[ORM\Index(name: 'ix_team_printer_sub_category_id', columns: ['sub_category_id'])]
+#[ORM\Index(name: 'ix_team_printer_team_id', columns: ['team_id'])]
+#[ORM\Index(name: 'ix_team_printer_user_id', columns: ['user_id'])]
+#[ORM\MappedSuperclass]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -43,61 +39,55 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to team
      *
      * @var \Dvsa\Olcs\Api\Entity\User\Team
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\Team", fetch="LAZY")
-     * @ORM\JoinColumn(name="team_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'team_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\Team::class, fetch: 'LAZY')]
     protected $team;
 
     /**
      * Foreign Key to printer
      *
      * @var \Dvsa\Olcs\Api\Entity\PrintScan\Printer
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\PrintScan\Printer", fetch="LAZY")
-     * @ORM\JoinColumn(name="printer_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'printer_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\PrintScan\Printer::class, fetch: 'LAZY')]
     protected $printer;
 
     /**
      * Optional field to enable different printers to be used for different categories of document. The default document setting is where this field is NULL
      *
      * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SubCategory", fetch="LAZY")
-     * @ORM\JoinColumn(name="sub_category_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SubCategory::class, fetch: 'LAZY')]
     protected $subCategory;
 
     /**
      * Optional field to enable different printers to be used for different users within a team. The settings for the team are where this field is NULL. The settings for individual users are where this field is populated
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

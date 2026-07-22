@@ -11,12 +11,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 use Aws\Credentials\CredentialsInterface;
 
-class SqsClientFactoryTest extends TestCase
+final class SqsClientFactoryTest extends TestCase
 {
     protected $sm;
 
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new SqsClientFactory();
@@ -59,22 +60,20 @@ class SqsClientFactoryTest extends TestCase
         $this->assertInstanceOf(SqsClient::class, $sqsClient);
     }
 
-    public static function dpTestInvoke(): array
+    public static function dpTestInvoke(): \Iterator
     {
-        return [
-            'with-sqs-options' => [
+        yield 'with-sqs-options' => [
+            'sqsOptions' => [
                 'sqsOptions' => [
-                    'sqsOptions' => [
-                        'credentials' => [
-                            'key' => 'some_key',
-                            'secret' => 'some_secret',
-                        ],
-                    ]
-                ],
+                    'credentials' => [
+                        'key' => 'some_key',
+                        'secret' => 'some_secret',
+                    ],
+                ]
             ],
-            'without-sqs-options' => [
-                'sqsOptions' => [],
-            ],
+        ];
+        yield 'without-sqs-options' => [
+            'sqsOptions' => [],
         ];
     }
 }

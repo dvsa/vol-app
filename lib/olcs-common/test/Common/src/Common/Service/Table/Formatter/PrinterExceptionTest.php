@@ -6,6 +6,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\PrinterException;
@@ -15,56 +17,53 @@ use Common\Service\Table\Formatter\PrinterException;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class PrinterExceptionTest extends \PHPUnit\Framework\TestCase
+final class PrinterExceptionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the format method
-     *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $expected): void
     {
-        $this->assertEquals($expected, (new PrinterException())->format($data));
+        $this->assertEquals($expected, new PrinterException()->format($data));
     }
 
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'team' => [
-                [
-                    'team' => [
-                        'name' => 'foo',
-                    ],
-                    'user' => null
+        yield 'team' => [
+            [
+                'team' => [
+                    'name' => 'foo',
                 ],
-                'foo',
+                'user' => null
             ],
-            'userWithName' => [
-                [
-                    'user' => [
-                        'contactDetails' => [
-                            'person' => [
-                                'forename' => 'foo',
-                                'familyName' => 'bar'
-                            ]
+            'foo',
+        ];
+        yield 'userWithName' => [
+            [
+                'user' => [
+                    'contactDetails' => [
+                        'person' => [
+                            'forename' => 'foo',
+                            'familyName' => 'bar'
                         ]
-                    ],
+                    ]
                 ],
-                'foo bar',
             ],
-            'userWithLoginId' => [
-                [
-                    'user' => [
-                        'loginId' => 'foo'
-                    ],
+            'foo bar',
+        ];
+        yield 'userWithLoginId' => [
+            [
+                'user' => [
+                    'loginId' => 'foo'
                 ],
-                'foo',
-            ]
+            ],
+            'foo',
         ];
     }
 }

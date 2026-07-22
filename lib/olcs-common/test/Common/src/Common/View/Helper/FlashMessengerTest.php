@@ -11,10 +11,9 @@ use Mockery as m;
 
 /**
  * Flash Messenger View Helper Test
- *
- * @covers \Common\View\Helper\FlashMessenger
  */
-class FlashMessengerTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\View\Helper\FlashMessenger::class)]
+final class FlashMessengerTest extends MockeryTestCase
 {
     /**
      * Subject under test
@@ -71,10 +70,8 @@ class FlashMessengerTest extends MockeryTestCase
         $this->assertSame($sut, $sut('norender'));
     }
 
-    /**
-     * @group view_helper
-     * @group flash_messenger_view_helper
-     */
+    #[\PHPUnit\Framework\Attributes\Group('view_helper')]
+    #[\PHPUnit\Framework\Attributes\Group('flash_messenger_view_helper')]
     public function testRenderWithoutMessages(): void
     {
         $this->flashMessengerHelperService->shouldReceive('getCurrentMessages')
@@ -90,10 +87,8 @@ class FlashMessengerTest extends MockeryTestCase
         $this->assertEquals('', $markup);
     }
 
-    /**
-     * @group view_helper
-     * @group flash_messenger_view_helper
-     */
+    #[\PHPUnit\Framework\Attributes\Group('view_helper')]
+    #[\PHPUnit\Framework\Attributes\Group('flash_messenger_view_helper')]
     public function testInvokeWithoutMessages(): void
     {
         $this->flashMessengerHelperService->shouldReceive('getCurrentMessages')
@@ -111,10 +106,8 @@ class FlashMessengerTest extends MockeryTestCase
         $this->assertEquals('', $markup);
     }
 
-    /**
-     * @group view_helper
-     * @group flash_messenger_view_helper
-     */
+    #[\PHPUnit\Framework\Attributes\Group('view_helper')]
+    #[\PHPUnit\Framework\Attributes\Group('flash_messenger_view_helper')]
     public function testRenderWithMessages(): void
     {
         $this->flashMessengerHelperService->shouldReceive('getCurrentMessages')

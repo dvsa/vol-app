@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class PreviousApplicationPublicationNoTest
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PreviousApplicationPublicationNoTest extends MockeryTestCase
+final class PreviousApplicationPublicationNoTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\Group('publicationFilter')]
     #[\PHPUnit\Framework\Attributes\DataProvider('CheckByApplicationAppStatusProvider')]
@@ -92,27 +92,23 @@ class PreviousApplicationPublicationNoTest extends MockeryTestCase
 
     /**
      * data provider for application status where we get previous publications by application id
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function checkByLicenceAppStatusProvider(): array
+    public static function checkByLicenceAppStatusProvider(): \Iterator
     {
-        return [
-            [ApplicationEntity::APPLICATION_STATUS_GRANTED],
-            [ApplicationEntity::APPLICATION_STATUS_REFUSED],
-            [ApplicationEntity::APPLICATION_STATUS_NOT_TAKEN_UP],
-            [ApplicationEntity::APPLICATION_STATUS_CURTAILED]
-        ];
+        yield [ApplicationEntity::APPLICATION_STATUS_GRANTED];
+        yield [ApplicationEntity::APPLICATION_STATUS_REFUSED];
+        yield [ApplicationEntity::APPLICATION_STATUS_NOT_TAKEN_UP];
+        yield [ApplicationEntity::APPLICATION_STATUS_CURTAILED];
     }
 
     /**
      * data provider for application status where we get previous publications by application id
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function checkByApplicationAppStatusProvider(): array
+    public static function checkByApplicationAppStatusProvider(): \Iterator
     {
-        return [
-            [ApplicationEntity::APPLICATION_STATUS_WITHDRAWN],
-            [ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION]
-        ];
+        yield [ApplicationEntity::APPLICATION_STATUS_WITHDRAWN];
+        yield [ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION];
     }
 }

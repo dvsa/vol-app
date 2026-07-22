@@ -10,7 +10,7 @@ use Olcs\Data\Mapper\EventHistory;
 /**
  * @covert \Olcs\Data\Mapper\EventHistory
  */
-class EventHistoryTest extends MockeryTestCase
+final class EventHistoryTest extends MockeryTestCase
 {
     public function testMapFromResult(): void
     {

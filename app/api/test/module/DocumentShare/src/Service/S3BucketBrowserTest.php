@@ -19,9 +19,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(S3BucketBrowser::class)]
-class S3BucketBrowserTest extends MockeryTestCase
+final class S3BucketBrowserTest extends MockeryTestCase
 {
-    private const BUCKET = 'test-bucket';
+    private const string BUCKET = 'test-bucket';
 
     private MockHandler $mockHandler;
 

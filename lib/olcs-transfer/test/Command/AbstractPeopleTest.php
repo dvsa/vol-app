@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command;
 
 use Dvsa\Olcs\Transfer\Command\AbstractPeople;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Command\AbstractPeople
- */
-class AbstractPeopleTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\AbstractPeople::class)]
+final class AbstractPeopleTest extends MockeryTestCase
 {
     public function testGetSet()
     {
@@ -27,12 +27,12 @@ class AbstractPeopleTest extends MockeryTestCase
         $sut = m::mock(AbstractPeople::class)->makePartial();
         $sut->exchangeArray($data);
 
-        static::assertEquals(111, $sut->getId());
-        static::assertEquals('unit_title', $sut->getTitle());
-        static::assertEquals('unit_forename', $sut->getForename());
-        static::assertEquals('unit_familyName', $sut->getFamilyName());
-        static::assertEquals('unit_otherName', $sut->getOtherName());
-        static::assertEquals('unit_birthDate', $sut->getBirthDate());
-        static::assertEquals('unit_position', $sut->getPosition());
+        $this->assertEquals(111, $sut->getId());
+        $this->assertEquals('unit_title', $sut->getTitle());
+        $this->assertEquals('unit_forename', $sut->getForename());
+        $this->assertEquals('unit_familyName', $sut->getFamilyName());
+        $this->assertEquals('unit_otherName', $sut->getOtherName());
+        $this->assertEquals('unit_birthDate', $sut->getBirthDate());
+        $this->assertEquals('unit_position', $sut->getPosition());
     }
 }

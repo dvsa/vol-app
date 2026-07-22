@@ -11,14 +11,13 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Submission\Sections\SectionGeneratorPluginManager
- */
-class SectionGeneratorPluginManagerTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Submission\Sections\SectionGeneratorPluginManager::class)]
+final class SectionGeneratorPluginManagerTest extends MockeryTestCase
 {
     /** @var  SectionGeneratorPluginManager */
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new SectionGeneratorPluginManager($this->createStub(ContainerInterface::class));

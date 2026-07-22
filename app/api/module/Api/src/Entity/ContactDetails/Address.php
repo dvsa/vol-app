@@ -6,20 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Address Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="address",
- *    indexes={
- *        @ORM\Index(name="ix_address_country_code", columns={"country_code"}),
- *        @ORM\Index(name="ix_address_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_address_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_address_admin_area", columns={"admin_area"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_address_olbs_key_olbs_type", columns={"olbs_key","olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'address')]
+#[ORM\Index(name: 'ix_address_country_code', columns: ['country_code'])]
+#[ORM\Index(name: 'ix_address_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_address_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_address_admin_area', columns: ['admin_area'])]
+#[ORM\UniqueConstraint(name: 'uk_address_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\Entity]
 class Address extends AbstractAddress
 {
     public const CONTACT_TYPE_REGISTERED_ADDRESS = 'ct_reg';
@@ -44,7 +38,7 @@ class Address extends AbstractAddress
         $addressLine4 = null,
         $town = null,
         $postcode = null,
-        Country $countryCode = null
+        ?Country $countryCode = null
     ) {
         $this->setAddressLine1($addressLine1);
         $this->setAddressLine2($addressLine2);

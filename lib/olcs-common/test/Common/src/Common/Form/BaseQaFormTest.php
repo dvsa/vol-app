@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper;
 
 use Common\Form\BaseQaForm;
@@ -12,7 +14,7 @@ use Laminas\Form\Element\Text;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class BaseQaFormTest extends MockeryTestCase
+final class BaseQaFormTest extends MockeryTestCase
 {
     private $form;
 

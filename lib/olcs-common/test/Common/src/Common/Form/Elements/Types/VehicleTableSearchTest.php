@@ -10,7 +10,7 @@ use Common\Form\Elements\Types\VehicleTableSearch;
 use PHPUnit\Framework\TestCase;
 use Laminas\Form\Element\Button;
 
-class VehicleTableSearchTest extends TestCase
+final class VehicleTableSearchTest extends TestCase
 {
     public function testVehicleTableSearchCreate(): void
     {

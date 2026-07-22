@@ -9,11 +9,9 @@ use Dvsa\Olcs\Api\Entity\Opposition\Opposition as Entity;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Opposition\Opposition
- * @covers Dvsa\Olcs\Api\Entity\Opposition\AbstractOpposition
- */
-class OppositionEntityTest extends EntityTester
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Opposition\Opposition::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Opposition\AbstractOpposition::class)]
+final class OppositionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -47,14 +45,14 @@ class OppositionEntityTest extends EntityTester
             $isWithdraw
         );
 
-        static::assertSame($mockCase, $sut->getCase());
-        static::assertSame($mockOpposer, $sut->getOpposer());
-        static::assertSame($oppositionType, $sut->getOppositionType());
+        $this->assertSame($mockCase, $sut->getCase());
+        $this->assertSame($mockOpposer, $sut->getOpposer());
+        $this->assertSame($oppositionType, $sut->getOppositionType());
 
-        static::assertEquals($isValid, $sut->getIsValid());
-        static::assertEquals($isWithdraw, $sut->getIsWithdrawn());
-        static::assertEquals($isCopied, $sut->getIsCopied());
-        static::assertEquals($isInTime, $sut->getIsInTime());
-        static::assertEquals($isWillingToAttendPi, $sut->getIsWillingToAttendPi());
+        $this->assertEquals($isValid, $sut->getIsValid());
+        $this->assertEquals($isWithdraw, $sut->getIsWithdrawn());
+        $this->assertEquals($isCopied, $sut->getIsCopied());
+        $this->assertEquals($isInTime, $sut->getIsInTime());
+        $this->assertEquals($isWillingToAttendPi, $sut->getIsWillingToAttendPi());
     }
 }

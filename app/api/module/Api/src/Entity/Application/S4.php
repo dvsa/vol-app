@@ -7,17 +7,13 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence;
 
 /**
  * S4 Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="s4",
- *    indexes={
- *        @ORM\Index(name="ix_s4_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_s4_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_s4_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_s4_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 's4')]
+#[ORM\Index(name: 'ix_s4_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_s4_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_s4_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_s4_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Entity]
 class S4 extends AbstractS4
 {
     public const STATUS_APPROVED = 's4_sts_approved';

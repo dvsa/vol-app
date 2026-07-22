@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * Create VI Extract Files Test
  */
-class SetViFlagsTest extends AbstractCommandHandlerTestCase
+final class SetViFlagsTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var m\Mock;

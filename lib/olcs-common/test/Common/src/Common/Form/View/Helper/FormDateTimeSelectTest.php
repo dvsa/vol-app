@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper;
 
 use Common\Form\View\Helper\FormDateTimeSelect;
@@ -20,7 +22,7 @@ use Psr\Container\ContainerInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class FormDateTimeSelectTest extends MockeryTestCase
+final class FormDateTimeSelectTest extends MockeryTestCase
 {
     private $sut;
 
@@ -100,7 +102,7 @@ class FormDateTimeSelectTest extends MockeryTestCase
             . '<option value="45">45</option>'
         . '</select>';
 
-        $this->assertEquals($expected, str_replace("\n", '', $markup));
+        $this->assertSame($expected, str_replace("\n", '', $markup));
     }
 
     public function testRenderWithAllMinutes(): void
@@ -151,13 +153,13 @@ class FormDateTimeSelectTest extends MockeryTestCase
             . ':<select name="minute" id="_minute">';
 
         for ($i = 0; $i <= 59; ++$i) {
-            $minute = str_pad($i, 2, '0', STR_PAD_LEFT);
+            $minute = str_pad((string) $i, 2, '0', STR_PAD_LEFT);
             $expected .= '<option value="' . $minute . '">' . $minute . '</option>';
         }
 
         $expected .= '</select>';
 
-        $this->assertEquals($expected, str_replace("\n", '', $markup));
+        $this->assertSame($expected, str_replace("\n", '', $markup));
     }
 
     public function testRenderShouldCreateEmptyWithSeconds(): void
@@ -278,7 +280,7 @@ class FormDateTimeSelectTest extends MockeryTestCase
             . '<option value="59">59</option>'
             . '</select>';
 
-        $this->assertEquals($expected, str_replace("\n", '', $markup));
+        $this->assertSame($expected, str_replace("\n", '', $markup));
     }
 
     public function testRenderWrongElement(): void

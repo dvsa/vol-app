@@ -137,7 +137,7 @@ class SwitchBoardController
      *
      * @return Form
      */
-    protected function createSwitchBoardForm(array $licence, array $formData = null): Form
+    protected function createSwitchBoardForm(array $licence, ?array $formData = null): Form
     {
         $form = $this->formHelper->createForm(SwitchBoardForm::class);
 

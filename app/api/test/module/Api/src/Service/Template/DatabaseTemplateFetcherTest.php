@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class DatabaseTemplateFetcherTest extends MockeryTestCase
+final class DatabaseTemplateFetcherTest extends MockeryTestCase
 {
     public function testFetch(): void
     {

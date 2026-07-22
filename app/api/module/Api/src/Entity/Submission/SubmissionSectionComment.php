@@ -8,17 +8,13 @@ use Dvsa\Olcs\Api\Entity\Submission\Submission as SubmissionEntity;
 
 /**
  * SubmissionSectionComment Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="submission_section_comment",
- *    indexes={
- *        @ORM\Index(name="ix_submission_section_comment_submission_id", columns={"submission_id"}),
- *        @ORM\Index(name="ix_submission_section_comment_submission_section", columns={"submission_section"}),
- *        @ORM\Index(name="ix_submission_section_comment_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_submission_section_comment_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'submission_section_comment')]
+#[ORM\Index(name: 'ix_submission_section_comment_submission_id', columns: ['submission_id'])]
+#[ORM\Index(name: 'ix_submission_section_comment_submission_section', columns: ['submission_section'])]
+#[ORM\Index(name: 'ix_submission_section_comment_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_submission_section_comment_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Entity]
 class SubmissionSectionComment extends AbstractSubmissionSectionComment
 {
     public function __construct(SubmissionEntity $submission, RefData $submissionSection)

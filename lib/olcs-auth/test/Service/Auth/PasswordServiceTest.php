@@ -18,7 +18,7 @@ use Laminas\Http\Response as LaminasResponse;
 /**
  * @see PasswordService
  */
-class PasswordServiceTest extends MockeryTestCase
+final class PasswordServiceTest extends MockeryTestCase
 {
     public function testResetPassword(): void
     {

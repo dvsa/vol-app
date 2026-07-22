@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\DataRetentionRule as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class DataRetentionRuleEntityTest extends EntityTester
+final class DataRetentionRuleEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

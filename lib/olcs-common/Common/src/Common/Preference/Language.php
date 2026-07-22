@@ -55,7 +55,7 @@ class Language implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Language
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Language
     {
         $request = $container->get('Request');
         // if not an Http request (eg Console request) then don't do anything as

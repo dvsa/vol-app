@@ -184,7 +184,7 @@ final class Grant extends AbstractCommandHandler implements TransactionedInterfa
         );
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $fullContainer = $container;
 

@@ -32,7 +32,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class GrantTransportManagerTest extends AbstractCommandHandlerTestCase
+final class GrantTransportManagerTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

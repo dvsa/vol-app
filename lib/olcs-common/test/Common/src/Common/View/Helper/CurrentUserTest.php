@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper;
 
 use Common\Rbac\User;
@@ -12,7 +14,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * @see CurrentUser
  */
-class CurrentUserTest extends MockeryTestCase
+final class CurrentUserTest extends MockeryTestCase
 {
     public function testGetFullNameEmpty(): void
     {
@@ -97,10 +99,10 @@ class CurrentUserTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider provideGetOperatorName
      * @param $userData
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideGetOperatorName')]
     public function testGetOperatorName($userData, $expected): void
     {
         $identity = new User();
@@ -115,11 +117,11 @@ class CurrentUserTest extends MockeryTestCase
     }
 
     /**
-     * @return (((string|string[][])[]|string)[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(array<(array<array<string>> | string)> | string)> | string)>>
      *
      * @psalm-return list{list{array{userType: '', organisationUsers: list{array{organisation: array{name: 'Organisation Ltd'}}}, partnerContactDetails: array{description: 'Partner'}, localAuthority: array{description: 'Local Authority'}}, ''}, list{array{userType: 'anon', organisationUsers: list{array{organisation: array{name: 'Organisation Ltd'}}}, partnerContactDetails: array{description: 'Partner'}, localAuthority: array{description: 'Local Authority'}}, ''}, list{array{userType: 'transport-manager', organisationUsers: list{array{organisation: array{name: 'Organisation Ltd'}}}, partnerContactDetails: array{description: 'Partner'}, localAuthority: array{description: 'Local Authority'}}, 'Organisation Ltd'}, list{array{userType: 'operator', organisationUsers: list{array{organisation: array{name: 'Organisation Ltd'}}}, partnerContactDetails: array{description: 'Partner'}, localAuthority: array{description: 'Local Authority'}}, 'Organisation Ltd'}, list{array{userType: 'partner', organisationUsers: list{array{organisation: array{name: 'Organisation Ltd'}}}, partnerContactDetails: array{description: 'Partner'}, localAuthority: array{description: 'Local Authority'}}, 'Partner'}, list{array{userType: 'local-authority', organisationUsers: list{array{organisation: array{name: 'Organisation Ltd'}}}, partnerContactDetails: array{description: 'Partner'}, localAuthority: array{description: 'Local Authority'}}, 'Local Authority'}}
      */
-    public function provideGetOperatorName(): array
+    public static function provideGetOperatorName(): \Iterator
     {
         $userdata = [
             'userType' => '',
@@ -137,21 +139,19 @@ class CurrentUserTest extends MockeryTestCase
                 'description' => 'Local Authority'
             ]
         ];
-        return [
-            [$userdata, ''],
-            [array_merge($userdata, ['userType' => User::USER_TYPE_ANON]), ''],
-            [array_merge($userdata, ['userType' => User::USER_TYPE_TRANSPORT_MANAGER]), 'Organisation Ltd'],
-            [array_merge($userdata, ['userType' => User::USER_TYPE_OPERATOR]), 'Organisation Ltd'],
-            [array_merge($userdata, ['userType' => User::USER_TYPE_PARTNER]), 'Partner'],
-            [array_merge($userdata, ['userType' => User::USER_TYPE_LOCAL_AUTHORITY]), 'Local Authority'],
-        ];
+        yield [$userdata, ''];
+        yield [array_merge($userdata, ['userType' => User::USER_TYPE_ANON]), ''];
+        yield [array_merge($userdata, ['userType' => User::USER_TYPE_TRANSPORT_MANAGER]), 'Organisation Ltd'];
+        yield [array_merge($userdata, ['userType' => User::USER_TYPE_OPERATOR]), 'Organisation Ltd'];
+        yield [array_merge($userdata, ['userType' => User::USER_TYPE_PARTNER]), 'Partner'];
+        yield [array_merge($userdata, ['userType' => User::USER_TYPE_LOCAL_AUTHORITY]), 'Local Authority'];
     }
 
     /**
-     * @dataProvider provideIsLoggedIn
      * @param $userData
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsLoggedIn')]
     public function testIsLoggedIn($userData, $expected): void
     {
         $identity = new User();
@@ -166,24 +166,22 @@ class CurrentUserTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|string[])[][]
+     * @return \Iterator<(int | string), array<(array<string> | bool)>>
      *
      * @psalm-return list{list{array<never, never>, false}, list{array{userType: 'anon'}, false}, list{array{userType: 'operator'}, true}}
      */
-    public function provideIsLoggedIn(): array
+    public static function provideIsLoggedIn(): \Iterator
     {
-        return [
-            [[], false],
-            [['userType' => User::USER_TYPE_ANON], false],
-            [['userType' => User::USER_TYPE_OPERATOR], true],
-        ];
+        yield [[], false];
+        yield [['userType' => User::USER_TYPE_ANON], false];
+        yield [['userType' => User::USER_TYPE_OPERATOR], true];
     }
 
     /**
-     * @dataProvider provideIsOperator
      * @param $userData
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsOperator')]
     public function testIsOperator($userData, $expected): void
     {
         $identity = new User();
@@ -198,25 +196,21 @@ class CurrentUserTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|string[])[][]
+     * @return \Iterator<(int | string), array<(array<string> | bool)>>
      *
      * @psalm-return list{list{array<never, never>, false}, list{array{userType: 'anon'}, false}, list{array{userType: 'operator'}, true}, list{array{userType: 'local-authority'}, false}, list{array{userType: 'partner'}, false}, list{array{userType: 'transport-manager'}, false}}
      */
-    public function provideIsOperator(): array
+    public static function provideIsOperator(): \Iterator
     {
-        return [
-            [[], false],
-            [['userType' => User::USER_TYPE_ANON], false],
-            [['userType' => User::USER_TYPE_OPERATOR], true],
-            [['userType' => User::USER_TYPE_LOCAL_AUTHORITY], false],
-            [['userType' => User::USER_TYPE_PARTNER], false],
-            [['userType' => User::USER_TYPE_TRANSPORT_MANAGER], false],
-        ];
+        yield [[], false];
+        yield [['userType' => User::USER_TYPE_ANON], false];
+        yield [['userType' => User::USER_TYPE_OPERATOR], true];
+        yield [['userType' => User::USER_TYPE_LOCAL_AUTHORITY], false];
+        yield [['userType' => User::USER_TYPE_PARTNER], false];
+        yield [['userType' => User::USER_TYPE_TRANSPORT_MANAGER], false];
     }
 
-    /**
-     * @dataProvider provideIsLocalAuthority
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsLocalAuthority')]
     public function testIsLocalAuthority($userData, $expected): void
     {
         $identity = new User();
@@ -231,25 +225,21 @@ class CurrentUserTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|string[])[][]
+     * @return \Iterator<(int | string), array<(array<string> | bool)>>
      *
      * @psalm-return list{list{array<never, never>, false}, list{array{userType: 'anon'}, false}, list{array{userType: 'operator'}, false}, list{array{userType: 'local-authority'}, true}, list{array{userType: 'partner'}, false}, list{array{userType: 'transport-manager'}, false}}
      */
-    public function provideIsLocalAuthority(): array
+    public static function provideIsLocalAuthority(): \Iterator
     {
-        return [
-            [[], false],
-            [['userType' => User::USER_TYPE_ANON], false],
-            [['userType' => User::USER_TYPE_OPERATOR], false],
-            [['userType' => User::USER_TYPE_LOCAL_AUTHORITY], true],
-            [['userType' => User::USER_TYPE_PARTNER], false],
-            [['userType' => User::USER_TYPE_TRANSPORT_MANAGER], false],
-        ];
+        yield [[], false];
+        yield [['userType' => User::USER_TYPE_ANON], false];
+        yield [['userType' => User::USER_TYPE_OPERATOR], false];
+        yield [['userType' => User::USER_TYPE_LOCAL_AUTHORITY], true];
+        yield [['userType' => User::USER_TYPE_PARTNER], false];
+        yield [['userType' => User::USER_TYPE_TRANSPORT_MANAGER], false];
     }
 
-    /**
-     * @dataProvider provideIsPartner
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsPartner')]
     public function testIsPartner($userData, $expected): void
     {
         $identity = new User();
@@ -264,27 +254,25 @@ class CurrentUserTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|string[])[][]
+     * @return \Iterator<(int | string), array<(array<string> | bool)>>
      *
      * @psalm-return list{list{array<never, never>, false}, list{array{userType: 'anon'}, false}, list{array{userType: 'operator'}, false}, list{array{userType: 'local-authority'}, false}, list{array{userType: 'partner'}, true}, list{array{userType: 'transport-manager'}, false}}
      */
-    public function provideIsPartner(): array
+    public static function provideIsPartner(): \Iterator
     {
-        return [
-            [[], false],
-            [['userType' => User::USER_TYPE_ANON], false],
-            [['userType' => User::USER_TYPE_OPERATOR], false],
-            [['userType' => User::USER_TYPE_LOCAL_AUTHORITY], false],
-            [['userType' => User::USER_TYPE_PARTNER], true],
-            [['userType' => User::USER_TYPE_TRANSPORT_MANAGER], false],
-        ];
+        yield [[], false];
+        yield [['userType' => User::USER_TYPE_ANON], false];
+        yield [['userType' => User::USER_TYPE_OPERATOR], false];
+        yield [['userType' => User::USER_TYPE_LOCAL_AUTHORITY], false];
+        yield [['userType' => User::USER_TYPE_PARTNER], true];
+        yield [['userType' => User::USER_TYPE_TRANSPORT_MANAGER], false];
     }
 
     /**
-     * @dataProvider provideIsTransportManager
      * @param $userData
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsTransportManager')]
     public function testIsTransportManager($userData, $expected): void
     {
         $identity = new User();
@@ -299,27 +287,25 @@ class CurrentUserTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|string[])[][]
+     * @return \Iterator<(int | string), array<(array<string> | bool)>>
      *
      * @psalm-return list{list{array<never, never>, false}, list{array{userType: 'anon'}, false}, list{array{userType: 'operator'}, false}, list{array{userType: 'local-authority'}, false}, list{array{userType: 'partner'}, false}, list{array{userType: 'transport-manager'}, true}}
      */
-    public function provideIsTransportManager(): array
+    public static function provideIsTransportManager(): \Iterator
     {
-        return [
-            [[], false],
-            [['userType' => User::USER_TYPE_ANON], false],
-            [['userType' => User::USER_TYPE_OPERATOR], false],
-            [['userType' => User::USER_TYPE_LOCAL_AUTHORITY], false],
-            [['userType' => User::USER_TYPE_PARTNER], false],
-            [['userType' => User::USER_TYPE_TRANSPORT_MANAGER], true],
-        ];
+        yield [[], false];
+        yield [['userType' => User::USER_TYPE_ANON], false];
+        yield [['userType' => User::USER_TYPE_OPERATOR], false];
+        yield [['userType' => User::USER_TYPE_LOCAL_AUTHORITY], false];
+        yield [['userType' => User::USER_TYPE_PARTNER], false];
+        yield [['userType' => User::USER_TYPE_TRANSPORT_MANAGER], true];
     }
 
     /**
-     * @dataProvider provideGetUniqueId
      * @param $userData
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideGetUniqueId')]
     public function testGetUniqueId($userData, $expected): void
     {
         $identity = new User();
@@ -334,17 +320,15 @@ class CurrentUserTest extends MockeryTestCase
     }
 
     /**
-     * @return (string|string[])[][]
+     * @return \Iterator<(int | string), array<(array<string> | string)>>
      *
      * @psalm-return list{list{array<never, never>, ''}, list{array{userType: 'anon'}, ''}, list{array{userType: 'operator', loginId: 'testing'}, string}}
      */
-    public function provideGetUniqueId(): array
+    public static function provideGetUniqueId(): \Iterator
     {
-        return [
-            [[], ''],
-            [['userType' => User::USER_TYPE_ANON], ''],
-            [['userType' => User::USER_TYPE_OPERATOR, 'loginId' => 'testing'], hash('sha256', 'testing1234')],
-        ];
+        yield [[], ''];
+        yield [['userType' => User::USER_TYPE_ANON], ''];
+        yield [['userType' => User::USER_TYPE_OPERATOR, 'loginId' => 'testing'], hash('sha256', 'testing1234')];
     }
 
     public function testGetNumberOfVehicles(): void

@@ -39,7 +39,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateNewUserTest extends AbstractCommandHandlerTestCase
+final class CreateNewUserTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var CreateNewUser
@@ -119,7 +119,7 @@ class CreateNewUserTest extends AbstractCommandHandlerTestCase
                     $person->setId(222);
                     $this->assertEquals('Bob', $person->getForename());
                     $this->assertEquals('Barker', $person->getFamilyName());
-                    $this->assertEquals('1965-01-01', $person->getBirthDate()->format('Y-m-d'));
+                    $this->assertSame('1965-01-01', $person->getBirthDate()->format('Y-m-d'));
                 }
             );
 
@@ -257,7 +257,7 @@ class CreateNewUserTest extends AbstractCommandHandlerTestCase
                     $person->setId(222);
                     $this->assertEquals('Bob', $person->getForename());
                     $this->assertEquals('Barker', $person->getFamilyName());
-                    $this->assertEquals('1965-01-01', $person->getBirthDate()->format('Y-m-d'));
+                    $this->assertSame('1965-01-01', $person->getBirthDate()->format('Y-m-d'));
                 }
             );
 
@@ -508,7 +508,7 @@ class CreateNewUserTest extends AbstractCommandHandlerTestCase
                     $person->setId(222);
                     $this->assertEquals('Bob', $person->getForename());
                     $this->assertEquals('Barker', $person->getFamilyName());
-                    $this->assertEquals('1965-01-01', $person->getBirthDate()->format('Y-m-d'));
+                    $this->assertSame('1965-01-01', $person->getBirthDate()->format('Y-m-d'));
                 }
             );
 

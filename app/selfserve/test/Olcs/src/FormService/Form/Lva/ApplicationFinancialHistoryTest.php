@@ -18,7 +18,7 @@ use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ApplicationFinancialHistoryTest extends MockeryTestCase
+final class ApplicationFinancialHistoryTest extends MockeryTestCase
 {
     use ButtonsAlterations;
 
@@ -29,6 +29,7 @@ class ApplicationFinancialHistoryTest extends MockeryTestCase
 
     protected $fh;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();

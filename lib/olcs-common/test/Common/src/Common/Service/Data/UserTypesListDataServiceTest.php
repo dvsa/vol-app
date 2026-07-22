@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Service\Data\UserTypesListDataService;
@@ -10,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class UserTypesListDataServiceTest extends MockeryTestCase
+final class UserTypesListDataServiceTest extends MockeryTestCase
 {
     public function testFetchListOptions(): void
     {

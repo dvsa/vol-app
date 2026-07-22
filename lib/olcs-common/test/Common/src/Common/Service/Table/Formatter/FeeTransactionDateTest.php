@@ -6,6 +6,8 @@
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\StackHelperService;
@@ -20,18 +22,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class FeeTransactionDateTest extends MockeryTestCase
+final class FeeTransactionDateTest extends MockeryTestCase
 {
-    protected $urlHelper;
-
-    protected $translator;
-
-    protected $viewHelperManager;
-
-    protected $router;
-
-    protected $request;
-
     protected $sut;
 
     #[\Override]

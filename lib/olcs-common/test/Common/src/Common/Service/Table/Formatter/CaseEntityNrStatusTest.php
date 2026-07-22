@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\CaseEntityNrStatus;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Common\Service\Table\Formatter\CaseEntityNrStatus
- */
-class CaseEntityNrStatusTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Formatter\CaseEntityNrStatus::class)]
+final class CaseEntityNrStatusTest extends MockeryTestCase
 {
     public $sut;
     /** @var  \Common\Service\Helper\UrlHelperService | m\MockInterface */
@@ -41,10 +41,7 @@ class CaseEntityNrStatusTest extends MockeryTestCase
             ],
         ];
 
-        static::assertSame(
-            '<a class="govuk-link" href="EXPECT_URL">' . $tmId . '</a>',
-            $this->sut->format($data, null)
-        );
+        $this->assertSame('<a class="govuk-link" href="EXPECT_URL">' . $tmId . '</a>', $this->sut->format($data, null));
     }
 
     public function testFormatLic(): void
@@ -70,10 +67,7 @@ class CaseEntityNrStatusTest extends MockeryTestCase
             ],
         ];
 
-        static::assertSame(
-            '<a class="govuk-link" href="EXPECT_LIC_URL">unit_LicNo</a> (unit_LicStatus)',
-            $this->sut->format($data, null)
-        );
+        $this->assertSame('<a class="govuk-link" href="EXPECT_LIC_URL">unit_LicNo</a> (unit_LicStatus)', $this->sut->format($data, null));
     }
 
     public function testFormatApp(): void
@@ -110,11 +104,8 @@ class CaseEntityNrStatusTest extends MockeryTestCase
             ],
         ];
 
-        static::assertSame(
-            '<a class="govuk-link" href="EXPECT_LIC_URL">unit_LicNo</a> (unit_LicStatus)' .
-            '<br />/<a class="govuk-link" href="EXPECT_APP_URL">' . $appId . '</a> (unit_AppStatus)',
-            $this->sut->format($data, null)
-        );
+        $this->assertSame('<a class="govuk-link" href="EXPECT_LIC_URL">unit_LicNo</a> (unit_LicStatus)' .
+        '<br />/<a class="govuk-link" href="EXPECT_APP_URL">' . $appId . '</a> (unit_AppStatus)', $this->sut->format($data, null));
     }
 
     public function testFormatAppWithNoApplication(): void
@@ -141,6 +132,6 @@ class CaseEntityNrStatusTest extends MockeryTestCase
             'application' => null,
         ];
 
-        static::assertSame('', $this->sut->format($data, null));
+        $this->assertSame('', $this->sut->format($data, null));
     }
 }

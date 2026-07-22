@@ -23,7 +23,7 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationVehiclesPsvReviewServiceTest extends MockeryTestCase
+final class ApplicationVehiclesPsvReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -33,6 +33,7 @@ class ApplicationVehiclesPsvReviewServiceTest extends MockeryTestCase
     /** @var VehiclesPsvReviewService */
     private $mockVehiclesPsv;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);
@@ -65,88 +66,86 @@ class ApplicationVehiclesPsvReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public static function providerGetConfigFromData(): array
+    public static function providerGetConfigFromData(): \Iterator
     {
-        return [
+        yield [
+            [
+                'hasEnteredReg' => 'N'
+            ],
             [
                 [
-                    'hasEnteredReg' => 'N'
-                ],
-                [
-                    [
-                        'multiItems' => [
+                    'multiItems' => [
+                        [
                             [
-                                [
-                                    'label' => 'application-review-vehicles-hasEnteredReg',
-                                    'value' => 'No'
-                                ]
+                                'label' => 'application-review-vehicles-hasEnteredReg',
+                                'value' => 'No'
                             ]
                         ]
                     ]
-                ],
-                [
-                    'subSections' => [
-                        [
-                            'mainItems' => 'MAINITEMS'
+                ]
+            ],
+            [
+                'subSections' => [
+                    [
+                        'mainItems' => 'MAINITEMS'
+                    ]
+                ]
+            ]
+        ];
+        yield [
+            [
+                'hasEnteredReg' => 'Y',
+                'licenceVehicles' => [
+                    [
+                        'vehicle' => [
+                            'vrm' => 'SM10QWE',
+                            'makeModel' => 'Foo Bar',
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'SM11QWE',
+                            'makeModel' => 'Foo Bar',
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'ME10QWE'
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'ME11QWE'
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'LG10QWE'
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'LG11QWE'
                         ]
                     ]
                 ]
             ],
             [
                 [
-                    'hasEnteredReg' => 'Y',
-                    'licenceVehicles' => [
+                    'multiItems' => [
                         [
-                            'vehicle' => [
-                                'vrm' => 'SM10QWE',
-                                'makeModel' => 'Foo Bar',
-                            ]
-                        ],
-                        [
-                            'vehicle' => [
-                                'vrm' => 'SM11QWE',
-                                'makeModel' => 'Foo Bar',
-                            ]
-                        ],
-                        [
-                            'vehicle' => [
-                                'vrm' => 'ME10QWE'
-                            ]
-                        ],
-                        [
-                            'vehicle' => [
-                                'vrm' => 'ME11QWE'
-                            ]
-                        ],
-                        [
-                            'vehicle' => [
-                                'vrm' => 'LG10QWE'
-                            ]
-                        ],
-                        [
-                            'vehicle' => [
-                                'vrm' => 'LG11QWE'
-                            ]
-                        ]
-                    ]
-                ],
-                [
-                    [
-                        'multiItems' => [
                             [
-                                [
-                                    'label' => 'application-review-vehicles-hasEnteredReg',
-                                    'value' => 'Yes'
-                                ]
+                                'label' => 'application-review-vehicles-hasEnteredReg',
+                                'value' => 'Yes'
                             ]
                         ]
                     ]
-                ],
-                [
-                    'subSections' => [
-                        [
-                            'mainItems' => 'MAINITEMS'
-                        ]
+                ]
+            ],
+            [
+                'subSections' => [
+                    [
+                        'mainItems' => 'MAINITEMS'
                     ]
                 ]
             ]

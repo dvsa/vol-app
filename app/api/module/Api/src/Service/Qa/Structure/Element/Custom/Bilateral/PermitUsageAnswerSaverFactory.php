@@ -18,7 +18,7 @@ class PermitUsageAnswerSaverFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PermitUsageAnswerSaver
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): PermitUsageAnswerSaver
     {
         return new PermitUsageAnswerSaver(
             $container->get('QaGenericAnswerFetcher'),

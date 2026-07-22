@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class LicenceCancelledTest
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class LicenceCancelledTest extends MockeryTestCase
+final class LicenceCancelledTest extends MockeryTestCase
 {
     /**
      *
@@ -48,16 +48,13 @@ Test the application licence cancelled filter')]
     /**
      * Filter provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function provideTestProvider(): array
+    public static function provideTestProvider(): \Iterator
     {
         $sut = new LicenceCancelled(m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class));
-
-        return [
-            [PublicationSectionEntity::LIC_SURRENDERED_SECTION, $sut::LIC_SURRENDERED],
-            [PublicationSectionEntity::LIC_TERMINATED_SECTION, $sut::LIC_TERMINATED],
-            [PublicationSectionEntity::LIC_CNS_SECTION, $sut::LIC_CNS]
-        ];
+        yield [PublicationSectionEntity::LIC_SURRENDERED_SECTION, $sut::LIC_SURRENDERED];
+        yield [PublicationSectionEntity::LIC_TERMINATED_SECTION, $sut::LIC_TERMINATED];
+        yield [PublicationSectionEntity::LIC_CNS_SECTION, $sut::LIC_CNS];
     }
 }

@@ -50,7 +50,7 @@ class CpidOrganisationExport extends AbstractConsumer
         $fh = fopen("php://temp", 'w');
 
         foreach ($iterableResult as $row) {
-            fputcsv($fh, $row);
+            fputcsv($fh, $row, ',', '"', '\\');
         }
 
         rewind($fh);

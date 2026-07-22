@@ -19,7 +19,7 @@ use Mockery as m;
 /**
  * SubmitTest
  */
-class SubmitTest extends AbstractCommandHandlerTestCase
+final class SubmitTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -139,7 +139,7 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             ContinueLicence::class,
             ['id' => 654, 'version' => 99],
-            (new Result())->addMessage('CONTINUE_LICENCE')
+            new Result()->addMessage('CONTINUE_LICENCE')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -183,7 +183,7 @@ class SubmitTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             ContinueLicence::class,
             ['id' => 654, 'version' => 99],
-            (new Result())->addMessage('CONTINUE_LICENCE')
+            new Result()->addMessage('CONTINUE_LICENCE')
         );
 
         $result = $this->sut->handleCommand($command);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Permits;
 
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintCountry;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintCountry;
 /**
  * ReadyToPrintCountry Test
  */
-class ReadyToPrintCountryTest extends \PHPUnit\Framework\TestCase
+final class ReadyToPrintCountryTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -16,11 +18,8 @@ class ReadyToPrintCountryTest extends \PHPUnit\Framework\TestCase
                 'irhpPermitType' => 100,
             ]
         );
-        static::assertEquals(
-            [
-                'irhpPermitType' => 100,
-            ],
-            $sut->getArrayCopy()
-        );
+        $this->assertEquals([
+            'irhpPermitType' => 100,
+        ], $sut->getArrayCopy());
     }
 }

@@ -27,28 +27,28 @@ class VersionTypeHandler extends AbstractTypeHandler
         $options = [];
 
         if ($column->getDefault() !== null) {
-            $options[] = '"default": ' . $column->getDefault();
+            $options[] = "'default' => " . $column->getDefault();
         }
 
         $columnDef = sprintf(
-            '@ORM\Column(type="%s", name="%s", nullable=%s',
+            "#[ORM\Column(type: '%s', name: '%s', nullable: %s",
             $type,
             $column->getName(),
             $column->isNullable() ? 'true' : 'false'
         );
 
         if (!empty($options)) {
-            $columnDef .= ', options={' . implode(', ', $options) . '}';
+            $columnDef .= ', options: [' . implode(', ', $options) . ']';
         }
 
-        $columnDef .= ')';
+        $columnDef .= ')]';
 
         $annotations[] = $columnDef;
 
         // Add version annotation
-        $annotations[] = '@ORM\Version';
+        $annotations[] = '#[ORM\Version]';
 
-        return implode("\n     * ", $annotations);
+        return implode("\n    ", $annotations);
     }
 
     #[\Override]

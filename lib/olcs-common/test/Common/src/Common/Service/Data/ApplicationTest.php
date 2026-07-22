@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -13,7 +15,7 @@ use Mockery as m;
  * Class Application Test
  * @package CommonTest\Service
  */
-class ApplicationTest extends AbstractDataServiceTestCase
+final class ApplicationTest extends AbstractDataServiceTestCase
 {
     /** @var Application */
     private $sut;
@@ -22,7 +24,6 @@ class ApplicationTest extends AbstractDataServiceTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->sut = new Application($this->abstractDataServiceServices);
     }
 
@@ -51,10 +52,10 @@ class ApplicationTest extends AbstractDataServiceTestCase
     /**
      * Test canHaveCases
      *
-     * @dataProvider canHaveCasesDataProvider
      * @param array $application
      * @param int $expectedResult
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('canHaveCasesDataProvider')]
     public function testCanHaveCases($application, $expectedResult): void
     {
         $this->sut->setData($application['id'], $application);
@@ -122,41 +123,39 @@ class ApplicationTest extends AbstractDataServiceTestCase
     /**
      * Data provider for canHaveCases.
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function canHaveCasesDataProvider()
+    public static function canHaveCasesDataProvider(): \Iterator
     {
-        return [
-            // status / licence not set
+        // status / licence not set
+        yield [
+            ['id' => 100],
+            false
+        ];
+        // licence without licNo
+        yield [
             [
-                ['id' => 100],
-                false
+                'id' => 100,
+                'licence' => ['licNo' => null]
             ],
-            // licence without licNo
+            false
+        ];
+        // status NOT_SUBMITTED
+        yield [
             [
-                [
-                    'id' => 100,
-                    'licence' => ['licNo' => null]
-                ],
-                false
+                'id' => 100,
+                'status' => ['id' => CommonRefData::APPLICATION_STATUS_NOT_SUBMITTED]
             ],
-            // status NOT_SUBMITTED
+            false
+        ];
+        // licence with licNo and status different than NOT_SUBMITTED
+        yield [
             [
-                [
-                    'id' => 100,
-                    'status' => ['id' => CommonRefData::APPLICATION_STATUS_NOT_SUBMITTED]
-                ],
-                false
+                'id' => 100,
+                'status' => ['id' => CommonRefData::APPLICATION_STATUS_GRANTED],
+                'licence' => ['licNo' => 'ABC']
             ],
-            // licence with licNo and status different than NOT_SUBMITTED
-            [
-                [
-                    'id' => 100,
-                    'status' => ['id' => CommonRefData::APPLICATION_STATUS_GRANTED],
-                    'licence' => ['licNo' => 'ABC']
-                ],
-                true
-            ],
+            true
         ];
     }
 

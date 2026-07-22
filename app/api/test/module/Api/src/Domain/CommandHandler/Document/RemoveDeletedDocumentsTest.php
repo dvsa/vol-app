@@ -19,7 +19,7 @@ use Laminas\Http\Response;
 /**
  * RemoveDeletedDocumentsTest
  */
-class RemoveDeletedDocumentsTest extends AbstractCommandHandlerTestCase
+final class RemoveDeletedDocumentsTest extends AbstractCommandHandlerTestCase
 {
     public $mockUploader;
     public function setUp(): void
@@ -60,10 +60,10 @@ class RemoveDeletedDocumentsTest extends AbstractCommandHandlerTestCase
         );
 
         $documentsToDelete = [
-            (new DocumentToDeleteEntity())->setDocumentStoreId('doc4.rtf'),
-            (new DocumentToDeleteEntity())->setDocumentStoreId('doc3.rtf'),
-            (new DocumentToDeleteEntity())->setDocumentStoreId('doc2.rtf'),
-            (new DocumentToDeleteEntity())->setDocumentStoreId('doc1.rtf'),
+            new DocumentToDeleteEntity()->setDocumentStoreId('doc4.rtf'),
+            new DocumentToDeleteEntity()->setDocumentStoreId('doc3.rtf'),
+            new DocumentToDeleteEntity()->setDocumentStoreId('doc2.rtf'),
+            new DocumentToDeleteEntity()->setDocumentStoreId('doc1.rtf'),
         ];
 
         $this->repoMap['SystemParameter']
@@ -95,7 +95,7 @@ class RemoveDeletedDocumentsTest extends AbstractCommandHandlerTestCase
         $command = Cmd::create([]);
 
         $documentsToDelete = [
-            (new DocumentToDeleteEntity())->setDocumentStoreId('doc1.rtf'),
+            new DocumentToDeleteEntity()->setDocumentStoreId('doc1.rtf'),
         ];
 
         $this->repoMap['SystemParameter']
@@ -155,10 +155,10 @@ class RemoveDeletedDocumentsTest extends AbstractCommandHandlerTestCase
 
         $documentToDelete = (new DocumentToDeleteEntity());
         $documentToDelete->setDocumentStoreId('doc1.rtf');
-        $documentToDelete->setProcessAfterDate((new \DateTime())->add(new \DateInterval('P2D')));
+        $documentToDelete->setProcessAfterDate(new \DateTime()->add(new \DateInterval('P2D')));
 
         $documentsToDelete = [
-            (new DocumentToDeleteEntity())->setDocumentStoreId('doc1.rtf'),
+            new DocumentToDeleteEntity()->setDocumentStoreId('doc1.rtf'),
         ];
 
         $this->repoMap['SystemParameter']
@@ -195,12 +195,12 @@ class RemoveDeletedDocumentsTest extends AbstractCommandHandlerTestCase
 
         $documentToDelete = (new DocumentToDeleteEntity());
         $documentToDelete->setDocumentStoreId('doc1.rtf');
-        $documentToDelete->setProcessAfterDate((new \DateTime())->add(new \DateInterval('P2D')));
+        $documentToDelete->setProcessAfterDate(new \DateTime()->add(new \DateInterval('P2D')));
 
         $documentsToDelete = [$documentToDelete];
 
         $nextQueueItem = new Queue();
-        $nextQueueItem->setProcessAfterDate((new \DateTime())->add(new \DateInterval('P4D')));
+        $nextQueueItem->setProcessAfterDate(new \DateTime()->add(new \DateInterval('P4D')));
 
         $this->repoMap['SystemParameter']
             ->shouldReceive('getDisableDataRetentionDocumentDelete')->with()->once()->andReturn(false);
@@ -236,12 +236,12 @@ class RemoveDeletedDocumentsTest extends AbstractCommandHandlerTestCase
 
         $documentToDelete = (new DocumentToDeleteEntity());
         $documentToDelete->setDocumentStoreId('doc1.rtf');
-        $documentToDelete->setProcessAfterDate((new \DateTime())->add(new \DateInterval('P3D')));
+        $documentToDelete->setProcessAfterDate(new \DateTime()->add(new \DateInterval('P3D')));
 
         $documentsToDelete = [$documentToDelete];
 
         $nextQueueItem = new Queue();
-        $nextQueueItem->setProcessAfterDate((new \DateTime())->add(new \DateInterval('P1D')));
+        $nextQueueItem->setProcessAfterDate(new \DateTime()->add(new \DateInterval('P1D')));
 
         $this->repoMap['SystemParameter']
             ->shouldReceive('getDisableDataRetentionDocumentDelete')->with()->once()->andReturn(false);

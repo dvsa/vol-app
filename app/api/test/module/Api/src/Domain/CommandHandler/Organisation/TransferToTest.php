@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class TransferToTest extends AbstractCommandHandlerTestCase
+final class TransferToTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

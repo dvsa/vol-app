@@ -21,7 +21,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationTest extends QueryHandlerTestCase
+final class VariationTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -80,7 +80,7 @@ class VariationTest extends QueryHandlerTestCase
             ->andReturn(false)
             ->once()
             ->shouldReceive('serialize')->andReturn(['foo' => 'bar']);
-        $application->setStatus((new \Dvsa\Olcs\Api\Entity\System\RefData())->setId('apsts_not_submitted'));
+        $application->setStatus(new \Dvsa\Olcs\Api\Entity\System\RefData()->setId('apsts_not_submitted'));
 
         $this->repoMap['SystemParameter']->shouldReceive('getDisableSelfServeCardPayments')->with()->once()
             ->andReturn(false);

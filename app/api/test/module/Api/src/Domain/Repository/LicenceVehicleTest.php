@@ -26,11 +26,12 @@ use Hamcrest\Core\IsIdentical;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\LicenceVehicle::class)]
-class LicenceVehicleTest extends RepositoryTestCase
+final class LicenceVehicleTest extends RepositoryTestCase
 {
     /** @var  LicenceVehicleRepo */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(LicenceVehicleRepo::class);
@@ -656,15 +657,12 @@ class LicenceVehicleTest extends RepositoryTestCase
 
         $this->mockCreateQueryBuilder($mockQb);
 
-        static::assertEquals('EXPECT', $this->sut->fetchForExport($mockQb));
+        $this->assertEquals('EXPECT', $this->sut->fetchForExport($mockQb));
 
-        static::assertEquals(
-            '{{QUERY}} ' .
-            'SELECT v.vrm, v.platedWeight, m.specifiedDate, ' .
-            'm.removalDate, gd2.id as discId, gd2.ceasedDate, gd2.discNo ' .
-            'LEFT JOIN Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc gd2 WITH gd2.id = ({{DQL}})',
-            $this->query
-        );
+        $this->assertEquals('{{QUERY}} ' .
+        'SELECT v.vrm, v.platedWeight, m.specifiedDate, ' .
+        'm.removalDate, gd2.id as discId, gd2.ceasedDate, gd2.discNo ' .
+        'LEFT JOIN Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc gd2 WITH gd2.id = ({{DQL}})', $this->query);
     }
 
     public function testFetchPsvVehiclesByLicenceId(): void
@@ -772,15 +770,13 @@ class LicenceVehicleTest extends RepositoryTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function vehiclesIdsDataProvider(): array
+    public static function vehiclesIdsDataProvider(): \Iterator
     {
-        return [
-            'integer array of vehicle ids' => [[1, 2, 3, 4]],
-            'mixed key integer array of vehicle ids' => [['foo' => 1, 2, 3, 4]],
-            'mixed type array of vehicle ids provider' => [['1', 2, 3, 4]],
-        ];
+        yield 'integer array of vehicle ids' => [[1, 2, 3, 4]];
+        yield 'mixed key integer array of vehicle ids' => [['foo' => 1, 2, 3, 4]];
+        yield 'mixed type array of vehicle ids provider' => [['1', 2, 3, 4]];
     }
 
     #[\PHPUnit\Framework\Attributes\Depends('createPaginatedVehiclesDataForLicenceQueryIsCallable')]

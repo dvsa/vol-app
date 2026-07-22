@@ -13,7 +13,7 @@ class PluginManagerFactory extends AbstractPluginManagerFactory
     public const PLUGIN_MANAGER_CLASS = 'Common\Service\Data\PluginManager';
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $name, array $options = null)
+    public function __invoke(ContainerInterface $container, $name, ?array $options = null)
     {
         $config = $container->get('Config');
 

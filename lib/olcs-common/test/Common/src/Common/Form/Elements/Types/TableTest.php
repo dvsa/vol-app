@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Types;
 
 use Common\Form\Elements\Types\Table;
@@ -16,7 +18,7 @@ use Common\Service\Table\TableBuilder;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TableTest extends \PHPUnit\Framework\TestCase
+final class TableTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test setTable
@@ -51,7 +53,7 @@ class TableTest extends \PHPUnit\Framework\TestCase
 
         $mockTable->expects($this->once())
             ->method('render')
-            ->will($this->returnValue('<table></table>'));
+            ->willReturn('<table></table>');
 
         $table = new Table($fieldset);
 

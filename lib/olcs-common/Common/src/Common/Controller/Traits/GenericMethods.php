@@ -5,7 +5,6 @@ namespace Common\Controller\Traits;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Script\ScriptFactory;
 use Common\Service\Table\TableFactory;
-use Common\Util\FlashMessengerTrait;
 use Laminas\Mvc\Controller\AbstractController;
 use Laminas\Mvc\Controller\Plugin\Params;
 use Laminas\Mvc\Controller\Plugin\Redirect;
@@ -18,8 +17,8 @@ use Laminas\Mvc\Controller\Plugin\Redirect;
  * @property TableFactory $tableFactory
  * @method AbstractController getRequest()
  * @method AbstractController getPluginManager()
- * @method FlashMessengerTrait addErrorMessage($message)
- * @method Params|mixed params(string $param = null, mixed $default = null)
+ * @method mixed addErrorMessage($message)
+ * @method Params|mixed params(?string $param = null, mixed $default = null)
  * @method Redirect redirect()
  */
 trait GenericMethods

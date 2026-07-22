@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Preference;
 
 use Common\Preference\LanguageListener;
@@ -10,7 +12,7 @@ use Laminas\EventManager\EventManagerInterface;
 use Laminas\Http\Request;
 use Laminas\Mvc\MvcEvent;
 
-class LanguageListenerTest extends MockeryTestCase
+final class LanguageListenerTest extends MockeryTestCase
 {
     protected $languagePref;
 

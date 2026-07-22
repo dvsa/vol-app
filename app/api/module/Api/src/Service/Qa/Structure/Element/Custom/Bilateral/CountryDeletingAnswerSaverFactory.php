@@ -18,7 +18,7 @@ class CountryDeletingAnswerSaverFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CountryDeletingAnswerSaver
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CountryDeletingAnswerSaver
     {
         return new CountryDeletingAnswerSaver(
             $container->get('QaGenericAnswerFetcher'),

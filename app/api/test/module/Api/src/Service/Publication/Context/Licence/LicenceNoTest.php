@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class LicenceNoTest extends MockeryTestCase
+final class LicenceNoTest extends MockeryTestCase
 {
     /**
      * @var \Dvsa\Olcs\Api\Service\Publication\Context\Licence\LicenceNo

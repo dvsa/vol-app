@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Bilateral;
 
 use Common\Service\Qa\Custom\Bilateral\Radio;
@@ -13,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StandardAndCabotageYesNoRadioTest extends MockeryTestCase
+final class StandardAndCabotageYesNoRadioTest extends MockeryTestCase
 {
     public function testGetInputSpecification(): void
     {

@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Helper;
 
 use Common\Service\Helper\DataHelperService;
@@ -15,7 +17,7 @@ use Common\Service\Helper\DataHelperService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DataHelperServiceTest extends \PHPUnit\Framework\TestCase
+final class DataHelperServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Holds the SUT
@@ -33,10 +35,8 @@ class DataHelperServiceTest extends \PHPUnit\Framework\TestCase
         $this->sut = new DataHelperService();
     }
 
-    /**
-     * @group helper_service
-     * @group data_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('data_helper_service')]
     public function testArrayRepeat(): void
     {
         $input = [
@@ -51,10 +51,8 @@ class DataHelperServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $this->sut->arrayRepeat($input, 3));
     }
 
-    /**
-     * @group helper_service
-     * @group data_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('data_helper_service')]
     public function testProcessDataMapWithoutMap(): void
     {
         $input = [
@@ -66,10 +64,8 @@ class DataHelperServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($input, $output);
     }
 
-    /**
-     * @group helper_service
-     * @group data_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('data_helper_service')]
     public function testProcessDataMap(): void
     {
         $input = [
@@ -116,10 +112,8 @@ class DataHelperServiceTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $output);
     }
 
-    /**
-     * @group helper_service
-     * @group data_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('data_helper_service')]
     public function testProcessDataMapWithAddress(): void
     {
         $input = [

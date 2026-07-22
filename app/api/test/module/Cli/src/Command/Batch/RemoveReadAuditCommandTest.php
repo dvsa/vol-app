@@ -9,7 +9,7 @@ use Dvsa\Olcs\Cli\Command\Batch\RemoveReadAuditCommand;
 use Dvsa\Olcs\Cli\Domain\Command\RemoveReadAudit;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class RemoveReadAuditCommandTest extends AbstractBatchCommandCases
+final class RemoveReadAuditCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

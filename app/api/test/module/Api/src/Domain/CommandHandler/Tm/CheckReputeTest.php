@@ -19,7 +19,7 @@ use Dvsa\Olcs\Transfer\Command\Tm\CheckRepute as CheckReputeCmd;
 use Dvsa\Olcs\Api\Entity\Tm\TransportManager as TransportManagerEntity;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 
-class CheckReputeTest extends AbstractCommandHandlerTestCase
+final class CheckReputeTest extends AbstractCommandHandlerTestCase
 {
     protected $sut;
     private m\mockInterface $inrClient;

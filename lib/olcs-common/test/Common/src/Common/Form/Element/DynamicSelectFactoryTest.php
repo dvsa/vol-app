@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Element;
 
 use Common\Form\Element\DynamicSelect;
@@ -9,7 +11,7 @@ use Psr\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-class DynamicSelectFactoryTest extends MockeryTestCase
+final class DynamicSelectFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

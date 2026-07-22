@@ -50,7 +50,7 @@ final class ResetPermitsTestData extends AbstractCommandHandler implements Trans
     }
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->setDbConnection($container->get('doctrine.connection.orm_default'));
         return parent::__invoke($container, $requestedName, $options);

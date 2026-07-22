@@ -20,8 +20,9 @@ use Dvsa\Olcs\Transfer\Query\Irfo\IrfoPsvAuthContinuationList as IrfoPsvAuthCont
 /**
  * IrfoPsvAuth Repo test
  */
-class IrfoPsvAuthTest extends RepositoryTestCase
+final class IrfoPsvAuthTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

@@ -26,7 +26,7 @@ use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 /**
  * Agreed and Legislation Update Test
  */
-class AgreedAndLegislationUpdateTest extends AbstractCommandHandlerTestCase
+final class AgreedAndLegislationUpdateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -295,7 +295,7 @@ class AgreedAndLegislationUpdateTest extends AbstractCommandHandlerTestCase
         $result = $this->sut->handleCommand($command);
         $this->assertEquals(1, $pi->getIsEcmsCase());
         $this->assertEquals(
-            (new DateTime('2015-12-12', new \DateTimeZone('UTC')))->format('Y-m-d'),
+            new DateTime('2015-12-12', new \DateTimeZone('UTC'))->format('Y-m-d'),
             $pi->getEcmsFirstReceivedDate()->format('Y-m-d')
         );
         $this->assertEquals($assignedCaseworker, $pi->getAssignedCaseworker()->getId());

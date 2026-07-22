@@ -29,7 +29,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class FeeEntityTest extends EntityTester
+final class FeeEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -73,27 +73,25 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->hasOutstandingPayment());
     }
 
-    public static function outstandingPaymentProvider(): array
+    public static function outstandingPaymentProvider(): \Iterator
     {
-        return [
-            'no fee payments' => [
-                [],
-                false,
+        yield 'no fee payments' => [
+            [],
+            false,
+        ];
+        yield 'one outstanding' => [
+            [
+                m::mock()
+                    ->shouldReceive('getTransaction')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('isOutstanding')
+                            ->andReturn(true)
+                            ->getMock()
+                    )
+                    ->getMock()
             ],
-            'one outstanding' => [
-                [
-                    m::mock()
-                        ->shouldReceive('getTransaction')
-                        ->andReturn(
-                            m::mock()
-                                ->shouldReceive('isOutstanding')
-                                ->andReturn(true)
-                                ->getMock()
-                        )
-                        ->getMock()
-                ],
-                true,
-            ]
+            true,
         ];
     }
 
@@ -204,7 +202,7 @@ class FeeEntityTest extends EntityTester
     {
         $feeType = m::mock()
             ->shouldReceive('getAccrualRule')
-            ->andReturn((new RefData())->setId($accrualRuleId))
+            ->andReturn(new RefData()->setId($accrualRuleId))
             ->getMock();
 
         $this->sut->setFeeType($feeType);
@@ -355,7 +353,7 @@ class FeeEntityTest extends EntityTester
     {
         $feeType = m::mock()
             ->shouldReceive('getAccrualRule')
-            ->andReturn((new RefData())->setId($accrualRuleId))
+            ->andReturn(new RefData()->setId($accrualRuleId))
             ->getMock();
 
         $this->sut->setFeeType($feeType);
@@ -363,41 +361,39 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getDefermentPeriod());
     }
 
-    public static function defermentPeriodProvider(): array
+    public static function defermentPeriodProvider(): \Iterator
     {
-        return [
-            'immediate' => [
-                Entity::ACCRUAL_RULE_IMMEDIATE,
-                1
-            ],
-            'licence start' => [
-                Entity::ACCRUAL_RULE_LICENCE_START,
-                60,
-            ],
-            'continuation' => [
-                Entity::ACCRUAL_RULE_CONTINUATION,
-                60,
-            ],
-            'IRHP permit - 3 months' => [
-                Entity::ACCRUAL_RULE_IRHP_PERMIT_3_MONTHS,
-                3,
-            ],
-            'IRHP permit - 6 months' => [
-                Entity::ACCRUAL_RULE_IRHP_PERMIT_6_MONTHS,
-                6,
-            ],
-            'IRHP permit - 9 months' => [
-                Entity::ACCRUAL_RULE_IRHP_PERMIT_9_MONTHS,
-                9,
-            ],
-            'IRHP permit - 12 months' => [
-                Entity::ACCRUAL_RULE_IRHP_PERMIT_12_MONTHS,
-                12,
-            ],
-            'no rule' => [
-                null,
-                null,
-            ],
+        yield 'immediate' => [
+            Entity::ACCRUAL_RULE_IMMEDIATE,
+            1
+        ];
+        yield 'licence start' => [
+            Entity::ACCRUAL_RULE_LICENCE_START,
+            60,
+        ];
+        yield 'continuation' => [
+            Entity::ACCRUAL_RULE_CONTINUATION,
+            60,
+        ];
+        yield 'IRHP permit - 3 months' => [
+            Entity::ACCRUAL_RULE_IRHP_PERMIT_3_MONTHS,
+            3,
+        ];
+        yield 'IRHP permit - 6 months' => [
+            Entity::ACCRUAL_RULE_IRHP_PERMIT_6_MONTHS,
+            6,
+        ];
+        yield 'IRHP permit - 9 months' => [
+            Entity::ACCRUAL_RULE_IRHP_PERMIT_9_MONTHS,
+            9,
+        ];
+        yield 'IRHP permit - 12 months' => [
+            Entity::ACCRUAL_RULE_IRHP_PERMIT_12_MONTHS,
+            12,
+        ];
+        yield 'no rule' => [
+            null,
+            null,
         ];
     }
 
@@ -415,17 +411,15 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->allowEdit());
     }
 
-    public static function allowEditProvider(): array
+    public static function allowEditProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_PAID, false],
-            [Entity::STATUS_CANCELLED, false],
-            [Entity::STATUS_OUTSTANDING, true],
-            [Entity::STATUS_REFUND_PENDING, true],
-            [Entity::STATUS_REFUNDED, true],
-            [Entity::STATUS_REFUND_FAILED, true],
-            ['invalid', true],
-        ];
+        yield [Entity::STATUS_PAID, false];
+        yield [Entity::STATUS_CANCELLED, false];
+        yield [Entity::STATUS_OUTSTANDING, true];
+        yield [Entity::STATUS_REFUND_PENDING, true];
+        yield [Entity::STATUS_REFUNDED, true];
+        yield [Entity::STATUS_REFUND_FAILED, true];
+        yield ['invalid', true];
     }
 
     public function testCompatibilityGetMethods(): void
@@ -485,7 +479,7 @@ class FeeEntityTest extends EntityTester
 
     public function testGetProcessedByNullNoTransaction(): void
     {
-        static::assertNull($this->sut->getProcessedBy());
+        $this->assertNull($this->sut->getProcessedBy());
     }
 
     public function testGetProcessedByNullNoTransactionUser(): void
@@ -493,7 +487,7 @@ class FeeEntityTest extends EntityTester
         $ft1 = self::getStubFeeTransaction('1234.56', '2015-09-01', '2015-09-02 12:34:56');
         $this->sut->getFeeTransactions()->add($ft1);
 
-        static::assertNull($this->sut->getProcessedBy());
+        $this->assertNull($this->sut->getProcessedBy());
     }
 
     private static function getStubFeeTransaction(
@@ -514,9 +508,9 @@ class FeeEntityTest extends EntityTester
         $transaction->setCompletedDate($completed);
         $created = new \DateTime($createdOn);
         $transaction->setCreatedOn($created);
-        $status = (new RefData())->setId($statusId);
+        $status = new RefData()->setId($statusId);
         $transaction->setStatus($status);
-        $type = (new RefData())->setId($typeId);
+        $type = new RefData()->setId($typeId);
         $transaction->setType($type);
         $transaction->setComment($comment);
 
@@ -574,68 +568,66 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getOutstandingAmount());
     }
 
-    public static function outstandingAmountProvider(): array
+    public static function outstandingAmountProvider(): \Iterator
     {
-        return [
-            'no transactions' => [
-                '1234.56',
-                new ArrayCollection(),
-                '1234.56',
-            ],
-            'one complete transaction' => [
-                '1234.56',
-                new ArrayCollection(
-                    [
-                        self::getStubFeeTransaction('1234.56', '2015-09-01', '2015-09-02'),
-                    ]
-                ),
-                '0.00',
-            ],
-            'one pending transaction' => [
-                '1234.56',
-                new ArrayCollection(
-                    [
-                        self::getStubFeeTransaction(
-                            '1234.56',
-                            '2015-09-01',
-                            '2015-09-02 12:34:56',
-                            Transaction::STATUS_OUTSTANDING
-                        ),
-                    ]
-                ),
-                '1234.56',
-            ],
-            'two complete one refund one pending' => [
-                '1234.56',
-                new ArrayCollection(
-                    [
-                        self::getStubFeeTransaction('1000', '2015-09-01', '2015-09-02'),
-                        self::getStubFeeTransaction('300', '2015-09-01', '2015-09-02'),
-                        self::getStubFeeTransaction('-100', '2015-09-01', '2015-09-02'),
-                        self::getStubFeeTransaction(
-                            '34.56',
-                            '2015-09-01',
-                            '2015-09-02',
-                            Transaction::STATUS_OUTSTANDING
-                        ),
-                    ]
-                ),
-                '34.56',
-            ],
-            'one overpayment' => [
-                '1234.56',
-                new ArrayCollection(
-                    [
-                        self::getStubFeeTransaction('2000', '2015-09-01', '2015-09-02'),
-                    ]
-                ),
-                '-765.44',
-            ],
-            'bug OLCS-11509' => [
-                '4.56',
-                new ArrayCollection([]),
-                '4.56',
-            ],
+        yield 'no transactions' => [
+            '1234.56',
+            new ArrayCollection(),
+            '1234.56',
+        ];
+        yield 'one complete transaction' => [
+            '1234.56',
+            new ArrayCollection(
+                [
+                    self::getStubFeeTransaction('1234.56', '2015-09-01', '2015-09-02'),
+                ]
+            ),
+            '0.00',
+        ];
+        yield 'one pending transaction' => [
+            '1234.56',
+            new ArrayCollection(
+                [
+                    self::getStubFeeTransaction(
+                        '1234.56',
+                        '2015-09-01',
+                        '2015-09-02 12:34:56',
+                        Transaction::STATUS_OUTSTANDING
+                    ),
+                ]
+            ),
+            '1234.56',
+        ];
+        yield 'two complete one refund one pending' => [
+            '1234.56',
+            new ArrayCollection(
+                [
+                    self::getStubFeeTransaction('1000', '2015-09-01', '2015-09-02'),
+                    self::getStubFeeTransaction('300', '2015-09-01', '2015-09-02'),
+                    self::getStubFeeTransaction('-100', '2015-09-01', '2015-09-02'),
+                    self::getStubFeeTransaction(
+                        '34.56',
+                        '2015-09-01',
+                        '2015-09-02',
+                        Transaction::STATUS_OUTSTANDING
+                    ),
+                ]
+            ),
+            '34.56',
+        ];
+        yield 'one overpayment' => [
+            '1234.56',
+            new ArrayCollection(
+                [
+                    self::getStubFeeTransaction('2000', '2015-09-01', '2015-09-02'),
+                ]
+            ),
+            '-765.44',
+        ];
+        yield 'bug OLCS-11509' => [
+            '4.56',
+            new ArrayCollection([]),
+            '4.56',
         ];
     }
 
@@ -647,63 +639,61 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isPartPaid());
     }
 
-    public static function partPaidProvider(): array
+    public static function partPaidProvider(): \Iterator
     {
-        return [
-            'no transactions' => [
-                '1234.56',
-                new ArrayCollection(),
-                false,
-            ],
-            'one complete transaction' => [
-                '1234.56',
-                new ArrayCollection(
-                    [
-                        self::getStubFeeTransaction('1234.56', '2015-09-01', '2015-09-02'),
-                    ]
-                ),
-                true, // fully paid IS part paid
-            ],
-            'one pending transaction' => [
-                '1234.56',
-                new ArrayCollection(
-                    [
-                        self::getStubFeeTransaction(
-                            '1234.56',
-                            '2015-09-01',
-                            '2015-09-02 12:34:56',
-                            Transaction::STATUS_OUTSTANDING
-                        ),
-                    ]
-                ),
-                false,
-            ],
-            'two complete one refund one pending' => [
-                '1234.56',
-                new ArrayCollection(
-                    [
-                        self::getStubFeeTransaction('1000', '2015-09-01', '2015-09-02'),
-                        self::getStubFeeTransaction('300', '2015-09-01', '2015-09-02'),
-                        self::getStubFeeTransaction('-100', '2015-09-01', '2015-09-02'),
-                        self::getStubFeeTransaction(
-                            '34.56',
-                            '2015-09-01',
-                            '2015-09-02',
-                            Transaction::STATUS_OUTSTANDING
-                        ),
-                    ]
-                ),
-                true,
-            ],
-            'one overpayment' => [
-                '1234.56',
-                new ArrayCollection(
-                    [
-                        self::getStubFeeTransaction('2000', '2015-09-01', '2015-09-02'),
-                    ]
-                ),
-                true,
-            ],
+        yield 'no transactions' => [
+            '1234.56',
+            new ArrayCollection(),
+            false,
+        ];
+        yield 'one complete transaction' => [
+            '1234.56',
+            new ArrayCollection(
+                [
+                    self::getStubFeeTransaction('1234.56', '2015-09-01', '2015-09-02'),
+                ]
+            ),
+            true, // fully paid IS part paid
+        ];
+        yield 'one pending transaction' => [
+            '1234.56',
+            new ArrayCollection(
+                [
+                    self::getStubFeeTransaction(
+                        '1234.56',
+                        '2015-09-01',
+                        '2015-09-02 12:34:56',
+                        Transaction::STATUS_OUTSTANDING
+                    ),
+                ]
+            ),
+            false,
+        ];
+        yield 'two complete one refund one pending' => [
+            '1234.56',
+            new ArrayCollection(
+                [
+                    self::getStubFeeTransaction('1000', '2015-09-01', '2015-09-02'),
+                    self::getStubFeeTransaction('300', '2015-09-01', '2015-09-02'),
+                    self::getStubFeeTransaction('-100', '2015-09-01', '2015-09-02'),
+                    self::getStubFeeTransaction(
+                        '34.56',
+                        '2015-09-01',
+                        '2015-09-02',
+                        Transaction::STATUS_OUTSTANDING
+                    ),
+                ]
+            ),
+            true,
+        ];
+        yield 'one overpayment' => [
+            '1234.56',
+            new ArrayCollection(
+                [
+                    self::getStubFeeTransaction('2000', '2015-09-01', '2015-09-02'),
+                ]
+            ),
+            true,
         ];
     }
 
@@ -720,7 +710,7 @@ class FeeEntityTest extends EntityTester
         $sut->setFeeTransactions(new ArrayCollection([$feeTr1]));
 
         //  call
-        static::assertNull($sut->getPaymentMethod());
+        $this->assertNull($sut->getPaymentMethod());
     }
 
     public function testGetCalculatedBundleValues(): void
@@ -739,20 +729,17 @@ class FeeEntityTest extends EntityTester
             ->shouldReceive('isAccrualBeforeInvoiceDatePermitted')->once()->andReturn('unit_isAccrualBeforeInvoiceDatePermitted')
             ->getMock();
 
-        static::assertEquals(
-            [
-                'outstanding' => 'unit_Outstanding',
-                'receiptNo' => 'unit_receiptNo',
-                'amount' => 'unit_Amount',
-                'dueDate' => 'unit_dueDate',
-                'ruleDateBeforeInvoice' => 'unit_RuleDateBeforeInvoice',
-                'isExpiredForLicence' => 'unit_ExpiredForLicence',
-                'isOutstanding' => 'unit_isOutstanding',
-                'isEcmtIssuingFee' => 'unit_isEcmtIssuing',
-                'isAccrualBeforeInvoiceDatePermitted' => 'unit_isAccrualBeforeInvoiceDatePermitted'
-            ],
-            $sut->getCalculatedBundleValues()
-        );
+        $this->assertEquals([
+            'outstanding' => 'unit_Outstanding',
+            'receiptNo' => 'unit_receiptNo',
+            'amount' => 'unit_Amount',
+            'dueDate' => 'unit_dueDate',
+            'ruleDateBeforeInvoice' => 'unit_RuleDateBeforeInvoice',
+            'isExpiredForLicence' => 'unit_ExpiredForLicence',
+            'isOutstanding' => 'unit_isOutstanding',
+            'isEcmtIssuingFee' => 'unit_isEcmtIssuing',
+            'isAccrualBeforeInvoiceDatePermitted' => 'unit_isAccrualBeforeInvoiceDatePermitted'
+        ], $sut->getCalculatedBundleValues());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('providerExpiredForLicence')]
@@ -778,17 +765,15 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($sut->isExpiredForLicence(), $expected);
     }
 
-    public static function providerExpiredForLicence(): array
+    public static function providerExpiredForLicence(): \Iterator
     {
-        return [
-            [
-                \DateTime::createFromFormat('Y-m-d', '3000-01-01'),
-                false
-            ],
-            [
-                \DateTime::createFromFormat('Y-m-d', '1000-01-01'),
-                true
-            ]
+        yield [
+            \DateTime::createFromFormat('Y-m-d', '3000-01-01'),
+            false
+        ];
+        yield [
+            \DateTime::createFromFormat('Y-m-d', '1000-01-01'),
+            true
         ];
     }
 
@@ -801,35 +786,32 @@ class FeeEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->getOrganisation());
     }
 
-    public static function getOrganisationProvider(): array
+    public static function getOrganisationProvider(): \Iterator
     {
         $organisation = m::mock(Organisation::class);
-
-        return [
-            'licence' => [
-                m::mock(Licence::class)->makePartial()->setOrganisation($organisation),
-                null,
-                null,
-                $organisation,
-            ],
-            'irfo gv permit' => [
-                null,
-                m::mock(IrfoGvPermit::class)->makePartial()->setOrganisation($organisation),
-                null,
-                $organisation,
-            ],
-            'irfo psv auth' => [
-                null,
-                null,
-                m::mock(IrfoPsvAuth::class)->makePartial()->setOrganisation($organisation),
-                $organisation,
-            ],
-            'neither' => [
-                null,
-                null,
-                null,
-                null,
-            ],
+        yield 'licence' => [
+            m::mock(Licence::class)->makePartial()->setOrganisation($organisation),
+            null,
+            null,
+            $organisation,
+        ];
+        yield 'irfo gv permit' => [
+            null,
+            m::mock(IrfoGvPermit::class)->makePartial()->setOrganisation($organisation),
+            null,
+            $organisation,
+        ];
+        yield 'irfo psv auth' => [
+            null,
+            null,
+            m::mock(IrfoPsvAuth::class)->makePartial()->setOrganisation($organisation),
+            $organisation,
+        ];
+        yield 'neither' => [
+            null,
+            null,
+            null,
+            null,
         ];
     }
 
@@ -841,29 +823,26 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getCustomerNameForInvoice());
     }
 
-    public static function getCustomerNameProvider(): array
+    public static function getCustomerNameProvider(): \Iterator
     {
         $organisation = m::mock(Organisation::class)
             ->shouldReceive('getName')
             ->andReturn('Foo')
             ->getMock();
-
-        return [
-            'licence' => [
-                m::mock(Licence::class)->makePartial()->setOrganisation($organisation),
-                null,
-                'Foo',
-            ],
-            'irfo' => [
-                null,
-                m::mock(IrfoGvPermit::class)->makePartial()->setOrganisation($organisation),
-                'Foo',
-            ],
-            'neither' => [
-                null,
-                null,
-                null,
-            ],
+        yield 'licence' => [
+            m::mock(Licence::class)->makePartial()->setOrganisation($organisation),
+            null,
+            'Foo',
+        ];
+        yield 'irfo' => [
+            null,
+            m::mock(IrfoGvPermit::class)->makePartial()->setOrganisation($organisation),
+            'Foo',
+        ];
+        yield 'neither' => [
+            null,
+            null,
+            null,
         ];
     }
 
@@ -880,10 +859,10 @@ class FeeEntityTest extends EntityTester
 
     public function testGetCustomerAddressForInvoiceEmpty(): void
     {
-        $this->assertNull($this->sut->getCustomerAddressForInvoice());
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\ContactDetails\Address::class, $this->sut->getCustomerAddressForInvoice());
     }
 
-    public static function getCustomerAddressProvider(): array
+    public static function getCustomerAddressProvider(): \Iterator
     {
         $address = m::mock(Address::class)
             ->shouldReceive('toArray')
@@ -909,61 +888,58 @@ class FeeEntityTest extends EntityTester
             ->shouldReceive('getIrfoContactDetails')
             ->andReturn($contactDetails)
             ->getMock();
-
-        return [
-            'licence' => [
-                m::mock(Licence::class)->makePartial()->setCorrespondenceCd($contactDetails),
-                null,
-                null,
-                [
-                    'addressLine1' => 'Foo1',
-                    'addressLine2' => 'Foo2',
-                    'addressLine3' => 'Foo3',
-                    'addressLine4' => 'Foo4',
-                    'town' => 'FooTown',
-                    'postcode' => 'FooPostcode',
-                    'countryCode' => 'FooCountry',
-                ],
-            ],
-            'irfo gv permit' => [
-                null,
-                m::mock(IrfoGvPermit::class)->makePartial()->setOrganisation($organisation),
-                null,
-                [
-                    'addressLine1' => 'Foo1',
-                    'addressLine2' => 'Foo2',
-                    'addressLine3' => 'Foo3',
-                    'addressLine4' => 'Foo4',
-                    'town' => 'FooTown',
-                    'postcode' => 'FooPostcode',
-                    'countryCode' => 'FooCountry',
-                ],
-            ],
-            'irfo psv auth' => [
-                null,
-                null,
-                m::mock(IrfoPsvAuth::class)->makePartial()->setOrganisation($organisation),
-                [
-                    'addressLine1' => 'Foo1',
-                    'addressLine2' => 'Foo2',
-                    'addressLine3' => 'Foo3',
-                    'addressLine4' => 'Foo4',
-                    'town' => 'FooTown',
-                    'postcode' => 'FooPostcode',
-                    'countryCode' => 'FooCountry',
-                ],
-            ],
-            //  licence and organisation - have not corr details
+        yield 'licence' => [
+            m::mock(Licence::class)->makePartial()->setCorrespondenceCd($contactDetails),
+            null,
+            null,
             [
-                'licence' => m::mock(Licence::class)->makePartial(),
-                'irfoGvPermit' => null,
-                'irfoPsvAuth' => new IrfoPsvAuth(
-                    new Organisation(),
-                    new Entities\Irfo\IrfoPsvAuthType(),
-                    new RefData()
-                ),
-                'expected' => null,
+                'addressLine1' => 'Foo1',
+                'addressLine2' => 'Foo2',
+                'addressLine3' => 'Foo3',
+                'addressLine4' => 'Foo4',
+                'town' => 'FooTown',
+                'postcode' => 'FooPostcode',
+                'countryCode' => 'FooCountry',
             ],
+        ];
+        yield 'irfo gv permit' => [
+            null,
+            m::mock(IrfoGvPermit::class)->makePartial()->setOrganisation($organisation),
+            null,
+            [
+                'addressLine1' => 'Foo1',
+                'addressLine2' => 'Foo2',
+                'addressLine3' => 'Foo3',
+                'addressLine4' => 'Foo4',
+                'town' => 'FooTown',
+                'postcode' => 'FooPostcode',
+                'countryCode' => 'FooCountry',
+            ],
+        ];
+        yield 'irfo psv auth' => [
+            null,
+            null,
+            m::mock(IrfoPsvAuth::class)->makePartial()->setOrganisation($organisation),
+            [
+                'addressLine1' => 'Foo1',
+                'addressLine2' => 'Foo2',
+                'addressLine3' => 'Foo3',
+                'addressLine4' => 'Foo4',
+                'town' => 'FooTown',
+                'postcode' => 'FooPostcode',
+                'countryCode' => 'FooCountry',
+            ],
+        ];
+        //  licence and organisation - have not corr details
+        yield [
+            'licence' => m::mock(Licence::class)->makePartial(),
+            'irfoGvPermit' => null,
+            'irfoPsvAuth' => new IrfoPsvAuth(
+                new Organisation(),
+                new Entities\Irfo\IrfoPsvAuthType(),
+                new RefData()
+            ),
+            'expected' => null,
         ];
     }
 
@@ -979,14 +955,12 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isPaid());
     }
 
-    public static function isPaidProvider(): array
+    public static function isPaidProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_PAID, true],
-            [Entity::STATUS_CANCELLED, false],
-            [Entity::STATUS_OUTSTANDING, false],
-            ['invalid', false],
-        ];
+        yield [Entity::STATUS_PAID, true];
+        yield [Entity::STATUS_CANCELLED, false];
+        yield [Entity::STATUS_OUTSTANDING, false];
+        yield ['invalid', false];
     }
 
     /**
@@ -1001,14 +975,12 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isOutstanding());
     }
 
-    public static function isOutstandingProvider(): array
+    public static function isOutstandingProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_PAID, false],
-            [Entity::STATUS_CANCELLED, false],
-            [Entity::STATUS_OUTSTANDING, true],
-            ['invalid', false],
-        ];
+        yield [Entity::STATUS_PAID, false];
+        yield [Entity::STATUS_CANCELLED, false];
+        yield [Entity::STATUS_OUTSTANDING, true];
+        yield ['invalid', false];
     }
 
     /**
@@ -1023,14 +995,12 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isCancelled());
     }
 
-    public static function isCancelledProvider(): array
+    public static function isCancelledProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_PAID, false],
-            [Entity::STATUS_CANCELLED, true],
-            [Entity::STATUS_OUTSTANDING, false],
-            ['invalid', false],
-        ];
+        yield [Entity::STATUS_PAID, false];
+        yield [Entity::STATUS_CANCELLED, true];
+        yield [Entity::STATUS_OUTSTANDING, false];
+        yield ['invalid', false];
     }
 
     /**
@@ -1089,30 +1059,28 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isBalancingFee());
     }
 
-    public static function isBalancingFeeProvider(): array
+    public static function isBalancingFeeProvider(): \Iterator
     {
-        return [
-            [FeeType::FEE_TYPE_APP, false],
-            [FeeType::FEE_TYPE_VAR, false],
-            [FeeType::FEE_TYPE_GRANT, false],
-            [FeeType::FEE_TYPE_CONT, false],
-            [FeeType::FEE_TYPE_VEH, false],
-            [FeeType::FEE_TYPE_GRANTINT, false],
-            [FeeType::FEE_TYPE_INTVEH, false],
-            [FeeType::FEE_TYPE_DUP, false],
-            [FeeType::FEE_TYPE_ANN, false],
-            [FeeType::FEE_TYPE_GRANTVAR, false],
-            [FeeType::FEE_TYPE_BUSAPP, false],
-            [FeeType::FEE_TYPE_BUSVAR, false],
-            [FeeType::FEE_TYPE_GVANNVEH, false],
-            [FeeType::FEE_TYPE_INTUPGRADEVEH, false],
-            [FeeType::FEE_TYPE_INTAMENDED, false],
-            [FeeType::FEE_TYPE_IRFOPSVAPP, false],
-            [FeeType::FEE_TYPE_IRFOPSVANN, false],
-            [FeeType::FEE_TYPE_IRFOPSVCOPY, false],
-            [FeeType::FEE_TYPE_IRFOGVPERMIT, false],
-            [FeeType::FEE_TYPE_ADJUSTMENT, true],
-        ];
+        yield [FeeType::FEE_TYPE_APP, false];
+        yield [FeeType::FEE_TYPE_VAR, false];
+        yield [FeeType::FEE_TYPE_GRANT, false];
+        yield [FeeType::FEE_TYPE_CONT, false];
+        yield [FeeType::FEE_TYPE_VEH, false];
+        yield [FeeType::FEE_TYPE_GRANTINT, false];
+        yield [FeeType::FEE_TYPE_INTVEH, false];
+        yield [FeeType::FEE_TYPE_DUP, false];
+        yield [FeeType::FEE_TYPE_ANN, false];
+        yield [FeeType::FEE_TYPE_GRANTVAR, false];
+        yield [FeeType::FEE_TYPE_BUSAPP, false];
+        yield [FeeType::FEE_TYPE_BUSVAR, false];
+        yield [FeeType::FEE_TYPE_GVANNVEH, false];
+        yield [FeeType::FEE_TYPE_INTUPGRADEVEH, false];
+        yield [FeeType::FEE_TYPE_INTAMENDED, false];
+        yield [FeeType::FEE_TYPE_IRFOPSVAPP, false];
+        yield [FeeType::FEE_TYPE_IRFOPSVANN, false];
+        yield [FeeType::FEE_TYPE_IRFOPSVCOPY, false];
+        yield [FeeType::FEE_TYPE_IRFOGVPERMIT, false];
+        yield [FeeType::FEE_TYPE_ADJUSTMENT, true];
     }
 
     /**
@@ -1131,30 +1099,28 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isNewApplicationFee());
     }
 
-    public static function isNewApplicationFeeProvider(): array
+    public static function isNewApplicationFeeProvider(): \Iterator
     {
-        return [
-            [FeeType::FEE_TYPE_APP, true],
-            [FeeType::FEE_TYPE_VAR, false],
-            [FeeType::FEE_TYPE_GRANT, false],
-            [FeeType::FEE_TYPE_CONT, false],
-            [FeeType::FEE_TYPE_VEH, false],
-            [FeeType::FEE_TYPE_GRANTINT, false],
-            [FeeType::FEE_TYPE_INTVEH, false],
-            [FeeType::FEE_TYPE_DUP, false],
-            [FeeType::FEE_TYPE_ANN, false],
-            [FeeType::FEE_TYPE_GRANTVAR, false],
-            [FeeType::FEE_TYPE_BUSAPP, false],
-            [FeeType::FEE_TYPE_BUSVAR, false],
-            [FeeType::FEE_TYPE_GVANNVEH, false],
-            [FeeType::FEE_TYPE_INTUPGRADEVEH, false],
-            [FeeType::FEE_TYPE_INTAMENDED, false],
-            [FeeType::FEE_TYPE_IRFOPSVAPP, false],
-            [FeeType::FEE_TYPE_IRFOPSVANN, false],
-            [FeeType::FEE_TYPE_IRFOPSVCOPY, false],
-            [FeeType::FEE_TYPE_IRFOGVPERMIT, false],
-            [FeeType::FEE_TYPE_ADJUSTMENT, false],
-        ];
+        yield [FeeType::FEE_TYPE_APP, true];
+        yield [FeeType::FEE_TYPE_VAR, false];
+        yield [FeeType::FEE_TYPE_GRANT, false];
+        yield [FeeType::FEE_TYPE_CONT, false];
+        yield [FeeType::FEE_TYPE_VEH, false];
+        yield [FeeType::FEE_TYPE_GRANTINT, false];
+        yield [FeeType::FEE_TYPE_INTVEH, false];
+        yield [FeeType::FEE_TYPE_DUP, false];
+        yield [FeeType::FEE_TYPE_ANN, false];
+        yield [FeeType::FEE_TYPE_GRANTVAR, false];
+        yield [FeeType::FEE_TYPE_BUSAPP, false];
+        yield [FeeType::FEE_TYPE_BUSVAR, false];
+        yield [FeeType::FEE_TYPE_GVANNVEH, false];
+        yield [FeeType::FEE_TYPE_INTUPGRADEVEH, false];
+        yield [FeeType::FEE_TYPE_INTAMENDED, false];
+        yield [FeeType::FEE_TYPE_IRFOPSVAPP, false];
+        yield [FeeType::FEE_TYPE_IRFOPSVANN, false];
+        yield [FeeType::FEE_TYPE_IRFOPSVCOPY, false];
+        yield [FeeType::FEE_TYPE_IRFOGVPERMIT, false];
+        yield [FeeType::FEE_TYPE_ADJUSTMENT, false];
     }
 
     /**
@@ -1173,30 +1139,28 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isVariationFee());
     }
 
-    public static function isVariationFeeProvider(): array
+    public static function isVariationFeeProvider(): \Iterator
     {
-        return [
-            [FeeType::FEE_TYPE_APP, false],
-            [FeeType::FEE_TYPE_VAR, true],
-            [FeeType::FEE_TYPE_GRANT, false],
-            [FeeType::FEE_TYPE_CONT, false],
-            [FeeType::FEE_TYPE_VEH, false],
-            [FeeType::FEE_TYPE_GRANTINT, false],
-            [FeeType::FEE_TYPE_INTVEH, false],
-            [FeeType::FEE_TYPE_DUP, false],
-            [FeeType::FEE_TYPE_ANN, false],
-            [FeeType::FEE_TYPE_GRANTVAR, false],
-            [FeeType::FEE_TYPE_BUSAPP, false],
-            [FeeType::FEE_TYPE_BUSVAR, false],
-            [FeeType::FEE_TYPE_GVANNVEH, false],
-            [FeeType::FEE_TYPE_INTUPGRADEVEH, false],
-            [FeeType::FEE_TYPE_INTAMENDED, false],
-            [FeeType::FEE_TYPE_IRFOPSVAPP, false],
-            [FeeType::FEE_TYPE_IRFOPSVANN, false],
-            [FeeType::FEE_TYPE_IRFOPSVCOPY, false],
-            [FeeType::FEE_TYPE_IRFOGVPERMIT, false],
-            [FeeType::FEE_TYPE_ADJUSTMENT, false],
-        ];
+        yield [FeeType::FEE_TYPE_APP, false];
+        yield [FeeType::FEE_TYPE_VAR, true];
+        yield [FeeType::FEE_TYPE_GRANT, false];
+        yield [FeeType::FEE_TYPE_CONT, false];
+        yield [FeeType::FEE_TYPE_VEH, false];
+        yield [FeeType::FEE_TYPE_GRANTINT, false];
+        yield [FeeType::FEE_TYPE_INTVEH, false];
+        yield [FeeType::FEE_TYPE_DUP, false];
+        yield [FeeType::FEE_TYPE_ANN, false];
+        yield [FeeType::FEE_TYPE_GRANTVAR, false];
+        yield [FeeType::FEE_TYPE_BUSAPP, false];
+        yield [FeeType::FEE_TYPE_BUSVAR, false];
+        yield [FeeType::FEE_TYPE_GVANNVEH, false];
+        yield [FeeType::FEE_TYPE_INTUPGRADEVEH, false];
+        yield [FeeType::FEE_TYPE_INTAMENDED, false];
+        yield [FeeType::FEE_TYPE_IRFOPSVAPP, false];
+        yield [FeeType::FEE_TYPE_IRFOPSVANN, false];
+        yield [FeeType::FEE_TYPE_IRFOPSVCOPY, false];
+        yield [FeeType::FEE_TYPE_IRFOGVPERMIT, false];
+        yield [FeeType::FEE_TYPE_ADJUSTMENT, false];
     }
 
     /**
@@ -1215,30 +1179,28 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isGrantFee());
     }
 
-    public static function isGrantFeeProvider(): array
+    public static function isGrantFeeProvider(): \Iterator
     {
-        return [
-            [FeeType::FEE_TYPE_APP, false],
-            [FeeType::FEE_TYPE_VAR, false],
-            [FeeType::FEE_TYPE_GRANT, true],
-            [FeeType::FEE_TYPE_CONT, false],
-            [FeeType::FEE_TYPE_VEH, false],
-            [FeeType::FEE_TYPE_GRANTINT, false],
-            [FeeType::FEE_TYPE_INTVEH, false],
-            [FeeType::FEE_TYPE_DUP, false],
-            [FeeType::FEE_TYPE_ANN, false],
-            [FeeType::FEE_TYPE_GRANTVAR, false],
-            [FeeType::FEE_TYPE_BUSAPP, false],
-            [FeeType::FEE_TYPE_BUSVAR, false],
-            [FeeType::FEE_TYPE_GVANNVEH, false],
-            [FeeType::FEE_TYPE_INTUPGRADEVEH, false],
-            [FeeType::FEE_TYPE_INTAMENDED, false],
-            [FeeType::FEE_TYPE_IRFOPSVAPP, false],
-            [FeeType::FEE_TYPE_IRFOPSVANN, false],
-            [FeeType::FEE_TYPE_IRFOPSVCOPY, false],
-            [FeeType::FEE_TYPE_IRFOGVPERMIT, false],
-            [FeeType::FEE_TYPE_ADJUSTMENT, false],
-        ];
+        yield [FeeType::FEE_TYPE_APP, false];
+        yield [FeeType::FEE_TYPE_VAR, false];
+        yield [FeeType::FEE_TYPE_GRANT, true];
+        yield [FeeType::FEE_TYPE_CONT, false];
+        yield [FeeType::FEE_TYPE_VEH, false];
+        yield [FeeType::FEE_TYPE_GRANTINT, false];
+        yield [FeeType::FEE_TYPE_INTVEH, false];
+        yield [FeeType::FEE_TYPE_DUP, false];
+        yield [FeeType::FEE_TYPE_ANN, false];
+        yield [FeeType::FEE_TYPE_GRANTVAR, false];
+        yield [FeeType::FEE_TYPE_BUSAPP, false];
+        yield [FeeType::FEE_TYPE_BUSVAR, false];
+        yield [FeeType::FEE_TYPE_GVANNVEH, false];
+        yield [FeeType::FEE_TYPE_INTUPGRADEVEH, false];
+        yield [FeeType::FEE_TYPE_INTAMENDED, false];
+        yield [FeeType::FEE_TYPE_IRFOPSVAPP, false];
+        yield [FeeType::FEE_TYPE_IRFOPSVANN, false];
+        yield [FeeType::FEE_TYPE_IRFOPSVCOPY, false];
+        yield [FeeType::FEE_TYPE_IRFOGVPERMIT, false];
+        yield [FeeType::FEE_TYPE_ADJUSTMENT, false];
     }
 
     /**
@@ -1265,16 +1227,14 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getSalesPersonReference());
     }
 
-    public static function salesPersonRefProvider(): array
+    public static function salesPersonRefProvider(): \Iterator
     {
-        return [
-            ['B', 'TA', 'B'],
-            ['C', 'TA', 'C'],
-            ['', 'IR', 'IR'],
-            ['', 'MGB', 'MGB'],
-            ['', 'MNI', 'MNI'],
-            ['', 'MR', 'MR'],
-        ];
+        yield ['B', 'TA', 'B'];
+        yield ['C', 'TA', 'C'];
+        yield ['', 'IR', 'IR'];
+        yield ['', 'MGB', 'MGB'];
+        yield ['', 'MNI', 'MNI'];
+        yield ['', 'MR', 'MR'];
     }
 
     /**
@@ -1440,33 +1400,31 @@ class FeeEntityTest extends EntityTester
         $this->assertEqualsWithDelta($expectedGrossAmount, $this->sut->getGrossAmount(), 0.01);
     }
 
-    public static function vatProvider(): array
+    public static function vatProvider(): \Iterator
     {
-        return [
-            'no_vat' => [
-                100.00,
-                0,
-                0,
-                100.00,
-            ],
-            '20pcvat' => [
-                100.00,
-                20,
-                20,
-                120.00,
-            ],
-            '17_5_pcvat' => [
-                123.45,
-                17.50,
-                21.60,
-                145.05,
-            ],
-            'rounding_down' => [
-                99.99,
-                20,
-                19.99, // 19.998 rounded *down*
-                119.98,
-            ],
+        yield 'no_vat' => [
+            100.00,
+            0,
+            0,
+            100.00,
+        ];
+        yield '20pcvat' => [
+            100.00,
+            20,
+            20,
+            120.00,
+        ];
+        yield '17_5_pcvat' => [
+            123.45,
+            17.50,
+            21.60,
+            145.05,
+        ];
+        yield 'rounding_down' => [
+            99.99,
+            20,
+            19.99, // 19.998 rounded *down*
+            119.98,
         ];
     }
 
@@ -1482,18 +1440,16 @@ class FeeEntityTest extends EntityTester
         $this->assertSame($expected, Entity::amountToPence($input));
     }
 
-    public static function amountToPenceProvider(): array
+    public static function amountToPenceProvider(): \Iterator
     {
-        return [
-            ['1.00', (int) 100],
-            ['1.01', (int) 101],
-            ['1.005', (int) 101],
-            ['1.001', (int) 100],
-            ['4.56', (int) 456],
-            ['35.16', (int) 3516],
-            ['1234.56', (int) 123456],
-            ['-4.56', (int) -456],
-        ];
+        yield ['1.00', (int) 100];
+        yield ['1.01', (int) 101];
+        yield ['1.005', (int) 101];
+        yield ['1.001', (int) 100];
+        yield ['4.56', (int) 456];
+        yield ['35.16', (int) 3516];
+        yield ['1234.56', (int) 123456];
+        yield ['-4.56', (int) -456];
     }
 
     /**
@@ -1508,16 +1464,14 @@ class FeeEntityTest extends EntityTester
         $this->assertSame($expected, Entity::amountToPounds($input));
     }
 
-    public static function amountToPoundsProvider(): array
+    public static function amountToPoundsProvider(): \Iterator
     {
-        return [
-            [100, '1.00'],
-            [101, '1.01'],
-            [456, '4.56'],
-            [3516, '35.16'],
-            [123456, '1234.56'],
-            [-456, '-4.56'],
-        ];
+        yield [100, '1.00'];
+        yield [101, '1.01'];
+        yield [456, '4.56'];
+        yield [3516, '35.16'];
+        yield [123456, '1234.56'];
+        yield [-456, '-4.56'];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('amountByTransactionProvider')]
@@ -1527,48 +1481,46 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getAmountAllocatedByTransactionId($transactionId));
     }
 
-    public static function amountByTransactionProvider(): array
+    public static function amountByTransactionProvider(): \Iterator
     {
-        return [
-            'no transactions' => [
-                new ArrayCollection(),
-                99,
-                null,
-            ],
-            'one complete transaction matched' => [
-                new ArrayCollection(
-                    [
-                        self::getStubFeeTransaction(
-                            '234.56',
-                            '2015-09-01',
-                            '2015-09-02',
-                            Transaction::STATUS_COMPLETE,
-                            Transaction::TYPE_PAYMENT,
-                            '',
-                            99
-                        ),
-                    ]
-                ),
-                99,
-                '234.56',
-            ],
-            'one complete transaction unmatched' => [
-                new ArrayCollection(
-                    [
-                        self::getStubFeeTransaction(
-                            '234.56',
-                            '2015-09-01',
-                            '2015-09-02',
-                            Transaction::STATUS_COMPLETE,
-                            Transaction::TYPE_PAYMENT,
-                            '',
-                            98
-                        ),
-                    ]
-                ),
-                99,
-                null,
-            ],
+        yield 'no transactions' => [
+            new ArrayCollection(),
+            99,
+            null,
+        ];
+        yield 'one complete transaction matched' => [
+            new ArrayCollection(
+                [
+                    self::getStubFeeTransaction(
+                        '234.56',
+                        '2015-09-01',
+                        '2015-09-02',
+                        Transaction::STATUS_COMPLETE,
+                        Transaction::TYPE_PAYMENT,
+                        '',
+                        99
+                    ),
+                ]
+            ),
+            99,
+            '234.56',
+        ];
+        yield 'one complete transaction unmatched' => [
+            new ArrayCollection(
+                [
+                    self::getStubFeeTransaction(
+                        '234.56',
+                        '2015-09-01',
+                        '2015-09-02',
+                        Transaction::STATUS_COMPLETE,
+                        Transaction::TYPE_PAYMENT,
+                        '',
+                        98
+                    ),
+                ]
+            ),
+            99,
+            null,
         ];
     }
 
@@ -1578,7 +1530,7 @@ class FeeEntityTest extends EntityTester
         // force the rule date to be now
         $feeType = m::mock()
             ->shouldReceive('getAccrualRule')
-            ->andReturn((new RefData())->setId(Entity::ACCRUAL_RULE_IMMEDIATE))
+            ->andReturn(new RefData()->setId(Entity::ACCRUAL_RULE_IMMEDIATE))
             ->getMock();
         $this->sut->setFeeType($feeType);
 
@@ -1587,16 +1539,14 @@ class FeeEntityTest extends EntityTester
         $this->assertSame($expected, $this->sut->isRuleBeforeInvoiceDate());
     }
 
-    public static function dataProviderIsRuleBeforeInvoiceDate(): array
+    public static function dataProviderIsRuleBeforeInvoiceDate(): \Iterator
     {
-        return [
-            [true, (new DateTime())->modify('1 second')],
-            [true, (new DateTime())->modify('1 day')],
-            [false, new DateTime()],
-            [false, (new DateTime())->modify('-1 day')],
-            [false, (new DateTime())->modify('-1 second')],
-            [false, null],
-        ];
+        yield [true, new DateTime()->modify('1 second')];
+        yield [true, new DateTime()->modify('1 day')];
+        yield [false, new DateTime()];
+        yield [false, new DateTime()->modify('-1 day')];
+        yield [false, new DateTime()->modify('-1 second')];
+        yield [false, null];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderGetInvoicedDateTime')]
@@ -1606,22 +1556,20 @@ class FeeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getInvoicedDateTime());
     }
 
-    public static function dataProviderGetInvoicedDateTime(): array
+    public static function dataProviderGetInvoicedDateTime(): \Iterator
     {
-        return [
-            [new DateTime('2016-01-25'), new DateTime('2016-01-25')],
-            [new DateTime('2016-01-25'), '2016-01-25'],
-            [null, null],
-        ];
+        yield [new DateTime('2016-01-25'), new DateTime('2016-01-25')];
+        yield [new DateTime('2016-01-25'), '2016-01-25'];
+        yield [null, null];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetRelatedOrganisation')]
     public function testGetRelatedOrganisation(Entity $sut, mixed $expect): void
     {
-        static::assertSame($expect, $sut->getRelatedOrganisation());
+        $this->assertSame($expect, $sut->getRelatedOrganisation());
     }
 
-    public static function dpTestGetRelatedOrganisation(): array
+    public static function dpTestGetRelatedOrganisation(): \Iterator
     {
         /** @var Organisation $mockOrg */
         $mockOrg = m::mock(Organisation::class);
@@ -1629,40 +1577,37 @@ class FeeEntityTest extends EntityTester
         $mockRef = m::mock(RefData::class);
 
         $licence = new Licence($mockOrg, $mockRef);
-
-        return [
-            [
-                'sut' => self::instantiate(Entity::class)->setApplication(
-                    new Entities\Application\Application($licence, $mockRef, false)
-                ),
-                'expect' => $mockOrg,
-            ],
-            [
-                'sut' => self::instantiate(Entity::class)->setBusReg(
-                    (new Entities\Bus\BusReg())->setLicence($licence)
-                ),
-                'expect' => $mockOrg,
-            ],
-            [
-                'sut' => self::instantiate(Entity::class)->setLicence($licence),
-                'expect' => $mockOrg,
-            ],
-            [
-                'sut' => self::instantiate(Entity::class)->setIrfoGvPermit(
-                    new IrfoGvPermit($mockOrg, new Entities\Irfo\IrfoGvPermitType(), $mockRef)
-                ),
-                'expect' => $mockOrg,
-            ],
-            [
-                'sut' => self::instantiate(Entity::class)->setIrfoPsvAuth(
-                    new IrfoPsvAuth($mockOrg, new Entities\Irfo\IrfoPsvAuthType(), $mockRef)
-                ),
-                'expect' => $mockOrg,
-            ],
-            [
-                'sut' => self::instantiate(Entity::class),
-                'expect' => null,
-            ],
+        yield [
+            'sut' => self::instantiate(Entity::class)->setApplication(
+                new Entities\Application\Application($licence, $mockRef, false)
+            ),
+            'expect' => $mockOrg,
+        ];
+        yield [
+            'sut' => self::instantiate(Entity::class)->setBusReg(
+                new Entities\Bus\BusReg()->setLicence($licence)
+            ),
+            'expect' => $mockOrg,
+        ];
+        yield [
+            'sut' => self::instantiate(Entity::class)->setLicence($licence),
+            'expect' => $mockOrg,
+        ];
+        yield [
+            'sut' => self::instantiate(Entity::class)->setIrfoGvPermit(
+                new IrfoGvPermit($mockOrg, new Entities\Irfo\IrfoGvPermitType(), $mockRef)
+            ),
+            'expect' => $mockOrg,
+        ];
+        yield [
+            'sut' => self::instantiate(Entity::class)->setIrfoPsvAuth(
+                new IrfoPsvAuth($mockOrg, new Entities\Irfo\IrfoPsvAuthType(), $mockRef)
+            ),
+            'expect' => $mockOrg,
+        ];
+        yield [
+            'sut' => self::instantiate(Entity::class),
+            'expect' => null,
         ];
     }
 

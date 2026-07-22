@@ -22,24 +22,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="person",
- *    indexes={
- *        @ORM\Index(name="ix_person_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_person_family_name", columns={"family_name"}),
- *        @ORM\Index(name="ix_person_forename", columns={"forename"}),
- *        @ORM\Index(name="ix_person_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_person_title", columns={"title"}),
- *        @ORM\Index(name="uk_person_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_person_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'person')]
+#[ORM\Index(name: 'ix_person_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_person_family_name', columns: ['family_name'])]
+#[ORM\Index(name: 'ix_person_forename', columns: ['forename'])]
+#[ORM\Index(name: 'ix_person_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_person_title', columns: ['title'])]
+#[ORM\Index(name: 'uk_person_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\UniqueConstraint(name: 'uk_person_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractPerson implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -53,152 +47,136 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Title
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="title", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'title', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $title;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Forename
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="forename", length=35, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'forename', length: 35, nullable: true)]
     protected $forename;
 
     /**
      * Family name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="family_name", length=35, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'family_name', length: 35, nullable: true)]
     protected $familyName;
 
     /**
      * Birth date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="birth_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'birth_date', nullable: true)]
     protected $birthDate;
 
     /**
      * length 50 to hold legacy data.  Town of birth.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="birth_place", length=50, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'birth_place', length: 50, nullable: true)]
     protected $birthPlace;
 
     /**
      * Other name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="other_name", length=35, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'other_name', length: 35, nullable: true)]
     protected $otherName;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;
 
     /**
      * ApplicationOrganisationPersons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson", mappedBy="person")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson::class, mappedBy: 'person')]
     protected $applicationOrganisationPersons;
 
     /**
      * ContactDetails
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", mappedBy="person")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, mappedBy: 'person')]
     protected $contactDetails;
 
     /**
      * Disqualifications
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Disqualification", mappedBy="person")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Disqualification::class, mappedBy: 'person')]
     protected $disqualifications;
 
     /**
      * OrganisationPersons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\OrganisationPerson", mappedBy="person")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\OrganisationPerson::class, mappedBy: 'person')]
     protected $organisationPersons;
 
     /**

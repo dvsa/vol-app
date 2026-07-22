@@ -12,7 +12,7 @@ use Mockery as m;
  * Class AddressTest
  * @package OlcsTest\View\Helper
  */
-class AddressTest extends \PHPUnit\Framework\TestCase
+final class AddressTest extends \PHPUnit\Framework\TestCase
 {
     protected $addressFormatter;
     protected $sut;

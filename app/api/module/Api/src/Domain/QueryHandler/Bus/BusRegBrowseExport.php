@@ -64,11 +64,11 @@ class BusRegBrowseExport extends AbstractQueryHandler
         $fp = fopen('php://temp', 'w+');
 
         // add column names
-        fputcsv($fp, $this->columnsToExport);
+        fputcsv($fp, $this->columnsToExport, ',', '"', '\\');
 
         $hasData = false;
         foreach ($iterableResult as $row) {
-            fputcsv($fp, $row);
+            fputcsv($fp, $row, ',', '"', '\\');
             $hasData = true;
         }
 

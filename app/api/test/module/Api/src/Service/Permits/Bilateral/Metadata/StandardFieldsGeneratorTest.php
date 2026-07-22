@@ -19,7 +19,7 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StandardFieldsGeneratorTest extends MockeryTestCase
+final class StandardFieldsGeneratorTest extends MockeryTestCase
 {
     private $irhpPermitStock;
 
@@ -27,6 +27,7 @@ class StandardFieldsGeneratorTest extends MockeryTestCase
 
     private $standardFieldsGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpPermitStock = m::mock(IrhpPermitStock::class);

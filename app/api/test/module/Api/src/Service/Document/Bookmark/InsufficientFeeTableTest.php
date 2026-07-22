@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class InsufficientFeeTableTest extends MockeryTestCase
+final class InsufficientFeeTableTest extends MockeryTestCase
 {
     public function testGetQuery(): void
     {

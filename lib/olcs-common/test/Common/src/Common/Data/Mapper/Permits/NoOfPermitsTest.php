@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace PermitsTest\Data\Mapper\Permits;
 
 use Common\Data\Mapper\Permits\NoOfPermits;
@@ -16,7 +18,7 @@ use Laminas\Form\Fieldset;
 /**
  * NoOfPermitsTest
  */
-class NoOfPermitsTest extends TestCase
+final class NoOfPermitsTest extends TestCase
 {
     private $form;
 
@@ -232,11 +234,11 @@ class NoOfPermitsTest extends TestCase
         $this->assertArrayHasKey('permitsRequired', $fieldsFieldsets);
 
         $permitsRequiredElements = $fieldsFieldsets['permitsRequired']->getElements();
-        $this->assertEquals(['2018', '2019', '2020', '2021'], array_keys($permitsRequiredElements));
+        $this->assertSame([2018, 2019, 2020, 2021], array_keys($permitsRequiredElements));
 
         $element2018 = $permitsRequiredElements['2018'];
         $this->assertInstanceOf(NoOfPermitsElement::class, $element2018);
-        $this->assertEquals($label2018Html, $element2018->getLabel());
+        $this->assertSame($label2018Html, $element2018->getLabel());
         $this->assertEquals($for2018Hint, $element2018->getOption('hint'));
         $this->assertEquals('govuk-hint', $element2018->getOption('hint-class'));
         $this->assertEquals('2018', $element2018->getAttribute('id'));
@@ -244,7 +246,7 @@ class NoOfPermitsTest extends TestCase
 
         $element2019 = $permitsRequiredElements['2019'];
         $this->assertInstanceOf(NoOfPermitsElement::class, $element2019);
-        $this->assertEquals($label2019Html, $element2019->getLabel());
+        $this->assertSame($label2019Html, $element2019->getLabel());
         $this->assertEquals($for2019Hint, $element2019->getOption('hint'));
         $this->assertEquals('govuk-hint', $element2019->getOption('hint-class'));
         $this->assertEquals('2019', $element2019->getAttribute('id'));
@@ -252,7 +254,7 @@ class NoOfPermitsTest extends TestCase
 
         $element2020 = $permitsRequiredElements['2020'];
         $this->assertInstanceOf(NoOfPermitsElement::class, $element2020);
-        $this->assertEquals($label2020Html, $element2020->getLabel());
+        $this->assertSame($label2020Html, $element2020->getLabel());
         $this->assertEquals($for2020Hint, $element2020->getOption('hint'));
         $this->assertEquals('govuk-hint', $element2020->getOption('hint-class'));
         $this->assertEquals('2020', $element2020->getAttribute('id'));
@@ -264,7 +266,7 @@ class NoOfPermitsTest extends TestCase
 
         $this->assertArrayHasKey('Submit', $formFieldsets);
         $submitFieldsetElements = $formFieldsets['Submit']->getElements();
-        $this->assertEquals(['SubmitButton', 'SaveAndReturnButton'], array_keys($submitFieldsetElements));
+        $this->assertSame(['SubmitButton', 'SaveAndReturnButton'], array_keys($submitFieldsetElements));
 
         $submitButton = $submitFieldsetElements['SubmitButton'];
         $this->assertEquals(
@@ -416,7 +418,7 @@ class NoOfPermitsTest extends TestCase
         $this->assertArrayHasKey('permitsRequired', $fieldsFieldsets);
 
         $permitsRequiredElements = $fieldsFieldsets['permitsRequired']->getElements();
-        $this->assertEquals(['2018', '2019', '2020'], array_keys($permitsRequiredElements));
+        $this->assertSame([2018, 2019, 2020], array_keys($permitsRequiredElements));
 
         $element2018 = $permitsRequiredElements['2018'];
         $this->assertInstanceOf(HtmlElement::class, $element2018);
@@ -432,7 +434,7 @@ class NoOfPermitsTest extends TestCase
 
         $this->assertArrayHasKey('Submit', $formFieldsets);
         $submitFieldsetElements = $formFieldsets['Submit']->getElements();
-        $this->assertEquals(['SaveAndReturnButton'], array_keys($submitFieldsetElements));
+        $this->assertSame(['SaveAndReturnButton'], array_keys($submitFieldsetElements));
 
         $saveAndReturnButton = $submitFieldsetElements['SaveAndReturnButton'];
         $this->assertEquals(

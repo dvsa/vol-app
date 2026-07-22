@@ -10,13 +10,14 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\Olcs\Api\Domain\ValidatorManager;
 
-class ValidatorManagerTest extends MockeryTestCase
+final class ValidatorManagerTest extends MockeryTestCase
 {
     /**
      * @var ValidatorManager
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $container = m::mock(ContainerInterface::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Variation;
 
 use Dvsa\Olcs\Transfer\Command\Variation\UpdateConditionUndertaking;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Variation\UpdateConditionUndertaking;
 /**
  * UpdateConditionUndertaking test
  */
-class UpdateConditionUndertakingTest extends \PHPUnit\Framework\TestCase
+final class UpdateConditionUndertakingTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

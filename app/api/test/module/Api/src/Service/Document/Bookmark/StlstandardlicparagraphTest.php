@@ -15,7 +15,7 @@ use Mockery as m;
 /**
  * StlstandardlicparagraphTest
  */
-class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
+final class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQueryLicence(): void
     {
@@ -62,7 +62,7 @@ class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
         $bookmark = new Sut();
         $query = $bookmark->getQuery([]);
 
-        $this->assertSame(null, $query);
+        $this->assertNull($query);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderDataProvider')]
@@ -81,14 +81,12 @@ class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public static function dpRenderDataProvider(): array
+    public static function dpRenderDataProvider(): \Iterator
     {
-        return [
-            [true, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL],
-            [true, Licence::LICENCE_TYPE_STANDARD_NATIONAL],
-            [false, Licence::LICENCE_TYPE_RESTRICTED],
-            [false, Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
-        ];
+        yield [true, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL];
+        yield [true, Licence::LICENCE_TYPE_STANDARD_NATIONAL];
+        yield [false, Licence::LICENCE_TYPE_RESTRICTED];
+        yield [false, Licence::LICENCE_TYPE_SPECIAL_RESTRICTED];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderCaseDataDataProvider')]
@@ -107,44 +105,42 @@ class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
         }
     }
 
-    public static function dpRenderCaseDataDataProvider(): array
+    public static function dpRenderCaseDataDataProvider(): \Iterator
     {
-        return [
+        yield [
+            true,
             [
-                true,
-                [
-                    'application' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL]],
-                    'licence' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_RESTRICTED]]
-                ]
+                'application' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL]],
+                'licence' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_RESTRICTED]]
+            ]
+        ];
+        yield [
+            true,
+            [
+                'application' => null,
+                'licence' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL]],
             ],
+        ];
+        yield [
+            true,
             [
-                true,
-                [
-                    'application' => null,
-                    'licence' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL]],
-                ],
+                'application' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL]],
+                'licence' => null,
             ],
+        ];
+        yield [
+            false,
+            ['application' => null, 'licence' => null]
+        ];
+        yield [
+            false,
+            ['application' => ['licenceType' => 'X'], 'application' => ['licenceType' => 'Z']]
+        ];
+        yield [
+            false,
             [
-                true,
-                [
-                    'application' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL]],
-                    'licence' => null,
-                ],
-            ],
-            [
-                false,
-                ['application' => null, 'licence' => null]
-            ],
-            [
-                false,
-                ['application' => ['licenceType' => 'X'], 'application' => ['licenceType' => 'Z']]
-            ],
-            [
-                false,
-                [
-                    'application' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_RESTRICTED]],
-                    'licence' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL]],
-                ],
+                'application' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_RESTRICTED]],
+                'licence' => ['licenceType' => ['id' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL]],
             ],
         ];
     }

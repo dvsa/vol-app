@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CanAccessOtherLicenceWithIdTest extends AbstractHandlerTestCase
+final class CanAccessOtherLicenceWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessOtherLicenceWithId
@@ -40,11 +40,9 @@ class CanAccessOtherLicenceWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

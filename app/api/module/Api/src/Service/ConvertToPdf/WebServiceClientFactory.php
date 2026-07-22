@@ -23,7 +23,7 @@ class WebServiceClientFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): WebServiceClient
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): WebServiceClient
     {
         $config = $container->get('config');
         if (!isset($config['convert_to_pdf']['uri'])) {

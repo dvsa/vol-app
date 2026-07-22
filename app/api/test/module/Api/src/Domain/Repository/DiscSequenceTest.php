@@ -21,8 +21,9 @@ use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea as TrafficAreaEntity;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class DiscSequenceTest extends RepositoryTestCase
+final class DiscSequenceTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(DiscSequenceRepo::class);

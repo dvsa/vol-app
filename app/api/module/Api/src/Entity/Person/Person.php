@@ -9,21 +9,15 @@ use Dvsa\Olcs\Api\Entity\Organisation\Disqualification;
 
 /**
  * Person Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="person",
- *    indexes={
- *        @ORM\Index(name="ix_person_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_person_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_person_family_name", columns={"family_name"}),
- *        @ORM\Index(name="ix_person_forename", columns={"forename"}),
- *        @ORM\Index(name="ix_person_title", columns={"title"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_person_olbs_key_olbs_type", columns={"olbs_key","olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'person')]
+#[ORM\Index(name: 'ix_person_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_person_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_person_family_name', columns: ['family_name'])]
+#[ORM\Index(name: 'ix_person_forename', columns: ['forename'])]
+#[ORM\Index(name: 'ix_person_title', columns: ['title'])]
+#[ORM\UniqueConstraint(name: 'uk_person_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\Entity]
 class Person extends AbstractPerson implements OrganisationProviderInterface
 {
     /**
@@ -37,7 +31,7 @@ class Person extends AbstractPerson implements OrganisationProviderInterface
      *
      * @return $this
      */
-    public function updatePerson($forename, $familyName, RefData $title = null, $birthDate = null, $birthPlace = null)
+    public function updatePerson($forename, $familyName, ?RefData $title = null, $birthDate = null, $birthPlace = null)
     {
         $this->setForename($forename);
         $this->setFamilyName($familyName);

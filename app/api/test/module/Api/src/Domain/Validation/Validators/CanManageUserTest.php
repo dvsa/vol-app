@@ -12,7 +12,7 @@ use Mockery as m;
 /**
  * Can Manage User Test
  */
-class CanManageUserTest extends AbstractValidatorsTestCase
+final class CanManageUserTest extends AbstractValidatorsTestCase
 {
     /**
      * @var Sut
@@ -58,11 +58,9 @@ class CanManageUserTest extends AbstractValidatorsTestCase
         $this->assertEquals(true, $this->sut->isValid(111));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false]
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

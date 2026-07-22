@@ -27,13 +27,14 @@ use Laminas\Navigation\Page\Mvc as NavigationPage;
 use Laminas\View\Helper\Placeholder;
 use Laminas\View\HelperPluginManager;
 
-class IrhpPermitAdminFurnitureTest extends TestCase
+final class IrhpPermitAdminFurnitureTest extends TestCase
 {
     /**
      * @var IrhpPermitAdminFurniture
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new IrhpPermitAdminFurniture();
@@ -121,13 +122,11 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut->onIrhpPermitAdminFurniture($event);
     }
 
-    public static function dpNoAdditionalNavProvider(): array
+    public static function dpNoAdditionalNavProvider(): \Iterator
     {
-        return [
-            [Refdata::ECMT_PERMIT_TYPE_ID],
-            [Refdata::IRHP_BILATERAL_PERMIT_TYPE_ID],
-            [Refdata::ECMT_SHORT_TERM_PERMIT_TYPE_ID],
-        ];
+        yield [Refdata::ECMT_PERMIT_TYPE_ID];
+        yield [Refdata::IRHP_BILATERAL_PERMIT_TYPE_ID];
+        yield [Refdata::ECMT_SHORT_TERM_PERMIT_TYPE_ID];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpWithAdditionalNavProvider')]
@@ -163,13 +162,11 @@ class IrhpPermitAdminFurnitureTest extends TestCase
         $this->sut->onIrhpPermitAdminFurniture($event);
     }
 
-    public static function dpWithAdditionalNavProvider(): array
+    public static function dpWithAdditionalNavProvider(): \Iterator
     {
-        return [
-            [Refdata::IRHP_MULTILATERAL_PERMIT_TYPE_ID],
-            [Refdata::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID],
-            [Refdata::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID],
-        ];
+        yield [Refdata::IRHP_MULTILATERAL_PERMIT_TYPE_ID];
+        yield [Refdata::CERT_ROADWORTHINESS_TRAILER_PERMIT_TYPE_ID];
+        yield [Refdata::CERT_ROADWORTHINESS_VEHICLE_PERMIT_TYPE_ID];
     }
 
     public function testOnIrhpPermitAdminRemovals(): void

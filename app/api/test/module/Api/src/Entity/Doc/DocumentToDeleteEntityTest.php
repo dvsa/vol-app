@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Doc\DocumentToDelete as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class DocumentToDeleteEntityTest extends EntityTester
+final class DocumentToDeleteEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

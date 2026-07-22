@@ -11,7 +11,7 @@ use Dvsa\Olcs\Cli\Domain\Command\Permits\MarkSuccessfulDaPermitApplications;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class MarkSuccessfulDaPermitApplicationsTest extends \PHPUnit\Framework\TestCase
+final class MarkSuccessfulDaPermitApplicationsTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {
@@ -21,6 +21,6 @@ class MarkSuccessfulDaPermitApplicationsTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals(7, $sut->getStockId());
+        $this->assertEquals(7, $sut->getStockId());
     }
 }

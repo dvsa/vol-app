@@ -13,7 +13,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class AnnotationBuilderFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AnnotationBuilder
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): AnnotationBuilder
     {
         $service = new AnnotationBuilder();
         $service->setFilterManager($container->get('FilterManager'));

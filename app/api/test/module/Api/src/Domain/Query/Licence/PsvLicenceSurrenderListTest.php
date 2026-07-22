@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Query\Licence\PsvLicenceSurrenderList;
 /**
  * ContinuationNotSoughtList test
  */
-class PsvLicenceSurrenderListTest extends \PHPUnit\Framework\TestCase
+final class PsvLicenceSurrenderListTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

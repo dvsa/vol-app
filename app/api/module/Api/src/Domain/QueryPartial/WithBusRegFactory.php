@@ -25,7 +25,7 @@ class WithBusRegFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): WithBusReg
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): WithBusReg
     {
         return new WithBusReg(
             $container->get('QueryPartialServiceManager')->get('with')

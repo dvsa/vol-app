@@ -23,7 +23,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdatePeriod as Command;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class UpdatePeriodTest extends AbstractCommandHandlerTestCase
+final class UpdatePeriodTest extends AbstractCommandHandlerTestCase
 {
     public $command;
 

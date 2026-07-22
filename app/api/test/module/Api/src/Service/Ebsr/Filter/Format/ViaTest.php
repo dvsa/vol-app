@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase as TestCase;
  * Class ViaTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\Filter\Format
  */
-class ViaTest extends TestCase
+final class ViaTest extends TestCase
 {
     /**
      * @param $expected
@@ -26,13 +26,11 @@ class ViaTest extends TestCase
         $this->assertEquals($expected, $result['via']);
     }
 
-    public static function provideFilter(): array
+    public static function provideFilter(): \Iterator
     {
-        return [
-            ['via1, via2', ['via1', 'via2']],
-            ['via1', ['via1']],
-            ['via1', 'via1'],
-            [null, null]
-        ];
+        yield ['via1, via2', ['via1', 'via2']];
+        yield ['via1', ['via1']];
+        yield ['via1', 'via1'];
+        yield [null, null];
     }
 }

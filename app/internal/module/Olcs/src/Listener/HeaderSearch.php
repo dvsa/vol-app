@@ -205,7 +205,7 @@ class HeaderSearch implements ListenerAggregateInterface, FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): HeaderSearch
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): HeaderSearch
     {
         $this->setViewHelperManager($container->get('ViewHelperManager'));
         $this->setSearchService($container->get('DataServiceManager')->get(SearchService::class));

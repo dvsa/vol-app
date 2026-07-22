@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class PermitUsageGeneratorTest extends MockeryTestCase
+final class PermitUsageGeneratorTest extends MockeryTestCase
 {
     private $irhpPermitApplication;
 
@@ -26,10 +26,9 @@ class PermitUsageGeneratorTest extends MockeryTestCase
 
     private $questionText;
 
-    private $questionTextGenerator;
-
     private $permitUsageGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpPermitApplication = m::mock(IrhpPermitApplication::class);
@@ -41,12 +40,12 @@ class PermitUsageGeneratorTest extends MockeryTestCase
 
         $this->questionText = m::mock(QuestionText::class);
 
-        $this->questionTextGenerator = m::mock(QuestionTextGenerator::class);
-        $this->questionTextGenerator->shouldReceive('generate')
+        $questionTextGenerator = m::mock(QuestionTextGenerator::class);
+        $questionTextGenerator->shouldReceive('generate')
             ->with($this->qaContext)
             ->andReturn($this->questionText);
 
-        $this->permitUsageGenerator = new PermitUsageGenerator($this->questionTextGenerator);
+        $this->permitUsageGenerator = new PermitUsageGenerator($questionTextGenerator);
     }
 
     public function testGenerateOnePermitUsageAvailable(): void

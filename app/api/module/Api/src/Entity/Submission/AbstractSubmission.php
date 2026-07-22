@@ -22,21 +22,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="submission",
- *    indexes={
- *        @ORM\Index(name="ix_submission_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_submission_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_submission_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_submission_recipient_user_id", columns={"recipient_user_id"}),
- *        @ORM\Index(name="ix_submission_sender_user_id", columns={"sender_user_id"}),
- *        @ORM\Index(name="ix_submission_submission_type", columns={"submission_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'submission')]
+#[ORM\Index(name: 'ix_submission_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_submission_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_submission_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_submission_recipient_user_id', columns: ['recipient_user_id'])]
+#[ORM\Index(name: 'ix_submission_sender_user_id', columns: ['sender_user_id'])]
+#[ORM\Index(name: 'ix_submission_submission_type', columns: ['submission_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractSubmission implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -50,173 +46,155 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * SubmissionType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="submission_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'submission_type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $submissionType;
 
     /**
      * User that assigned a submission to a recipient
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="sender_user_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'sender_user_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $senderUser;
 
     /**
      * The user who must next action a submission
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="recipient_user_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'recipient_user_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $recipientUser;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Contains data for each submission section concatenated togather as a JSon string.
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="data_snapshot", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'data_snapshot', nullable: true)]
     protected $dataSnapshot;
 
     /**
      * Flag to prioratise submissions for recipient user
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="urgent", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'urgent', nullable: true)]
     protected $urgent;
 
     /**
      * Date submission was assigned
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="assigned_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'assigned_date', nullable: true)]
     protected $assignedDate;
 
     /**
      * Tc sla started
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="tc_sla_started", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'tc_sla_started', nullable: false, options: ['default' => 0])]
     protected $tcSlaStarted = 0;
 
     /**
      * Date all submission information was completed
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="information_complete_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'information_complete_date', nullable: true)]
     protected $informationCompleteDate;
 
     /**
      * Date submission completed, no further action required
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="closed_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'closed_date', nullable: true)]
     protected $closedDate;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", mappedBy="submission")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'submission')]
     protected $documents;
 
     /**
      * SlaTargetDates
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\SlaTargetDate", mappedBy="submission", cascade={"persist"}, indexBy="sla_id", orphanRemoval=true)
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\SlaTargetDate::class, mappedBy: 'submission', cascade: ['persist'], indexBy: 'sla_id', orphanRemoval: true)]
     protected $slaTargetDates;
 
     /**
      * SubmissionActions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Submission\SubmissionAction", mappedBy="submission")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\SubmissionAction::class, mappedBy: 'submission')]
     protected $submissionActions;
 
     /**
      * SubmissionSectionComments
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Submission\SubmissionSectionComment", mappedBy="submission")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\SubmissionSectionComment::class, mappedBy: 'submission')]
     protected $submissionSectionComments;
 
     /**

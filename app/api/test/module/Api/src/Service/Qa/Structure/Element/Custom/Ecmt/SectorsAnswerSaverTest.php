@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class SectorsAnswerSaverTest extends MockeryTestCase
+final class SectorsAnswerSaverTest extends MockeryTestCase
 {
     public function testSave(): void
     {

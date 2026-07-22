@@ -37,7 +37,7 @@ use Mockery as m;
 /**
  * Generate LetterInstance Test
  */
-class GenerateTest extends AbstractCommandHandlerTestCase
+final class GenerateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -111,8 +111,8 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         $result = $this->sut->handleCommand($command);
 
         $this->assertSame(999, $result->getId('letterInstance'));
-        $this->assertStringContainsString('Letter instance', $result->getMessages()[0]);
-        $this->assertStringContainsString('generated successfully', $result->getMessages()[0]);
+        $this->assertStringContainsString('Letter instance', (string) $result->getMessages()[0]);
+        $this->assertStringContainsString('generated successfully', (string) $result->getMessages()[0]);
 
         $this->assertNotNull($letterInstance->getReference());
         $this->assertStringStartsWith('LTR', $letterInstance->getReference());
@@ -599,7 +599,7 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         $messages = $result->getMessages();
         $warningFound = false;
         foreach ($messages as $msg) {
-            if (str_contains($msg, 'Required section "Introductory wording"')) {
+            if (str_contains((string) $msg, 'Required section "Introductory wording"')) {
                 $warningFound = true;
                 break;
             }
@@ -784,13 +784,13 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         // Section with a conditioned variant that requires GV + Variation + NI + choice 10
         $section = m::mock(LetterSectionEntity::class)->makePartial();
         $section->shouldReceive('getVariantForContext')
-            ->with(m::on(function ($context) {
+            ->with(m::on(
                 // Verify the context was built correctly from application and licence
-                return $context['goodsOrPsv'] === 'lcat_gv'
-                    && $context['isVariation'] === true
-                    && $context['isNi'] === true
-                    && $context['selectedChoiceIds'] === [10, 20];
-            }))
+                fn($context) => $context['goodsOrPsv'] === 'lcat_gv'
+                && $context['isVariation'] === true
+                && $context['isNi'] === true
+                && $context['selectedChoiceIds'] === [10, 20]
+            ))
             ->andReturnUsing(function () use ($sectionVersion) {
                 $variant = m::mock(LetterSectionVariantEntity::class)->makePartial();
                 $variant->shouldReceive('getCurrentVersion')->andReturn($sectionVersion);
@@ -988,15 +988,15 @@ class GenerateTest extends AbstractCommandHandlerTestCase
 
         $section = m::mock(LetterSectionEntity::class)->makePartial();
         $section->shouldReceive('getVariantForContext')
-            ->with(m::on(function ($context) {
+            ->with(m::on(
                 // When no application, goodsOrPsv comes from licence
                 // isVariation is null (no application)
                 // isNi comes from licence
-                return $context['goodsOrPsv'] === 'lcat_psv'
-                    && $context['isVariation'] === null
-                    && $context['isNi'] === true
-                    && $context['selectedChoiceIds'] === [];
-            }))
+                fn($context) => $context['goodsOrPsv'] === 'lcat_psv'
+                && $context['isVariation'] === null
+                && $context['isNi'] === true
+                && $context['selectedChoiceIds'] === []
+            ))
             ->andReturnUsing(function () use ($sectionVersion) {
                 $variant = m::mock(LetterSectionVariantEntity::class)->makePartial();
                 $variant->shouldReceive('getCurrentVersion')->andReturn($sectionVersion);

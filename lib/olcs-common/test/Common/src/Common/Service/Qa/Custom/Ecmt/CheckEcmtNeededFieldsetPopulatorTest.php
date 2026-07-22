@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Ecmt;
 
 use Common\Service\Qa\Custom\Ecmt\InfoIconAdder;
@@ -15,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class CheckEcmtNeededFieldsetPopulatorTest extends MockeryTestCase
+final class CheckEcmtNeededFieldsetPopulatorTest extends MockeryTestCase
 {
     public function testPopulate(): void
     {

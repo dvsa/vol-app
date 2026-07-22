@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see FormErrorsFactory
  */
-class FormErrorsFactoryTest extends MockeryTestCase
+final class FormErrorsFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

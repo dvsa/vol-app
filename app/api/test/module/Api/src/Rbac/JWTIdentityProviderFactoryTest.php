@@ -19,7 +19,7 @@ use Dvsa\OlcsTest\MocksServicesTrait;
  * Class JWTIdentityProviderFactoryTest
  * @see JWTIdentityProviderFactory
  */
-class JWTIdentityProviderFactoryTest extends MockeryTestCase
+final class JWTIdentityProviderFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
@@ -28,6 +28,7 @@ class JWTIdentityProviderFactoryTest extends MockeryTestCase
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();

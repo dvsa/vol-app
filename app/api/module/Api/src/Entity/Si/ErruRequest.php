@@ -11,23 +11,17 @@ use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
 
 /**
  * ErruRequest Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="erru_request",
- *    indexes={
- *        @ORM\Index(name="ix_erru_request_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_erru_request_response_user_id", columns={"response_user_id"}),
- *        @ORM\Index(name="ix_erru_request_member_state_code", columns={"member_state_code"}),
- *        @ORM\Index(name="ix_erru_request_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_erru_request_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_erru_request_msi_type", columns={"msi_type"}),
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_erru_request_workflow_id", columns={"workflow_id"}),
- *        @ORM\UniqueConstraint(name="uk_erru_request_case_id", columns={"case_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'erru_request')]
+#[ORM\Index(name: 'ix_erru_request_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_erru_request_response_user_id', columns: ['response_user_id'])]
+#[ORM\Index(name: 'ix_erru_request_member_state_code', columns: ['member_state_code'])]
+#[ORM\Index(name: 'ix_erru_request_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_erru_request_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_erru_request_msi_type', columns: ['msi_type'])]
+#[ORM\UniqueConstraint(name: 'uk_erru_request_workflow_id', columns: ['workflow_id'])]
+#[ORM\UniqueConstraint(name: 'uk_erru_request_case_id', columns: ['case_id'])]
+#[ORM\Entity]
 class ErruRequest extends AbstractErruRequest
 {
     public const DEFAULT_CASE_TYPE = 'erru_case_t_msinre'; //MSI with no response entered

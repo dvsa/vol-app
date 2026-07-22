@@ -7,6 +7,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -20,7 +22,7 @@ use Mockery as m;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class TaskIdentifierTest extends \PHPUnit\Framework\TestCase
+final class TaskIdentifierTest extends \PHPUnit\Framework\TestCase
 {
     protected $urlHelper;
 
@@ -41,9 +43,9 @@ class TaskIdentifierTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test link formatter
-     * @group taskIdentifier
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('taskIdentifier')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat(
         $data,
         $column,
@@ -66,288 +68,286 @@ class TaskIdentifierTest extends \PHPUnit\Framework\TestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            // Licence
-            0 => [
-                [
-                    'linkDisplay' => 'Unlinked',
-                    'linkType' => 'Licence',
-                    'linkId' => null
-                ],
-                [],
-                'lva-licence/overview',
-                'licence',
-                'Unlinked'
+        // Licence
+        yield 0 => [
+            [
+                'linkDisplay' => 'Unlinked',
+                'linkType' => 'Licence',
+                'linkId' => null
             ],
-            1 => [
-                [
-                    'linkDisplay' => 'P1234',
-                    'linkType' => 'Licence',
-                    'linkId' => 1,
-                ],
-                [],
-                'lva-licence/overview',
-                'licence',
-                '<a class="govuk-link" href="correctUrl">P1234</a>'
+            [],
+            'lva-licence/overview',
+            'licence',
+            'Unlinked'
+        ];
+        yield 1 => [
+            [
+                'linkDisplay' => 'P1234',
+                'linkType' => 'Licence',
+                'linkId' => 1,
             ],
-            3 => [
-                [
-                    'linkDisplay' => 'P1234',
-                    'linkType' => 'Licence',
-                    'linkId' => 1,
-                ],
-                [],
-                'lva-licence/overview',
-                'licence',
-                '<a class="govuk-link" href="correctUrl">P1234</a>'
+            [],
+            'lva-licence/overview',
+            'licence',
+            '<a class="govuk-link" href="correctUrl">P1234</a>'
+        ];
+        yield 3 => [
+            [
+                'linkDisplay' => 'P1234',
+                'linkType' => 'Licence',
+                'linkId' => 1,
             ],
-            4 => [
-                [
-                    'linkDisplay' => 'P1234',
-                    'linkType' => '',
-                    'linkId' => 1,
-                ],
-                [],
-                'lva-licence/overview',
-                'licence',
-                '<a class="govuk-link" href="#">P1234</a>'
+            [],
+            'lva-licence/overview',
+            'licence',
+            '<a class="govuk-link" href="correctUrl">P1234</a>'
+        ];
+        yield 4 => [
+            [
+                'linkDisplay' => 'P1234',
+                'linkType' => '',
+                'linkId' => 1,
             ],
-            // Application
-            5 => [
-                [
-                    'linkDisplay' => 'Unlinked',
-                    'linkType' => 'Application',
-                    'linkId' => null
-                ],
-                [],
-                'lva-application/overview',
-                'application',
-                'Unlinked'
+            [],
+            'lva-licence/overview',
+            'licence',
+            '<a class="govuk-link" href="#">P1234</a>'
+        ];
+        // Application
+        yield 5 => [
+            [
+                'linkDisplay' => 'Unlinked',
+                'linkType' => 'Application',
+                'linkId' => null
             ],
-            6 => [
-                [
-                    'linkDisplay' => 'P1234',
-                    'linkType' => 'Application',
-                    'linkId' => 1,
-                ],
-                [],
-                'lva-application/overview',
-                'application',
-                '<a class="govuk-link" href="correctUrl">P1234</a>'
+            [],
+            'lva-application/overview',
+            'application',
+            'Unlinked'
+        ];
+        yield 6 => [
+            [
+                'linkDisplay' => 'P1234',
+                'linkType' => 'Application',
+                'linkId' => 1,
             ],
-            7 => [
-                [
-                    'linkDisplay' => 'P1234',
-                    'linkType' => '',
-                    'linkId' => 1,
-                ],
-                [],
-                'lva-application/overview',
-                'application',
-                '<a class="govuk-link" href="#">P1234</a>'
+            [],
+            'lva-application/overview',
+            'application',
+            '<a class="govuk-link" href="correctUrl">P1234</a>'
+        ];
+        yield 7 => [
+            [
+                'linkDisplay' => 'P1234',
+                'linkType' => '',
+                'linkId' => 1,
             ],
-            // Transport Manager
-            8 => [
-                [
-                    'linkDisplay' => 'Unlinked',
-                    'linkType' => 'Transport Manager',
-                    'linkId' => null,
-                ],
-                [],
-                'lva-application/overview',
-                'application',
-                'Unlinked'
+            [],
+            'lva-application/overview',
+            'application',
+            '<a class="govuk-link" href="#">P1234</a>'
+        ];
+        // Transport Manager
+        yield 8 => [
+            [
+                'linkDisplay' => 'Unlinked',
+                'linkType' => 'Transport Manager',
+                'linkId' => null,
             ],
-            9 => [
-                [
-                    'linkDisplay' => '1234',
-                    'linkType' => 'Transport Manager',
-                    'linkId' => 1,
-                ],
-                [],
-                'transport-manager/details',
-                'transportManager',
-                '<a class="govuk-link" href="correctUrl">1234</a>'
+            [],
+            'lva-application/overview',
+            'application',
+            'Unlinked'
+        ];
+        yield 9 => [
+            [
+                'linkDisplay' => '1234',
+                'linkType' => 'Transport Manager',
+                'linkId' => 1,
             ],
-            10 => [
-                [
-                    'linkDisplay' => '1234',
-                    'linkType' => '',
-                    'linkId' => 1,
-                ],
-                [],
-                'transport-manager/details',
-                'transportManager',
-                '<a class="govuk-link" href="#">1234</a>'
+            [],
+            'transport-manager/details',
+            'transportManager',
+            '<a class="govuk-link" href="correctUrl">1234</a>'
+        ];
+        yield 10 => [
+            [
+                'linkDisplay' => '1234',
+                'linkType' => '',
+                'linkId' => 1,
             ],
-            // Bus Registration
-            11 => [
-                [
-                    'linkDisplay' => 'Unlinked',
-                    'linkType' => 'Bus Registration',
-                    'linkId' => null,
-                ],
-                [],
-                'licence/bus-details',
-                'busRegId',
-                'Unlinked'
+            [],
+            'transport-manager/details',
+            'transportManager',
+            '<a class="govuk-link" href="#">1234</a>'
+        ];
+        // Bus Registration
+        yield 11 => [
+            [
+                'linkDisplay' => 'Unlinked',
+                'linkType' => 'Bus Registration',
+                'linkId' => null,
             ],
-            12 => [
-                [
-                    'linkDisplay' => 'P1234/123',
-                    'linkType' => 'Bus Registration',
-                    'linkId' => 99,
-                    'licenceId' => 110
-                ],
-                [],
-                'licence/bus-details',
-                'busRegId',
-                '<a class="govuk-link" href="correctUrl">P1234/123</a>',
-                ['licence' => 110] // additional route param needed
+            [],
+            'licence/bus-details',
+            'busRegId',
+            'Unlinked'
+        ];
+        yield 12 => [
+            [
+                'linkDisplay' => 'P1234/123',
+                'linkType' => 'Bus Registration',
+                'linkId' => 99,
+                'licenceId' => 110
             ],
-            13 => [
-                [
-                    'linkDisplay' => 'P1234/123',
-                    'linkType' => '',
-                    'linkId' => 99,
-                    'licenceId' => 110
-                ],
-                [],
-                'licence/bus-details',
-                'busRegId',
-                '<a class="govuk-link" href="#">P1234/123</a>',
-                ['licence' => 110]
+            [],
+            'licence/bus-details',
+            'busRegId',
+            '<a class="govuk-link" href="correctUrl">P1234/123</a>',
+            ['licence' => 110] // additional route param needed
+        ];
+        yield 13 => [
+            [
+                'linkDisplay' => 'P1234/123',
+                'linkType' => '',
+                'linkId' => 99,
+                'licenceId' => 110
             ],
-            // Case
-            14 => [
-                [
-                    'linkDisplay' => 'Unlinked',
-                    'linkType' => 'Case',
-                    'linkId' => null,
-                ],
-                [],
-                'case',
-                'case',
-                'Unlinked'
+            [],
+            'licence/bus-details',
+            'busRegId',
+            '<a class="govuk-link" href="#">P1234/123</a>',
+            ['licence' => 110]
+        ];
+        // Case
+        yield 14 => [
+            [
+                'linkDisplay' => 'Unlinked',
+                'linkType' => 'Case',
+                'linkId' => null,
             ],
-            15 => [
-                [
-                    'linkDisplay' => '1234',
-                    'linkType' => 'Case',
-                    'linkId' => 99,
-                ],
-                [],
-                'case',
-                'case',
-                '<a class="govuk-link" href="correctUrl">1234</a>',
+            [],
+            'case',
+            'case',
+            'Unlinked'
+        ];
+        yield 15 => [
+            [
+                'linkDisplay' => '1234',
+                'linkType' => 'Case',
+                'linkId' => 99,
             ],
-            16 => [
-                [
-                    'linkDisplay' => '1234',
-                    'linkType' => '',
-                    'linkId' => 99,
-                ],
-                [],
-                'case',
-                'case',
-                '<a class="govuk-link" href="#">1234</a>',
+            [],
+            'case',
+            'case',
+            '<a class="govuk-link" href="correctUrl">1234</a>',
+        ];
+        yield 16 => [
+            [
+                'linkDisplay' => '1234',
+                'linkType' => '',
+                'linkId' => 99,
             ],
-            // IRFO Organisation
-            17 => [
-                [
-                    'linkDisplay' => 'Unlinked',
-                    'linkType' => 'IRFO Organisation',
-                    'linkId' => null,
-                ],
-                [],
-                'operator/business-details',
-                'organisation',
-                'Unlinked'
+            [],
+            'case',
+            'case',
+            '<a class="govuk-link" href="#">1234</a>',
+        ];
+        // IRFO Organisation
+        yield 17 => [
+            [
+                'linkDisplay' => 'Unlinked',
+                'linkType' => 'IRFO Organisation',
+                'linkId' => null,
             ],
-            18 => [
-                [
-                    'linkDisplay' => '1234',
-                    'linkType' => 'IRFO Organisation',
-                    'linkId' => 99,
-                ],
-                [],
-                'operator/business-details',
-                'organisation',
-                '<a class="govuk-link" href="correctUrl">1234</a>',
+            [],
+            'operator/business-details',
+            'organisation',
+            'Unlinked'
+        ];
+        yield 18 => [
+            [
+                'linkDisplay' => '1234',
+                'linkType' => 'IRFO Organisation',
+                'linkId' => 99,
             ],
-            19 => [
-                [
-                    'linkDisplay' => '1234',
-                    'linkType' => '',
-                    'linkId' => 99,
-                ],
-                [],
-                'operator/business-details',
-                'organisation',
-                '<a class="govuk-link" href="#">1234</a>',
+            [],
+            'operator/business-details',
+            'organisation',
+            '<a class="govuk-link" href="correctUrl">1234</a>',
+        ];
+        yield 19 => [
+            [
+                'linkDisplay' => '1234',
+                'linkType' => '',
+                'linkId' => 99,
             ],
-            // Submission
-            20 => [
-                [
-                    'linkDisplay' => 'Unlinked',
-                    'linkType' => 'Submission',
-                    'linkId' => null,
-                    'caseId' => 5
-                ],
-                [],
-                'submission',
-                'submission',
-                'Unlinked',
-                ['case' => 5, 'action' => 'details']
+            [],
+            'operator/business-details',
+            'organisation',
+            '<a class="govuk-link" href="#">1234</a>',
+        ];
+        // Submission
+        yield 20 => [
+            [
+                'linkDisplay' => 'Unlinked',
+                'linkType' => 'Submission',
+                'linkId' => null,
+                'caseId' => 5
             ],
-            21 => [
-                [
-                    'linkDisplay' => '1234/5',
-                    'linkType' => 'Submission',
-                    'linkId' => 99,
-                    'caseId' => 5
-                ],
-                [],
-                'submission',
-                'submission',
-                '<a class="govuk-link" href="correctUrl">1234/5</a>',
-                ['case' => 5, 'action' => 'details']
+            [],
+            'submission',
+            'submission',
+            'Unlinked',
+            ['case' => 5, 'action' => 'details']
+        ];
+        yield 21 => [
+            [
+                'linkDisplay' => '1234/5',
+                'linkType' => 'Submission',
+                'linkId' => 99,
+                'caseId' => 5
             ],
-            22 => [
-                [
-                    'linkDisplay' => '1234/5',
-                    'linkType' => '',
-                    'linkId' => 99,
-                    'caseId' => 5
-                ],
-                [],
-                'submission',
-                'submission',
-                '<a class="govuk-link" href="#">1234/5</a>',
-                ['case' => 5, 'action' => 'details']
+            [],
+            'submission',
+            'submission',
+            '<a class="govuk-link" href="correctUrl">1234/5</a>',
+            ['case' => 5, 'action' => 'details']
+        ];
+        yield 22 => [
+            [
+                'linkDisplay' => '1234/5',
+                'linkType' => '',
+                'linkId' => 99,
+                'caseId' => 5
             ],
-            // Permits
-            23 => [
-                [
-                    'linkDisplay' => 'OG4569803/6',
-                    'linkType' => 'Permit Application',
-                    'linkId' => 6,
-                    'licenceId' => 106,
-                ],
-                [],
-                'licence/irhp-application/application',
-                'irhpAppId',
-                '<a class="govuk-link" href="correctUrl">OG4569803/6</a>',
-                [
-                    'irhpAppId' => 6,
-                    'licence' => 106,
-                    'action' => 'edit'
-                ]
+            [],
+            'submission',
+            'submission',
+            '<a class="govuk-link" href="#">1234/5</a>',
+            ['case' => 5, 'action' => 'details']
+        ];
+        // Permits
+        yield 23 => [
+            [
+                'linkDisplay' => 'OG4569803/6',
+                'linkType' => 'Permit Application',
+                'linkId' => 6,
+                'licenceId' => 106,
             ],
+            [],
+            'licence/irhp-application/application',
+            'irhpAppId',
+            '<a class="govuk-link" href="correctUrl">OG4569803/6</a>',
+            [
+                'irhpAppId' => 6,
+                'licence' => 106,
+                'action' => 'edit'
+            ]
         ];
     }
 }

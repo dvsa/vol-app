@@ -116,7 +116,7 @@ class FeeTypeList extends AbstractQueryHandler
      *
      * @return array
      */
-    private function filterDuplicates($feeTypes, TrafficArea $trafficArea = null)
+    private function filterDuplicates($feeTypes, ?TrafficArea $trafficArea = null)
     {
         $filtered = [];
 

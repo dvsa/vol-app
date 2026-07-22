@@ -15,7 +15,7 @@ use LmcRbacMvc\Identity\IdentityProviderInterface;
 class ValidateControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ValidateController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ValidateController
     {
         $identityProvider = $container->get(IdentityProviderInterface::class);
         return new ValidateController($identityProvider);

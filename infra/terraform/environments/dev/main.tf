@@ -103,7 +103,9 @@ locals {
       ]
       resources = [
         "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3",
-        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*"
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*",
+        "arn:aws:s3:::devapp-olcs-pri-integration-dva-s3",
+        "arn:aws:s3:::devapp-olcs-pri-integration-dva-s3/*"
       ]
     },
     {
@@ -269,6 +271,8 @@ module "service" {
   environment = "dev"
 
   legacy_environment = "DEV"
+
+  dva_ni_export_s3uri = module.parameters.dva_ni_export_s3uri
 
   domain_env = "dev"
 
@@ -736,6 +740,13 @@ module "service" {
       },
     ]
   }
+}
+
+module "idp" {
+  source = "../../modules/idp"
+
+  environment           = "dev"
+  documents_bucket_name = "olcs-devappdev-base-sabredav"
 }
 
 resource "null_resource" "deployed_versions" {

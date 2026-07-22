@@ -10,11 +10,16 @@
          failOnRisky="true"
          failOnIncomplete="true"
          failOnSkipped="true"
+         failOnPhpunitDeprecation="true"
+         failOnPhpunitNotice="true"
+         failOnPhpunitWarning="true"
          displayDetailsOnTestsThatTriggerDeprecations="true"
          displayDetailsOnTestsThatTriggerNotices="true"
          displayDetailsOnTestsThatTriggerWarnings="true"
          displayDetailsOnIncompleteTests="true"
          displayDetailsOnSkippedTests="true"
+         displayDetailsOnPhpunitDeprecations="true"
+         displayDetailsOnPhpunitNotices="true"
 >
   <php>
     <ini name="date.timezone" value="UTC"/>
@@ -26,4 +31,11 @@
     </testsuite>
   </testsuites>
   <logging/>
+  <!-- failOnDeprecation applies to first-party module/ code only; PHP 8.4
+       deprecations raised inside third-party vendor/ packages don't fail the suite. -->
+  <source ignoreIndirectDeprecations="true">
+    <include>
+      <directory>module</directory>
+    </include>
+  </source>
 </phpunit>

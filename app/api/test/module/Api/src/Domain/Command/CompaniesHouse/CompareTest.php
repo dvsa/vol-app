@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\CompaniesHouse\Compare;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class CompareTest extends \PHPUnit\Framework\TestCase
+final class CompareTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

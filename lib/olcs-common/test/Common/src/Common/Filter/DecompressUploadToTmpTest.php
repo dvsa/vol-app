@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Filter;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -13,9 +15,9 @@ use Mockery as m;
  * same namespace.
  *
  * @package CommonTest\Filter
- * @group UnsafeMocking
  */
-class DecompressUploadToTmpTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\Group('UnsafeMocking')]
+final class DecompressUploadToTmpTest extends MockeryTestCase
 {
     public function testFilter(): void
     {

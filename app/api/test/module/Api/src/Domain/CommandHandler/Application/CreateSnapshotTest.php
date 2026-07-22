@@ -28,7 +28,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateSnapshotTest extends AbstractCommandHandlerTestCase
+final class CreateSnapshotTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -157,130 +157,128 @@ class CreateSnapshotTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [
-                'isVariation' => false,
-                'isGoods' => true,
-                'isRealUpgrade' => true,
-                'isSpecialRestricted' => false,
-                'event' => Cmd::ON_GRANT,
-                'fileName' => 'GV79 Application 111 Snapshot Grant.html',
-                'description' => 'GV79 Application 111 Snapshot (at grant/valid)',
-                'subCategory' => 14,
-                'isExternal' => false,
-            ],
-            [
-                'isVariation' => false,
-                'isGoods' => false,
-                'isRealUpgrade' => true,
-                'isSpecialRestricted' => true,
-                'event' => Cmd::ON_GRANT,
-                'fileName' => 'PSV356 Application 111 Snapshot Grant.html',
-                'description' => 'PSV356 Application 111 Snapshot (at grant/valid)',
-                'subCategory' => 14,
-                'isExternal' => false,
-            ],
-            [
-                'isVariation' => false,
-                'isGoods' => false,
-                'isRealUpgrade' => true,
-                'isSpecialRestricted' => false,
-                'event' => Cmd::ON_GRANT,
-                'fileName' => 'PSV421 Application 111 Snapshot Grant.html',
-                'description' => 'PSV421 Application 111 Snapshot (at grant/valid)',
-                'subCategory' => 14,
-                'isExternal' => false,
-            ],
-            [
-                'isVariation' => true,
-                'isGoods' => true,
-                'isRealUpgrade' => true,
-                'isSpecialRestricted' => false,
-                'event' => Cmd::ON_GRANT,
-                'fileName' => 'GV80A Application 111 Snapshot Grant.html',
-                'description' => 'GV80A Application 111 Snapshot (at grant/valid)',
-                'subCategory' => 14,
-                'isExternal' => false,
-            ],
-            [
-                'isVariation' => true,
-                'isGoods' => true,
-                'isRealUpgrade' => false,
-                'isSpecialRestricted' => false,
-                'event' => Cmd::ON_GRANT,
-                'fileName' => 'GV81 Application 111 Snapshot Grant.html',
-                'description' => 'GV81 Application 111 Snapshot (at grant/valid)',
-                'subCategory' => 14,
-                'isExternal' => false,
-            ],
-            [
-                'isVariation' => true,
-                'isGoods' => false,
-                'isRealUpgrade' => true,
-                'isSpecialRestricted' => false,
-                'event' => Cmd::ON_GRANT,
-                'fileName' => 'PSV431A Application 111 Snapshot Grant.html',
-                'description' => 'PSV431A Application 111 Snapshot (at grant/valid)',
-                'subCategory' => 14,
-                'isExternal' => false,
-            ],
-            [
-                'isVariation' => true,
-                'isGoods' => false,
-                'isRealUpgrade' => false,
-                'isSpecialRestricted' => false,
-                'event' => Cmd::ON_GRANT,
-                'fileName' => 'PSV431 Application 111 Snapshot Grant.html',
-                'description' => 'PSV431 Application 111 Snapshot (at grant/valid)',
-                'subCategory' => 14,
-                'isExternal' => false,
-            ],
-            [
-                'isVariation' => false,
-                'isGoods' => true,
-                'isRealUpgrade' => true,
-                'isSpecialRestricted' => false,
-                'event' => Cmd::ON_SUBMIT,
-                'fileName' => 'GV79 Application 111 Snapshot Submit.html',
-                'description' => 'GV79 Application 111 Snapshot (at submission)',
-                'subCategory' => 15,
-                'isExternal' => true,
-            ],
-            [
-                'isVariation' => false,
-                'isGoods' => true,
-                'isRealUpgrade' => true,
-                'isSpecialRestricted' => false,
-                'event' => Cmd::ON_REFUSE,
-                'fileName' => 'GV79 Application 111 Snapshot Refuse.html',
-                'description' => 'GV79 Application 111 Snapshot (at refuse)',
-                'subCategory' => 14,
-                'isExternal' => false,
-            ],
-            [
-                'isVariation' => false,
-                'isGoods' => true,
-                'isRealUpgrade' => true,
-                'isSpecialRestricted' => false,
-                'event' => Cmd::ON_WITHDRAW,
-                'fileName' => 'GV79 Application 111 Snapshot Withdraw.html',
-                'description' => 'GV79 Application 111 Snapshot (at withdraw)',
-                'subCategory' => 14,
-                'isExternal' => false,
-            ],
-            [
-                'isVariation' => false,
-                'isGoods' => true,
-                'isRealUpgrade' => true,
-                'isSpecialRestricted' => false,
-                'event' => Cmd::ON_NTU,
-                'fileName' => 'GV79 Application 111 Snapshot NTU.html',
-                'description' => 'GV79 Application 111 Snapshot (at NTU)',
-                'subCategory' => 14,
-                'isExternal' => false,
-            ],
+        yield [
+            'isVariation' => false,
+            'isGoods' => true,
+            'isRealUpgrade' => true,
+            'isSpecialRestricted' => false,
+            'event' => Cmd::ON_GRANT,
+            'fileName' => 'GV79 Application 111 Snapshot Grant.html',
+            'description' => 'GV79 Application 111 Snapshot (at grant/valid)',
+            'subCategory' => 14,
+            'isExternal' => false,
+        ];
+        yield [
+            'isVariation' => false,
+            'isGoods' => false,
+            'isRealUpgrade' => true,
+            'isSpecialRestricted' => true,
+            'event' => Cmd::ON_GRANT,
+            'fileName' => 'PSV356 Application 111 Snapshot Grant.html',
+            'description' => 'PSV356 Application 111 Snapshot (at grant/valid)',
+            'subCategory' => 14,
+            'isExternal' => false,
+        ];
+        yield [
+            'isVariation' => false,
+            'isGoods' => false,
+            'isRealUpgrade' => true,
+            'isSpecialRestricted' => false,
+            'event' => Cmd::ON_GRANT,
+            'fileName' => 'PSV421 Application 111 Snapshot Grant.html',
+            'description' => 'PSV421 Application 111 Snapshot (at grant/valid)',
+            'subCategory' => 14,
+            'isExternal' => false,
+        ];
+        yield [
+            'isVariation' => true,
+            'isGoods' => true,
+            'isRealUpgrade' => true,
+            'isSpecialRestricted' => false,
+            'event' => Cmd::ON_GRANT,
+            'fileName' => 'GV80A Application 111 Snapshot Grant.html',
+            'description' => 'GV80A Application 111 Snapshot (at grant/valid)',
+            'subCategory' => 14,
+            'isExternal' => false,
+        ];
+        yield [
+            'isVariation' => true,
+            'isGoods' => true,
+            'isRealUpgrade' => false,
+            'isSpecialRestricted' => false,
+            'event' => Cmd::ON_GRANT,
+            'fileName' => 'GV81 Application 111 Snapshot Grant.html',
+            'description' => 'GV81 Application 111 Snapshot (at grant/valid)',
+            'subCategory' => 14,
+            'isExternal' => false,
+        ];
+        yield [
+            'isVariation' => true,
+            'isGoods' => false,
+            'isRealUpgrade' => true,
+            'isSpecialRestricted' => false,
+            'event' => Cmd::ON_GRANT,
+            'fileName' => 'PSV431A Application 111 Snapshot Grant.html',
+            'description' => 'PSV431A Application 111 Snapshot (at grant/valid)',
+            'subCategory' => 14,
+            'isExternal' => false,
+        ];
+        yield [
+            'isVariation' => true,
+            'isGoods' => false,
+            'isRealUpgrade' => false,
+            'isSpecialRestricted' => false,
+            'event' => Cmd::ON_GRANT,
+            'fileName' => 'PSV431 Application 111 Snapshot Grant.html',
+            'description' => 'PSV431 Application 111 Snapshot (at grant/valid)',
+            'subCategory' => 14,
+            'isExternal' => false,
+        ];
+        yield [
+            'isVariation' => false,
+            'isGoods' => true,
+            'isRealUpgrade' => true,
+            'isSpecialRestricted' => false,
+            'event' => Cmd::ON_SUBMIT,
+            'fileName' => 'GV79 Application 111 Snapshot Submit.html',
+            'description' => 'GV79 Application 111 Snapshot (at submission)',
+            'subCategory' => 15,
+            'isExternal' => true,
+        ];
+        yield [
+            'isVariation' => false,
+            'isGoods' => true,
+            'isRealUpgrade' => true,
+            'isSpecialRestricted' => false,
+            'event' => Cmd::ON_REFUSE,
+            'fileName' => 'GV79 Application 111 Snapshot Refuse.html',
+            'description' => 'GV79 Application 111 Snapshot (at refuse)',
+            'subCategory' => 14,
+            'isExternal' => false,
+        ];
+        yield [
+            'isVariation' => false,
+            'isGoods' => true,
+            'isRealUpgrade' => true,
+            'isSpecialRestricted' => false,
+            'event' => Cmd::ON_WITHDRAW,
+            'fileName' => 'GV79 Application 111 Snapshot Withdraw.html',
+            'description' => 'GV79 Application 111 Snapshot (at withdraw)',
+            'subCategory' => 14,
+            'isExternal' => false,
+        ];
+        yield [
+            'isVariation' => false,
+            'isGoods' => true,
+            'isRealUpgrade' => true,
+            'isSpecialRestricted' => false,
+            'event' => Cmd::ON_NTU,
+            'fileName' => 'GV79 Application 111 Snapshot NTU.html',
+            'description' => 'GV79 Application 111 Snapshot (at NTU)',
+            'subCategory' => 14,
+            'isExternal' => false,
         ];
     }
 }

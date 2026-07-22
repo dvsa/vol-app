@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateTaxiPhvStatus;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateTaxiPhvStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateTaxiPhvStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

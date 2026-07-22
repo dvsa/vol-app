@@ -23,7 +23,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class FeeTest extends QueryHandlerTestCase
+final class FeeTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

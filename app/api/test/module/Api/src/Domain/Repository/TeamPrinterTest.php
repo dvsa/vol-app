@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Domain\Repository\TeamPrinter as TeamPrinterRepo;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TeamPrinterTest extends RepositoryTestCase
+final class TeamPrinterTest extends RepositoryTestCase
 {
     public function testFetchByDetails(): void
     {

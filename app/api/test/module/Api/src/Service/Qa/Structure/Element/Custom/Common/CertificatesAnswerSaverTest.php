@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class CertificatesAnswerSaverTest extends MockeryTestCase
+final class CertificatesAnswerSaverTest extends MockeryTestCase
 {
     public function testSave(): void
     {

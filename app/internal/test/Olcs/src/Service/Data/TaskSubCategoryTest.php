@@ -8,7 +8,7 @@ use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 use Olcs\Service\Data\TaskSubCategory;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\TaskSubCategory::class)]
-class TaskSubCategoryTest extends AbstractListDataServiceTestCase
+final class TaskSubCategoryTest extends AbstractListDataServiceTestCase
 {
     /** @var TaskSubCategory */
     private $sut;
@@ -22,6 +22,6 @@ class TaskSubCategoryTest extends AbstractListDataServiceTestCase
 
     public function testFetchListData(): void
     {
-        static::assertEquals(TaskSubCategory::TYPE_IS_TASK, $this->sut->getCategoryType());
+        $this->assertEquals(TaskSubCategory::TYPE_IS_TASK, $this->sut->getCategoryType());
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Util;
 
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
@@ -18,13 +20,14 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DtoTest extends MockeryTestCase
+final class DtoTest extends MockeryTestCase
 {
     /**
      * @var AnnotationBuilder
      */
     protected $annotationBuilder;
 
+    #[\Override]
     public function setUp(): void
     {
         $annotationBuilder = new AnnotationBuilder();
@@ -67,7 +70,7 @@ class DtoTest extends MockeryTestCase
         }
 
         // Assert the exception here, as we expect to always throw an exception
-        $this->assertEquals('Validation has not yet occurred', $ex->getMessage());
+        $this->assertSame('Validation has not yet occurred', $ex->getMessage());
 
         $this->assertFalse($command->isValid());
 

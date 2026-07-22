@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Trailer\DeleteTrailer;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class DeleteTrailerTest extends AbstractHandlerTestCase
+final class DeleteTrailerTest extends AbstractHandlerTestCase
 {
     /**
      * @var DeleteTrailer
@@ -40,7 +40,7 @@ class DeleteTrailerTest extends AbstractHandlerTestCase
             ->with(Permission::INTERNAL_USER, null)->once()
             ->andReturn(true);
 
-        $this->assertSame(true, $this->sut->isValid($dto));
+        $this->assertTrue($this->sut->isValid($dto));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
@@ -65,13 +65,11 @@ class DeleteTrailerTest extends AbstractHandlerTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

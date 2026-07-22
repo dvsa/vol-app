@@ -10,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see AlertList
  */
-class AlertListTest extends MockeryTestCase
+final class AlertListTest extends MockeryTestCase
 {
     public function testStructure()
     {
@@ -26,8 +26,8 @@ class AlertListTest extends MockeryTestCase
             ]
         );
 
-        static::assertEquals($trafficAreas, $sut->getTrafficAreas());
-        static::assertFalse($sut->getIncludeClosed());
-        static::assertEquals($typeOfChange, $sut->getTypeOfChange());
+        $this->assertEquals($trafficAreas, $sut->getTrafficAreas());
+        $this->assertFalse($sut->getIncludeClosed());
+        $this->assertEquals($typeOfChange, $sut->getTypeOfChange());
     }
 }

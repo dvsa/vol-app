@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class AnswersSummaryRowsAdderTest extends MockeryTestCase
+final class AnswersSummaryRowsAdderTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
     public function testGenerate(mixed $isSnapshot): void
@@ -71,11 +71,9 @@ class AnswersSummaryRowsAdderTest extends MockeryTestCase
         $answersSummaryRowsAdder->addRows($answersSummary, $irhpApplicationEntity, $isSnapshot);
     }
 
-    public static function dpSnapshot(): array
+    public static function dpSnapshot(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 }

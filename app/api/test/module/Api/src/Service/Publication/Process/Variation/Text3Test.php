@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class Text3Test extends MockeryTestCase
+final class Text3Test extends MockeryTestCase
 {
     /**
      * @var \Dvsa\Olcs\Api\Service\Publication\Process\Variation\Text3
@@ -119,34 +119,32 @@ class Text3Test extends MockeryTestCase
         );
     }
 
-    public static function dpAuthorisationsWhereNoOperatingCentres(): array
+    public static function dpAuthorisationsWhereNoOperatingCentres(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'authorisation' => [
-                        'AUTHORISATION_TEXT1',
-                        'AUTHORISATION_TEXT2',
-                    ],
+                'authorisation' => [
+                    'AUTHORISATION_TEXT1',
+                    'AUTHORISATION_TEXT2',
                 ],
             ],
+        ];
+        yield [
             [
-                [
-                    'authorisation' => [
-                        'AUTHORISATION_TEXT1',
-                        'AUTHORISATION_TEXT2',
-                    ],
-                    'operatingCentres' => null,
+                'authorisation' => [
+                    'AUTHORISATION_TEXT1',
+                    'AUTHORISATION_TEXT2',
                 ],
+                'operatingCentres' => null,
             ],
+        ];
+        yield [
             [
-                [
-                    'authorisation' => [
-                        'AUTHORISATION_TEXT1',
-                        'AUTHORISATION_TEXT2',
-                    ],
-                    'operatingCentres' => [],
+                'authorisation' => [
+                    'AUTHORISATION_TEXT1',
+                    'AUTHORISATION_TEXT2',
                 ],
+                'operatingCentres' => [],
             ],
         ];
     }
@@ -173,17 +171,15 @@ class Text3Test extends MockeryTestCase
         );
     }
 
-    public static function dpAuthorisationsAndOperatingCentresWhereOneOrMoreOperatingCentres(): array
+    public static function dpAuthorisationsAndOperatingCentresWhereOneOrMoreOperatingCentres(): \Iterator
     {
-        return [
-            [
-                ['OC_LINE1'],
-                "LICENCE_ADDRESS\nOC_LINE1\nAUTHORISATION_TEXT1\nAUTHORISATION_TEXT2",
-            ],
-            [
-                ['OC_LINE1', 'OC_LINE2'],
-                "LICENCE_ADDRESS\nOC_LINE1\nOC_LINE2\nAUTHORISATION_TEXT1\nAUTHORISATION_TEXT2",
-            ],
+        yield [
+            ['OC_LINE1'],
+            "LICENCE_ADDRESS\nOC_LINE1\nAUTHORISATION_TEXT1\nAUTHORISATION_TEXT2",
+        ];
+        yield [
+            ['OC_LINE1', 'OC_LINE2'],
+            "LICENCE_ADDRESS\nOC_LINE1\nOC_LINE2\nAUTHORISATION_TEXT1\nAUTHORISATION_TEXT2",
         ];
     }
 
@@ -252,15 +248,13 @@ class Text3Test extends MockeryTestCase
         }
     }
 
-    public static function dataProviderTestUpgrade(): array
+    public static function dataProviderTestUpgrade(): \Iterator
     {
-        return [
-            [Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_STANDARD_NATIONAL, true],
-            [Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL, true],
-            [Licence::LICENCE_TYPE_STANDARD_NATIONAL, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL, true],
-            [Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_RESTRICTED, false],
-            [Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_SPECIAL_RESTRICTED, false],
-            [Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL, Licence::LICENCE_TYPE_STANDARD_NATIONAL, false],
-        ];
+        yield [Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_STANDARD_NATIONAL, true];
+        yield [Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL, true];
+        yield [Licence::LICENCE_TYPE_STANDARD_NATIONAL, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL, true];
+        yield [Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_RESTRICTED, false];
+        yield [Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_SPECIAL_RESTRICTED, false];
+        yield [Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL, Licence::LICENCE_TYPE_STANDARD_NATIONAL, false];
     }
 }

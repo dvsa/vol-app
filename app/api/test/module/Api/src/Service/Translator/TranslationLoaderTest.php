@@ -19,8 +19,9 @@ use Olcs\Logging\Log\Logger;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class TranslationLoaderTest extends MockeryTestCase
+final class TranslationLoaderTest extends MockeryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         Logger::setLogger(new \Psr\Log\NullLogger());
@@ -53,8 +54,8 @@ class TranslationLoaderTest extends MockeryTestCase
         $loader = new TranslationLoader($mockCache, $mockTranslationTextRepo, $mockReplacementRepo);
         $textDomain = $loader->load($locale, $textDomain);
 
-        self::assertInstanceOf(TextDomain::class, $textDomain);
-        self::assertSame($actualMessages, $textDomain->getArrayCopy());
+        $this->assertInstanceOf(TextDomain::class, $textDomain);
+        $this->assertSame($actualMessages, $textDomain->getArrayCopy());
     }
 
     /**
@@ -82,8 +83,8 @@ class TranslationLoaderTest extends MockeryTestCase
         $loader = new TranslationLoader($mockCache, $mockTranslationTextRepo, $mockReplacementRepo);
         $textDomain = $loader->load($locale, $textDomain);
 
-        self::assertInstanceOf(TextDomain::class, $textDomain);
-        self::assertSame($this->actualTranslations(), $textDomain->getArrayCopy());
+        $this->assertInstanceOf(TextDomain::class, $textDomain);
+        $this->assertSame($this->actualTranslations(), $textDomain->getArrayCopy());
     }
 
     /**
@@ -111,8 +112,8 @@ class TranslationLoaderTest extends MockeryTestCase
         $loader = new TranslationLoader($mockCache, $mockTranslationTextRepo, $mockReplacementRepo);
         $textDomain = $loader->load($locale, $textDomain);
 
-        self::assertInstanceOf(TextDomain::class, $textDomain);
-        self::assertSame($this->actualTranslations(), $textDomain->getArrayCopy());
+        $this->assertInstanceOf(TextDomain::class, $textDomain);
+        $this->assertSame($this->actualTranslations(), $textDomain->getArrayCopy());
     }
 
     /**
@@ -132,7 +133,7 @@ class TranslationLoaderTest extends MockeryTestCase
 
         $loader = new TranslationLoader($mockCache, $mockTranslationTextRepo, $mockReplacementRepo);
 
-        self::assertSame($replacements, $loader->loadReplacements());
+        $this->assertSame($replacements, $loader->loadReplacements());
     }
 
     /**
@@ -153,7 +154,7 @@ class TranslationLoaderTest extends MockeryTestCase
 
         $loader = new TranslationLoader($mockCache, $mockTranslationTextRepo, $mockReplacementRepo);
 
-        self::assertSame($this->actualReplacements(), $loader->loadReplacements());
+        $this->assertSame($this->actualReplacements(), $loader->loadReplacements());
     }
 
     /**
@@ -174,7 +175,7 @@ class TranslationLoaderTest extends MockeryTestCase
 
         $loader = new TranslationLoader($mockCache, $mockTranslationTextRepo, $mockReplacementRepo);
 
-        self::assertSame($this->actualReplacements(), $loader->loadReplacements());
+        $this->assertSame($this->actualReplacements(), $loader->loadReplacements());
     }
 
     private function dbTranslations(mixed $locale): array

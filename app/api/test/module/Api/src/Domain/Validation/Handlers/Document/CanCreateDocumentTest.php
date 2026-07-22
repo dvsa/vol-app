@@ -10,7 +10,7 @@ use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanCreateDocument;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanCreateDocument::class)]
-class CanCreateDocumentTest extends AbstractHandlerTestCase
+final class CanCreateDocumentTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanCreateDocument
@@ -186,23 +186,21 @@ class CanCreateDocumentTest extends AbstractHandlerTestCase
         }
     }
 
-    public static function dataProviderTestIsValidExtensionInternal(): array
+    public static function dataProviderTestIsValidExtensionInternal(): \Iterator
     {
-        return [
-            [true, 'jpg'],
-            [true, 'JPG'],
-            [true, 'JpG'],
-            [true, 'rtf'],
-            [true, 'pdf'],
-            [false, 'GIF'],
-            [false, 'gif'],
-            [false, 'pd'],
-            [false, 'pdfx'],
-            // internal specific
-            [true, 'INT'],
-            // external specific
-            [false, 'EXT'],
-        ];
+        yield [true, 'jpg'];
+        yield [true, 'JPG'];
+        yield [true, 'JpG'];
+        yield [true, 'rtf'];
+        yield [true, 'pdf'];
+        yield [false, 'GIF'];
+        yield [false, 'gif'];
+        yield [false, 'pd'];
+        yield [false, 'pdfx'];
+        // internal specific
+        yield [true, 'INT'];
+        // external specific
+        yield [false, 'EXT'];
     }
 
     /**
@@ -243,22 +241,20 @@ class CanCreateDocumentTest extends AbstractHandlerTestCase
         }
     }
 
-    public static function dataProviderTestIsValidExtensionExternal(): array
+    public static function dataProviderTestIsValidExtensionExternal(): \Iterator
     {
-        return [
-            [true, 'jpg'],
-            [true, 'JPG'],
-            [true, 'JpG'],
-            [true, 'rtf'],
-            [true, 'pdf'],
-            [false, 'GIF'],
-            [false, 'gif'],
-            [false, 'pd'],
-            [false, 'pdfx'],
-            // internal specific
-            [false, 'INT'],
-            // external specific
-            [true, 'EXT'],
-        ];
+        yield [true, 'jpg'];
+        yield [true, 'JPG'];
+        yield [true, 'JpG'];
+        yield [true, 'rtf'];
+        yield [true, 'pdf'];
+        yield [false, 'GIF'];
+        yield [false, 'gif'];
+        yield [false, 'pd'];
+        yield [false, 'pdfx'];
+        // internal specific
+        yield [false, 'INT'];
+        // external specific
+        yield [true, 'EXT'];
     }
 }

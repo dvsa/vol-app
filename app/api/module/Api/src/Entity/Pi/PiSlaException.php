@@ -6,10 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * PiSlaException
- *
- * @ORM\Entity
- * @ORM\Table(name="pi_sla_exception")
  */
+#[ORM\Table(name: 'pi_sla_exception')]
+#[ORM\Entity]
 class PiSlaException extends AbstractPiSlaException
 {
     /**

@@ -13,8 +13,9 @@ use Dvsa\Olcs\Api\Domain\Repository\TranslationKeyText as Repo;
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class TranslationKeyTextTest extends RepositoryTestCase
+final class TranslationKeyTextTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);
@@ -33,13 +34,13 @@ class TranslationKeyTextTest extends RepositoryTestCase
                 ->getMock()
         );
 
-        self::assertEquals(['RESULTS'], $this->sut->fetchByParentLanguage(1, 2));
+        $this->assertEquals(['RESULTS'], $this->sut->fetchByParentLanguage(1, 2));
 
         $expectedQuery = 'BLAH '
             . 'AND m.translationKey = [[1]] '
             . 'AND m.language = [[2]]';
 
-        self::assertEquals($expectedQuery, $this->query);
+        $this->assertEquals($expectedQuery, $this->query);
     }
 
     public function testFetchAll(): void
@@ -61,7 +62,7 @@ class TranslationKeyTextTest extends RepositoryTestCase
         $this->queryBuilder->expects('with')->with('language', 'l')->andReturnSelf();
         $this->queryBuilder->expects('modifyQuery')->with($mockQb)->andReturnSelf();
 
-        self::assertEquals(['RESULTS'], $this->sut->fetchAll($locale, $hydrationMode));
-        self::assertEquals($expectedQuery, $this->query);
+        $this->assertEquals(['RESULTS'], $this->sut->fetchAll($locale, $hydrationMode));
+        $this->assertEquals($expectedQuery, $this->query);
     }
 }

@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as Entity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ConditionsUndertakingsTest extends QueryHandlerTestCase
+final class ConditionsUndertakingsTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

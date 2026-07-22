@@ -23,7 +23,7 @@ class LicenceControllerFactory implements FactoryInterface
      * @return ApplicationController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LicenceController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);

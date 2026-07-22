@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Entity\Pi\Reason as ReasonEntity;
 /**
  * Create Agreed And Legislation Test
  */
-class CreateAgreedAndLegislationTest extends AbstractCommandHandlerTestCase
+final class CreateAgreedAndLegislationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

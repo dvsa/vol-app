@@ -19,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ConfirmPrintingTest extends AbstractCommandHandlerTestCase
+final class ConfirmPrintingTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

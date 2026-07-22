@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Api\Service\Nr\Filter\Format;
 use Dvsa\Olcs\Api\Service\Nr\Filter\Format\MemberStateCode;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Nr\Filter\Format\MemberStateCode::class)]
-class MemberStateCodeTest extends \PHPUnit\Framework\TestCase
+final class MemberStateCodeTest extends \PHPUnit\Framework\TestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFilter')]
     public function testFilter(mixed $value, mixed $expect): void
@@ -16,23 +16,18 @@ class MemberStateCodeTest extends \PHPUnit\Framework\TestCase
             'memberStateCode' => $value,
         ];
 
-        static::assertEquals(
-            [
-                'memberStateCode' => $expect,
-            ],
-            (new MemberStateCode())->filter($value)
-        );
+        $this->assertEquals([
+            'memberStateCode' => $expect,
+        ], new MemberStateCode()->filter($value));
     }
 
-    public static function dpTestFilter(): array
+    public static function dpTestFilter(): \Iterator
     {
-        return [
-            [
-                'value' => 'gb',
-                'expect' => 'gb',
-            ],
-            ['uk', 'GB'],
-            ['UK', 'GB'],
+        yield [
+            'value' => 'gb',
+            'expect' => 'gb',
         ];
+        yield ['uk', 'GB'];
+        yield ['UK', 'GB'];
     }
 }

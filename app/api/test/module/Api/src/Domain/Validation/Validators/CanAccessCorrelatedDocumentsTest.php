@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * Can Access Document Test
  */
-class CanAccessCorrelatedDocumentsTest extends AbstractValidatorsTestCase
+final class CanAccessCorrelatedDocumentsTest extends AbstractValidatorsTestCase
 {
     public $cache;
     /**

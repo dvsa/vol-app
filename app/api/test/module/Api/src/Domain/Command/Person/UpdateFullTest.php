@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Person\UpdateFull;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class UpdateFullTest extends \PHPUnit\Framework\TestCase
+final class UpdateFullTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

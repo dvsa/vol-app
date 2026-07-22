@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Type;
 
 use Mockery as m;
@@ -17,7 +19,7 @@ use Common\Service\Table\Type\CustomSelector;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class CustomSelectorTest extends MockeryTestCase
+final class CustomSelectorTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -31,9 +33,7 @@ class CustomSelectorTest extends MockeryTestCase
         $this->sut = new CustomSelector($this->table);
     }
 
-    /**
-     * @group checkboxTest
-     */
+    #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
     public function testRender(): void
     {
         $fieldset = 'table';
@@ -56,9 +56,8 @@ class CustomSelectorTest extends MockeryTestCase
 
     /**
      * Test render with disabled attribute
-     *
-     * @group checkboxTest
      */
+    #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
     public function testRenderWithDisabledAttribute(): void
     {
         $fieldset = 'table';
@@ -87,9 +86,7 @@ class CustomSelectorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @group checkboxTest
-     */
+    #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
     public function testRenderWithoutFieldet(): void
     {
         $fieldset = null;
@@ -114,9 +111,7 @@ class CustomSelectorTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @group checkboxTest
-     */
+    #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
     public function testRenderWithDataAttributes(): void
     {
         $fieldset = null;
@@ -143,9 +138,8 @@ class CustomSelectorTest extends MockeryTestCase
 
     /**
      * Test render with data attribute when column is an array
-     *
-     * @group checkboxTest
      */
+    #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
     public function testRenderWithDataAttributesArray(): void
     {
         $fieldset = null;

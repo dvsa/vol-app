@@ -18,7 +18,7 @@ use Olcs\View\Model\ViewModel;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ViewModelTest extends \PHPUnit\Framework\TestCase
+final class ViewModelTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var ViewModel

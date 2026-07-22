@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Controller\Lva;
 
 use Common\Controller\Continuation\ChecklistController;
@@ -12,32 +14,25 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class ChecklistControllerTest extends MockeryTestCase
+final class ChecklistControllerTest extends MockeryTestCase
 {
-    public $mockNiTextTranslationUtil;
-    public $mockAuthService;
-    public $mockFormServiceManager;
-    public $mockTranslationHelper;
     public $request;
     public $sut;
     #[\Override]
     protected function setUp(): void
     {
         parent::setUp();
-
-        $this->mockNiTextTranslationUtil = m::mock(NiTextTranslation::class);
-        $this->mockAuthService = m::mock(AuthorizationService::class);
-        $this->mockFormServiceManager = m::mock(FormServiceManager::class);
-        $this->mockTranslationHelper = m::mock(TranslationHelperService::class);
-
+        $mockNiTextTranslationUtil = m::mock(NiTextTranslation::class);
+        $mockAuthService = m::mock(AuthorizationService::class);
+        $mockFormServiceManager = m::mock(FormServiceManager::class);
+        $mockTranslationHelper = m::mock(TranslationHelperService::class);
         $this->mockController(ChecklistController::class, [
-            $this->mockNiTextTranslationUtil,
-            $this->mockAuthService,
-            $this->mockFormServiceManager,
-            $this->mockTranslationHelper,
+            $mockNiTextTranslationUtil,
+            $mockAuthService,
+            $mockFormServiceManager,
+            $mockTranslationHelper,
         ]);
-
-        $this->mockTranslationHelper->shouldReceive('translate')
+        $mockTranslationHelper->shouldReceive('translate')
             ->andReturnUsing(
                 static fn($input) => $input
             );

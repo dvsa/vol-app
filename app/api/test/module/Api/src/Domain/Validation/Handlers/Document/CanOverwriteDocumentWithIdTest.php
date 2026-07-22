@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 
-class CanOverwriteDocumentWithIdTest extends AbstractHandlerTestCase
+final class CanOverwriteDocumentWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanOverwriteDocumentWithId

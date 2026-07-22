@@ -19,7 +19,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 /**
  * Create ReputeNotLost Test
  */
-class CreateReputeNotLostTest extends AbstractCommandHandlerTestCase
+final class CreateReputeNotLostTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

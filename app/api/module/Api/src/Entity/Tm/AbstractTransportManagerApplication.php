@@ -22,29 +22,23 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="transport_manager_application",
- *    indexes={
- *        @ORM\Index(name="ix_op_application_op_digital_signature_id", columns={"op_digital_signature_id"}),
- *        @ORM\Index(name="ix_op_application_op_signature_type", columns={"op_signature_type"}),
- *        @ORM\Index(name="ix_tm_application_tm_digital_signature_id", columns={"tm_digital_signature_id"}),
- *        @ORM\Index(name="ix_tm_application_tm_signature_type", columns={"tm_signature_type"}),
- *        @ORM\Index(name="ix_transport_manager_application_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_transport_manager_application_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_transport_manager_application_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_transport_manager_application_tm_application_status", columns={"tm_application_status"}),
- *        @ORM\Index(name="ix_transport_manager_application_tm_type", columns={"tm_type"}),
- *        @ORM\Index(name="ix_transport_manager_application_transport_manager_id", columns={"transport_manager_id"}),
- *        @ORM\Index(name="uk_transport_manager_application_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_transport_manager_application_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'transport_manager_application')]
+#[ORM\Index(name: 'ix_op_application_op_digital_signature_id', columns: ['op_digital_signature_id'])]
+#[ORM\Index(name: 'ix_op_application_op_signature_type', columns: ['op_signature_type'])]
+#[ORM\Index(name: 'ix_tm_application_tm_digital_signature_id', columns: ['tm_digital_signature_id'])]
+#[ORM\Index(name: 'ix_tm_application_tm_signature_type', columns: ['tm_signature_type'])]
+#[ORM\Index(name: 'ix_transport_manager_application_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_transport_manager_application_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_transport_manager_application_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_transport_manager_application_tm_application_status', columns: ['tm_application_status'])]
+#[ORM\Index(name: 'ix_transport_manager_application_tm_type', columns: ['tm_type'])]
+#[ORM\Index(name: 'ix_transport_manager_application_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\Index(name: 'uk_transport_manager_application_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_transport_manager_application_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractTransportManagerApplication implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -58,285 +52,255 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to transport_manager
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
     protected $transportManager;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
     protected $application;
 
     /**
      * TmType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="tm_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'tm_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $tmType;
 
     /**
      * type of signature used from ref data one of sig_physical_signature the application is signed with a physical signature sig_digital_signature the application is signed digitally sig_signature_not_required
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="tm_signature_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'tm_signature_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $tmSignatureType;
 
     /**
      * id of the TM Verify signature where applicable.
      *
      * @var \Dvsa\Olcs\Api\Entity\DigitalSignature
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\DigitalSignature", fetch="LAZY")
-     * @ORM\JoinColumn(name="tm_digital_signature_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'tm_digital_signature_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\DigitalSignature::class, fetch: 'LAZY')]
     protected $tmDigitalSignature;
 
     /**
      * type of signature used from ref data one of sig_physical_signature the application is signed with a physical signature sig_digital_signature the application is signed digitally sig_signature_not_required
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="op_signature_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'op_signature_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $opSignatureType;
 
     /**
      * id of the Operator Verify signature where applicable.
      *
      * @var \Dvsa\Olcs\Api\Entity\DigitalSignature
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\DigitalSignature", fetch="LAZY")
-     * @ORM\JoinColumn(name="op_digital_signature_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'op_digital_signature_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\DigitalSignature::class, fetch: 'LAZY')]
     protected $opDigitalSignature;
 
     /**
      * TmApplicationStatus
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="tm_application_status", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'tm_application_status', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $tmApplicationStatus;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * isOwner
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="is_owner", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'is_owner', nullable: true)]
     protected $isOwner;
 
     /**
      * A or D for Add or Delete
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="action", length=1, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'action', length: 1, nullable: false)]
     protected $action = '';
 
     /**
      * Hours mon
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="hours_mon", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'hours_mon', nullable: true)]
     protected $hoursMon;
 
     /**
      * Hours tue
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="hours_tue", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'hours_tue', nullable: true)]
     protected $hoursTue;
 
     /**
      * Hours wed
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="hours_wed", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'hours_wed', nullable: true)]
     protected $hoursWed;
 
     /**
      * Hours thu
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="hours_thu", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'hours_thu', nullable: true)]
     protected $hoursThu;
 
     /**
      * Hours fri
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="hours_fri", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'hours_fri', nullable: true)]
     protected $hoursFri;
 
     /**
      * Hours sat
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="hours_sat", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'hours_sat', nullable: true)]
     protected $hoursSat;
 
     /**
      * Hours sun
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="hours_sun", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'hours_sun', nullable: true)]
     protected $hoursSun;
 
     /**
      * Has other licences
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="has_other_licences", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'has_other_licences', nullable: true)]
     protected $hasOtherLicences;
 
     /**
      * Has other employment
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="has_other_employment", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'has_other_employment', nullable: true)]
     protected $hasOtherEmployment;
 
     /**
      * Has convictions
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="has_convictions", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'has_convictions', nullable: true)]
     protected $hasConvictions;
 
     /**
      * Has previous licences
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="has_previous_licences", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'has_previous_licences', nullable: true)]
     protected $hasPreviousLicences;
 
     /**
      * Whether TM has undertaken training in last 5 years - added November 2021
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="has_undertaken_training", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'has_undertaken_training', nullable: true)]
     protected $hasUndertakenTraining;
 
     /**
      * declarationConfirmation
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="declaration_confirmation", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'declaration_confirmation', nullable: false, options: ['default' => 0])]
     protected $declarationConfirmation = 0;
 
     /**
      * Additional information
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="additional_information", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'additional_information', length: 4000, nullable: true)]
     protected $additionalInformation;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * OtherLicences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence", mappedBy="transportManagerApplication")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence::class, mappedBy: 'transportManagerApplication')]
     protected $otherLicences;
 
     /**

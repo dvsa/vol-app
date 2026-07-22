@@ -17,7 +17,7 @@ use Olcs\Controller\Auth\LoginControllerFactory;
 use PHPUnit\Framework\TestCase;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class LoginControllerFactoryTest extends TestCase
+final class LoginControllerFactoryTest extends TestCase
 {
     /**
      * @var LoginControllerFactory

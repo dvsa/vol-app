@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class CanUploadEbsrTest extends AbstractValidatorsTestCase
+final class CanUploadEbsrTest extends AbstractValidatorsTestCase
 {
     /**
      * @var CanUploadEbsr
@@ -49,14 +49,12 @@ class CanUploadEbsrTest extends AbstractValidatorsTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function hasActiveLicencesProvider(): array
+    public static function hasActiveLicencesProvider(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 
     /**

@@ -29,7 +29,7 @@ use RuntimeException;
 /**
  * @see ExpiredPasswordController
  */
-class ExpiredPasswordControllerTest extends MockeryTestCase
+final class ExpiredPasswordControllerTest extends MockeryTestCase
 {
     private ExpiredPasswordController $sut;
 
@@ -313,9 +313,7 @@ class ExpiredPasswordControllerTest extends MockeryTestCase
         $this->sut->indexAction();
     }
 
-    /**
-     * @dataProvider errorMessagesDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('errorMessagesDataProvider')]
     public function testIndexActionForPostWithValidDataNewPasswordInvalid($errorMessage): void
     {
         $post = [
@@ -386,12 +384,10 @@ class ExpiredPasswordControllerTest extends MockeryTestCase
     /**
      * dataProvider for testIndexActionForPostWithValidDataNewPasswordInvalid
      */
-    public function errorMessagesDataProvider(): array
+    public static function errorMessagesDataProvider(): \Iterator
     {
-        return [
-            'FAILURE_NEW_PASSWORD_INVALID' => [ChangeExpiredPasswordResult::FAILURE_NEW_PASSWORD_INVALID],
-            'FAILURE_NEW_PASSWORD_MATCHES_OLD' => [ChangeExpiredPasswordResult::FAILURE_NEW_PASSWORD_MATCHES_OLD],
-        ];
+        yield 'FAILURE_NEW_PASSWORD_INVALID' => [ChangeExpiredPasswordResult::FAILURE_NEW_PASSWORD_INVALID];
+        yield 'FAILURE_NEW_PASSWORD_MATCHES_OLD' => [ChangeExpiredPasswordResult::FAILURE_NEW_PASSWORD_MATCHES_OLD];
     }
 
     public function testIndexActionForPostWithValidDataNotAuthorizedFailure(): void

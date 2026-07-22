@@ -56,36 +56,36 @@ class PrimaryKeyTypeHandler extends AbstractTypeHandler
         $annotations = [];
 
         // Add @ORM\Id
-        $annotations[] = '@ORM\Id';
+        $annotations[] = '#[ORM\Id]';
 
         // Add column definition
         $columnDef = sprintf(
-            '@ORM\Column(type="%s", name="%s"',
+            "#[ORM\Column(type: '%s', name: '%s'",
             $column->getType(),
             $column->getName()
         );
 
         // Add length for string types
         if ($column->getLength() && in_array($column->getType(), ['string', 'char'])) {
-            $columnDef .= sprintf(', length=%d', $column->getLength());
+            $columnDef .= sprintf(', length: %d', $column->getLength());
         }
 
         // Add nullable if needed
         if ($column->isNullable()) {
-            $columnDef .= ', nullable=true';
+            $columnDef .= ', nullable: true';
         } else {
-            $columnDef .= ', nullable=false';
+            $columnDef .= ', nullable: false';
         }
 
-        $columnDef .= ')';
+        $columnDef .= ')]';
         $annotations[] = $columnDef;
 
         // Add generation strategy only for auto-increment columns
         if ($column->isAutoIncrement()) {
-            $annotations[] = '@ORM\GeneratedValue(strategy="IDENTITY")';
+            $annotations[] = "#[ORM\GeneratedValue(strategy: 'IDENTITY')]";
         }
 
-        return implode("\n     * ", $annotations);
+        return implode("\n    ", $annotations);
     }
 
     #[\Override]

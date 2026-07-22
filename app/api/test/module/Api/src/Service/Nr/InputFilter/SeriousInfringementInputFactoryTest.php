@@ -17,7 +17,7 @@ use Psr\Container\ContainerInterface;
  * Class SeriousInfringementInputFactoryTest
  * @package Dvsa\OlcsTest\Api\Service\Nr\InputFilter
  */
-class SeriousInfringementInputFactoryTest extends TestCase
+final class SeriousInfringementInputFactoryTest extends TestCase
 {
     public function testCreateService(): void
     {

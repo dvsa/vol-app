@@ -28,7 +28,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result as ResultCmd;
 /**
  * ApplicationTest
  */
-class ApplicationTest extends AbstractCommandHandlerTestCase
+final class ApplicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -335,48 +335,44 @@ class ApplicationTest extends AbstractCommandHandlerTestCase
     /**
      * Data provider for handleCommand
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function handleCommandProvider(): array
+    public static function handleCommandProvider(): \Iterator
     {
-        return [
-            [ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION],
-            [ApplicationEntity::APPLICATION_STATUS_GRANTED],
-            [ApplicationEntity::APPLICATION_STATUS_REFUSED],
-            [ApplicationEntity::APPLICATION_STATUS_WITHDRAWN],
-            [ApplicationEntity::APPLICATION_STATUS_NOT_TAKEN_UP],
-        ];
+        yield [ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION];
+        yield [ApplicationEntity::APPLICATION_STATUS_GRANTED];
+        yield [ApplicationEntity::APPLICATION_STATUS_REFUSED];
+        yield [ApplicationEntity::APPLICATION_STATUS_WITHDRAWN];
+        yield [ApplicationEntity::APPLICATION_STATUS_NOT_TAKEN_UP];
     }
 
     /**
      * Data provider for testGetPublicationSectionId
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function publicationSectionIdProvider(): array
+    public static function publicationSectionIdProvider(): \Iterator
     {
-        return [
-            [
-                ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION,
-                false,
-                PublicationSectionEntity::APP_NEW_SECTION
-            ],
-            [ApplicationEntity::APPLICATION_STATUS_GRANTED, false, PublicationSectionEntity::APP_GRANTED_SECTION],
-            [ApplicationEntity::APPLICATION_STATUS_REFUSED, false, PublicationSectionEntity::APP_REFUSED_SECTION],
-            [ApplicationEntity::APPLICATION_STATUS_WITHDRAWN, false, PublicationSectionEntity::APP_WITHDRAWN_SECTION],
-            [
-                ApplicationEntity::APPLICATION_STATUS_NOT_TAKEN_UP,
-                false,
-                PublicationSectionEntity::APP_GRANT_NOT_TAKEN_SECTION
-            ],
-            [
-                ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION,
-                true,
-                PublicationSectionEntity::VAR_NEW_SECTION
-            ],
-            [ApplicationEntity::APPLICATION_STATUS_GRANTED, true, PublicationSectionEntity::VAR_GRANTED_SECTION],
-            [ApplicationEntity::APPLICATION_STATUS_REFUSED, true, PublicationSectionEntity::VAR_REFUSED_SECTION],
-            [ApplicationEntity::APPLICATION_STATUS_WITHDRAWN, true, PublicationSectionEntity::APP_WITHDRAWN_SECTION],
+        yield [
+            ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            false,
+            PublicationSectionEntity::APP_NEW_SECTION
         ];
+        yield [ApplicationEntity::APPLICATION_STATUS_GRANTED, false, PublicationSectionEntity::APP_GRANTED_SECTION];
+        yield [ApplicationEntity::APPLICATION_STATUS_REFUSED, false, PublicationSectionEntity::APP_REFUSED_SECTION];
+        yield [ApplicationEntity::APPLICATION_STATUS_WITHDRAWN, false, PublicationSectionEntity::APP_WITHDRAWN_SECTION];
+        yield [
+            ApplicationEntity::APPLICATION_STATUS_NOT_TAKEN_UP,
+            false,
+            PublicationSectionEntity::APP_GRANT_NOT_TAKEN_SECTION
+        ];
+        yield [
+            ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            true,
+            PublicationSectionEntity::VAR_NEW_SECTION
+        ];
+        yield [ApplicationEntity::APPLICATION_STATUS_GRANTED, true, PublicationSectionEntity::VAR_GRANTED_SECTION];
+        yield [ApplicationEntity::APPLICATION_STATUS_REFUSED, true, PublicationSectionEntity::VAR_REFUSED_SECTION];
+        yield [ApplicationEntity::APPLICATION_STATUS_WITHDRAWN, true, PublicationSectionEntity::APP_WITHDRAWN_SECTION];
     }
 }

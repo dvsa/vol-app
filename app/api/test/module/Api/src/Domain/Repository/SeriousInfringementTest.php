@@ -12,8 +12,9 @@ use Dvsa\Olcs\Transfer\Query\Cases\Si\SiList as SiListQry;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class SeriousInfringementTest extends RepositoryTestCase
+final class SeriousInfringementTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(SiRepo::class, true);

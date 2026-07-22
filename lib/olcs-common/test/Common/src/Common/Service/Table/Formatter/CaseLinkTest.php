@@ -4,6 +4,8 @@
  * Case Link Test
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -16,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @package CommonTest\Service\Table\Formatter
  */
-class CaseLinkTest extends TestCase
+final class CaseLinkTest extends TestCase
 {
     public $sut;
     protected $urlHelper;
@@ -36,9 +38,8 @@ class CaseLinkTest extends TestCase
 
     /**
      * Test the format method
-     *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $expected): void
     {
         $this->urlHelper->shouldReceive('fromRoute')
@@ -59,21 +60,19 @@ class CaseLinkTest extends TestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'case' => [
-                [
-                    'id' => 69
-                ],
-                '<a class="govuk-link" href="CASE_URL">69</a>',
+        yield 'case' => [
+            [
+                'id' => 69
             ],
-            'other' => [
-                [],
-                '',
-            ],
+            '<a class="govuk-link" href="CASE_URL">69</a>',
+        ];
+        yield 'other' => [
+            [],
+            '',
         ];
     }
 }

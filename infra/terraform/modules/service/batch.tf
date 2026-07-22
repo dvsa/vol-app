@@ -10,8 +10,10 @@ data "aws_secretsmanager_secret" "infra" {
 
 locals {
 
-  account_prefix = contains(["DEV", "QA"], var.legacy_environment) ? "DEV" : ""
+  account_prefix = contains(["DEV", "QA", "REG"], var.legacy_environment) ? "DEV" : ""
   env_prefix     = var.legacy_environment == "APP" ? "APP" : "APP${var.legacy_environment}"
+
+  dva_ni_export_bucket = regex("^s3://([^/]+)", var.dva_ni_export_s3uri)[0]
 
   default_retry_policy = {
     attempts = 1
@@ -120,7 +122,7 @@ locals {
         },
         {
           name  = "DVA_REPORT_BUCKET"
-          value = "devappdev-olcs-pri-integration-dva-s3"
+          value = local.dva_ni_export_bucket
         }
       ]
 

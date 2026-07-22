@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Doc\DocParagraphBookmark as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class DocParagraphBookmarkEntityTest extends EntityTester
+final class DocParagraphBookmarkEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

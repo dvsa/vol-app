@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Bilateral;
 
 use Common\Service\Qa\Custom\Bilateral\Radio;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StandardAndCabotageYesNoRadioValidatorTest extends MockeryTestCase
+final class StandardAndCabotageYesNoRadioValidatorTest extends MockeryTestCase
 {
     private $yesContentElement;
 
@@ -26,9 +28,7 @@ class StandardAndCabotageYesNoRadioValidatorTest extends MockeryTestCase
         $this->yesNoRadioValidator = new StandardAndCabotageYesNoRadioValidator($this->yesContentElement);
     }
 
-    /**
-     * @dataProvider dpIsValidTrue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValidTrue')]
     public function testIsValidTrue($value, $context): void
     {
         $this->assertTrue(
@@ -37,24 +37,22 @@ class StandardAndCabotageYesNoRadioValidatorTest extends MockeryTestCase
     }
 
     /**
-     * @return ((null|string)[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(string | null)> | string)>>
      *
      * @psalm-return list{array{value: 'Y', context: array{yesContent: 'yes_content_value'}}, array{value: 'N', context: array{yesContent: null}}}
      */
-    public function dpIsValidTrue(): array
+    public static function dpIsValidTrue(): \Iterator
     {
-        return [
-            [
-                'value' => 'Y',
-                'context' => [
-                    'yesContent' => 'yes_content_value'
-                ]
-            ],
-            [
-                'value' => 'N',
-                'context' => [
-                    'yesContent' => null
-                ]
+        yield [
+            'value' => 'Y',
+            'context' => [
+                'yesContent' => 'yes_content_value'
+            ]
+        ];
+        yield [
+            'value' => 'N',
+            'context' => [
+                'yesContent' => null
             ]
         ];
     }

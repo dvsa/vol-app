@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\IrhpApplication;
 
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateFull;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateFull;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class UpdateFullTest extends \PHPUnit\Framework\TestCase
+final class UpdateFullTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

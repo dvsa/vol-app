@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="application_path",
- *    indexes={
- *        @ORM\Index(name="fk_application_path_application_path_group_id", columns={"application_path_group_id"}),
- *        @ORM\Index(name="fk_application_path_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_application_path_irhp_permit_type_id_irhp_permit_type_id", columns={"irhp_permit_type_id"}),
- *        @ORM\Index(name="fk_application_path_last_modified_by_user_id", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'application_path')]
+#[ORM\Index(name: 'fk_application_path_application_path_group_id', columns: ['application_path_group_id'])]
+#[ORM\Index(name: 'fk_application_path_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_application_path_irhp_permit_type_id_irhp_permit_type_id', columns: ['irhp_permit_type_id'])]
+#[ORM\Index(name: 'fk_application_path_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractApplicationPath implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,91 +41,82 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * IrhpPermitType
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_permit_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irhp_permit_type_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType::class, fetch: 'LAZY')]
     protected $irhpPermitType;
 
     /**
      * ApplicationPathGroup
      *
      * @var \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_path_group_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'application_path_group_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup::class, fetch: 'LAZY')]
     protected $applicationPathGroup;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Title
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="title", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'title', length: 100, nullable: true)]
     protected $title;
 
     /**
      * Effective from
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="effective_from", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'effective_from', nullable: true)]
     protected $effectiveFrom;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * ApplicationSteps
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Generic\ApplicationStep", mappedBy="applicationPath")
-     * @ORM\OrderBy({"weight" = "ASC"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep::class, mappedBy: 'applicationPath')]
+    #[ORM\OrderBy(['weight' => 'ASC'])]
     protected $applicationSteps;
 
     /**

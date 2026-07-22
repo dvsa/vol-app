@@ -20,7 +20,7 @@ use Mockery as m;
 /**
  * Create Bus Test
  */
-class CreateBusTest extends AbstractCommandHandlerTestCase
+final class CreateBusTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

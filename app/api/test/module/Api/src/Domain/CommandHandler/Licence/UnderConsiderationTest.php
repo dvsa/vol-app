@@ -25,7 +25,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
  * @package Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class UnderConsiderationTest extends AbstractCommandHandlerTestCase
+final class UnderConsiderationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

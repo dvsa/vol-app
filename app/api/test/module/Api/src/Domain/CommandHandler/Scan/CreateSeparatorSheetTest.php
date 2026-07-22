@@ -16,10 +16,10 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Scan\CreateSeparatorSheet::class)]
-class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
+final class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
 {
-    public const SUB_CAT_ID = 8001;
-    public const SCAN_ID = 9999;
+    public const int SUB_CAT_ID = 8001;
+    public const int SCAN_ID = 9999;
 
     /** @var  m\MockInterface | Category */
     private $mockCat;
@@ -796,14 +796,12 @@ class CreateSeparatorSheetTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dpHandleCommandCategoryPermitsBadIdentifierFormat(): array
+    public static function dpHandleCommandCategoryPermitsBadIdentifierFormat(): \Iterator
     {
-        return [
-            ['OB1234567 100007'],
-            ['OB1234567 / 100007/'],
-            ['OB1234567 . 100007'],
-            ['OB1234567'],
-        ];
+        yield ['OB1234567 100007'];
+        yield ['OB1234567 / 100007/'];
+        yield ['OB1234567 . 100007'];
+        yield ['OB1234567'];
     }
 
     public function testHandleCommandCategoryPermitsApplicationLicenceMismatch(): void

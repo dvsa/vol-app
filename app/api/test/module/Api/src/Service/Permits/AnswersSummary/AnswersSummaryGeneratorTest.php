@@ -17,13 +17,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class AnswersSummaryGeneratorTest extends MockeryTestCase
+final class AnswersSummaryGeneratorTest extends MockeryTestCase
 {
     private $irhpApplication;
 
     private $answersSummary;
-
-    private $answersSummaryFactory;
 
     private $headerAnswersSummaryRowsAdder;
 
@@ -33,14 +31,15 @@ class AnswersSummaryGeneratorTest extends MockeryTestCase
 
     private $customRowsAdderForType2;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpApplication = m::mock(IrhpApplication::class);
 
         $this->answersSummary = m::mock(AnswersSummary::class);
 
-        $this->answersSummaryFactory = m::mock(AnswersSummaryFactory::class);
-        $this->answersSummaryFactory->shouldReceive('create')
+        $answersSummaryFactory = m::mock(AnswersSummaryFactory::class);
+        $answersSummaryFactory->shouldReceive('create')
             ->withNoArgs()
             ->once()
             ->andReturn($this->answersSummary);
@@ -50,7 +49,7 @@ class AnswersSummaryGeneratorTest extends MockeryTestCase
         $this->defaultAnswersSummaryRowsAdder = m::mock(AnswersSummaryRowsAdderInterface::class);
 
         $this->answersSummaryGenerator = new AnswersSummaryGenerator(
-            $this->answersSummaryFactory,
+            $answersSummaryFactory,
             $this->headerAnswersSummaryRowsAdder,
             $this->defaultAnswersSummaryRowsAdder
         );
@@ -112,11 +111,9 @@ class AnswersSummaryGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpSnapshot(): array
+    public static function dpSnapshot(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 }

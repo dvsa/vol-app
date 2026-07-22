@@ -8,7 +8,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class DateBeforeValidatorFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DateBeforeValidator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DateBeforeValidator
     {
         $options ??= [];
 

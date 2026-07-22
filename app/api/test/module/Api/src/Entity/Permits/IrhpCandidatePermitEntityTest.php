@@ -18,7 +18,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class IrhpCandidatePermitEntityTest extends EntityTester
+final class IrhpCandidatePermitEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -201,12 +201,10 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->canDelete());
     }
 
-    public static function canDeleteProvider(): array
+    public static function canDeleteProvider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false]
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 
     public function testUpdateIrhpPermitRange(): void
@@ -277,12 +275,10 @@ class IrhpCandidatePermitEntityTest extends EntityTester
         $this->assertSame($expected, $entity->isApplicationUnderConsideration());
     }
 
-    public static function isApplicationUnderConsiderationProvider(): array
+    public static function isApplicationUnderConsiderationProvider(): \Iterator
     {
-        return [
-            [false, false],
-            [true, true]
-        ];
+        yield [false, false];
+        yield [true, true];
     }
 
     public function testReviveFromUnsuccessful(): void

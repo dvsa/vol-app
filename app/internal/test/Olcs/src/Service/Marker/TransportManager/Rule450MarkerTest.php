@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class Rule450MarkerTest extends TestCase
+final class Rule450MarkerTest extends TestCase
 {
     /**
      *
@@ -20,6 +20,7 @@ class Rule450MarkerTest extends TestCase
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new \Olcs\Service\Marker\TransportManager\Rule450Marker();

@@ -16,13 +16,14 @@ use Symfony\Component\Mime\Email as SymfonyEmail;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 
-class EmailTest extends MockeryTestCase
+final class EmailTest extends MockeryTestCase
 {
     /**
      * @var Email
      */
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new Email();
@@ -115,7 +116,7 @@ class EmailTest extends MockeryTestCase
                     $this->assertEquals('bcc@foo.com', $bcc[0]->getAddress());
 
                     // Verify subject
-                    $this->assertEquals('Subject', $email->getSubject());
+                    $this->assertSame('Subject', $email->getSubject());
 
                     // Verify body
                     $this->assertEquals('This is the content', $email->getTextBody());
@@ -149,7 +150,7 @@ class EmailTest extends MockeryTestCase
             ->andReturnUsing(
                 function (SymfonyEmail $email) {
                     // Verify subject
-                    $this->assertEquals('msg subject', $email->getSubject());
+                    $this->assertSame('msg subject', $email->getSubject());
 
                     // Verify from address
                     $from = $email->getFrom();
@@ -234,7 +235,7 @@ class EmailTest extends MockeryTestCase
             ->andReturnUsing(
                 function (SymfonyEmail $email) {
                     // Verify subject
-                    $this->assertEquals('msg subject', $email->getSubject());
+                    $this->assertSame('msg subject', $email->getSubject());
 
                     // Verify plain and html body
                     $this->assertEquals('plain content', $email->getTextBody());
@@ -310,16 +311,14 @@ class EmailTest extends MockeryTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function toFromAddressProvider(): array
+    public static function toFromAddressProvider(): \Iterator
     {
-        return [
-            ['foo@bar.com', 'from name', null, Email::MISSING_TO_ERROR],
-            ['foo@bar.com', null, null, Email::MISSING_TO_ERROR],
-            [null, 'from name', 'foo@bar.com', Email::MISSING_FROM_ERROR],
-            [null, null, 'foo@bar.com', Email::MISSING_FROM_ERROR],
-        ];
+        yield ['foo@bar.com', 'from name', null, Email::MISSING_TO_ERROR];
+        yield ['foo@bar.com', null, null, Email::MISSING_TO_ERROR];
+        yield [null, 'from name', 'foo@bar.com', Email::MISSING_FROM_ERROR];
+        yield [null, null, 'foo@bar.com', Email::MISSING_FROM_ERROR];
     }
 
     public function testSendHandlesException(): void

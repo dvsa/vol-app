@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Controller\Lva;
 
 use Common\Controller\Lva\AbstractControllerFactory;
@@ -10,16 +12,11 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Common\Controller\Lva\AbstractControllerFactory
- */
-class AbstractControllerFactoryTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Controller\Lva\AbstractControllerFactory::class)]
+final class AbstractControllerFactoryTest extends MockeryTestCase
 {
     /** @var  AbstractControllerFactory */
     protected $sut;
-
-    /** @var  m\MockInterface | ControllerManager */
-    protected $mockScm;
 
     /** @var  m\MockInterface | ContainerInterface */
     protected $mockSm;
@@ -31,9 +28,7 @@ class AbstractControllerFactoryTest extends MockeryTestCase
         $this->mockSm = m::mock(ContainerInterface::class);
     }
 
-    /**
-     * @group lva_abstract_factory
-     */
+    #[\PHPUnit\Framework\Attributes\Group('lva_abstract_factory')]
     public function testCanCreate(): void
     {
         $requestedName = 'foo';
@@ -51,9 +46,7 @@ class AbstractControllerFactoryTest extends MockeryTestCase
         $this->assertTrue($this->sut->canCreate($this->mockSm, $requestedName));
     }
 
-    /**
-     * @group lva_abstract_factory
-     */
+    #[\PHPUnit\Framework\Attributes\Group('lva_abstract_factory')]
     public function testCanCreateWithoutConfigMatch(): void
     {
         $requestedName = 'bar';
@@ -71,9 +64,7 @@ class AbstractControllerFactoryTest extends MockeryTestCase
         $this->assertFalse($this->sut->canCreate($this->mockSm, $requestedName));
     }
 
-    /**
-     * @group lva_abstract_factory
-     */
+    #[\PHPUnit\Framework\Attributes\Group('lva_abstract_factory')]
     public function testInvoke(): void
     {
         $requestedName = 'foo';
@@ -106,7 +97,7 @@ class AbstractControllerFactoryTest extends MockeryTestCase
         $this->mockSm->shouldReceive('get')->with('Config')->andReturn($config);
 
         $actual = ($this->sut)($this->mockSm, $requestedName);
-        static::assertInstanceOf(FactoryInterface::class, $actual);
-        static::assertInstanceOf(ControllerWithFactoryStub::class, $actual);
+        $this->assertInstanceOf(FactoryInterface::class, $actual);
+        $this->assertInstanceOf(ControllerWithFactoryStub::class, $actual);
     }
 }

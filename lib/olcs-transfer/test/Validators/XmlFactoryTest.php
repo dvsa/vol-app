@@ -11,7 +11,7 @@ use Laminas\Xml\Security as XmlSecurityValidator;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 
-class XmlFactoryTest extends TestCase
+final class XmlFactoryTest extends TestCase
 {
     public function testInvoke()
     {

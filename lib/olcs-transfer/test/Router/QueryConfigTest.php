@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Router;
 
 use Dvsa\Olcs\Transfer\Router\QueryConfig;
 use Laminas\Http\Request;
 
-class QueryConfigTest extends \PHPUnit\Framework\TestCase
+final class QueryConfigTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetConfig(): void
     {

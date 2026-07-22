@@ -9,25 +9,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * LetterIssue Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="letter_issue")
  */
+#[ORM\Table(name: 'letter_issue')]
+#[ORM\Entity]
 class LetterIssue extends AbstractLetterIssue
 {
     /**
      * Letter issue versions
      *
      * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion",
-     *     mappedBy="letterIssue",
-     *     cascade={"persist"},
-     *     orphanRemoval=false
-     * )
-     * @ORM\OrderBy({"versionNumber" = "DESC"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion::class, mappedBy: 'letterIssue', cascade: ['persist'], orphanRemoval: false)]
+    #[ORM\OrderBy(['versionNumber' => 'DESC'])]
     protected $versions;
 
     /**

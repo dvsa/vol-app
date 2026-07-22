@@ -14,28 +14,24 @@ use Laminas\Form\Element;
 /**
  * @see FormValidatorBuilder
  */
-class FormValidationBuilderTest extends MockeryTestCase
+final class FormValidationBuilderTest extends MockeryTestCase
 {
-    protected const CSRF_FIELD_NAME = 'CSRF_FIELD_NAME';
+    protected const string CSRF_FIELD_NAME = 'CSRF_FIELD_NAME';
 
     /**
      * @var FormValidatorBuilder
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function aValidatorIsCallable(): void
     {
         // Assert
         $this->assertIsCallable(static fn(): \Common\Test\Form\FormValidatorBuilder => \Common\Test\Form\FormValidatorBuilder::aValidator());
     }
 
-    /**
-     * @test
-     * @depends aValidatorIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('aValidatorIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function aValidatorReturnsInstanceOfSelf(): void
     {
         // Execute
@@ -45,9 +41,7 @@ class FormValidationBuilderTest extends MockeryTestCase
         $this->assertInstanceOf(FormValidatorBuilder::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function populateCsrfValidationBeforeValidatingIsCallable(): void
     {
         // Setup
@@ -57,10 +51,8 @@ class FormValidationBuilderTest extends MockeryTestCase
         $this->assertIsCallable(fn(): \Common\Test\Form\FormValidatorBuilder => $this->sut->populateCsrfDataBeforeValidating());
     }
 
-    /**
-     * @test
-     * @depends populateCsrfValidationBeforeValidatingIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('populateCsrfValidationBeforeValidatingIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function populateCsrfValidationBeforeValidatingReturnsSelf(): void
     {
         // Setup
@@ -73,9 +65,7 @@ class FormValidationBuilderTest extends MockeryTestCase
         $this->assertSame($this->sut, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function buildIsCallable(): void
     {
         // Setup
@@ -85,10 +75,8 @@ class FormValidationBuilderTest extends MockeryTestCase
         $this->assertIsCallable(fn(): \Common\Form\FormValidator => $this->sut->build());
     }
 
-    /**
-     * @test
-     * @depends buildIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('buildIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function buildReturnsInstanceOfFormValidator(): void
     {
         // Setup
@@ -101,10 +89,8 @@ class FormValidationBuilderTest extends MockeryTestCase
         $this->assertInstanceOf(FormValidator::class, $result);
     }
 
-    /**
-     * @test
-     * @depends buildReturnsInstanceOfFormValidator
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('buildReturnsInstanceOfFormValidator')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function buildAllowsCsrfValidation(): void
     {
         // Setup
@@ -118,11 +104,9 @@ class FormValidationBuilderTest extends MockeryTestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @test
-     * @depends buildReturnsInstanceOfFormValidator
-     * @depends populateCsrfValidationBeforeValidatingReturnsSelf
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('buildReturnsInstanceOfFormValidator')]
+    #[\PHPUnit\Framework\Attributes\Depends('populateCsrfValidationBeforeValidatingReturnsSelf')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function buildDisablesCsrfForTopLevelCsrfFormElement(): void
     {
         // Setup

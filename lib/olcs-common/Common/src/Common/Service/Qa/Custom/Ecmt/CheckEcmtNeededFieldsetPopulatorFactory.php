@@ -8,7 +8,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class CheckEcmtNeededFieldsetPopulatorFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CheckEcmtNeededFieldsetPopulator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CheckEcmtNeededFieldsetPopulator
     {
         return new CheckEcmtNeededFieldsetPopulator(
             $container->get('QaCheckboxFieldsetPopulator'),

@@ -26,7 +26,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateTranslateToWelshTaskTest extends AbstractCommandHandlerTestCase
+final class CreateTranslateToWelshTaskTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

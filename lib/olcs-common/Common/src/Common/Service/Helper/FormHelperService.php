@@ -426,7 +426,7 @@ class FormHelperService
      * @param Fieldset $form Form fieldset
      * @param InputFilter                                  $filter Filter
      */
-    public function disableEmptyValidation(Fieldset $form, InputFilter $filter = null): void
+    public function disableEmptyValidation(Fieldset $form, ?InputFilter $filter = null): void
     {
         if (!$filter instanceof \Laminas\InputFilter\InputFilter) {
             $filter = $form->getInputFilter();

@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
 /**
  * Test the permit app APSG part successful email
  */
-class SendEcmtApsgPartSuccessfulTest extends AbstractEcmtAnnualPermitTestCase
+final class SendEcmtApsgPartSuccessfulTest extends AbstractEcmtAnnualPermitTestCase
 {
     protected $commandClass = SendEcmtApsgPartSuccessfulCmd::class;
     protected $commandHandlerClass = SendEcmtApsgPartSuccessfulHandler::class;

@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Domain\Command\Transaction\ResolveOutstandingPayments;
 use Dvsa\Olcs\Cli\Command\Batch\ResolvePaymentsCommand;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class ResolvePaymentsCommandTest extends AbstractBatchCommandCases
+final class ResolvePaymentsCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

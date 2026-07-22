@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class AllTest extends QueryHandlerTestCase
+final class AllTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

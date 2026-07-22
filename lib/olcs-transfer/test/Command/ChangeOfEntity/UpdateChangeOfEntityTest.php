@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\ChangeOfEntity;
 
 use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\UpdateChangeOfEntity as Cmd;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\ChangeOfEntity\UpdateChangeOfEntity as Cmd;
 /**
  * Update Change Of Entity command test
  */
-class UpdateChangeOfEntityTest extends \PHPUnit\Framework\TestCase
+final class UpdateChangeOfEntityTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

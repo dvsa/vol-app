@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Filter;
 
 use Common\Filesystem\Filesystem;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class DecompressToTmpDelegatorFactoryTest
  * @package CommonTest\Filter
  */
-class DecompressToTmpDelegatorFactoryTest extends MockeryTestCase
+final class DecompressToTmpDelegatorFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {
@@ -35,7 +37,7 @@ class DecompressToTmpDelegatorFactoryTest extends MockeryTestCase
         $service = $sut($mockSl, '', $callback);
 
         $this->assertInstanceOf(DecompressUploadToTmp::class, $service);
-        $this->assertEquals($tmpDir, $service->getTempRootDir());
+        $this->assertSame($tmpDir, $service->getTempRootDir());
         $this->assertInstanceOf(Decompress::class, $service->getDecompressFilter());
         $this->assertSame($mockFileSystem, $service->getFileSystem());
     }

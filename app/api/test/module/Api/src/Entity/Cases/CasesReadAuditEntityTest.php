@@ -15,7 +15,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class CasesReadAuditEntityTest extends EntityTester
+final class CasesReadAuditEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

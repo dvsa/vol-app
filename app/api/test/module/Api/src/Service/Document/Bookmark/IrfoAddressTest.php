@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\IrfoAddress as Sut;
 /**
  * IrfoAddress bookmark test
  */
-class IrfoAddressTest extends \PHPUnit\Framework\TestCase
+final class IrfoAddressTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -28,31 +28,29 @@ class IrfoAddressTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'irfoContactDetails' => [
-                        'address' => [
-                            'addressLine1' => 'Line 1',
-                            'addressLine2' => 'Line 2',
-                            'addressLine3' => 'Line 3',
-                            'addressLine4' => 'Line 4',
-                            'town' => 'Leeds',
-                            'postcode' => 'LS9 6NF',
-                            'countryCode' => [
-                                'countryDesc' => 'United Kingdom'
-                            ]
+                'irfoContactDetails' => [
+                    'address' => [
+                        'addressLine1' => 'Line 1',
+                        'addressLine2' => 'Line 2',
+                        'addressLine3' => 'Line 3',
+                        'addressLine4' => 'Line 4',
+                        'town' => 'Leeds',
+                        'postcode' => 'LS9 6NF',
+                        'countryCode' => [
+                            'countryDesc' => 'United Kingdom'
                         ]
                     ]
-                ],
-                'Line 1, Line 2, Line 3, Line 4, Leeds, LS9 6NF, United Kingdom'
+                ]
             ],
-            [
-                [],
-                ''
-            ],
+            'Line 1, Line 2, Line 3, Line 4, Leeds, LS9 6NF, United Kingdom'
+        ];
+        yield [
+            [],
+            ''
         ];
     }
 }

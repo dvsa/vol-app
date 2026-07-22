@@ -19,7 +19,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class LetterTest extends AbstractCommandHandlerTestCase
+final class LetterTest extends AbstractCommandHandlerTestCase
 {
     private $mockFileUploader;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Validators;
 
 use Common\Form\Elements\Validators\EcmtNoOfPermitsCombinedTotalValidator;
@@ -10,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EcmtNoOfPermitsCombinedTotalValidatorTest extends MockeryTestCase
+final class EcmtNoOfPermitsCombinedTotalValidatorTest extends MockeryTestCase
 {
     public function testValidateMinTrue(): void
     {

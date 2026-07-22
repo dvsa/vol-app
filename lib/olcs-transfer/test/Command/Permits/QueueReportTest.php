@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Permits\QueueReport;
 /**
  * @see QueueReport
  */
-class QueueReportTest extends \PHPUnit\Framework\TestCase
+final class QueueReportTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

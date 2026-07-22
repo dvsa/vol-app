@@ -13,7 +13,7 @@ class EventHistoryDescriptionFactory implements FactoryInterface
      * @return EventHistoryDescription
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $router = $container->get('Router');
         $request = $container->get('Request');

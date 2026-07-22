@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Cqrs\Command;
 
 use Common\Exception\ResourceConflictException;
@@ -22,21 +24,16 @@ use Laminas\Session\Container;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Common\Service\Cqrs\Command\CommandService
- */
-class CommandServiceTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Cqrs\Command\CommandService::class)]
+final class CommandServiceTest extends MockeryTestCase
 {
     public $mockContainer;
-    public const ROUTE_NAME = 'backend/aaa/bbb';
+    public const string ROUTE_NAME = 'backend/aaa/bbb';
 
-    public const METHOD = 'POST';
+    public const string METHOD = 'POST';
 
     /** @var  CommandService */
     private $sut;
-
-    /** @var  m\MockInterface */
-    private $mockDto;
 
     /** @var  m\MockInterface | CommandContainerInterface */
     private $mockCmd;
@@ -57,14 +54,14 @@ class CommandServiceTest extends MockeryTestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->mockDto = m::mock(CommandInterface::class);
-        $this->mockDto->shouldReceive('getArrayCopy')->atMost(1)->andReturn([]);
+        $mockDto = m::mock(CommandInterface::class);
+        $mockDto->shouldReceive('getArrayCopy')->atMost(1)->andReturn([]);
 
         $this->mockCmd = m::mock(CommandContainer::class);
         $this->mockCmd
             ->shouldReceive('getRouteName')->atMost(1)->andReturn(self::ROUTE_NAME)
             ->shouldReceive('getMethod')->atMost(1)->andReturn(self::METHOD)
-            ->shouldReceive('getDto')->atMost(1)->andReturn($this->mockDto);
+            ->shouldReceive('getDto')->atMost(1)->andReturn($mockDto);
 
         $this->mockRouter = m::mock(\Laminas\Router\RouteInterface::class)->makePartial();
         $this->mockClient = m::mock(\Laminas\Http\Client::class)->makePartial();
@@ -242,9 +239,9 @@ class CommandServiceTest extends MockeryTestCase
         //  call & check
         $actual = $this->sut->send($mockCmd);
 
-        static::assertEquals(1, $this->mockClient->getRequest()->getHeaders()->count());
-        static::assertInstanceOf(CqrsResponse::class, $actual);
-        static::assertEquals(['key' => 'EXPECTED'], $actual->getResult());
+        $this->assertEquals(1, $this->mockClient->getRequest()->getHeaders()->count());
+        $this->assertInstanceOf(CqrsResponse::class, $actual);
+        $this->assertEquals(['key' => 'EXPECTED'], $actual->getResult());
     }
 
     public function testWhenCommandHasSecureTokenThenTokenIsApplied(): void
@@ -286,14 +283,11 @@ class CommandServiceTest extends MockeryTestCase
 
         $actual = $this->sut->send($mockCmd);
 
-        static::assertEquals(1, $this->mockClient->getRequest()->getHeaders()->count());
-        static::assertTrue($this->mockClient->getRequest()->getHeaders()->has('Cookie'));
-        static::assertEquals(
-            'secureToken=exampleSecureToken',
-            $this->mockClient->getRequest()->getCookie()->getFieldValue()
-        );
-        static::assertInstanceOf(CqrsResponse::class, $actual);
-        static::assertEquals(['key' => 'EXPECTED'], $actual->getResult());
+        $this->assertEquals(1, $this->mockClient->getRequest()->getHeaders()->count());
+        $this->assertTrue($this->mockClient->getRequest()->getHeaders()->has('Cookie'));
+        $this->assertEquals('secureToken=exampleSecureToken', $this->mockClient->getRequest()->getCookie()->getFieldValue());
+        $this->assertInstanceOf(CqrsResponse::class, $actual);
+        $this->assertEquals(['key' => 'EXPECTED'], $actual->getResult());
     }
 
     public function testWhenCommandHasSecureTokenThenTokenIsOverridden(): void
@@ -336,14 +330,11 @@ class CommandServiceTest extends MockeryTestCase
 
         $actual = $this->sut->send($mockCmd);
 
-        static::assertEquals(1, $this->mockClient->getRequest()->getHeaders()->count());
-        static::assertTrue($this->mockClient->getRequest()->getHeaders()->has('Cookie'));
-        static::assertEquals(
-            'secureToken=exampleSecureToken',
-            $this->mockClient->getRequest()->getCookie()->getFieldValue()
-        );
-        static::assertInstanceOf(CqrsResponse::class, $actual);
-        static::assertEquals(['key' => 'EXPECTED'], $actual->getResult());
+        $this->assertEquals(1, $this->mockClient->getRequest()->getHeaders()->count());
+        $this->assertTrue($this->mockClient->getRequest()->getHeaders()->has('Cookie'));
+        $this->assertEquals('secureToken=exampleSecureToken', $this->mockClient->getRequest()->getCookie()->getFieldValue());
+        $this->assertInstanceOf(CqrsResponse::class, $actual);
+        $this->assertEquals(['key' => 'EXPECTED'], $actual->getResult());
     }
 
     public function testWhenCommandHasNoSecureTokenThenTokenIsLeftIntact(): void
@@ -384,14 +375,11 @@ class CommandServiceTest extends MockeryTestCase
 
         $actual = $this->sut->send($mockCmd);
 
-        static::assertEquals(1, $this->mockClient->getRequest()->getHeaders()->count());
-        static::assertTrue($this->mockClient->getRequest()->getHeaders()->has('Cookie'));
-        static::assertEquals(
-            'secureToken=theDefaultValue',
-            $this->mockClient->getRequest()->getCookie()->getFieldValue()
-        );
-        static::assertInstanceOf(CqrsResponse::class, $actual);
-        static::assertEquals(['key' => 'EXPECTED'], $actual->getResult());
+        $this->assertEquals(1, $this->mockClient->getRequest()->getHeaders()->count());
+        $this->assertTrue($this->mockClient->getRequest()->getHeaders()->has('Cookie'));
+        $this->assertEquals('secureToken=theDefaultValue', $this->mockClient->getRequest()->getCookie()->getFieldValue());
+        $this->assertInstanceOf(CqrsResponse::class, $actual);
+        $this->assertEquals(['key' => 'EXPECTED'], $actual->getResult());
     }
 
     /**
@@ -400,9 +388,9 @@ class CommandServiceTest extends MockeryTestCase
      */
     private function assertInvalidResponse(CqrsResponse $actual, string $message, int $statusCode): void
     {
-        static::assertInstanceOf(CqrsResponse::class, $actual);
-        static::assertStringStartsWith($message, current($actual->getResult()['messages']));
-        static::assertEquals($statusCode, $actual->getHttpResponse()->getStatusCode());
+        $this->assertInstanceOf(CqrsResponse::class, $actual);
+        $this->assertStringStartsWith($message, current($actual->getResult()['messages']));
+        $this->assertEquals($statusCode, $actual->getHttpResponse()->getStatusCode());
     }
 
     public function testAddAuthorizationHeader(): void
@@ -447,7 +435,7 @@ class CommandServiceTest extends MockeryTestCase
 
         $actual = $this->sut->send($mockCmd);
 
-        static::assertInstanceOf(CqrsResponse::class, $actual);
+        $this->assertInstanceOf(CqrsResponse::class, $actual);
         $this->assertArrayHasKey('Authorization', $headers->toArray());
         $this->assertSame('Bearer access_token', $headers->get('Authorization')->getFieldValue());
     }

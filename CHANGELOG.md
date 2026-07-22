@@ -1,11 +1,43 @@
 # Changelog
 
-## [8.1.4](https://github.com/dvsa/vol-app/compare/v8.1.3...v8.1.4) (2026-07-16)
+## [9.0.0](https://github.com/dvsa/vol-app/compare/v8.1.3...v9.0.0) (2026-07-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* upgrades PHP 8.4, PhpUnit 13, bumped various dependencies, increased test strictness VOL-6520 ([#1638](https://github.com/dvsa/vol-app/issues/1638))
+
+### Features
+
+* add new parameters reg ([#1667](https://github.com/dvsa/vol-app/issues/1667)) ([18ded52](https://github.com/dvsa/vol-app/commit/18ded526b48ea5522edbd6b0671da5ce18a9fd25))
+* add reg env infra ([#1628](https://github.com/dvsa/vol-app/issues/1628)) ([47dbce7](https://github.com/dvsa/vol-app/commit/47dbce785d93773f584ca0fab5c6be1c3c0fbaf5))
+* convert doctrine entities to attributes, fix refdata translations, update entity generator (with new generator tests) VOL-7037 ([#1601](https://github.com/dvsa/vol-app/issues/1601)) ([d344177](https://github.com/dvsa/vol-app/commit/d34417774bbfbaf00b1f5a4ef02dfe9673cc4c92))
+* introduce idp module to tf and add the classify document step function ([#1632](https://github.com/dvsa/vol-app/issues/1632)) ([78b77ec](https://github.com/dvsa/vol-app/commit/78b77ec930305b338a2d4105052c9457c2b14bc6))
+* update govuk-frontend to v6.3.0 ([#1645](https://github.com/dvsa/vol-app/issues/1645)) ([d196e12](https://github.com/dvsa/vol-app/commit/d196e1246879b42b0eec7e2a705c0ed4c9730c9d))
+* update workflows reg ([#1640](https://github.com/dvsa/vol-app/issues/1640)) ([04f4a4e](https://github.com/dvsa/vol-app/commit/04f4a4e4cdd9660d5f8ea0ebb38bf6e8e5e2ee93))
+* upgrades PHP 8.4, PhpUnit 13, bumped various dependencies, increased test strictness VOL-6520 ([#1638](https://github.com/dvsa/vol-app/issues/1638)) ([eb0d2ba](https://github.com/dvsa/vol-app/commit/eb0d2ba290279b7094a6a96d6a8a300d8ed6ea59))
 
 
 ### Bug Fixes
 
-* restore CSV exports broken by toIterable() migration (VOL-7445) ([#1652](https://github.com/dvsa/vol-app/issues/1652)) ([e099689](https://github.com/dvsa/vol-app/commit/e0996895d9259a545aa9b9ba9803879ddbef4bb5))
+* 7137 mysql more delim changes ([#1655](https://github.com/dvsa/vol-app/issues/1655)) ([f6ba2e2](https://github.com/dvsa/vol-app/commit/f6ba2e2ed718f7b25ad507d34fe4ebd6b83a2a0d))
+* absolute references in NI extract ([#1664](https://github.com/dvsa/vol-app/issues/1664)) ([f59499f](https://github.com/dvsa/vol-app/commit/f59499facca1c74e0539a3858ee252abf1b40a85))
+* add permission for all environments to the ni extract bucket ([#1669](https://github.com/dvsa/vol-app/issues/1669)) ([5177215](https://github.com/dvsa/vol-app/commit/51772157761cb50035aa155cdd9f2e8b833f6cb1))
+* add reg to secrets ([#1656](https://github.com/dvsa/vol-app/issues/1656)) ([c30c81a](https://github.com/dvsa/vol-app/commit/c30c81a1bcc41bb50a28ff65062a14b4c4e823ee))
+* add reg workflows ([#1660](https://github.com/dvsa/vol-app/issues/1660)) ([4abd13e](https://github.com/dvsa/vol-app/commit/4abd13eb76f66249db181ae762f74538cbcca035))
+* **api:** correct NTU date comparison so process-ntu selects applications ([#1614](https://github.com/dvsa/vol-app/issues/1614)) ([2e0e0db](https://github.com/dvsa/vol-app/commit/2e0e0db08a9e082afad99cffe4bad7e74f3383cf))
+* **api:** distinguish transaction reports from bank statements ([#1641](https://github.com/dvsa/vol-app/issues/1641)) ([e2cad9b](https://github.com/dvsa/vol-app/commit/e2cad9b05b5f9bfaef72cca9bdb132ee6827993d))
+* correct qa/int mail dsn ([#1647](https://github.com/dvsa/vol-app/issues/1647)) ([fe8bd90](https://github.com/dvsa/vol-app/commit/fe8bd90f94fa67bb2ddb9218761a9cd52817ef98))
+* delim order ([#1650](https://github.com/dvsa/vol-app/issues/1650)) ([565b92a](https://github.com/dvsa/vol-app/commit/565b92ab7143b49959b7b18157b4c87943a9f839))
+* letters admin updates batch3 vol 7305 ([#1642](https://github.com/dvsa/vol-app/issues/1642)) ([8e6b0ae](https://github.com/dvsa/vol-app/commit/8e6b0ae386271234d5257c3a9b9f35d8d91cdd66))
+* remove stripping delimiter ([#1653](https://github.com/dvsa/vol-app/issues/1653)) ([74fafbb](https://github.com/dvsa/vol-app/commit/74fafbbee82370994df90ebaeebb966f3ec6023b))
+* restore CSV exports broken by toIterable() migration (VOL-7445) ([#1652](https://github.com/dvsa/vol-app/issues/1652)) ([8eba538](https://github.com/dvsa/vol-app/commit/8eba5388cb1aabc0822c394a6f318f4e8121dbd3))
+* smoke on dev ([#1648](https://github.com/dvsa/vol-app/issues/1648)) ([881c84a](https://github.com/dvsa/vol-app/commit/881c84a4dbad1d40ee8820f33ca03db477b6c04a))
+* sql delete statement ([#1661](https://github.com/dvsa/vol-app/issues/1661)) ([db4b189](https://github.com/dvsa/vol-app/commit/db4b189a10e50cd6772d28d3d93ac53d5a71677a))
+* syntax ([#1659](https://github.com/dvsa/vol-app/issues/1659)) ([17f62d2](https://github.com/dvsa/vol-app/commit/17f62d2728c101084ab7f8a9377f648bbedd60aa))
+* update lint version ([#1646](https://github.com/dvsa/vol-app/issues/1646)) ([90950a7](https://github.com/dvsa/vol-app/commit/90950a73247f960a7a4f41c7eb5f83957c9733c7))
+* use correct iam policy action for classify step ([#1639](https://github.com/dvsa/vol-app/issues/1639)) ([376dd76](https://github.com/dvsa/vol-app/commit/376dd76a35d2d9ed8d91058abfce5493108bcdba))
+* wrong env name ([#1644](https://github.com/dvsa/vol-app/issues/1644)) ([d39ff9a](https://github.com/dvsa/vol-app/commit/d39ff9a40c90d54175d2b003f72e4dfabf04eb2a))
 
 ## [8.1.3](https://github.com/dvsa/vol-app/compare/v8.1.2...v8.1.3) (2026-07-07)
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Lva;
 
 use Common\RefData;
@@ -9,7 +11,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Data\Mapper\Lva\TransportManagerApplication;
 
-class TransportManagerApplicationTest extends MockeryTestCase
+final class TransportManagerApplicationTest extends MockeryTestCase
 {
     public function testMapFromError(): void
     {
@@ -39,9 +41,8 @@ class TransportManagerApplicationTest extends MockeryTestCase
      * testMapForSections
      *
      * @param $data
-     *
-     * @dataProvider transportManagerDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('transportManagerDataProvider')]
     public function testMapForSections($data): void
     {
         $translationHelper = m::mock(TranslationHelperService::class);
@@ -57,60 +58,58 @@ class TransportManagerApplicationTest extends MockeryTestCase
     }
 
     /**
-     * @return ((((string|string[])[]|string)[]|string)[]|string)[][][]
+     * @return \Iterator<(int | string), array<array<(array<(array<(array<(array<string> | string)> | string)> | string)> | string)>>>
      *
      * @psalm-return list{list{array{application: array{vehicleType: array{id: 'app_veh_type_mixed'}}, isOwner: '__TEST__', tmType: array{description: '__TEST__'}, hoursMon: '__TEST__', hoursTue: '__TEST__', hoursWed: '__TEST__', hoursThu: '__TEST__', hoursFri: '__TEST__', hoursSat: '__TEST__', hoursSun: '__TEST__', otherLicences: array<never, never>, additionalInformation: '__TEST__', hasUndertakenTraining: 'N', transportManager: array{otherLicences: array<never, never>, employments: array<never, never>, previousConvictions: array<never, never>, documents: array<never, never>, homeCd: array{emailAddress: '__TEST__', address: array{countryCode: array{countryDesc: '__TEST__'}}, person: array{forename: '__TEST__', familyName: '__TEST__'}}, workCd: array{address: array{countryCode: array{countryDesc: '__TEST__'}}}}}}}
      */
-    public function transportManagerDataProvider(): array
+    public static function transportManagerDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'application' => [
-                        'vehicleType' => [
-                            'id' => RefData::APP_VEHICLE_TYPE_MIXED,
-                        ],
+                'application' => [
+                    'vehicleType' => [
+                        'id' => RefData::APP_VEHICLE_TYPE_MIXED,
                     ],
-                    'isOwner' => '__TEST__',
-                    'tmType' => ['description' => '__TEST__'],
-                    'hoursMon' => '__TEST__',
-                    'hoursTue' => '__TEST__',
-                    'hoursWed' => '__TEST__',
-                    'hoursThu' => '__TEST__',
-                    'hoursFri' => '__TEST__',
-                    'hoursSat' => '__TEST__',
-                    'hoursSun' => '__TEST__',
-                    'otherLicences' => [
-                    ],
-                    'additionalInformation' => '__TEST__',
-                    'hasUndertakenTraining' => 'N',
-                    'transportManager' =>
-                        [
-                            'otherLicences' => [],
-                            'employments' => [],
-                            'previousConvictions' => [],
-                            'documents' => [],
-                            'homeCd' => [
-                                'emailAddress' => '__TEST__',
-                                'address' => [
-                                    'countryCode' => [
-                                        'countryDesc' => '__TEST__'
-                                    ],
+                ],
+                'isOwner' => '__TEST__',
+                'tmType' => ['description' => '__TEST__'],
+                'hoursMon' => '__TEST__',
+                'hoursTue' => '__TEST__',
+                'hoursWed' => '__TEST__',
+                'hoursThu' => '__TEST__',
+                'hoursFri' => '__TEST__',
+                'hoursSat' => '__TEST__',
+                'hoursSun' => '__TEST__',
+                'otherLicences' => [
+                ],
+                'additionalInformation' => '__TEST__',
+                'hasUndertakenTraining' => 'N',
+                'transportManager' =>
+                    [
+                        'otherLicences' => [],
+                        'employments' => [],
+                        'previousConvictions' => [],
+                        'documents' => [],
+                        'homeCd' => [
+                            'emailAddress' => '__TEST__',
+                            'address' => [
+                                'countryCode' => [
+                                    'countryDesc' => '__TEST__'
                                 ],
-                                'person' => [
-                                    'forename' => '__TEST__',
-                                    'familyName' => '__TEST__',
-                                ]
                             ],
-                            'workCd' => [
-                                'address' => [
-                                    'countryCode' => [
-                                        'countryDesc' => '__TEST__'
-                                    ],
-                                ]
+                            'person' => [
+                                'forename' => '__TEST__',
+                                'familyName' => '__TEST__',
+                            ]
+                        ],
+                        'workCd' => [
+                            'address' => [
+                                'countryCode' => [
+                                    'countryDesc' => '__TEST__'
+                                ],
                             ]
                         ]
-                ]
+                    ]
             ]
         ];
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Mockery as m;
@@ -12,31 +14,26 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationGoodsVehiclesTest extends MockeryTestCase
+final class VariationGoodsVehiclesTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $authService;
     protected $sut;
 
     protected $formHelper;
 
     protected $formService;
 
-    protected $sm;
-
     #[\Override]
     protected function setUp(): void
     {
-        $this->authService = m::mock(AuthorizationService::class);
+        $authService = m::mock(AuthorizationService::class);
+        $sm = m::mock(\Laminas\ServiceManager\ServiceManager::class);
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
         $this->formHelper->shouldReceive('getServiceLocator')
-            ->andReturn($this->sm);
+            ->andReturn($sm);
 
         $this->formService = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
 
-        $this->sut = new VariationGoodsVehicles($this->formHelper, $this->authService, $this->formService);
+        $this->sut = new VariationGoodsVehicles($this->formHelper, $authService, $this->formService);
     }
 
     public function testGetForm(): void

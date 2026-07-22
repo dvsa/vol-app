@@ -13,7 +13,7 @@ use Laminas\Mvc\Controller\Plugin\Params;
  * Class AddFormDefaultDataTest
  * @package OlcsTest\Mvc\Controller\ParameterProvider
  */
-class AddFormDefaultDataTest extends TestCase
+final class AddFormDefaultDataTest extends TestCase
 {
     public function testProvideParameters(): void
     {

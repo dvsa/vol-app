@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Service\Lva\SectionAccessService;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Mockery as m;
 
-class LicenceChecklistTest extends QueryHandlerTestCase
+final class LicenceChecklistTest extends QueryHandlerTestCase
 {
     /** @var  LicenceChecklist */
     protected $sut;

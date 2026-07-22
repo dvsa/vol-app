@@ -17,7 +17,7 @@ class CurrentUserFactory implements FactoryInterface
      * @throws RuntimeException
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CurrentUser
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CurrentUser
     {
         $config = $container->get('Config');
 

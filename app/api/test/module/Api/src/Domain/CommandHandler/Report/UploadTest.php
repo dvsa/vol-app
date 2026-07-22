@@ -25,12 +25,12 @@ use org\bovigo\vfs\vfsStream;
 use LmcRbacMvc\Service\AuthorizationService;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Report\Upload::class)]
-class UploadTest extends AbstractCommandHandlerTestCase
+final class UploadTest extends AbstractCommandHandlerTestCase
 {
-    public const FILENAME = 'fileName.csv';
-    public const BODY = 'expect_body';
-    public const IDENTIFIER = '/some/identifier.csv';
-    public const USER_ID = 7001;
+    public const string FILENAME = 'fileName.csv';
+    public const string BODY = 'expect_body';
+    public const string IDENTIFIER = '/some/identifier.csv';
+    public const int USER_ID = 7001;
 
     /** @var Upload */
     protected $sut;
@@ -91,8 +91,8 @@ class UploadTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('upload')
             ->andReturnUsing(
                 function ($identifier, DsFile $file) {
-                    static::assertSame(self::IDENTIFIER, $identifier);
-                    static::assertEquals(self::BODY, $file->getContent());
+                    $this->assertSame(self::IDENTIFIER, $identifier);
+                    $this->assertEquals(self::BODY, $file->getContent());
 
                     $file->setIdentifier(self::IDENTIFIER);
 
@@ -121,7 +121,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
                 ]),
                 'processAfterDate' => null,
             ],
-            (new Result())->addMessage('Queue item created')
+            new Result()->addMessage('Queue item created')
         );
 
         //  call
@@ -166,8 +166,8 @@ class UploadTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('upload')
             ->andReturnUsing(
                 function ($identifier, DsFile $file) {
-                    static::assertSame(self::IDENTIFIER, $identifier);
-                    static::assertEquals(self::BODY, $file->getContent());
+                    $this->assertSame(self::IDENTIFIER, $identifier);
+                    $this->assertEquals(self::BODY, $file->getContent());
 
                     $file->setIdentifier(self::IDENTIFIER);
 
@@ -197,7 +197,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
                 ]),
                 'processAfterDate' => null,
             ],
-            (new Result())->addMessage('Queue item created')
+            new Result()->addMessage('Queue item created')
         );
 
         //  call
@@ -242,8 +242,8 @@ class UploadTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('upload')
             ->andReturnUsing(
                 function ($identifier, DsFile $file) {
-                    static::assertSame(self::IDENTIFIER, $identifier);
-                    static::assertEquals(self::BODY, $file->getContent());
+                    $this->assertSame(self::IDENTIFIER, $identifier);
+                    $this->assertEquals(self::BODY, $file->getContent());
 
                     $file->setIdentifier(self::IDENTIFIER);
 
@@ -273,7 +273,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
                 ]),
                 'processAfterDate' => null,
             ],
-            (new Result())->addMessage('Queue item created')
+            new Result()->addMessage('Queue item created')
         );
 
         //  call
@@ -317,8 +317,8 @@ class UploadTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('upload')
             ->andReturnUsing(
                 function ($identifier, DsFile $file) {
-                    static::assertSame(self::IDENTIFIER, $identifier);
-                    static::assertEquals(self::BODY, $file->getContent());
+                    $this->assertSame(self::IDENTIFIER, $identifier);
+                    $this->assertEquals(self::BODY, $file->getContent());
 
                     $file->setIdentifier(self::IDENTIFIER);
 
@@ -337,7 +337,7 @@ class UploadTest extends AbstractCommandHandlerTestCase
                 ]),
                 'processAfterDate' => null,
             ],
-            (new Result())->addMessage('Queue item created')
+            new Result()->addMessage('Queue item created')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -381,8 +381,8 @@ class UploadTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('upload')
             ->andReturnUsing(
                 function ($identifier, DsFile $file) {
-                    static::assertSame(self::IDENTIFIER, $identifier);
-                    static::assertEquals(self::BODY, $file->getContent());
+                    $this->assertSame(self::IDENTIFIER, $identifier);
+                    $this->assertEquals(self::BODY, $file->getContent());
 
                     $file->setIdentifier(self::IDENTIFIER);
 
@@ -440,10 +440,10 @@ class UploadTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('upload')
             ->andReturnUsing(
                 function ($fileName, DsFile $file) use ($expectMimeType) {
-                    static::assertSame(self::IDENTIFIER, $fileName);
+                    $this->assertSame(self::IDENTIFIER, $fileName);
 
-                    static::assertEquals(self::BODY, gzuncompress($file->getContent()));
-                    static::assertEquals($expectMimeType, $file->getMimeType());
+                    $this->assertSame(self::BODY, gzuncompress($file->getContent()));
+                    $this->assertEquals($expectMimeType, $file->getMimeType());
 
                     $file->setIdentifier(self::IDENTIFIER);
                     return $file;

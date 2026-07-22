@@ -18,7 +18,7 @@ trait GenericSectionIndexAction
     /**
      * Redirect to the first section
      *
-     * @return Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {

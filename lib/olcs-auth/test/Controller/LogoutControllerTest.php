@@ -11,9 +11,9 @@ use Laminas\Session\Container;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class LogoutControllerTest extends MockeryTestCase
+final class LogoutControllerTest extends MockeryTestCase
 {
-    private const REDIRECT_URL = 'http://www.example-gov-site.uk';
+    private const string REDIRECT_URL = 'http://www.example-gov-site.uk';
 
     private Redirect $redirect;
 
@@ -22,7 +22,7 @@ class LogoutControllerTest extends MockeryTestCase
         $controller = new LogoutController(
             true,
             self::REDIRECT_URL,
-            $this->createMock(Container::class)
+            $this->createStub(Container::class)
         );
 
         // Mock redirect service
@@ -43,7 +43,7 @@ class LogoutControllerTest extends MockeryTestCase
         $controller = new LogoutController(
             false,
             self::REDIRECT_URL,
-            $this->createMock(Container::class)
+            $this->createStub(Container::class)
         );
 
         // Mock redirect service

@@ -21,7 +21,7 @@ use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class PresidingTcTest extends AbstractDataServiceTestCase
+final class PresidingTcTest extends AbstractDataServiceTestCase
 {
     /** @var PresidingTc */
     private $sut;

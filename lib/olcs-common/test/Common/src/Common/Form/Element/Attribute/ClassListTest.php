@@ -7,35 +7,31 @@ namespace CommonTest\Form\Element\Attribute;
 use Common\Test\MockeryTestCase;
 use Common\Form\Element\Attribute\ClassList;
 
-/**
- * @covers \Common\Form\Element\Attribute\ClassList
- */
-class ClassListTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\Element\Attribute\ClassList::class)]
+final class ClassListTest extends MockeryTestCase
 {
-    protected const A_CLASS = 'A_CLASS';
+    protected const string A_CLASS = 'A_CLASS';
 
-    protected const A_CLASS_ARRAY = [self::A_CLASS];
+    protected const array A_CLASS_ARRAY = [self::A_CLASS];
 
-    protected const B_CLASS = 'B_CLASS';
+    protected const string B_CLASS = 'B_CLASS';
 
-    protected const B_CLASS_ARRAY = [self::B_CLASS];
+    protected const array B_CLASS_ARRAY = [self::B_CLASS];
 
-    protected const AB_CLASS_STRING = self::A_CLASS . ' ' . self::B_CLASS;
+    protected const string AB_CLASS_STRING = self::A_CLASS . ' ' . self::B_CLASS;
 
-    protected const AB_CLASS_ARRAY = [self::A_CLASS, self::B_CLASS];
+    protected const array AB_CLASS_ARRAY = [self::A_CLASS, self::B_CLASS];
 
-    protected const EMPTY_CLASS_STRING = '';
+    protected const string EMPTY_CLASS_STRING = '';
 
-    protected const AA_CLASS_ARRAY = [self::A_CLASS, self::A_CLASS];
+    protected const array AA_CLASS_ARRAY = [self::A_CLASS, self::A_CLASS];
 
     /**
      * @var ClassList|null
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function toStringIsCallable(): void
     {
         // Setup
@@ -45,10 +41,8 @@ class ClassListTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, '__toString']);
     }
 
-    /**
-     * @test
-     * @depends toStringIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('toStringIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function toStringReturnsAnEmptyStringWhenNoClassesHaveBeenAdded(): void
     {
         // Setup
@@ -61,9 +55,7 @@ class ClassListTest extends MockeryTestCase
         $this->assertEmpty($result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function addIsCallable(): void
     {
         // Setup
@@ -73,10 +65,8 @@ class ClassListTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'add']);
     }
 
-    /**
-     * @test
-     * @depends addIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function addReturnsSelf(): void
     {
         // Setup
@@ -89,11 +79,9 @@ class ClassListTest extends MockeryTestCase
         $this->assertEquals($this->sut, $result);
     }
 
-    /**
-     * @test
-     * @depends addIsCallable
-     * @depends toStringIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('toStringIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function addAddsAClassWhenPassedAString(): void
     {
         // Setup
@@ -104,13 +92,11 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::A_CLASS, $result);
+        $this->assertSame(static::A_CLASS, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsAClassWhenPassedAString
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsAClassWhenPassedAString')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function addAddsMultipleClassesWhenPassedAString(): void
     {
         // Setup
@@ -121,14 +107,12 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::AB_CLASS_STRING, $result);
+        $this->assertSame(static::AB_CLASS_STRING, $result);
     }
 
-    /**
-     * @test
-     * @depends addIsCallable
-     * @depends toStringIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('toStringIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function addAddsAClassWhenPassedAnArray(): void
     {
         // Setup
@@ -139,13 +123,11 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::A_CLASS, $result);
+        $this->assertSame(static::A_CLASS, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsAClassWhenPassedAString
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsAClassWhenPassedAString')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function addAddsMultipleClassesWhenPassedAnArray(): void
     {
         // Setup
@@ -156,13 +138,11 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::AB_CLASS_STRING, $result);
+        $this->assertSame(static::AB_CLASS_STRING, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsAClassWhenPassedAnArray
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsAClassWhenPassedAnArray')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function addAddsMultipleClassesWhenPassedOneAtATime(): void
     {
         // Setup
@@ -175,13 +155,11 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::AB_CLASS_STRING, $result);
+        $this->assertSame(static::AB_CLASS_STRING, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsAClassWhenPassedAnArray
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsAClassWhenPassedAnArray')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function addAddsAClassWhenPassedAClassList(): void
     {
         // Setup
@@ -195,13 +173,11 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::A_CLASS, $result);
+        $this->assertSame(static::A_CLASS, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsMultipleClassesWhenPassedOneAtATime
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsMultipleClassesWhenPassedOneAtATime')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function addAddsMultipleClassesWhenPassedAClassList(): void
     {
         // Setup
@@ -216,13 +192,11 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::AB_CLASS_STRING, $result);
+        $this->assertSame(static::AB_CLASS_STRING, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsMultipleClassesWhenPassedAString
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsMultipleClassesWhenPassedAString')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function addDoesNotAddDuplicateClasses(): void
     {
         // Setup
@@ -233,14 +207,12 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::AB_CLASS_STRING, $result);
+        $this->assertSame(static::AB_CLASS_STRING, $result);
     }
 
-    /**
-     * @test
-     * @depends addIsCallable
-     * @depends toStringIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('toStringIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructAddsAClassWhenPassedAString(): void
     {
         // Execute
@@ -248,13 +220,11 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::A_CLASS, $result);
+        $this->assertSame(static::A_CLASS, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsAClassWhenPassedAString
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsAClassWhenPassedAString')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructAddsMultipleClassesWhenPassedAString(): void
     {
         // Execute
@@ -262,14 +232,12 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::AB_CLASS_STRING, $result);
+        $this->assertSame(static::AB_CLASS_STRING, $result);
     }
 
-    /**
-     * @test
-     * @depends addIsCallable
-     * @depends toStringIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('toStringIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructAddsAClassWhenPassedAnArray(): void
     {
         // Execute
@@ -277,13 +245,11 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::A_CLASS, $result);
+        $this->assertSame(static::A_CLASS, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsAClassWhenPassedAString
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsAClassWhenPassedAString')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructAddsMultipleClassesWhenPassedAnArray(): void
     {
         // Execute
@@ -291,13 +257,11 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::AB_CLASS_STRING, $result);
+        $this->assertSame(static::AB_CLASS_STRING, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsAClassWhenPassedAnArray
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsAClassWhenPassedAnArray')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructAddsAClassWhenPassedAClassList(): void
     {
         // Setup
@@ -309,13 +273,11 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::A_CLASS, $result);
+        $this->assertSame(static::A_CLASS, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsMultipleClassesWhenPassedOneAtATime
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsMultipleClassesWhenPassedOneAtATime')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructAddsMultipleClassesWhenPassedAClassList(): void
     {
         // Setup
@@ -328,13 +290,11 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::AB_CLASS_STRING, $result);
+        $this->assertSame(static::AB_CLASS_STRING, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsMultipleClassesWhenPassedAString
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsMultipleClassesWhenPassedAString')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructDoesNotAddDuplicateClasses(): void
     {
         // Execute
@@ -342,12 +302,10 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::AB_CLASS_STRING, $result);
+        $this->assertSame(static::AB_CLASS_STRING, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function removeIsCallable(): void
     {
         // Setup
@@ -357,10 +315,8 @@ class ClassListTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'remove']);
     }
 
-    /**
-     * @test
-     * @depends removeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('removeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function removeRemovesClassThatWasNeverAdded(): void
     {
         // Setup
@@ -373,11 +329,9 @@ class ClassListTest extends MockeryTestCase
         $this->assertTrue(true);
     }
 
-    /**
-     * @test
-     * @depends addAddsAClassWhenPassedAString
-     * @depends removeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsAClassWhenPassedAString')]
+    #[\PHPUnit\Framework\Attributes\Depends('removeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function removeReturnsSelf(): void
     {
         // Setup
@@ -391,11 +345,9 @@ class ClassListTest extends MockeryTestCase
         $this->assertEquals($this->sut, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsAClassWhenPassedAString
-     * @depends removeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsAClassWhenPassedAString')]
+    #[\PHPUnit\Framework\Attributes\Depends('removeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function removeRemovesAPreviouslyAddedClassWhenPassedAString(): void
     {
         // Setup
@@ -409,15 +361,13 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::B_CLASS, $result);
+        $this->assertSame(static::B_CLASS, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsAClassWhenPassedAString
-     * @depends removeIsCallable
-     * @depends toStringReturnsAnEmptyStringWhenNoClassesHaveBeenAdded
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsAClassWhenPassedAString')]
+    #[\PHPUnit\Framework\Attributes\Depends('removeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('toStringReturnsAnEmptyStringWhenNoClassesHaveBeenAdded')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function removeRemovesMultiplePreviouslyAddedClassesWhenPassedAString(): void
     {
         // Setup
@@ -431,14 +381,12 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::EMPTY_CLASS_STRING, $result);
+        $this->assertSame(static::EMPTY_CLASS_STRING, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsMultipleClassesWhenPassedAnArray
-     * @depends toStringReturnsAnEmptyStringWhenNoClassesHaveBeenAdded
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsMultipleClassesWhenPassedAnArray')]
+    #[\PHPUnit\Framework\Attributes\Depends('toStringReturnsAnEmptyStringWhenNoClassesHaveBeenAdded')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function removeRemovesAPreviouslyAddedClassWhenPassedAnArray(): void
     {
         // Setup
@@ -451,14 +399,12 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::B_CLASS, $result);
+        $this->assertSame(static::B_CLASS, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsAClassWhenPassedAString
-     * @depends toStringReturnsAnEmptyStringWhenNoClassesHaveBeenAdded
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsAClassWhenPassedAString')]
+    #[\PHPUnit\Framework\Attributes\Depends('toStringReturnsAnEmptyStringWhenNoClassesHaveBeenAdded')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function removeRemovesMultiplePreviouslyAddedClassesWhenPassedAnArray(): void
     {
         // Setup
@@ -472,14 +418,12 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::EMPTY_CLASS_STRING, $result);
+        $this->assertSame(static::EMPTY_CLASS_STRING, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsMultipleClassesWhenPassedAnArray
-     * @depends toStringReturnsAnEmptyStringWhenNoClassesHaveBeenAdded
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsMultipleClassesWhenPassedAnArray')]
+    #[\PHPUnit\Framework\Attributes\Depends('toStringReturnsAnEmptyStringWhenNoClassesHaveBeenAdded')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function removeRemovesAPreviouslyAddedClassWhenPassedAClassList(): void
     {
         // Setup
@@ -495,14 +439,12 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::B_CLASS, $result);
+        $this->assertSame(static::B_CLASS, $result);
     }
 
-    /**
-     * @test
-     * @depends addAddsMultipleClassesWhenPassedAnArray
-     * @depends toStringReturnsAnEmptyStringWhenNoClassesHaveBeenAdded
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsMultipleClassesWhenPassedAnArray')]
+    #[\PHPUnit\Framework\Attributes\Depends('toStringReturnsAnEmptyStringWhenNoClassesHaveBeenAdded')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function removeRemovesMultiplePreviouslyAddedClassesWhenPassedAClassList(): void
     {
         // Setup
@@ -518,12 +460,10 @@ class ClassListTest extends MockeryTestCase
         $result = (string) $this->sut;
 
         // Assert
-        $this->assertEquals(static::EMPTY_CLASS_STRING, $result);
+        $this->assertSame(static::EMPTY_CLASS_STRING, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function toArrayIsCallable(): void
     {
         // Setup
@@ -533,10 +473,8 @@ class ClassListTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'toArray']);
     }
 
-    /**
-     * @test
-     * @depends toArrayIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('toArrayIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function toArrayReturnsAnArray(): void
     {
         // Setup
@@ -549,11 +487,9 @@ class ClassListTest extends MockeryTestCase
         $this->assertIsArray($result);
     }
 
-    /**
-     * @test
-     * @depends toArrayReturnsAnArray
-     * @depends constructAddsMultipleClassesWhenPassedAnArray
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('toArrayReturnsAnArray')]
+    #[\PHPUnit\Framework\Attributes\Depends('constructAddsMultipleClassesWhenPassedAnArray')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function toArrayReturnsAnArrayOfClassNames(): void
     {
         // Setup
@@ -566,10 +502,8 @@ class ClassListTest extends MockeryTestCase
         $this->assertEquals(static::AB_CLASS_ARRAY, $result);
     }
 
-    /**
-     * @test
-     * @depends toArrayReturnsAnArrayOfClassNames
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('toArrayReturnsAnArrayOfClassNames')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function toArrayReturnsAnArrayIndexedNumerically(): void
     {
         // Setup
@@ -582,10 +516,8 @@ class ClassListTest extends MockeryTestCase
         $this->assertEquals(array_values($result), $result);
     }
 
-    /**
-     * @test
-     * @depends toArrayReturnsAnArrayOfClassNames
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('toArrayReturnsAnArrayOfClassNames')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function toArrayRemovesDuplicateClassNames(): void
     {
         // Setup
@@ -598,19 +530,15 @@ class ClassListTest extends MockeryTestCase
         $this->assertEquals(static::A_CLASS_ARRAY, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function fromStringIsCallable(): void
     {
         // Assert
         $this->assertIsCallable(static fn(string $str): \Common\Form\Element\Attribute\ClassList => \Common\Form\Element\Attribute\ClassList::fromString($str));
     }
 
-    /**
-     * @test
-     * @depends fromStringIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('fromStringIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function fromStringReturnsAClassList(): void
     {
         // Execute
@@ -620,10 +548,8 @@ class ClassListTest extends MockeryTestCase
         $this->assertInstanceOf(ClassList::class, $result);
     }
 
-    /**
-     * @test
-     * @depends fromStringReturnsAClassList
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('fromStringReturnsAClassList')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function fromStringReturnsAClassListWithEachClassInAString(): void
     {
         // Execute
@@ -633,9 +559,7 @@ class ClassListTest extends MockeryTestCase
         $this->assertEquals(new ClassList(static::AB_CLASS_ARRAY), $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasIsCallable(): void
     {
         // Setup
@@ -645,11 +569,9 @@ class ClassListTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'has']);
     }
 
-    /**
-     * @test
-     * @depends hasIsCallable
-     * @depends addAddsAClassWhenPassedAString
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('hasIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsAClassWhenPassedAString')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasReturnsFalseWhenAClassListIsEmptyAndPassedAString(): void
     {
         // Setup
@@ -662,11 +584,9 @@ class ClassListTest extends MockeryTestCase
         $this->assertEquals(false, $result);
     }
 
-    /**
-     * @test
-     * @depends hasIsCallable
-     * @depends addAddsAClassWhenPassedAString
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('hasIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsAClassWhenPassedAString')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasReturnsTrueWhenAStringClassIsInAClassList(): void
     {
         // Setup
@@ -680,10 +600,8 @@ class ClassListTest extends MockeryTestCase
         $this->assertEquals(true, $result);
     }
 
-    /**
-     * @test
-     * @depends hasIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('hasIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasReturnsFalseWhenAClassListIsEmptyAndPassedAnArray(): void
     {
         // Setup
@@ -696,11 +614,9 @@ class ClassListTest extends MockeryTestCase
         $this->assertEquals(false, $result);
     }
 
-    /**
-     * @test
-     * @depends hasIsCallable
-     * @depends addAddsMultipleClassesWhenPassedAnArray
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('hasIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsMultipleClassesWhenPassedAnArray')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasReturnsTrueWhenAllClassesInAnArrayOfClassesAreInAClassList(): void
     {
         // Setup
@@ -713,11 +629,9 @@ class ClassListTest extends MockeryTestCase
         $this->assertEquals(true, $result);
     }
 
-    /**
-     * @test
-     * @depends hasIsCallable
-     * @depends constructAddsMultipleClassesWhenPassedAnArray
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('hasIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('constructAddsMultipleClassesWhenPassedAnArray')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasReturnsFalseWhenAClassListIsEmptyAndPassedAClassList(): void
     {
         // Setup
@@ -730,12 +644,10 @@ class ClassListTest extends MockeryTestCase
         $this->assertEquals(false, $result);
     }
 
-    /**
-     * @test
-     * @depends hasIsCallable
-     * @depends addAddsMultipleClassesWhenPassedAnArray
-     * @depends constructAddsMultipleClassesWhenPassedAnArray
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('hasIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('addAddsMultipleClassesWhenPassedAnArray')]
+    #[\PHPUnit\Framework\Attributes\Depends('constructAddsMultipleClassesWhenPassedAnArray')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function hasReturnsTrueWhenAllClassesOfAClassListAreInAClassList(): void
     {
         // Setup

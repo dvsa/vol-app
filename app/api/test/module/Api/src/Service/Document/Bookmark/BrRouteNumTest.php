@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BrRouteNum;
 /**
  * Br Route Num test
  */
-class BrRouteNumTest extends \PHPUnit\Framework\TestCase
+final class BrRouteNumTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -19,7 +19,7 @@ class BrRouteNumTest extends \PHPUnit\Framework\TestCase
             \Dvsa\Olcs\Transfer\Query\QueryInterface::class,
             $bookmark->getQuery(['busRegId' => 123])
         );
-        $this->assertTrue(is_null($bookmark->getQuery([])));
+        $this->assertNull($bookmark->getQuery([]));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
@@ -31,51 +31,49 @@ class BrRouteNumTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
-            // no results
+        // no results
+        yield [
+            [],
+            ''
+        ];
+        // service without other services
+        yield [
             [
-                [],
-                ''
+                'serviceNo' => '1'
             ],
-            // service without other services
+            '1'
+        ];
+        // service without other services
+        yield [
             [
-                [
-                    'serviceNo' => '1'
-                ],
-                '1'
+                'serviceNo' => '1',
+                'otherServices' => []
             ],
-            // service without other services
+            '1'
+        ];
+        // service with one other service
+        yield [
             [
-                [
-                    'serviceNo' => '1',
-                    'otherServices' => []
-                ],
-                '1'
+                'serviceNo' => '1',
+                'otherServices' => [
+                    ['serviceNo' => '2']
+                ]
             ],
-            // service with one other service
+            '1 (2)'
+        ];
+        // service with many other services
+        yield [
             [
-                [
-                    'serviceNo' => '1',
-                    'otherServices' => [
-                        ['serviceNo' => '2']
-                    ]
-                ],
-                '1 (2)'
+                'serviceNo' => '1',
+                'otherServices' => [
+                    ['serviceNo' => '2'],
+                    ['serviceNo' => '3'],
+                    ['serviceNo' => '4'],
+                ]
             ],
-            // service with many other services
-            [
-                [
-                    'serviceNo' => '1',
-                    'otherServices' => [
-                        ['serviceNo' => '2'],
-                        ['serviceNo' => '3'],
-                        ['serviceNo' => '4'],
-                    ]
-                ],
-                '1 (2, 3, 4)'
-            ],
+            '1 (2, 3, 4)'
         ];
     }
 }

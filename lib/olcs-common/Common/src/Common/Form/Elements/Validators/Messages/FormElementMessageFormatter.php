@@ -173,7 +173,7 @@ class FormElementMessageFormatter
      * @param string|null $elementType
      * @return false|string
      */
-    protected function getReplacementForDefaultElementMessage(ElementInterface $element, $messageKey, string $elementType = null)
+    protected function getReplacementForDefaultElementMessage(ElementInterface $element, $messageKey, ?string $elementType = null)
     {
         if (null === $elementType) {
             return false;

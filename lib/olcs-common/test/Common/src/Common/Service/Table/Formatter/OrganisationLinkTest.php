@@ -4,6 +4,8 @@
  * OrganisationLinkTest.php
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -16,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @package CommonTest\Service\Table\Formatter
  */
-class OrganisationLinkTest extends TestCase
+final class OrganisationLinkTest extends TestCase
 {
     protected $urlHelper;
 

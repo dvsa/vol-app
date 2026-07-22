@@ -14,7 +14,7 @@ class RefreshTokenServiceFactory implements FactoryInterface
      * @param array|null $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RefreshTokenService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): RefreshTokenService
     {
         return new RefreshTokenService(
             $container->get('CommandSender')

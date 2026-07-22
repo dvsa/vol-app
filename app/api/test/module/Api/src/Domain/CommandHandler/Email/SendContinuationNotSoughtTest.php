@@ -26,7 +26,7 @@ use Dvsa\Olcs\Email\Data\Message;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class SendContinuationNotSoughtTest extends AbstractCommandHandlerTestCase
+final class SendContinuationNotSoughtTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

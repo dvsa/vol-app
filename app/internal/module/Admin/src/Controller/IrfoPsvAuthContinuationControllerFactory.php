@@ -12,7 +12,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class IrfoPsvAuthContinuationControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrfoPsvAuthContinuationController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IrfoPsvAuthContinuationController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         assert($translationHelper instanceof TranslationHelperService);

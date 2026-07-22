@@ -58,19 +58,15 @@ use RuntimeException;
 
 /**
  * IrhpApplication Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="irhp_application",
- *    indexes={
- *        @ORM\Index(name="ix_irhp_application_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_irhp_application_source", columns={"source"}),
- *        @ORM\Index(name="ix_irhp_application_status", columns={"status"}),
- *        @ORM\Index(name="ix_irhp_application_irhp_permit_type_id", columns={"irhp_permit_type_id"}),
- *        @ORM\Index(name="ix_irhp_application_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_irhp_application_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_application')]
+#[ORM\Index(name: 'ix_irhp_application_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_irhp_application_source', columns: ['source'])]
+#[ORM\Index(name: 'ix_irhp_application_status', columns: ['status'])]
+#[ORM\Index(name: 'ix_irhp_application_irhp_permit_type_id', columns: ['irhp_permit_type_id'])]
+#[ORM\Index(name: 'ix_irhp_application_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_irhp_application_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Entity]
 class IrhpApplication extends AbstractIrhpApplication implements
     IrhpInterface,
     OrganisationProviderInterface,
@@ -170,7 +166,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      *
      * @return string
      */
-    public function getProductReferenceForTier(DateTime $now = null)
+    public function getProductReferenceForTier(?DateTime $now = null)
     {
         $now = is_null($now) ? new DateTime() : $now;
         $irhpPermitApplication = $this->getFirstIrhpPermitApplication();
@@ -1164,7 +1160,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
         RefData $status,
         IrhpPermitType $irhpPermitType,
         Licence $licence,
-        string $dateReceived = null
+        ?string $dateReceived = null
     ) {
         $irhpApplication = new self();
         $irhpApplication->source = $source;
@@ -1656,7 +1652,7 @@ class IrhpApplication extends AbstractIrhpApplication implements
      * @param DateTime|null $expiryDate
      * @throws ForbiddenException
      */
-    public function expire(RefData $expireStatus, DateTime $expiryDate = null)
+    public function expire(RefData $expireStatus, ?DateTime $expiryDate = null)
     {
         if (!$this->canBeExpired()) {
             throw new ForbiddenException('This application cannot be expired.');

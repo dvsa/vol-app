@@ -19,7 +19,7 @@ use Dvsa\Olcs\Api\Entity\Cases\Cases as CasesEntity;
 /**
  * UpdateConvictionNote Test
  */
-class UpdateConvictionNoteTest extends AbstractCommandHandlerTestCase
+final class UpdateConvictionNoteTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

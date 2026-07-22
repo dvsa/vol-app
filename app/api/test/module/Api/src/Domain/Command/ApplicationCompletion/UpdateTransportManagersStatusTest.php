@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateTransportManagersSt
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateTransportManagersStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateTransportManagersStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

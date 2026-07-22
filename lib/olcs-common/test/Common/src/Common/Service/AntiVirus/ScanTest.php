@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\AntVirus;
 
 use Common\Service\AntiVirus\Scan;
@@ -7,7 +9,7 @@ use Psr\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-class ScanTest extends MockeryTestCase
+final class ScanTest extends MockeryTestCase
 {
     /**
      * @var Scan
@@ -42,14 +44,14 @@ class ScanTest extends MockeryTestCase
 
         $object = $this->sut->__invoke($mockServiceManager, Scan::class);
 
-        $this->assertSame(null, $object->getCliCommand());
+        $this->assertNull($object->getCliCommand());
     }
 
     public function testIsEnabled(): void
     {
-        $this->assertSame(false, $this->sut->isEnabled());
+        $this->assertFalse($this->sut->isEnabled());
         $this->sut->setCliCommand('XXX');
-        $this->assertSame(true, $this->sut->isEnabled());
+        $this->assertTrue($this->sut->isEnabled());
     }
 
     public function testIsCleanMissingCommand(): void
@@ -84,30 +86,30 @@ class ScanTest extends MockeryTestCase
     public function testIsCleanOk(): void
     {
         $mockShell = m::mock(\Common\Filesystem\Shell::class);
-        $mockShell->shouldReceive('fileperms')->with(__FILE__)->once()->andReturn(octdec(600));
+        $mockShell->shouldReceive('fileperms')->with(__FILE__)->once()->andReturn(octdec('600'));
         $mockShell->shouldReceive('chmod')->with(__FILE__, 0660)->once()->andReturn(true);
         $mockShell->shouldReceive('execute')->with('scan ' . __FILE__)->once()->andReturn(0);
-        $mockShell->shouldReceive('chmod')->with(__FILE__, octdec(600))->once()->andReturn(true);
+        $mockShell->shouldReceive('chmod')->with(__FILE__, octdec('600'))->once()->andReturn(true);
         $this->sut->setShell($mockShell);
 
         $this->sut->setCliCommand('scan %s');
 
         $result = $this->sut->isClean(__FILE__);
-        $this->assertSame(true, $result);
+        $this->assertTrue($result);
     }
 
     public function testIsCleanFailed(): void
     {
         $mockShell = m::mock(\Common\Filesystem\Shell::class);
-        $mockShell->shouldReceive('fileperms')->with(__FILE__)->once()->andReturn(octdec(644));
+        $mockShell->shouldReceive('fileperms')->with(__FILE__)->once()->andReturn(octdec('644'));
         $mockShell->shouldReceive('chmod')->with(__FILE__, 0660)->once()->andReturn(true);
         $mockShell->shouldReceive('execute')->with('scan ' . __FILE__)->once()->andReturn(1);
-        $mockShell->shouldReceive('chmod')->with(__FILE__, octdec(644))->once()->andReturn(true);
+        $mockShell->shouldReceive('chmod')->with(__FILE__, octdec('644'))->once()->andReturn(true);
         $this->sut->setShell($mockShell);
 
         $this->sut->setCliCommand('scan %s');
 
         $result = $this->sut->isClean(__FILE__);
-        $this->assertSame(false, $result);
+        $this->assertFalse($result);
     }
 }

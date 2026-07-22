@@ -16,7 +16,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
-class ByApplicationToOrganisationTest extends QueryHandlerTestCase
+final class ByApplicationToOrganisationTest extends QueryHandlerTestCase
 {
     /**
      * @var ByApplicationToOrganisation
@@ -56,7 +56,7 @@ class ByApplicationToOrganisationTest extends QueryHandlerTestCase
         $this->queryHandler->shouldReceive('handleQuery')->with(m::on(
             function ($argument) {
                 $this->assertInstanceOf(ByOrganisation::class, $argument);
-                assert($argument instanceof ByOrganisation);
+                $this->assertInstanceOf(ByOrganisation::class, $argument);
                 $this->assertEquals(1, $argument->getOrganisation());
                 return true;
             }

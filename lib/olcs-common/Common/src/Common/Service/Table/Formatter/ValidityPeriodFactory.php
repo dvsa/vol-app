@@ -13,7 +13,7 @@ class ValidityPeriodFactory implements FactoryInterface
      * @return ValidityPeriod
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $viewHelperManager = $container->get('ViewHelperManager');
         $translator = $container->get('translator');

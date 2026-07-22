@@ -208,6 +208,10 @@ return [
             \Dvsa\Olcs\Api\Service\Letter\LetterPreviewService::class =>
                 \Dvsa\Olcs\Api\Service\Letter\LetterPreviewServiceFactory::class,
 
+            // Master Template Resolver (VOL-7305)
+            \Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolver::class =>
+                \Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolverFactory::class,
+
             \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClient::class =>
                 \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClientFactory::class,
             \Dvsa\Olcs\Api\Rbac\IdentityProviderInterface::class => \Dvsa\Olcs\Api\Rbac\IdentityProviderFactory::class,
@@ -934,15 +938,13 @@ return [
     'doctrine' => [
         'driver' => [
             'EntityDriver' => [
-                'class' => \Doctrine\ORM\Mapping\Driver\AnnotationDriver::class,
-                'cache' => 'array',
+                'class' => \Doctrine\ORM\Mapping\Driver\AttributeDriver::class,
                 'paths' => [
                     __DIR__ . '/../src/Entity'
                 ]
             ],
             'translatable_metadata_driver' => [
-                'class' => \Doctrine\ORM\Mapping\Driver\AnnotationDriver::class,
-                'cache' => 'array',
+                'class' => \Doctrine\ORM\Mapping\Driver\AttributeDriver::class,
                 'paths' => [
                     'vendor/gedmo/doctrine-extensions/src/Translatable/Entity'
                 ],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Router;
 
 use Dvsa\Olcs\Transfer\Router\CommandConfig;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Transfer\Router\CommandConfig;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CommandConfigTest extends \PHPUnit\Framework\TestCase
+final class CommandConfigTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetDeleteConfig()
     {

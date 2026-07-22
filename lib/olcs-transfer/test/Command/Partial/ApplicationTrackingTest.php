@@ -6,7 +6,7 @@ namespace Dvsa\OlcsTest\Transfer\Command\Partial;
 
 use Dvsa\Olcs\Transfer\Command\Partial\ApplicationTracking;
 
-class ApplicationTrackingTest extends \PHPUnit\Framework\TestCase
+final class ApplicationTrackingTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

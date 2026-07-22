@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\User;
 
 use Dvsa\Olcs\Transfer\Command\User\UpdateUserLastLoginAt;
@@ -11,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Update User Last Login At test
  */
-class UpdateUserLastLoginAtTest extends TestCase
+final class UpdateUserLastLoginAtTest extends TestCase
 {
     use CommandTest, DtoWithoutInvalidFieldTest, DtoWithoutOptionalFieldsTest {
         DtoWithoutInvalidFieldTest::testInvalidField insteadof CommandTest;

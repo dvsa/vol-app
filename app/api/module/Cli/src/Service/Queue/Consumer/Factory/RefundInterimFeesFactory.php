@@ -21,7 +21,7 @@ class RefundInterimFeesFactory implements FactoryInterface
      * @return RefundInterimFees
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RefundInterimFees
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): RefundInterimFees
     {
         return new RefundInterimFees(
             $container->get(AbstractConsumerServices::class),

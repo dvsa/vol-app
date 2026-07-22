@@ -8,14 +8,13 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * <?php echo $className; ?> Entity
- *
-<?php if (isset($repositoryClass) && $repositoryClass !== null): ?>
- * @ORM\Entity(repositoryClass="<?php echo $repositoryClass; ?>")
-<?php else: ?>
- * @ORM\Entity
-<?php endif; ?>
- * @ORM\Table(name="<?php echo $tableName; ?>")
  */
+#[ORM\Table(name: '<?php echo $tableName; ?>')]
+<?php if (isset($repositoryClass) && $repositoryClass !== null): ?>
+#[ORM\Entity(repositoryClass: \<?php echo ltrim($repositoryClass, '\\'); ?>::class)]
+<?php else: ?>
+#[ORM\Entity]
+<?php endif; ?>
 class <?php echo $className; ?> extends <?php echo $abstractClassName; ?>
 
 {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva\BusinessDetails;
 
 use Common\RefData;
@@ -12,7 +14,7 @@ use Common\FormService\Form\Lva\BusinessDetails\ApplicationBusinessDetails;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationBusinessDetailsTest extends MockeryTestCase
+final class ApplicationBusinessDetailsTest extends MockeryTestCase
 {
     protected $sut;
 

@@ -14,7 +14,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(DocumentStoreFactory::class)]
-class DocumentStoreFactoryTest extends MockeryTestCase
+final class DocumentStoreFactoryTest extends MockeryTestCase
 {
     private function container(?string $backend): ContainerInterface
     {

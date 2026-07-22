@@ -16,16 +16,16 @@ use Mockery as m;
  * Class TransportManagersTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class TransportManagersTest extends AbstractSubmissionSectionTestCase
+final class TransportManagersTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\TransportManagers::class;
 
     /**
      * Filter provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
         $case = static::getCase();
 
@@ -77,9 +77,7 @@ class TransportManagersTest extends AbstractSubmissionSectionTestCase
             ]
         ];
 
-        return [
-            [$case, $expectedResult],
-        ];
+        yield [$case, $expectedResult];
     }
 
     #[\Override]

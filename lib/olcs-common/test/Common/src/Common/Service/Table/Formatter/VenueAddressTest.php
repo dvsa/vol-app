@@ -4,6 +4,8 @@
  * Venue Address formatter test
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\DataHelperService;
@@ -13,60 +15,58 @@ use Common\Service\Table\Formatter\VenueAddress;
 /**
  * Venue Address formatter test
  */
-class VenueAddressTest extends \PHPUnit\Framework\TestCase
+final class VenueAddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group VenueAddressFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('VenueAddressFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $expected): void
     {
-        $this->assertEquals($expected, (new VenueAddress(new Address(new DataHelperService())))->format($data));
+        $this->assertEquals($expected, new VenueAddress(new Address(new DataHelperService()))->format($data));
     }
 
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'venue' => [
-                [
-                    'venue' => [
-                        'name' => 'venue',
-                        'address' => [
-                            'addressLine1' => 'a1',
-                            'addressLine2' => 'a2',
-                            'addressLine3' => 'a3',
-                            'addressLine4' => 'a4',
-                            'town' => 'town',
-                            'postcode' => 'PO12 6ST',
-                        ],
+        yield 'venue' => [
+            [
+                'venue' => [
+                    'name' => 'venue',
+                    'address' => [
+                        'addressLine1' => 'a1',
+                        'addressLine2' => 'a2',
+                        'addressLine3' => 'a3',
+                        'addressLine4' => 'a4',
+                        'town' => 'town',
+                        'postcode' => 'PO12 6ST',
                     ],
-                    'venueOther' => null,
                 ],
-                'venue - a1, a2, a3, a4, town, PO12 6ST',
+                'venueOther' => null,
             ],
-            'otherVenue' => [
-                [
-                    'venue' => null,
-                    'venueOther' => 'other venue',
-                ],
-                'other venue',
+            'venue - a1, a2, a3, a4, town, PO12 6ST',
+        ];
+        yield 'otherVenue' => [
+            [
+                'venue' => null,
+                'venueOther' => 'other venue',
             ],
-            'other' => [
-                [
-                    'venue' => null,
-                    'venueOther' => null,
-                ],
-                '',
+            'other venue',
+        ];
+        yield 'other' => [
+            [
+                'venue' => null,
+                'venueOther' => null,
             ],
+            '',
         ];
     }
 }

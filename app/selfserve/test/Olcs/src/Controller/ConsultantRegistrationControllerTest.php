@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Olcs\Controller\ConsultantRegistrationController;
 use Mockery as m;
 
-class ConsultantRegistrationControllerTest extends TestCase
+final class ConsultantRegistrationControllerTest extends TestCase
 {
     protected $sut;
 

@@ -11,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\XmlTools\Xml\XmlNodeBuilder;
 use Psr\Container\ContainerInterface;
 
-class MsiResponseFactoryTest extends TestCase
+final class MsiResponseFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {

@@ -7,7 +7,7 @@ namespace OlcsTest\Data\Mapper;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\TaskAllocationRule as Sut;
 
-class TaskAllocationRuleTest extends MockeryTestCase
+final class TaskAllocationRuleTest extends MockeryTestCase
 {
     public function testMapFromResult(): void
     {

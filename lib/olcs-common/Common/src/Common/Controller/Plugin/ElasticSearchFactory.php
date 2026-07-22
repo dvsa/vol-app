@@ -10,7 +10,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class ElasticSearchFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ElasticSearch
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ElasticSearch
     {
         $plugin = new ElasticSearch();
 

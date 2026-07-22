@@ -24,7 +24,7 @@ use Mockery as m;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class ResetToValidTest extends AbstractCommandHandlerTestCase
+final class ResetToValidTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

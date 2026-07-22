@@ -22,22 +22,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="cases",
- *    indexes={
- *        @ORM\Index(name="ix_cases_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_cases_case_type", columns={"case_type"}),
- *        @ORM\Index(name="ix_cases_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_cases_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_cases_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_cases_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"}),
- *        @ORM\Index(name="ix_cases_transport_manager_id", columns={"transport_manager_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'cases')]
+#[ORM\Index(name: 'ix_cases_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_cases_case_type', columns: ['case_type'])]
+#[ORM\Index(name: 'ix_cases_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_cases_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_cases_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_cases_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\Index(name: 'ix_cases_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractCases implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -51,351 +47,305 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Created from App.lic or TM
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_type', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $caseType;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
     protected $application;
 
     /**
      * Foreign Key to transport_manager
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
     protected $transportManager;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Ecms no
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="ecms_no", length=45, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'ecms_no', length: 45, nullable: true)]
     protected $ecmsNo;
 
     /**
      * Date case opened
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="open_date", nullable=false)
      */
+    #[ORM\Column(type: 'datetime', name: 'open_date', nullable: false)]
     protected $openDate;
 
     /**
      * Date case closed
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="closed_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'closed_date', nullable: true)]
     protected $closedDate;
 
     /**
      * Short summary note in old system
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=1024, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 1024, nullable: true)]
     protected $description;
 
     /**
      * Case involves an impounding
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_impounding", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_impounding', nullable: false, options: ['default' => 0])]
     protected $isImpounding = 0;
 
     /**
      * Annual test history
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="annual_test_history", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'annual_test_history', length: 4000, nullable: true)]
     protected $annualTestHistory;
 
     /**
      * Notes on any prohibitions linked to the case
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="prohibition_note", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'prohibition_note', length: 4000, nullable: true)]
     protected $prohibitionNote;
 
     /**
      * Penalties note
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="penalties_note", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'penalties_note', length: 4000, nullable: true)]
     protected $penaltiesNote;
 
     /**
      * Notes on any convictions linked to the case
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="conviction_note", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'conviction_note', length: 4000, nullable: true)]
     protected $convictionNote;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
     protected $olbsKey;
 
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;
 
     /**
      * Categorys
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="cases", fetch="LAZY")
-     * @ORM\JoinTable(name="case_category",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="case_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'case_category')]
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'category_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'cases', fetch: 'LAZY')]
     protected $categorys;
 
     /**
      * Outcomes
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="cases", fetch="LAZY")
-     * @ORM\JoinTable(name="case_outcome",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="cases_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="outcome_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'case_outcome')]
+    #[ORM\JoinColumn(name: 'cases_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'outcome_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'cases', fetch: 'LAZY')]
     protected $outcomes;
 
     /**
      * Appeal
      *
      * @var \Dvsa\Olcs\Api\Entity\Appeal
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Appeal", mappedBy="case")
      */
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Appeal::class, mappedBy: 'case')]
     protected $appeal;
 
     /**
      * ReadAudits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\CasesReadAudit", mappedBy="case")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\CasesReadAudit::class, mappedBy: 'case')]
     protected $readAudits;
 
     /**
      * Complaints
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Complaint", mappedBy="case")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Complaint::class, mappedBy: 'case')]
     protected $complaints;
 
     /**
      * ConditionUndertakings
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking", mappedBy="case")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking::class, mappedBy: 'case')]
     protected $conditionUndertakings;
 
     /**
      * Convictions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Conviction", mappedBy="case")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Conviction::class, mappedBy: 'case')]
     protected $convictions;
 
     /**
      * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", mappedBy="case")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'case')]
     protected $documents;
 
     /**
      * ErruRequest
      *
      * @var \Dvsa\Olcs\Api\Entity\ErruRequest
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\ErruRequest", mappedBy="case", cascade={"persist"})
      */
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\ErruRequest::class, mappedBy: 'case', cascade: ['persist'])]
     protected $erruRequest;
 
     /**
      * LegacyOffences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Legacy\LegacyOffence", mappedBy="case")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Legacy\LegacyOffence::class, mappedBy: 'case')]
     protected $legacyOffences;
 
     /**
      * Oppositions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Opposition\Opposition", mappedBy="case")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Opposition\Opposition::class, mappedBy: 'case')]
     protected $oppositions;
 
     /**
      * PublicInquiry
      *
      * @var \Dvsa\Olcs\Api\Entity\Pi
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Pi", mappedBy="case")
      */
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, mappedBy: 'case')]
     protected $publicInquiry;
 
     /**
      * Prohibitions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Prohibition\Prohibition", mappedBy="case")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Prohibition\Prohibition::class, mappedBy: 'case')]
     protected $prohibitions;
 
     /**
      * SeriousInfringements
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Si\SeriousInfringement", mappedBy="case", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement::class, mappedBy: 'case', cascade: ['persist'])]
     protected $seriousInfringements;
 
     /**
      * Statements
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Statement", mappedBy="case")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Statement::class, mappedBy: 'case')]
     protected $statements;
 
     /**
      * Stays
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Stay", mappedBy="case")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Stay::class, mappedBy: 'case')]
     protected $stays;
 
     /**
      * TmDecisions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TmCaseDecision", mappedBy="case")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TmCaseDecision::class, mappedBy: 'case')]
     protected $tmDecisions;
 
     /**

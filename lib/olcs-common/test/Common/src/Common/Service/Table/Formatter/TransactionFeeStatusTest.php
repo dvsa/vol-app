@@ -6,6 +6,8 @@
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\RefData;
@@ -21,14 +23,10 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class TransactionFeeStatusTest extends MockeryTestCase
+final class TransactionFeeStatusTest extends MockeryTestCase
 {
     public $mockRouteMatch;
     protected $urlHelper;
-
-    protected $router;
-
-    protected $request;
 
     protected $sut;
 
@@ -36,14 +34,14 @@ class TransactionFeeStatusTest extends MockeryTestCase
     protected function setUp(): void
     {
         $this->urlHelper = m::mock(UrlHelperService::class);
-        $this->router = m::mock(TreeRouteStack::class);
-        $this->request = m::mock(Request::class);
+        $router = m::mock(TreeRouteStack::class);
+        $request = m::mock(Request::class);
         $this->mockRouteMatch = m::mock(\Laminas\Router\RouteMatch::class);
-        $this->sut = new TransactionFeeStatus($this->router, $this->request, $this->urlHelper);
+        $this->sut = new TransactionFeeStatus($router, $request, $this->urlHelper);
 
-        $this->router
+        $router
             ->shouldReceive('match')
-            ->with($this->request)
+            ->with($request)
             ->andReturn($this->mockRouteMatch);
     }
 
@@ -56,11 +54,11 @@ class TransactionFeeStatusTest extends MockeryTestCase
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group FeeStatusFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('FeeStatusFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $route, $expectedRouteParams, $expectedOutput): void
     {
         $this->mockRouteMatch
@@ -78,52 +76,50 @@ class TransactionFeeStatusTest extends MockeryTestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'standard' => [
-                [
-                    'reversingTransaction' => null,
-                ],
-                null,
-                null,
-                'Applied',
+        yield 'standard' => [
+            [
+                'reversingTransaction' => null,
             ],
-            'reversed' => [
-                [
-                    'reversingTransaction' => [
-                        'id' => 99,
-                        'type' => RefData::TRANSACTION_TYPE_REVERSAL,
-                    ],
+            null,
+            null,
+            'Applied',
+        ];
+        yield 'reversed' => [
+            [
+                'reversingTransaction' => [
+                    'id' => 99,
+                    'type' => RefData::TRANSACTION_TYPE_REVERSAL,
                 ],
-                '/foo/transaction',
-                ['transaction' => 99, 'action' => 'edit-fee'],
-                '<a class="govuk-link" href="the_url">Reversed</a>',
             ],
-            'refunded' => [
-                [
-                    'reversingTransaction' => [
-                        'id' => 99,
-                        'type' => RefData::TRANSACTION_TYPE_REFUND,
-                    ],
+            '/foo/transaction',
+            ['transaction' => 99, 'action' => 'edit-fee'],
+            '<a class="govuk-link" href="the_url">Reversed</a>',
+        ];
+        yield 'refunded' => [
+            [
+                'reversingTransaction' => [
+                    'id' => 99,
+                    'type' => RefData::TRANSACTION_TYPE_REFUND,
                 ],
-                '/foo/transaction',
-                ['transaction' => 99, 'action' => 'edit-fee'],
-                '<a class="govuk-link" href="the_url">Refunded</a>',
             ],
-            'other' => [
-                [
-                    'reversingTransaction' => [
-                        'id' => 99,
-                        'type' => RefData::TRANSACTION_TYPE_OTHER,
-                    ],
+            '/foo/transaction',
+            ['transaction' => 99, 'action' => 'edit-fee'],
+            '<a class="govuk-link" href="the_url">Refunded</a>',
+        ];
+        yield 'other' => [
+            [
+                'reversingTransaction' => [
+                    'id' => 99,
+                    'type' => RefData::TRANSACTION_TYPE_OTHER,
                 ],
-                '/foo/transaction',
-                ['transaction' => 99, 'action' => 'edit-fee'],
-                '<a class="govuk-link" href="the_url">Adjusted</a>',
             ],
+            '/foo/transaction',
+            ['transaction' => 99, 'action' => 'edit-fee'],
+            '<a class="govuk-link" href="the_url">Adjusted</a>',
         ];
     }
 }

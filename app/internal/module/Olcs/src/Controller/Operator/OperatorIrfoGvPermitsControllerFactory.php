@@ -13,7 +13,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class OperatorIrfoGvPermitsControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatorIrfoGvPermitsController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): OperatorIrfoGvPermitsController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         assert($translationHelper instanceof TranslationHelperService);

@@ -25,7 +25,7 @@ class WithContactDetailsFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): WithContactDetails
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): WithContactDetails
     {
         return new WithContactDetails(
             $container->get('doctrine.entitymanager.orm_default'),

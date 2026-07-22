@@ -15,7 +15,7 @@ use Psr\Container\ContainerInterface;
 /**
  * @see FormElementErrorsFactory
  */
-class FormElementErrorsFactoryTest extends MockeryTestCase
+final class FormElementErrorsFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

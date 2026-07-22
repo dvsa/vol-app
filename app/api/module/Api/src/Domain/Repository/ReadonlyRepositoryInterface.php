@@ -35,7 +35,7 @@ interface ReadonlyRepositoryInterface
      */
     public function fetchList(QueryInterface $query, $hydrateMode = Query::HYDRATE_ARRAY);
 
-    public function fetchPaginatedList(QueryBuilder $qb, $hydrateMode = Query::HYDRATE_ARRAY, QueryInterface $originalQuery = null);
+    public function fetchPaginatedList(QueryBuilder $qb, $hydrateMode = Query::HYDRATE_ARRAY, ?QueryInterface $originalQuery = null);
 
     /**
      * @param int $hydrateMode

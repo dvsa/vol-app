@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\CreateFee;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CancelAllInterimFeesTest extends \PHPUnit\Framework\TestCase
+final class CancelAllInterimFeesTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

@@ -16,7 +16,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class LicencePsvVehiclesTest extends MockeryTestCase
+final class LicencePsvVehiclesTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -24,6 +24,7 @@ class LicencePsvVehiclesTest extends MockeryTestCase
 
     protected $formHelper;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class)->makePartial();

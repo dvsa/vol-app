@@ -28,7 +28,7 @@ use Dvsa\Olcs\Transfer\Command\Document\PrintLetter;
 use Mockery as m;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
+final class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
 {
     protected $config = [
         'message_queue' => [
@@ -509,29 +509,25 @@ class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
             ->getMock());
     }
 
-    public static function addressData(): array
+    public static function addressData(): \Iterator
     {
-        return [
-            'GBLicence' => [
-                self::getMockLicences()[0],
-                ProcessInsolvency::GB_TEAMLEADER_TASK,
-            ],
-            'NILicence' => [
-                self::getMockLicences()[1],
-                ProcessInsolvency::NI_TEAMLEADER_TASK,
-            ]
+        yield 'GBLicence' => [
+            self::getMockLicences()[0],
+            ProcessInsolvency::GB_TEAMLEADER_TASK,
+        ];
+        yield 'NILicence' => [
+            self::getMockLicences()[1],
+            ProcessInsolvency::NI_TEAMLEADER_TASK,
         ];
     }
 
-    public static function emailTestsDataProvider(): array
+    public static function emailTestsDataProvider(): \Iterator
     {
-        return [
-            'GBLicence' => [
-                self::getMockLicences()[0],
-            ],
-            'NILicence' => [
-                self::getMockLicences()[1],
-            ]
+        yield 'GBLicence' => [
+            self::getMockLicences()[0],
+        ];
+        yield 'NILicence' => [
+            self::getMockLicences()[1],
         ];
     }
 

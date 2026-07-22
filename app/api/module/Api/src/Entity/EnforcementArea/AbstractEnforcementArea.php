@@ -21,16 +21,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="enforcement_area",
- *    indexes={
- *        @ORM\Index(name="ix_enforcement_area_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_enforcement_area_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'enforcement_area')]
+#[ORM\Index(name: 'ix_enforcement_area_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_enforcement_area_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractEnforcementArea implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -43,60 +39,54 @@ abstract class AbstractEnforcementArea implements BundleSerializableInterface, J
      * Primary key
      *
      * @var string
-     *
-     * @ORM\Id
-     * @ORM\Column(type="string", name="id", length=4, nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'string', name: 'id', length: 4, nullable: false)]
     protected $id = '';
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Name or area. Geographical description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=70, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 70, nullable: false)]
     protected $name = '';
 
     /**
      * Primary contact email address or the area
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="email_address", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'email_address', length: 255, nullable: true)]
     protected $emailAddress;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**

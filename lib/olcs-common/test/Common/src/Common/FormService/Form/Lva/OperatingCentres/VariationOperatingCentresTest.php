@@ -24,14 +24,8 @@ use Common\Service\Helper\FormHelperService;
 use Common\RefData;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class VariationOperatingCentresTest extends MockeryTestCase
+final class VariationOperatingCentresTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $authService;
-    public $rowsInput;
-    public $tableElement;
     protected $form;
 
     /**
@@ -45,15 +39,11 @@ class VariationOperatingCentresTest extends MockeryTestCase
 
     protected $translator;
 
-    private $inputFilter;
-
-    private $validatorChain;
-
     #[\Override]
     protected function setUp(): void
     {
         $this->tableBuilder = m::mock(TableFactory::class);
-        $this->authService = m::mock(AuthorizationService::class);
+        $authService = m::mock(AuthorizationService::class);
         $this->translator = m::mock(TranslationHelperService::class);
 
         $fsm = m::mock(FormServiceManager::class)->makePartial();
@@ -64,19 +54,19 @@ class VariationOperatingCentresTest extends MockeryTestCase
             ],
         ];
 
-        $this->validatorChain = m::mock(ValidatorChain::class);
-        $this->validatorChain->expects('getValidators')->andReturn($validators);
-        $this->rowsInput = m::mock(Input::class);
-        $this->rowsInput->expects('getValidatorChain')->withNoArgs()->andReturn($this->validatorChain);
+        $validatorChain = m::mock(ValidatorChain::class);
+        $validatorChain->expects('getValidators')->andReturn($validators);
+        $rowsInput = m::mock(Input::class);
+        $rowsInput->expects('getValidatorChain')->withNoArgs()->andReturn($validatorChain);
 
-        $this->tableElement = m::mock(Table::class);
-        $this->tableElement->expects('get')->with('rows')->andReturn($this->rowsInput);
+        $tableElement = m::mock(Table::class);
+        $tableElement->expects('get')->with('rows')->andReturn($rowsInput);
 
-        $this->inputFilter = m::mock(InputFilter::class);
-        $this->inputFilter->expects('get')->with('table')->andReturn($this->tableElement);
+        $inputFilter = m::mock(InputFilter::class);
+        $inputFilter->expects('get')->with('table')->andReturn($tableElement);
 
         $this->form = m::mock(Form::class);
-        $this->form->expects('getInputFilter')->withNoArgs()->andReturn($this->inputFilter);
+        $this->form->expects('getInputFilter')->withNoArgs()->andReturn($inputFilter);
 
         $lvaVariation = m::mock(VariationFormService::class);
         $lvaVariation->shouldReceive('alterForm')
@@ -91,7 +81,7 @@ class VariationOperatingCentresTest extends MockeryTestCase
             ->with('Lva\OperatingCentres')
             ->andReturn($this->form);
 
-        $this->sut = new VariationOperatingCentres($this->mockFormHelper, $this->authService, $this->tableBuilder, $fsm, $this->translator);
+        $this->sut = new VariationOperatingCentres($this->mockFormHelper, $authService, $this->tableBuilder, $fsm, $this->translator);
     }
 
     public function testGetForm(): void

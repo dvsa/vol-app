@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Query\Fee\InterimRefunds as InterimRefundsQuery;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class InterimRefundsTest extends QueryHandlerTestCase
+final class InterimRefundsTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

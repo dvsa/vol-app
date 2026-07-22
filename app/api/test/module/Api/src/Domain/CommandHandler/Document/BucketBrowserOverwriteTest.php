@@ -14,7 +14,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use RuntimeException;
 
-class BucketBrowserOverwriteTest extends AbstractCommandHandlerTestCase
+final class BucketBrowserOverwriteTest extends AbstractCommandHandlerTestCase
 {
     /** @var m\MockInterface|S3BucketBrowser */
     private $mockBrowser;

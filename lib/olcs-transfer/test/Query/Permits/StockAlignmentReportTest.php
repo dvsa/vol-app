@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Permits;
 
 use Dvsa\Olcs\Transfer\Query\Permits\StockAlignmentReport;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\StockAlignmentReport;
 /**
  * StockAlignmentReport test
  */
-class StockAlignmentReportTest extends \PHPUnit\Framework\TestCase
+final class StockAlignmentReportTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

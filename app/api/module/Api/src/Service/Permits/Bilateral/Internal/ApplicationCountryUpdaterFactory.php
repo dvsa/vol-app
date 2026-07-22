@@ -16,7 +16,7 @@ class ApplicationCountryUpdaterFactory implements FactoryInterface
      * @return ApplicationCountryUpdater
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationCountryUpdater
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ApplicationCountryUpdater
     {
         return new ApplicationCountryUpdater(
             $container->get('PermitsBilateralInternalIrhpPermitApplicationCreator'),

@@ -10,10 +10,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Submission\Sections\SectionGeneratorPluginManagerFactory
- */
-class SectionGeneratorPluginManagerFactoryTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Submission\Sections\SectionGeneratorPluginManagerFactory::class)]
+final class SectionGeneratorPluginManagerFactoryTest extends MockeryTestCase
 {
     public function testCanCreateServiceWithName(): void
     {
@@ -30,8 +28,8 @@ class SectionGeneratorPluginManagerFactoryTest extends MockeryTestCase
             )
             ->getMock();
 
-        $actual = (new SectionGeneratorPluginManagerFactory())->__invoke($mockSl, SectionGeneratorPluginManager::class);
+        $actual = new SectionGeneratorPluginManagerFactory()->__invoke($mockSl, SectionGeneratorPluginManager::class);
 
-        static::assertInstanceOf(SectionGeneratorPluginManager::class, $actual);
+        $this->assertInstanceOf(SectionGeneratorPluginManager::class, $actual);
     }
 }

@@ -11,7 +11,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class EcmtPermitFeesTest extends QueryHandlerTestCase
+final class EcmtPermitFeesTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -43,12 +43,12 @@ class EcmtPermitFeesTest extends QueryHandlerTestCase
 
         $result = $this->sut->handleQuery($query);
 
-        $this->assertTrue(isset($result['fee']));
+        $this->assertArrayHasKey('fee', $result);
         $this->assertCount(2, $result['fee']);
 
         $resultKeys = array_keys($result['fee']);
-        $this->assertEquals($feeProductReference1, $resultKeys[0]);
-        $this->assertEquals($feeProductReference2, $resultKeys[1]);
+        $this->assertSame($feeProductReference1, $resultKeys[0]);
+        $this->assertSame($feeProductReference2, $resultKeys[1]);
 
         $this->assertSame($feeType1, $result['fee'][$feeProductReference1]);
         $this->assertSame($feeType2, $result['fee'][$feeProductReference2]);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\SystemParameter;
 
 use Dvsa\Olcs\Transfer\Command\SystemParameter\UpdateSystemParameter;
@@ -12,7 +14,7 @@ use Laminas\Stdlib\ArraySerializableInterface;
  *
  * @package Dvsa\OlcsTest\Transfer\Command\SystemParameter
  */
-class UpdateSystemParameterTest extends \PHPUnit\Framework\TestCase
+final class UpdateSystemParameterTest extends \PHPUnit\Framework\TestCase
 {
     use CommandTest;
 

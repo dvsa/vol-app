@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Entity\Cases\Cases;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class CreateComplaintTest extends AbstractCommandHandlerTestCase
+final class CreateComplaintTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -79,7 +79,7 @@ class CreateComplaintTest extends AbstractCommandHandlerTestCase
                 function (ComplaintEntity $complaint) {
                     $complaint->setId(99);
                     $this->assertSame(24, $complaint->getCase()->getId());
-                    $this->assertSame(true, $complaint->getIsCompliance());
+                    $this->assertTrue($complaint->getIsCompliance());
                     $this->assertSame('cs_ack', (string) $complaint->getStatus());
                     $this->assertEquals(new DateTime('2015-01-16'), $complaint->getComplaintDate());
                     $this->assertEquals(new DateTime('2017-10-03'), $complaint->getClosedDate());

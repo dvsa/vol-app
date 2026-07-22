@@ -25,7 +25,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\UpdateApplicationCompletion as Upda
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class UpdateOtherLicenceTest extends AbstractCommandHandlerTestCase
+final class UpdateOtherLicenceTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

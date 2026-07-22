@@ -20,7 +20,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class CreateAlertTest extends AbstractCommandHandlerTestCase
+final class CreateAlertTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -88,7 +88,7 @@ class CreateAlertTest extends AbstractCommandHandlerTestCase
         );
 
         $this->assertEquals($companyNumber, $alert->getCompanyOrLlpNo());
-        $this->assertEquals(2, $alert->getReasons()->count());
+        $this->assertCount(2, $alert->getReasons());
         $this->assertEquals('reason_foo', $alert->getReasons()[0]->getReasonType()->getId());
         $this->assertEquals('reason_bar', $alert->getReasons()[1]->getReasonType()->getId());
     }

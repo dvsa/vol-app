@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\Country as CountryEntity;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CountryListTest extends QueryHandlerTestCase
+final class CountryListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

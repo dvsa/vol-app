@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Auth\ChangePassword;
 /**
  * @see ChangePassword
  */
-class ChangePasswordTest extends \PHPUnit\Framework\TestCase
+final class ChangePasswordTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa;
 
 use Common\Service\Qa\DataTransformer\EcmtNoOfPermitsSingleDataTransformer;
@@ -12,7 +14,7 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EcmtNoOfPermitsSingleDataTransformerTest extends MockeryTestCase
+final class EcmtNoOfPermitsSingleDataTransformerTest extends MockeryTestCase
 {
     private $sut;
 
@@ -22,9 +24,7 @@ class EcmtNoOfPermitsSingleDataTransformerTest extends MockeryTestCase
         $this->sut = new EcmtNoOfPermitsSingleDataTransformer();
     }
 
-    /**
-     * @dataProvider dpGetTransformed
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetTransformed')]
     public function testGetTransformed($data, $expectedTransformedData): void
     {
         $this->assertEquals(
@@ -34,32 +34,30 @@ class EcmtNoOfPermitsSingleDataTransformerTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][][]
+     * @return \Iterator<(int | string), array<array<string>>>
      *
      * @psalm-return list{list{array{emissionsCategory: 'euro5', permitsRequired: '12'}, array{euro5: '12', euro6: '0'}}, list{array{emissionsCategory: 'euro6', permitsRequired: '8'}, array{euro5: '0', euro6: '8'}}}
      */
-    public function dpGetTransformed(): array
+    public static function dpGetTransformed(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'emissionsCategory' => 'euro5',
-                    'permitsRequired' => '12'
-                ],
-                [
-                    'euro5' => '12',
-                    'euro6' => '0'
-                ]
+                'emissionsCategory' => 'euro5',
+                'permitsRequired' => '12'
             ],
             [
-                [
-                    'emissionsCategory' => 'euro6',
-                    'permitsRequired' => '8'
-                ],
-                [
-                    'euro5' => '0',
-                    'euro6' => '8'
-                ]
+                'euro5' => '12',
+                'euro6' => '0'
+            ]
+        ];
+        yield [
+            [
+                'emissionsCategory' => 'euro6',
+                'permitsRequired' => '8'
+            ],
+            [
+                'euro5' => '0',
+                'euro6' => '8'
             ]
         ];
     }
@@ -77,9 +75,7 @@ class EcmtNoOfPermitsSingleDataTransformerTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @dataProvider dpGetTransformedUnexpectedData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetTransformedUnexpectedData')]
     public function testGetTransformedUnexpectedData($data): void
     {
         $this->expectException(RuntimeException::class);
@@ -89,32 +85,30 @@ class EcmtNoOfPermitsSingleDataTransformerTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][][]
+     * @return \Iterator<(int | string), array<array<string>>>
      *
      * @psalm-return list{list{array{permitsRequired: '7', euro5: '6'}}, list{array{permitsRequired: '8', euro5: '12'}}, list{array{permitsRequired: '10', euro5: '5', euro6: '7'}}}
      */
-    public function dpGetTransformedUnexpectedData(): array
+    public static function dpGetTransformedUnexpectedData(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'permitsRequired' => '7',
-                    'euro5' => '6'
-                ]
-            ],
+                'permitsRequired' => '7',
+                'euro5' => '6'
+            ]
+        ];
+        yield [
             [
-                [
-                    'permitsRequired' => '8',
-                    'euro5' => '12'
-                ]
-            ],
+                'permitsRequired' => '8',
+                'euro5' => '12'
+            ]
+        ];
+        yield [
             [
-                [
-                    'permitsRequired' => '10',
-                    'euro5' => '5',
-                    'euro6' => '7'
-                ]
-            ],
+                'permitsRequired' => '10',
+                'euro5' => '5',
+                'euro6' => '7'
+            ]
         ];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\Order;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Transfer\Validators\Order;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class OrderTest extends \PHPUnit\Framework\TestCase
+final class OrderTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 
@@ -18,29 +20,25 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         $this->sut = new Order();
     }
 
-    /**
-     * @dataProvider dataProviderIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderIsValid')]
     public function testIsValid($value, $expected)
     {
         $this->assertEquals($expected, $this->sut->isValid($value));
     }
 
-    public function dataProviderIsValid()
+    public static function dataProviderIsValid(): \Iterator
     {
-        return [
-            ['asc', true],
-            ['desc', true],
-            ['asc,desc', true],
-            ['desc, asc', true],
-            ['ASC, DESC', true],
-            ['ASC, DESC, ASC, DESC, ASC', true],
-            ['ASCX', false],
-            ['DESCX', false],
-            ['X', false],
-            ['ASC, desc, descX', false],
-            ['', false],
-            [null, false],
-        ];
+        yield ['asc', true];
+        yield ['desc', true];
+        yield ['asc,desc', true];
+        yield ['desc, asc', true];
+        yield ['ASC, DESC', true];
+        yield ['ASC, DESC, ASC, DESC, ASC', true];
+        yield ['ASCX', false];
+        yield ['DESCX', false];
+        yield ['X', false];
+        yield ['ASC, desc, descX', false];
+        yield ['', false];
+        yield [null, false];
     }
 }

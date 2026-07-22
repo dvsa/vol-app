@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\Title;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Transfer\Validators\Title;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class TitleTest extends \PHPUnit\Framework\TestCase
+final class TitleTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 
@@ -18,27 +20,23 @@ class TitleTest extends \PHPUnit\Framework\TestCase
         $this->sut = new Title();
     }
 
-    /**
-     * @dataProvider isValidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($value, $expected)
     {
         $this->assertEquals($expected, $this->sut->isValid($value));
     }
 
-    public function isValidProvider()
+    public static function isValidProvider(): \Iterator
     {
-        return [
-            'Dr' => ['title_dr', true],
-            'Miss' => ['title_miss', true],
-            'Mr' => ['title_mr', true],
-            'Mrs' => ['title_mrs', true],
-            'Ms' => ['title_ms', true],
-            'uppercase' => ['TITLE_DR', false],
-            'random' => ['foobar', false],
-            'number' => [1, false],
-            'space' => [' ', false],
-            'null' => [null, false],
-        ];
+        yield 'Dr' => ['title_dr', true];
+        yield 'Miss' => ['title_miss', true];
+        yield 'Mr' => ['title_mr', true];
+        yield 'Mrs' => ['title_mrs', true];
+        yield 'Ms' => ['title_ms', true];
+        yield 'uppercase' => ['TITLE_DR', false];
+        yield 'random' => ['foobar', false];
+        yield 'number' => [1, false];
+        yield 'space' => [' ', false];
+        yield 'null' => [null, false];
     }
 }

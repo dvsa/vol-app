@@ -12,10 +12,8 @@ use Dvsa\Olcs\Transfer\Query\EventHistory\EventHistory as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\QueryHandler\EventHistory\EventHistory
- */
-class EventHistoryTest extends QueryHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\EventHistory\EventHistory::class)]
+final class EventHistoryTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -87,13 +85,11 @@ class EventHistoryTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result->serialize());
     }
 
-    public static function eventHistoryDetailsProvider(): array
+    public static function eventHistoryDetailsProvider(): \Iterator
     {
-        return [
-            [['foo' => 'bar'], 'application', 1, 2],
-            [[], 'application', 1, 2],
-            [[], null, null, null]
-        ];
+        yield [['foo' => 'bar'], 'application', 1, 2];
+        yield [[], 'application', 1, 2];
+        yield [[], null, null, null];
     }
 
     public function testHandleQueryWithException(): void

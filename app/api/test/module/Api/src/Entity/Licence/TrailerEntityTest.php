@@ -13,7 +13,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class TrailerEntityTest extends EntityTester
+final class TrailerEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -26,7 +26,7 @@ class TrailerEntityTest extends EntityTester
     {
         $sut = new Entity();
 
-        $this->assertSame(null, $sut->getRelatedOrganisation());
+        $this->assertNull($sut->getRelatedOrganisation());
     }
 
     public function testGetRelatedOrganisation(): void
