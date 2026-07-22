@@ -19,8 +19,10 @@ consumer.
   existing `SendEmail::replaceUris`).
 - The recipient lands on an **anonymous selfserve page** (`RetrieveController`, no login) that
   resolves the token to a redacted summary and offers downloads.
-- Each download is **streamed through the API** from the document store — no presigned URLs,
-  consistent with the bucket-browser posture (`Document\BucketBrowserDownload`).
+- Downloads are served by selfserve. On the **WebDAV** store the API streams the bytes through
+  selfserve; on the **S3** store the API instead returns a short-lived presigned URL that selfserve
+  fetches **server-side** (never exposed to the browser), keeping the API out of the byte path. The
+  OTP gate and audit are enforced first either way. See "Download transport" below.
 - **Real document ids are never exposed.** Only opaque values (the link token, per-document
   `memberRef`) ever appear in a URL, token or markup; they resolve to real ids server-side.
 
@@ -76,6 +78,23 @@ the link is gone.
 - **Session secret** — `config['retrieval']['session_secret']` (≥32 chars) must be set in
   OTP-enabled environments (via secrets / local config), or the OTP path errors. Non-OTP
   environments boot fine with it empty.
+
+## Download transport (WebDAV vs S3)
+
+How selfserve gets the bytes is chosen by the API from `document_share.backend` and signalled to
+selfserve via a `downloadStrategy` field on `Resolve`:
+
+- **WebDAV (`stream`)** — the API streams the document through selfserve, which proxies it to the
+  browser (forced `attachment` + `nosniff`).
+- **S3 (`presigned`)** — the API returns a short-lived presigned GET URL (TTL
+  `retrieval.presigned_ttl`, default 300s); selfserve fetches it **server-side** and streams the
+  bytes onward. The presigned URL never reaches the client, so the OTP/no-forwarding guarantee
+  holds, and the API stays out of the byte path.
+
+This is an additive optimisation — only the byte transport changes; tokens, OTP, bundles, the
+landing page, audit and the purge job are all unaffected. WebDAV is the safe default; S3 is picked
+up automatically (`S3DocumentStore implements ProvidesPresignedUrls`). Note: selfserve needs network
+egress to S3 for the server-side fetch.
 
 ## Publications integration
 

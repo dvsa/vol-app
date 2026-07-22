@@ -199,10 +199,59 @@ class RetrieveController extends AbstractController
             return $this->downloadFailureResponse($token, $gateMode);
         }
 
-        return $this->streamDocument(
-            $downloadResponse,
-            $this->displayFilenameFor($resolved, $memberRef)
-        );
+        $filename = $this->displayFilenameFor($resolved, $memberRef);
+
+        // On an S3 store the API returns a presigned URL (not a stream); fetch it server-side and
+        // stream to the browser. WebDAV returns a stream we proxy directly.
+        if (($resolved['downloadStrategy'] ?? 'stream') === 'presigned') {
+            $result = $downloadResponse->getResult();
+            $presignedUrl = is_array($result) ? ($result['presignedUrl'] ?? null) : null;
+
+            if (!is_string($presignedUrl) || $presignedUrl === '') {
+                return $this->downloadFailureResponse($token, $gateMode);
+            }
+
+            return $this->streamFromPresignedUrl($presignedUrl, $filename);
+        }
+
+        return $this->streamDocument($downloadResponse, $filename);
+    }
+
+    /**
+     * Fetch a presigned URL server-side (it never reaches the browser) and stream the bytes to the
+     * client as a forced attachment. Used for the S3 document store.
+     *
+     * @return \Laminas\Http\Response|ViewModel
+     */
+    private function streamFromPresignedUrl(string $url, ?string $displayFilename)
+    {
+        $stream = @fopen($url, 'rb');
+        if ($stream === false) {
+            return $this->notAvailable();
+        }
+
+        $response = new \Laminas\Http\Response\Stream();
+        $response->setStatusCode(200);
+        $response->setStream($stream);
+
+        $filename = ($displayFilename !== null && $displayFilename !== '') ? $displayFilename : 'document';
+        $filename = str_replace(['"', '\\', "\r", "\n", '/'], '', $filename);
+
+        $headers = new Headers();
+        $headers->addHeaderLine('Content-Type', 'application/octet-stream');
+        $headers->addHeaderLine('Content-Disposition', 'attachment; filename="' . $filename . '"');
+        $headers->addHeaderLine('X-Content-Type-Options', 'nosniff');
+
+        // Forward the upstream Content-Length when the http wrapper exposed it (nicer download UX).
+        foreach (stream_get_meta_data($stream)['wrapper_data'] ?? [] as $header) {
+            if (is_string($header) && stripos($header, 'Content-Length:') === 0) {
+                $headers->addHeaderLine('Content-Length', trim(substr($header, 15)));
+            }
+        }
+
+        $response->setHeaders($headers);
+
+        return $response;
     }
 
     /**

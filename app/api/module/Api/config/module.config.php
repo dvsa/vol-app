@@ -32,6 +32,9 @@ return [
         // HMAC secret (>=32 chars) for post-OTP session grants. Empty here so non-OTP envs boot
         // fine; OTP-enabled envs MUST override via secrets/local config, or the OTP path errors.
         'session_secret' => '',
+        // Seconds a presigned download URL is valid (S3 document store only). Kept short —
+        // selfserve fetches it server-side immediately, it never reaches the browser.
+        'presigned_ttl' => 300,
     ],
     'service_manager' => [
         'alias' => [

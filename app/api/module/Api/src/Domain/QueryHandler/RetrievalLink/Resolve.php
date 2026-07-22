@@ -7,6 +7,8 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler\RetrievalLink;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Api\Domain\Retrieval\RetrievalLinkAccessTrait;
+use Dvsa\Olcs\Api\Domain\UploaderAwareInterface;
+use Dvsa\Olcs\Api\Domain\UploaderAwareTrait;
 use Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink as RetrievalLinkEntity;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
@@ -15,9 +17,10 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
  * list (by opaque member ref + display name), and the expiry. Never exposes recipient email or
  * real document ids. Unknown/expired/revoked all raise the same NotFoundException.
  */
-final class Resolve extends AbstractQueryHandler
+final class Resolve extends AbstractQueryHandler implements UploaderAwareInterface
 {
     use RetrievalLinkAccessTrait;
+    use UploaderAwareTrait;
 
     protected $repoServiceName = 'RetrievalLink';
 
@@ -53,6 +56,9 @@ final class Resolve extends AbstractQueryHandler
             'documentCount' => count($documents),
             'documents' => $documents,
             'expiresAt' => $link->getExpiresAt(),
+            // How selfserve should fetch the bytes: 'presigned' (S3 — pull straight from S3) or
+            // 'stream' (WebDAV — proxy the API stream).
+            'downloadStrategy' => $this->getUploader()->supportsPresignedUrls() ? 'presigned' : 'stream',
         ];
     }
 }

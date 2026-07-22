@@ -29,6 +29,8 @@ final class Download extends AbstractDownload
 
     private SessionGrantService $sessionGrantService;
 
+    private int $presignedTtl = 300;
+
     /**
      * @param QueryInterface $query
      * @throws NotFoundException
@@ -64,8 +66,20 @@ final class Download extends AbstractDownload
 
         $this->recordRetrievalEvent($link, 'downloaded', $member->getMemberRef(), null, null, $member->getDisplayFilename());
 
+        $identifier = (string) $member->getDocument()->getIdentifier();
+
+        // On an S3-backed store, hand selfserve a short-lived presigned URL so it fetches the bytes
+        // straight from S3, keeping the API out of the byte path. WebDAV returns null → we stream.
+        $presignedUrl = $this->getUploader()->presignedGetUrl($identifier, $this->presignedTtl);
+        if ($presignedUrl !== null) {
+            return [
+                'presignedUrl' => $presignedUrl,
+                'filename' => $member->getDisplayFilename(),
+            ];
+        }
+
         return $this->download(
-            (string) $member->getDocument()->getIdentifier(),
+            $identifier,
             null,
             pathinfo((string) $member->getDisplayFilename(), PATHINFO_FILENAME),
         );
@@ -75,6 +89,9 @@ final class Download extends AbstractDownload
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->sessionGrantService = $container->get(SessionGrantService::class);
+        $config = $container->get('config');
+        $this->presignedTtl = (int) ($config['retrieval']['presigned_ttl'] ?? 300);
+
         return parent::__invoke($container, $requestedName, $options);
     }
 }
