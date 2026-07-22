@@ -1,5 +1,13 @@
 # Changelog
 
+## [9.0.1](https://github.com/dvsa/vol-app/compare/v9.0.0...v9.0.1) (2026-07-22)
+
+
+### Bug Fixes
+
+* parameter dependencies and paths ([#1672](https://github.com/dvsa/vol-app/issues/1672)) ([3a74467](https://github.com/dvsa/vol-app/commit/3a744670f9b0ba12a281fe84640b82bda6088e98))
+* update proxy setup ([#1670](https://github.com/dvsa/vol-app/issues/1670)) ([937269e](https://github.com/dvsa/vol-app/commit/937269e5b251abce9eb14f332df72c168a1bcee2))
+
 ## [9.0.0](https://github.com/dvsa/vol-app/compare/v8.1.3...v9.0.0) (2026-07-21)
 
 
