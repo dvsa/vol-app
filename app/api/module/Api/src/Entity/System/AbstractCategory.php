@@ -144,7 +144,7 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
      *
      * @param int $id new value being set
      *
-     * @return Category
+     * @return static
      */
     public function setId($id)
     {
@@ -168,7 +168,7 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $taskAllocationType new value being set
      *
-     * @return Category
+     * @return static
      */
     public function setTaskAllocationType($taskAllocationType)
     {
@@ -192,7 +192,7 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Category
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -216,7 +216,7 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Category
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -240,7 +240,7 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
      *
      * @param string $description new value being set
      *
-     * @return Category
+     * @return static
      */
     public function setDescription($description)
     {
@@ -264,7 +264,7 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
      *
      * @param string $isDocCategory new value being set
      *
-     * @return Category
+     * @return static
      */
     public function setIsDocCategory($isDocCategory)
     {
@@ -288,7 +288,7 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
      *
      * @param string $isTaskCategory new value being set
      *
-     * @return Category
+     * @return static
      */
     public function setIsTaskCategory($isTaskCategory)
     {
@@ -312,7 +312,7 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
      *
      * @param bool $isScanCategory new value being set
      *
-     * @return Category
+     * @return static
      */
     public function setIsScanCategory($isScanCategory)
     {
@@ -336,7 +336,7 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
      *
      * @param bool $isMessaging new value being set
      *
-     * @return Category
+     * @return static
      */
     public function setIsMessaging($isMessaging)
     {
@@ -360,7 +360,7 @@ abstract class AbstractCategory implements BundleSerializableInterface, JsonSeri
      *
      * @param int $version new value being set
      *
-     * @return Category
+     * @return static
      */
     public function setVersion($version)
     {

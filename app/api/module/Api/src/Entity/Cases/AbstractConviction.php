@@ -268,7 +268,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param int $id new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setId($id)
     {
@@ -292,7 +292,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $defendantType new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setDefendantType($defendantType)
     {
@@ -316,7 +316,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setCase($case)
     {
@@ -340,7 +340,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $convictionCategory new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setConvictionCategory($convictionCategory)
     {
@@ -364,7 +364,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -388,7 +388,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -412,7 +412,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -436,7 +436,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $offenceDate new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setOffenceDate($offenceDate)
     {
@@ -466,7 +466,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $convictionDate new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setConvictionDate($convictionDate)
     {
@@ -496,7 +496,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $court new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setCourt($court)
     {
@@ -520,7 +520,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $penalty new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setPenalty($penalty)
     {
@@ -544,7 +544,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $costs new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setCosts($costs)
     {
@@ -568,7 +568,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $msi new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setMsi($msi)
     {
@@ -592,7 +592,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $isDealtWith new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setIsDealtWith($isDealtWith)
     {
@@ -616,7 +616,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $isDeclared new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setIsDeclared($isDeclared)
     {
@@ -640,7 +640,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $birthDate new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setBirthDate($birthDate)
     {
@@ -670,7 +670,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $personFirstname new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setPersonFirstname($personFirstname)
     {
@@ -694,7 +694,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $personLastname new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setPersonLastname($personLastname)
     {
@@ -718,7 +718,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $notes new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setNotes($notes)
     {
@@ -742,7 +742,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $takenIntoConsideration new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setTakenIntoConsideration($takenIntoConsideration)
     {
@@ -766,7 +766,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $categoryText new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setCategoryText($categoryText)
     {
@@ -790,7 +790,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $operatorName new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setOperatorName($operatorName)
     {
@@ -814,7 +814,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param int $version new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setVersion($version)
     {
@@ -838,7 +838,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param int $olbsKey new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

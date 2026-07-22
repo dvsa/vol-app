@@ -113,7 +113,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
      *
      * @param string $id new value being set
      *
-     * @return RefData
+     * @return static
      */
     public function setId($id)
     {
@@ -137,7 +137,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $parent new value being set
      *
-     * @return RefData
+     * @return static
      */
     public function setParent($parent)
     {
@@ -161,7 +161,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
      *
      * @param string $description new value being set
      *
-     * @return RefData
+     * @return static
      */
     public function setDescription($description)
     {
@@ -185,7 +185,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
      *
      * @param string $refDataCategoryId new value being set
      *
-     * @return RefData
+     * @return static
      */
     public function setRefDataCategoryId($refDataCategoryId)
     {
@@ -209,7 +209,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
      *
      * @param string $olbsKey new value being set
      *
-     * @return RefData
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -233,7 +233,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
      *
      * @param int $displayOrder new value being set
      *
-     * @return RefData
+     * @return static
      */
     public function setDisplayOrder($displayOrder)
     {
@@ -257,7 +257,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
      *
      * @param int $version new value being set
      *
-     * @return RefData
+     * @return static
      */
     public function setVersion($version)
     {

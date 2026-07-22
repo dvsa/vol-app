@@ -155,7 +155,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setId($id)
     {
@@ -179,7 +179,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setTrafficArea($trafficArea)
     {
@@ -203,7 +203,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -227,7 +227,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -251,7 +251,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param string $description new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setDescription($description)
     {
@@ -275,7 +275,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param string $emailAddress new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setEmailAddress($emailAddress)
     {
@@ -299,7 +299,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param string $txcName new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setTxcName($txcName)
     {
@@ -323,7 +323,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param string $naptanCode new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setNaptanCode($naptanCode)
     {
@@ -347,7 +347,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setVersion($version)
     {
@@ -371,7 +371,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being set as the value
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setBusRegs($busRegs)
     {
@@ -395,7 +395,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $busRegs collection being added
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function addBusRegs($busRegs)
     {
@@ -418,7 +418,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being removed
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function removeBusRegs($busRegs)
     {
@@ -434,7 +434,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $users collection being set as the value
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setUsers($users)
     {
@@ -458,7 +458,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $users collection being added
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function addUsers($users)
     {
@@ -481,7 +481,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $users collection being removed
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function removeUsers($users)
     {

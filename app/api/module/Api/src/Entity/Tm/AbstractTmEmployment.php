@@ -142,7 +142,7 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return TmEmployment
+     * @return static
      */
     public function setId($id)
     {
@@ -166,7 +166,7 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return TmEmployment
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -190,7 +190,7 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails new value being set
      *
-     * @return TmEmployment
+     * @return static
      */
     public function setContactDetails($contactDetails)
     {
@@ -214,7 +214,7 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return TmEmployment
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -238,7 +238,7 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return TmEmployment
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -262,7 +262,7 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
      *
      * @param string $position new value being set
      *
-     * @return TmEmployment
+     * @return static
      */
     public function setPosition($position)
     {
@@ -286,7 +286,7 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
      *
      * @param string $employerName new value being set
      *
-     * @return TmEmployment
+     * @return static
      */
     public function setEmployerName($employerName)
     {
@@ -310,7 +310,7 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
      *
      * @param string $hoursPerWeek new value being set
      *
-     * @return TmEmployment
+     * @return static
      */
     public function setHoursPerWeek($hoursPerWeek)
     {
@@ -334,7 +334,7 @@ abstract class AbstractTmEmployment implements BundleSerializableInterface, Json
      *
      * @param int $version new value being set
      *
-     * @return TmEmployment
+     * @return static
      */
     public function setVersion($version)
     {

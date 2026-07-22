@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Cli\Service\EntityGenerator;
 
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Exceptions\EntityConfigException;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\ColumnMetadata;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\EntityData;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\EntityGeneratorInterface;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\GenerationResult;
@@ -368,9 +369,26 @@ class EntityGenerator implements EntityGeneratorInterface
             'softDeletable' => $this->hasSoftDeletable($table, $config),
             'imports' => $this->gatherImports($fields),
             'repositoryClass' => $this->getRepositoryClass($table),
+            'idProperties' => $this->getIdPropertyNames($fields),
         ];
 
         return $this->templateRenderer->render('abstract-entity', $templateData);
+    }
+
+    /**
+     * Property names of the primary key fields (composite keys yield several)
+     */
+    private function getIdPropertyNames(array $fields): array
+    {
+        $names = [];
+        foreach ($fields as $field) {
+            $column = $field['column'] ?? null;
+            if ($column instanceof ColumnMetadata && $column->isPrimary()) {
+                $names[] = $field['property']['name'];
+            }
+        }
+
+        return $names;
     }
 
     /**

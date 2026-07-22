@@ -146,7 +146,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param int $id new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setId($id)
     {
@@ -170,7 +170,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -194,7 +194,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -218,7 +218,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param string $name new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setName($name)
     {
@@ -242,7 +242,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param string $nameKey new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setNameKey($nameKey)
     {
@@ -266,7 +266,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param string $description new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setDescription($description)
     {
@@ -290,7 +290,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param string $descriptionKey new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setDescriptionKey($descriptionKey)
     {
@@ -314,7 +314,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param string $siftingPercentage new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setSiftingPercentage($siftingPercentage)
     {
@@ -338,7 +338,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param int $version new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setVersion($version)
     {
@@ -362,7 +362,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @param int $displayOrder new value being set
      *
-     * @return Sectors
+     * @return static
      */
     public function setDisplayOrder($displayOrder)
     {

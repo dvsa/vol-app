@@ -84,7 +84,7 @@ abstract class AbstractLicenceReadAudit implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return LicenceReadAudit
+     * @return static
      */
     public function setId($id)
     {
@@ -108,7 +108,7 @@ abstract class AbstractLicenceReadAudit implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return LicenceReadAudit
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -132,7 +132,7 @@ abstract class AbstractLicenceReadAudit implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return LicenceReadAudit
+     * @return static
      */
     public function setUser($user)
     {

@@ -165,7 +165,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return Disqualification
+     * @return static
      */
     public function setId($id)
     {
@@ -189,7 +189,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return Disqualification
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -213,7 +213,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\Person\Person $person new value being set
      *
-     * @return Disqualification
+     * @return static
      */
     public function setPerson($person)
     {
@@ -237,7 +237,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Disqualification
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -261,7 +261,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Disqualification
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -285,7 +285,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @param string $isDisqualified new value being set
      *
-     * @return Disqualification
+     * @return static
      */
     public function setIsDisqualified($isDisqualified)
     {
@@ -309,7 +309,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @param \DateTime $startDate new value being set
      *
-     * @return Disqualification
+     * @return static
      */
     public function setStartDate($startDate)
     {
@@ -339,7 +339,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @param string $notes new value being set
      *
-     * @return Disqualification
+     * @return static
      */
     public function setNotes($notes)
     {
@@ -363,7 +363,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @param int $period new value being set
      *
-     * @return Disqualification
+     * @return static
      */
     public function setPeriod($period)
     {
@@ -387,7 +387,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @param int $version new value being set
      *
-     * @return Disqualification
+     * @return static
      */
     public function setVersion($version)
     {
@@ -411,7 +411,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @param int $olbsKey new value being set
      *
-     * @return Disqualification
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -435,7 +435,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @param string $olbsType new value being set
      *
-     * @return Disqualification
+     * @return static
      */
     public function setOlbsType($olbsType)
     {

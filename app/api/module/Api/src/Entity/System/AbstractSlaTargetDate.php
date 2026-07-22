@@ -199,7 +199,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @param int $id new value being set
      *
-     * @return SlaTargetDate
+     * @return static
      */
     public function setId($id)
     {
@@ -223,7 +223,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document new value being set
      *
-     * @return SlaTargetDate
+     * @return static
      */
     public function setDocument($document)
     {
@@ -247,7 +247,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\Pi\Pi $pi new value being set
      *
-     * @return SlaTargetDate
+     * @return static
      */
     public function setPi($pi)
     {
@@ -271,7 +271,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\Submission\Submission $submission new value being set
      *
-     * @return SlaTargetDate
+     * @return static
      */
     public function setSubmission($submission)
     {
@@ -295,7 +295,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke $proposeToRevoke new value being set
      *
-     * @return SlaTargetDate
+     * @return static
      */
     public function setProposeToRevoke($proposeToRevoke)
     {
@@ -319,7 +319,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Statement $statement new value being set
      *
-     * @return SlaTargetDate
+     * @return static
      */
     public function setStatement($statement)
     {
@@ -343,7 +343,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\System\Sla $sla new value being set
      *
-     * @return SlaTargetDate
+     * @return static
      */
     public function setSla($sla)
     {
@@ -367,7 +367,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return SlaTargetDate
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -391,7 +391,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return SlaTargetDate
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -415,7 +415,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @param \DateTime $agreedDate new value being set
      *
-     * @return SlaTargetDate
+     * @return static
      */
     public function setAgreedDate($agreedDate)
     {
@@ -445,7 +445,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @param \DateTime $targetDate new value being set
      *
-     * @return SlaTargetDate
+     * @return static
      */
     public function setTargetDate($targetDate)
     {
@@ -475,7 +475,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @param \DateTime $sentDate new value being set
      *
-     * @return SlaTargetDate
+     * @return static
      */
     public function setSentDate($sentDate)
     {
@@ -505,7 +505,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @param string $underDelegation new value being set
      *
-     * @return SlaTargetDate
+     * @return static
      */
     public function setUnderDelegation($underDelegation)
     {
@@ -529,7 +529,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @param string $notes new value being set
      *
-     * @return SlaTargetDate
+     * @return static
      */
     public function setNotes($notes)
     {
@@ -553,7 +553,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @param int $version new value being set
      *
-     * @return SlaTargetDate
+     * @return static
      */
     public function setVersion($version)
     {

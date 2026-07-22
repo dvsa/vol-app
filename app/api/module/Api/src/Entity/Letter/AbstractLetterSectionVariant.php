@@ -174,7 +174,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @param int $id new value being set
      *
-     * @return LetterSectionVariant
+     * @return static
      */
     public function setId($id)
     {
@@ -198,7 +198,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterSection $letterSection new value being set
      *
-     * @return LetterSectionVariant
+     * @return static
      */
     public function setLetterSection($letterSection)
     {
@@ -222,7 +222,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion $currentVersion new value being set
      *
-     * @return LetterSectionVariant
+     * @return static
      */
     public function setCurrentVersion($currentVersion)
     {
@@ -246,7 +246,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
-     * @return LetterSectionVariant
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -270,7 +270,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $organisationType new value being set
      *
-     * @return LetterSectionVariant
+     * @return static
      */
     public function setOrganisationType($organisationType)
     {
@@ -294,7 +294,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterChoice $letterChoice new value being set
      *
-     * @return LetterSectionVariant
+     * @return static
      */
     public function setLetterChoice($letterChoice)
     {
@@ -318,7 +318,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterSectionVariant
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -342,7 +342,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterSectionVariant
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -366,7 +366,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @param bool $isVariation new value being set
      *
-     * @return LetterSectionVariant
+     * @return static
      */
     public function setIsVariation($isVariation)
     {
@@ -390,7 +390,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @param bool $isNi new value being set
      *
-     * @return LetterSectionVariant
+     * @return static
      */
     public function setIsNi($isNi)
     {
@@ -414,7 +414,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @param int $displayOrder new value being set
      *
-     * @return LetterSectionVariant
+     * @return static
      */
     public function setDisplayOrder($displayOrder)
     {
@@ -438,7 +438,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @param int $version new value being set
      *
-     * @return LetterSectionVariant
+     * @return static
      */
     public function setVersion($version)
     {

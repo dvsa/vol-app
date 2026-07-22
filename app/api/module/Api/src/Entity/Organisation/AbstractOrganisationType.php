@@ -80,7 +80,7 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return OrganisationType
+     * @return static
      */
     public function setId($id)
     {
@@ -104,7 +104,7 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $orgType new value being set
      *
-     * @return OrganisationType
+     * @return static
      */
     public function setOrgType($orgType)
     {
@@ -128,7 +128,7 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $orgPersonType new value being set
      *
-     * @return OrganisationType
+     * @return static
      */
     public function setOrgPersonType($orgPersonType)
     {

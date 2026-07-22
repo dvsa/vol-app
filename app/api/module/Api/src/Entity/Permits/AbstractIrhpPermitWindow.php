@@ -121,7 +121,7 @@ abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return IrhpPermitWindow
+     * @return static
      */
     public function setId($id)
     {
@@ -145,7 +145,7 @@ abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock $irhpPermitStock new value being set
      *
-     * @return IrhpPermitWindow
+     * @return static
      */
     public function setIrhpPermitStock($irhpPermitStock)
     {
@@ -169,7 +169,7 @@ abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrhpPermitWindow
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -193,7 +193,7 @@ abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrhpPermitWindow
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -217,7 +217,7 @@ abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, 
      *
      * @param \DateTime $startDate new value being set
      *
-     * @return IrhpPermitWindow
+     * @return static
      */
     public function setStartDate($startDate)
     {
@@ -247,7 +247,7 @@ abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, 
      *
      * @param \DateTime $endDate new value being set
      *
-     * @return IrhpPermitWindow
+     * @return static
      */
     public function setEndDate($endDate)
     {
@@ -277,7 +277,7 @@ abstract class AbstractIrhpPermitWindow implements BundleSerializableInterface, 
      *
      * @param int $version new value being set
      *
-     * @return IrhpPermitWindow
+     * @return static
      */
     public function setVersion($version)
     {

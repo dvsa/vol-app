@@ -146,7 +146,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param int $id new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setId($id)
     {
@@ -170,7 +170,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany $companiesHouseCompany new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setCompaniesHouseCompany($companiesHouseCompany)
     {
@@ -194,7 +194,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param string $name new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setName($name)
     {
@@ -218,7 +218,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param string $addressLine1 new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setAddressLine1($addressLine1)
     {
@@ -242,7 +242,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param string $addressLine2 new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setAddressLine2($addressLine2)
     {
@@ -266,7 +266,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param string $country new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setCountry($country)
     {
@@ -290,7 +290,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param string $locality new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setLocality($locality)
     {
@@ -314,7 +314,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param string $postalCode new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setPostalCode($postalCode)
     {
@@ -338,7 +338,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param string $region new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setRegion($region)
     {
@@ -362,7 +362,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param \DateTime $appointedOn new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setAppointedOn($appointedOn)
     {
@@ -392,7 +392,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      *
      * @param int $version new value being set
      *
-     * @return CompaniesHouseInsolvencyPractitioner
+     * @return static
      */
     public function setVersion($version)
     {

@@ -145,7 +145,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param int $id new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setId($id)
     {
@@ -169,7 +169,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterTodo $letterTodo new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setLetterTodo($letterTodo)
     {
@@ -193,7 +193,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -217,7 +217,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -241,7 +241,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param array $description new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setDescription($description)
     {
@@ -265,7 +265,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param string $helpText new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setHelpText($helpText)
     {
@@ -289,7 +289,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param bool $isLocked new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setIsLocked($isLocked)
     {
@@ -313,7 +313,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param \DateTime $publishFrom new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setPublishFrom($publishFrom)
     {
@@ -343,7 +343,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param int $versionNumber new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setVersionNumber($versionNumber)
     {
@@ -367,7 +367,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @param int $version new value being set
      *
-     * @return LetterTodoVersion
+     * @return static
      */
     public function setVersion($version)
     {

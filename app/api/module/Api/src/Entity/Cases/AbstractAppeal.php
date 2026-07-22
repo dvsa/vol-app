@@ -248,7 +248,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param int $id new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setId($id)
     {
@@ -272,7 +272,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setCase($case)
     {
@@ -296,7 +296,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $reason new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setReason($reason)
     {
@@ -320,7 +320,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $outcome new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setOutcome($outcome)
     {
@@ -344,7 +344,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -368,7 +368,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -392,7 +392,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param string $appealNo new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setAppealNo($appealNo)
     {
@@ -416,7 +416,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $deadlineDate new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setDeadlineDate($deadlineDate)
     {
@@ -446,7 +446,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $appealDate new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setAppealDate($appealDate)
     {
@@ -476,7 +476,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param string $outlineGround new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setOutlineGround($outlineGround)
     {
@@ -500,7 +500,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $hearingDate new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setHearingDate($hearingDate)
     {
@@ -530,7 +530,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $papersDueDate new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setPapersDueDate($papersDueDate)
     {
@@ -560,7 +560,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $papersDueTcDate new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setPapersDueTcDate($papersDueTcDate)
     {
@@ -590,7 +590,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param string $comment new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setComment($comment)
     {
@@ -614,7 +614,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $papersSentDate new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setPapersSentDate($papersSentDate)
     {
@@ -644,7 +644,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $papersSentTcDate new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setPapersSentTcDate($papersSentTcDate)
     {
@@ -674,7 +674,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $decisionDate new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setDecisionDate($decisionDate)
     {
@@ -704,7 +704,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $withdrawnDate new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setWithdrawnDate($withdrawnDate)
     {
@@ -734,7 +734,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param string $dvsaNotified new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setDvsaNotified($dvsaNotified)
     {
@@ -758,7 +758,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param int $version new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setVersion($version)
     {
@@ -782,7 +782,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param int $olbsKey new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -806,7 +806,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      *
      * @param string $olbsType new value being set
      *
-     * @return Appeal
+     * @return static
      */
     public function setOlbsType($olbsType)
     {

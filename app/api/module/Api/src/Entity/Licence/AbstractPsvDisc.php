@@ -163,7 +163,7 @@ abstract class AbstractPsvDisc implements BundleSerializableInterface, JsonSeria
      *
      * @param int $id new value being set
      *
-     * @return PsvDisc
+     * @return static
      */
     public function setId($id)
     {
@@ -187,7 +187,7 @@ abstract class AbstractPsvDisc implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return PsvDisc
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -211,7 +211,7 @@ abstract class AbstractPsvDisc implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return PsvDisc
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -235,7 +235,7 @@ abstract class AbstractPsvDisc implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return PsvDisc
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -259,7 +259,7 @@ abstract class AbstractPsvDisc implements BundleSerializableInterface, JsonSeria
      *
      * @param string $discNo new value being set
      *
-     * @return PsvDisc
+     * @return static
      */
     public function setDiscNo($discNo)
     {
@@ -283,7 +283,7 @@ abstract class AbstractPsvDisc implements BundleSerializableInterface, JsonSeria
      *
      * @param \DateTime $issuedDate new value being set
      *
-     * @return PsvDisc
+     * @return static
      */
     public function setIssuedDate($issuedDate)
     {
@@ -313,7 +313,7 @@ abstract class AbstractPsvDisc implements BundleSerializableInterface, JsonSeria
      *
      * @param \DateTime $ceasedDate new value being set
      *
-     * @return PsvDisc
+     * @return static
      */
     public function setCeasedDate($ceasedDate)
     {
@@ -343,7 +343,7 @@ abstract class AbstractPsvDisc implements BundleSerializableInterface, JsonSeria
      *
      * @param string $isCopy new value being set
      *
-     * @return PsvDisc
+     * @return static
      */
     public function setIsCopy($isCopy)
     {
@@ -367,7 +367,7 @@ abstract class AbstractPsvDisc implements BundleSerializableInterface, JsonSeria
      *
      * @param string $reprintRequired new value being set
      *
-     * @return PsvDisc
+     * @return static
      */
     public function setReprintRequired($reprintRequired)
     {
@@ -391,7 +391,7 @@ abstract class AbstractPsvDisc implements BundleSerializableInterface, JsonSeria
      *
      * @param string $isPrinting new value being set
      *
-     * @return PsvDisc
+     * @return static
      */
     public function setIsPrinting($isPrinting)
     {
@@ -415,7 +415,7 @@ abstract class AbstractPsvDisc implements BundleSerializableInterface, JsonSeria
      *
      * @param int $version new value being set
      *
-     * @return PsvDisc
+     * @return static
      */
     public function setVersion($version)
     {
@@ -439,7 +439,7 @@ abstract class AbstractPsvDisc implements BundleSerializableInterface, JsonSeria
      *
      * @param int $olbsKey new value being set
      *
-     * @return PsvDisc
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

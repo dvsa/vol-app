@@ -133,7 +133,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return OrganisationUser
+     * @return static
      */
     public function setId($id)
     {
@@ -157,7 +157,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return OrganisationUser
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -181,7 +181,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return OrganisationUser
+     * @return static
      */
     public function setUser($user)
     {
@@ -205,7 +205,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return OrganisationUser
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -229,7 +229,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return OrganisationUser
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -253,7 +253,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      *
      * @param string $isAdministrator new value being set
      *
-     * @return OrganisationUser
+     * @return static
      */
     public function setIsAdministrator($isAdministrator)
     {
@@ -277,7 +277,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      *
      * @param string $sftpAccess new value being set
      *
-     * @return OrganisationUser
+     * @return static
      */
     public function setSftpAccess($sftpAccess)
     {
@@ -301,7 +301,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      *
      * @param int $version new value being set
      *
-     * @return OrganisationUser
+     * @return static
      */
     public function setVersion($version)
     {

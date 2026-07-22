@@ -84,7 +84,7 @@ abstract class AbstractTransportManagerReadAudit implements BundleSerializableIn
      *
      * @param int $id new value being set
      *
-     * @return TransportManagerReadAudit
+     * @return static
      */
     public function setId($id)
     {
@@ -108,7 +108,7 @@ abstract class AbstractTransportManagerReadAudit implements BundleSerializableIn
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return TransportManagerReadAudit
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -132,7 +132,7 @@ abstract class AbstractTransportManagerReadAudit implements BundleSerializableIn
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return TransportManagerReadAudit
+     * @return static
      */
     public function setUser($user)
     {

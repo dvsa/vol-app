@@ -254,7 +254,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setId($id)
     {
@@ -278,7 +278,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow $irhpPermitWindow new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setIrhpPermitWindow($irhpPermitWindow)
     {
@@ -302,7 +302,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -326,7 +326,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setIrhpApplication($irhpApplication)
     {
@@ -350,7 +350,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\Sectors $sectors new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setSectors($sectors)
     {
@@ -374,7 +374,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setStatus($status)
     {
@@ -398,7 +398,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -422,7 +422,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -446,7 +446,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \DateTime $startDate new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setStartDate($startDate)
     {
@@ -476,7 +476,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param bool $checkedAnswers new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setCheckedAnswers($checkedAnswers)
     {
@@ -500,7 +500,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param int $permitsRequired new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setPermitsRequired($permitsRequired)
     {
@@ -524,7 +524,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param int $requiredEuro5 new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setRequiredEuro5($requiredEuro5)
     {
@@ -548,7 +548,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param int $requiredEuro6 new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setRequiredEuro6($requiredEuro6)
     {
@@ -572,7 +572,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param int $requiredStandard new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setRequiredStandard($requiredStandard)
     {
@@ -596,7 +596,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param int $requiredCabotage new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setRequiredCabotage($requiredCabotage)
     {
@@ -620,7 +620,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param string $properties new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setProperties($properties)
     {
@@ -644,7 +644,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setVersion($version)
     {
@@ -668,7 +668,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $answers collection being set as the value
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setAnswers($answers)
     {
@@ -692,7 +692,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $answers collection being added
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function addAnswers($answers)
     {
@@ -715,7 +715,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $answers collection being removed
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function removeAnswers($answers)
     {
@@ -731,7 +731,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $fees collection being set as the value
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setFees($fees)
     {
@@ -755,7 +755,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $fees collection being added
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function addFees($fees)
     {
@@ -778,7 +778,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $fees collection being removed
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function removeFees($fees)
     {
@@ -794,7 +794,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpCandidatePermits collection being set as the value
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setIrhpCandidatePermits($irhpCandidatePermits)
     {
@@ -818,7 +818,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpCandidatePermits collection being added
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function addIrhpCandidatePermits($irhpCandidatePermits)
     {
@@ -841,7 +841,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpCandidatePermits collection being removed
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function removeIrhpCandidatePermits($irhpCandidatePermits)
     {
@@ -857,7 +857,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermits collection being set as the value
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setIrhpPermits($irhpPermits)
     {
@@ -881,7 +881,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermits collection being added
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function addIrhpPermits($irhpPermits)
     {
@@ -904,7 +904,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermits collection being removed
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function removeIrhpPermits($irhpPermits)
     {
@@ -920,7 +920,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRequests collection being set as the value
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function setIrhpPermitRequests($irhpPermitRequests)
     {
@@ -944,7 +944,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitRequests collection being added
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function addIrhpPermitRequests($irhpPermitRequests)
     {
@@ -967,7 +967,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRequests collection being removed
      *
-     * @return IrhpPermitApplication
+     * @return static
      */
     public function removeIrhpPermitRequests($irhpPermitRequests)
     {

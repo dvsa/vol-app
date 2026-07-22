@@ -194,7 +194,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return QuestionText
+     * @return static
      */
     public function setId($id)
     {
@@ -218,7 +218,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\Generic\Question $question new value being set
      *
-     * @return QuestionText
+     * @return static
      */
     public function setQuestion($question)
     {
@@ -242,7 +242,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return QuestionText
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -266,7 +266,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return QuestionText
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -290,7 +290,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param \DateTime $effectiveFrom new value being set
      *
-     * @return QuestionText
+     * @return static
      */
     public function setEffectiveFrom($effectiveFrom)
     {
@@ -320,7 +320,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param string $questionShortKey new value being set
      *
-     * @return QuestionText
+     * @return static
      */
     public function setQuestionShortKey($questionShortKey)
     {
@@ -344,7 +344,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param string $questionSummaryKey new value being set
      *
-     * @return QuestionText
+     * @return static
      */
     public function setQuestionSummaryKey($questionSummaryKey)
     {
@@ -368,7 +368,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param string $questionKey new value being set
      *
-     * @return QuestionText
+     * @return static
      */
     public function setQuestionKey($questionKey)
     {
@@ -392,7 +392,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param string $warningKey new value being set
      *
-     * @return QuestionText
+     * @return static
      */
     public function setWarningKey($warningKey)
     {
@@ -416,7 +416,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param string $detailsKey new value being set
      *
-     * @return QuestionText
+     * @return static
      */
     public function setDetailsKey($detailsKey)
     {
@@ -440,7 +440,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param string $guidanceKey new value being set
      *
-     * @return QuestionText
+     * @return static
      */
     public function setGuidanceKey($guidanceKey)
     {
@@ -464,7 +464,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param string $additionalGuidanceKey new value being set
      *
-     * @return QuestionText
+     * @return static
      */
     public function setAdditionalGuidanceKey($additionalGuidanceKey)
     {
@@ -488,7 +488,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param string $hintKey new value being set
      *
-     * @return QuestionText
+     * @return static
      */
     public function setHintKey($hintKey)
     {
@@ -512,7 +512,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param string $bulletListKey new value being set
      *
-     * @return QuestionText
+     * @return static
      */
     public function setBulletListKey($bulletListKey)
     {
@@ -536,7 +536,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param string $labelKey new value being set
      *
-     * @return QuestionText
+     * @return static
      */
     public function setLabelKey($labelKey)
     {
@@ -560,7 +560,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      *
      * @param int $version new value being set
      *
-     * @return QuestionText
+     * @return static
      */
     public function setVersion($version)
     {

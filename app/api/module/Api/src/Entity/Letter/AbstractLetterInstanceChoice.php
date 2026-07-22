@@ -117,7 +117,7 @@ abstract class AbstractLetterInstanceChoice implements BundleSerializableInterfa
      *
      * @param int $id new value being set
      *
-     * @return LetterInstanceChoice
+     * @return static
      */
     public function setId($id)
     {
@@ -141,7 +141,7 @@ abstract class AbstractLetterInstanceChoice implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterInstance $letterInstance new value being set
      *
-     * @return LetterInstanceChoice
+     * @return static
      */
     public function setLetterInstance($letterInstance)
     {
@@ -165,7 +165,7 @@ abstract class AbstractLetterInstanceChoice implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterChoice $letterChoice new value being set
      *
-     * @return LetterInstanceChoice
+     * @return static
      */
     public function setLetterChoice($letterChoice)
     {
@@ -189,7 +189,7 @@ abstract class AbstractLetterInstanceChoice implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterInstanceChoice
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -213,7 +213,7 @@ abstract class AbstractLetterInstanceChoice implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterInstanceChoice
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -237,7 +237,7 @@ abstract class AbstractLetterInstanceChoice implements BundleSerializableInterfa
      *
      * @param int $version new value being set
      *
-     * @return LetterInstanceChoice
+     * @return static
      */
     public function setVersion($version)
     {

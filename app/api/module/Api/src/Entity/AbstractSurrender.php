@@ -232,7 +232,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param int $id new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setId($id)
     {
@@ -256,7 +256,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -280,7 +280,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setStatus($status)
     {
@@ -304,7 +304,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $licenceDocumentStatus new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setLicenceDocumentStatus($licenceDocumentStatus)
     {
@@ -328,7 +328,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $communityLicenceDocumentStatus new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setCommunityLicenceDocumentStatus($communityLicenceDocumentStatus)
     {
@@ -352,7 +352,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\DigitalSignature $digitalSignature new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setDigitalSignature($digitalSignature)
     {
@@ -376,7 +376,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $signatureType new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setSignatureType($signatureType)
     {
@@ -400,7 +400,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -424,7 +424,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -448,7 +448,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param int $discDestroyed new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setDiscDestroyed($discDestroyed)
     {
@@ -472,7 +472,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param int $discLost new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setDiscLost($discLost)
     {
@@ -496,7 +496,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param int $discStolen new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setDiscStolen($discStolen)
     {
@@ -520,7 +520,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param string $discLostInfo new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setDiscLostInfo($discLostInfo)
     {
@@ -544,7 +544,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param string $discStolenInfo new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setDiscStolenInfo($discStolenInfo)
     {
@@ -568,7 +568,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param string $licenceDocumentInfo new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setLicenceDocumentInfo($licenceDocumentInfo)
     {
@@ -592,7 +592,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param string $communityLicenceDocumentInfo new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setCommunityLicenceDocumentInfo($communityLicenceDocumentInfo)
     {
@@ -616,7 +616,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param bool $signatureChecked new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setSignatureChecked($signatureChecked)
     {
@@ -640,7 +640,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param bool $ecmsChecked new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setEcmsChecked($ecmsChecked)
     {
@@ -664,7 +664,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param int $version new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setVersion($version)
     {

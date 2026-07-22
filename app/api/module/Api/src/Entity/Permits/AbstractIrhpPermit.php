@@ -177,7 +177,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param int $id new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setId($id)
     {
@@ -201,7 +201,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit $replaces new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setReplaces($replaces)
     {
@@ -225,7 +225,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange $irhpPermitRange new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setIrhpPermitRange($irhpPermitRange)
     {
@@ -249,7 +249,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication $irhpPermitApplication new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setIrhpPermitApplication($irhpPermitApplication)
     {
@@ -273,7 +273,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit $irhpCandidatePermit new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setIrhpCandidatePermit($irhpCandidatePermit)
     {
@@ -297,7 +297,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setStatus($status)
     {
@@ -321,7 +321,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -345,7 +345,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -369,7 +369,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param int $permitNumber new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setPermitNumber($permitNumber)
     {
@@ -393,7 +393,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $issueDate new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setIssueDate($issueDate)
     {
@@ -423,7 +423,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $expiryDate new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setExpiryDate($expiryDate)
     {
@@ -453,7 +453,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param string $permitProperties new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setPermitProperties($permitProperties)
     {
@@ -477,7 +477,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param int $version new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setVersion($version)
     {

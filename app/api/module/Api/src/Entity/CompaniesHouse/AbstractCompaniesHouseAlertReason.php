@@ -87,7 +87,7 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
      *
      * @param int $id new value being set
      *
-     * @return CompaniesHouseAlertReason
+     * @return static
      */
     public function setId($id)
     {
@@ -111,7 +111,7 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
      *
      * @param \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert $companiesHouseAlert new value being set
      *
-     * @return CompaniesHouseAlertReason
+     * @return static
      */
     public function setCompaniesHouseAlert($companiesHouseAlert)
     {
@@ -135,7 +135,7 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $reasonType new value being set
      *
-     * @return CompaniesHouseAlertReason
+     * @return static
      */
     public function setReasonType($reasonType)
     {
@@ -159,7 +159,7 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
      *
      * @param int $version new value being set
      *
-     * @return CompaniesHouseAlertReason
+     * @return static
      */
     public function setVersion($version)
     {

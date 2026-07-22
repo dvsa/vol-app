@@ -115,7 +115,7 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return RolePermission
+     * @return static
      */
     public function setId($id)
     {
@@ -139,7 +139,7 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\Role $role new value being set
      *
-     * @return RolePermission
+     * @return static
      */
     public function setRole($role)
     {
@@ -163,7 +163,7 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\Permission $permission new value being set
      *
-     * @return RolePermission
+     * @return static
      */
     public function setPermission($permission)
     {
@@ -187,7 +187,7 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return RolePermission
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -211,7 +211,7 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return RolePermission
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -235,7 +235,7 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return RolePermission
+     * @return static
      */
     public function setVersion($version)
     {

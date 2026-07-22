@@ -151,7 +151,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      *
      * @param int $id new value being set
      *
-     * @return ApplicationOrganisationPerson
+     * @return static
      */
     public function setId($id)
     {
@@ -175,7 +175,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\Person\Person $person new value being set
      *
-     * @return ApplicationOrganisationPerson
+     * @return static
      */
     public function setPerson($person)
     {
@@ -199,7 +199,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\Person\Person $originalPerson new value being set
      *
-     * @return ApplicationOrganisationPerson
+     * @return static
      */
     public function setOriginalPerson($originalPerson)
     {
@@ -223,7 +223,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return ApplicationOrganisationPerson
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -247,7 +247,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return ApplicationOrganisationPerson
+     * @return static
      */
     public function setApplication($application)
     {
@@ -271,7 +271,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ApplicationOrganisationPerson
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -295,7 +295,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ApplicationOrganisationPerson
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -319,7 +319,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      *
      * @param string $action new value being set
      *
-     * @return ApplicationOrganisationPerson
+     * @return static
      */
     public function setAction($action)
     {
@@ -343,7 +343,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      *
      * @param string $position new value being set
      *
-     * @return ApplicationOrganisationPerson
+     * @return static
      */
     public function setPosition($position)
     {
@@ -367,7 +367,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      *
      * @param int $version new value being set
      *
-     * @return ApplicationOrganisationPerson
+     * @return static
      */
     public function setVersion($version)
     {

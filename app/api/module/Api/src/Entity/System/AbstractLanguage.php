@@ -111,7 +111,7 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
      *
      * @param int $id new value being set
      *
-     * @return Language
+     * @return static
      */
     public function setId($id)
     {
@@ -135,7 +135,7 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Language
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -159,7 +159,7 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Language
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -183,7 +183,7 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
      *
      * @param string $name new value being set
      *
-     * @return Language
+     * @return static
      */
     public function setName($name)
     {
@@ -207,7 +207,7 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
      *
      * @param string $isoCode new value being set
      *
-     * @return Language
+     * @return static
      */
     public function setIsoCode($isoCode)
     {
@@ -231,7 +231,7 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
      *
      * @param int $version new value being set
      *
-     * @return Language
+     * @return static
      */
     public function setVersion($version)
     {

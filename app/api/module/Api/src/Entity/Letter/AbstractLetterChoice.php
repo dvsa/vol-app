@@ -145,7 +145,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setId($id)
     {
@@ -169,7 +169,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -193,7 +193,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -217,7 +217,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param string $choiceKey new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setChoiceKey($choiceKey)
     {
@@ -241,7 +241,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param string $label new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setLabel($label)
     {
@@ -265,7 +265,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param string $groupLabel new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setGroupLabel($groupLabel)
     {
@@ -289,7 +289,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param string $inputType new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setInputType($inputType)
     {
@@ -313,7 +313,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param int $displayOrder new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setDisplayOrder($displayOrder)
     {
@@ -337,7 +337,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param bool $isActive new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setIsActive($isActive)
     {
@@ -361,7 +361,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param int $version new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setVersion($version)
     {

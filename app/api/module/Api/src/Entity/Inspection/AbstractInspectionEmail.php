@@ -125,7 +125,7 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return InspectionEmail
+     * @return static
      */
     public function setId($id)
     {
@@ -149,7 +149,7 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Inspection\InspectionRequest $inspectionRequest new value being set
      *
-     * @return InspectionEmail
+     * @return static
      */
     public function setInspectionRequest($inspectionRequest)
     {
@@ -173,7 +173,7 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
      *
      * @param string $subject new value being set
      *
-     * @return InspectionEmail
+     * @return static
      */
     public function setSubject($subject)
     {
@@ -197,7 +197,7 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
      *
      * @param string $messageBody new value being set
      *
-     * @return InspectionEmail
+     * @return static
      */
     public function setMessageBody($messageBody)
     {
@@ -221,7 +221,7 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
      *
      * @param string $emailStatus new value being set
      *
-     * @return InspectionEmail
+     * @return static
      */
     public function setEmailStatus($emailStatus)
     {
@@ -245,7 +245,7 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
      *
      * @param string $processed new value being set
      *
-     * @return InspectionEmail
+     * @return static
      */
     public function setProcessed($processed)
     {
@@ -269,7 +269,7 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
      *
      * @param string $senderEmailAddress new value being set
      *
-     * @return InspectionEmail
+     * @return static
      */
     public function setSenderEmailAddress($senderEmailAddress)
     {
@@ -293,7 +293,7 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
      *
      * @param \DateTime $receivedDate new value being set
      *
-     * @return InspectionEmail
+     * @return static
      */
     public function setReceivedDate($receivedDate)
     {
@@ -323,7 +323,7 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return InspectionEmail
+     * @return static
      */
     public function setVersion($version)
     {

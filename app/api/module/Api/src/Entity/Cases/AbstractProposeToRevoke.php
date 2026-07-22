@@ -314,7 +314,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setId($id)
     {
@@ -338,7 +338,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setCase($case)
     {
@@ -362,7 +362,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $presidingTc new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setPresidingTc($presidingTc)
     {
@@ -386,7 +386,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $assignedCaseworker new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setAssignedCaseworker($assignedCaseworker)
     {
@@ -410,7 +410,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -434,7 +434,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -458,7 +458,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $approvalSubmissionPresidingTc new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setApprovalSubmissionPresidingTc($approvalSubmissionPresidingTc)
     {
@@ -482,7 +482,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Pi\PresidingTc $finalSubmissionPresidingTc new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setFinalSubmissionPresidingTc($finalSubmissionPresidingTc)
     {
@@ -506,7 +506,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $actionToBeTaken new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setActionToBeTaken($actionToBeTaken)
     {
@@ -530,7 +530,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \DateTime $ptrAgreedDate new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setPtrAgreedDate($ptrAgreedDate)
     {
@@ -560,7 +560,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \DateTime $closedDate new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setClosedDate($closedDate)
     {
@@ -590,7 +590,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param string $comment new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setComment($comment)
     {
@@ -614,7 +614,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setVersion($version)
     {
@@ -638,7 +638,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $isSubmissionRequiredForApproval new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setIsSubmissionRequiredForApproval($isSubmissionRequiredForApproval)
     {
@@ -662,7 +662,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \DateTime $approvalSubmissionIssuedDate new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setApprovalSubmissionIssuedDate($approvalSubmissionIssuedDate)
     {
@@ -692,7 +692,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \DateTime $approvalSubmissionReturnedDate new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setApprovalSubmissionReturnedDate($approvalSubmissionReturnedDate)
     {
@@ -722,7 +722,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \DateTime $iorLetterIssuedDate new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setIorLetterIssuedDate($iorLetterIssuedDate)
     {
@@ -752,7 +752,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \DateTime $operatorResponseDueDate new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setOperatorResponseDueDate($operatorResponseDueDate)
     {
@@ -782,7 +782,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \DateTime $operatorResponseReceivedDate new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setOperatorResponseReceivedDate($operatorResponseReceivedDate)
     {
@@ -812,7 +812,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param bool $isSubmissionRequiredForAction new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setIsSubmissionRequiredForAction($isSubmissionRequiredForAction)
     {
@@ -836,7 +836,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \DateTime $finalSubmissionIssuedDate new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setFinalSubmissionIssuedDate($finalSubmissionIssuedDate)
     {
@@ -866,7 +866,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \DateTime $finalSubmissionReturnedDate new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setFinalSubmissionReturnedDate($finalSubmissionReturnedDate)
     {
@@ -896,7 +896,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \DateTime $revocationLetterIssuedDate new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setRevocationLetterIssuedDate($revocationLetterIssuedDate)
     {
@@ -926,7 +926,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \DateTime $nfaLetterIssuedDate new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setNfaLetterIssuedDate($nfaLetterIssuedDate)
     {
@@ -956,7 +956,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \DateTime $warningLetterIssuedDate new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setWarningLetterIssuedDate($warningLetterIssuedDate)
     {
@@ -986,7 +986,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \DateTime $piAgreedDate new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setPiAgreedDate($piAgreedDate)
     {
@@ -1016,7 +1016,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \DateTime $otherActionAgreedDate new value being set
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setOtherActionAgreedDate($otherActionAgreedDate)
     {
@@ -1046,7 +1046,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $reasons collection being set as the value
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setReasons($reasons)
     {
@@ -1070,7 +1070,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $reasons collection being added
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function addReasons($reasons)
     {
@@ -1093,7 +1093,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $reasons collection being removed
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function removeReasons($reasons)
     {
@@ -1109,7 +1109,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $slaTargetDates collection being set as the value
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function setSlaTargetDates($slaTargetDates)
     {
@@ -1133,7 +1133,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $slaTargetDates collection being added
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function addSlaTargetDates($slaTargetDates)
     {
@@ -1156,7 +1156,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $slaTargetDates collection being removed
      *
-     * @return ProposeToRevoke
+     * @return static
      */
     public function removeSlaTargetDates($slaTargetDates)
     {

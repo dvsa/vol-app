@@ -151,7 +151,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @param int $id new value being set
      *
-     * @return SiPenaltyErruRequested
+     * @return static
      */
     public function setId($id)
     {
@@ -175,7 +175,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement $seriousInfringement new value being set
      *
-     * @return SiPenaltyErruRequested
+     * @return static
      */
     public function setSeriousInfringement($seriousInfringement)
     {
@@ -199,7 +199,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType $siPenaltyRequestedType new value being set
      *
-     * @return SiPenaltyErruRequested
+     * @return static
      */
     public function setSiPenaltyRequestedType($siPenaltyRequestedType)
     {
@@ -223,7 +223,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return SiPenaltyErruRequested
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -247,7 +247,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return SiPenaltyErruRequested
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -271,7 +271,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @param int $penaltyRequestedIdentifier new value being set
      *
-     * @return SiPenaltyErruRequested
+     * @return static
      */
     public function setPenaltyRequestedIdentifier($penaltyRequestedIdentifier)
     {
@@ -295,7 +295,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @param int $duration new value being set
      *
-     * @return SiPenaltyErruRequested
+     * @return static
      */
     public function setDuration($duration)
     {
@@ -319,7 +319,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @param int $version new value being set
      *
-     * @return SiPenaltyErruRequested
+     * @return static
      */
     public function setVersion($version)
     {
@@ -343,7 +343,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @param int $olbsKey new value being set
      *
-     * @return SiPenaltyErruRequested
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -367,7 +367,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $appliedPenalties collection being set as the value
      *
-     * @return SiPenaltyErruRequested
+     * @return static
      */
     public function setAppliedPenalties($appliedPenalties)
     {
@@ -391,7 +391,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $appliedPenalties collection being added
      *
-     * @return SiPenaltyErruRequested
+     * @return static
      */
     public function addAppliedPenalties($appliedPenalties)
     {
@@ -414,7 +414,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $appliedPenalties collection being removed
      *
-     * @return SiPenaltyErruRequested
+     * @return static
      */
     public function removeAppliedPenalties($appliedPenalties)
     {

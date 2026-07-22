@@ -215,7 +215,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setId($id)
     {
@@ -239,7 +239,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -263,7 +263,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle $vehicle new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setVehicle($vehicle)
     {
@@ -287,7 +287,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setApplication($application)
     {
@@ -311,7 +311,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $interimApplication new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setInterimApplication($interimApplication)
     {
@@ -335,7 +335,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -359,7 +359,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -383,7 +383,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \DateTime $receivedDate new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setReceivedDate($receivedDate)
     {
@@ -413,7 +413,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \DateTime $removalDate new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setRemovalDate($removalDate)
     {
@@ -443,7 +443,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \DateTime $removalLetterSeedDate new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setRemovalLetterSeedDate($removalLetterSeedDate)
     {
@@ -473,7 +473,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param string $viAction new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setViAction($viAction)
     {
@@ -497,7 +497,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \DateTime $warningLetterSeedDate new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setWarningLetterSeedDate($warningLetterSeedDate)
     {
@@ -527,7 +527,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \DateTime $warningLetterSentDate new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setWarningLetterSentDate($warningLetterSentDate)
     {
@@ -557,7 +557,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \DateTime $specifiedDate new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setSpecifiedDate($specifiedDate)
     {
@@ -587,7 +587,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setVersion($version)
     {
@@ -611,7 +611,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param int $olbsKey new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -635,7 +635,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $goodsDiscs collection being set as the value
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setGoodsDiscs($goodsDiscs)
     {
@@ -659,7 +659,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $goodsDiscs collection being added
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function addGoodsDiscs($goodsDiscs)
     {
@@ -682,7 +682,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $goodsDiscs collection being removed
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function removeGoodsDiscs($goodsDiscs)
     {

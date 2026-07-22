@@ -285,7 +285,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param int $id new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setId($id)
     {
@@ -309,7 +309,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Continuation $continuation new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setContinuation($continuation)
     {
@@ -333,7 +333,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -357,7 +357,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $checklistDocument new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setChecklistDocument($checklistDocument)
     {
@@ -381,7 +381,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setStatus($status)
     {
@@ -405,7 +405,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $signatureType new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setSignatureType($signatureType)
     {
@@ -429,7 +429,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\DigitalSignature $digitalSignature new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setDigitalSignature($digitalSignature)
     {
@@ -453,7 +453,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -477,7 +477,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -501,7 +501,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $received new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setReceived($received)
     {
@@ -525,7 +525,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param int $totAuthVehicles new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setTotAuthVehicles($totAuthVehicles)
     {
@@ -549,7 +549,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param int $totPsvDiscs new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setTotPsvDiscs($totPsvDiscs)
     {
@@ -573,7 +573,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param int $totCommunityLicences new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setTotCommunityLicences($totCommunityLicences)
     {
@@ -597,7 +597,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $averageBalanceAmount new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setAverageBalanceAmount($averageBalanceAmount)
     {
@@ -621,7 +621,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $hasOverdraft new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setHasOverdraft($hasOverdraft)
     {
@@ -645,7 +645,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $overdraftAmount new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setOverdraftAmount($overdraftAmount)
     {
@@ -669,7 +669,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $hasFactoring new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setHasFactoring($hasFactoring)
     {
@@ -693,7 +693,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $factoringAmount new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setFactoringAmount($factoringAmount)
     {
@@ -717,7 +717,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $hasOtherFinances new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setHasOtherFinances($hasOtherFinances)
     {
@@ -741,7 +741,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $otherFinancesAmount new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setOtherFinancesAmount($otherFinancesAmount)
     {
@@ -765,7 +765,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param string $otherFinancesDetails new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setOtherFinancesDetails($otherFinancesDetails)
     {
@@ -789,7 +789,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param bool $financialEvidenceUploaded new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setFinancialEvidenceUploaded($financialEvidenceUploaded)
     {
@@ -813,7 +813,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param bool $isDigital new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setIsDigital($isDigital)
     {
@@ -837,7 +837,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param bool $digitalNotificationSent new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setDigitalNotificationSent($digitalNotificationSent)
     {
@@ -861,7 +861,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param bool $digitalReminderSent new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setDigitalReminderSent($digitalReminderSent)
     {
@@ -885,7 +885,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @param int $version new value being set
      *
-     * @return ContinuationDetail
+     * @return static
      */
     public function setVersion($version)
     {

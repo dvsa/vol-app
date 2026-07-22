@@ -151,7 +151,7 @@ abstract class AbstractCommunityLicSuspension implements BundleSerializableInter
      *
      * @param int $id new value being set
      *
-     * @return CommunityLicSuspension
+     * @return static
      */
     public function setId($id)
     {
@@ -175,7 +175,7 @@ abstract class AbstractCommunityLicSuspension implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic $communityLic new value being set
      *
-     * @return CommunityLicSuspension
+     * @return static
      */
     public function setCommunityLic($communityLic)
     {
@@ -199,7 +199,7 @@ abstract class AbstractCommunityLicSuspension implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return CommunityLicSuspension
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -223,7 +223,7 @@ abstract class AbstractCommunityLicSuspension implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return CommunityLicSuspension
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -247,7 +247,7 @@ abstract class AbstractCommunityLicSuspension implements BundleSerializableInter
      *
      * @param \DateTime $startDate new value being set
      *
-     * @return CommunityLicSuspension
+     * @return static
      */
     public function setStartDate($startDate)
     {
@@ -277,7 +277,7 @@ abstract class AbstractCommunityLicSuspension implements BundleSerializableInter
      *
      * @param \DateTime $endDate new value being set
      *
-     * @return CommunityLicSuspension
+     * @return static
      */
     public function setEndDate($endDate)
     {
@@ -307,7 +307,7 @@ abstract class AbstractCommunityLicSuspension implements BundleSerializableInter
      *
      * @param string $isActioned new value being set
      *
-     * @return CommunityLicSuspension
+     * @return static
      */
     public function setIsActioned($isActioned)
     {
@@ -331,7 +331,7 @@ abstract class AbstractCommunityLicSuspension implements BundleSerializableInter
      *
      * @param int $version new value being set
      *
-     * @return CommunityLicSuspension
+     * @return static
      */
     public function setVersion($version)
     {
@@ -355,7 +355,7 @@ abstract class AbstractCommunityLicSuspension implements BundleSerializableInter
      *
      * @param int $olbsKey new value being set
      *
-     * @return CommunityLicSuspension
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -379,7 +379,7 @@ abstract class AbstractCommunityLicSuspension implements BundleSerializableInter
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $communityLicSuspensionReasons collection being set as the value
      *
-     * @return CommunityLicSuspension
+     * @return static
      */
     public function setCommunityLicSuspensionReasons($communityLicSuspensionReasons)
     {
@@ -403,7 +403,7 @@ abstract class AbstractCommunityLicSuspension implements BundleSerializableInter
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $communityLicSuspensionReasons collection being added
      *
-     * @return CommunityLicSuspension
+     * @return static
      */
     public function addCommunityLicSuspensionReasons($communityLicSuspensionReasons)
     {
@@ -426,7 +426,7 @@ abstract class AbstractCommunityLicSuspension implements BundleSerializableInter
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $communityLicSuspensionReasons collection being removed
      *
-     * @return CommunityLicSuspension
+     * @return static
      */
     public function removeCommunityLicSuspensionReasons($communityLicSuspensionReasons)
     {

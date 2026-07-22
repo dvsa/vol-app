@@ -217,7 +217,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setId($id)
     {
@@ -241,7 +241,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock $irhpPermitStock new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setIrhpPermitStock($irhpPermitStock)
     {
@@ -265,7 +265,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $emissionsCategory new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setEmissionsCategory($emissionsCategory)
     {
@@ -289,7 +289,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $journey new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setJourney($journey)
     {
@@ -313,7 +313,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -337,7 +337,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -361,7 +361,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param string $prefix new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setPrefix($prefix)
     {
@@ -385,7 +385,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param int $fromNo new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setFromNo($fromNo)
     {
@@ -409,7 +409,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param int $toNo new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setToNo($toNo)
     {
@@ -433,7 +433,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param bool $cabotage new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setCabotage($cabotage)
     {
@@ -457,7 +457,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param bool $ssReserve new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setSsReserve($ssReserve)
     {
@@ -481,7 +481,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param bool $lostReplacement new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setLostReplacement($lostReplacement)
     {
@@ -505,7 +505,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setVersion($version)
     {
@@ -529,7 +529,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRangeAttributes collection being set as the value
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setIrhpPermitRangeAttributes($irhpPermitRangeAttributes)
     {
@@ -553,7 +553,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitRangeAttributes collection being added
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function addIrhpPermitRangeAttributes($irhpPermitRangeAttributes)
     {
@@ -576,7 +576,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRangeAttributes collection being removed
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function removeIrhpPermitRangeAttributes($irhpPermitRangeAttributes)
     {
@@ -592,7 +592,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being set as the value
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setCountrys($countrys)
     {
@@ -616,7 +616,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $countrys collection being added
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function addCountrys($countrys)
     {
@@ -639,7 +639,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being removed
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function removeCountrys($countrys)
     {
@@ -655,7 +655,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpCandidatePermits collection being set as the value
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setIrhpCandidatePermits($irhpCandidatePermits)
     {
@@ -679,7 +679,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpCandidatePermits collection being added
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function addIrhpCandidatePermits($irhpCandidatePermits)
     {
@@ -702,7 +702,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpCandidatePermits collection being removed
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function removeIrhpCandidatePermits($irhpCandidatePermits)
     {
@@ -718,7 +718,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermits collection being set as the value
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setIrhpPermits($irhpPermits)
     {
@@ -742,7 +742,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermits collection being added
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function addIrhpPermits($irhpPermits)
     {
@@ -765,7 +765,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermits collection being removed
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function removeIrhpPermits($irhpPermits)
     {

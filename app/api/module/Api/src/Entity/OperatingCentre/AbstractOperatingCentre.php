@@ -160,7 +160,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function setId($id)
     {
@@ -184,7 +184,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Address $address new value being set
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function setAddress($address)
     {
@@ -208,7 +208,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -232,7 +232,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -256,7 +256,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function setVersion($version)
     {
@@ -280,7 +280,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param int $olbsKey new value being set
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -304,7 +304,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $complaints collection being set as the value
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function setComplaints($complaints)
     {
@@ -328,7 +328,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $complaints collection being added
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function addComplaints($complaints)
     {
@@ -351,7 +351,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $complaints collection being removed
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function removeComplaints($complaints)
     {
@@ -367,7 +367,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $oppositions collection being set as the value
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function setOppositions($oppositions)
     {
@@ -391,7 +391,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $oppositions collection being added
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function addOppositions($oppositions)
     {
@@ -414,7 +414,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $oppositions collection being removed
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function removeOppositions($oppositions)
     {
@@ -430,7 +430,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $applications collection being set as the value
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function setApplications($applications)
     {
@@ -454,7 +454,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $applications collection being added
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function addApplications($applications)
     {
@@ -477,7 +477,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $applications collection being removed
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function removeApplications($applications)
     {
@@ -493,7 +493,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $conditionUndertakings collection being set as the value
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function setConditionUndertakings($conditionUndertakings)
     {
@@ -517,7 +517,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $conditionUndertakings collection being added
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function addConditionUndertakings($conditionUndertakings)
     {
@@ -540,7 +540,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $conditionUndertakings collection being removed
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function removeConditionUndertakings($conditionUndertakings)
     {
@@ -556,7 +556,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $adDocuments collection being set as the value
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function setAdDocuments($adDocuments)
     {
@@ -580,7 +580,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $adDocuments collection being added
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function addAdDocuments($adDocuments)
     {
@@ -603,7 +603,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $adDocuments collection being removed
      *
-     * @return OperatingCentre
+     * @return static
      */
     public function removeAdDocuments($adDocuments)
     {

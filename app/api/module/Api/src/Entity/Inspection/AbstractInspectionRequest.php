@@ -283,7 +283,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param int $id new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setId($id)
     {
@@ -307,7 +307,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -331,7 +331,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setApplication($application)
     {
@@ -355,7 +355,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre $operatingCentre new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setOperatingCentre($operatingCentre)
     {
@@ -379,7 +379,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $requestorUser new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setRequestorUser($requestorUser)
     {
@@ -403,7 +403,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Task\Task $task new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setTask($task)
     {
@@ -427,7 +427,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setCase($case)
     {
@@ -451,7 +451,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $requestType new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setRequestType($requestType)
     {
@@ -475,7 +475,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $resultType new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setResultType($resultType)
     {
@@ -499,7 +499,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $reportType new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setReportType($reportType)
     {
@@ -523,7 +523,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -547,7 +547,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -571,7 +571,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param string $requestorNotes new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setRequestorNotes($requestorNotes)
     {
@@ -595,7 +595,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param string $inspectorNotes new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setInspectorNotes($inspectorNotes)
     {
@@ -619,7 +619,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \DateTime $dueDate new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setDueDate($dueDate)
     {
@@ -649,7 +649,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \DateTime $fromDate new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setFromDate($fromDate)
     {
@@ -679,7 +679,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \DateTime $toDate new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setToDate($toDate)
     {
@@ -709,7 +709,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \DateTime $requestDate new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setRequestDate($requestDate)
     {
@@ -739,7 +739,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \DateTime $returnDate new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setReturnDate($returnDate)
     {
@@ -769,7 +769,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \DateTime $deferredDate new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setDeferredDate($deferredDate)
     {
@@ -799,7 +799,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param string $inspectorName new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setInspectorName($inspectorName)
     {
@@ -823,7 +823,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param int $trailersExaminedNo new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setTrailersExaminedNo($trailersExaminedNo)
     {
@@ -847,7 +847,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param int $vehiclesExaminedNo new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setVehiclesExaminedNo($vehiclesExaminedNo)
     {
@@ -871,7 +871,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param int $version new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setVersion($version)
     {
@@ -895,7 +895,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param int $olbsKey new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

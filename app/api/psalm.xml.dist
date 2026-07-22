@@ -34,7 +34,6 @@
     <UndefinedClass>
       <errorLevel type="suppress">
         <file name="module/Email/src/Service/Imap.php"/>
-        <file name="module/Api/src/Domain/Repository/LetterTypeTodo.php"/>
         <file name="module/Api/src/Service/ConvertToPdf/ConvertToPdfFactory.php"/>
       </errorLevel>
     </UndefinedClass>
@@ -43,7 +42,6 @@
         <file name="module/Email/src/Service/Imap.php"/>
         <file name="module/Api/src/Domain/CommandHandler/ConditionUndertaking/Delete.php"/>
         <file name="module/Api/src/Domain/Validation/Handlers/Misc/CanVerify.php"/>
-        <file name="module/Api/src/Entity/AbstractOperatingCentreOpposition.php"/>
         <file name="module/Api/src/Entity/Application/AbstractApplication.php"/>
         <file name="module/Api/src/Entity/Application/Application.php"/>
         <file name="module/Api/src/Entity/Bus/AbstractBusReg.php"/>

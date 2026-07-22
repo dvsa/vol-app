@@ -131,7 +131,7 @@ abstract class AbstractIrfoGvPermitType implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return IrfoGvPermitType
+     * @return static
      */
     public function setId($id)
     {
@@ -155,7 +155,7 @@ abstract class AbstractIrfoGvPermitType implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $irfoFeeType new value being set
      *
-     * @return IrfoGvPermitType
+     * @return static
      */
     public function setIrfoFeeType($irfoFeeType)
     {
@@ -179,7 +179,7 @@ abstract class AbstractIrfoGvPermitType implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry $irfoCountry new value being set
      *
-     * @return IrfoGvPermitType
+     * @return static
      */
     public function setIrfoCountry($irfoCountry)
     {
@@ -203,7 +203,7 @@ abstract class AbstractIrfoGvPermitType implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrfoGvPermitType
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -227,7 +227,7 @@ abstract class AbstractIrfoGvPermitType implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrfoGvPermitType
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -251,7 +251,7 @@ abstract class AbstractIrfoGvPermitType implements BundleSerializableInterface, 
      *
      * @param string $description new value being set
      *
-     * @return IrfoGvPermitType
+     * @return static
      */
     public function setDescription($description)
     {
@@ -275,7 +275,7 @@ abstract class AbstractIrfoGvPermitType implements BundleSerializableInterface, 
      *
      * @param \DateTime $displayUntil new value being set
      *
-     * @return IrfoGvPermitType
+     * @return static
      */
     public function setDisplayUntil($displayUntil)
     {
@@ -305,7 +305,7 @@ abstract class AbstractIrfoGvPermitType implements BundleSerializableInterface, 
      *
      * @param int $version new value being set
      *
-     * @return IrfoGvPermitType
+     * @return static
      */
     public function setVersion($version)
     {

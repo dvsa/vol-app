@@ -259,7 +259,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param int $id new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setId($id)
     {
@@ -283,7 +283,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $irfoFeeType new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setIrfoFeeType($irfoFeeType)
     {
@@ -307,7 +307,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $feeType new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setFeeType($feeType)
     {
@@ -331,7 +331,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $accrualRule new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setAccrualRule($accrualRule)
     {
@@ -355,7 +355,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setTrafficArea($trafficArea)
     {
@@ -379,7 +379,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $licenceType new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setLicenceType($licenceType)
     {
@@ -403,7 +403,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -427,7 +427,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -451,7 +451,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -475,7 +475,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param \DateTime $effectiveFrom new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setEffectiveFrom($effectiveFrom)
     {
@@ -505,7 +505,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param string $description new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setDescription($description)
     {
@@ -529,7 +529,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param string $fixedValue new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setFixedValue($fixedValue)
     {
@@ -553,7 +553,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param string $annualValue new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setAnnualValue($annualValue)
     {
@@ -577,7 +577,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param string $fiveYearValue new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setFiveYearValue($fiveYearValue)
     {
@@ -601,7 +601,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param string $vatCode new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setVatCode($vatCode)
     {
@@ -625,7 +625,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param string $vatRate new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setVatRate($vatRate)
     {
@@ -649,7 +649,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param string $expireFeeWithLicence new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setExpireFeeWithLicence($expireFeeWithLicence)
     {
@@ -673,7 +673,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $isMiscellaneous new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setIsMiscellaneous($isMiscellaneous)
     {
@@ -697,7 +697,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param string $costCentreRef new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setCostCentreRef($costCentreRef)
     {
@@ -721,7 +721,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param string $productReference new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setProductReference($productReference)
     {
@@ -745,7 +745,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param string $isNi new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setIsNi($isNi)
     {
@@ -769,7 +769,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $isVisibleInInternal new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setIsVisibleInInternal($isVisibleInInternal)
     {
@@ -793,7 +793,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @param int $version new value being set
      *
-     * @return FeeType
+     * @return static
      */
     public function setVersion($version)
     {

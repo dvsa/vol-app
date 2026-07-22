@@ -231,7 +231,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setId($id)
     {
@@ -255,7 +255,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType $irhpPermitType new value being set
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setIrhpPermitType($irhpPermitType)
     {
@@ -279,7 +279,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup $applicationPathGroup new value being set
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setApplicationPathGroup($applicationPathGroup)
     {
@@ -303,7 +303,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $businessProcess new value being set
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setBusinessProcess($businessProcess)
     {
@@ -327,7 +327,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Country $country new value being set
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setCountry($country)
     {
@@ -351,7 +351,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $permitCategory new value being set
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setPermitCategory($permitCategory)
     {
@@ -375,7 +375,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setStatus($status)
     {
@@ -399,7 +399,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -423,7 +423,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -447,7 +447,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param string $periodNameKey new value being set
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setPeriodNameKey($periodNameKey)
     {
@@ -471,7 +471,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \DateTime $validFrom new value being set
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setValidFrom($validFrom)
     {
@@ -501,7 +501,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \DateTime $validTo new value being set
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setValidTo($validTo)
     {
@@ -531,7 +531,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param int $initialStock new value being set
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setInitialStock($initialStock)
     {
@@ -555,7 +555,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param bool $hiddenSs new value being set
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setHiddenSs($hiddenSs)
     {
@@ -579,7 +579,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setVersion($version)
     {
@@ -603,7 +603,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitJurisdictionQuotas collection being set as the value
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setIrhpPermitJurisdictionQuotas($irhpPermitJurisdictionQuotas)
     {
@@ -627,7 +627,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitJurisdictionQuotas collection being added
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function addIrhpPermitJurisdictionQuotas($irhpPermitJurisdictionQuotas)
     {
@@ -650,7 +650,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitJurisdictionQuotas collection being removed
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function removeIrhpPermitJurisdictionQuotas($irhpPermitJurisdictionQuotas)
     {
@@ -666,7 +666,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRanges collection being set as the value
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setIrhpPermitRanges($irhpPermitRanges)
     {
@@ -690,7 +690,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitRanges collection being added
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function addIrhpPermitRanges($irhpPermitRanges)
     {
@@ -713,7 +713,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRanges collection being removed
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function removeIrhpPermitRanges($irhpPermitRanges)
     {
@@ -729,7 +729,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitSectorQuotas collection being set as the value
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setIrhpPermitSectorQuotas($irhpPermitSectorQuotas)
     {
@@ -753,7 +753,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitSectorQuotas collection being added
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function addIrhpPermitSectorQuotas($irhpPermitSectorQuotas)
     {
@@ -776,7 +776,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitSectorQuotas collection being removed
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function removeIrhpPermitSectorQuotas($irhpPermitSectorQuotas)
     {
@@ -792,7 +792,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitWindows collection being set as the value
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function setIrhpPermitWindows($irhpPermitWindows)
     {
@@ -816,7 +816,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitWindows collection being added
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function addIrhpPermitWindows($irhpPermitWindows)
     {
@@ -839,7 +839,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitWindows collection being removed
      *
-     * @return IrhpPermitStock
+     * @return static
      */
     public function removeIrhpPermitWindows($irhpPermitWindows)
     {

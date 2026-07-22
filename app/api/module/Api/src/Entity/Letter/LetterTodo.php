@@ -17,7 +17,7 @@ class LetterTodo extends AbstractLetterTodo
     /**
      * Letter todo versions
      *
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, LetterTodoVersion>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion::class, mappedBy: 'letterTodo', cascade: ['persist'], orphanRemoval: false)]
     #[ORM\OrderBy(['versionNumber' => 'DESC'])]

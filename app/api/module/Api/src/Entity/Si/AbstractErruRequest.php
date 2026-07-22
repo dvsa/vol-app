@@ -237,7 +237,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param int $id new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setId($id)
     {
@@ -261,7 +261,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setCase($case)
     {
@@ -285,7 +285,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $requestDocument new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setRequestDocument($requestDocument)
     {
@@ -309,7 +309,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $responseDocument new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setResponseDocument($responseDocument)
     {
@@ -333,7 +333,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Country $memberStateCode new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setMemberStateCode($memberStateCode)
     {
@@ -357,7 +357,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $msiType new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setMsiType($msiType)
     {
@@ -381,7 +381,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $communityLicenceStatus new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setCommunityLicenceStatus($communityLicenceStatus)
     {
@@ -405,7 +405,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $responseUser new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setResponseUser($responseUser)
     {
@@ -429,7 +429,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -453,7 +453,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -477,7 +477,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param string $originatingAuthority new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setOriginatingAuthority($originatingAuthority)
     {
@@ -501,7 +501,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param string $transportUndertakingName new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setTransportUndertakingName($transportUndertakingName)
     {
@@ -525,7 +525,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param string $vrm new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setVrm($vrm)
     {
@@ -549,7 +549,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param string $notificationNumber new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setNotificationNumber($notificationNumber)
     {
@@ -573,7 +573,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param string $workflowId new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setWorkflowId($workflowId)
     {
@@ -597,7 +597,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param string $communityLicenceNumber new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setCommunityLicenceNumber($communityLicenceNumber)
     {
@@ -621,7 +621,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param int $totAuthVehicles new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setTotAuthVehicles($totAuthVehicles)
     {
@@ -645,7 +645,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $responseTime new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setResponseTime($responseTime)
     {
@@ -675,7 +675,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @param int $version new value being set
      *
-     * @return ErruRequest
+     * @return static
      */
     public function setVersion($version)
     {

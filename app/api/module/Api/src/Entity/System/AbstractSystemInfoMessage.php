@@ -139,7 +139,7 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
      *
      * @param int $id new value being set
      *
-     * @return SystemInfoMessage
+     * @return static
      */
     public function setId($id)
     {
@@ -163,7 +163,7 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return SystemInfoMessage
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -187,7 +187,7 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return SystemInfoMessage
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -211,7 +211,7 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
      *
      * @param string $isInternal new value being set
      *
-     * @return SystemInfoMessage
+     * @return static
      */
     public function setIsInternal($isInternal)
     {
@@ -235,7 +235,7 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
      *
      * @param \DateTime $startDate new value being set
      *
-     * @return SystemInfoMessage
+     * @return static
      */
     public function setStartDate($startDate)
     {
@@ -265,7 +265,7 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
      *
      * @param \DateTime $endDate new value being set
      *
-     * @return SystemInfoMessage
+     * @return static
      */
     public function setEndDate($endDate)
     {
@@ -295,7 +295,7 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
      *
      * @param string $description new value being set
      *
-     * @return SystemInfoMessage
+     * @return static
      */
     public function setDescription($description)
     {
@@ -319,7 +319,7 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
      *
      * @param bool $importance new value being set
      *
-     * @return SystemInfoMessage
+     * @return static
      */
     public function setImportance($importance)
     {
@@ -343,7 +343,7 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
      *
      * @param int $version new value being set
      *
-     * @return SystemInfoMessage
+     * @return static
      */
     public function setVersion($version)
     {

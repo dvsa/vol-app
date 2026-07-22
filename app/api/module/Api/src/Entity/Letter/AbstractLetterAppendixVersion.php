@@ -172,7 +172,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setId($id)
     {
@@ -196,7 +196,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterAppendix $letterAppendix new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setLetterAppendix($letterAppendix)
     {
@@ -220,7 +220,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setDocument($document)
     {
@@ -244,7 +244,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -268,7 +268,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -292,7 +292,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param string $name new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setName($name)
     {
@@ -316,7 +316,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param string $description new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setDescription($description)
     {
@@ -340,7 +340,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param string $appendixType new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setAppendixType($appendixType)
     {
@@ -364,7 +364,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param array $defaultContent new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setDefaultContent($defaultContent)
     {
@@ -388,7 +388,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param bool $isLocked new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setIsLocked($isLocked)
     {
@@ -412,7 +412,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param \DateTime $publishFrom new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setPublishFrom($publishFrom)
     {
@@ -442,7 +442,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param int $versionNumber new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setVersionNumber($versionNumber)
     {
@@ -466,7 +466,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return LetterAppendixVersion
+     * @return static
      */
     public function setVersion($version)
     {
