@@ -2,7 +2,7 @@
 ## Requirements
 
 | Name | Version |
-| ---- | ------- |
+|------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0 |
 | <a name="requirement_archive"></a> [archive](#requirement\_archive) | >= 2.0.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0.0 |
@@ -11,10 +11,10 @@
 ## Providers
 
 | Name | Version |
-| ---- | ------- |
-| <a name="provider_archive"></a> [archive](#provider\_archive) | 2.8.0 |
-| <a name="provider_aws"></a> [aws](#provider\_aws) | 6.53.0 |
-| <a name="provider_awscc"></a> [awscc](#provider\_awscc) | 1.93.0 |
+|------|---------|
+| <a name="provider_archive"></a> [archive](#provider\_archive) | >= 2.0.0 |
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0.0 |
+| <a name="provider_awscc"></a> [awscc](#provider\_awscc) | >= 1.32.0 |
 
 ## Modules
 
@@ -23,7 +23,7 @@ No modules.
 ## Resources
 
 | Name | Type |
-| ---- | ---- |
+|------|------|
 | [aws_cloudwatch_event_rule.classified](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule) | resource |
 | [aws_cloudwatch_event_rule.document_uploaded](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule) | resource |
 | [aws_cloudwatch_event_target.classification](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target) | resource |
@@ -66,7 +66,7 @@ No modules.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-| ---- | ----------- | ---- | ------- | :------: |
+|------|-------------|------|---------|:--------:|
 | <a name="input_bda_project_stage"></a> [bda\_project\_stage](#input\_bda\_project\_stage) | BDA project stage to invoke. LIVE uses the latest published blueprint version. | `string` | `"LIVE"` | no |
 | <a name="input_bedrock_region"></a> [bedrock\_region](#input\_bedrock\_region) | AWS region for Bedrock API calls | `string` | `"eu-west-1"` | no |
 | <a name="input_bedrock_region_prefix"></a> [bedrock\_region\_prefix](#input\_bedrock\_region\_prefix) | Cross-region inference profile prefix, e.g. 'eu' or 'us' | `string` | `"eu"` | no |
@@ -84,7 +84,7 @@ No modules.
 ## Outputs
 
 | Name | Description |
-| ---- | ----------- |
+|------|-------------|
 | <a name="output_bda_blueprint_arn"></a> [bda\_blueprint\_arn](#output\_bda\_blueprint\_arn) | ARN of the bank statement BDA blueprint |
 | <a name="output_bda_project_arn"></a> [bda\_project\_arn](#output\_bda\_project\_arn) | ARN of the Bedrock Data Automation project |
 | <a name="output_classification_sm_arn"></a> [classification\_sm\_arn](#output\_classification\_sm\_arn) | ARN of the Classification Step Functions state machine |
