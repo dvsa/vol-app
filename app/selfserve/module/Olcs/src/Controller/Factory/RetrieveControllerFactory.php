@@ -19,11 +19,16 @@ class RetrieveControllerFactory implements FactoryInterface
     #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): RetrieveController
     {
+        $config = $container->get('config');
+        $retrieveConfig = $config['retrieve_document'] ?? [];
+
         return new RetrieveController(
             $container->get(NiTextTranslation::class),
             $container->get(AuthorizationService::class),
             $container->get(FormHelperService::class),
-            new RemoteAddress()
+            new RemoteAddress(),
+            is_string($retrieveConfig['presigned_fetch_proxy'] ?? null) ? $retrieveConfig['presigned_fetch_proxy'] : '',
+            (int) ($retrieveConfig['presigned_fetch_timeout'] ?? 30),
         );
     }
 }

@@ -93,8 +93,17 @@ selfserve via a `downloadStrategy` field on `Resolve`:
 
 This is an additive optimisation — only the byte transport changes; tokens, OTP, bundles, the
 landing page, audit and the purge job are all unaffected. WebDAV is the safe default; S3 is picked
-up automatically (`S3DocumentStore implements ProvidesPresignedUrls`). Note: selfserve needs network
-egress to S3 for the server-side fetch.
+up automatically (`S3DocumentStore implements ProvidesPresignedUrls`).
+
+**Egress path for the server-side fetch.** The frontends have no direct outbound internet egress —
+everything external goes via the shared Squid forward proxy, which allow-lists `.amazonaws.com` (so
+S3 is reachable). So selfserve's fetch must go **through that proxy**: `RetrieveController` fetches
+the presigned URL with a Guzzle client routed through `config['retrieve_document']['presigned_fetch_proxy']`,
+which carries the `%shd_proxy%` token resolved from Parameter Store per environment (a bare `fopen`
+would ignore the proxy and be blocked). Locally the token is unresolved and the fetch connects
+directly — mirroring how the API's Notify client is proxied (`presignedFetchProxyOptions`, same
+`%placeholder%`-ignoring guard as `GovUkNotifyTransportFactoryFactory::resolveGuzzleOptions`). No S3
+IAM is needed on the frontend task role: the presigned URL is already authenticated by its signature.
 
 ## Publications integration
 

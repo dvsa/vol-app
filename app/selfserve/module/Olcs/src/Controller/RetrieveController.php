@@ -43,7 +43,9 @@ class RetrieveController extends AbstractController
         NiTextTranslation $niTextTranslationUtil,
         AuthorizationService $authService,
         protected FormHelperService $formHelper,
-        protected RemoteAddress $remoteAddress
+        protected RemoteAddress $remoteAddress,
+        protected string $presignedFetchProxy = '',
+        protected int $presignedFetchTimeout = 30
     ) {
         parent::__construct($niTextTranslationUtil, $authService);
     }
@@ -221,18 +223,43 @@ class RetrieveController extends AbstractController
      * Fetch a presigned URL server-side (it never reaches the browser) and stream the bytes to the
      * client as a forced attachment. Used for the S3 document store.
      *
+     * The presigned URL points at S3, which the frontends can only reach through the shared forward
+     * proxy (they have no direct outbound egress) — so this must NOT use a bare `fopen`, which would
+     * ignore the proxy and try to connect to S3 directly. We fetch with an HTTP client routed through
+     * the proxy, exactly like the API's Notify client. The URL is already authenticated by its
+     * signature, so no credentials are attached here. The response is buffered to a temporary stream
+     * before being handed to the client (documents are single-digit MB); on any transport or non-200
+     * upstream error we render the neutral "not available" page.
+     *
      * @return \Laminas\Http\Response|ViewModel
      */
     private function streamFromPresignedUrl(string $url, ?string $displayFilename)
     {
-        $stream = @fopen($url, 'rb');
-        if ($stream === false) {
+        // Buffer to memory, spilling to a temp file past 5 MB, so we never load a large file wholly
+        // into RAM and never expose the presigned URL to the browser.
+        $sink = fopen('php://temp/maxmemory:' . (5 * 1024 * 1024), 'w+b');
+        if ($sink === false) {
             return $this->notAvailable();
         }
 
+        try {
+            $client = new \GuzzleHttp\Client();
+            $upstream = $client->request('GET', $url, $this->presignedFetchOptions() + ['sink' => $sink]);
+        } catch (\GuzzleHttp\Exception\GuzzleException) {
+            fclose($sink);
+            return $this->notAvailable();
+        }
+
+        if ($upstream->getStatusCode() !== 200) {
+            fclose($sink);
+            return $this->notAvailable();
+        }
+
+        rewind($sink);
+
         $response = new \Laminas\Http\Response\Stream();
         $response->setStatusCode(200);
-        $response->setStream($stream);
+        $response->setStream($sink);
 
         $filename = ($displayFilename !== null && $displayFilename !== '') ? $displayFilename : 'document';
         $filename = str_replace(['"', '\\', "\r", "\n", '/'], '', $filename);
@@ -242,16 +269,47 @@ class RetrieveController extends AbstractController
         $headers->addHeaderLine('Content-Disposition', 'attachment; filename="' . $filename . '"');
         $headers->addHeaderLine('X-Content-Type-Options', 'nosniff');
 
-        // Forward the upstream Content-Length when the http wrapper exposed it (nicer download UX).
-        foreach (stream_get_meta_data($stream)['wrapper_data'] ?? [] as $header) {
-            if (is_string($header) && stripos($header, 'Content-Length:') === 0) {
-                $headers->addHeaderLine('Content-Length', trim(substr($header, 15)));
-            }
+        // Forward the upstream Content-Length when S3 provided it (nicer download UX).
+        $contentLength = $upstream->getHeaderLine('Content-Length');
+        if ($contentLength !== '') {
+            $headers->addHeaderLine('Content-Length', $contentLength);
         }
 
         $response->setHeaders($headers);
 
         return $response;
+    }
+
+    /**
+     * Guzzle request options for the server-side presigned fetch.
+     *
+     * @return array<string, mixed>
+     */
+    private function presignedFetchOptions(): array
+    {
+        return [
+            'timeout' => $this->presignedFetchTimeout,
+            'connect_timeout' => 10,
+            'http_errors' => false,
+        ] + self::presignedFetchProxyOptions($this->presignedFetchProxy);
+    }
+
+    /**
+     * Resolve the proxy option for the presigned fetch. Returns the shared egress proxy when one is
+     * configured; an empty value or a still-unresolved `%placeholder%` (which happens locally, where
+     * the cloud parameter providers are not active and the frontends are not behind the proxy) is
+     * ignored so the client connects directly rather than pointing at a bogus proxy host. Mirrors
+     * {@see \Dvsa\Olcs\Email\Transport\Factory\GovUkNotifyTransportFactoryFactory::resolveGuzzleOptions}.
+     *
+     * @return array{proxy?: string}
+     */
+    public static function presignedFetchProxyOptions(mixed $proxy): array
+    {
+        if (is_string($proxy) && $proxy !== '' && !str_contains($proxy, '%')) {
+            return ['proxy' => $proxy];
+        }
+
+        return [];
     }
 
     /**
