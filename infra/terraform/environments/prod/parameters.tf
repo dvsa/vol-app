@@ -1,7 +1,7 @@
 module "parameters" {
   source = "../../modules/parameters"
 
-  environment = "prod"
+  environment = "app"
 
   application_parameters = {
     address_service_azure_client_id              = "c233d9f0-5e58-4c30-b456-e41fa8e8d13c"
