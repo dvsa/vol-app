@@ -136,7 +136,7 @@ abstract class AbstractOrganisationPerson implements BundleSerializableInterface
      *
      * @param int $id new value being set
      *
-     * @return OrganisationPerson
+     * @return static
      */
     public function setId($id)
     {
@@ -160,7 +160,7 @@ abstract class AbstractOrganisationPerson implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Person\Person $person new value being set
      *
-     * @return OrganisationPerson
+     * @return static
      */
     public function setPerson($person)
     {
@@ -184,7 +184,7 @@ abstract class AbstractOrganisationPerson implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return OrganisationPerson
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -208,7 +208,7 @@ abstract class AbstractOrganisationPerson implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return OrganisationPerson
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -232,7 +232,7 @@ abstract class AbstractOrganisationPerson implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return OrganisationPerson
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -256,7 +256,7 @@ abstract class AbstractOrganisationPerson implements BundleSerializableInterface
      *
      * @param string $position new value being set
      *
-     * @return OrganisationPerson
+     * @return static
      */
     public function setPosition($position)
     {
@@ -280,7 +280,7 @@ abstract class AbstractOrganisationPerson implements BundleSerializableInterface
      *
      * @param int $version new value being set
      *
-     * @return OrganisationPerson
+     * @return static
      */
     public function setVersion($version)
     {
@@ -304,7 +304,7 @@ abstract class AbstractOrganisationPerson implements BundleSerializableInterface
      *
      * @param int $olbsKey new value being set
      *
-     * @return OrganisationPerson
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

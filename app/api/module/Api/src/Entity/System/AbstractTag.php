@@ -103,7 +103,7 @@ abstract class AbstractTag implements BundleSerializableInterface, JsonSerializa
      *
      * @param int $id new value being set
      *
-     * @return Tag
+     * @return static
      */
     public function setId($id)
     {
@@ -127,7 +127,7 @@ abstract class AbstractTag implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Tag
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -151,7 +151,7 @@ abstract class AbstractTag implements BundleSerializableInterface, JsonSerializa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Tag
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -175,7 +175,7 @@ abstract class AbstractTag implements BundleSerializableInterface, JsonSerializa
      *
      * @param string $tag new value being set
      *
-     * @return Tag
+     * @return static
      */
     public function setTag($tag)
     {
@@ -199,7 +199,7 @@ abstract class AbstractTag implements BundleSerializableInterface, JsonSerializa
      *
      * @param int $version new value being set
      *
-     * @return Tag
+     * @return static
      */
     public function setVersion($version)
     {

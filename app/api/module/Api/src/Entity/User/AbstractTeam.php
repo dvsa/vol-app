@@ -163,7 +163,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param int $id new value being set
      *
-     * @return Team
+     * @return static
      */
     public function setId($id)
     {
@@ -187,7 +187,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
-     * @return Team
+     * @return static
      */
     public function setTrafficArea($trafficArea)
     {
@@ -211,7 +211,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Team
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -235,7 +235,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Team
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -259,7 +259,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param string $description new value being set
      *
-     * @return Team
+     * @return static
      */
     public function setDescription($description)
     {
@@ -283,7 +283,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param string $name new value being set
      *
-     * @return Team
+     * @return static
      */
     public function setName($name)
     {
@@ -307,7 +307,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param int $version new value being set
      *
-     * @return Team
+     * @return static
      */
     public function setVersion($version)
     {
@@ -331,7 +331,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param int $olbsKey new value being set
      *
-     * @return Team
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -355,7 +355,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tasks collection being set as the value
      *
-     * @return Team
+     * @return static
      */
     public function setTasks($tasks)
     {
@@ -379,7 +379,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tasks collection being added
      *
-     * @return Team
+     * @return static
      */
     public function addTasks($tasks)
     {
@@ -402,7 +402,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tasks collection being removed
      *
-     * @return Team
+     * @return static
      */
     public function removeTasks($tasks)
     {
@@ -418,7 +418,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $taskAllocationRules collection being set as the value
      *
-     * @return Team
+     * @return static
      */
     public function setTaskAllocationRules($taskAllocationRules)
     {
@@ -442,7 +442,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $taskAllocationRules collection being added
      *
-     * @return Team
+     * @return static
      */
     public function addTaskAllocationRules($taskAllocationRules)
     {
@@ -465,7 +465,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $taskAllocationRules collection being removed
      *
-     * @return Team
+     * @return static
      */
     public function removeTaskAllocationRules($taskAllocationRules)
     {
@@ -481,7 +481,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $teamPrinters collection being set as the value
      *
-     * @return Team
+     * @return static
      */
     public function setTeamPrinters($teamPrinters)
     {
@@ -505,7 +505,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $teamPrinters collection being added
      *
-     * @return Team
+     * @return static
      */
     public function addTeamPrinters($teamPrinters)
     {
@@ -528,7 +528,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $teamPrinters collection being removed
      *
-     * @return Team
+     * @return static
      */
     public function removeTeamPrinters($teamPrinters)
     {

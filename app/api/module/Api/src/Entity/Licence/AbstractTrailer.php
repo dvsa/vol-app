@@ -142,7 +142,7 @@ abstract class AbstractTrailer implements BundleSerializableInterface, JsonSeria
      *
      * @param int $id new value being set
      *
-     * @return Trailer
+     * @return static
      */
     public function setId($id)
     {
@@ -166,7 +166,7 @@ abstract class AbstractTrailer implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return Trailer
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -190,7 +190,7 @@ abstract class AbstractTrailer implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Trailer
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -214,7 +214,7 @@ abstract class AbstractTrailer implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Trailer
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -238,7 +238,7 @@ abstract class AbstractTrailer implements BundleSerializableInterface, JsonSeria
      *
      * @param string $trailerNo new value being set
      *
-     * @return Trailer
+     * @return static
      */
     public function setTrailerNo($trailerNo)
     {
@@ -262,7 +262,7 @@ abstract class AbstractTrailer implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $isLongerSemiTrailer new value being set
      *
-     * @return Trailer
+     * @return static
      */
     public function setIsLongerSemiTrailer($isLongerSemiTrailer)
     {
@@ -286,7 +286,7 @@ abstract class AbstractTrailer implements BundleSerializableInterface, JsonSeria
      *
      * @param \DateTime $specifiedDate new value being set
      *
-     * @return Trailer
+     * @return static
      */
     public function setSpecifiedDate($specifiedDate)
     {
@@ -316,7 +316,7 @@ abstract class AbstractTrailer implements BundleSerializableInterface, JsonSeria
      *
      * @param int $version new value being set
      *
-     * @return Trailer
+     * @return static
      */
     public function setVersion($version)
     {
@@ -340,7 +340,7 @@ abstract class AbstractTrailer implements BundleSerializableInterface, JsonSeria
      *
      * @param int $olbsKey new value being set
      *
-     * @return Trailer
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

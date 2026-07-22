@@ -154,7 +154,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
      *
      * @param int $id new value being set
      *
-     * @return DataRetentionRule
+     * @return static
      */
     public function setId($id)
     {
@@ -178,7 +178,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $actionType new value being set
      *
-     * @return DataRetentionRule
+     * @return static
      */
     public function setActionType($actionType)
     {
@@ -202,7 +202,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return DataRetentionRule
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -226,7 +226,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return DataRetentionRule
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -250,7 +250,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
      *
      * @param string $description new value being set
      *
-     * @return DataRetentionRule
+     * @return static
      */
     public function setDescription($description)
     {
@@ -274,7 +274,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
      *
      * @param int $retentionPeriod new value being set
      *
-     * @return DataRetentionRule
+     * @return static
      */
     public function setRetentionPeriod($retentionPeriod)
     {
@@ -298,7 +298,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
      *
      * @param int $maxDataSet new value being set
      *
-     * @return DataRetentionRule
+     * @return static
      */
     public function setMaxDataSet($maxDataSet)
     {
@@ -322,7 +322,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
      *
      * @param bool $isEnabled new value being set
      *
-     * @return DataRetentionRule
+     * @return static
      */
     public function setIsEnabled($isEnabled)
     {
@@ -346,7 +346,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
      *
      * @param bool $isCustomRule new value being set
      *
-     * @return DataRetentionRule
+     * @return static
      */
     public function setIsCustomRule($isCustomRule)
     {
@@ -370,7 +370,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
      *
      * @param string $populateProcedure new value being set
      *
-     * @return DataRetentionRule
+     * @return static
      */
     public function setPopulateProcedure($populateProcedure)
     {
@@ -394,7 +394,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
      *
      * @param string $customProcedure new value being set
      *
-     * @return DataRetentionRule
+     * @return static
      */
     public function setCustomProcedure($customProcedure)
     {

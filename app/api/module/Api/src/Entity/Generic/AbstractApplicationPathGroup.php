@@ -120,7 +120,7 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
      *
      * @param int $id new value being set
      *
-     * @return ApplicationPathGroup
+     * @return static
      */
     public function setId($id)
     {
@@ -144,7 +144,7 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ApplicationPathGroup
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -168,7 +168,7 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ApplicationPathGroup
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -192,7 +192,7 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
      *
      * @param string $name new value being set
      *
-     * @return ApplicationPathGroup
+     * @return static
      */
     public function setName($name)
     {
@@ -216,7 +216,7 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
      *
      * @param bool $isVisibleInInternal new value being set
      *
-     * @return ApplicationPathGroup
+     * @return static
      */
     public function setIsVisibleInInternal($isVisibleInInternal)
     {
@@ -240,7 +240,7 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
      *
      * @param int $version new value being set
      *
-     * @return ApplicationPathGroup
+     * @return static
      */
     public function setVersion($version)
     {
@@ -264,7 +264,7 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $applicationPaths collection being set as the value
      *
-     * @return ApplicationPathGroup
+     * @return static
      */
     public function setApplicationPaths($applicationPaths)
     {
@@ -288,7 +288,7 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $applicationPaths collection being added
      *
-     * @return ApplicationPathGroup
+     * @return static
      */
     public function addApplicationPaths($applicationPaths)
     {
@@ -311,7 +311,7 @@ abstract class AbstractApplicationPathGroup implements BundleSerializableInterfa
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $applicationPaths collection being removed
      *
-     * @return ApplicationPathGroup
+     * @return static
      */
     public function removeApplicationPaths($applicationPaths)
     {

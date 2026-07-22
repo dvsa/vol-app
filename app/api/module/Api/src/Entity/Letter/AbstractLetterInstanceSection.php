@@ -131,7 +131,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return LetterInstanceSection
+     * @return static
      */
     public function setId($id)
     {
@@ -155,7 +155,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterInstance $letterInstance new value being set
      *
-     * @return LetterInstanceSection
+     * @return static
      */
     public function setLetterInstance($letterInstance)
     {
@@ -179,7 +179,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion $letterSectionVersion new value being set
      *
-     * @return LetterInstanceSection
+     * @return static
      */
     public function setLetterSectionVersion($letterSectionVersion)
     {
@@ -203,7 +203,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterInstanceSection
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -227,7 +227,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterInstanceSection
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -251,7 +251,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      *
      * @param array $editedContent new value being set
      *
-     * @return LetterInstanceSection
+     * @return static
      */
     public function setEditedContent($editedContent)
     {
@@ -275,7 +275,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      *
      * @param int $displayOrder new value being set
      *
-     * @return LetterInstanceSection
+     * @return static
      */
     public function setDisplayOrder($displayOrder)
     {
@@ -299,7 +299,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return LetterInstanceSection
+     * @return static
      */
     public function setVersion($version)
     {

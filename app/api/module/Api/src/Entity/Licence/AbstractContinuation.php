@@ -109,7 +109,7 @@ abstract class AbstractContinuation implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return Continuation
+     * @return static
      */
     public function setId($id)
     {
@@ -133,7 +133,7 @@ abstract class AbstractContinuation implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
-     * @return Continuation
+     * @return static
      */
     public function setTrafficArea($trafficArea)
     {
@@ -157,7 +157,7 @@ abstract class AbstractContinuation implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Continuation
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -181,7 +181,7 @@ abstract class AbstractContinuation implements BundleSerializableInterface, Json
      *
      * @param int $month new value being set
      *
-     * @return Continuation
+     * @return static
      */
     public function setMonth($month)
     {
@@ -205,7 +205,7 @@ abstract class AbstractContinuation implements BundleSerializableInterface, Json
      *
      * @param int $year new value being set
      *
-     * @return Continuation
+     * @return static
      */
     public function setYear($year)
     {
@@ -229,7 +229,7 @@ abstract class AbstractContinuation implements BundleSerializableInterface, Json
      *
      * @param int $version new value being set
      *
-     * @return Continuation
+     * @return static
      */
     public function setVersion($version)
     {

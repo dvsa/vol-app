@@ -226,7 +226,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param int $id new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setId($id)
     {
@@ -250,7 +250,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -274,7 +274,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre $operatingCentre new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setOperatingCentre($operatingCentre)
     {
@@ -298,7 +298,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\S4 $s4 new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setS4($s4)
     {
@@ -322,7 +322,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -346,7 +346,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -370,7 +370,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param int $adPlaced new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setAdPlaced($adPlaced)
     {
@@ -394,7 +394,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param string $adPlacedIn new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setAdPlacedIn($adPlacedIn)
     {
@@ -418,7 +418,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param \DateTime $adPlacedDate new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setAdPlacedDate($adPlacedDate)
     {
@@ -448,7 +448,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param string $permission new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setPermission($permission)
     {
@@ -472,7 +472,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param int $noOfTrailersRequired new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setNoOfTrailersRequired($noOfTrailersRequired)
     {
@@ -496,7 +496,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param int $noOfVehiclesRequired new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setNoOfVehiclesRequired($noOfVehiclesRequired)
     {
@@ -520,7 +520,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param int $noOfVehiclesPossessed new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setNoOfVehiclesPossessed($noOfVehiclesPossessed)
     {
@@ -544,7 +544,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param int $noOfTrailersPossessed new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setNoOfTrailersPossessed($noOfTrailersPossessed)
     {
@@ -568,7 +568,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param string $viAction new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setViAction($viAction)
     {
@@ -592,7 +592,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param string $isInterim new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setIsInterim($isInterim)
     {
@@ -616,7 +616,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param string $publicationAppropriate new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setPublicationAppropriate($publicationAppropriate)
     {
@@ -640,7 +640,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param int $version new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setVersion($version)
     {
@@ -664,7 +664,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @param int $olbsKey new value being set
      *
-     * @return LicenceOperatingCentre
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

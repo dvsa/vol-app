@@ -130,7 +130,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
      *
      * @param int $id new value being set
      *
-     * @return CompaniesHouseAlert
+     * @return static
      */
     public function setId($id)
     {
@@ -154,7 +154,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return CompaniesHouseAlert
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -178,7 +178,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return CompaniesHouseAlert
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -202,7 +202,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return CompaniesHouseAlert
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -226,7 +226,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
      *
      * @param string $companyOrLlpNo new value being set
      *
-     * @return CompaniesHouseAlert
+     * @return static
      */
     public function setCompanyOrLlpNo($companyOrLlpNo)
     {
@@ -250,7 +250,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
      *
      * @param string $isClosed new value being set
      *
-     * @return CompaniesHouseAlert
+     * @return static
      */
     public function setIsClosed($isClosed)
     {
@@ -274,7 +274,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
      *
      * @param int $version new value being set
      *
-     * @return CompaniesHouseAlert
+     * @return static
      */
     public function setVersion($version)
     {
@@ -298,7 +298,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $reasons collection being set as the value
      *
-     * @return CompaniesHouseAlert
+     * @return static
      */
     public function setReasons($reasons)
     {
@@ -322,7 +322,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $reasons collection being added
      *
-     * @return CompaniesHouseAlert
+     * @return static
      */
     public function addReasons($reasons)
     {
@@ -345,7 +345,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $reasons collection being removed
      *
-     * @return CompaniesHouseAlert
+     * @return static
      */
     public function removeReasons($reasons)
     {

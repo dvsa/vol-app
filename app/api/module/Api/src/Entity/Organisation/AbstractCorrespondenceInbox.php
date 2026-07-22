@@ -157,7 +157,7 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
      *
      * @param int $id new value being set
      *
-     * @return CorrespondenceInbox
+     * @return static
      */
     public function setId($id)
     {
@@ -181,7 +181,7 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document new value being set
      *
-     * @return CorrespondenceInbox
+     * @return static
      */
     public function setDocument($document)
     {
@@ -205,7 +205,7 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return CorrespondenceInbox
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -229,7 +229,7 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return CorrespondenceInbox
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -253,7 +253,7 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return CorrespondenceInbox
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -277,7 +277,7 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
      *
      * @param string $archived new value being set
      *
-     * @return CorrespondenceInbox
+     * @return static
      */
     public function setArchived($archived)
     {
@@ -301,7 +301,7 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
      *
      * @param string $accessed new value being set
      *
-     * @return CorrespondenceInbox
+     * @return static
      */
     public function setAccessed($accessed)
     {
@@ -325,7 +325,7 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
      *
      * @param string $emailReminderSent new value being set
      *
-     * @return CorrespondenceInbox
+     * @return static
      */
     public function setEmailReminderSent($emailReminderSent)
     {
@@ -349,7 +349,7 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
      *
      * @param string $printed new value being set
      *
-     * @return CorrespondenceInbox
+     * @return static
      */
     public function setPrinted($printed)
     {
@@ -373,7 +373,7 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
      *
      * @param int $version new value being set
      *
-     * @return CorrespondenceInbox
+     * @return static
      */
     public function setVersion($version)
     {
@@ -397,7 +397,7 @@ abstract class AbstractCorrespondenceInbox implements BundleSerializableInterfac
      *
      * @param int $olbsKey new value being set
      *
-     * @return CorrespondenceInbox
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

@@ -158,6 +158,18 @@ locals {
       resources = [
         "arn:aws:rds:eu-west-1:054614622558:cluster-snapshot:olcs-anon-*"
       ]
+    },
+    {
+      effect = "Allow"
+      actions = [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket"
+      ]
+      resources = [
+        "arn:aws:s3:::app-olcs-pri-integration-dva-s3",
+        "arn:aws:s3:::app-olcs-pri-integration-dva-s3/*"
+      ]
     }
   ]
 }
@@ -253,6 +265,8 @@ module "service" {
   environment = "prod"
 
   legacy_environment = "APP"
+
+  dva_ni_export_s3uri = module.parameters.dva_ni_export_s3uri
 
   domain_env = "app"
 

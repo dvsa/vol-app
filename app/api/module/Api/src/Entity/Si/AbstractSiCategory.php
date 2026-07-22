@@ -105,7 +105,7 @@ abstract class AbstractSiCategory implements BundleSerializableInterface, JsonSe
      *
      * @param string $id new value being set
      *
-     * @return SiCategory
+     * @return static
      */
     public function setId($id)
     {
@@ -129,7 +129,7 @@ abstract class AbstractSiCategory implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return SiCategory
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -153,7 +153,7 @@ abstract class AbstractSiCategory implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return SiCategory
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -177,7 +177,7 @@ abstract class AbstractSiCategory implements BundleSerializableInterface, JsonSe
      *
      * @param string $description new value being set
      *
-     * @return SiCategory
+     * @return static
      */
     public function setDescription($description)
     {
@@ -201,7 +201,7 @@ abstract class AbstractSiCategory implements BundleSerializableInterface, JsonSe
      *
      * @param int $version new value being set
      *
-     * @return SiCategory
+     * @return static
      */
     public function setVersion($version)
     {

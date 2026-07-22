@@ -191,7 +191,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param int $id new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setId($id)
     {
@@ -215,7 +215,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -239,7 +239,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -263,7 +263,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param string $vrm new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setVrm($vrm)
     {
@@ -287,7 +287,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param int $platedWeight new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setPlatedWeight($platedWeight)
     {
@@ -311,7 +311,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param string $certificateNo new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setCertificateNo($certificateNo)
     {
@@ -335,7 +335,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param string $viAction new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setViAction($viAction)
     {
@@ -359,7 +359,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $section26 new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setSection26($section26)
     {
@@ -383,7 +383,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $section26Curtail new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setSection26Curtail($section26Curtail)
     {
@@ -407,7 +407,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $section26Revoked new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setSection26Revoked($section26Revoked)
     {
@@ -431,7 +431,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $section26Suspend new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setSection26Suspend($section26Suspend)
     {
@@ -455,7 +455,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param string $makeModel new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setMakeModel($makeModel)
     {
@@ -479,7 +479,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param int $version new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setVersion($version)
     {
@@ -503,7 +503,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param int $olbsKey new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -527,7 +527,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $licenceVehicles collection being set as the value
      *
-     * @return Vehicle
+     * @return static
      */
     public function setLicenceVehicles($licenceVehicles)
     {
@@ -551,7 +551,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $licenceVehicles collection being added
      *
-     * @return Vehicle
+     * @return static
      */
     public function addLicenceVehicles($licenceVehicles)
     {
@@ -574,7 +574,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $licenceVehicles collection being removed
      *
-     * @return Vehicle
+     * @return static
      */
     public function removeLicenceVehicles($licenceVehicles)
     {

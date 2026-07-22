@@ -110,7 +110,7 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return DocParagraph
+     * @return static
      */
     public function setId($id)
     {
@@ -134,7 +134,7 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return DocParagraph
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -158,7 +158,7 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return DocParagraph
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -182,7 +182,7 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
      *
      * @param string $paraTitle new value being set
      *
-     * @return DocParagraph
+     * @return static
      */
     public function setParaTitle($paraTitle)
     {
@@ -206,7 +206,7 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
      *
      * @param string $paraText new value being set
      *
-     * @return DocParagraph
+     * @return static
      */
     public function setParaText($paraText)
     {
@@ -230,7 +230,7 @@ abstract class AbstractDocParagraph implements BundleSerializableInterface, Json
      *
      * @param int $version new value being set
      *
-     * @return DocParagraph
+     * @return static
      */
     public function setVersion($version)
     {

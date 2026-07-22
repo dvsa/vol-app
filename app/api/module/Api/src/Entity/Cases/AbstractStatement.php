@@ -233,7 +233,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param int $id new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setId($id)
     {
@@ -257,7 +257,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setCase($case)
     {
@@ -281,7 +281,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $statementType new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setStatementType($statementType)
     {
@@ -305,7 +305,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $assignedCaseworker new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setAssignedCaseworker($assignedCaseworker)
     {
@@ -329,7 +329,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $contactType new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setContactType($contactType)
     {
@@ -353,7 +353,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $licenceType new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setLicenceType($licenceType)
     {
@@ -377,7 +377,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $requestorsContactDetails new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setRequestorsContactDetails($requestorsContactDetails)
     {
@@ -401,7 +401,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -425,7 +425,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -449,7 +449,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param string $vrm new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setVrm($vrm)
     {
@@ -473,7 +473,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param \DateTime $stoppedDate new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setStoppedDate($stoppedDate)
     {
@@ -503,7 +503,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param \DateTime $requestedDate new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setRequestedDate($requestedDate)
     {
@@ -533,7 +533,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param string $authorisersDecision new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setAuthorisersDecision($authorisersDecision)
     {
@@ -557,7 +557,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param \DateTime $issuedDate new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setIssuedDate($issuedDate)
     {
@@ -587,7 +587,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param string $licenceNo new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setLicenceNo($licenceNo)
     {
@@ -611,7 +611,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param string $requestorsBody new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setRequestorsBody($requestorsBody)
     {
@@ -635,7 +635,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param int $version new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setVersion($version)
     {
@@ -659,7 +659,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param int $olbsKey new value being set
      *
-     * @return Statement
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -683,7 +683,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $slaTargetDates collection being set as the value
      *
-     * @return Statement
+     * @return static
      */
     public function setSlaTargetDates($slaTargetDates)
     {
@@ -707,7 +707,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $slaTargetDates collection being added
      *
-     * @return Statement
+     * @return static
      */
     public function addSlaTargetDates($slaTargetDates)
     {
@@ -730,7 +730,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $slaTargetDates collection being removed
      *
-     * @return Statement
+     * @return static
      */
     public function removeSlaTargetDates($slaTargetDates)
     {

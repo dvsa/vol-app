@@ -208,7 +208,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setId($id)
     {
@@ -232,7 +232,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setCase($case)
     {
@@ -256,7 +256,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $decision new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setDecision($decision)
     {
@@ -280,7 +280,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -304,7 +304,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -328,7 +328,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \DateTime $decisionDate new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setDecisionDate($decisionDate)
     {
@@ -358,7 +358,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \DateTime $notifiedDate new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setNotifiedDate($notifiedDate)
     {
@@ -388,7 +388,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param string $isMsi new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setIsMsi($isMsi)
     {
@@ -412,7 +412,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param string $reputeNotLostReason new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setReputeNotLostReason($reputeNotLostReason)
     {
@@ -436,7 +436,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \DateTime $unfitnessStartDate new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setUnfitnessStartDate($unfitnessStartDate)
     {
@@ -466,7 +466,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \DateTime $unfitnessEndDate new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setUnfitnessEndDate($unfitnessEndDate)
     {
@@ -496,7 +496,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param string $noFurtherActionReason new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setNoFurtherActionReason($noFurtherActionReason)
     {
@@ -520,7 +520,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setVersion($version)
     {
@@ -544,7 +544,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param int $olbsKey new value being set
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -568,7 +568,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $rehabMeasures collection being set as the value
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setRehabMeasures($rehabMeasures)
     {
@@ -592,7 +592,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $rehabMeasures collection being added
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function addRehabMeasures($rehabMeasures)
     {
@@ -615,7 +615,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $rehabMeasures collection being removed
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function removeRehabMeasures($rehabMeasures)
     {
@@ -631,7 +631,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $unfitnessReasons collection being set as the value
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function setUnfitnessReasons($unfitnessReasons)
     {
@@ -655,7 +655,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $unfitnessReasons collection being added
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function addUnfitnessReasons($unfitnessReasons)
     {
@@ -678,7 +678,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $unfitnessReasons collection being removed
      *
-     * @return TmCaseDecision
+     * @return static
      */
     public function removeUnfitnessReasons($unfitnessReasons)
     {

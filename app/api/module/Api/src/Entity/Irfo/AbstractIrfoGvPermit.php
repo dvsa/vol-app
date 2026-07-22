@@ -207,7 +207,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setId($id)
     {
@@ -231,7 +231,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -255,7 +255,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermitType $irfoGvPermitType new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setIrfoGvPermitType($irfoGvPermitType)
     {
@@ -279,7 +279,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $irfoPermitStatus new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setIrfoPermitStatus($irfoPermitStatus)
     {
@@ -303,7 +303,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $withdrawnReason new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setWithdrawnReason($withdrawnReason)
     {
@@ -327,7 +327,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -351,7 +351,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -375,7 +375,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param string $irfoFeeId new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setIrfoFeeId($irfoFeeId)
     {
@@ -399,7 +399,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param string $exemptionDetails new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setExemptionDetails($exemptionDetails)
     {
@@ -423,7 +423,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param \DateTime $expiryDate new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setExpiryDate($expiryDate)
     {
@@ -453,7 +453,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param string $isFeeExempt new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setIsFeeExempt($isFeeExempt)
     {
@@ -477,7 +477,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param \DateTime $inForceDate new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setInForceDate($inForceDate)
     {
@@ -507,7 +507,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param int $noOfCopies new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setNoOfCopies($noOfCopies)
     {
@@ -531,7 +531,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param string $note new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setNote($note)
     {
@@ -555,7 +555,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param string $permitPrinted new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setPermitPrinted($permitPrinted)
     {
@@ -579,7 +579,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param int $yearRequired new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setYearRequired($yearRequired)
     {
@@ -603,7 +603,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
      *
      * @param int $version new value being set
      *
-     * @return IrfoGvPermit
+     * @return static
      */
     public function setVersion($version)
     {

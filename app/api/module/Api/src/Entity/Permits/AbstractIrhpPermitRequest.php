@@ -135,7 +135,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      *
      * @param int $id new value being set
      *
-     * @return IrhpPermitRequest
+     * @return static
      */
     public function setId($id)
     {
@@ -159,7 +159,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication new value being set
      *
-     * @return IrhpPermitRequest
+     * @return static
      */
     public function setIrhpApplication($irhpApplication)
     {
@@ -183,7 +183,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication $irhpPermitApplication new value being set
      *
-     * @return IrhpPermitRequest
+     * @return static
      */
     public function setIrhpPermitApplication($irhpPermitApplication)
     {
@@ -207,7 +207,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrhpPermitRequest
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -231,7 +231,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrhpPermitRequest
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -255,7 +255,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      *
      * @param int $permitsRequired new value being set
      *
-     * @return IrhpPermitRequest
+     * @return static
      */
     public function setPermitsRequired($permitsRequired)
     {
@@ -279,7 +279,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      *
      * @param int $version new value being set
      *
-     * @return IrhpPermitRequest
+     * @return static
      */
     public function setVersion($version)
     {
@@ -303,7 +303,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRequestAttributes collection being set as the value
      *
-     * @return IrhpPermitRequest
+     * @return static
      */
     public function setIrhpPermitRequestAttributes($irhpPermitRequestAttributes)
     {
@@ -327,7 +327,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitRequestAttributes collection being added
      *
-     * @return IrhpPermitRequest
+     * @return static
      */
     public function addIrhpPermitRequestAttributes($irhpPermitRequestAttributes)
     {
@@ -350,7 +350,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRequestAttributes collection being removed
      *
-     * @return IrhpPermitRequest
+     * @return static
      */
     public function removeIrhpPermitRequestAttributes($irhpPermitRequestAttributes)
     {

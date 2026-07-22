@@ -127,7 +127,7 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return SlaException
+     * @return static
      */
     public function setId($id)
     {
@@ -151,7 +151,7 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return SlaException
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -175,7 +175,7 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return SlaException
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -199,7 +199,7 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
      *
      * @param string $slaDescription new value being set
      *
-     * @return SlaException
+     * @return static
      */
     public function setSlaDescription($slaDescription)
     {
@@ -223,7 +223,7 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
      *
      * @param string $slaExceptionDescription new value being set
      *
-     * @return SlaException
+     * @return static
      */
     public function setSlaExceptionDescription($slaExceptionDescription)
     {
@@ -247,7 +247,7 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
      *
      * @param \DateTime $effectiveFrom new value being set
      *
-     * @return SlaException
+     * @return static
      */
     public function setEffectiveFrom($effectiveFrom)
     {
@@ -277,7 +277,7 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
      *
      * @param \DateTime $effectiveTo new value being set
      *
-     * @return SlaException
+     * @return static
      */
     public function setEffectiveTo($effectiveTo)
     {
@@ -307,7 +307,7 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
      *
      * @param int $version new value being set
      *
-     * @return SlaException
+     * @return static
      */
     public function setVersion($version)
     {

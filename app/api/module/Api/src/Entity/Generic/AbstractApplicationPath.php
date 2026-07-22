@@ -141,7 +141,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return ApplicationPath
+     * @return static
      */
     public function setId($id)
     {
@@ -165,7 +165,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType $irhpPermitType new value being set
      *
-     * @return ApplicationPath
+     * @return static
      */
     public function setIrhpPermitType($irhpPermitType)
     {
@@ -189,7 +189,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Generic\ApplicationPathGroup $applicationPathGroup new value being set
      *
-     * @return ApplicationPath
+     * @return static
      */
     public function setApplicationPathGroup($applicationPathGroup)
     {
@@ -213,7 +213,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ApplicationPath
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -237,7 +237,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ApplicationPath
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -261,7 +261,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
      *
      * @param string $title new value being set
      *
-     * @return ApplicationPath
+     * @return static
      */
     public function setTitle($title)
     {
@@ -285,7 +285,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
      *
      * @param \DateTime $effectiveFrom new value being set
      *
-     * @return ApplicationPath
+     * @return static
      */
     public function setEffectiveFrom($effectiveFrom)
     {
@@ -315,7 +315,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return ApplicationPath
+     * @return static
      */
     public function setVersion($version)
     {
@@ -339,7 +339,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $applicationSteps collection being set as the value
      *
-     * @return ApplicationPath
+     * @return static
      */
     public function setApplicationSteps($applicationSteps)
     {
@@ -363,7 +363,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $applicationSteps collection being added
      *
-     * @return ApplicationPath
+     * @return static
      */
     public function addApplicationSteps($applicationSteps)
     {
@@ -386,7 +386,7 @@ abstract class AbstractApplicationPath implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $applicationSteps collection being removed
      *
-     * @return ApplicationPath
+     * @return static
      */
     public function removeApplicationSteps($applicationSteps)
     {

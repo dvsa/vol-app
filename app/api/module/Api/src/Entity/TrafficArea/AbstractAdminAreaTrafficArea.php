@@ -104,7 +104,7 @@ abstract class AbstractAdminAreaTrafficArea implements BundleSerializableInterfa
      *
      * @param string $id new value being set
      *
-     * @return AdminAreaTrafficArea
+     * @return static
      */
     public function setId($id)
     {
@@ -128,7 +128,7 @@ abstract class AbstractAdminAreaTrafficArea implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
-     * @return AdminAreaTrafficArea
+     * @return static
      */
     public function setTrafficArea($trafficArea)
     {
@@ -152,7 +152,7 @@ abstract class AbstractAdminAreaTrafficArea implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return AdminAreaTrafficArea
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -176,7 +176,7 @@ abstract class AbstractAdminAreaTrafficArea implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return AdminAreaTrafficArea
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -200,7 +200,7 @@ abstract class AbstractAdminAreaTrafficArea implements BundleSerializableInterfa
      *
      * @param int $version new value being set
      *
-     * @return AdminAreaTrafficArea
+     * @return static
      */
     public function setVersion($version)
     {

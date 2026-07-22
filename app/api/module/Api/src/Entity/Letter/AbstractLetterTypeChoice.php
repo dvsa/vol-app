@@ -116,7 +116,7 @@ abstract class AbstractLetterTypeChoice implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return LetterTypeChoice
+     * @return static
      */
     public function setId($id)
     {
@@ -140,7 +140,7 @@ abstract class AbstractLetterTypeChoice implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterType $letterType new value being set
      *
-     * @return LetterTypeChoice
+     * @return static
      */
     public function setLetterType($letterType)
     {
@@ -164,7 +164,7 @@ abstract class AbstractLetterTypeChoice implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterChoice $letterChoice new value being set
      *
-     * @return LetterTypeChoice
+     * @return static
      */
     public function setLetterChoice($letterChoice)
     {
@@ -188,7 +188,7 @@ abstract class AbstractLetterTypeChoice implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterTypeChoice
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -212,7 +212,7 @@ abstract class AbstractLetterTypeChoice implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterTypeChoice
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -236,7 +236,7 @@ abstract class AbstractLetterTypeChoice implements BundleSerializableInterface, 
      *
      * @param int $displayOrder new value being set
      *
-     * @return LetterTypeChoice
+     * @return static
      */
     public function setDisplayOrder($displayOrder)
     {

@@ -286,7 +286,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param int $id new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setId($id)
     {
@@ -310,7 +310,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\System\Category $category new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setCategory($category)
     {
@@ -334,7 +334,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setSubCategory($subCategory)
     {
@@ -358,7 +358,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $assignedToUser new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setAssignedToUser($assignedToUser)
     {
@@ -382,7 +382,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\User\Team $assignedToTeam new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setAssignedToTeam($assignedToTeam)
     {
@@ -406,7 +406,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $assignedByUser new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setAssignedByUser($assignedByUser)
     {
@@ -430,7 +430,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setCase($case)
     {
@@ -454,7 +454,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -478,7 +478,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setApplication($application)
     {
@@ -502,7 +502,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -526,7 +526,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -550,7 +550,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Surrender $surrender new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setSurrender($surrender)
     {
@@ -574,7 +574,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $irfoOrganisation new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setIrfoOrganisation($irfoOrganisation)
     {
@@ -598,7 +598,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Submission\Submission $submission new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setSubmission($submission)
     {
@@ -622,7 +622,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setIrhpApplication($irhpApplication)
     {
@@ -646,7 +646,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -670,7 +670,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -694,7 +694,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param string $isClosed new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setIsClosed($isClosed)
     {
@@ -718,7 +718,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param string $description new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setDescription($description)
     {
@@ -742,7 +742,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param \DateTime $actionDate new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setActionDate($actionDate)
     {
@@ -772,7 +772,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param string $urgent new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setUrgent($urgent)
     {
@@ -796,7 +796,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param bool $messaging new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setMessaging($messaging)
     {
@@ -820,7 +820,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param int $version new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setVersion($version)
     {
@@ -844,7 +844,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @param int $olbsKey new value being set
      *
-     * @return Task
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

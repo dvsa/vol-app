@@ -218,7 +218,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param int $id new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setId($id)
     {
@@ -242,7 +242,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setApplication($application)
     {
@@ -266,7 +266,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre $operatingCentre new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setOperatingCentre($operatingCentre)
     {
@@ -290,7 +290,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\S4 $s4 new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setS4($s4)
     {
@@ -314,7 +314,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -338,7 +338,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -362,7 +362,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param string $action new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setAction($action)
     {
@@ -386,7 +386,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param int $adPlaced new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setAdPlaced($adPlaced)
     {
@@ -410,7 +410,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param string $adPlacedIn new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setAdPlacedIn($adPlacedIn)
     {
@@ -434,7 +434,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param \DateTime $adPlacedDate new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setAdPlacedDate($adPlacedDate)
     {
@@ -464,7 +464,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param string $publicationAppropriate new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setPublicationAppropriate($publicationAppropriate)
     {
@@ -488,7 +488,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param string $permission new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setPermission($permission)
     {
@@ -512,7 +512,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param int $noOfTrailersRequired new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setNoOfTrailersRequired($noOfTrailersRequired)
     {
@@ -536,7 +536,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param int $noOfVehiclesRequired new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setNoOfVehiclesRequired($noOfVehiclesRequired)
     {
@@ -560,7 +560,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param string $viAction new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setViAction($viAction)
     {
@@ -584,7 +584,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param string $isInterim new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setIsInterim($isInterim)
     {
@@ -608,7 +608,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param int $version new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setVersion($version)
     {
@@ -632,7 +632,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @param int $olbsKey new value being set
      *
-     * @return ApplicationOperatingCentre
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

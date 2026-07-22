@@ -163,7 +163,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param int $id new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setId($id)
     {
@@ -187,7 +187,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit $irfoGvPermit new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setIrfoGvPermit($irfoGvPermit)
     {
@@ -211,7 +211,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -235,7 +235,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -259,7 +259,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param string $cocA new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setCocA($cocA)
     {
@@ -283,7 +283,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param string $cocB new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setCocB($cocB)
     {
@@ -307,7 +307,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param string $cocC new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setCocC($cocC)
     {
@@ -331,7 +331,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param string $cocD new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setCocD($cocD)
     {
@@ -355,7 +355,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param string $cocT new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setCocT($cocT)
     {
@@ -379,7 +379,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param string $vrm new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setVrm($vrm)
     {
@@ -403,7 +403,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param int $version new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setVersion($version)
     {
@@ -427,7 +427,7 @@ abstract class AbstractIrfoVehicle implements BundleSerializableInterface, JsonS
      *
      * @param int $olbsKey new value being set
      *
-     * @return IrfoVehicle
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

@@ -107,7 +107,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
      *
      * @param int $id new value being set
      *
-     * @return Sla
+     * @return static
      */
     public function setId($id)
     {
@@ -131,7 +131,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
      *
      * @param string $category new value being set
      *
-     * @return Sla
+     * @return static
      */
     public function setCategory($category)
     {
@@ -155,7 +155,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
      *
      * @param string $field new value being set
      *
-     * @return Sla
+     * @return static
      */
     public function setField($field)
     {
@@ -179,7 +179,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
      *
      * @param string $compareTo new value being set
      *
-     * @return Sla
+     * @return static
      */
     public function setCompareTo($compareTo)
     {
@@ -203,7 +203,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
      *
      * @param int $days new value being set
      *
-     * @return Sla
+     * @return static
      */
     public function setDays($days)
     {
@@ -227,7 +227,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
      *
      * @param \DateTime $effectiveFrom new value being set
      *
-     * @return Sla
+     * @return static
      */
     public function setEffectiveFrom($effectiveFrom)
     {
@@ -257,7 +257,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
      *
      * @param \DateTime $effectiveTo new value being set
      *
-     * @return Sla
+     * @return static
      */
     public function setEffectiveTo($effectiveTo)
     {
@@ -287,7 +287,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
      *
      * @param bool $publicHoliday new value being set
      *
-     * @return Sla
+     * @return static
      */
     public function setPublicHoliday($publicHoliday)
     {
@@ -311,7 +311,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
      *
      * @param bool $weekend new value being set
      *
-     * @return Sla
+     * @return static
      */
     public function setWeekend($weekend)
     {

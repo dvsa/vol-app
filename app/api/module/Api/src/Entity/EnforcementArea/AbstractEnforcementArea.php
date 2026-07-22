@@ -110,7 +110,7 @@ abstract class AbstractEnforcementArea implements BundleSerializableInterface, J
      *
      * @param string $id new value being set
      *
-     * @return EnforcementArea
+     * @return static
      */
     public function setId($id)
     {
@@ -134,7 +134,7 @@ abstract class AbstractEnforcementArea implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return EnforcementArea
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -158,7 +158,7 @@ abstract class AbstractEnforcementArea implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return EnforcementArea
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -182,7 +182,7 @@ abstract class AbstractEnforcementArea implements BundleSerializableInterface, J
      *
      * @param string $name new value being set
      *
-     * @return EnforcementArea
+     * @return static
      */
     public function setName($name)
     {
@@ -206,7 +206,7 @@ abstract class AbstractEnforcementArea implements BundleSerializableInterface, J
      *
      * @param string $emailAddress new value being set
      *
-     * @return EnforcementArea
+     * @return static
      */
     public function setEmailAddress($emailAddress)
     {
@@ -230,7 +230,7 @@ abstract class AbstractEnforcementArea implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return EnforcementArea
+     * @return static
      */
     public function setVersion($version)
     {

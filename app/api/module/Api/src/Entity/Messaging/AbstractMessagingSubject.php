@@ -131,7 +131,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return MessagingSubject
+     * @return static
      */
     public function setId($id)
     {
@@ -155,7 +155,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\System\Category $category new value being set
      *
-     * @return MessagingSubject
+     * @return static
      */
     public function setCategory($category)
     {
@@ -179,7 +179,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory new value being set
      *
-     * @return MessagingSubject
+     * @return static
      */
     public function setSubCategory($subCategory)
     {
@@ -203,7 +203,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return MessagingSubject
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -227,7 +227,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return MessagingSubject
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -251,7 +251,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
      *
      * @param string $description new value being set
      *
-     * @return MessagingSubject
+     * @return static
      */
     public function setDescription($description)
     {
@@ -275,7 +275,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
      *
      * @param int $version new value being set
      *
-     * @return MessagingSubject
+     * @return static
      */
     public function setVersion($version)
     {
@@ -299,7 +299,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
      *
      * @param int $isActive new value being set
      *
-     * @return MessagingSubject
+     * @return static
      */
     public function setIsActive($isActive)
     {

@@ -171,7 +171,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param int $id new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setId($id)
     {
@@ -195,7 +195,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -219,7 +219,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority $localAuthority new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setLocalAuthority($localAuthority)
     {
@@ -243,7 +243,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -267,7 +267,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $zipDocument new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setZipDocument($zipDocument)
     {
@@ -291,7 +291,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $routeDocument new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setRouteDocument($routeDocument)
     {
@@ -315,7 +315,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $pdfDocument new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setPdfDocument($pdfDocument)
     {
@@ -339,7 +339,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -363,7 +363,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -387,7 +387,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param string $fileRead new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setFileRead($fileRead)
     {
@@ -411,7 +411,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param int $variationNo new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setVariationNo($variationNo)
     {
@@ -435,7 +435,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param int $version new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setVersion($version)
     {

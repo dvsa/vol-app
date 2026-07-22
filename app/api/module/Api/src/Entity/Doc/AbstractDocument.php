@@ -408,7 +408,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param int $id new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setId($id)
     {
@@ -432,7 +432,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setTrafficArea($trafficArea)
     {
@@ -456,7 +456,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\System\Category $category new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setCategory($category)
     {
@@ -480,7 +480,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setSubCategory($subCategory)
     {
@@ -504,7 +504,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -528,7 +528,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setApplication($application)
     {
@@ -552,7 +552,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setCase($case)
     {
@@ -576,7 +576,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -600,7 +600,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Surrender $surrender new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setSurrender($surrender)
     {
@@ -624,7 +624,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre $operatingCentre new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setOperatingCentre($operatingCentre)
     {
@@ -648,7 +648,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -672,7 +672,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $irfoOrganisation new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setIrfoOrganisation($irfoOrganisation)
     {
@@ -696,7 +696,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Submission\Submission $submission new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setSubmission($submission)
     {
@@ -720,7 +720,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Statement $statement new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setStatement($statement)
     {
@@ -744,7 +744,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail $continuationDetail new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setContinuationDetail($continuationDetail)
     {
@@ -768,7 +768,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setIrhpApplication($irhpApplication)
     {
@@ -792,7 +792,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation $messagingConversation new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setMessagingConversation($messagingConversation)
     {
@@ -816,7 +816,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage $messagingMessage new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setMessagingMessage($messagingMessage)
     {
@@ -840,7 +840,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -864,7 +864,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -888,7 +888,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param string $identifier new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setIdentifier($identifier)
     {
@@ -912,7 +912,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param string $description new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setDescription($description)
     {
@@ -936,7 +936,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \DateTime $issuedDate new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setIssuedDate($issuedDate)
     {
@@ -966,7 +966,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param string $filename new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setFilename($filename)
     {
@@ -990,7 +990,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param string $metadata new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setMetadata($metadata)
     {
@@ -1014,7 +1014,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param bool $isExternal new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setIsExternal($isExternal)
     {
@@ -1038,7 +1038,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param bool $isScan new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setIsScan($isScan)
     {
@@ -1062,7 +1062,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param int $size new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setSize($size)
     {
@@ -1086,7 +1086,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param bool $isPostSubmissionUpload new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setIsPostSubmissionUpload($isPostSubmissionUpload)
     {
@@ -1110,7 +1110,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param int $version new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setVersion($version)
     {
@@ -1134,7 +1134,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param int $olbsKey new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -1158,7 +1158,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param string $olbsType new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setOlbsType($olbsType)
     {
@@ -1182,7 +1182,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $continuationDetails collection being set as the value
      *
-     * @return Document
+     * @return static
      */
     public function setContinuationDetails($continuationDetails)
     {
@@ -1206,7 +1206,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $continuationDetails collection being added
      *
-     * @return Document
+     * @return static
      */
     public function addContinuationDetails($continuationDetails)
     {
@@ -1229,7 +1229,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $continuationDetails collection being removed
      *
-     * @return Document
+     * @return static
      */
     public function removeContinuationDetails($continuationDetails)
     {
@@ -1245,7 +1245,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $templates collection being set as the value
      *
-     * @return Document
+     * @return static
      */
     public function setTemplates($templates)
     {
@@ -1269,7 +1269,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $templates collection being added
      *
-     * @return Document
+     * @return static
      */
     public function addTemplates($templates)
     {
@@ -1292,7 +1292,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $templates collection being removed
      *
-     * @return Document
+     * @return static
      */
     public function removeTemplates($templates)
     {
@@ -1308,7 +1308,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission $ebsrSubmission entity being set as the value
      *
-     * @return Document
+     * @return static
      */
     public function setEbsrSubmission($ebsrSubmission)
     {
@@ -1332,7 +1332,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Si\ErruRequest $requestErru entity being set as the value
      *
-     * @return Document
+     * @return static
      */
     public function setRequestErru($requestErru)
     {
@@ -1356,7 +1356,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Si\ErruRequest $responseErru entity being set as the value
      *
-     * @return Document
+     * @return static
      */
     public function setResponseErru($responseErru)
     {
@@ -1380,7 +1380,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\System\SlaTargetDate $slaTargetDate entity being set as the value
      *
-     * @return Document
+     * @return static
      */
     public function setSlaTargetDate($slaTargetDate)
     {

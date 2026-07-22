@@ -17,7 +17,7 @@ class LetterAppendix extends AbstractLetterAppendix
     /**
      * Letter appendix versions
      *
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, LetterAppendixVersion>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion::class, mappedBy: 'letterAppendix', cascade: ['persist'], orphanRemoval: false)]
     #[ORM\OrderBy(['versionNumber' => 'DESC'])]

@@ -84,7 +84,7 @@ abstract class AbstractCasesReadAudit implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return CasesReadAudit
+     * @return static
      */
     public function setId($id)
     {
@@ -108,7 +108,7 @@ abstract class AbstractCasesReadAudit implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return CasesReadAudit
+     * @return static
      */
     public function setCase($case)
     {
@@ -132,7 +132,7 @@ abstract class AbstractCasesReadAudit implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return CasesReadAudit
+     * @return static
      */
     public function setUser($user)
     {

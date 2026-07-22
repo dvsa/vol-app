@@ -139,7 +139,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param int $id new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setId($id)
     {
@@ -163,7 +163,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -187,7 +187,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -211,7 +211,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -235,7 +235,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param string $description new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setDescription($description)
     {
@@ -259,7 +259,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $startDate new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setStartDate($startDate)
     {
@@ -289,7 +289,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $endDate new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setEndDate($endDate)
     {
@@ -319,7 +319,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param int $version new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setVersion($version)
     {
@@ -343,7 +343,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param int $olbsKey new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

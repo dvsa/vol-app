@@ -106,7 +106,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return CompaniesHouseOfficer
+     * @return static
      */
     public function setId($id)
     {
@@ -130,7 +130,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany $companiesHouseCompany new value being set
      *
-     * @return CompaniesHouseOfficer
+     * @return static
      */
     public function setCompaniesHouseCompany($companiesHouseCompany)
     {
@@ -154,7 +154,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      *
      * @param string $name new value being set
      *
-     * @return CompaniesHouseOfficer
+     * @return static
      */
     public function setName($name)
     {
@@ -178,7 +178,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      *
      * @param string $role new value being set
      *
-     * @return CompaniesHouseOfficer
+     * @return static
      */
     public function setRole($role)
     {
@@ -202,7 +202,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      *
      * @param \DateTime $dateOfBirth new value being set
      *
-     * @return CompaniesHouseOfficer
+     * @return static
      */
     public function setDateOfBirth($dateOfBirth)
     {
@@ -232,7 +232,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return CompaniesHouseOfficer
+     * @return static
      */
     public function setVersion($version)
     {

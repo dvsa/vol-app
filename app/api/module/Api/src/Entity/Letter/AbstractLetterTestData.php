@@ -111,7 +111,7 @@ abstract class AbstractLetterTestData implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return LetterTestData
+     * @return static
      */
     public function setId($id)
     {
@@ -135,7 +135,7 @@ abstract class AbstractLetterTestData implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterTestData
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -159,7 +159,7 @@ abstract class AbstractLetterTestData implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterTestData
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -183,7 +183,7 @@ abstract class AbstractLetterTestData implements BundleSerializableInterface, Js
      *
      * @param string $name new value being set
      *
-     * @return LetterTestData
+     * @return static
      */
     public function setName($name)
     {
@@ -207,7 +207,7 @@ abstract class AbstractLetterTestData implements BundleSerializableInterface, Js
      *
      * @param array $json new value being set
      *
-     * @return LetterTestData
+     * @return static
      */
     public function setJson($json)
     {
@@ -231,7 +231,7 @@ abstract class AbstractLetterTestData implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return LetterTestData
+     * @return static
      */
     public function setVersion($version)
     {

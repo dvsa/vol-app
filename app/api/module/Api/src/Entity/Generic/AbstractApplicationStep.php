@@ -164,7 +164,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return ApplicationStep
+     * @return static
      */
     public function setId($id)
     {
@@ -188,7 +188,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Generic\ApplicationPath $applicationPath new value being set
      *
-     * @return ApplicationStep
+     * @return static
      */
     public function setApplicationPath($applicationPath)
     {
@@ -212,7 +212,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Generic\Question $question new value being set
      *
-     * @return ApplicationStep
+     * @return static
      */
     public function setQuestion($question)
     {
@@ -236,7 +236,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ApplicationStep
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -260,7 +260,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ApplicationStep
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -284,7 +284,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
      *
      * @param string $weight new value being set
      *
-     * @return ApplicationStep
+     * @return static
      */
     public function setWeight($weight)
     {
@@ -308,7 +308,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
      *
      * @param bool $onlyOnYes new value being set
      *
-     * @return ApplicationStep
+     * @return static
      */
     public function setOnlyOnYes($onlyOnYes)
     {
@@ -332,7 +332,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
      *
      * @param bool $ignoreQuestionValidation new value being set
      *
-     * @return ApplicationStep
+     * @return static
      */
     public function setIgnoreQuestionValidation($ignoreQuestionValidation)
     {
@@ -356,7 +356,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
      *
      * @param bool $breakOnFailure new value being set
      *
-     * @return ApplicationStep
+     * @return static
      */
     public function setBreakOnFailure($breakOnFailure)
     {
@@ -380,7 +380,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
      *
      * @param bool $enabledAfterSubmission new value being set
      *
-     * @return ApplicationStep
+     * @return static
      */
     public function setEnabledAfterSubmission($enabledAfterSubmission)
     {
@@ -404,7 +404,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return ApplicationStep
+     * @return static
      */
     public function setVersion($version)
     {
@@ -428,7 +428,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $applicationValidations collection being set as the value
      *
-     * @return ApplicationStep
+     * @return static
      */
     public function setApplicationValidations($applicationValidations)
     {
@@ -452,7 +452,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $applicationValidations collection being added
      *
-     * @return ApplicationStep
+     * @return static
      */
     public function addApplicationValidations($applicationValidations)
     {
@@ -475,7 +475,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $applicationValidations collection being removed
      *
-     * @return ApplicationStep
+     * @return static
      */
     public function removeApplicationValidations($applicationValidations)
     {

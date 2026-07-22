@@ -147,7 +147,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return ApplicationValidation
+     * @return static
      */
     public function setId($id)
     {
@@ -171,7 +171,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Generic\Question $question new value being set
      *
-     * @return ApplicationValidation
+     * @return static
      */
     public function setQuestion($question)
     {
@@ -195,7 +195,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep $applicationStep new value being set
      *
-     * @return ApplicationValidation
+     * @return static
      */
     public function setApplicationStep($applicationStep)
     {
@@ -219,7 +219,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ApplicationValidation
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -243,7 +243,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ApplicationValidation
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -267,7 +267,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      *
      * @param string $rule new value being set
      *
-     * @return ApplicationValidation
+     * @return static
      */
     public function setRule($rule)
     {
@@ -291,7 +291,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      *
      * @param string $parameters new value being set
      *
-     * @return ApplicationValidation
+     * @return static
      */
     public function setParameters($parameters)
     {
@@ -315,7 +315,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      *
      * @param string $weight new value being set
      *
-     * @return ApplicationValidation
+     * @return static
      */
     public function setWeight($weight)
     {
@@ -339,7 +339,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      *
      * @param string $errorTranslationKey new value being set
      *
-     * @return ApplicationValidation
+     * @return static
      */
     public function setErrorTranslationKey($errorTranslationKey)
     {
@@ -363,7 +363,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return ApplicationValidation
+     * @return static
      */
     public function setVersion($version)
     {

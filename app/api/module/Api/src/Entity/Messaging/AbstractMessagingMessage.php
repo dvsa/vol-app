@@ -134,7 +134,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return MessagingMessage
+     * @return static
      */
     public function setId($id)
     {
@@ -158,7 +158,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation $messagingConversation new value being set
      *
-     * @return MessagingMessage
+     * @return static
      */
     public function setMessagingConversation($messagingConversation)
     {
@@ -182,7 +182,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\Messaging\MessagingContent $messagingContent new value being set
      *
-     * @return MessagingMessage
+     * @return static
      */
     public function setMessagingContent($messagingContent)
     {
@@ -206,7 +206,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return MessagingMessage
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -230,7 +230,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return MessagingMessage
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -254,7 +254,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      *
      * @param int $version new value being set
      *
-     * @return MessagingMessage
+     * @return static
      */
     public function setVersion($version)
     {
@@ -278,7 +278,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being set as the value
      *
-     * @return MessagingMessage
+     * @return static
      */
     public function setDocuments($documents)
     {
@@ -302,7 +302,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documents collection being added
      *
-     * @return MessagingMessage
+     * @return static
      */
     public function addDocuments($documents)
     {
@@ -325,7 +325,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being removed
      *
-     * @return MessagingMessage
+     * @return static
      */
     public function removeDocuments($documents)
     {
@@ -341,7 +341,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $userMessageReads collection being set as the value
      *
-     * @return MessagingMessage
+     * @return static
      */
     public function setUserMessageReads($userMessageReads)
     {
@@ -365,7 +365,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $userMessageReads collection being added
      *
-     * @return MessagingMessage
+     * @return static
      */
     public function addUserMessageReads($userMessageReads)
     {
@@ -388,7 +388,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $userMessageReads collection being removed
      *
-     * @return MessagingMessage
+     * @return static
      */
     public function removeUserMessageReads($userMessageReads)
     {

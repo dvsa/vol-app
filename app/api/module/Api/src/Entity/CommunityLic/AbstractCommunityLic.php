@@ -191,7 +191,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setId($id)
     {
@@ -215,7 +215,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -239,7 +239,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setStatus($status)
     {
@@ -263,7 +263,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -287,7 +287,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -311,7 +311,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \DateTime $expiredDate new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setExpiredDate($expiredDate)
     {
@@ -341,7 +341,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \DateTime $specifiedDate new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setSpecifiedDate($specifiedDate)
     {
@@ -371,7 +371,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \DateTime $licenceExpiredDate new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setLicenceExpiredDate($licenceExpiredDate)
     {
@@ -401,7 +401,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param int $issueNo new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setIssueNo($issueNo)
     {
@@ -425,7 +425,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param int $serialNo new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setSerialNo($serialNo)
     {
@@ -449,7 +449,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param string $serialNoPrefix new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setSerialNoPrefix($serialNoPrefix)
     {
@@ -473,7 +473,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param int $version new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setVersion($version)
     {
@@ -497,7 +497,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param int $olbsKey new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -521,7 +521,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $communityLicSuspensions collection being set as the value
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setCommunityLicSuspensions($communityLicSuspensions)
     {
@@ -545,7 +545,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $communityLicSuspensions collection being added
      *
-     * @return CommunityLic
+     * @return static
      */
     public function addCommunityLicSuspensions($communityLicSuspensions)
     {
@@ -568,7 +568,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $communityLicSuspensions collection being removed
      *
-     * @return CommunityLic
+     * @return static
      */
     public function removeCommunityLicSuspensions($communityLicSuspensions)
     {
@@ -584,7 +584,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $communityLicWithdrawals collection being set as the value
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setCommunityLicWithdrawals($communityLicWithdrawals)
     {
@@ -608,7 +608,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $communityLicWithdrawals collection being added
      *
-     * @return CommunityLic
+     * @return static
      */
     public function addCommunityLicWithdrawals($communityLicWithdrawals)
     {
@@ -631,7 +631,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $communityLicWithdrawals collection being removed
      *
-     * @return CommunityLic
+     * @return static
      */
     public function removeCommunityLicWithdrawals($communityLicWithdrawals)
     {

@@ -140,7 +140,7 @@ class BusRegBrowseView implements BundleSerializableInterface, JsonSerializable
     /**
      * Is short notice
      *
-     * @var bool
+     * @var string
      */
     #[ORM\Column(type: 'string', name: 'is_short_notice')]
     protected $isShortNotice;

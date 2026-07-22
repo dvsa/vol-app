@@ -134,7 +134,7 @@ abstract class AbstractChangeOfEntity implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return ChangeOfEntity
+     * @return static
      */
     public function setId($id)
     {
@@ -158,7 +158,7 @@ abstract class AbstractChangeOfEntity implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return ChangeOfEntity
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -182,7 +182,7 @@ abstract class AbstractChangeOfEntity implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ChangeOfEntity
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -206,7 +206,7 @@ abstract class AbstractChangeOfEntity implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ChangeOfEntity
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -230,7 +230,7 @@ abstract class AbstractChangeOfEntity implements BundleSerializableInterface, Js
      *
      * @param string $oldLicenceNo new value being set
      *
-     * @return ChangeOfEntity
+     * @return static
      */
     public function setOldLicenceNo($oldLicenceNo)
     {
@@ -254,7 +254,7 @@ abstract class AbstractChangeOfEntity implements BundleSerializableInterface, Js
      *
      * @param string $oldOrganisationName new value being set
      *
-     * @return ChangeOfEntity
+     * @return static
      */
     public function setOldOrganisationName($oldOrganisationName)
     {
@@ -278,7 +278,7 @@ abstract class AbstractChangeOfEntity implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return ChangeOfEntity
+     * @return static
      */
     public function setVersion($version)
     {
@@ -302,7 +302,7 @@ abstract class AbstractChangeOfEntity implements BundleSerializableInterface, Js
      *
      * @param int $olbsKey new value being set
      *
-     * @return ChangeOfEntity
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

@@ -135,7 +135,7 @@ abstract class AbstractLetterIssueType implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return LetterIssueType
+     * @return static
      */
     public function setId($id)
     {
@@ -159,7 +159,7 @@ abstract class AbstractLetterIssueType implements BundleSerializableInterface, J
      *
      * @param string $code new value being set
      *
-     * @return LetterIssueType
+     * @return static
      */
     public function setCode($code)
     {
@@ -183,7 +183,7 @@ abstract class AbstractLetterIssueType implements BundleSerializableInterface, J
      *
      * @param string $name new value being set
      *
-     * @return LetterIssueType
+     * @return static
      */
     public function setName($name)
     {
@@ -207,7 +207,7 @@ abstract class AbstractLetterIssueType implements BundleSerializableInterface, J
      *
      * @param string $description new value being set
      *
-     * @return LetterIssueType
+     * @return static
      */
     public function setDescription($description)
     {
@@ -231,7 +231,7 @@ abstract class AbstractLetterIssueType implements BundleSerializableInterface, J
      *
      * @param int $displayOrder new value being set
      *
-     * @return LetterIssueType
+     * @return static
      */
     public function setDisplayOrder($displayOrder)
     {
@@ -255,7 +255,7 @@ abstract class AbstractLetterIssueType implements BundleSerializableInterface, J
      *
      * @param bool $isActive new value being set
      *
-     * @return LetterIssueType
+     * @return static
      */
     public function setIsActive($isActive)
     {
@@ -279,7 +279,7 @@ abstract class AbstractLetterIssueType implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterIssueType
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -303,7 +303,7 @@ abstract class AbstractLetterIssueType implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterIssueType
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -327,7 +327,7 @@ abstract class AbstractLetterIssueType implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return LetterIssueType
+     * @return static
      */
     public function setVersion($version)
     {

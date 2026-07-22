@@ -125,7 +125,7 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      *
      * @param int $id new value being set
      *
-     * @return MessagingUserMessageRead
+     * @return static
      */
     public function setId($id)
     {
@@ -149,7 +149,7 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return MessagingUserMessageRead
+     * @return static
      */
     public function setUser($user)
     {
@@ -173,7 +173,7 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      *
      * @param \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage $messagingMessage new value being set
      *
-     * @return MessagingUserMessageRead
+     * @return static
      */
     public function setMessagingMessage($messagingMessage)
     {
@@ -197,7 +197,7 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return MessagingUserMessageRead
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -221,7 +221,7 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return MessagingUserMessageRead
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -245,7 +245,7 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      *
      * @param \DateTime $lastReadOn new value being set
      *
-     * @return MessagingUserMessageRead
+     * @return static
      */
     public function setLastReadOn($lastReadOn)
     {
@@ -275,7 +275,7 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      *
      * @param int $version new value being set
      *
-     * @return MessagingUserMessageRead
+     * @return static
      */
     public function setVersion($version)
     {

@@ -134,7 +134,7 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
      *
      * @param int $id new value being set
      *
-     * @return CompanySubsidiary
+     * @return static
      */
     public function setId($id)
     {
@@ -158,7 +158,7 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return CompanySubsidiary
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -182,7 +182,7 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return CompanySubsidiary
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -206,7 +206,7 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return CompanySubsidiary
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -230,7 +230,7 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
      *
      * @param string $name new value being set
      *
-     * @return CompanySubsidiary
+     * @return static
      */
     public function setName($name)
     {
@@ -254,7 +254,7 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
      *
      * @param string $companyNo new value being set
      *
-     * @return CompanySubsidiary
+     * @return static
      */
     public function setCompanyNo($companyNo)
     {
@@ -278,7 +278,7 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
      *
      * @param int $version new value being set
      *
-     * @return CompanySubsidiary
+     * @return static
      */
     public function setVersion($version)
     {
@@ -302,7 +302,7 @@ abstract class AbstractCompanySubsidiary implements BundleSerializableInterface,
      *
      * @param int $olbsKey new value being set
      *
-     * @return CompanySubsidiary
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

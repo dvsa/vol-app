@@ -119,7 +119,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return EbsrRouteReprint
+     * @return static
      */
     public function setId($id)
     {
@@ -143,7 +143,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return EbsrRouteReprint
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -167,7 +167,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $requestedUser new value being set
      *
-     * @return EbsrRouteReprint
+     * @return static
      */
     public function setRequestedUser($requestedUser)
     {
@@ -191,7 +191,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param string $exceptionName new value being set
      *
-     * @return EbsrRouteReprint
+     * @return static
      */
     public function setExceptionName($exceptionName)
     {
@@ -215,7 +215,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param bool $scale new value being set
      *
-     * @return EbsrRouteReprint
+     * @return static
      */
     public function setScale($scale)
     {
@@ -239,7 +239,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param \DateTime $publishedTimestamp new value being set
      *
-     * @return EbsrRouteReprint
+     * @return static
      */
     public function setPublishedTimestamp($publishedTimestamp)
     {
@@ -269,7 +269,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param \DateTime $requestedTimestamp new value being set
      *
-     * @return EbsrRouteReprint
+     * @return static
      */
     public function setRequestedTimestamp($requestedTimestamp)
     {
@@ -299,7 +299,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @param int $olbsKey new value being set
      *
-     * @return EbsrRouteReprint
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

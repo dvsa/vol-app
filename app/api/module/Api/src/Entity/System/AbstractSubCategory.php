@@ -152,7 +152,7 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
      *
      * @param int $id new value being set
      *
-     * @return SubCategory
+     * @return static
      */
     public function setId($id)
     {
@@ -176,7 +176,7 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\System\Category $category new value being set
      *
-     * @return SubCategory
+     * @return static
      */
     public function setCategory($category)
     {
@@ -200,7 +200,7 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return SubCategory
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -224,7 +224,7 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return SubCategory
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -248,7 +248,7 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
      *
      * @param string $subCategoryName new value being set
      *
-     * @return SubCategory
+     * @return static
      */
     public function setSubCategoryName($subCategoryName)
     {
@@ -272,7 +272,7 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
      *
      * @param bool $isScan new value being set
      *
-     * @return SubCategory
+     * @return static
      */
     public function setIsScan($isScan)
     {
@@ -296,7 +296,7 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
      *
      * @param bool $isDoc new value being set
      *
-     * @return SubCategory
+     * @return static
      */
     public function setIsDoc($isDoc)
     {
@@ -320,7 +320,7 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
      *
      * @param bool $isTask new value being set
      *
-     * @return SubCategory
+     * @return static
      */
     public function setIsTask($isTask)
     {
@@ -344,7 +344,7 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
      *
      * @param bool $isFreeText new value being set
      *
-     * @return SubCategory
+     * @return static
      */
     public function setIsFreeText($isFreeText)
     {
@@ -368,7 +368,7 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
      *
      * @param bool $isMessaging new value being set
      *
-     * @return SubCategory
+     * @return static
      */
     public function setIsMessaging($isMessaging)
     {
@@ -392,7 +392,7 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
      *
      * @param int $version new value being set
      *
-     * @return SubCategory
+     * @return static
      */
     public function setVersion($version)
     {

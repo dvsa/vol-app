@@ -178,7 +178,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param int $id new value being set
      *
-     * @return Question
+     * @return static
      */
     public function setId($id)
     {
@@ -202,7 +202,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $questionType new value being set
      *
-     * @return Question
+     * @return static
      */
     public function setQuestionType($questionType)
     {
@@ -226,7 +226,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $formControlType new value being set
      *
-     * @return Question
+     * @return static
      */
     public function setFormControlType($formControlType)
     {
@@ -250,7 +250,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $submitOptions new value being set
      *
-     * @return Question
+     * @return static
      */
     public function setSubmitOptions($submitOptions)
     {
@@ -274,7 +274,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Question
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -298,7 +298,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Question
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -322,7 +322,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param string $title new value being set
      *
-     * @return Question
+     * @return static
      */
     public function setTitle($title)
     {
@@ -346,7 +346,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param string $description new value being set
      *
-     * @return Question
+     * @return static
      */
     public function setDescription($description)
     {
@@ -370,7 +370,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param string $optionSource new value being set
      *
-     * @return Question
+     * @return static
      */
     public function setOptionSource($optionSource)
     {
@@ -394,7 +394,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param string $slug new value being set
      *
-     * @return Question
+     * @return static
      */
     public function setSlug($slug)
     {
@@ -418,7 +418,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param int $version new value being set
      *
-     * @return Question
+     * @return static
      */
     public function setVersion($version)
     {
@@ -442,7 +442,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $applicationValidations collection being set as the value
      *
-     * @return Question
+     * @return static
      */
     public function setApplicationValidations($applicationValidations)
     {
@@ -466,7 +466,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $applicationValidations collection being added
      *
-     * @return Question
+     * @return static
      */
     public function addApplicationValidations($applicationValidations)
     {
@@ -489,7 +489,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $applicationValidations collection being removed
      *
-     * @return Question
+     * @return static
      */
     public function removeApplicationValidations($applicationValidations)
     {
@@ -505,7 +505,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $questionTexts collection being set as the value
      *
-     * @return Question
+     * @return static
      */
     public function setQuestionTexts($questionTexts)
     {
@@ -529,7 +529,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $questionTexts collection being added
      *
-     * @return Question
+     * @return static
      */
     public function addQuestionTexts($questionTexts)
     {
@@ -552,7 +552,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $questionTexts collection being removed
      *
-     * @return Question
+     * @return static
      */
     public function removeQuestionTexts($questionTexts)
     {

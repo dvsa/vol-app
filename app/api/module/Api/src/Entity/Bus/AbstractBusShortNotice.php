@@ -268,7 +268,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setId($id)
     {
@@ -292,7 +292,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -316,7 +316,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -340,7 +340,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -364,7 +364,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $bankHolidayChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setBankHolidayChange($bankHolidayChange)
     {
@@ -388,7 +388,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $unforseenChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setUnforseenChange($unforseenChange)
     {
@@ -412,7 +412,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $unforseenDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setUnforseenDetail($unforseenDetail)
     {
@@ -436,7 +436,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $timetableChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setTimetableChange($timetableChange)
     {
@@ -460,7 +460,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $timetableDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setTimetableDetail($timetableDetail)
     {
@@ -484,7 +484,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $replacementChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setReplacementChange($replacementChange)
     {
@@ -508,7 +508,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $replacementDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setReplacementDetail($replacementDetail)
     {
@@ -532,7 +532,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $holidayChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setHolidayChange($holidayChange)
     {
@@ -556,7 +556,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $holidayDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setHolidayDetail($holidayDetail)
     {
@@ -580,7 +580,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $trcChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setTrcChange($trcChange)
     {
@@ -604,7 +604,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $trcDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setTrcDetail($trcDetail)
     {
@@ -628,7 +628,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $policeChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setPoliceChange($policeChange)
     {
@@ -652,7 +652,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $policeDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setPoliceDetail($policeDetail)
     {
@@ -676,7 +676,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $specialOccasionChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setSpecialOccasionChange($specialOccasionChange)
     {
@@ -700,7 +700,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $specialOccasionDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setSpecialOccasionDetail($specialOccasionDetail)
     {
@@ -724,7 +724,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $connectionChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setConnectionChange($connectionChange)
     {
@@ -748,7 +748,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $connectionDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setConnectionDetail($connectionDetail)
     {
@@ -772,7 +772,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $notAvailableChange new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setNotAvailableChange($notAvailableChange)
     {
@@ -796,7 +796,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param string $notAvailableDetail new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setNotAvailableDetail($notAvailableDetail)
     {
@@ -820,7 +820,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setVersion($version)
     {
@@ -844,7 +844,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @param int $olbsKey new value being set
      *
-     * @return BusShortNotice
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

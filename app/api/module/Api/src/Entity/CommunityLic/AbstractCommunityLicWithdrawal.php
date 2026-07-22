@@ -134,7 +134,7 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
      *
      * @param int $id new value being set
      *
-     * @return CommunityLicWithdrawal
+     * @return static
      */
     public function setId($id)
     {
@@ -158,7 +158,7 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic $communityLic new value being set
      *
-     * @return CommunityLicWithdrawal
+     * @return static
      */
     public function setCommunityLic($communityLic)
     {
@@ -182,7 +182,7 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return CommunityLicWithdrawal
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -206,7 +206,7 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return CommunityLicWithdrawal
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -230,7 +230,7 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
      *
      * @param \DateTime $startDate new value being set
      *
-     * @return CommunityLicWithdrawal
+     * @return static
      */
     public function setStartDate($startDate)
     {
@@ -260,7 +260,7 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
      *
      * @param \DateTime $endDate new value being set
      *
-     * @return CommunityLicWithdrawal
+     * @return static
      */
     public function setEndDate($endDate)
     {
@@ -290,7 +290,7 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
      *
      * @param int $version new value being set
      *
-     * @return CommunityLicWithdrawal
+     * @return static
      */
     public function setVersion($version)
     {
@@ -314,7 +314,7 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
      *
      * @param int $olbsKey new value being set
      *
-     * @return CommunityLicWithdrawal
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
