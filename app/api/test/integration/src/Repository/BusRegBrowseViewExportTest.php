@@ -18,12 +18,16 @@ class BusRegBrowseViewExportTest extends IntegrationTestCase
 {
     public function testFetchForExportExecutesAgainstTheView(): void
     {
+        // Export every mapped field (the production handler passes a user-chosen
+        // subset of the same names), derived from metadata so entity changes are
+        // exercised automatically rather than tracked by hand
+        $columns = array_values(array_diff(
+            $this->em()->getClassMetadata(\Dvsa\Olcs\Api\Entity\View\BusRegBrowseView::class)->getFieldNames(),
+            ['id'],
+        ));
+
         $rows = [];
-        $result = $this->repo('BusRegBrowseView')->fetchForExport(
-            ['licNo', 'regNo', 'serviceNo', 'startPoint', 'finishPoint', 'acceptedDate'],
-            '2020-01-01',
-            ['B', 'C'],
-        );
+        $result = $this->repo('BusRegBrowseView')->fetchForExport($columns, '2020-01-01', ['B', 'C']);
 
         foreach ($result as $row) {
             $rows[] = $row;

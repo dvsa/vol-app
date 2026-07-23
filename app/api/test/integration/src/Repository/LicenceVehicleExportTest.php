@@ -18,10 +18,16 @@ class LicenceVehicleExportTest extends IntegrationTestCase
 {
     public function testFetchForExportExecutesAndStreamsRows(): void
     {
-        $licenceId = $this->em()->getConnection()->fetchOne(
-            'SELECT licence_id FROM licence_vehicle WHERE specified_date IS NOT NULL LIMIT 1'
-        );
-        $this->assertNotFalse($licenceId, 'Expected the seeded test dataset to contain a specified licence vehicle');
+        // Fixture discovery through the entity layer (not raw SQL) so renames and
+        // remappings flow through the ORM metadata like the code under test
+        $licenceId = $this->em()->createQueryBuilder()
+            ->select('IDENTITY(lv.licence)')
+            ->from(\Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle::class, 'lv')
+            ->where('lv.specifiedDate IS NOT NULL')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getSingleScalarResult();
+        $this->assertNotNull($licenceId, 'Expected the seeded test dataset to contain a specified licence vehicle');
 
         $repo = $this->repo('LicenceVehicle');
         $query = GoodsVehiclesExport::create(['id' => (int) $licenceId]);
