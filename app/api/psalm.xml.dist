@@ -49,6 +49,7 @@
         <file name="module/Api/src/Entity/Cases/AbstractCases.php"/>
         <file name="module/Api/src/Entity/Cases/Cases.php"/>
         <file name="module/Api/src/Entity/Doc/AbstractDocument.php"/>
+        <file name="module/Api/src/Service/Cache/RedisConnectionFactory.php"/>
       </errorLevel>
     </UndefinedDocblockClass>
     <!-- Generated Letter entity files contain dead code branches -->

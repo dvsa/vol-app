@@ -68,6 +68,7 @@
     "laminas/laminas-filter": "^2.42",
     "laminas/laminas-validator": "^2.65",
     "laminas/laminas-stdlib": "^3.21",
+    "laminas/laminas-cache-storage-adapter-redis": "^2.10",
     "psr/container": "^1.1|^2",
     "laminas/laminas-cli": "^1.13",
     "doctrine/migrations": "^3.9",
