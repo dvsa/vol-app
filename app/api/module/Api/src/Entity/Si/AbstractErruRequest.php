@@ -52,7 +52,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -61,7 +61,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
-    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'erruRequest', fetch: 'LAZY')]
     protected $case;
 
@@ -88,7 +88,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
      */
-    #[ORM\JoinColumn(name: 'member_state_code', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'member_state_code', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, fetch: 'LAZY')]
     protected $memberStateCode;
 
@@ -97,7 +97,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'msi_type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'msi_type', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $msiType;
 
@@ -192,7 +192,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'tot_auth_vehicles', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_vehicles', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $totAuthVehicles = 0;
 
     /**
@@ -208,7 +208,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

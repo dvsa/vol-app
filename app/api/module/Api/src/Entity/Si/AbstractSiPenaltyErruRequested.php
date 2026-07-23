@@ -46,7 +46,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -55,7 +55,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @var \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement
      */
-    #[ORM\JoinColumn(name: 'serious_infringement_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'serious_infringement_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement::class, inversedBy: 'requestedErrus', fetch: 'LAZY')]
     protected $seriousInfringement;
 
@@ -64,7 +64,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @var \Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType
      */
-    #[ORM\JoinColumn(name: 'si_penalty_requested_type_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'si_penalty_requested_type_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SiPenaltyRequestedType::class, fetch: 'LAZY')]
     protected $siPenaltyRequestedType;
 
@@ -93,7 +93,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'penalty_requested_identifier', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'penalty_requested_identifier', nullable: true, options: ['unsigned' => true])]
     protected $penaltyRequestedIdentifier;
 
     /**
@@ -101,7 +101,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'duration', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'duration', nullable: true, options: ['unsigned' => true])]
     protected $duration;
 
     /**
@@ -109,7 +109,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -118,7 +118,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

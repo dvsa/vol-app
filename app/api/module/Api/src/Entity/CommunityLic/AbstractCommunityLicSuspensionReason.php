@@ -47,7 +47,7 @@ abstract class AbstractCommunityLicSuspensionReason implements BundleSerializabl
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -56,7 +56,7 @@ abstract class AbstractCommunityLicSuspensionReason implements BundleSerializabl
      *
      * @var \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicSuspension
      */
-    #[ORM\JoinColumn(name: 'community_lic_suspension_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'community_lic_suspension_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicSuspension::class, inversedBy: 'communityLicSuspensionReasons', fetch: 'LAZY', cascade: ['persist'])]
     protected $communityLicSuspension;
 
@@ -65,7 +65,7 @@ abstract class AbstractCommunityLicSuspensionReason implements BundleSerializabl
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'type_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'type_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $type;
 
@@ -94,7 +94,7 @@ abstract class AbstractCommunityLicSuspensionReason implements BundleSerializabl
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -103,7 +103,7 @@ abstract class AbstractCommunityLicSuspensionReason implements BundleSerializabl
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

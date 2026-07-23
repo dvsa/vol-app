@@ -43,7 +43,7 @@ abstract class AbstractPostcodeEnforcementArea implements BundleSerializableInte
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -52,7 +52,7 @@ abstract class AbstractPostcodeEnforcementArea implements BundleSerializableInte
      *
      * @var \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea
      */
-    #[ORM\JoinColumn(name: 'enforcement_area_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'enforcement_area_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea::class, fetch: 'LAZY')]
     protected $enforcementArea;
 
@@ -89,7 +89,7 @@ abstract class AbstractPostcodeEnforcementArea implements BundleSerializableInte
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

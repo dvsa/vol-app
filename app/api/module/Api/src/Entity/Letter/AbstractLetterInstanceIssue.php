@@ -43,7 +43,7 @@ abstract class AbstractLetterInstanceIssue implements BundleSerializableInterfac
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -52,7 +52,7 @@ abstract class AbstractLetterInstanceIssue implements BundleSerializableInterfac
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterInstance
      */
-    #[ORM\JoinColumn(name: 'letter_instance_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'letter_instance_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class, inversedBy: 'letterInstanceIssues', fetch: 'LAZY')]
     protected $letterInstance;
 
@@ -61,7 +61,7 @@ abstract class AbstractLetterInstanceIssue implements BundleSerializableInterfac
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion
      */
-    #[ORM\JoinColumn(name: 'letter_issue_version_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'letter_issue_version_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion::class, fetch: 'LAZY')]
     protected $letterIssueVersion;
 
@@ -98,7 +98,7 @@ abstract class AbstractLetterInstanceIssue implements BundleSerializableInterfac
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['unsigned' => true])]
     protected $displayOrder = 0;
 
     /**
@@ -106,7 +106,7 @@ abstract class AbstractLetterInstanceIssue implements BundleSerializableInterfac
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

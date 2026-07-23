@@ -44,7 +44,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -53,7 +53,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
-    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, inversedBy: 'organisationUsers', fetch: 'LAZY')]
     protected $organisation;
 
@@ -62,7 +62,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, inversedBy: 'organisationUsers', fetch: 'LAZY')]
     protected $user;
 
@@ -107,7 +107,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

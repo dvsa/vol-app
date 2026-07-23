@@ -44,7 +44,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -53,7 +53,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
-    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'communityLics', fetch: 'LAZY')]
     protected $licence;
 
@@ -62,7 +62,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
@@ -115,7 +115,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'issue_no', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'issue_no', nullable: true, options: ['unsigned' => true])]
     protected $issueNo;
 
     /**
@@ -123,7 +123,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'serial_no', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'serial_no', nullable: true, options: ['unsigned' => true])]
     protected $serialNo;
 
     /**
@@ -139,7 +139,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -148,7 +148,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

@@ -42,7 +42,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -103,7 +103,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $displayOrder = 0;
 
     /**
@@ -119,7 +119,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

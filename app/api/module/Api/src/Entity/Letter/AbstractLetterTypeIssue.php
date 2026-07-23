@@ -43,7 +43,7 @@ abstract class AbstractLetterTypeIssue implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
      */
     #[ORM\Id]
-    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, inversedBy: 'letterTypeIssues', fetch: 'LAZY')]
     protected $letterType;
 
@@ -53,7 +53,7 @@ abstract class AbstractLetterTypeIssue implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion
      */
     #[ORM\Id]
-    #[ORM\JoinColumn(name: 'letter_issue_version_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'letter_issue_version_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion::class, fetch: 'LAZY')]
     protected $letterIssueVersion;
 

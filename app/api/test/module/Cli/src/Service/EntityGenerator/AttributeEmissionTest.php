@@ -44,7 +44,7 @@ final class AttributeEmissionTest extends TestCase
 
         // cf. AbstractApplication::$licence
         $this->assertSame(
-            "#[ORM\\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]\n    "
+            "#[ORM\\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]\n    "
             . "#[ORM\\ManyToOne(targetEntity: \\Dvsa\\Olcs\\Api\\Entity\\Licence\\Licence::class, fetch: 'LAZY')]",
             $sut->generateAnnotation($column, ['namespaces' => ['Licence' => 'Licence']])
         );
@@ -174,7 +174,7 @@ final class AttributeEmissionTest extends TestCase
         $column = new ColumnMetadata('licence_id', 'integer', null, false);
 
         $this->assertSame(
-            "#[ORM\\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]\n    "
+            "#[ORM\\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]\n    "
             . "#[ORM\\ManyToOne(targetEntity: \\Dvsa\\Olcs\\Api\\Entity\\Licence\\Licence::class,"
             . " inversedBy: 'licenceVehicles', fetch: 'LAZY')]",
             $sut->generateAnnotation($column, [
@@ -241,6 +241,25 @@ final class AttributeEmissionTest extends TestCase
         ]);
 
         $this->assertSame([], $processor->processInverseRelationships([$table]));
+    }
+
+    public function testUnsignedAndFixedColumnOptionsAreEmitted(): void
+    {
+        $sut = new DefaultTypeHandler();
+
+        // cf. address.olbs_key: int unsigned with no default
+        $unsigned = new ColumnMetadata('olbs_key', 'integer', null, true, false, false, null, null, ['unsigned' => true]);
+        $this->assertSame(
+            "#[ORM\\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]",
+            $sut->generateAnnotation($unsigned)
+        );
+
+        // cf. address.admin_area: char(40) - fixed, after any default
+        $fixed = new ColumnMetadata('admin_area', 'string', 40, true, false, false, null, null, ['fixed' => true]);
+        $this->assertSame(
+            "#[ORM\\Column(type: 'string', name: 'admin_area', length: 40, nullable: true, options: ['fixed' => true])]",
+            $sut->generateAnnotation($fixed)
+        );
     }
 
     public function testUniqueKeysAreEmittedOnlyAsUniqueConstraints(): void

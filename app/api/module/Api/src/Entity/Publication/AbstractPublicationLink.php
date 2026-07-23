@@ -54,7 +54,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -63,7 +63,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\Publication\Publication
      */
-    #[ORM\JoinColumn(name: 'publication_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'publication_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\Publication::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
     protected $publication;
 
@@ -72,7 +72,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
      */
-    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
@@ -135,7 +135,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\Publication\PublicationSection
      */
-    #[ORM\JoinColumn(name: 'publication_section_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'publication_section_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationSection::class, fetch: 'LAZY')]
     protected $publicationSection;
 
@@ -204,7 +204,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -213,7 +213,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

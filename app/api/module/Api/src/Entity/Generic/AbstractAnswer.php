@@ -45,7 +45,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -54,7 +54,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @var \Dvsa\Olcs\Api\Entity\Generic\QuestionText
      */
-    #[ORM\JoinColumn(name: 'question_text_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'question_text_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\QuestionText::class, fetch: 'LAZY')]
     protected $questionText;
 
@@ -165,7 +165,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

@@ -82,8 +82,16 @@ class RelationshipTypeHandler extends AbstractTypeHandler
             "referencedColumnName: '" . $referencedColumn . "'"
         ];
 
-        if ($column->isNullable()) {
-            $joinOptions[] = 'nullable: true';
+        // JoinColumn's default is nullable: true (the opposite of Column's), so
+        // NOT NULL foreign keys must say so explicitly or the metadata misreports
+        // the real constraint
+        $joinOptions[] = $column->isNullable() ? 'nullable: true' : 'nullable: false';
+
+        // Mirror the database's referential action (DDL-level only; app-level
+        // cascades are configured separately via EntityConfig cascade options)
+        $onDelete = $this->getOnDeleteAction($column);
+        if ($onDelete !== null) {
+            $joinOptions[] = "onDelete: '" . $onDelete . "'";
         }
 
         // Check for cascade options in config
@@ -132,6 +140,32 @@ class RelationshipTypeHandler extends AbstractTypeHandler
         }
 
         return implode("\n    ", $annotations);
+    }
+
+    /**
+     * Get the FK's ON DELETE action where it differs from the default
+     * (CASCADE / SET NULL); RESTRICT and NO ACTION are MySQL defaults and
+     * are left implicit.
+     */
+    private function getOnDeleteAction(ColumnMetadata $column): ?string
+    {
+        if ($this->currentTable === null) {
+            return null;
+        }
+
+        foreach ($this->currentTable->getForeignKeys() as $foreignKey) {
+            $localColumns = is_array($foreignKey) ? ($foreignKey['local_columns'] ?? []) : $foreignKey->getLocalColumns();
+            if (!in_array($column->getName(), $localColumns)) {
+                continue;
+            }
+
+            $onDelete = is_array($foreignKey) ? ($foreignKey['on_delete'] ?? null) : $foreignKey->onDelete();
+            $onDelete = $onDelete !== null ? strtoupper($onDelete) : null;
+
+            return in_array($onDelete, ['CASCADE', 'SET NULL'], true) ? $onDelete : null;
+        }
+
+        return null;
     }
 
     /**

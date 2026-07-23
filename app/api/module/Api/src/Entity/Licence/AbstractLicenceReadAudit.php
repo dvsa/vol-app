@@ -40,7 +40,7 @@ abstract class AbstractLicenceReadAudit implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -49,7 +49,7 @@ abstract class AbstractLicenceReadAudit implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
-    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'readAudits', fetch: 'LAZY')]
     protected $licence;
 
@@ -58,7 +58,7 @@ abstract class AbstractLicenceReadAudit implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 

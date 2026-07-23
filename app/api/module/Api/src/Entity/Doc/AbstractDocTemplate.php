@@ -48,7 +48,7 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -57,7 +57,7 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Category
      */
-    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Category::class, fetch: 'LAZY')]
     protected $category;
 
@@ -84,7 +84,7 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      */
-    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'templates', fetch: 'LAZY')]
     protected $document;
 
@@ -145,7 +145,7 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

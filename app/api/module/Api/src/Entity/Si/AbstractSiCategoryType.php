@@ -45,7 +45,7 @@ abstract class AbstractSiCategoryType implements BundleSerializableInterface, Js
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'smallint', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'smallint', name: 'id', nullable: false, options: ['unsigned' => true])]
     protected $id = 0;
 
     /**
@@ -53,7 +53,7 @@ abstract class AbstractSiCategoryType implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\Si\SiCategory
      */
-    #[ORM\JoinColumn(name: 'si_category_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'si_category_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SiCategory::class, fetch: 'LAZY')]
     protected $siCategory;
 
@@ -90,7 +90,7 @@ abstract class AbstractSiCategoryType implements BundleSerializableInterface, Js
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

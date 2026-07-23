@@ -36,7 +36,7 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -45,7 +45,7 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'org_type_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'org_type_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $orgType;
 
@@ -54,7 +54,7 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'org_person_type_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'org_person_type_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $orgPersonType;
 

@@ -57,7 +57,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -66,7 +66,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
-    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'applications', fetch: 'LAZY', cascade: ['persist'])]
     protected $licence;
 
@@ -75,7 +75,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
@@ -156,7 +156,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'applied_via', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'applied_via', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $appliedVia;
 
@@ -219,7 +219,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'tot_auth_trailers', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_trailers', nullable: true, options: ['unsigned' => true])]
     protected $totAuthTrailers;
 
     /**
@@ -227,7 +227,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'tot_auth_vehicles', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totAuthVehicles;
 
     /**
@@ -235,7 +235,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'tot_auth_hgv_vehicles', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_hgv_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totAuthHgvVehicles;
 
     /**
@@ -243,7 +243,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'tot_auth_lgv_vehicles', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_lgv_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totAuthLgvVehicles;
 
     /**
@@ -251,7 +251,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'tot_community_licences', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'tot_community_licences', nullable: true, options: ['unsigned' => true])]
     protected $totCommunityLicences;
 
     /**
@@ -355,7 +355,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'small_vehicle_evidence_uploaded', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'small_vehicle_evidence_uploaded', nullable: true, options: ['unsigned' => true])]
     protected $smallVehicleEvidenceUploaded;
 
     /**
@@ -363,7 +363,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'occupation_evidence_uploaded', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'occupation_evidence_uploaded', nullable: true, options: ['unsigned' => true])]
     protected $occupationEvidenceUploaded;
 
     /**
@@ -563,7 +563,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var string
      */
-    #[ORM\Column(type: 'yesnonull', name: 'psv_income_records_confirmation', nullable: true)]
+    #[ORM\Column(type: 'yesnonull', name: 'psv_income_records_confirmation', nullable: true, options: ['unsigned' => true])]
     protected $psvIncomeRecordsConfirmation;
 
     /**
@@ -571,7 +571,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var string
      */
-    #[ORM\Column(type: 'yesnonull', name: 'psv_occupation_records_confirmation', nullable: true)]
+    #[ORM\Column(type: 'yesnonull', name: 'psv_occupation_records_confirmation', nullable: true, options: ['unsigned' => true])]
     protected $psvOccupationRecordsConfirmation;
 
     /**
@@ -579,7 +579,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'psv_total_vehicle_small', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'psv_total_vehicle_small', nullable: true, options: ['unsigned' => true])]
     protected $psvTotalVehicleSmall;
 
     /**
@@ -587,7 +587,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'psv_total_vehicle_large', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'psv_total_vehicle_large', nullable: true, options: ['unsigned' => true])]
     protected $psvTotalVehicleLarge;
 
     /**
@@ -611,7 +611,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'interim_auth_vehicles', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'interim_auth_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $interimAuthVehicles;
 
     /**
@@ -619,7 +619,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'interim_auth_hgv_vehicles', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'interim_auth_hgv_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $interimAuthHgvVehicles;
 
     /**
@@ -627,7 +627,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'interim_auth_lgv_vehicles', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'interim_auth_lgv_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $interimAuthLgvVehicles;
 
     /**
@@ -635,7 +635,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'interim_auth_trailers', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'interim_auth_trailers', nullable: true, options: ['unsigned' => true])]
     protected $interimAuthTrailers;
 
     /**
@@ -675,7 +675,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'request_inspection', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'request_inspection', nullable: true, options: ['unsigned' => true])]
     protected $requestInspection;
 
     /**
@@ -691,7 +691,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'request_inspection_delay', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'request_inspection_delay', nullable: true, options: ['unsigned' => true])]
     protected $requestInspectionDelay;
 
     /**
@@ -699,7 +699,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

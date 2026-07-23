@@ -53,7 +53,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -80,7 +80,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @var \Dvsa\Olcs\Api\Entity\DataRetentionRule
      */
-    #[ORM\JoinColumn(name: 'data_retention_rule_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'data_retention_rule_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\DataRetentionRule::class, fetch: 'LAZY')]
     protected $dataRetentionRule;
 
@@ -117,7 +117,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'entity_pk', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'entity_pk', nullable: false, options: ['unsigned' => true])]
     protected $entityPk = 0;
 
     /**
@@ -133,7 +133,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'organisation_id', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'organisation_id', nullable: true, options: ['unsigned' => true])]
     protected $organisationId;
 
     /**
@@ -141,7 +141,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'licence_id', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'licence_id', nullable: true, options: ['unsigned' => true])]
     protected $licenceId;
 
     /**

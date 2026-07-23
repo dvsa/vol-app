@@ -47,7 +47,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -56,7 +56,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @var \Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType
      */
-    #[ORM\JoinColumn(name: 'event_history_type_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'event_history_type_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType::class, fetch: 'LAZY')]
     protected $eventHistoryType;
 
@@ -187,7 +187,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'entity_pk', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'entity_pk', nullable: true, options: ['unsigned' => true])]
     protected $entityPk;
 
     /**
@@ -195,7 +195,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'entity_version', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'entity_version', nullable: true, options: ['unsigned' => true])]
     protected $entityVersion;
 
     /**
@@ -211,7 +211,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

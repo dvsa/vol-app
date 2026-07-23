@@ -57,7 +57,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -75,7 +75,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
-    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, inversedBy: 'licences', fetch: 'LAZY', cascade: ['persist'])]
     protected $organisation;
 
@@ -147,7 +147,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
@@ -217,7 +217,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'tot_auth_trailers', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_trailers', nullable: true, options: ['unsigned' => true])]
     protected $totAuthTrailers;
 
     /**
@@ -225,7 +225,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'tot_auth_vehicles', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totAuthVehicles;
 
     /**
@@ -233,7 +233,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'tot_auth_hgv_vehicles', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_hgv_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totAuthHgvVehicles;
 
     /**
@@ -241,7 +241,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'tot_auth_lgv_vehicles', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'tot_auth_lgv_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totAuthLgvVehicles;
 
     /**
@@ -249,7 +249,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'tot_community_licences', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'tot_community_licences', nullable: true, options: ['unsigned' => true])]
     protected $totCommunityLicences;
 
     /**
@@ -257,7 +257,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'trailers_in_possession', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'trailers_in_possession', nullable: true, options: ['unsigned' => true])]
     protected $trailersInPossession;
 
     /**
@@ -353,7 +353,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'safety_ins_trailers', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'safety_ins_trailers', nullable: true, options: ['unsigned' => true])]
     protected $safetyInsTrailers;
 
     /**
@@ -361,7 +361,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'safety_ins_vehicles', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'safety_ins_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $safetyInsVehicles;
 
     /**
@@ -393,7 +393,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'psv_discs_to_be_printed_no', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'psv_discs_to_be_printed_no', nullable: true, options: ['unsigned' => true])]
     protected $psvDiscsToBePrintedNo;
 
     /**
@@ -417,7 +417,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -426,7 +426,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

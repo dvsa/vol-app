@@ -48,7 +48,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -57,7 +57,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
-    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'operatingCentres', fetch: 'LAZY')]
     protected $application;
 
@@ -66,7 +66,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
      */
-    #[ORM\JoinColumn(name: 'operating_centre_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'operating_centre_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre::class, inversedBy: 'applications', fetch: 'LAZY')]
     protected $operatingCentre;
 
@@ -152,7 +152,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'no_of_trailers_required', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'no_of_trailers_required', nullable: true, options: ['unsigned' => true])]
     protected $noOfTrailersRequired;
 
     /**
@@ -160,7 +160,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'no_of_vehicles_required', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'no_of_vehicles_required', nullable: true, options: ['unsigned' => true])]
     protected $noOfVehiclesRequired;
 
     /**
@@ -184,7 +184,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -193,7 +193,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

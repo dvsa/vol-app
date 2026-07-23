@@ -50,7 +50,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -197,7 +197,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'total_auth_vehicles', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'total_auth_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totalAuthVehicles;
 
     /**
@@ -205,7 +205,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
      *
      * @var string
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_per_week', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'hours_per_week', nullable: true, options: ['unsigned' => true])]
     protected $hoursPerWeek;
 
     /**
@@ -213,7 +213,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

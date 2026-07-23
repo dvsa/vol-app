@@ -40,7 +40,7 @@ abstract class AbstractTransportManagerReadAudit implements BundleSerializableIn
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -49,7 +49,7 @@ abstract class AbstractTransportManagerReadAudit implements BundleSerializableIn
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      */
-    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'readAudits', fetch: 'LAZY')]
     protected $transportManager;
 
@@ -58,7 +58,7 @@ abstract class AbstractTransportManagerReadAudit implements BundleSerializableIn
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 

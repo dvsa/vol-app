@@ -39,7 +39,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -48,7 +48,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      *
      * @var \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany
      */
-    #[ORM\JoinColumn(name: 'companies_house_company_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'companies_house_company_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany::class, inversedBy: 'officers', fetch: 'LAZY')]
     protected $companiesHouseCompany;
 
@@ -81,7 +81,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

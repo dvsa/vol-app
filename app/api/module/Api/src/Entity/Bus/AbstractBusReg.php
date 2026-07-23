@@ -53,7 +53,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -71,7 +71,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
@@ -80,7 +80,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'revert_status', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'revert_status', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $revertStatus;
 
@@ -89,7 +89,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
-    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'busRegs', fetch: 'LAZY')]
     protected $licence;
 
@@ -98,7 +98,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusNoticePeriod
      */
-    #[ORM\JoinColumn(name: 'bus_notice_period_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'bus_notice_period_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusNoticePeriod::class, fetch: 'LAZY')]
     protected $busNoticePeriod;
 
@@ -107,7 +107,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'subsidised', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'subsidised', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $subsidised;
 
@@ -153,7 +153,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'route_no', nullable: false)]
+    #[ORM\Column(type: 'smallint', name: 'route_no', nullable: false, options: ['unsigned' => true])]
     protected $routeNo = 0;
 
     /**
@@ -361,7 +361,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'variation_no', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'smallint', name: 'variation_no', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $variationNo = 0;
 
     /**
@@ -505,7 +505,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -514,7 +514,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

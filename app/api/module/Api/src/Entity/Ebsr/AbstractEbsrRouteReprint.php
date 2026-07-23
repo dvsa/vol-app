@@ -36,7 +36,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -45,7 +45,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      */
-    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
     protected $busReg;
 
@@ -54,7 +54,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
-    #[ORM\JoinColumn(name: 'requested_user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'requested_user_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $requestedUser;
 
@@ -71,7 +71,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @var bool
      */
-    #[ORM\Column(type: 'boolean', name: 'scale', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'boolean', name: 'scale', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $scale = 0;
 
     /**
@@ -95,7 +95,7 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

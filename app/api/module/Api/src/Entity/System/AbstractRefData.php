@@ -79,7 +79,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'display_order', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'display_order', nullable: true, options: ['unsigned' => true])]
     protected $displayOrder;
 
     /**
@@ -87,7 +87,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'integer', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

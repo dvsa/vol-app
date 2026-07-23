@@ -41,7 +41,7 @@ abstract class AbstractBusNoticePeriod implements BundleSerializableInterface, J
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -78,7 +78,7 @@ abstract class AbstractBusNoticePeriod implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'standard_period', nullable: false)]
+    #[ORM\Column(type: 'smallint', name: 'standard_period', nullable: false, options: ['unsigned' => true])]
     protected $standardPeriod = 0;
 
     /**
@@ -86,7 +86,7 @@ abstract class AbstractBusNoticePeriod implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'cancellation_period', nullable: false)]
+    #[ORM\Column(type: 'smallint', name: 'cancellation_period', nullable: false, options: ['unsigned' => true])]
     protected $cancellationPeriod = 0;
 
     /**
@@ -94,7 +94,7 @@ abstract class AbstractBusNoticePeriod implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

@@ -40,7 +40,7 @@ abstract class AbstractCasesReadAudit implements BundleSerializableInterface, Js
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -49,7 +49,7 @@ abstract class AbstractCasesReadAudit implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
-    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'readAudits', fetch: 'LAZY')]
     protected $case;
 
@@ -58,7 +58,7 @@ abstract class AbstractCasesReadAudit implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 

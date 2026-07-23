@@ -44,7 +44,7 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -53,7 +53,7 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 
@@ -62,7 +62,7 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      *
      * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage
      */
-    #[ORM\JoinColumn(name: 'messaging_message_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'messaging_message_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage::class, inversedBy: 'userMessageReads', fetch: 'LAZY')]
     protected $messagingMessage;
 

@@ -44,7 +44,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -53,7 +53,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @var \Dvsa\Olcs\Api\Entity\Template\TemplateTestData
      */
-    #[ORM\JoinColumn(name: 'template_test_data_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'template_test_data_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Template\TemplateTestData::class, fetch: 'LAZY')]
     protected $templateTestData;
 
@@ -139,7 +139,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

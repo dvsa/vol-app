@@ -45,7 +45,7 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -54,7 +54,7 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, inversedBy: 'passwordResets', fetch: 'LAZY', cascade: ['persist'])]
     protected $user;
 
@@ -99,7 +99,7 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
      *
      * @var bool
      */
-    #[ORM\Column(type: 'boolean', name: 'success', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'boolean', name: 'success', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $success = 0;
 
     /**

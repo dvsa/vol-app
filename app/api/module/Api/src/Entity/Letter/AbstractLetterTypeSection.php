@@ -43,7 +43,7 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
      */
     #[ORM\Id]
-    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, inversedBy: 'letterTypeSections', fetch: 'LAZY')]
     protected $letterType;
 
@@ -53,7 +53,7 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSection
      */
     #[ORM\Id]
-    #[ORM\JoinColumn(name: 'letter_section_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'letter_section_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSection::class, fetch: 'LAZY')]
     protected $letterSection;
 
@@ -82,7 +82,7 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['unsigned' => true])]
     protected $displayOrder = 0;
 
     /**

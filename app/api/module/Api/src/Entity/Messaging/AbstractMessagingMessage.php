@@ -43,7 +43,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -52,7 +52,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation
      */
-    #[ORM\JoinColumn(name: 'messaging_conversation_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'messaging_conversation_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation::class, fetch: 'LAZY')]
     protected $messagingConversation;
 
@@ -61,7 +61,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingContent
      */
-    #[ORM\JoinColumn(name: 'messaging_content_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'messaging_content_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Messaging\MessagingContent::class, fetch: 'LAZY', cascade: ['persist', 'remove'])]
     protected $messagingContent;
 

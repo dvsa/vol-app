@@ -45,7 +45,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -54,7 +54,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      *
      * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth
      */
-    #[ORM\JoinColumn(name: 'irfo_psv_auth_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'irfo_psv_auth_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth::class, inversedBy: 'irfoPsvAuthNumbers', fetch: 'LAZY')]
     protected $irfoPsvAuth;
 
@@ -91,7 +91,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

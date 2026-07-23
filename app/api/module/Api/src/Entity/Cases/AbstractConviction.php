@@ -49,7 +49,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -58,7 +58,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'defendant_type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'defendant_type', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $defendantType;
 
@@ -67,7 +67,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
-    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'convictions', fetch: 'LAZY')]
     protected $case;
 
@@ -234,7 +234,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -243,7 +243,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

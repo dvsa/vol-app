@@ -49,7 +49,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -58,7 +58,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'tm_status', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'tm_status', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $tmStatus;
 
@@ -76,7 +76,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
      */
-    #[ORM\JoinColumn(name: 'home_cd_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'home_cd_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY')]
     protected $homeCd;
 
@@ -123,7 +123,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'disqualification_tm_case_id', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'disqualification_tm_case_id', nullable: true, options: ['unsigned' => true])]
     protected $disqualificationTmCaseId;
 
     /**
@@ -171,7 +171,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -180,7 +180,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

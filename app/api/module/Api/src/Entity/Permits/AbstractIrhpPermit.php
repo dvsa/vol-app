@@ -46,7 +46,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -64,7 +64,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange
      */
-    #[ORM\JoinColumn(name: 'irhp_permit_range_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'irhp_permit_range_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange::class, inversedBy: 'irhpPermits', fetch: 'LAZY')]
     protected $irhpPermitRange;
 
@@ -73,7 +73,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
      */
-    #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, inversedBy: 'irhpPermits', fetch: 'LAZY')]
     protected $irhpPermitApplication;
 
@@ -91,7 +91,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
@@ -120,7 +120,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'permit_number', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'permit_number', nullable: true, options: ['unsigned' => true])]
     protected $permitNumber;
 
     /**
@@ -152,7 +152,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

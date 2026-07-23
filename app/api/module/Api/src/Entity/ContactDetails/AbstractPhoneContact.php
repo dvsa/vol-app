@@ -44,7 +44,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -53,7 +53,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'phone_contact_type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'phone_contact_type', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $phoneContactType;
 
@@ -62,7 +62,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
      */
-    #[ORM\JoinColumn(name: 'contact_details_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'contact_details_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, inversedBy: 'phoneContacts', fetch: 'LAZY')]
     protected $contactDetails;
 
@@ -107,7 +107,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -116,7 +116,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

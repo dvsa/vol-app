@@ -53,7 +53,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -62,7 +62,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      */
-    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'tmApplications', fetch: 'LAZY')]
     protected $transportManager;
 
@@ -71,7 +71,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
-    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'transportManagers', fetch: 'LAZY')]
     protected $application;
 
@@ -170,7 +170,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var string
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_mon', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'hours_mon', nullable: true, options: ['unsigned' => true])]
     protected $hoursMon;
 
     /**
@@ -178,7 +178,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var string
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_tue', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'hours_tue', nullable: true, options: ['unsigned' => true])]
     protected $hoursTue;
 
     /**
@@ -186,7 +186,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var string
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_wed', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'hours_wed', nullable: true, options: ['unsigned' => true])]
     protected $hoursWed;
 
     /**
@@ -194,7 +194,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var string
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_thu', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'hours_thu', nullable: true, options: ['unsigned' => true])]
     protected $hoursThu;
 
     /**
@@ -202,7 +202,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var string
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_fri', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'hours_fri', nullable: true, options: ['unsigned' => true])]
     protected $hoursFri;
 
     /**
@@ -210,7 +210,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var string
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_sat', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'hours_sat', nullable: true, options: ['unsigned' => true])]
     protected $hoursSat;
 
     /**
@@ -218,7 +218,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var string
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_sun', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'hours_sun', nullable: true, options: ['unsigned' => true])]
     protected $hoursSun;
 
     /**
@@ -282,7 +282,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -291,7 +291,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

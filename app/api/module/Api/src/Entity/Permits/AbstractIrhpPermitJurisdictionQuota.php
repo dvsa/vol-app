@@ -43,7 +43,7 @@ abstract class AbstractIrhpPermitJurisdictionQuota implements BundleSerializable
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -52,7 +52,7 @@ abstract class AbstractIrhpPermitJurisdictionQuota implements BundleSerializable
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
      */
-    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
@@ -61,7 +61,7 @@ abstract class AbstractIrhpPermitJurisdictionQuota implements BundleSerializable
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock
      */
-    #[ORM\JoinColumn(name: 'irhp_permit_stock_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'irhp_permit_stock_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock::class, inversedBy: 'irhpPermitJurisdictionQuotas', fetch: 'LAZY')]
     protected $irhpPermitStock;
 
@@ -98,7 +98,7 @@ abstract class AbstractIrhpPermitJurisdictionQuota implements BundleSerializable
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

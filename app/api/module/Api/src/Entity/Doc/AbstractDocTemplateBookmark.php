@@ -44,7 +44,7 @@ abstract class AbstractDocTemplateBookmark implements BundleSerializableInterfac
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -53,7 +53,7 @@ abstract class AbstractDocTemplateBookmark implements BundleSerializableInterfac
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\DocTemplate
      */
-    #[ORM\JoinColumn(name: 'doc_template_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'doc_template_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocTemplate::class, inversedBy: 'docTemplateBookmarks', fetch: 'LAZY')]
     protected $docTemplate;
 
@@ -62,7 +62,7 @@ abstract class AbstractDocTemplateBookmark implements BundleSerializableInterfac
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\DocBookmark
      */
-    #[ORM\JoinColumn(name: 'doc_bookmark_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'doc_bookmark_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocBookmark::class, fetch: 'LAZY')]
     protected $docBookmark;
 
@@ -91,7 +91,7 @@ abstract class AbstractDocTemplateBookmark implements BundleSerializableInterfac
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
