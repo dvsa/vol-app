@@ -28,6 +28,16 @@ class SchemaDriftTest extends IntegrationTestCase
         $entityManager = $this->em();
         $metadata = $entityManager->getMetadataFactory()->getAllMetadata();
 
+        // View-backed entities (Entity/View) can never be introspected as tables,
+        // so SchemaTool would forever propose CREATE TABLE for them - not drift.
+        $viewNames = $entityManager->getConnection()->fetchFirstColumn(
+            'SELECT table_name FROM information_schema.views WHERE table_schema = DATABASE()'
+        );
+        $metadata = array_values(array_filter(
+            $metadata,
+            static fn ($classMetadata): bool => !in_array($classMetadata->getTableName(), $viewNames, true),
+        ));
+
         $statements = (new SchemaTool($entityManager))->getUpdateSchemaSql($metadata);
 
         // Tables with no entity mapping (audit *_hist tables, ETL working tables
