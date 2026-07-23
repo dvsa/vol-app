@@ -60,7 +60,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'licenceVehicles', fetch: 'LAZY')]
     protected $licence;
 
     /**
@@ -69,7 +69,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle
      */
     #[ORM\JoinColumn(name: 'vehicle_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle::class, fetch: 'LAZY', cascade: ['persist', 'remove'])]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle::class, inversedBy: 'licenceVehicles', fetch: 'LAZY', cascade: ['persist', 'remove'])]
     protected $vehicle;
 
     /**
@@ -78,7 +78,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'licenceVehicles', fetch: 'LAZY')]
     protected $application;
 
     /**
@@ -87,7 +87,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'interim_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'interimLicenceVehicles', fetch: 'LAZY')]
     protected $interimApplication;
 
     /**

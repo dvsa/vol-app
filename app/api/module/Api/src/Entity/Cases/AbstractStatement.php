@@ -61,7 +61,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
     #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'statements', fetch: 'LAZY')]
     protected $case;
 
     /**

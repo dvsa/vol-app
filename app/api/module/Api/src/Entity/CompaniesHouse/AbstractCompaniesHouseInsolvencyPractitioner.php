@@ -49,7 +49,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
      * @var \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany
      */
     #[ORM\JoinColumn(name: 'companies_house_company_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany::class, inversedBy: 'insolvencyPractitioners', fetch: 'LAZY')]
     protected $companiesHouseCompany;
 
     /**

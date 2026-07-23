@@ -53,7 +53,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      * @var \Dvsa\Olcs\Api\Entity\Generic\Question
      */
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\Question::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\Question::class, inversedBy: 'applicationValidations', fetch: 'LAZY')]
     protected $question;
 
     /**
@@ -62,7 +62,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      * @var \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep
      */
     #[ORM\JoinColumn(name: 'application_step_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep::class, inversedBy: 'applicationValidations', fetch: 'LAZY')]
     protected $applicationStep;
 
     /**

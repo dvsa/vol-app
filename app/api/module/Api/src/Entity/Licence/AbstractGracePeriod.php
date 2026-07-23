@@ -53,7 +53,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'gracePeriods', fetch: 'LAZY')]
     protected $licence;
 
     /**

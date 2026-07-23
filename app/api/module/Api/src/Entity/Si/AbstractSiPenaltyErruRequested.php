@@ -56,7 +56,7 @@ abstract class AbstractSiPenaltyErruRequested implements BundleSerializableInter
      * @var \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement
      */
     #[ORM\JoinColumn(name: 'serious_infringement_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement::class, inversedBy: 'requestedErrus', fetch: 'LAZY')]
     protected $seriousInfringement;
 
     /**

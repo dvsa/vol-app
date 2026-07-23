@@ -66,7 +66,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'conditionUndertakings', fetch: 'LAZY')]
     protected $application;
 
     /**
@@ -75,7 +75,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'conditionUndertakings', fetch: 'LAZY')]
     protected $licence;
 
     /**
@@ -84,7 +84,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
      */
     #[ORM\JoinColumn(name: 'operating_centre_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre::class, inversedBy: 'conditionUndertakings', fetch: 'LAZY')]
     protected $operatingCentre;
 
     /**
@@ -93,7 +93,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
     #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'conditionUndertakings', fetch: 'LAZY')]
     protected $case;
 
     /**
@@ -102,7 +102,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      * @var \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking
      */
     #[ORM\JoinColumn(name: 'lic_condition_variation_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking::class, inversedBy: 'variationRecords', fetch: 'LAZY')]
     protected $licConditionVariation;
 
     /**

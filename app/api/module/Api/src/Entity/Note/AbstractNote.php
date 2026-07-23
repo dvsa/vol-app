@@ -126,7 +126,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'notes', fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**

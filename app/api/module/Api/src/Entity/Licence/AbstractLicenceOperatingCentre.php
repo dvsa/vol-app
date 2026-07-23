@@ -58,7 +58,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'operatingCentres', fetch: 'LAZY')]
     protected $licence;
 
     /**

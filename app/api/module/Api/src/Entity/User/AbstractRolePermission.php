@@ -53,7 +53,7 @@ abstract class AbstractRolePermission implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\User\Role
      */
     #[ORM\JoinColumn(name: 'role_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\Role::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\Role::class, inversedBy: 'rolePermissions', fetch: 'LAZY')]
     protected $role;
 
     /**

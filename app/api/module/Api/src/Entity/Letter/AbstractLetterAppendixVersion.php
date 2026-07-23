@@ -54,7 +54,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterAppendix
      */
     #[ORM\JoinColumn(name: 'letter_appendix_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterAppendix::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterAppendix::class, inversedBy: 'versions', fetch: 'LAZY')]
     protected $letterAppendix;
 
     /**

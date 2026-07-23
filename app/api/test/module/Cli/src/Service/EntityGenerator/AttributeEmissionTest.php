@@ -19,6 +19,7 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\BlameableTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\DefaultTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\RelationshipTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\InversedByConfig;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -158,6 +159,88 @@ final class AttributeEmissionTest extends TestCase
                 'annotation' => "#[ORM\\OneToOne(targetEntity: \\Dvsa\\Olcs\\Api\\Entity\\Cases\\Appeal::class, mappedBy: 'case')]",
             ])
         );
+    }
+
+    public function testManyToOneWithConfiguredInverseSideEmitsInversedBy(): void
+    {
+        // cf. AbstractLicenceVehicle::$licence <-> AbstractLicence::$licenceVehicles:
+        // EntityConfig's inversedBy drives the generated inverse collection, so the
+        // owning side must name it with identical pluralization
+        $table = new TableMetadata('licence_vehicle', [], [], [], [
+            ['local_columns' => ['licence_id'], 'foreign_table' => 'licence'],
+        ]);
+        $sut = new RelationshipTypeHandler();
+        $sut->setCurrentTable($table);
+        $column = new ColumnMetadata('licence_id', 'integer', null, false);
+
+        $this->assertSame(
+            "#[ORM\\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]\n    "
+            . "#[ORM\\ManyToOne(targetEntity: \\Dvsa\\Olcs\\Api\\Entity\\Licence\\Licence::class,"
+            . " inversedBy: 'licenceVehicles', fetch: 'LAZY')]",
+            $sut->generateAnnotation($column, [
+                'namespaces' => ['Licence' => 'Licence'],
+                'fieldConfig' => new FieldConfig(
+                    inversedBy: new InversedByConfig(entity: 'Licence', property: 'licenceVehicle'),
+                ),
+            ])
+        );
+    }
+
+    public function testManyToOneWithoutConfiguredInverseSideStaysUnidirectional(): void
+    {
+        $table = new TableMetadata('application', [], [], [], [
+            ['local_columns' => ['licence_id'], 'foreign_table' => 'licence'],
+        ]);
+        $sut = new RelationshipTypeHandler();
+        $sut->setCurrentTable($table);
+        $column = new ColumnMetadata('licence_id', 'integer', null, false);
+
+        $this->assertStringNotContainsString(
+            'inversedBy',
+            $sut->generateAnnotation($column, ['namespaces' => ['Licence' => 'Licence']])
+        );
+    }
+
+    public function testGenerateInverseFalseStillEmitsOwningInversedBy(): void
+    {
+        // cf. AbstractLetterInstanceChoice::$letterInstance - the inverse collection
+        // is hand-written in the concrete LetterInstance, but the owning side must
+        // still name it
+        $table = new TableMetadata('letter_instance_choice', [], [], [], [
+            ['local_columns' => ['letter_instance_id'], 'foreign_table' => 'letter_instance'],
+        ]);
+        $sut = new RelationshipTypeHandler();
+        $sut->setCurrentTable($table);
+        $column = new ColumnMetadata('letter_instance_id', 'integer', null, false);
+
+        $this->assertStringContainsString(
+            "inversedBy: 'letterInstanceChoices'",
+            $sut->generateAnnotation($column, [
+                'namespaces' => ['LetterInstance' => 'Letter'],
+                'fieldConfig' => new FieldConfig(
+                    inversedBy: new InversedByConfig(
+                        entity: 'LetterInstance',
+                        property: 'letterInstanceChoice',
+                        generateInverse: false,
+                    ),
+                ),
+            ])
+        );
+    }
+
+    public function testGenerateInverseFalseSkipsInverseCollectionGeneration(): void
+    {
+        $appRoot = dirname(__DIR__, 6);
+        $configService = new EntityConfigService($appRoot . '/data/db/EntityConfig.php');
+        $processor = new InverseRelationshipProcessor($configService, new PropertyNameResolver());
+
+        $table = new TableMetadata('letter_instance_choice', [
+            new ColumnMetadata('letter_instance_id', 'integer', null, false),
+        ], [], [], [
+            ['local_columns' => ['letter_instance_id'], 'foreign_table' => 'letter_instance'],
+        ]);
+
+        $this->assertSame([], $processor->processInverseRelationships([$table]));
     }
 
     public function testUniqueKeysAreEmittedOnlyAsUniqueConstraints(): void

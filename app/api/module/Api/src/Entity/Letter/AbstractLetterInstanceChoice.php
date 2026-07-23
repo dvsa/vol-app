@@ -54,7 +54,7 @@ abstract class AbstractLetterInstanceChoice implements BundleSerializableInterfa
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterInstance
      */
     #[ORM\JoinColumn(name: 'letter_instance_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class, inversedBy: 'letterInstanceChoices', fetch: 'LAZY')]
     protected $letterInstance;
 
     /**

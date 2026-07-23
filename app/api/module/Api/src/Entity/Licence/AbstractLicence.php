@@ -76,7 +76,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
     #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, inversedBy: 'licences', fetch: 'LAZY', cascade: ['persist'])]
     protected $organisation;
 
     /**

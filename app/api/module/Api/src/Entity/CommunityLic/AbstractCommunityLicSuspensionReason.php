@@ -57,7 +57,7 @@ abstract class AbstractCommunityLicSuspensionReason implements BundleSerializabl
      * @var \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicSuspension
      */
     #[ORM\JoinColumn(name: 'community_lic_suspension_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicSuspension::class, fetch: 'LAZY', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicSuspension::class, inversedBy: 'communityLicSuspensionReasons', fetch: 'LAZY', cascade: ['persist'])]
     protected $communityLicSuspension;
 
     /**

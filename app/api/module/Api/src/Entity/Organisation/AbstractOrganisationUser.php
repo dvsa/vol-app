@@ -54,7 +54,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
     #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, inversedBy: 'organisationUsers', fetch: 'LAZY')]
     protected $organisation;
 
     /**
@@ -63,7 +63,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, inversedBy: 'organisationUsers', fetch: 'LAZY')]
     protected $user;
 
     /**

@@ -57,7 +57,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType
      */
     #[ORM\JoinColumn(name: 'irhp_permit_type_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType::class, inversedBy: 'irhpPermitStocks', fetch: 'LAZY')]
     protected $irhpPermitType;
 
     /**
@@ -84,7 +84,7 @@ abstract class AbstractIrhpPermitStock implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
      */
     #[ORM\JoinColumn(name: 'country_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, inversedBy: 'irhpPermitStocks', fetch: 'LAZY')]
     protected $country;
 
     /**

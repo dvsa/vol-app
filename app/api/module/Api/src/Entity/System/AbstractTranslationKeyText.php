@@ -63,7 +63,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      * @var \Dvsa\Olcs\Api\Entity\System\TranslationKey
      */
     #[ORM\JoinColumn(name: 'translation_key_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\TranslationKey::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\TranslationKey::class, inversedBy: 'translationKeyTexts', fetch: 'LAZY')]
     protected $translationKey;
 
     /**

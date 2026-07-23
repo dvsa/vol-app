@@ -67,7 +67,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Address
      */
     #[ORM\JoinColumn(name: 'address_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Address::class, fetch: 'LAZY', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Address::class, inversedBy: 'contactDetails', fetch: 'LAZY', cascade: ['persist'])]
     protected $address;
 
     /**
@@ -76,7 +76,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Person\Person
      */
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, fetch: 'LAZY', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, inversedBy: 'contactDetails', fetch: 'LAZY', cascade: ['persist'])]
     protected $person;
 
     /**

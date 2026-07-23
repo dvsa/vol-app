@@ -60,7 +60,7 @@ abstract class AbstractIrhpApplication implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'irhpApplications', fetch: 'LAZY')]
     protected $licence;
 
     /**

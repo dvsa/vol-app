@@ -55,7 +55,7 @@ abstract class AbstractUserPasswordReset implements BundleSerializableInterface,
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, inversedBy: 'passwordResets', fetch: 'LAZY', cascade: ['persist'])]
     protected $user;
 
     /**

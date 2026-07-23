@@ -50,7 +50,7 @@ abstract class AbstractBusRegReadAudit implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'readAudits', fetch: 'LAZY')]
     protected $busReg;
 
     /**

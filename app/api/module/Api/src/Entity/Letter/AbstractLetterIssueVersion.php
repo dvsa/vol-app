@@ -56,7 +56,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssue
      */
     #[ORM\JoinColumn(name: 'letter_issue_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssue::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssue::class, inversedBy: 'versions', fetch: 'LAZY')]
     protected $letterIssue;
 
     /**

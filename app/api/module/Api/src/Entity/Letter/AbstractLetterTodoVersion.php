@@ -52,7 +52,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterTodo
      */
     #[ORM\JoinColumn(name: 'letter_todo_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTodo::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTodo::class, inversedBy: 'versions', fetch: 'LAZY')]
     protected $letterTodo;
 
     /**

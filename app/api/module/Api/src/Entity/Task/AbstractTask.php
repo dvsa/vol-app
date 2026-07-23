@@ -94,7 +94,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      * @var \Dvsa\Olcs\Api\Entity\User\Team
      */
     #[ORM\JoinColumn(name: 'assigned_to_team_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\Team::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\Team::class, inversedBy: 'tasks', fetch: 'LAZY')]
     protected $assignedToTeam;
 
     /**
@@ -130,7 +130,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'tasks', fetch: 'LAZY')]
     protected $application;
 
     /**
@@ -139,7 +139,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'tasks', fetch: 'LAZY')]
     protected $busReg;
 
     /**
@@ -184,7 +184,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'tasks', fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**

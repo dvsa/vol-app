@@ -54,7 +54,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
     #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, inversedBy: 'disqualifications', fetch: 'LAZY')]
     protected $organisation;
 
     /**
@@ -63,7 +63,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      * @var \Dvsa\Olcs\Api\Entity\Person\Person
      */
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, inversedBy: 'disqualifications', fetch: 'LAZY')]
     protected $person;
 
     /**

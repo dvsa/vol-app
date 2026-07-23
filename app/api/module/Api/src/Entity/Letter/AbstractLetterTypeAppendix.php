@@ -44,7 +44,7 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
      */
     #[ORM\Id]
     #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, inversedBy: 'letterTypeAppendices', fetch: 'LAZY')]
     protected $letterType;
 
     /**

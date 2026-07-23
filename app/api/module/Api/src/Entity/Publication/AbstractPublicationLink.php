@@ -64,7 +64,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Publication\Publication
      */
     #[ORM\JoinColumn(name: 'publication_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\Publication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\Publication::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
     protected $publication;
 
     /**
@@ -91,7 +91,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
     protected $licence;
 
     /**
@@ -100,7 +100,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
     protected $application;
 
     /**
@@ -109,7 +109,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Pi\Pi
      */
     #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
     protected $pi;
 
     /**
@@ -118,7 +118,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
     protected $busReg;
 
     /**

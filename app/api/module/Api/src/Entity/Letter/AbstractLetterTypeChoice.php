@@ -54,7 +54,7 @@ abstract class AbstractLetterTypeChoice implements BundleSerializableInterface, 
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
      */
     #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, inversedBy: 'letterTypeChoices', fetch: 'LAZY')]
     protected $letterType;
 
     /**

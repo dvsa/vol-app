@@ -53,7 +53,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
      * @var \Dvsa\Olcs\Api\Entity\Generic\Question
      */
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\Question::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\Question::class, inversedBy: 'questionTexts', fetch: 'LAZY')]
     protected $question;
 
     /**

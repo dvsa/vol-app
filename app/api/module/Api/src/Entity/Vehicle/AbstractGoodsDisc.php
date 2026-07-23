@@ -55,7 +55,7 @@ abstract class AbstractGoodsDisc implements BundleSerializableInterface, JsonSer
      * @var \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle
      */
     #[ORM\JoinColumn(name: 'licence_vehicle_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle::class, inversedBy: 'goodsDiscs', fetch: 'LAZY')]
     protected $licenceVehicle;
 
     /**

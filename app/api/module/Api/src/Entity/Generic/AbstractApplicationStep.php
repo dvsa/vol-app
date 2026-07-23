@@ -53,7 +53,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Generic\ApplicationPath
      */
     #[ORM\JoinColumn(name: 'application_path_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationPath::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationPath::class, inversedBy: 'applicationSteps', fetch: 'LAZY')]
     protected $applicationPath;
 
     /**

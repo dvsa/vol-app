@@ -70,7 +70,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'users', fetch: 'LAZY')]
     protected $transportManager;
 
     /**
@@ -79,7 +79,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
      * @var \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority
      */
     #[ORM\JoinColumn(name: 'local_authority_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority::class, inversedBy: 'users', fetch: 'LAZY')]
     protected $localAuthority;
 
     /**

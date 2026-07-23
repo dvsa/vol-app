@@ -53,7 +53,7 @@ abstract class AbstractProhibitionDefect implements BundleSerializableInterface,
      * @var \Dvsa\Olcs\Api\Entity\Prohibition\Prohibition
      */
     #[ORM\JoinColumn(name: 'prohibition_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Prohibition\Prohibition::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Prohibition\Prohibition::class, inversedBy: 'defects', fetch: 'LAZY')]
     protected $prohibition;
 
     /**

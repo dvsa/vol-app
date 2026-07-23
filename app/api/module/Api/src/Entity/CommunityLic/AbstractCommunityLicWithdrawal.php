@@ -56,7 +56,7 @@ abstract class AbstractCommunityLicWithdrawal implements BundleSerializableInter
      * @var \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic
      */
     #[ORM\JoinColumn(name: 'community_lic_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic::class, fetch: 'LAZY', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic::class, inversedBy: 'communityLicWithdrawals', fetch: 'LAZY', cascade: ['persist'])]
     protected $communityLic;
 
     /**

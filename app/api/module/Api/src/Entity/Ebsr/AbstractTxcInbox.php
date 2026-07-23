@@ -57,7 +57,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'txcInboxs', fetch: 'LAZY')]
     protected $busReg;
 
     /**

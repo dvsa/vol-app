@@ -71,7 +71,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      */
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'ebsrSubmission', fetch: 'LAZY')]
     protected $document;
 
     /**
@@ -80,7 +80,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'ebsrSubmissions', fetch: 'LAZY')]
     protected $busReg;
 
     /**

@@ -56,7 +56,7 @@ abstract class AbstractChangeOfEntity implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'changeOfEntitys', fetch: 'LAZY')]
     protected $licence;
 
     /**

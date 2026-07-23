@@ -55,7 +55,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant
      */
     #[ORM\JoinColumn(name: 'letter_section_variant_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant::class, inversedBy: 'versions', fetch: 'LAZY')]
     protected $letterSectionVariant;
 
     /**

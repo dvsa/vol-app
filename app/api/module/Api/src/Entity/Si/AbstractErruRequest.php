@@ -62,7 +62,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
     #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
-    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'erruRequest', fetch: 'LAZY')]
     protected $case;
 
     /**
@@ -71,7 +71,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      */
     #[ORM\JoinColumn(name: 'request_document_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'requestErru', fetch: 'LAZY')]
     protected $requestDocument;
 
     /**
@@ -80,7 +80,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      */
     #[ORM\JoinColumn(name: 'response_document_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'responseErru', fetch: 'LAZY')]
     protected $responseDocument;
 
     /**

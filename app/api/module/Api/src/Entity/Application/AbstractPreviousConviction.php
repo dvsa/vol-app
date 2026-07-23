@@ -57,7 +57,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'previousConvictions', fetch: 'LAZY')]
     protected $application;
 
     /**
@@ -66,7 +66,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'previousConvictions', fetch: 'LAZY')]
     protected $transportManager;
 
     /**

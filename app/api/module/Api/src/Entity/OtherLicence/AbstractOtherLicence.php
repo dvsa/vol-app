@@ -60,7 +60,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'otherLicences', fetch: 'LAZY')]
     protected $application;
 
     /**
@@ -69,7 +69,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'otherLicences', fetch: 'LAZY')]
     protected $transportManager;
 
     /**
@@ -78,7 +78,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence
      */
     #[ORM\JoinColumn(name: 'transport_manager_licence_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence::class, inversedBy: 'otherLicences', fetch: 'LAZY')]
     protected $transportManagerLicence;
 
     /**
@@ -87,7 +87,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication
      */
     #[ORM\JoinColumn(name: 'transport_manager_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication::class, inversedBy: 'otherLicences', fetch: 'LAZY')]
     protected $transportManagerApplication;
 
     /**

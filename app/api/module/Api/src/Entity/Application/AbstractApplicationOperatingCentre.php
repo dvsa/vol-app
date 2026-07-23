@@ -58,7 +58,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'operatingCentres', fetch: 'LAZY')]
     protected $application;
 
     /**
@@ -67,7 +67,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
      */
     #[ORM\JoinColumn(name: 'operating_centre_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre::class, inversedBy: 'applications', fetch: 'LAZY')]
     protected $operatingCentre;
 
     /**
@@ -76,7 +76,7 @@ abstract class AbstractApplicationOperatingCentre implements BundleSerializableI
      * @var \Dvsa\Olcs\Api\Entity\Application\S4
      */
     #[ORM\JoinColumn(name: 's4_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\S4::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\S4::class, inversedBy: 'aocs', fetch: 'LAZY')]
     protected $s4;
 
     /**

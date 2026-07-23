@@ -53,7 +53,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
-    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'shortNotice', fetch: 'LAZY')]
     protected $busReg;
 
     /**

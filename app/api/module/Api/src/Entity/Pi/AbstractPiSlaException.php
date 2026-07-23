@@ -53,7 +53,7 @@ abstract class AbstractPiSlaException implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Pi\Pi
      */
     #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, inversedBy: 'piSlaExceptions', fetch: 'LAZY')]
     protected $pi;
 
     /**

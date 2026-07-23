@@ -54,7 +54,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      * @var \Dvsa\Olcs\Api\Entity\Publication\PublicationLink
      */
     #[ORM\JoinColumn(name: 'publication_link_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationLink::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationLink::class, inversedBy: 'policeDatas', fetch: 'LAZY')]
     protected $publicationLink;
 
     /**

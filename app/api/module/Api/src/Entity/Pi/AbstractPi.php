@@ -64,7 +64,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
     #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
-    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'publicInquiry', fetch: 'LAZY')]
     protected $case;
 
     /**

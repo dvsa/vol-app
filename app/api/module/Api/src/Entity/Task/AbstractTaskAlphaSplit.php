@@ -53,7 +53,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule
      */
     #[ORM\JoinColumn(name: 'task_allocation_rule_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule::class, inversedBy: 'taskAlphaSplits', fetch: 'LAZY')]
     protected $taskAllocationRule;
 
     /**

@@ -55,7 +55,7 @@ abstract class AbstractIrfoPsvAuthNumber implements BundleSerializableInterface,
      * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth
      */
     #[ORM\JoinColumn(name: 'irfo_psv_auth_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth::class, inversedBy: 'irfoPsvAuthNumbers', fetch: 'LAZY')]
     protected $irfoPsvAuth;
 
     /**

@@ -44,7 +44,7 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      */
     #[ORM\Id]
     #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, inversedBy: 'letterTypeSections', fetch: 'LAZY')]
     protected $letterType;
 
     /**

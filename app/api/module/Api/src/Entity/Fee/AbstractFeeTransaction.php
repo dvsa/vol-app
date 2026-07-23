@@ -54,7 +54,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Fee\Fee
      */
     #[ORM\JoinColumn(name: 'fee_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, fetch: 'LAZY', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, inversedBy: 'feeTransactions', fetch: 'LAZY', cascade: ['persist'])]
     protected $fee;
 
     /**
@@ -63,7 +63,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Fee\Transaction
      */
     #[ORM\JoinColumn(name: 'txn_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Transaction::class, fetch: 'LAZY', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Transaction::class, inversedBy: 'feeTransactions', fetch: 'LAZY', cascade: ['persist'])]
     protected $transaction;
 
     /**
@@ -72,7 +72,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction
      */
     #[ORM\JoinColumn(name: 'reversed_fee_txn_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction::class, inversedBy: 'reversingFeeTransactions', fetch: 'LAZY')]
     protected $reversedFeeTransaction;
 
     /**

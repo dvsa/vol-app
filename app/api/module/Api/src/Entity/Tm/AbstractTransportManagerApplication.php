@@ -63,7 +63,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'tmApplications', fetch: 'LAZY')]
     protected $transportManager;
 
     /**
@@ -72,7 +72,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'transportManagers', fetch: 'LAZY')]
     protected $application;
 
     /**

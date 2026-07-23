@@ -53,7 +53,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
      */
     #[ORM\JoinColumn(name: 'submission_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\Submission::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\Submission::class, inversedBy: 'submissionSectionComments', fetch: 'LAZY')]
     protected $submission;
 
     /**

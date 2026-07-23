@@ -63,7 +63,7 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage
      */
     #[ORM\JoinColumn(name: 'messaging_message_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage::class, inversedBy: 'userMessageReads', fetch: 'LAZY')]
     protected $messagingMessage;
 
     /**

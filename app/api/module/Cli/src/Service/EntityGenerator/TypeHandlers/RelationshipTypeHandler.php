@@ -6,6 +6,8 @@ namespace Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers;
 
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\ColumnMetadata;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\TableMetadata;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig;
 
 /**
  * Type handler for relationship columns (foreign keys)
@@ -13,6 +15,13 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\TableMetadata;
 class RelationshipTypeHandler extends AbstractTypeHandler
 {
     private ?TableMetadata $currentTable = null;
+
+    private readonly PropertyNameResolver $propertyNameResolver;
+
+    public function __construct()
+    {
+        $this->propertyNameResolver = new PropertyNameResolver();
+    }
 
     /**
      * Set the current table being processed
@@ -55,8 +64,18 @@ class RelationshipTypeHandler extends AbstractTypeHandler
 
         $options = [
             'targetEntity: \\' . ltrim($targetEntity, '\\') . '::class',
-            "fetch: 'LAZY'"
         ];
+
+        // When EntityConfig declares an inversedBy for this column the
+        // InverseRelationshipProcessor generates the inverse side with mappedBy,
+        // so the owning side must name it - resolved with the same pluralization
+        // rules so the pair always matches.
+        $inversedBy = $this->getInversedByProperty($config, !$isOneToOne);
+        if ($inversedBy !== null) {
+            $options[] = "inversedBy: '" . $inversedBy . "'";
+        }
+
+        $options[] = "fetch: 'LAZY'";
 
         $joinOptions = [
             "name: '" . $column->getName() . "'",
@@ -113,6 +132,24 @@ class RelationshipTypeHandler extends AbstractTypeHandler
         }
 
         return implode("\n    ", $annotations);
+    }
+
+    /**
+     * Resolve the inverse-side property name for this owning side, if and only
+     * if EntityConfig declares an inversedBy for the column - the same condition
+     * under which InverseRelationshipProcessor generates that inverse side.
+     */
+    private function getInversedByProperty(array $config, bool $isCollection): ?string
+    {
+        $fieldConfig = $config['fieldConfig'] ?? null;
+
+        if (!$fieldConfig instanceof FieldConfig || $fieldConfig->inversedBy === null) {
+            return null;
+        }
+
+        $property = $fieldConfig->inversedBy->property;
+
+        return $this->propertyNameResolver->resolvePropertyName($property, $isCollection, $property);
     }
 
     /**

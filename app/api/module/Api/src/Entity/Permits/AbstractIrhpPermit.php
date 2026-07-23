@@ -65,7 +65,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange
      */
     #[ORM\JoinColumn(name: 'irhp_permit_range_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange::class, inversedBy: 'irhpPermits', fetch: 'LAZY')]
     protected $irhpPermitRange;
 
     /**
@@ -74,7 +74,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
      */
     #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, inversedBy: 'irhpPermits', fetch: 'LAZY')]
     protected $irhpPermitApplication;
 
     /**
@@ -83,7 +83,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit
      */
     #[ORM\JoinColumn(name: 'irhp_candidate_permit_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit::class, inversedBy: 'irhpPermits', fetch: 'LAZY')]
     protected $irhpCandidatePermit;
 
     /**

@@ -50,7 +50,7 @@ abstract class AbstractOrganisationReadAudit implements BundleSerializableInterf
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
     #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, inversedBy: 'readAudits', fetch: 'LAZY')]
     protected $organisation;
 
     /**

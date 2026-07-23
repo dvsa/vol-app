@@ -58,7 +58,7 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'tmLicences', fetch: 'LAZY')]
     protected $transportManager;
 
     /**
@@ -67,7 +67,7 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'tmLicences', fetch: 'LAZY')]
     protected $licence;
 
     /**

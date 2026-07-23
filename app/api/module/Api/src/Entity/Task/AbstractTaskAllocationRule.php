@@ -75,7 +75,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
      * @var \Dvsa\Olcs\Api\Entity\User\Team
      */
     #[ORM\JoinColumn(name: 'team_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\Team::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\Team::class, inversedBy: 'taskAllocationRules', fetch: 'LAZY')]
     protected $team;
 
     /**

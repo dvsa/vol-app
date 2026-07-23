@@ -49,7 +49,7 @@ abstract class AbstractCompaniesHouseOfficer implements BundleSerializableInterf
      * @var \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany
      */
     #[ORM\JoinColumn(name: 'companies_house_company_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany::class, inversedBy: 'officers', fetch: 'LAZY')]
     protected $companiesHouseCompany;
 
     /**

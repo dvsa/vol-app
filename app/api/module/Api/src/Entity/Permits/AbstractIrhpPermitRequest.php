@@ -53,7 +53,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'irhpPermitRequests', fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**
@@ -62,7 +62,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
      */
     #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, inversedBy: 'irhpPermitRequests', fetch: 'LAZY')]
     protected $irhpPermitApplication;
 
     /**

@@ -55,7 +55,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
     #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
-    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'appeal', fetch: 'LAZY')]
     protected $case;
 
     /**

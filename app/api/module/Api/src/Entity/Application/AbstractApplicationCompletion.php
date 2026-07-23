@@ -53,7 +53,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id')]
-    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'applicationCompletion', fetch: 'LAZY')]
     protected $application;
 
     /**

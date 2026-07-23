@@ -55,7 +55,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      * @var \Dvsa\Olcs\Api\Entity\Person\Person
      */
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, inversedBy: 'applicationOrganisationPersons', fetch: 'LAZY')]
     protected $person;
 
     /**
@@ -82,7 +82,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'applicationOrganisationPersons', fetch: 'LAZY')]
     protected $application;
 
     /**

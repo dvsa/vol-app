@@ -52,7 +52,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
      */
     #[ORM\JoinColumn(name: 'submission_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\Submission::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\Submission::class, inversedBy: 'submissionActions', fetch: 'LAZY')]
     protected $submission;
 
     /**

@@ -54,7 +54,7 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
      * @var \Dvsa\Olcs\Api\Entity\Doc\DocBookmark
      */
     #[ORM\JoinColumn(name: 'doc_bookmark_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocBookmark::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocBookmark::class, inversedBy: 'docParagraphBookmarks', fetch: 'LAZY')]
     protected $docBookmark;
 
     /**

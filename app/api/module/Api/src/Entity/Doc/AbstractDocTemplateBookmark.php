@@ -54,7 +54,7 @@ abstract class AbstractDocTemplateBookmark implements BundleSerializableInterfac
      * @var \Dvsa\Olcs\Api\Entity\Doc\DocTemplate
      */
     #[ORM\JoinColumn(name: 'doc_template_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocTemplate::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocTemplate::class, inversedBy: 'docTemplateBookmarks', fetch: 'LAZY')]
     protected $docTemplate;
 
     /**

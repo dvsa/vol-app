@@ -54,7 +54,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterInstance
      */
     #[ORM\JoinColumn(name: 'letter_instance_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class, inversedBy: 'letterInstanceTodos', fetch: 'LAZY')]
     protected $letterInstance;
 
     /**
@@ -63,7 +63,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue
      */
     #[ORM\JoinColumn(name: 'letter_instance_issue_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue::class, inversedBy: 'letterInstanceTodos', fetch: 'LAZY')]
     protected $letterInstanceIssue;
 
     /**

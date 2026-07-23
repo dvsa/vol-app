@@ -74,7 +74,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'irhpPermitApplications', fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**

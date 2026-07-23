@@ -85,7 +85,7 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      */
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'templates', fetch: 'LAZY')]
     protected $document;
 
     /**

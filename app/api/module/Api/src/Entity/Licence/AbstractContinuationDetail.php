@@ -67,7 +67,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'continuationDetails', fetch: 'LAZY')]
     protected $licence;
 
     /**
@@ -76,7 +76,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      */
     #[ORM\JoinColumn(name: 'checklist_document_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'continuationDetails', fetch: 'LAZY')]
     protected $checklistDocument;
 
     /**

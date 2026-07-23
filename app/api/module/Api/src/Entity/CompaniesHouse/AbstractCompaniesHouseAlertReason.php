@@ -45,7 +45,7 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
      * @var \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert
      */
     #[ORM\JoinColumn(name: 'companies_house_alert_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert::class, inversedBy: 'reasons', fetch: 'LAZY')]
     protected $companiesHouseAlert;
 
     /**

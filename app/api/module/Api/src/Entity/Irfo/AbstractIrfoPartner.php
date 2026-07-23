@@ -53,7 +53,7 @@ abstract class AbstractIrfoPartner implements BundleSerializableInterface, JsonS
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
     #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, inversedBy: 'irfoPartners', fetch: 'LAZY')]
     protected $organisation;
 
     /**

@@ -56,7 +56,7 @@ abstract class AbstractPiHearing implements BundleSerializableInterface, JsonSer
      * @var \Dvsa\Olcs\Api\Entity\Pi\Pi
      */
     #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, inversedBy: 'piHearings', fetch: 'LAZY')]
     protected $pi;
 
     /**

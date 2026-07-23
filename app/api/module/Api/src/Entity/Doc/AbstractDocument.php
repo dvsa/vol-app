@@ -72,7 +72,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
      */
     #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $trafficArea;
 
     /**
@@ -99,7 +99,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $licence;
 
     /**
@@ -108,7 +108,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $application;
 
     /**
@@ -117,7 +117,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
     #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $case;
 
     /**
@@ -126,7 +126,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $transportManager;
 
     /**
@@ -144,7 +144,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
      */
     #[ORM\JoinColumn(name: 'operating_centre_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre::class, inversedBy: 'adDocuments', fetch: 'LAZY')]
     protected $operatingCentre;
 
     /**
@@ -153,7 +153,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $busReg;
 
     /**
@@ -171,7 +171,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
      */
     #[ORM\JoinColumn(name: 'submission_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\Submission::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\Submission::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $submission;
 
     /**
@@ -198,7 +198,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**
@@ -216,7 +216,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage
      */
     #[ORM\JoinColumn(name: 'messaging_message_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $messagingMessage;
 
     /**

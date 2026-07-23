@@ -63,7 +63,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
      */
     #[ORM\JoinColumn(name: 'contact_details_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, inversedBy: 'phoneContacts', fetch: 'LAZY')]
     protected $contactDetails;
 
     /**

@@ -62,7 +62,7 @@ abstract class AbstractIrhpPermitJurisdictionQuota implements BundleSerializable
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock
      */
     #[ORM\JoinColumn(name: 'irhp_permit_stock_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock::class, inversedBy: 'irhpPermitJurisdictionQuotas', fetch: 'LAZY')]
     protected $irhpPermitStock;
 
     /**

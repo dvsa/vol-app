@@ -57,7 +57,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      * @var \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested
      */
     #[ORM\JoinColumn(name: 'si_penalty_erru_requested_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested::class, inversedBy: 'appliedPenalties', fetch: 'LAZY')]
     protected $siPenaltyErruRequested;
 
     /**
@@ -66,7 +66,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      * @var \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement
      */
     #[ORM\JoinColumn(name: 'serious_infringement_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement::class, inversedBy: 'appliedPenalties', fetch: 'LAZY')]
     protected $seriousInfringement;
 
     /**
