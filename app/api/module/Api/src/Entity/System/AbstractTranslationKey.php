@@ -25,7 +25,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Table(name: 'translation_key')]
 #[ORM\Index(name: 'fk_translation_key_users_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'fk_translation_key_users_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'translation_key_translation_key_uindex', columns: ['translation_key'])]
 #[ORM\UniqueConstraint(name: 'translation_key_translation_key_uindex', columns: ['translation_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

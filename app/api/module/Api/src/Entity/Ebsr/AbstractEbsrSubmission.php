@@ -26,8 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_ebsr_submission_ebsr_submission_status_id', columns: ['ebsr_submission_status_id'])]
 #[ORM\Index(name: 'ix_ebsr_submission_ebsr_submission_type_id', columns: ['ebsr_submission_type_id'])]
 #[ORM\Index(name: 'ix_ebsr_submission_organisation_id', columns: ['organisation_id'])]
-#[ORM\Index(name: 'uk_ebsr_submission_document_id', columns: ['document_id'])]
-#[ORM\Index(name: 'uk_ebsr_submission_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_ebsr_submission_document_id', columns: ['document_id'])]
 #[ORM\UniqueConstraint(name: 'uk_ebsr_submission_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]

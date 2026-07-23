@@ -21,7 +21,6 @@ use Doctrine\Common\Collections\Collection;
  */
 #[ORM\Table(name: 'sub_category_description')]
 #[ORM\Index(name: 'ix_sub_category_description_sub_category_id', columns: ['sub_category_id'])]
-#[ORM\Index(name: 'uk_sub_category_description_sub_category_id_description', columns: ['sub_category_id', 'description'])]
 #[ORM\UniqueConstraint(name: 'uk_sub_category_description_sub_category_id_description', columns: ['sub_category_id', 'description'])]
 #[ORM\MappedSuperclass]
 abstract class AbstractSubCategoryDescription implements BundleSerializableInterface, JsonSerializable, \Stringable

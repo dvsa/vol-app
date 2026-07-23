@@ -31,7 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_hearing_outcome', columns: ['outcome'])]
 #[ORM\Index(name: 'ix_hearing_presiding_tc_id', columns: ['presiding_tc_id'])]
 #[ORM\Index(name: 'ix_hearing_venue_id', columns: ['venue_id'])]
-#[ORM\Index(name: 'uk_hearing_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\UniqueConstraint(name: 'uk_hearing_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

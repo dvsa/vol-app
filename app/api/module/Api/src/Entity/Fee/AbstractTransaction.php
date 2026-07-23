@@ -32,7 +32,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_txn_status', columns: ['status'])]
 #[ORM\Index(name: 'ix_txn_type', columns: ['type'])]
 #[ORM\Index(name: 'ix_txn_waive_recommender_user_id', columns: ['waive_recommender_user_id'])]
-#[ORM\Index(name: 'uk_txn_receipt_document_id', columns: ['receipt_document_id'])]
 #[ORM\UniqueConstraint(name: 'uk_txn_receipt_document_id', columns: ['receipt_document_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

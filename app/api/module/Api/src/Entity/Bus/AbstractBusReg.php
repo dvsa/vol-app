@@ -33,8 +33,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_bus_reg_status', columns: ['status'])]
 #[ORM\Index(name: 'ix_bus_reg_subsidised', columns: ['subsidised'])]
 #[ORM\Index(name: 'ix_bus_reg_withdrawn_reason', columns: ['withdrawn_reason'])]
-#[ORM\Index(name: 'uk_bus_reg_olbs_key', columns: ['olbs_key'])]
-#[ORM\Index(name: 'uk_bus_reg_reg_no_variation_no_deleted_date', columns: ['reg_no', 'variation_no', 'deleted_date'])]
 #[ORM\UniqueConstraint(name: 'uk_bus_reg_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_bus_reg_reg_no_variation_no_deleted_date', columns: ['reg_no', 'variation_no', 'deleted_date'])]
 #[ORM\MappedSuperclass]
@@ -560,7 +558,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
     #[ORM\JoinTable(name: 'bus_reg_variation_reason')]
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'variation_reason_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'busRegs', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $variationReasons;
 
     /**

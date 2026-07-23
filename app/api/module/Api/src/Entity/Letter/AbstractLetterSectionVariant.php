@@ -31,7 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_letter_section_variant_letter_choice_id', columns: ['letter_choice_id'])]
 #[ORM\Index(name: 'ix_letter_section_variant_letter_section_id', columns: ['letter_section_id'])]
 #[ORM\Index(name: 'ix_letter_section_variant_organisation_type', columns: ['organisation_type'])]
-#[ORM\Index(name: 'uk_letter_section_variant_conditions', columns: ['letter_section_id', 'goods_or_psv', 'is_variation', 'is_ni', 'organisation_type', 'letter_choice_id'])]
 #[ORM\UniqueConstraint(name: 'uk_letter_section_variant_conditions', columns: ['letter_section_id', 'goods_or_psv', 'is_variation', 'is_ni', 'organisation_type', 'letter_choice_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

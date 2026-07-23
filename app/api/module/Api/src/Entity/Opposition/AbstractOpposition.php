@@ -31,7 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_opposition_opposer_id', columns: ['opposer_id'])]
 #[ORM\Index(name: 'ix_opposition_opposition_type', columns: ['opposition_type'])]
 #[ORM\Index(name: 'ix_opposition_status', columns: ['status'])]
-#[ORM\Index(name: 'uk_opposition_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\UniqueConstraint(name: 'uk_opposition_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -220,7 +219,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     #[ORM\JoinTable(name: 'opposition_grounds')]
     #[ORM\JoinColumn(name: 'opposition_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'ground_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'oppositions', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $grounds;
 
     /**

@@ -31,7 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_continuation_detail_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_continuation_detail_licence_id', columns: ['licence_id'])]
 #[ORM\Index(name: 'ix_continuation_detail_status', columns: ['status'])]
-#[ORM\Index(name: 'uk_continuation_detail_licence_id_continuation_id', columns: ['licence_id', 'continuation_id'])]
 #[ORM\UniqueConstraint(name: 'uk_continuation_detail_licence_id_continuation_id', columns: ['licence_id', 'continuation_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

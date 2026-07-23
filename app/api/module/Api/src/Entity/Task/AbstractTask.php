@@ -24,7 +24,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 #[ORM\Table(name: 'task')]
 #[ORM\Index(name: 'ix_task_assigned_by_user_id', columns: ['assigned_by_user_id'])]
-#[ORM\Index(name: 'uk_task_olbs_key', columns: ['olbs_key'])]
 #[ORM\Index(name: 'ix_task_transport_manager_id', columns: ['transport_manager_id'])]
 #[ORM\Index(name: 'ix_task_surrender_id', columns: ['surrender_id'])]
 #[ORM\Index(name: 'ix_task_submission_id', columns: ['submission_id'])]

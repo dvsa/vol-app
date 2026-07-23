@@ -29,7 +29,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_pi_hearing_presided_by_role', columns: ['presided_by_role'])]
 #[ORM\Index(name: 'ix_pi_hearing_presiding_tc_id', columns: ['presiding_tc_id'])]
 #[ORM\Index(name: 'ix_pi_hearing_venue_id', columns: ['venue_id'])]
-#[ORM\Index(name: 'uk_pi_hearing_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\UniqueConstraint(name: 'uk_pi_hearing_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

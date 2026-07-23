@@ -33,7 +33,6 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\Index(name: 'ix_event_history_task_id', columns: ['task_id'])]
 #[ORM\Index(name: 'ix_event_history_transport_manager_id', columns: ['transport_manager_id'])]
 #[ORM\Index(name: 'ix_event_history_user_id', columns: ['user_id'])]
-#[ORM\Index(name: 'uk_event_history_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\UniqueConstraint(name: 'uk_event_history_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\MappedSuperclass]
 abstract class AbstractEventHistory implements BundleSerializableInterface, JsonSerializable, \Stringable

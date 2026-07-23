@@ -23,7 +23,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @source OLCS-Entity-Generator-v2
  */
 #[ORM\Table(name: 'letter_issue_type')]
-#[ORM\Index(name: 'code', columns: ['code'])]
 #[ORM\UniqueConstraint(name: 'code', columns: ['code'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

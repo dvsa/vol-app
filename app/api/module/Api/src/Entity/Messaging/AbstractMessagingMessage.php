@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'fk_messaging_message_created_by_user_id', columns: ['created_by'])]
 #[ORM\Index(name: 'fk_messaging_message_last_modified_by_user_id', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'fk_messaging_message_messaging_conversation_id', columns: ['messaging_conversation_id'])]
-#[ORM\Index(name: 'message_content_id', columns: ['messaging_content_id'])]
 #[ORM\UniqueConstraint(name: 'message_content_id', columns: ['messaging_content_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

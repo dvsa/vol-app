@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_prohibition_defect_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_prohibition_defect_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_prohibition_defect_prohibition_id', columns: ['prohibition_id'])]
-#[ORM\Index(name: 'uk_prohibition_defect_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_prohibition_defect_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

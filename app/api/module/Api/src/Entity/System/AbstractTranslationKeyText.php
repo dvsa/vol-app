@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'fk_translation_key_text_languages1_idx', columns: ['language_id'])]
 #[ORM\Index(name: 'fk_translation_key_text_users_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'fk_translation_key_text_users_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'one_transText_per_lang', columns: ['language_id', 'translation_key_id'])]
 #[ORM\Index(name: 'translation_key_text_translation_key_id_fk', columns: ['translation_key_id'])]
 #[ORM\UniqueConstraint(name: 'one_transText_per_lang', columns: ['language_id', 'translation_key_id'])]
 #[ORM\MappedSuperclass]

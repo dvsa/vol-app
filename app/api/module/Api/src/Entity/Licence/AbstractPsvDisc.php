@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_psv_disc_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_psv_disc_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_psv_disc_licence_id', columns: ['licence_id'])]
-#[ORM\Index(name: 'uk_psv_disc_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_psv_disc_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

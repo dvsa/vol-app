@@ -30,7 +30,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_conviction_defendant_type', columns: ['defendant_type'])]
 #[ORM\Index(name: 'ix_conviction_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_conviction_transport_manager_id', columns: ['transport_manager_id'])]
-#[ORM\Index(name: 'uk_conviction_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_conviction_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

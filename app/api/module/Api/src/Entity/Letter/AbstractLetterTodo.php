@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'fk_letter_todo_current_version_id', columns: ['current_version_id'])]
 #[ORM\Index(name: 'ix_letter_todo_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_letter_todo_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'uk_letter_todo_key', columns: ['todo_key'])]
 #[ORM\UniqueConstraint(name: 'uk_letter_todo_key', columns: ['todo_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

@@ -29,7 +29,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_tm_qualification_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_tm_qualification_qualification_type', columns: ['qualification_type'])]
 #[ORM\Index(name: 'ix_tm_qualification_transport_manager_id', columns: ['transport_manager_id'])]
-#[ORM\Index(name: 'uk_tm_qualification_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_tm_qualification_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

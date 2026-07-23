@@ -28,7 +28,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_tm_case_decision_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_tm_case_decision_decision', columns: ['decision'])]
 #[ORM\Index(name: 'ix_tm_case_decision_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'uk_tm_case_decision_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_tm_case_decision_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -171,7 +170,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     #[ORM\JoinTable(name: 'tm_case_decision_rehab')]
     #[ORM\JoinColumn(name: 'tm_case_decision_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'rehab_measure_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'tmCaseDecisions', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $rehabMeasures;
 
     /**
@@ -182,7 +181,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     #[ORM\JoinTable(name: 'tm_case_decision_unfitness')]
     #[ORM\JoinColumn(name: 'tm_case_decision_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'unfitness_reason_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'tmCaseDecisions', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $unfitnessReasons;
 
     /**

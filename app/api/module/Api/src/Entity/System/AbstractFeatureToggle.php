@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_feature_toggle_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_feature_toggle_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_feature_toggle_status', columns: ['status'])]
-#[ORM\Index(name: 'uk_feature_toggle_config_name', columns: ['config_name'])]
 #[ORM\UniqueConstraint(name: 'uk_feature_toggle_config_name', columns: ['config_name'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

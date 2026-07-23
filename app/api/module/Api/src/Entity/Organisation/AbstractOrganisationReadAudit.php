@@ -24,7 +24,6 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\Index(name: 'ix_organisation_read_audit_created_on', columns: ['created_on'])]
 #[ORM\Index(name: 'ix_organisation_read_audit_organisation_id', columns: ['organisation_id'])]
 #[ORM\Index(name: 'ix_organisation_read_audit_user_id', columns: ['user_id'])]
-#[ORM\Index(name: 'uk_organisation_read_audit_organisation_id_user_id_created_on', columns: ['organisation_id', 'user_id', 'created_on'])]
 #[ORM\UniqueConstraint(name: 'uk_organisation_read_audit_organisation_id_user_id_created_on', columns: ['organisation_id', 'user_id', 'created_on'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

@@ -35,7 +35,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_publication_link_publication_section_id', columns: ['publication_section_id'])]
 #[ORM\Index(name: 'ix_publication_link_traffic_area_id', columns: ['traffic_area_id'])]
 #[ORM\Index(name: 'ix_publication_link_transport_manager_id', columns: ['transport_manager_id'])]
-#[ORM\Index(name: 'uk_publication_link_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\UniqueConstraint(name: 'uk_publication_link_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

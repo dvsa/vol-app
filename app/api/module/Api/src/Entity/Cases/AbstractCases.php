@@ -214,7 +214,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     #[ORM\JoinTable(name: 'case_category')]
     #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'category_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'cases', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $categorys;
 
     /**
@@ -225,7 +225,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     #[ORM\JoinTable(name: 'case_outcome')]
     #[ORM\JoinColumn(name: 'cases_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'outcome_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'cases', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $outcomes;
 
     /**

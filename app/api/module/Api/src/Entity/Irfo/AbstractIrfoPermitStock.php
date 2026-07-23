@@ -28,7 +28,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_irfo_permit_stock_irfo_gv_permit_id', columns: ['irfo_gv_permit_id'])]
 #[ORM\Index(name: 'ix_irfo_permit_stock_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_irfo_permit_stock_status', columns: ['status'])]
-#[ORM\Index(name: 'uk_irfo_permit_stock_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_irfo_permit_stock_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

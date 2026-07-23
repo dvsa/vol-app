@@ -23,7 +23,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @source OLCS-Entity-Generator-v2
  */
 #[ORM\Table(name: 'messaging_user_message_read')]
-#[ORM\Index(name: 'ck_unique_user_id_message_id', columns: ['user_id', 'messaging_message_id'])]
 #[ORM\Index(name: 'fk_messaging_user_message_read_created_by_user_id', columns: ['created_by'])]
 #[ORM\Index(name: 'fk_messaging_user_message_read_last_modified_by_user_id', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'fk_messaging_user_message_read_messaging_message_id', columns: ['messaging_message_id'])]

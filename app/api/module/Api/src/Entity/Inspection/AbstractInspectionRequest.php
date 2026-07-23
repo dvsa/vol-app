@@ -34,7 +34,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_inspection_request_requestor_user_id', columns: ['requestor_user_id'])]
 #[ORM\Index(name: 'ix_inspection_request_result_type', columns: ['result_type'])]
 #[ORM\Index(name: 'ix_inspection_request_task_id', columns: ['task_id'])]
-#[ORM\Index(name: 'uk_inspection_request_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_inspection_request_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

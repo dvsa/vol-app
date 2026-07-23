@@ -31,7 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_sla_target_date_propose_to_revoke_idx', columns: ['propose_to_revoke_id'])]
 #[ORM\Index(name: 'ix_sla_target_date_sla_id', columns: ['sla_id'])]
 #[ORM\Index(name: 'ix_sla_target_date_submission_id', columns: ['submission_id'])]
-#[ORM\Index(name: 'uk_sla_target_date_document_id', columns: ['document_id'])]
 #[ORM\UniqueConstraint(name: 'uk_sla_target_date_document_id', columns: ['document_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

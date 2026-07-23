@@ -27,7 +27,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'fk_answer_irhp_permit_application_id_irhp_permit_application_id', columns: ['irhp_permit_application_id'])]
 #[ORM\Index(name: 'fk_answer_last_modified_by_user_id', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_answer_question_text_id', columns: ['question_text_id'])]
-#[ORM\Index(name: 'uk_answer_irhp_application_id_question_text_id', columns: ['irhp_application_id', 'irhp_permit_application_id', 'question_text_id'])]
 #[ORM\Index(name: 'IDX_DADD4A25DC41CE69', columns: ['irhp_application_id'])]
 #[ORM\UniqueConstraint(name: 'uk_answer_irhp_application_id_question_text_id', columns: ['irhp_application_id', 'irhp_permit_application_id', 'question_text_id'])]
 #[ORM\MappedSuperclass]

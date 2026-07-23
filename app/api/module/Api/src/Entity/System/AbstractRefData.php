@@ -23,7 +23,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Table(name: 'ref_data')]
 #[ORM\Index(name: 'ix_ref_data_parent_id', columns: ['parent_id'])]
 #[ORM\Index(name: 'ix_ref_data_ref_data_category_id', columns: ['ref_data_category_id'])]
-#[ORM\Index(name: 'uk_ref_data_ref_data_category_id_olbs_key', columns: ['ref_data_category_id', 'olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_ref_data_ref_data_category_id_olbs_key', columns: ['ref_data_category_id', 'olbs_key'])]
 #[ORM\MappedSuperclass]
 abstract class AbstractRefData implements BundleSerializableInterface, JsonSerializable, \Stringable

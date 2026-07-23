@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'fk_letter_appendix_current_version_id', columns: ['current_version_id'])]
 #[ORM\Index(name: 'ix_letter_appendix_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_letter_appendix_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'uk_letter_appendix_key', columns: ['appendix_key'])]
 #[ORM\UniqueConstraint(name: 'uk_letter_appendix_key', columns: ['appendix_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

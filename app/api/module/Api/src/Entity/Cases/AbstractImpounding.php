@@ -188,7 +188,7 @@ abstract class AbstractImpounding implements BundleSerializableInterface, JsonSe
     #[ORM\JoinTable(name: 'impounding_legislation_type')]
     #[ORM\JoinColumn(name: 'impounding_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'impounding_legislation_type_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'impoundings', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $impoundingLegislationTypes;
 
     /**

@@ -110,7 +110,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     #[ORM\JoinTable(name: 'irhp_permit_request_attribute')]
     #[ORM\JoinColumn(name: 'irhp_permit_request_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'irhp_permit_request_attribute_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'irhpPermitRequests', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $irhpPermitRequestAttributes;
 
     /**

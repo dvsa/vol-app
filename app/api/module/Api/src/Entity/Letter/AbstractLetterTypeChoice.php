@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_letter_type_choice_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_letter_type_choice_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_letter_type_choice_letter_choice_id', columns: ['letter_choice_id'])]
-#[ORM\Index(name: 'uk_letter_type_choice', columns: ['letter_type_id', 'letter_choice_id'])]
 #[ORM\Index(name: 'IDX_89D7E87430450394', columns: ['letter_type_id'])]
 #[ORM\UniqueConstraint(name: 'uk_letter_type_choice', columns: ['letter_type_id', 'letter_choice_id'])]
 #[ORM\MappedSuperclass]

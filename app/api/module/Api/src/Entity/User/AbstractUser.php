@@ -31,8 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_user_partner_contact_details_id', columns: ['partner_contact_details_id'])]
 #[ORM\Index(name: 'ix_user_team_id', columns: ['team_id'])]
 #[ORM\Index(name: 'ix_user_transport_manager_id', columns: ['transport_manager_id'])]
-#[ORM\Index(name: 'uk_user_login_id', columns: ['login_id'])]
-#[ORM\Index(name: 'uk_user_pid', columns: ['pid'])]
 #[ORM\UniqueConstraint(name: 'uk_user_login_id', columns: ['login_id'])]
 #[ORM\UniqueConstraint(name: 'uk_user_pid', columns: ['pid'])]
 #[ORM\MappedSuperclass]

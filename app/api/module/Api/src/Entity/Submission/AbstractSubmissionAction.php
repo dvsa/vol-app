@@ -119,7 +119,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     #[ORM\JoinTable(name: 'submission_action_type')]
     #[ORM\JoinColumn(name: 'submission_action_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'action_type', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'submissionActions', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $actionTypes;
 
     /**

@@ -28,7 +28,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_private_hire_licence_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_private_hire_licence_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_private_hire_licence_licence_id', columns: ['licence_id'])]
-#[ORM\Index(name: 'uk_private_hire_licence_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_private_hire_licence_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

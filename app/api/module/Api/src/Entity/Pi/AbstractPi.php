@@ -34,8 +34,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_pi_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_pi_pi_status', columns: ['pi_status'])]
 #[ORM\Index(name: 'ix_pi_written_outcome', columns: ['written_outcome'])]
-#[ORM\Index(name: 'uk_pi_case_id', columns: ['case_id'])]
-#[ORM\Index(name: 'uk_pi_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\UniqueConstraint(name: 'uk_pi_case_id', columns: ['case_id'])]
 #[ORM\UniqueConstraint(name: 'uk_pi_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\MappedSuperclass]
@@ -392,7 +390,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     #[ORM\JoinTable(name: 'pi_tm_decision')]
     #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'tm_decision_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'pis', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $tmDecisions;
 
     /**
@@ -403,7 +401,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     #[ORM\JoinTable(name: 'pi_type')]
     #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'pi_type_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'pis', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $piTypes;
 
     /**

@@ -24,7 +24,6 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\Index(name: 'ix_transport_manager_read_audit_created_on', columns: ['created_on'])]
 #[ORM\Index(name: 'ix_transport_manager_read_audit_transport_manager_id', columns: ['transport_manager_id'])]
 #[ORM\Index(name: 'ix_transport_manager_read_audit_user_id', columns: ['user_id'])]
-#[ORM\Index(name: 'uk_tm_read_audit_tm_id_user_id_created_on', columns: ['transport_manager_id', 'user_id', 'created_on'])]
 #[ORM\UniqueConstraint(name: 'uk_tm_read_audit_tm_id_user_id_created_on', columns: ['transport_manager_id', 'user_id', 'created_on'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

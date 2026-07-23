@@ -27,7 +27,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_traffic_area_enforcement_area_enforcement_area_id', columns: ['enforcement_area_id'])]
 #[ORM\Index(name: 'ix_traffic_area_enforcement_area_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_traffic_area_enforcement_area_traffic_area_id', columns: ['traffic_area_id'])]
-#[ORM\Index(name: 'uk_ta_enforcement_area_traffic_area_id_enforcement_area_id', columns: ['traffic_area_id', 'enforcement_area_id'])]
 #[ORM\UniqueConstraint(name: 'uk_ta_enforcement_area_traffic_area_id_enforcement_area_id', columns: ['traffic_area_id', 'enforcement_area_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

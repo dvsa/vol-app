@@ -30,7 +30,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'surrender_fk_community_licence_document_status_ref_data_id', columns: ['community_licence_document_status'])]
 #[ORM\Index(name: 'surrender_fk_digital_signature_id_ref_data_id', columns: ['digital_signature_id'])]
 #[ORM\Index(name: 'surrender_fk_last_modified', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'surrender_id_uindex', columns: ['id'])]
 #[ORM\Index(name: 'surrender_licence_document_ref_data_id_fk', columns: ['licence_document_status'])]
 #[ORM\Index(name: 'surrender_status_index', columns: ['status'])]
 #[ORM\UniqueConstraint(name: 'surrender_id_uindex', columns: ['id'])]

@@ -28,21 +28,6 @@ class SchemaDriftTest extends IntegrationTestCase
         $entityManager = $this->em();
         $metadata = $entityManager->getMetadataFactory()->getAllMetadata();
 
-        // The entity generator emits every unique key as both #[ORM\Index] and
-        // #[ORM\UniqueConstraint] with the same name (119 occurrences), which DBAL
-        // rejects when building the target schema. A unique constraint is an index
-        // in MySQL, so drop the redundant Index declarations from the in-memory
-        // metadata. Remove this once the generator stops emitting the duplicates.
-        foreach ($metadata as $classMetadata) {
-            $duplicateNames = array_intersect_key(
-                $classMetadata->table['indexes'] ?? [],
-                $classMetadata->table['uniqueConstraints'] ?? [],
-            );
-            foreach (array_keys($duplicateNames) as $name) {
-                unset($classMetadata->table['indexes'][$name]);
-            }
-        }
-
         $statements = (new SchemaTool($entityManager))->getUpdateSchemaSql($metadata);
 
         // Tables with no entity mapping (audit *_hist tables, ETL working tables

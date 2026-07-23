@@ -36,7 +36,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_letter_instance_organisation_id', columns: ['organisation_id'])]
 #[ORM\Index(name: 'ix_letter_instance_status', columns: ['status'])]
 #[ORM\Index(name: 'ix_letter_instance_transport_manager_id', columns: ['transport_manager_id'])]
-#[ORM\Index(name: 'uk_letter_instance_reference', columns: ['reference'])]
 #[ORM\UniqueConstraint(name: 'uk_letter_instance_reference', columns: ['reference'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

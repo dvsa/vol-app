@@ -31,7 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_propose_to_revoke_final_submission_presiding_tc', columns: ['final_submission_presiding_tc'])]
 #[ORM\Index(name: 'ix_propose_to_revoke_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_propose_to_revoke_presiding_tc_id', columns: ['presiding_tc_id'])]
-#[ORM\Index(name: 'uk_propose_to_revoke_case_id', columns: ['case_id'])]
 #[ORM\UniqueConstraint(name: 'uk_propose_to_revoke_case_id', columns: ['case_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]

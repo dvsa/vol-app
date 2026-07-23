@@ -25,7 +25,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 #[ORM\Table(name: 'document')]
 #[ORM\Index(name: 'fk_document_irhp_application_id_irhp_application_id', columns: ['irhp_application_id'])]
-#[ORM\Index(name: 'uk_document_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\Index(name: 'ix_document_transport_manager_id', columns: ['transport_manager_id'])]
 #[ORM\Index(name: 'ix_document_traffic_area_id', columns: ['traffic_area_id'])]
 #[ORM\Index(name: 'ix_document_surrender_id', columns: ['surrender_id'])]

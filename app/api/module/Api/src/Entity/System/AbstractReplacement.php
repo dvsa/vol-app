@@ -25,7 +25,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Table(name: 'replacement')]
 #[ORM\Index(name: 'fk_replacement_users_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'fk_replacement_users_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'placeholder', columns: ['placeholder'])]
 #[ORM\UniqueConstraint(name: 'placeholder', columns: ['placeholder'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
