@@ -62,7 +62,8 @@ class SchemaDriftTest extends IntegrationTestCase
                     // storage type; the Liquibase DDL never carries their DC2Type
                     // comment hint, so compare the storage declaration instead.
                     $type = $column->getType();
-                    if ($type instanceof \Dvsa\Olcs\Api\Entity\Types\YesNoType
+                    if (
+                        $type instanceof \Dvsa\Olcs\Api\Entity\Types\YesNoType
                         || $type instanceof \Dvsa\Olcs\Api\Entity\Types\YesNoNullType
                     ) {
                         $column->setType(\Doctrine\DBAL\Types\Type::getType('boolean'));
