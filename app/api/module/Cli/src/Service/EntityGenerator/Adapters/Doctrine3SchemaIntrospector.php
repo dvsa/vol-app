@@ -228,6 +228,10 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
                 continue; // Skip primary key index
             }
 
+            if ($index->isUnique()) {
+                continue; // Unique keys are emitted as #[ORM\UniqueConstraint] by extractUniqueConstraints()
+            }
+
             $indexes[] = [
                 'name' => $index->getName(),
                 'columns' => $index->getColumns(),

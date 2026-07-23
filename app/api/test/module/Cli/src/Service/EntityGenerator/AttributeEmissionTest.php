@@ -4,10 +4,17 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Cli\Service\EntityGenerator;
 
+use Doctrine\DBAL\Schema\Table;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\Adapters\Doctrine3SchemaIntrospector;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\EntityConfigService;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\EntityGenerator;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\ColumnMetadata;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\TableMetadata;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\InverseRelationshipProcessor;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\MethodGeneratorService;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\TemplateRenderer;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlerRegistry;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\BlameableTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\DefaultTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\RelationshipTypeHandler;
@@ -153,10 +160,100 @@ final class AttributeEmissionTest extends TestCase
         );
     }
 
+    public function testUniqueKeysAreEmittedOnlyAsUniqueConstraints(): void
+    {
+        // cf. AbstractTransaction: uk_txn_receipt_document_id must not be emitted as
+        // both #[ORM\Index] and #[ORM\UniqueConstraint] - DBAL rejects the name clash
+        $table = new Table('txn');
+        $table->addColumn('id', 'integer');
+        $table->addColumn('receipt_document_id', 'integer');
+        $table->addColumn('reference', 'string');
+        $table->setPrimaryKey(['id']);
+        $table->addUniqueIndex(['receipt_document_id'], 'uk_txn_receipt_document_id');
+        $table->addIndex(['reference'], 'ix_txn_reference');
+
+        $indexes = $this->invokeIntrospectorMethod('extractIndexes', [$table]);
+        $uniqueConstraints = $this->invokeIntrospectorMethod('extractUniqueConstraints', [$table]);
+
+        $this->assertSame(['ix_txn_reference'], array_column($indexes, 'name'));
+        $this->assertSame(['uk_txn_receipt_document_id'], array_column($uniqueConstraints, 'name'));
+    }
+
+    public function testOwningManyToManyToRefDataIsUnidirectional(): void
+    {
+        // cf. AbstractOpposition::$grounds - RefData never declares inverse
+        // collections, so an inversedBy would point at a nonexistent property
+        $field = $this->invokeConstructedGeneratorMethod('createManyToManyField', [
+            [
+                'join_table' => 'opposition_grounds',
+                'foreign_table' => 'ref_data',
+                'join_columns' => ['opposition_id'],
+                'local_columns' => ['id'],
+                'inverse_join_columns' => ['ground_id'],
+                'foreign_columns' => ['id'],
+                'is_owning' => true,
+            ],
+            'opposition',
+            [],
+        ]);
+
+        $this->assertStringContainsString(
+            "#[ORM\\ManyToMany(targetEntity: \\Dvsa\\Olcs\\Api\\Entity\\System\\RefData::class, fetch: 'LAZY')]",
+            $field['annotation']
+        );
+        $this->assertStringNotContainsString('inversedBy', $field['annotation']);
+    }
+
+    public function testOwningManyToManyToNonRefDataKeepsInversedBy(): void
+    {
+        // cf. AbstractOpposition::$operatingCentres - bidirectional sides are unaffected
+        $field = $this->invokeConstructedGeneratorMethod('createManyToManyField', [
+            [
+                'join_table' => 'operating_centre_opposition',
+                'foreign_table' => 'operating_centre',
+                'join_columns' => ['opposition_id'],
+                'local_columns' => ['id'],
+                'inverse_join_columns' => ['operating_centre_id'],
+                'foreign_columns' => ['id'],
+                'is_owning' => true,
+            ],
+            'opposition',
+            [],
+        ]);
+
+        $this->assertStringContainsString("inversedBy: 'oppositions'", $field['annotation']);
+    }
+
     private function invokeGeneratorMethod(string $method, array $args): string
     {
         $generator = (new \ReflectionClass(EntityGenerator::class))->newInstanceWithoutConstructor();
 
         return (new \ReflectionMethod(EntityGenerator::class, $method))->invoke($generator, ...$args);
+    }
+
+    private function invokeConstructedGeneratorMethod(string $method, array $args): mixed
+    {
+        $appRoot = dirname(__DIR__, 6);
+        $configService = new EntityConfigService($appRoot . '/data/db/EntityConfig.php');
+        $propertyNameResolver = new PropertyNameResolver();
+        $generator = new EntityGenerator(
+            new TypeHandlerRegistry(),
+            new TemplateRenderer(
+                $appRoot . '/module/Cli/src/Service/EntityGenerator/Templates',
+                new MethodGeneratorService()
+            ),
+            $configService,
+            new InverseRelationshipProcessor($configService, $propertyNameResolver),
+            $propertyNameResolver
+        );
+
+        return (new \ReflectionMethod(EntityGenerator::class, $method))->invoke($generator, ...$args);
+    }
+
+    private function invokeIntrospectorMethod(string $method, array $args): array
+    {
+        $introspector = (new \ReflectionClass(Doctrine3SchemaIntrospector::class))->newInstanceWithoutConstructor();
+
+        return (new \ReflectionMethod(Doctrine3SchemaIntrospector::class, $method))->invoke($introspector, ...$args);
     }
 }
