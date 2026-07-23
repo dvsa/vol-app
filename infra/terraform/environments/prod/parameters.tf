@@ -34,7 +34,7 @@ module "parameters" {
     govuk_account_private_key_algorithm          = "RS256"
     govuk_account_public_key                     = "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQ0lqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FnOEFNSUlDQ2dLQ0FnRUF5UmZETWpPeEpKK0Z5c0NHR1RzRQpVcXpHVStzdFV4bFJ3alJrd3g4ZEFZcUpzb2ZhbFE5RzFsdnpPTG9CVDh5SzBoN0FLeGN1U29LNVAxQXVTY0FqCmJCd1ZnTUIvNmdncE1acGE0WVVJaEhKZFBYOFl2Z05RSkg2eU8ycExXVkN2WmtyYk8rcFQ3QnIzLzVCL3IzMkgKWW1OZUVlbCtWS2NoTFhDZG5NRGFNazJ4YVRDVHgwNmhVcE5TWmVvbEVQYzdqSktURDlFMTAwQStoRFJyWGl3dwo4T2ZHbEYyT2hTb09FMVV1ckUzS0hRVjBDQ2F5NDcxNk9FaUVPSFQrUHhFVFZwS0VlNzhTVFhDR3MyMC9wYnptCnpxNS8vTjB0S3hscVlNL05tYTkwZW8yd3FWTytYUHUrM1QyTjY0UlJmeDBjQXdTTllmbEFJMk1ieElVMnBsclkKMmtkM013RzNiYmpJaXVlRXU0U0JUWlErMTV5b0tscGFyazU2Snp3ZXhraUF5OEZwTGpWWUs2VGhielc4Z2FCOApnNHBNV3dXNWZpMVB6N0UwbC9nVzhWRHdGYVpWbGk5cFVaTUxvMnhDMFhBRnlJaUdrUzFTMDhRWmJ1ajhKekdPClRxTDhqZEpDYXVWeWxmK3ZVM3E2SENULzVpaDdDNHp4VVBnYm1TeTIreDRkRzh4OG5BaVExbkRQdGZDWC9JTmUKVzZleUtIZ1gyZEllWE1YNmZ1SzVsajloS08wY1FQdXFnN0pBcUNQUUM3cDFoaS96S0RBcEZoVEdCYldxRXo5QgpVRGZhWE5TNFp3QVhtSlNDZWtlWVRmZTZreW9YMWFnakJaM096ZHVyNjhETUpxWWdXWnlaaDFOM0ZCUk9mS1Q4CklQKytZOXBWUWpEbytOT09SaityaW5zQ0F3RUFBUT09Ci0tLS0tRU5EIFBVQkxJQyBLRVktLS0tLQo="
     lar_base_uri                                 = "https://fx9cl3117i.execute-api.eu-west-1.amazonaws.com/live/"
-    log_level                                    = "4"
+    log_level                                    = "warning"
     olcs_aws_account_number                      = "146997448015"
     olcs_aws_region                              = "eu-west-1"
     olcs_aws_s3_role_arn                         = "arn:aws:iam::146997448015:role/OLCS-APP-BASE-API"

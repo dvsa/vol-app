@@ -34,7 +34,7 @@ module "parameters" {
     govuk_account_private_key_algorithm          = "RS256"
     govuk_account_public_key                     = "LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUExZXJNSjAxclBJOEQrbnFvYUZaQQpHUVZkR3VTUm5mV2pqUHpOYWJQbFB5U3FaaVZCdGo3WTNnL3lEV1JoWUUzeTE3YTBaeExmd2FkTGZPbE5jczVxCkJ1M1BwSlNCUm5EVmVZMlhQdjdIaHE5b2tvbTFVMzgzekozVU5NSmNYTyt4UU9FMzB1cVh0OFQ3RFkrZ2F5VXoKcFFpYlUzNE1tQ21rR0JHT3dENDYrcWN3NUZWZ3FaZjJDUEdOdkEwenNyZ2g5cEIrWGtKbXpWdERFbVY3Sjh2bApnaDM2OWRRbHE5SHNNWE82Q1pXakI1bWUrU2NqY215WUNnSHZDT2ViNGVpL3p2TzIrNUhqMy8zZEFpTzZWa25kClozTENqelYvU1hPSHFmbVRmUHJVeUNLQ2lDMWxEMTRuSldDOWpQZk1xZk1CVlIrdGxubCtrb1o0blMwWkFrSGsKMndJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tCg=="
     lar_base_uri                                 = "https://ce5rumk6p4.execute-api.eu-west-1.amazonaws.com/ci/"
-    log_level                                    = "4"
+    log_level                                    = "warning"
     olcs_aws_account_number                      = "054614622558"
     olcs_aws_region                              = "eu-west-1"
     olcs_aws_s3_role_arn                         = "arn:aws:iam::054614622558:role/OLCS-DEVAPPQA-BASE-API"
