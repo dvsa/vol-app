@@ -83,15 +83,18 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
         run: |
-          jq -n \
-            --arg channel "${SLACK_CHAN}" \
-            --arg color "${SLACK_COMPLETED}" \
-            --arg text "Starting refresh of OLCSDB from anonymised PROD db into ${{ inputs.platformEnv }}" \
-            '{channel:$channel, attachments:[{color:$color, text:$text}]}' \
-          | curl -sS -X POST "https://slack.com/api/chat.postMessage" \
-              -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \
-              -H "Content-Type: application/json; charset=utf-8" \
-              --data @- >/dev/null || true
+          response="$(
+            jq -n \
+              --arg channel "${SLACK_CHAN}" \
+              --arg color "${SLACK_COMPLETED}" \
+              --arg text "Starting refresh of OLCSDB from anonymised PROD db into ${{ inputs.platformEnv }}" \
+              '{channel:$channel, attachments:[{color:$color, text:$text}]}' \
+            | curl -sS --retry 3 --retry-delay 2 --retry-all-errors -X POST "https://slack.com/api/chat.postMessage" \
+                -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \
+                -H "Content-Type: application/json; charset=utf-8" \
+                --data @- 2>&1 || true
+          )"
+          echo "${response}" | jq -e '.ok == true' >/dev/null 2>&1 || echo "Slack notification failed: ${response}" >&2
 
       - name: Run DB refresh flow
         shell: bash
