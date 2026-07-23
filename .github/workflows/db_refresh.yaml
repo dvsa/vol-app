@@ -62,14 +62,13 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
-          
 
       - name: Install jq (if missing)
         shell: bash
@@ -80,20 +79,19 @@ jobs:
           fi
 
       - name: Send start notification to Slack
-        uses: slackapi/slack-github-action@v1.27.0
-        with:
-          payload: |
-            {
-              "channel": "${{ env.SLACK_CHAN }}",
-              "attachments": [
-                {
-                  "color": "${{ env.SLACK_COMPLETED }}",
-                  "text": "Starting refresh of OLCSDB from anonymised PROD db into ${{ inputs.platformEnv }}"
-                }
-              ]
-            }
+        shell: bash
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          jq -n \
+            --arg channel "${SLACK_CHAN}" \
+            --arg color "${SLACK_COMPLETED}" \
+            --arg text "Starting refresh of OLCSDB from anonymised PROD db into ${{ inputs.platformEnv }}" \
+            '{channel:$channel, attachments:[{color:$color, text:$text}]}' \
+          | curl -sS -X POST "https://slack.com/api/chat.postMessage" \
+              -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \
+              -H "Content-Type: application/json; charset=utf-8" \
+              --data @- >/dev/null || true
 
       - name: Run DB refresh flow
         shell: bash
@@ -232,9 +230,9 @@ jobs:
           RDS_SUBNET="devapp${SUBNET_PREFIX}-olcs-rds-devapp${SUBNET_PREFIX}ew"
 
           CLEAN_PREFIX="$(echo "${PREFIX}" | tr -d '/')"
-          RDS_READER_TAGS="[{ \"Key\": \"Name\", \"Value\": \"${CLEAN_PREFIX}-OLCS-RDS-OLCSREADDB-RDS\" }, { \"Key\": \"Environment\", \"Value\": \"${PREFIX}\" }, { \"Key\": \"StopOvernight\", \"Value\": \"1\" }, { \"Key\": \"Application\", \"Value\": \"OLCS\" }, { \"Key\": \"Tier\", \"Value\": \"RDS\" }]"
-          RDS_WRITER_TAGS="[{ \"Key\": \"Name\", \"Value\": \"${CLEAN_PREFIX}-OLCS-RDS-OLCSDB-RDS\" }, { \"Key\": \"Environment\", \"Value\": \"${PREFIX}\" }, { \"Key\": \"StopOvernight\", \"Value\": \"1\" }, { \"Key\": \"Application\", \"Value\": \"OLCS\" }, { \"Key\": \"Tier\", \"Value\": \"RDS\" }]"
-          RDS_TAGS="[{ \"Key\": \"Name\", \"Value\": \"${CLEAN_PREFIX}-OLCS-RDS-OLCSDB-RDS\" }, { \"Key\": \"Environment\", \"Value\": \"${PREFIX}\" }, { \"Key\": \"StopOvernight\", \"Value\": \"1\" }, { \"Key\": \"Application\", \"Value\": \"OLCS\" }, { \"Key\": \"Tier\", \"Value\": \"RDS\" }]"
+          RDS_READER_TAGS="[{ \"Key\": \"Name\", \"Value\": \"${CLEAN_PREFIX}-OLCS-RDS-OLCSREADDB-RDS\" }, { \"Key\": \"Environment\", \"Value\": \"${PREFIX}\" }, { \"Key\": \"StopOvernight\", \"Value\": \"1\" }]"
+          RDS_WRITER_TAGS="[{ \"Key\": \"Name\", \"Value\": \"${CLEAN_PREFIX}-OLCS-RDS-OLCSDB-RDS\" }, { \"Key\": \"Environment\", \"Value\": \"${PREFIX}\" }, { \"Key\": \"StopOvernight\", \"Value\": \"1\" }]"
+          RDS_TAGS="[{ \"Key\": \"Name\", \"Value\": \"${CLEAN_PREFIX}-OLCS-RDS-OLCSDB-RDS\" }, { \"Key\": \"Environment\", \"Value\": \"${PREFIX}\" }, { \"Key\": \"StopOvernight\", \"Value\": \"1\" }]"
 
           # 1. get RDS status
           payload="{ \"EventType\": \"GetRDSClusterStatus\", \"RDSName\": \"${RDS_CLUSTER_NAME}\" }"
@@ -286,7 +284,7 @@ jobs:
             --argjson logs "${RDS_LOG_EXPORTS}" \
             --argjson tags "${RDS_TAGS}" \
             --argjson multiAz "${MULTI_AZ}" \
-            '{EventType:$eventType,RDSName:$rdsName,RDSOptionGroup:$optionGroup,RDSCloudwatchLogsExportConfiguration:logs,RDSBaseSnap:$baseSnap,RDSSubnet:$subnet,EngineVersion:$engineVersion,RDSSnapSource:$snapSource,RDSTags:tags,MultiAZ:multiAz}'
+            '{EventType:$eventType,RDSName:$rdsName,RDSOptionGroup:$optionGroup,RDSCloudwatchLogsExportConfiguration:$logs,RDSBaseSnap:$baseSnap,RDSSubnet:$subnet,EngineVersion:$engineVersion,RDSSnapSource:$snapSource,RDSTags:$tags,MultiAZ:$multiAz}'
           )"
           invoke_lambda "${payload}" "RestoreDBComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || { slack_send "${SLACK_FAIL}" "Error. Build failed restoring from DB snapshot"; exit 1; }
           wait_cluster_status "${RDS_CLUSTER_NAME}" "available" 60 60 || { slack_send "${SLACK_FAIL}" "Error. Build failed getting DB status after restore"; exit 1; }
@@ -299,14 +297,14 @@ jobs:
           slack_send "${SLACK_COMPLETED}" "Master password reset for ${RDS_CLUSTER_NAME}"
 
           # 7. modify restored instance
-          payload="{ \"EventType\":\"ModifyRestoredDB\", \"RDSName\":\"${RDS_CLUSTER_NAME}\", \"RDSSG\": \"${RDS_SEC_GROUP}\", \"RDSOptionGroup\": \"${RDS_OPTION_GROUP}\", \"RDSCloudwatchLogsExportConfiguration\": ${RDS_LOG_EXPORTS}, \"RDSParamGroup\": \"${RDS_PARAM_GROUP}\", \"RDSDBInstanceClass\": \"${RDS_DB_INSTANCE_CLASS}\", \"RDSMonitoringInterval\": ${RDS_MONITORING_INTERVAL}, \"RDSMonitoringRoleArn\": \"${RDS_MONITORING_ROLE_ARN}\" }"
+          payload="{ \"EventType\":\"ModifyRestoredDB\", \"RDSName\":\"${RDS_CLUSTER_NAME}\", \"RDSSG\": \"${RDS_SEC_GROUP}\", \"RDSOptionGroup\": \"${RDS_OPTION_GROUP}\", \"RDSCloudwatchLogsExportConfiguration\": ${RDS_LOG_EXPORTS} }"
           invoke_lambda "${payload}" "LaunchComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || { slack_send "${SLACK_FAIL}" "Error. Lambda failed updating security and parameter groups"; exit 1; }
           wait_cluster_status "${RDS_CLUSTER_NAME}" "available" 60 30 || { slack_send "${SLACK_FAIL}" "Error. Getting RDS status after modify"; exit 1; }
           slack_send "${SLACK_COMPLETED}" "Modify of ${RDS_CLUSTER_NAME} security and parameter groups succeeded"
 
           if [[ "${SHUTDOWN_ENV}" != "true" ]]; then
             # 8. create writer
-            payload="{ \"EventType\":\"CreateWriter\", \"RDSDBInstanceClassWriter\":\"${RDS_DB_INSTANCE_CLASS}\", \"RDSName\":\"${RDS_CLUSTER_NAME}\", \"RDSWriterTags\": ${RDS_WRITER_TAGS}, \"RDSWriter\":\"${RDS_WRITER_NAME}\" }"
+            payload="{ \"EventType\":\"CreateWriter\", \"RDSDBInstanceClassWriter\":\"${RDS_DB_INSTANCE_CLASS}\", \"RDSName\":\"${RDS_CLUSTER_NAME}\", \"RDSWriterTags\": ${RDS_WRITER_TAGS}, \"RDSWriterName\":\"${RDS_WRITER_NAME}\", \"RDSMonitoringRoleArn\":\"${RDS_MONITORING_ROLE_ARN}\", \"RDSMonitoringInterval\": ${RDS_MONITORING_INTERVAL}, \"RDSParamGroup\":\"${RDS_PARAM_GROUP}\", \"RDSClusterParamGroup\":\"${RDS_PARAM_GROUP}\", \"RDSDBSubnetGroup\":\"${RDS_SUBNET}\", \"RDSWriterSecGroup\":\"${RDS_WRITER_SEC_GROUP}\" }"
             if ! invoke_lambda "${payload}" "CreateWriterSuccess" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
               slack_send "${SLACK_WARN}" "Warning. Failed to create Writer ${RDS_WRITER_NAME} for ${RDS_CLUSTER_NAME}. Build will continue - manually create Writer"
             fi
@@ -317,7 +315,7 @@ jobs:
             fi
 
             # 9. create reader
-            payload="{ \"EventType\":\"CreateReader\", \"RDSDBInstanceClassReader\":\"${RDS_DB_INSTANCE_CLASS}\", \"RDSName\":\"${RDS_CLUSTER_NAME}\", \"RDSReaderTags\": ${RDS_READER_TAGS}, \"RDSReader\":\"${RDS_READER_NAME}\" }"
+            payload="{ \"EventType\":\"CreateReader\", \"RDSDBInstanceClassReader\":\"${RDS_DB_INSTANCE_CLASS}\", \"RDSName\":\"${RDS_CLUSTER_NAME}\", \"RDSReaderTags\": ${RDS_READER_TAGS}, \"RDSReaderName\":\"${RDS_READER_NAME}\", \"RDSMonitoringRoleArn\":\"${RDS_MONITORING_ROLE_ARN}\", \"RDSMonitoringInterval\": ${RDS_MONITORING_INTERVAL}, \"RDSParamGroup\":\"${RDS_PARAM_GROUP}\", \"RDSClusterParamGroup\":\"${RDS_PARAM_GROUP}\", \"RDSDBSubnetGroup\":\"${RDS_SUBNET}\", \"RDSReaderSecGroup\":\"${RDS_SEC_GROUP}\" }"
             if ! invoke_lambda "${payload}" "CreateReaderSuccess" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
               slack_send "${SLACK_WARN}" "Warning. Failed to create Reader ${RDS_READER_NAME} for ${RDS_CLUSTER_NAME}. Build will continue - manually create Reader"
             fi
@@ -367,34 +365,32 @@ jobs:
 
       - name: Final success notification
         if: success()
-        uses: slackapi/slack-github-action@v1.27.0
-        with:
-          payload: |
-            {
-              "channel": "${{ env.SLACK_CHAN }}",
-              "attachments": [
-                {
-                  "color": "${{ env.SLACK_COMPLETED }}",
-                  "text": "Refresh of OLCSDB from anonymised PROD db into ${{ inputs.platformEnv }} completed successfully"
-                }
-              ]
-            }
+        shell: bash
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          jq -n \
+            --arg channel "${SLACK_CHAN}" \
+            --arg color "${SLACK_COMPLETED}" \
+            --arg text "Refresh of OLCSDB from anonymised PROD db into ${{ inputs.platformEnv }} completed successfully" \
+            '{channel:$channel, attachments:[{color:$color, text:$text}]}' \
+          | curl -sS -X POST "https://slack.com/api/chat.postMessage" \
+              -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \
+              -H "Content-Type: application/json; charset=utf-8" \
+              --data @- >/dev/null || true
 
       - name: Final failure notification
         if: failure()
-        uses: slackapi/slack-github-action@v1.27.0
-        with:
-          payload: |
-            {
-              "channel": "${{ env.SLACK_CHAN }}",
-              "attachments": [
-                {
-                  "color": "${{ env.SLACK_FAIL }}",
-                  "text": "DB refresh failed for ${{ inputs.platformEnv }}. Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                }
-              ]
-            }
+        shell: bash
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          jq -n \
+            --arg channel "${SLACK_CHAN}" \
+            --arg color "${SLACK_FAIL}" \
+            --arg text "DB refresh failed for ${{ inputs.platformEnv }}. Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+            '{channel:$channel, attachments:[{color:$color, text:$text}]}' \
+          | curl -sS -X POST "https://slack.com/api/chat.postMessage" \
+              -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \
+              -H "Content-Type: application/json; charset=utf-8" \
+              --data @- >/dev/null || true
