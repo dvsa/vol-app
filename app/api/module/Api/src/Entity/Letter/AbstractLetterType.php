@@ -159,7 +159,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
      *
      * @param int $id new value being set
      *
-     * @return LetterType
+     * @return static
      */
     public function setId($id)
     {
@@ -183,7 +183,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\MasterTemplate $masterTemplate new value being set
      *
-     * @return LetterType
+     * @return static
      */
     public function setMasterTemplate($masterTemplate)
     {
@@ -207,7 +207,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterTestData $letterTestData new value being set
      *
-     * @return LetterType
+     * @return static
      */
     public function setLetterTestData($letterTestData)
     {
@@ -231,7 +231,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\System\Category $category new value being set
      *
-     * @return LetterType
+     * @return static
      */
     public function setCategory($category)
     {
@@ -255,7 +255,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory new value being set
      *
-     * @return LetterType
+     * @return static
      */
     public function setSubCategory($subCategory)
     {
@@ -279,7 +279,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterType
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -303,7 +303,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterType
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -327,7 +327,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
      *
      * @param string $name new value being set
      *
-     * @return LetterType
+     * @return static
      */
     public function setName($name)
     {
@@ -351,7 +351,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
      *
      * @param string $description new value being set
      *
-     * @return LetterType
+     * @return static
      */
     public function setDescription($description)
     {
@@ -375,7 +375,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
      *
      * @param bool $isActive new value being set
      *
-     * @return LetterType
+     * @return static
      */
     public function setIsActive($isActive)
     {
@@ -399,7 +399,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
      *
      * @param int $version new value being set
      *
-     * @return LetterType
+     * @return static
      */
     public function setVersion($version)
     {

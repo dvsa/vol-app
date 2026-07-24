@@ -8,9 +8,6 @@
 
 namespace Dvsa\Olcs\Snapshot;
 
-use Laminas\Cache\Storage\Adapter\Redis;
-use Laminas\I18n\Translator\Translator;
-
 /**
  * Module
  *
@@ -18,19 +15,6 @@ use Laminas\I18n\Translator\Translator;
  */
 class Module
 {
-    public function onBootstrap(\Laminas\Mvc\MvcEvent $e)
-    {
-        $sm = $e->getApplication()->getServiceManager();
-
-        /**
-         * @var Translator $translator
-         * @var Redis      $cache
-         */
-        $cache = $sm->get('default-cache');
-        $translator = $sm->get('translator');
-        $translator->setCache($cache);
-    }
-
     public function getConfig()
     {
         return include __DIR__ . '/../config/module.config.php';

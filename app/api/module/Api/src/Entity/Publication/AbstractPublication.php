@@ -186,7 +186,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param int $id new value being set
      *
-     * @return Publication
+     * @return static
      */
     public function setId($id)
     {
@@ -210,7 +210,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
-     * @return Publication
+     * @return static
      */
     public function setTrafficArea($trafficArea)
     {
@@ -234,7 +234,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document new value being set
      *
-     * @return Publication
+     * @return static
      */
     public function setDocument($document)
     {
@@ -258,7 +258,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $policeDocument new value being set
      *
-     * @return Publication
+     * @return static
      */
     public function setPoliceDocument($policeDocument)
     {
@@ -282,7 +282,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\DocTemplate $docTemplate new value being set
      *
-     * @return Publication
+     * @return static
      */
     public function setDocTemplate($docTemplate)
     {
@@ -306,7 +306,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $pubStatus new value being set
      *
-     * @return Publication
+     * @return static
      */
     public function setPubStatus($pubStatus)
     {
@@ -330,7 +330,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Publication
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -354,7 +354,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Publication
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -378,7 +378,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param int $publicationNo new value being set
      *
-     * @return Publication
+     * @return static
      */
     public function setPublicationNo($publicationNo)
     {
@@ -402,7 +402,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param string $pubType new value being set
      *
-     * @return Publication
+     * @return static
      */
     public function setPubType($pubType)
     {
@@ -426,7 +426,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $pubDate new value being set
      *
-     * @return Publication
+     * @return static
      */
     public function setPubDate($pubDate)
     {
@@ -456,7 +456,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param string $docName new value being set
      *
-     * @return Publication
+     * @return static
      */
     public function setDocName($docName)
     {
@@ -480,7 +480,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param int $version new value being set
      *
-     * @return Publication
+     * @return static
      */
     public function setVersion($version)
     {
@@ -504,7 +504,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $publicationLinks collection being set as the value
      *
-     * @return Publication
+     * @return static
      */
     public function setPublicationLinks($publicationLinks)
     {
@@ -528,7 +528,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $publicationLinks collection being added
      *
-     * @return Publication
+     * @return static
      */
     public function addPublicationLinks($publicationLinks)
     {
@@ -551,7 +551,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $publicationLinks collection being removed
      *
-     * @return Publication
+     * @return static
      */
     public function removePublicationLinks($publicationLinks)
     {

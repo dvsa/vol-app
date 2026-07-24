@@ -141,7 +141,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param int $id new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setId($id)
     {
@@ -165,7 +165,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterInstance $letterInstance new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setLetterInstance($letterInstance)
     {
@@ -189,7 +189,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue $letterInstanceIssue new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setLetterInstanceIssue($letterInstanceIssue)
     {
@@ -213,7 +213,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion $letterTodoVersion new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setLetterTodoVersion($letterTodoVersion)
     {
@@ -237,7 +237,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -261,7 +261,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -285,7 +285,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param bool $isRendered new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setIsRendered($isRendered)
     {
@@ -309,7 +309,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param int $displayOrder new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setDisplayOrder($displayOrder)
     {
@@ -333,7 +333,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
      *
      * @param int $version new value being set
      *
-     * @return LetterInstanceTodo
+     * @return static
      */
     public function setVersion($version)
     {

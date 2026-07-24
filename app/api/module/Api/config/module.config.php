@@ -541,6 +541,9 @@ return [
             ApiSrv\AddressHelper\AddressHelperService::class => ApiSrv\AddressHelper\AddressHelperServiceFactory::class,
 
             Aws\S3\S3Client::class => Dvsa\Olcs\Api\Service\S3\S3ClientFactory::class,
+            'default-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
+            'cache.redis.connection'
+                =>  \Dvsa\Olcs\Api\Service\Cache\RedisConnectionFactory::class,
         ],
     ],
     'view_manager' => [
@@ -831,7 +834,6 @@ return [
             Repository\LetterIssueType::class => RepositoryFactory::class,
             Repository\LetterTypeSection::class => RepositoryFactory::class,
             Repository\LetterTypeIssue::class => RepositoryFactory::class,
-            Repository\LetterTypeTodo::class => RepositoryFactory::class,
             Repository\LetterTypeAppendix::class => RepositoryFactory::class,
             Repository\LetterInstanceSection::class => RepositoryFactory::class,
             Repository\LetterInstanceIssue::class => RepositoryFactory::class,
@@ -875,7 +877,6 @@ return [
             'LetterIssueType' => Repository\LetterIssueType::class,
             'LetterTypeSection' => Repository\LetterTypeSection::class,
             'LetterTypeIssue' => Repository\LetterTypeIssue::class,
-            'LetterTypeTodo' => Repository\LetterTypeTodo::class,
             'LetterTypeAppendix' => Repository\LetterTypeAppendix::class,
             'LetterInstanceSection' => Repository\LetterInstanceSection::class,
             'LetterInstanceIssue' => Repository\LetterInstanceIssue::class,

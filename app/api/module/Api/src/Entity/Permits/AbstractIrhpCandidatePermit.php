@@ -192,7 +192,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param int $id new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setId($id)
     {
@@ -216,7 +216,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication $irhpPermitApplication new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setIrhpPermitApplication($irhpPermitApplication)
     {
@@ -240,7 +240,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange $irhpPermitRange new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setIrhpPermitRange($irhpPermitRange)
     {
@@ -264,7 +264,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $requestedEmissionsCategory new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setRequestedEmissionsCategory($requestedEmissionsCategory)
     {
@@ -288,7 +288,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $assignedEmissionsCategory new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setAssignedEmissionsCategory($assignedEmissionsCategory)
     {
@@ -312,7 +312,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -336,7 +336,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -360,7 +360,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param string $applicationScore new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setApplicationScore($applicationScore)
     {
@@ -384,7 +384,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param string $intensityOfUse new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setIntensityOfUse($intensityOfUse)
     {
@@ -408,7 +408,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param string $randomFactor new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setRandomFactor($randomFactor)
     {
@@ -432,7 +432,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param string $randomizedScore new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setRandomizedScore($randomizedScore)
     {
@@ -456,7 +456,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param bool $successful new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setSuccessful($successful)
     {
@@ -480,7 +480,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param bool $wanted new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setWanted($wanted)
     {
@@ -504,7 +504,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param int $version new value being set
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setVersion($version)
     {
@@ -528,7 +528,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermits collection being set as the value
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function setIrhpPermits($irhpPermits)
     {
@@ -552,7 +552,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermits collection being added
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function addIrhpPermits($irhpPermits)
     {
@@ -575,7 +575,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermits collection being removed
      *
-     * @return IrhpCandidatePermit
+     * @return static
      */
     public function removeIrhpPermits($irhpPermits)
     {

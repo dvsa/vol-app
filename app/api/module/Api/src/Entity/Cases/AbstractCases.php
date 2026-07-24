@@ -383,7 +383,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param int $id new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setId($id)
     {
@@ -407,7 +407,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $caseType new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setCaseType($caseType)
     {
@@ -431,7 +431,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setApplication($application)
     {
@@ -455,7 +455,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -479,7 +479,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -503,7 +503,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -527,7 +527,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -551,7 +551,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param string $ecmsNo new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setEcmsNo($ecmsNo)
     {
@@ -575,7 +575,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \DateTime $openDate new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setOpenDate($openDate)
     {
@@ -605,7 +605,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \DateTime $closedDate new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setClosedDate($closedDate)
     {
@@ -635,7 +635,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param string $description new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setDescription($description)
     {
@@ -659,7 +659,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param string $isImpounding new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setIsImpounding($isImpounding)
     {
@@ -683,7 +683,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param string $annualTestHistory new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setAnnualTestHistory($annualTestHistory)
     {
@@ -707,7 +707,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param string $prohibitionNote new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setProhibitionNote($prohibitionNote)
     {
@@ -731,7 +731,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param string $penaltiesNote new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setPenaltiesNote($penaltiesNote)
     {
@@ -755,7 +755,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param string $convictionNote new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setConvictionNote($convictionNote)
     {
@@ -779,7 +779,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param int $version new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setVersion($version)
     {
@@ -803,7 +803,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param int $olbsKey new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -827,7 +827,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param string $olbsType new value being set
      *
-     * @return Cases
+     * @return static
      */
     public function setOlbsType($olbsType)
     {
@@ -851,7 +851,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $categorys collection being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setCategorys($categorys)
     {
@@ -875,7 +875,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $categorys collection being added
      *
-     * @return Cases
+     * @return static
      */
     public function addCategorys($categorys)
     {
@@ -898,7 +898,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $categorys collection being removed
      *
-     * @return Cases
+     * @return static
      */
     public function removeCategorys($categorys)
     {
@@ -914,7 +914,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $outcomes collection being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setOutcomes($outcomes)
     {
@@ -938,7 +938,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $outcomes collection being added
      *
-     * @return Cases
+     * @return static
      */
     public function addOutcomes($outcomes)
     {
@@ -961,7 +961,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $outcomes collection being removed
      *
-     * @return Cases
+     * @return static
      */
     public function removeOutcomes($outcomes)
     {
@@ -977,7 +977,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Appeal $appeal entity being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setAppeal($appeal)
     {
@@ -1001,7 +1001,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $readAudits collection being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setReadAudits($readAudits)
     {
@@ -1025,7 +1025,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $readAudits collection being added
      *
-     * @return Cases
+     * @return static
      */
     public function addReadAudits($readAudits)
     {
@@ -1048,7 +1048,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $readAudits collection being removed
      *
-     * @return Cases
+     * @return static
      */
     public function removeReadAudits($readAudits)
     {
@@ -1064,7 +1064,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $complaints collection being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setComplaints($complaints)
     {
@@ -1088,7 +1088,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $complaints collection being added
      *
-     * @return Cases
+     * @return static
      */
     public function addComplaints($complaints)
     {
@@ -1111,7 +1111,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $complaints collection being removed
      *
-     * @return Cases
+     * @return static
      */
     public function removeComplaints($complaints)
     {
@@ -1127,7 +1127,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $conditionUndertakings collection being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setConditionUndertakings($conditionUndertakings)
     {
@@ -1151,7 +1151,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $conditionUndertakings collection being added
      *
-     * @return Cases
+     * @return static
      */
     public function addConditionUndertakings($conditionUndertakings)
     {
@@ -1174,7 +1174,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $conditionUndertakings collection being removed
      *
-     * @return Cases
+     * @return static
      */
     public function removeConditionUndertakings($conditionUndertakings)
     {
@@ -1190,7 +1190,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $convictions collection being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setConvictions($convictions)
     {
@@ -1214,7 +1214,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $convictions collection being added
      *
-     * @return Cases
+     * @return static
      */
     public function addConvictions($convictions)
     {
@@ -1237,7 +1237,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $convictions collection being removed
      *
-     * @return Cases
+     * @return static
      */
     public function removeConvictions($convictions)
     {
@@ -1253,7 +1253,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setDocuments($documents)
     {
@@ -1277,7 +1277,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documents collection being added
      *
-     * @return Cases
+     * @return static
      */
     public function addDocuments($documents)
     {
@@ -1300,7 +1300,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being removed
      *
-     * @return Cases
+     * @return static
      */
     public function removeDocuments($documents)
     {
@@ -1316,7 +1316,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\Si\ErruRequest $erruRequest entity being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setErruRequest($erruRequest)
     {
@@ -1340,7 +1340,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $legacyOffences collection being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setLegacyOffences($legacyOffences)
     {
@@ -1364,7 +1364,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $legacyOffences collection being added
      *
-     * @return Cases
+     * @return static
      */
     public function addLegacyOffences($legacyOffences)
     {
@@ -1387,7 +1387,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $legacyOffences collection being removed
      *
-     * @return Cases
+     * @return static
      */
     public function removeLegacyOffences($legacyOffences)
     {
@@ -1403,7 +1403,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $oppositions collection being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setOppositions($oppositions)
     {
@@ -1427,7 +1427,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $oppositions collection being added
      *
-     * @return Cases
+     * @return static
      */
     public function addOppositions($oppositions)
     {
@@ -1450,7 +1450,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $oppositions collection being removed
      *
-     * @return Cases
+     * @return static
      */
     public function removeOppositions($oppositions)
     {
@@ -1466,7 +1466,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Dvsa\Olcs\Api\Entity\Pi\Pi $publicInquiry entity being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setPublicInquiry($publicInquiry)
     {
@@ -1490,7 +1490,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $prohibitions collection being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setProhibitions($prohibitions)
     {
@@ -1514,7 +1514,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $prohibitions collection being added
      *
-     * @return Cases
+     * @return static
      */
     public function addProhibitions($prohibitions)
     {
@@ -1537,7 +1537,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $prohibitions collection being removed
      *
-     * @return Cases
+     * @return static
      */
     public function removeProhibitions($prohibitions)
     {
@@ -1553,7 +1553,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $seriousInfringements collection being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setSeriousInfringements($seriousInfringements)
     {
@@ -1577,7 +1577,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $seriousInfringements collection being added
      *
-     * @return Cases
+     * @return static
      */
     public function addSeriousInfringements($seriousInfringements)
     {
@@ -1600,7 +1600,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $seriousInfringements collection being removed
      *
-     * @return Cases
+     * @return static
      */
     public function removeSeriousInfringements($seriousInfringements)
     {
@@ -1616,7 +1616,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $statements collection being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setStatements($statements)
     {
@@ -1640,7 +1640,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $statements collection being added
      *
-     * @return Cases
+     * @return static
      */
     public function addStatements($statements)
     {
@@ -1663,7 +1663,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $statements collection being removed
      *
-     * @return Cases
+     * @return static
      */
     public function removeStatements($statements)
     {
@@ -1679,7 +1679,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $stays collection being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setStays($stays)
     {
@@ -1703,7 +1703,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $stays collection being added
      *
-     * @return Cases
+     * @return static
      */
     public function addStays($stays)
     {
@@ -1726,7 +1726,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $stays collection being removed
      *
-     * @return Cases
+     * @return static
      */
     public function removeStays($stays)
     {
@@ -1742,7 +1742,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tmDecisions collection being set as the value
      *
-     * @return Cases
+     * @return static
      */
     public function setTmDecisions($tmDecisions)
     {
@@ -1766,7 +1766,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tmDecisions collection being added
      *
-     * @return Cases
+     * @return static
      */
     public function addTmDecisions($tmDecisions)
     {
@@ -1789,7 +1789,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tmDecisions collection being removed
      *
-     * @return Cases
+     * @return static
      */
     public function removeTmDecisions($tmDecisions)
     {

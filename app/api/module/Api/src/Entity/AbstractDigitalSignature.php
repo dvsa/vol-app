@@ -111,7 +111,7 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return DigitalSignature
+     * @return static
      */
     public function setId($id)
     {
@@ -135,7 +135,7 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return DigitalSignature
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -159,7 +159,7 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return DigitalSignature
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -183,7 +183,7 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
      *
      * @param string $attributes new value being set
      *
-     * @return DigitalSignature
+     * @return static
      */
     public function setAttributes($attributes)
     {
@@ -207,7 +207,7 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
      *
      * @param string $samlResponse new value being set
      *
-     * @return DigitalSignature
+     * @return static
      */
     public function setSamlResponse($samlResponse)
     {
@@ -231,7 +231,7 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
      *
      * @param int $version new value being set
      *
-     * @return DigitalSignature
+     * @return static
      */
     public function setVersion($version)
     {

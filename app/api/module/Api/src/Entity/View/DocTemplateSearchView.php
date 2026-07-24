@@ -79,7 +79,7 @@ class DocTemplateSearchView implements BundleSerializableInterface
     /**
      * Letter Type ID
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'letter_type_id', nullable: true)]
     protected $letterType;
@@ -103,7 +103,7 @@ class DocTemplateSearchView implements BundleSerializableInterface
     /**
      * Letter Type Name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'letter_type_name', nullable: true)]
     protected $letterTypeName;

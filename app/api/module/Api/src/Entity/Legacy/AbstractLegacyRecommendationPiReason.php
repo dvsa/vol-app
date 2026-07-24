@@ -122,7 +122,7 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
      *
      * @param int $id new value being set
      *
-     * @return LegacyRecommendationPiReason
+     * @return static
      */
     public function setId($id)
     {
@@ -146,7 +146,7 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
      *
      * @param \Dvsa\Olcs\Api\Entity\Legacy\LegacyRecommendation $legacyRecommendation new value being set
      *
-     * @return LegacyRecommendationPiReason
+     * @return static
      */
     public function setLegacyRecommendation($legacyRecommendation)
     {
@@ -170,7 +170,7 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
      *
      * @param \Dvsa\Olcs\Api\Entity\Legacy\LegacyPiReason $legacyPiReason new value being set
      *
-     * @return LegacyRecommendationPiReason
+     * @return static
      */
     public function setLegacyPiReason($legacyPiReason)
     {
@@ -194,7 +194,7 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LegacyRecommendationPiReason
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -218,7 +218,7 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LegacyRecommendationPiReason
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -242,7 +242,7 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
      *
      * @param string $comment new value being set
      *
-     * @return LegacyRecommendationPiReason
+     * @return static
      */
     public function setComment($comment)
     {
@@ -266,7 +266,7 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
      *
      * @param int $version new value being set
      *
-     * @return LegacyRecommendationPiReason
+     * @return static
      */
     public function setVersion($version)
     {

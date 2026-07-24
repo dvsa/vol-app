@@ -122,7 +122,7 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return IrfoPsvAuthType
+     * @return static
      */
     public function setId($id)
     {
@@ -146,7 +146,7 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $irfoFeeType new value being set
      *
-     * @return IrfoPsvAuthType
+     * @return static
      */
     public function setIrfoFeeType($irfoFeeType)
     {
@@ -170,7 +170,7 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrfoPsvAuthType
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -194,7 +194,7 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrfoPsvAuthType
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -218,7 +218,7 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
      *
      * @param string $description new value being set
      *
-     * @return IrfoPsvAuthType
+     * @return static
      */
     public function setDescription($description)
     {
@@ -242,7 +242,7 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
      *
      * @param string $sectionCode new value being set
      *
-     * @return IrfoPsvAuthType
+     * @return static
      */
     public function setSectionCode($sectionCode)
     {
@@ -266,7 +266,7 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return IrfoPsvAuthType
+     * @return static
      */
     public function setVersion($version)
     {

@@ -142,7 +142,7 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return LegacyPiReason
+     * @return static
      */
     public function setId($id)
     {
@@ -166,7 +166,7 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LegacyPiReason
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -190,7 +190,7 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LegacyPiReason
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -214,7 +214,7 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
      *
      * @param string $goodsOrPsv new value being set
      *
-     * @return LegacyPiReason
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -238,7 +238,7 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
      *
      * @param string $sectionCode new value being set
      *
-     * @return LegacyPiReason
+     * @return static
      */
     public function setSectionCode($sectionCode)
     {
@@ -262,7 +262,7 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
      *
      * @param string $description new value being set
      *
-     * @return LegacyPiReason
+     * @return static
      */
     public function setDescription($description)
     {
@@ -286,7 +286,7 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
      *
      * @param bool $isReadOnly new value being set
      *
-     * @return LegacyPiReason
+     * @return static
      */
     public function setIsReadOnly($isReadOnly)
     {
@@ -310,7 +310,7 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
      *
      * @param bool $isNi new value being set
      *
-     * @return LegacyPiReason
+     * @return static
      */
     public function setIsNi($isNi)
     {
@@ -334,7 +334,7 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
      *
      * @param bool $isDecision new value being set
      *
-     * @return LegacyPiReason
+     * @return static
      */
     public function setIsDecision($isDecision)
     {
@@ -358,7 +358,7 @@ abstract class AbstractLegacyPiReason implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return LegacyPiReason
+     * @return static
      */
     public function setVersion($version)
     {

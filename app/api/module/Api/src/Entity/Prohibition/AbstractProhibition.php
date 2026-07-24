@@ -177,7 +177,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param int $id new value being set
      *
-     * @return Prohibition
+     * @return static
      */
     public function setId($id)
     {
@@ -201,7 +201,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return Prohibition
+     * @return static
      */
     public function setCase($case)
     {
@@ -225,7 +225,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $prohibitionType new value being set
      *
-     * @return Prohibition
+     * @return static
      */
     public function setProhibitionType($prohibitionType)
     {
@@ -249,7 +249,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Prohibition
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -273,7 +273,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Prohibition
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -297,7 +297,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $prohibitionDate new value being set
      *
-     * @return Prohibition
+     * @return static
      */
     public function setProhibitionDate($prohibitionDate)
     {
@@ -327,7 +327,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $clearedDate new value being set
      *
-     * @return Prohibition
+     * @return static
      */
     public function setClearedDate($clearedDate)
     {
@@ -357,7 +357,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param string $isTrailer new value being set
      *
-     * @return Prohibition
+     * @return static
      */
     public function setIsTrailer($isTrailer)
     {
@@ -381,7 +381,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param string $vrm new value being set
      *
-     * @return Prohibition
+     * @return static
      */
     public function setVrm($vrm)
     {
@@ -405,7 +405,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param string $imposedAt new value being set
      *
-     * @return Prohibition
+     * @return static
      */
     public function setImposedAt($imposedAt)
     {
@@ -429,7 +429,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param int $version new value being set
      *
-     * @return Prohibition
+     * @return static
      */
     public function setVersion($version)
     {
@@ -453,7 +453,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param int $olbsKey new value being set
      *
-     * @return Prohibition
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -477,7 +477,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $defects collection being set as the value
      *
-     * @return Prohibition
+     * @return static
      */
     public function setDefects($defects)
     {
@@ -501,7 +501,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $defects collection being added
      *
-     * @return Prohibition
+     * @return static
      */
     public function addDefects($defects)
     {
@@ -524,7 +524,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $defects collection being removed
      *
-     * @return Prohibition
+     * @return static
      */
     public function removeDefects($defects)
     {

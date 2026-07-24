@@ -196,7 +196,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param string $id new value being set
      *
-     * @return TrafficArea
+     * @return static
      */
     public function setId($id)
     {
@@ -220,7 +220,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails new value being set
      *
-     * @return TrafficArea
+     * @return static
      */
     public function setContactDetails($contactDetails)
     {
@@ -244,7 +244,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return TrafficArea
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -268,7 +268,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return TrafficArea
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -292,7 +292,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param string $name new value being set
      *
-     * @return TrafficArea
+     * @return static
      */
     public function setName($name)
     {
@@ -316,7 +316,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param string $txcName new value being set
      *
-     * @return TrafficArea
+     * @return static
      */
     public function setTxcName($txcName)
     {
@@ -340,7 +340,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param bool $isScotland new value being set
      *
-     * @return TrafficArea
+     * @return static
      */
     public function setIsScotland($isScotland)
     {
@@ -364,7 +364,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param bool $isWales new value being set
      *
-     * @return TrafficArea
+     * @return static
      */
     public function setIsWales($isWales)
     {
@@ -388,7 +388,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param bool $isNi new value being set
      *
-     * @return TrafficArea
+     * @return static
      */
     public function setIsNi($isNi)
     {
@@ -412,7 +412,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param bool $isEngland new value being set
      *
-     * @return TrafficArea
+     * @return static
      */
     public function setIsEngland($isEngland)
     {
@@ -436,7 +436,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param string $salesPersonReference new value being set
      *
-     * @return TrafficArea
+     * @return static
      */
     public function setSalesPersonReference($salesPersonReference)
     {
@@ -460,7 +460,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param int $version new value being set
      *
-     * @return TrafficArea
+     * @return static
      */
     public function setVersion($version)
     {
@@ -484,7 +484,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being set as the value
      *
-     * @return TrafficArea
+     * @return static
      */
     public function setBusRegs($busRegs)
     {
@@ -508,7 +508,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $busRegs collection being added
      *
-     * @return TrafficArea
+     * @return static
      */
     public function addBusRegs($busRegs)
     {
@@ -531,7 +531,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being removed
      *
-     * @return TrafficArea
+     * @return static
      */
     public function removeBusRegs($busRegs)
     {
@@ -547,7 +547,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $recipients collection being set as the value
      *
-     * @return TrafficArea
+     * @return static
      */
     public function setRecipients($recipients)
     {
@@ -571,7 +571,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $recipients collection being added
      *
-     * @return TrafficArea
+     * @return static
      */
     public function addRecipients($recipients)
     {
@@ -594,7 +594,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $recipients collection being removed
      *
-     * @return TrafficArea
+     * @return static
      */
     public function removeRecipients($recipients)
     {
@@ -610,7 +610,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being set as the value
      *
-     * @return TrafficArea
+     * @return static
      */
     public function setDocuments($documents)
     {
@@ -634,7 +634,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documents collection being added
      *
-     * @return TrafficArea
+     * @return static
      */
     public function addDocuments($documents)
     {
@@ -657,7 +657,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being removed
      *
-     * @return TrafficArea
+     * @return static
      */
     public function removeDocuments($documents)
     {
@@ -673,7 +673,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $trafficAreaEnforcementAreas collection being set as the value
      *
-     * @return TrafficArea
+     * @return static
      */
     public function setTrafficAreaEnforcementAreas($trafficAreaEnforcementAreas)
     {
@@ -697,7 +697,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $trafficAreaEnforcementAreas collection being added
      *
-     * @return TrafficArea
+     * @return static
      */
     public function addTrafficAreaEnforcementAreas($trafficAreaEnforcementAreas)
     {
@@ -720,7 +720,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $trafficAreaEnforcementAreas collection being removed
      *
-     * @return TrafficArea
+     * @return static
      */
     public function removeTrafficAreaEnforcementAreas($trafficAreaEnforcementAreas)
     {

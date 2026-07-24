@@ -172,7 +172,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
      *
      * @param int $id new value being set
      *
-     * @return TaskAllocationRule
+     * @return static
      */
     public function setId($id)
     {
@@ -196,7 +196,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\Category $category new value being set
      *
-     * @return TaskAllocationRule
+     * @return static
      */
     public function setCategory($category)
     {
@@ -220,7 +220,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory new value being set
      *
-     * @return TaskAllocationRule
+     * @return static
      */
     public function setSubCategory($subCategory)
     {
@@ -244,7 +244,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\Team $team new value being set
      *
-     * @return TaskAllocationRule
+     * @return static
      */
     public function setTeam($team)
     {
@@ -268,7 +268,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return TaskAllocationRule
+     * @return static
      */
     public function setUser($user)
     {
@@ -292,7 +292,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
-     * @return TaskAllocationRule
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -316,7 +316,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
-     * @return TaskAllocationRule
+     * @return static
      */
     public function setTrafficArea($trafficArea)
     {
@@ -340,7 +340,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return TaskAllocationRule
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -364,7 +364,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return TaskAllocationRule
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -388,7 +388,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
      *
      * @param bool $isMlh new value being set
      *
-     * @return TaskAllocationRule
+     * @return static
      */
     public function setIsMlh($isMlh)
     {
@@ -412,7 +412,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
      *
      * @param int $version new value being set
      *
-     * @return TaskAllocationRule
+     * @return static
      */
     public function setVersion($version)
     {
@@ -436,7 +436,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $taskAlphaSplits collection being set as the value
      *
-     * @return TaskAllocationRule
+     * @return static
      */
     public function setTaskAlphaSplits($taskAlphaSplits)
     {
@@ -460,7 +460,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $taskAlphaSplits collection being added
      *
-     * @return TaskAllocationRule
+     * @return static
      */
     public function addTaskAlphaSplits($taskAlphaSplits)
     {
@@ -483,7 +483,7 @@ abstract class AbstractTaskAllocationRule implements BundleSerializableInterface
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $taskAlphaSplits collection being removed
      *
-     * @return TaskAllocationRule
+     * @return static
      */
     public function removeTaskAlphaSplits($taskAlphaSplits)
     {

@@ -91,7 +91,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
      *
      * @param int $id new value being set
      *
-     * @return Printer
+     * @return static
      */
     public function setId($id)
     {
@@ -115,7 +115,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
      *
      * @param string $printerTray new value being set
      *
-     * @return Printer
+     * @return static
      */
     public function setPrinterTray($printerTray)
     {
@@ -139,7 +139,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
      *
      * @param string $printerName new value being set
      *
-     * @return Printer
+     * @return static
      */
     public function setPrinterName($printerName)
     {
@@ -163,7 +163,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
      *
      * @param string $description new value being set
      *
-     * @return Printer
+     * @return static
      */
     public function setDescription($description)
     {
@@ -187,7 +187,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $teamPrinters collection being set as the value
      *
-     * @return Printer
+     * @return static
      */
     public function setTeamPrinters($teamPrinters)
     {
@@ -211,7 +211,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $teamPrinters collection being added
      *
-     * @return Printer
+     * @return static
      */
     public function addTeamPrinters($teamPrinters)
     {
@@ -234,7 +234,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $teamPrinters collection being removed
      *
-     * @return Printer
+     * @return static
      */
     public function removeTeamPrinters($teamPrinters)
     {

@@ -129,7 +129,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
      *
      * @param int $id new value being set
      *
-     * @return Role
+     * @return static
      */
     public function setId($id)
     {
@@ -153,7 +153,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Role
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -177,7 +177,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Role
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -201,7 +201,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
      *
      * @param string $role new value being set
      *
-     * @return Role
+     * @return static
      */
     public function setRole($role)
     {
@@ -225,7 +225,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
      *
      * @param string $description new value being set
      *
-     * @return Role
+     * @return static
      */
     public function setDescription($description)
     {
@@ -249,7 +249,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
      *
      * @param int $version new value being set
      *
-     * @return Role
+     * @return static
      */
     public function setVersion($version)
     {
@@ -273,7 +273,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $users collection being set as the value
      *
-     * @return Role
+     * @return static
      */
     public function setUsers($users)
     {
@@ -297,7 +297,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $users collection being added
      *
-     * @return Role
+     * @return static
      */
     public function addUsers($users)
     {
@@ -320,7 +320,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $users collection being removed
      *
-     * @return Role
+     * @return static
      */
     public function removeUsers($users)
     {
@@ -336,7 +336,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $rolePermissions collection being set as the value
      *
-     * @return Role
+     * @return static
      */
     public function setRolePermissions($rolePermissions)
     {
@@ -360,7 +360,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $rolePermissions collection being added
      *
-     * @return Role
+     * @return static
      */
     public function addRolePermissions($rolePermissions)
     {
@@ -383,7 +383,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $rolePermissions collection being removed
      *
-     * @return Role
+     * @return static
      */
     public function removeRolePermissions($rolePermissions)
     {

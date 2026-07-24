@@ -84,7 +84,7 @@ abstract class AbstractExtTranslations implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return ExtTranslations
+     * @return static
      */
     public function setId($id)
     {
@@ -108,7 +108,7 @@ abstract class AbstractExtTranslations implements BundleSerializableInterface, J
      *
      * @param string $locale new value being set
      *
-     * @return ExtTranslations
+     * @return static
      */
     public function setLocale($locale)
     {
@@ -132,7 +132,7 @@ abstract class AbstractExtTranslations implements BundleSerializableInterface, J
      *
      * @param string $objectClass new value being set
      *
-     * @return ExtTranslations
+     * @return static
      */
     public function setObjectClass($objectClass)
     {
@@ -156,7 +156,7 @@ abstract class AbstractExtTranslations implements BundleSerializableInterface, J
      *
      * @param string $field new value being set
      *
-     * @return ExtTranslations
+     * @return static
      */
     public function setField($field)
     {
@@ -180,7 +180,7 @@ abstract class AbstractExtTranslations implements BundleSerializableInterface, J
      *
      * @param string $foreignKey new value being set
      *
-     * @return ExtTranslations
+     * @return static
      */
     public function setForeignKey($foreignKey)
     {
@@ -204,7 +204,7 @@ abstract class AbstractExtTranslations implements BundleSerializableInterface, J
      *
      * @param string $content new value being set
      *
-     * @return ExtTranslations
+     * @return static
      */
     public function setContent($content)
     {

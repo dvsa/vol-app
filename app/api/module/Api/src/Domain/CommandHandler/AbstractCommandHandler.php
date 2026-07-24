@@ -62,6 +62,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 use LmcRbacMvc\Service\AuthorizationService;
 use Olcs\Logging\Log\Logger;
 use Psr\Container\ContainerInterface;
+use Dvsa\Olcs\Api\Domain\RedisAwareInterface;
 
 /**
  * Abstract Command Handler
@@ -235,6 +236,16 @@ abstract class AbstractCommandHandler implements CommandHandlerInterface, Factor
         if ($this instanceof EditorJsConverterAwareInterface) {
             $converterService = $mainServiceLocator->get(\Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class);
             $this->setConverterService($converterService);
+        }
+
+        if ($this instanceof RedisAwareInterface) {
+            $redis = $mainServiceLocator->get('cache.redis.connection');
+
+            if (!$redis instanceof \Redis) {
+                throw new \RuntimeException('Redis connection service is invalid');
+            }
+
+            $this->setRedis($redis);
         }
     }
 

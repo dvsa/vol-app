@@ -1,0 +1,233 @@
+{
+  "Comment": "Extract data from bank statements using Bedrock Data Automation",
+  "StartAt": "CheckIsBankStatement",
+  "TimeoutSeconds": 1800,
+  "States": {
+    "CheckIsBankStatement": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Or": [
+            {
+              "Variable": "$.classification",
+              "StringEquals": "BANK_STATEMENT"
+            },
+            {
+              "Variable": "$.classification",
+              "StringEquals": "TRANSACTION_REPORT"
+            },
+            {
+              "Variable": "$.classification",
+              "StringEquals": "BankStatement"
+            },
+            {
+              "Variable": "$.classification",
+              "StringMatches": "*Bank Statement*"
+            }
+          ],
+          "Next": "InvokeBedrockDataAutomation"
+        }
+      ],
+      "Default": "EmitSkippedEvent"
+    },
+    "InvokeBedrockDataAutomation": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:bedrockdataautomationruntime:invokeDataAutomationAsync",
+      "Parameters": {
+        "InputConfiguration": {
+          "S3Uri.$": "States.Format('s3://{}/{}', $.bucket, $.key)"
+        },
+        "OutputConfiguration": {
+          "S3Uri.$": "States.Format('s3://{}/{}/brda', $.config.outputBucket, $.key)"
+        },
+        "DataAutomationProfileArn.$": "$.config.bedrockProfileArn",
+        "DataAutomationConfiguration": {
+          "DataAutomationProjectArn.$": "$.config.bedrockProjectArn",
+          "Stage.$": "$.config.bedrockProjectStage"
+        }
+      },
+      "ResultPath": "$.bedrock.invocation",
+      "Next": "WaitForBedrock",
+      "Retry": [
+        {
+          "ErrorEquals": ["BedrockDataAutomationRuntime.ThrottlingException", "ThrottlingException"],
+          "IntervalSeconds": 5,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "BedrockDataAutomationRuntime.ValidationException",
+            "BedrockDataAutomationRuntime.ResourceNotFoundException",
+            "BedrockDataAutomationRuntime.ClientException"
+          ],
+          "ResultPath": "$.error",
+          "Next": "EmitExtractionFailedEvent"
+        },
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "EmitExtractionFailedEvent"
+        }
+      ]
+    },
+    "WaitForBedrock": {
+      "Type": "Wait",
+      "Seconds": 10,
+      "Next": "GetBedrockStatus"
+    },
+    "GetBedrockStatus": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:bedrockdataautomationruntime:getDataAutomationStatus",
+      "Parameters": {
+        "InvocationArn.$": "$.bedrock.invocation.InvocationArn"
+      },
+      "ResultPath": "$.bedrock.status",
+      "Next": "CheckBedrockStatus",
+      "Retry": [
+        {
+          "ErrorEquals": ["BedrockDataAutomationRuntime.ThrottlingException", "ThrottlingException"],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": [
+            "BedrockDataAutomationRuntime.ValidationException",
+            "BedrockDataAutomationRuntime.ResourceNotFoundException",
+            "BedrockDataAutomationRuntime.ClientException"
+          ],
+          "ResultPath": "$.error",
+          "Next": "EmitExtractionFailedEvent"
+        },
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "EmitExtractionFailedEvent"
+        }
+      ]
+    },
+    "CheckBedrockStatus": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.bedrock.status.Status",
+          "StringEquals": "Success",
+          "Next": "PrepareExtractedData"
+        },
+        {
+          "Variable": "$.bedrock.status.Status",
+          "StringEquals": "Failed",
+          "Next": "EmitExtractionFailedEvent"
+        },
+        {
+          "Variable": "$.bedrock.status.Status",
+          "StringEquals": "ClientError",
+          "Next": "EmitExtractionFailedEvent"
+        }
+      ],
+      "Default": "WaitForBedrock"
+    },
+    "PrepareExtractedData": {
+      "Type": "Pass",
+      "Parameters": {
+        "bucket.$": "$.bucket",
+        "key.$": "$.key",
+        "object.$": "$.object",
+        "config.$": "$.config",
+        "classification.$": "$.classification",
+        "classificationConfidence.$": "$.classificationConfidence",
+        "totalPages.$": "$.totalPages",
+        "classifiedPages.$": "$.classifiedPages",
+        "dominantTypePages.$": "$.dominantTypePages",
+        "pageBreakdown.$": "$.pageBreakdown",
+        "documentSizeBytes.$": "$.documentSizeBytes",
+        "modelId.$": "$.modelId",
+        "bedrockInvocationArn.$": "$.bedrock.invocation.InvocationArn",
+        "bedrockInvocationId.$": "States.ArrayGetItem(States.StringSplit($.bedrock.invocation.InvocationArn, '/'), 1)",
+        "extractedDataS3Bucket.$": "$.config.outputBucket",
+        "extractedDataS3KeyPrefix.$": "States.Format('{}/brda/', $.key)"
+      },
+      "Next": "EmitExtractedEvent"
+    },
+    "EmitExtractedEvent": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "bucket.$": "$.bucket",
+              "key.$": "$.key",
+              "object.$": "$.object",
+              "config.$": "$.config",
+              "classification.$": "$.classification",
+              "classificationConfidence.$": "$.classificationConfidence",
+              "totalPages.$": "$.totalPages",
+              "classifiedPages.$": "$.classifiedPages",
+              "dominantTypePages.$": "$.dominantTypePages",
+              "pageBreakdown.$": "$.pageBreakdown",
+              "documentSizeBytes.$": "$.documentSizeBytes",
+              "modelId.$": "$.modelId",
+              "bedrockInvocationArn.$": "$.bedrockInvocationArn",
+              "bedrockInvocationId.$": "$.bedrockInvocationId",
+              "extractedDataS3Bucket.$": "$.extractedDataS3Bucket",
+              "extractedDataS3KeyPrefix.$": "$.extractedDataS3KeyPrefix"
+            },
+            "DetailType": "DocumentProcessing-Extracted",
+            "Source": "custom.documentProcessing"
+          }
+        ]
+      },
+      "End": true
+    },
+    "EmitSkippedEvent": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "bucket.$": "$.bucket",
+              "key.$": "$.key",
+              "object.$": "$.object",
+              "config.$": "$.config",
+              "classification.$": "$.classification",
+              "reason": "Document is not a bank statement, skipping extraction"
+            },
+            "DetailType": "DocumentProcessing-ExtractionSkipped",
+            "Source": "custom.documentProcessing"
+          }
+        ]
+      },
+      "End": true
+    },
+    "EmitExtractionFailedEvent": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "bucket.$": "$.bucket",
+              "key.$": "$.key",
+              "object.$": "$.object",
+              "config.$": "$.config",
+              "reason": "Data extraction failed",
+              "error.$": "$.bedrock.status.ErrorType",
+              "cause.$": "$.bedrock.status.ErrorMessage",
+              "bedrockStatus.$": "$.bedrock.status"
+            },
+            "DetailType": "DocumentProcessing-ExtractionFailed",
+            "Source": "custom.documentProcessing"
+          }
+        ]
+      },
+      "End": true
+    }
+  }
+}

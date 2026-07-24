@@ -168,7 +168,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param int $id new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setId($id)
     {
@@ -192,7 +192,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -216,7 +216,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -240,7 +240,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param string $sendAppDecision new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setSendAppDecision($sendAppDecision)
     {
@@ -264,7 +264,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param string $sendNoticesProcs new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setSendNoticesProcs($sendNoticesProcs)
     {
@@ -288,7 +288,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param string $isPolice new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setIsPolice($isPolice)
     {
@@ -312,7 +312,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param string $isObjector new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setIsObjector($isObjector)
     {
@@ -336,7 +336,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param string $contactName new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setContactName($contactName)
     {
@@ -360,7 +360,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param string $emailAddress new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setEmailAddress($emailAddress)
     {
@@ -384,7 +384,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param int $version new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setVersion($version)
     {
@@ -408,7 +408,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param int $olbsKey new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -432,7 +432,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $trafficAreas collection being set as the value
      *
-     * @return Recipient
+     * @return static
      */
     public function setTrafficAreas($trafficAreas)
     {
@@ -456,7 +456,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $trafficAreas collection being added
      *
-     * @return Recipient
+     * @return static
      */
     public function addTrafficAreas($trafficAreas)
     {
@@ -479,7 +479,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $trafficAreas collection being removed
      *
-     * @return Recipient
+     * @return static
      */
     public function removeTrafficAreas($trafficAreas)
     {

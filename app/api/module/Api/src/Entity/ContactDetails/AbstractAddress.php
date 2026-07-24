@@ -233,7 +233,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param int $id new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setId($id)
     {
@@ -257,7 +257,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\TrafficArea\AdminAreaTrafficArea $adminArea new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setAdminArea($adminArea)
     {
@@ -281,7 +281,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Country $countryCode new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setCountryCode($countryCode)
     {
@@ -305,7 +305,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -329,7 +329,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -353,7 +353,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param int $uprn new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setUprn($uprn)
     {
@@ -377,7 +377,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param string $paonStart new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setPaonStart($paonStart)
     {
@@ -401,7 +401,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param string $paonEnd new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setPaonEnd($paonEnd)
     {
@@ -425,7 +425,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param string $addressLine2 new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setAddressLine2($addressLine2)
     {
@@ -449,7 +449,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param string $saonStart new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setSaonStart($saonStart)
     {
@@ -473,7 +473,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param string $saonEnd new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setSaonEnd($saonEnd)
     {
@@ -497,7 +497,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param string $addressLine1 new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setAddressLine1($addressLine1)
     {
@@ -521,7 +521,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param string $addressLine3 new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setAddressLine3($addressLine3)
     {
@@ -545,7 +545,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param string $addressLine4 new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setAddressLine4($addressLine4)
     {
@@ -569,7 +569,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param string $town new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setTown($town)
     {
@@ -593,7 +593,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param string $postcode new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setPostcode($postcode)
     {
@@ -617,7 +617,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param int $version new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setVersion($version)
     {
@@ -641,7 +641,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param int $olbsKey new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -665,7 +665,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param string $olbsType new value being set
      *
-     * @return Address
+     * @return static
      */
     public function setOlbsType($olbsType)
     {
@@ -689,7 +689,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $contactDetails collection being set as the value
      *
-     * @return Address
+     * @return static
      */
     public function setContactDetails($contactDetails)
     {
@@ -713,7 +713,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $contactDetails collection being added
      *
-     * @return Address
+     * @return static
      */
     public function addContactDetails($contactDetails)
     {
@@ -736,7 +736,7 @@ abstract class AbstractAddress implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $contactDetails collection being removed
      *
-     * @return Address
+     * @return static
      */
     public function removeContactDetails($contactDetails)
     {

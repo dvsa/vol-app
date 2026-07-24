@@ -115,7 +115,7 @@ abstract class AbstractLetterSection implements BundleSerializableInterface, Jso
      *
      * @param int $id new value being set
      *
-     * @return LetterSection
+     * @return static
      */
     public function setId($id)
     {
@@ -139,7 +139,7 @@ abstract class AbstractLetterSection implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion $currentVersion new value being set
      *
-     * @return LetterSection
+     * @return static
      */
     public function setCurrentVersion($currentVersion)
     {
@@ -163,7 +163,7 @@ abstract class AbstractLetterSection implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterSection
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -187,7 +187,7 @@ abstract class AbstractLetterSection implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterSection
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -211,7 +211,7 @@ abstract class AbstractLetterSection implements BundleSerializableInterface, Jso
      *
      * @param string $sectionKey new value being set
      *
-     * @return LetterSection
+     * @return static
      */
     public function setSectionKey($sectionKey)
     {
@@ -235,7 +235,7 @@ abstract class AbstractLetterSection implements BundleSerializableInterface, Jso
      *
      * @param int $version new value being set
      *
-     * @return LetterSection
+     * @return static
      */
     public function setVersion($version)
     {

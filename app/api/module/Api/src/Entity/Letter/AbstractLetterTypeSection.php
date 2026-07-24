@@ -42,8 +42,8 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
      */
-    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id')]
     #[ORM\Id]
+    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, fetch: 'LAZY')]
     protected $letterType;
 
@@ -52,8 +52,8 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSection
      */
-    #[ORM\JoinColumn(name: 'letter_section_id', referencedColumnName: 'id')]
     #[ORM\Id]
+    #[ORM\JoinColumn(name: 'letter_section_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSection::class, fetch: 'LAZY')]
     protected $letterSection;
 
@@ -130,7 +130,7 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterType $letterType new value being set
      *
-     * @return LetterTypeSection
+     * @return static
      */
     public function setLetterType($letterType)
     {
@@ -154,7 +154,7 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterSection $letterSection new value being set
      *
-     * @return LetterTypeSection
+     * @return static
      */
     public function setLetterSection($letterSection)
     {
@@ -178,7 +178,7 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterTypeSection
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -202,7 +202,7 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterTypeSection
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -226,7 +226,7 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      *
      * @param int $displayOrder new value being set
      *
-     * @return LetterTypeSection
+     * @return static
      */
     public function setDisplayOrder($displayOrder)
     {
@@ -250,7 +250,7 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      *
      * @param array $overrideContent new value being set
      *
-     * @return LetterTypeSection
+     * @return static
      */
     public function setOverrideContent($overrideContent)
     {
@@ -274,7 +274,7 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      *
      * @param array $issueFilter new value being set
      *
-     * @return LetterTypeSection
+     * @return static
      */
     public function setIssueFilter($issueFilter)
     {
@@ -298,7 +298,7 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
      *
      * @param bool $isRequired new value being set
      *
-     * @return LetterTypeSection
+     * @return static
      */
     public function setIsRequired($isRequired)
     {
@@ -323,6 +323,6 @@ abstract class AbstractLetterTypeSection implements BundleSerializableInterface,
     #[\Override]
     public function __toString(): string
     {
-        return (string) $this->getId();
+        return implode('-', [(string) $this->letterType, (string) $this->letterSection]);
     }
 }

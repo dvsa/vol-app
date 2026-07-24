@@ -325,7 +325,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param int $id new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setId($id)
     {
@@ -349,7 +349,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -373,7 +373,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setApplication($application)
     {
@@ -397,7 +397,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $tmType new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setTmType($tmType)
     {
@@ -421,7 +421,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $tmSignatureType new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setTmSignatureType($tmSignatureType)
     {
@@ -445,7 +445,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param \Dvsa\Olcs\Api\Entity\DigitalSignature $tmDigitalSignature new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setTmDigitalSignature($tmDigitalSignature)
     {
@@ -469,7 +469,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $opSignatureType new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setOpSignatureType($opSignatureType)
     {
@@ -493,7 +493,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param \Dvsa\Olcs\Api\Entity\DigitalSignature $opDigitalSignature new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setOpDigitalSignature($opDigitalSignature)
     {
@@ -517,7 +517,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $tmApplicationStatus new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setTmApplicationStatus($tmApplicationStatus)
     {
@@ -541,7 +541,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -565,7 +565,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -589,7 +589,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param string $isOwner new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setIsOwner($isOwner)
     {
@@ -613,7 +613,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param string $action new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setAction($action)
     {
@@ -637,7 +637,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param string $hoursMon new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setHoursMon($hoursMon)
     {
@@ -661,7 +661,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param string $hoursTue new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setHoursTue($hoursTue)
     {
@@ -685,7 +685,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param string $hoursWed new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setHoursWed($hoursWed)
     {
@@ -709,7 +709,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param string $hoursThu new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setHoursThu($hoursThu)
     {
@@ -733,7 +733,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param string $hoursFri new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setHoursFri($hoursFri)
     {
@@ -757,7 +757,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param string $hoursSat new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setHoursSat($hoursSat)
     {
@@ -781,7 +781,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param string $hoursSun new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setHoursSun($hoursSun)
     {
@@ -805,7 +805,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param bool $hasOtherLicences new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setHasOtherLicences($hasOtherLicences)
     {
@@ -829,7 +829,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param bool $hasOtherEmployment new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setHasOtherEmployment($hasOtherEmployment)
     {
@@ -853,7 +853,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param bool $hasConvictions new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setHasConvictions($hasConvictions)
     {
@@ -877,7 +877,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param bool $hasPreviousLicences new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setHasPreviousLicences($hasPreviousLicences)
     {
@@ -901,7 +901,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param string $hasUndertakenTraining new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setHasUndertakenTraining($hasUndertakenTraining)
     {
@@ -925,7 +925,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param string $declarationConfirmation new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setDeclarationConfirmation($declarationConfirmation)
     {
@@ -949,7 +949,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param string $additionalInformation new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setAdditionalInformation($additionalInformation)
     {
@@ -973,7 +973,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param int $version new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setVersion($version)
     {
@@ -997,7 +997,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param int $olbsKey new value being set
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -1021,7 +1021,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $otherLicences collection being set as the value
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function setOtherLicences($otherLicences)
     {
@@ -1045,7 +1045,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $otherLicences collection being added
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function addOtherLicences($otherLicences)
     {
@@ -1068,7 +1068,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $otherLicences collection being removed
      *
-     * @return TransportManagerApplication
+     * @return static
      */
     public function removeOtherLicences($otherLicences)
     {

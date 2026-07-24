@@ -131,7 +131,7 @@ abstract class AbstractProhibitionDefect implements BundleSerializableInterface,
      *
      * @param int $id new value being set
      *
-     * @return ProhibitionDefect
+     * @return static
      */
     public function setId($id)
     {
@@ -155,7 +155,7 @@ abstract class AbstractProhibitionDefect implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Prohibition\Prohibition $prohibition new value being set
      *
-     * @return ProhibitionDefect
+     * @return static
      */
     public function setProhibition($prohibition)
     {
@@ -179,7 +179,7 @@ abstract class AbstractProhibitionDefect implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return ProhibitionDefect
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -203,7 +203,7 @@ abstract class AbstractProhibitionDefect implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return ProhibitionDefect
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -227,7 +227,7 @@ abstract class AbstractProhibitionDefect implements BundleSerializableInterface,
      *
      * @param string $notes new value being set
      *
-     * @return ProhibitionDefect
+     * @return static
      */
     public function setNotes($notes)
     {
@@ -251,7 +251,7 @@ abstract class AbstractProhibitionDefect implements BundleSerializableInterface,
      *
      * @param string $defectType new value being set
      *
-     * @return ProhibitionDefect
+     * @return static
      */
     public function setDefectType($defectType)
     {
@@ -275,7 +275,7 @@ abstract class AbstractProhibitionDefect implements BundleSerializableInterface,
      *
      * @param int $version new value being set
      *
-     * @return ProhibitionDefect
+     * @return static
      */
     public function setVersion($version)
     {
@@ -299,7 +299,7 @@ abstract class AbstractProhibitionDefect implements BundleSerializableInterface,
      *
      * @param int $olbsKey new value being set
      *
-     * @return ProhibitionDefect
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

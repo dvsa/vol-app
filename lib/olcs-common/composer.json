@@ -31,7 +31,6 @@
     "php": "~8.4.0",
     "ezyang/htmlpurifier": "^4.17",
     "laminas/laminas-authentication": "^2.18",
-    "laminas/laminas-cache": "^3.13",
     "laminas/laminas-code": "^4.16",
     "laminas/laminas-eventmanager": "^3.14",
     "laminas/laminas-filter": "^2.41",

@@ -113,7 +113,7 @@ abstract class AbstractReplacement implements BundleSerializableInterface, JsonS
      *
      * @param int $id new value being set
      *
-     * @return Replacement
+     * @return static
      */
     public function setId($id)
     {
@@ -137,7 +137,7 @@ abstract class AbstractReplacement implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Replacement
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -161,7 +161,7 @@ abstract class AbstractReplacement implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Replacement
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -185,7 +185,7 @@ abstract class AbstractReplacement implements BundleSerializableInterface, JsonS
      *
      * @param string $placeholder new value being set
      *
-     * @return Replacement
+     * @return static
      */
     public function setPlaceholder($placeholder)
     {
@@ -209,7 +209,7 @@ abstract class AbstractReplacement implements BundleSerializableInterface, JsonS
      *
      * @param string $replacementText new value being set
      *
-     * @return Replacement
+     * @return static
      */
     public function setReplacementText($replacementText)
     {
@@ -233,7 +233,7 @@ abstract class AbstractReplacement implements BundleSerializableInterface, JsonS
      *
      * @param int $version new value being set
      *
-     * @return Replacement
+     * @return static
      */
     public function setVersion($version)
     {

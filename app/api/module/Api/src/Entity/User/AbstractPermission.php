@@ -111,7 +111,7 @@ abstract class AbstractPermission implements BundleSerializableInterface, JsonSe
      *
      * @param int $id new value being set
      *
-     * @return Permission
+     * @return static
      */
     public function setId($id)
     {
@@ -135,7 +135,7 @@ abstract class AbstractPermission implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Permission
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -159,7 +159,7 @@ abstract class AbstractPermission implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Permission
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -183,7 +183,7 @@ abstract class AbstractPermission implements BundleSerializableInterface, JsonSe
      *
      * @param string $code new value being set
      *
-     * @return Permission
+     * @return static
      */
     public function setCode($code)
     {
@@ -207,7 +207,7 @@ abstract class AbstractPermission implements BundleSerializableInterface, JsonSe
      *
      * @param string $name new value being set
      *
-     * @return Permission
+     * @return static
      */
     public function setName($name)
     {
@@ -231,7 +231,7 @@ abstract class AbstractPermission implements BundleSerializableInterface, JsonSe
      *
      * @param int $version new value being set
      *
-     * @return Permission
+     * @return static
      */
     public function setVersion($version)
     {

@@ -84,7 +84,7 @@ abstract class AbstractBusRegReadAudit implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return BusRegReadAudit
+     * @return static
      */
     public function setId($id)
     {
@@ -108,7 +108,7 @@ abstract class AbstractBusRegReadAudit implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return BusRegReadAudit
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -132,7 +132,7 @@ abstract class AbstractBusRegReadAudit implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return BusRegReadAudit
+     * @return static
      */
     public function setUser($user)
     {

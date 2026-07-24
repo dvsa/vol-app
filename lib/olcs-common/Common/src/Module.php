@@ -240,9 +240,7 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface
      */
     protected function setUpTranslator(ServiceManager $sm, $eventManager)
     {
-        $cache = $sm->get('default-cache');
-        $translator = $sm->get('translator');
-        $translator->setCache($cache);
+        $sm->get('translator');
 
         /** @var LanguageListener $languagePrefListener */
         $languagePrefListener = $sm->get('LanguageListener');

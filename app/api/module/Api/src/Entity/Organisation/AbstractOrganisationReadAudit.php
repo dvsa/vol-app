@@ -84,7 +84,7 @@ abstract class AbstractOrganisationReadAudit implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return OrganisationReadAudit
+     * @return static
      */
     public function setId($id)
     {
@@ -108,7 +108,7 @@ abstract class AbstractOrganisationReadAudit implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return OrganisationReadAudit
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -132,7 +132,7 @@ abstract class AbstractOrganisationReadAudit implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return OrganisationReadAudit
+     * @return static
      */
     public function setUser($user)
     {

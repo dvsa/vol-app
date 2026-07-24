@@ -123,7 +123,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return TaskAlphaSplit
+     * @return static
      */
     public function setId($id)
     {
@@ -147,7 +147,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule $taskAllocationRule new value being set
      *
-     * @return TaskAlphaSplit
+     * @return static
      */
     public function setTaskAllocationRule($taskAllocationRule)
     {
@@ -171,7 +171,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return TaskAlphaSplit
+     * @return static
      */
     public function setUser($user)
     {
@@ -195,7 +195,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return TaskAlphaSplit
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -219,7 +219,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return TaskAlphaSplit
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -243,7 +243,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      *
      * @param string $letters new value being set
      *
-     * @return TaskAlphaSplit
+     * @return static
      */
     public function setLetters($letters)
     {
@@ -267,7 +267,7 @@ abstract class AbstractTaskAlphaSplit implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return TaskAlphaSplit
+     * @return static
      */
     public function setVersion($version)
     {

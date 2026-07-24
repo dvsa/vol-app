@@ -131,7 +131,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function setId($id)
     {
@@ -155,7 +155,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $name new value being set
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function setName($name)
     {
@@ -179,7 +179,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -203,7 +203,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -227,7 +227,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param string $description new value being set
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function setDescription($description)
     {
@@ -251,7 +251,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function setVersion($version)
     {
@@ -275,7 +275,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $applicationPaths collection being set as the value
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function setApplicationPaths($applicationPaths)
     {
@@ -299,7 +299,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $applicationPaths collection being added
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function addApplicationPaths($applicationPaths)
     {
@@ -322,7 +322,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $applicationPaths collection being removed
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function removeApplicationPaths($applicationPaths)
     {
@@ -338,7 +338,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitStocks collection being set as the value
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function setIrhpPermitStocks($irhpPermitStocks)
     {
@@ -362,7 +362,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitStocks collection being added
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function addIrhpPermitStocks($irhpPermitStocks)
     {
@@ -385,7 +385,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitStocks collection being removed
      *
-     * @return IrhpPermitType
+     * @return static
      */
     public function removeIrhpPermitStocks($irhpPermitStocks)
     {

@@ -59,7 +59,7 @@ abstract class AbstractEventHistoryType implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return EventHistoryType
+     * @return static
      */
     public function setId($id)
     {
@@ -83,7 +83,7 @@ abstract class AbstractEventHistoryType implements BundleSerializableInterface, 
      *
      * @param string $eventCode new value being set
      *
-     * @return EventHistoryType
+     * @return static
      */
     public function setEventCode($eventCode)
     {
@@ -107,7 +107,7 @@ abstract class AbstractEventHistoryType implements BundleSerializableInterface, 
      *
      * @param string $description new value being set
      *
-     * @return EventHistoryType
+     * @return static
      */
     public function setDescription($description)
     {

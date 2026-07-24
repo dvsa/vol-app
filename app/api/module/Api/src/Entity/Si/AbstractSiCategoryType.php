@@ -115,7 +115,7 @@ abstract class AbstractSiCategoryType implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return SiCategoryType
+     * @return static
      */
     public function setId($id)
     {
@@ -139,7 +139,7 @@ abstract class AbstractSiCategoryType implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Si\SiCategory $siCategory new value being set
      *
-     * @return SiCategoryType
+     * @return static
      */
     public function setSiCategory($siCategory)
     {
@@ -163,7 +163,7 @@ abstract class AbstractSiCategoryType implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return SiCategoryType
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -187,7 +187,7 @@ abstract class AbstractSiCategoryType implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return SiCategoryType
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -211,7 +211,7 @@ abstract class AbstractSiCategoryType implements BundleSerializableInterface, Js
      *
      * @param string $description new value being set
      *
-     * @return SiCategoryType
+     * @return static
      */
     public function setDescription($description)
     {
@@ -235,7 +235,7 @@ abstract class AbstractSiCategoryType implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return SiCategoryType
+     * @return static
      */
     public function setVersion($version)
     {

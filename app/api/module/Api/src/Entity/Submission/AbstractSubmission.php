@@ -222,7 +222,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param int $id new value being set
      *
-     * @return Submission
+     * @return static
      */
     public function setId($id)
     {
@@ -246,7 +246,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return Submission
+     * @return static
      */
     public function setCase($case)
     {
@@ -270,7 +270,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $submissionType new value being set
      *
-     * @return Submission
+     * @return static
      */
     public function setSubmissionType($submissionType)
     {
@@ -294,7 +294,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $senderUser new value being set
      *
-     * @return Submission
+     * @return static
      */
     public function setSenderUser($senderUser)
     {
@@ -318,7 +318,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $recipientUser new value being set
      *
-     * @return Submission
+     * @return static
      */
     public function setRecipientUser($recipientUser)
     {
@@ -342,7 +342,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Submission
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -366,7 +366,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Submission
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -390,7 +390,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param string $dataSnapshot new value being set
      *
-     * @return Submission
+     * @return static
      */
     public function setDataSnapshot($dataSnapshot)
     {
@@ -414,7 +414,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param string $urgent new value being set
      *
-     * @return Submission
+     * @return static
      */
     public function setUrgent($urgent)
     {
@@ -438,7 +438,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $assignedDate new value being set
      *
-     * @return Submission
+     * @return static
      */
     public function setAssignedDate($assignedDate)
     {
@@ -468,7 +468,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param bool $tcSlaStarted new value being set
      *
-     * @return Submission
+     * @return static
      */
     public function setTcSlaStarted($tcSlaStarted)
     {
@@ -492,7 +492,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $informationCompleteDate new value being set
      *
-     * @return Submission
+     * @return static
      */
     public function setInformationCompleteDate($informationCompleteDate)
     {
@@ -522,7 +522,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $closedDate new value being set
      *
-     * @return Submission
+     * @return static
      */
     public function setClosedDate($closedDate)
     {
@@ -552,7 +552,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param int $version new value being set
      *
-     * @return Submission
+     * @return static
      */
     public function setVersion($version)
     {
@@ -576,7 +576,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being set as the value
      *
-     * @return Submission
+     * @return static
      */
     public function setDocuments($documents)
     {
@@ -600,7 +600,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documents collection being added
      *
-     * @return Submission
+     * @return static
      */
     public function addDocuments($documents)
     {
@@ -623,7 +623,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being removed
      *
-     * @return Submission
+     * @return static
      */
     public function removeDocuments($documents)
     {
@@ -639,7 +639,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $slaTargetDates collection being set as the value
      *
-     * @return Submission
+     * @return static
      */
     public function setSlaTargetDates($slaTargetDates)
     {
@@ -663,7 +663,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $slaTargetDates collection being added
      *
-     * @return Submission
+     * @return static
      */
     public function addSlaTargetDates($slaTargetDates)
     {
@@ -686,7 +686,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $slaTargetDates collection being removed
      *
-     * @return Submission
+     * @return static
      */
     public function removeSlaTargetDates($slaTargetDates)
     {
@@ -702,7 +702,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $submissionActions collection being set as the value
      *
-     * @return Submission
+     * @return static
      */
     public function setSubmissionActions($submissionActions)
     {
@@ -726,7 +726,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $submissionActions collection being added
      *
-     * @return Submission
+     * @return static
      */
     public function addSubmissionActions($submissionActions)
     {
@@ -749,7 +749,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $submissionActions collection being removed
      *
-     * @return Submission
+     * @return static
      */
     public function removeSubmissionActions($submissionActions)
     {
@@ -765,7 +765,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $submissionSectionComments collection being set as the value
      *
-     * @return Submission
+     * @return static
      */
     public function setSubmissionSectionComments($submissionSectionComments)
     {
@@ -789,7 +789,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $submissionSectionComments collection being added
      *
-     * @return Submission
+     * @return static
      */
     public function addSubmissionSectionComments($submissionSectionComments)
     {
@@ -812,7 +812,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $submissionSectionComments collection being removed
      *
-     * @return Submission
+     * @return static
      */
     public function removeSubmissionSectionComments($submissionSectionComments)
     {

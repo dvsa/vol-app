@@ -197,7 +197,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param int $id new value being set
      *
-     * @return DataRetention
+     * @return static
      */
     public function setId($id)
     {
@@ -221,7 +221,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $assignedTo new value being set
      *
-     * @return DataRetention
+     * @return static
      */
     public function setAssignedTo($assignedTo)
     {
@@ -245,7 +245,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
-     * @return DataRetention
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -269,7 +269,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\DataRetentionRule $dataRetentionRule new value being set
      *
-     * @return DataRetention
+     * @return static
      */
     public function setDataRetentionRule($dataRetentionRule)
     {
@@ -293,7 +293,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return DataRetention
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -317,7 +317,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return DataRetention
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -341,7 +341,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param string $entityName new value being set
      *
-     * @return DataRetention
+     * @return static
      */
     public function setEntityName($entityName)
     {
@@ -365,7 +365,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param int $entityPk new value being set
      *
-     * @return DataRetention
+     * @return static
      */
     public function setEntityPk($entityPk)
     {
@@ -389,7 +389,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param string $organisationName new value being set
      *
-     * @return DataRetention
+     * @return static
      */
     public function setOrganisationName($organisationName)
     {
@@ -413,7 +413,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param int $organisationId new value being set
      *
-     * @return DataRetention
+     * @return static
      */
     public function setOrganisationId($organisationId)
     {
@@ -437,7 +437,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param int $licenceId new value being set
      *
-     * @return DataRetention
+     * @return static
      */
     public function setLicenceId($licenceId)
     {
@@ -461,7 +461,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param string $licNo new value being set
      *
-     * @return DataRetention
+     * @return static
      */
     public function setLicNo($licNo)
     {
@@ -485,7 +485,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param bool $actionConfirmation new value being set
      *
-     * @return DataRetention
+     * @return static
      */
     public function setActionConfirmation($actionConfirmation)
     {
@@ -509,7 +509,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param \DateTime $nextReviewDate new value being set
      *
-     * @return DataRetention
+     * @return static
      */
     public function setNextReviewDate($nextReviewDate)
     {
@@ -539,7 +539,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
      *
      * @param \DateTime $actionedDate new value being set
      *
-     * @return DataRetention
+     * @return static
      */
     public function setActionedDate($actionedDate)
     {

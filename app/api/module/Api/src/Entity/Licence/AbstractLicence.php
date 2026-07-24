@@ -663,7 +663,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param int $id new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setId($id)
     {
@@ -687,7 +687,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea $enforcementArea new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setEnforcementArea($enforcementArea)
     {
@@ -711,7 +711,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -735,7 +735,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setTrafficArea($trafficArea)
     {
@@ -759,7 +759,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $correspondenceCd new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setCorrespondenceCd($correspondenceCd)
     {
@@ -783,7 +783,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $establishmentCd new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setEstablishmentCd($establishmentCd)
     {
@@ -807,7 +807,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $transportConsultantCd new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setTransportConsultantCd($transportConsultantCd)
     {
@@ -831,7 +831,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -855,7 +855,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $vehicleType new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setVehicleType($vehicleType)
     {
@@ -879,7 +879,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $licenceType new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setLicenceType($licenceType)
     {
@@ -903,7 +903,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setStatus($status)
     {
@@ -927,7 +927,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $tachographIns new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setTachographIns($tachographIns)
     {
@@ -951,7 +951,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -975,7 +975,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -999,7 +999,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param string $licNo new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setLicNo($licNo)
     {
@@ -1023,7 +1023,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $lgvDeclarationConfirmation new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setLgvDeclarationConfirmation($lgvDeclarationConfirmation)
     {
@@ -1047,7 +1047,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param string $viAction new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setViAction($viAction)
     {
@@ -1071,7 +1071,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $optOutTmLetter new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setOptOutTmLetter($optOutTmLetter)
     {
@@ -1095,7 +1095,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param int $totAuthTrailers new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setTotAuthTrailers($totAuthTrailers)
     {
@@ -1119,7 +1119,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param int $totAuthVehicles new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setTotAuthVehicles($totAuthVehicles)
     {
@@ -1143,7 +1143,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param int $totAuthHgvVehicles new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setTotAuthHgvVehicles($totAuthHgvVehicles)
     {
@@ -1167,7 +1167,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param int $totAuthLgvVehicles new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setTotAuthLgvVehicles($totAuthLgvVehicles)
     {
@@ -1191,7 +1191,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param int $totCommunityLicences new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setTotCommunityLicences($totCommunityLicences)
     {
@@ -1215,7 +1215,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param int $trailersInPossession new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setTrailersInPossession($trailersInPossession)
     {
@@ -1239,7 +1239,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param string $fabsReference new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setFabsReference($fabsReference)
     {
@@ -1263,7 +1263,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \DateTime $expiryDate new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setExpiryDate($expiryDate)
     {
@@ -1293,7 +1293,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \DateTime $grantedDate new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setGrantedDate($grantedDate)
     {
@@ -1323,7 +1323,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \DateTime $reviewDate new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setReviewDate($reviewDate)
     {
@@ -1353,7 +1353,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \DateTime $feeDate new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setFeeDate($feeDate)
     {
@@ -1383,7 +1383,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \DateTime $inForceDate new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setInForceDate($inForceDate)
     {
@@ -1413,7 +1413,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \DateTime $surrenderedDate new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setSurrenderedDate($surrenderedDate)
     {
@@ -1443,7 +1443,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \DateTime $revokedDate new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setRevokedDate($revokedDate)
     {
@@ -1473,7 +1473,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \DateTime $curtailedDate new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setCurtailedDate($curtailedDate)
     {
@@ -1503,7 +1503,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \DateTime $suspendedDate new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setSuspendedDate($suspendedDate)
     {
@@ -1533,7 +1533,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \DateTime $cnsDate new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setCnsDate($cnsDate)
     {
@@ -1563,7 +1563,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param int $safetyInsTrailers new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setSafetyInsTrailers($safetyInsTrailers)
     {
@@ -1587,7 +1587,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param int $safetyInsVehicles new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setSafetyInsVehicles($safetyInsVehicles)
     {
@@ -1611,7 +1611,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param string $safetyIns new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setSafetyIns($safetyIns)
     {
@@ -1635,7 +1635,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param string $safetyInsVaries new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setSafetyInsVaries($safetyInsVaries)
     {
@@ -1659,7 +1659,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param string $tachographInsName new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setTachographInsName($tachographInsName)
     {
@@ -1683,7 +1683,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param int $psvDiscsToBePrintedNo new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setPsvDiscsToBePrintedNo($psvDiscsToBePrintedNo)
     {
@@ -1707,7 +1707,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param string $translateToWelsh new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setTranslateToWelsh($translateToWelsh)
     {
@@ -1731,7 +1731,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param string $isMaintenanceSuitable new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setIsMaintenanceSuitable($isMaintenanceSuitable)
     {
@@ -1755,7 +1755,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param int $version new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setVersion($version)
     {
@@ -1779,7 +1779,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param int $olbsKey new value being set
      *
-     * @return Licence
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -1803,7 +1803,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $decisions collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setDecisions($decisions)
     {
@@ -1827,7 +1827,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $decisions collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addDecisions($decisions)
     {
@@ -1850,7 +1850,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $decisions collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeDecisions($decisions)
     {
@@ -1866,7 +1866,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $applications collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setApplications($applications)
     {
@@ -1890,7 +1890,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $applications collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addApplications($applications)
     {
@@ -1913,7 +1913,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $applications collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeApplications($applications)
     {
@@ -1929,7 +1929,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setBusRegs($busRegs)
     {
@@ -1953,7 +1953,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $busRegs collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addBusRegs($busRegs)
     {
@@ -1976,7 +1976,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeBusRegs($busRegs)
     {
@@ -1992,7 +1992,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $cases collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setCases($cases)
     {
@@ -2016,7 +2016,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $cases collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addCases($cases)
     {
@@ -2039,7 +2039,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $cases collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeCases($cases)
     {
@@ -2055,7 +2055,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $changeOfEntitys collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setChangeOfEntitys($changeOfEntitys)
     {
@@ -2079,7 +2079,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $changeOfEntitys collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addChangeOfEntitys($changeOfEntitys)
     {
@@ -2102,7 +2102,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $changeOfEntitys collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeChangeOfEntitys($changeOfEntitys)
     {
@@ -2118,7 +2118,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $communityLics collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setCommunityLics($communityLics)
     {
@@ -2142,7 +2142,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $communityLics collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addCommunityLics($communityLics)
     {
@@ -2165,7 +2165,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $communityLics collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeCommunityLics($communityLics)
     {
@@ -2181,7 +2181,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $companySubsidiaries collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setCompanySubsidiaries($companySubsidiaries)
     {
@@ -2205,7 +2205,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $companySubsidiaries collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addCompanySubsidiaries($companySubsidiaries)
     {
@@ -2228,7 +2228,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $companySubsidiaries collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeCompanySubsidiaries($companySubsidiaries)
     {
@@ -2244,7 +2244,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $conditionUndertakings collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setConditionUndertakings($conditionUndertakings)
     {
@@ -2268,7 +2268,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $conditionUndertakings collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addConditionUndertakings($conditionUndertakings)
     {
@@ -2291,7 +2291,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $conditionUndertakings collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeConditionUndertakings($conditionUndertakings)
     {
@@ -2307,7 +2307,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $continuationDetails collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setContinuationDetails($continuationDetails)
     {
@@ -2331,7 +2331,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $continuationDetails collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addContinuationDetails($continuationDetails)
     {
@@ -2354,7 +2354,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $continuationDetails collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeContinuationDetails($continuationDetails)
     {
@@ -2370,7 +2370,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setDocuments($documents)
     {
@@ -2394,7 +2394,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documents collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addDocuments($documents)
     {
@@ -2417,7 +2417,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeDocuments($documents)
     {
@@ -2433,7 +2433,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $fees collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setFees($fees)
     {
@@ -2457,7 +2457,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $fees collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addFees($fees)
     {
@@ -2480,7 +2480,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $fees collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeFees($fees)
     {
@@ -2496,7 +2496,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $gracePeriods collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setGracePeriods($gracePeriods)
     {
@@ -2520,7 +2520,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $gracePeriods collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addGracePeriods($gracePeriods)
     {
@@ -2543,7 +2543,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $gracePeriods collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeGracePeriods($gracePeriods)
     {
@@ -2559,7 +2559,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpApplications collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setIrhpApplications($irhpApplications)
     {
@@ -2583,7 +2583,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpApplications collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addIrhpApplications($irhpApplications)
     {
@@ -2606,7 +2606,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpApplications collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeIrhpApplications($irhpApplications)
     {
@@ -2622,7 +2622,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $operatingCentres collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setOperatingCentres($operatingCentres)
     {
@@ -2646,7 +2646,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $operatingCentres collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addOperatingCentres($operatingCentres)
     {
@@ -2669,7 +2669,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $operatingCentres collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeOperatingCentres($operatingCentres)
     {
@@ -2685,7 +2685,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $readAudits collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setReadAudits($readAudits)
     {
@@ -2709,7 +2709,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $readAudits collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addReadAudits($readAudits)
     {
@@ -2732,7 +2732,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $readAudits collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeReadAudits($readAudits)
     {
@@ -2748,7 +2748,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $licenceStatusRules collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setLicenceStatusRules($licenceStatusRules)
     {
@@ -2772,7 +2772,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $licenceStatusRules collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addLicenceStatusRules($licenceStatusRules)
     {
@@ -2795,7 +2795,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $licenceStatusRules collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeLicenceStatusRules($licenceStatusRules)
     {
@@ -2811,7 +2811,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $licenceVehicles collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setLicenceVehicles($licenceVehicles)
     {
@@ -2835,7 +2835,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $licenceVehicles collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addLicenceVehicles($licenceVehicles)
     {
@@ -2858,7 +2858,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $licenceVehicles collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeLicenceVehicles($licenceVehicles)
     {
@@ -2874,7 +2874,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $privateHireLicences collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setPrivateHireLicences($privateHireLicences)
     {
@@ -2898,7 +2898,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $privateHireLicences collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addPrivateHireLicences($privateHireLicences)
     {
@@ -2921,7 +2921,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $privateHireLicences collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removePrivateHireLicences($privateHireLicences)
     {
@@ -2937,7 +2937,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $psvDiscs collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setPsvDiscs($psvDiscs)
     {
@@ -2961,7 +2961,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $psvDiscs collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addPsvDiscs($psvDiscs)
     {
@@ -2984,7 +2984,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $psvDiscs collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removePsvDiscs($psvDiscs)
     {
@@ -3000,7 +3000,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $publicationLinks collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setPublicationLinks($publicationLinks)
     {
@@ -3024,7 +3024,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $publicationLinks collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addPublicationLinks($publicationLinks)
     {
@@ -3047,7 +3047,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $publicationLinks collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removePublicationLinks($publicationLinks)
     {
@@ -3063,7 +3063,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tradingNames collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setTradingNames($tradingNames)
     {
@@ -3087,7 +3087,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tradingNames collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addTradingNames($tradingNames)
     {
@@ -3110,7 +3110,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tradingNames collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeTradingNames($tradingNames)
     {
@@ -3126,7 +3126,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tmLicences collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setTmLicences($tmLicences)
     {
@@ -3150,7 +3150,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tmLicences collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addTmLicences($tmLicences)
     {
@@ -3173,7 +3173,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tmLicences collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeTmLicences($tmLicences)
     {
@@ -3189,7 +3189,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $workshops collection being set as the value
      *
-     * @return Licence
+     * @return static
      */
     public function setWorkshops($workshops)
     {
@@ -3213,7 +3213,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $workshops collection being added
      *
-     * @return Licence
+     * @return static
      */
     public function addWorkshops($workshops)
     {
@@ -3236,7 +3236,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $workshops collection being removed
      *
-     * @return Licence
+     * @return static
      */
     public function removeWorkshops($workshops)
     {

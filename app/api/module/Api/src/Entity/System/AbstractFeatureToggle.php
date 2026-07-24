@@ -123,7 +123,7 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
      *
      * @param int $id new value being set
      *
-     * @return FeatureToggle
+     * @return static
      */
     public function setId($id)
     {
@@ -147,7 +147,7 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return FeatureToggle
+     * @return static
      */
     public function setStatus($status)
     {
@@ -171,7 +171,7 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return FeatureToggle
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -195,7 +195,7 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return FeatureToggle
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -219,7 +219,7 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
      *
      * @param string $friendlyName new value being set
      *
-     * @return FeatureToggle
+     * @return static
      */
     public function setFriendlyName($friendlyName)
     {
@@ -243,7 +243,7 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
      *
      * @param string $configName new value being set
      *
-     * @return FeatureToggle
+     * @return static
      */
     public function setConfigName($configName)
     {
@@ -267,7 +267,7 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
      *
      * @param int $version new value being set
      *
-     * @return FeatureToggle
+     * @return static
      */
     public function setVersion($version)
     {

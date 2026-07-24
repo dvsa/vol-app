@@ -123,7 +123,7 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
      *
      * @param int $id new value being set
      *
-     * @return BusRegOtherService
+     * @return static
      */
     public function setId($id)
     {
@@ -147,7 +147,7 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return BusRegOtherService
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -171,7 +171,7 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return BusRegOtherService
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -195,7 +195,7 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return BusRegOtherService
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -219,7 +219,7 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
      *
      * @param string $serviceNo new value being set
      *
-     * @return BusRegOtherService
+     * @return static
      */
     public function setServiceNo($serviceNo)
     {
@@ -243,7 +243,7 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
      *
      * @param int $version new value being set
      *
-     * @return BusRegOtherService
+     * @return static
      */
     public function setVersion($version)
     {
@@ -267,7 +267,7 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
      *
      * @param int $olbsKey new value being set
      *
-     * @return BusRegOtherService
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

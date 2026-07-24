@@ -168,7 +168,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @param int $id new value being set
      *
-     * @return SiPenaltyErruImposed
+     * @return static
      */
     public function setId($id)
     {
@@ -192,7 +192,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement $seriousInfringement new value being set
      *
-     * @return SiPenaltyErruImposed
+     * @return static
      */
     public function setSeriousInfringement($seriousInfringement)
     {
@@ -216,7 +216,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Si\SiPenaltyImposedType $siPenaltyImposedType new value being set
      *
-     * @return SiPenaltyErruImposed
+     * @return static
      */
     public function setSiPenaltyImposedType($siPenaltyImposedType)
     {
@@ -240,7 +240,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $executed new value being set
      *
-     * @return SiPenaltyErruImposed
+     * @return static
      */
     public function setExecuted($executed)
     {
@@ -264,7 +264,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return SiPenaltyErruImposed
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -288,7 +288,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return SiPenaltyErruImposed
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -312,7 +312,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @param int $penaltyImposedIdentifier new value being set
      *
-     * @return SiPenaltyErruImposed
+     * @return static
      */
     public function setPenaltyImposedIdentifier($penaltyImposedIdentifier)
     {
@@ -336,7 +336,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @param \DateTime $finalDecisionDate new value being set
      *
-     * @return SiPenaltyErruImposed
+     * @return static
      */
     public function setFinalDecisionDate($finalDecisionDate)
     {
@@ -366,7 +366,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @param \DateTime $startDate new value being set
      *
-     * @return SiPenaltyErruImposed
+     * @return static
      */
     public function setStartDate($startDate)
     {
@@ -396,7 +396,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @param \DateTime $endDate new value being set
      *
-     * @return SiPenaltyErruImposed
+     * @return static
      */
     public function setEndDate($endDate)
     {
@@ -426,7 +426,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @param int $version new value being set
      *
-     * @return SiPenaltyErruImposed
+     * @return static
      */
     public function setVersion($version)
     {
@@ -450,7 +450,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @param int $olbsKey new value being set
      *
-     * @return SiPenaltyErruImposed
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

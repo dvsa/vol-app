@@ -78,6 +78,25 @@ final class TransactioningCommandHandlerTest extends MockeryTestCase
         $this->sut->handleCommand($command);
     }
 
+    public function testHandleCommandErrorRollsBackAndRethrows(): void
+    {
+        $this->expectException(\Error::class);
+        $this->expectExceptionMessage('Call to a member function getId() on null');
+
+        $command = m::mock(CommandInterface::class);
+
+        $this->repo->expects('beginTransaction')->withNoArgs();
+
+        $this->wrapped->expects('handleCommand')
+            ->with($command)
+            ->andThrow(new \Error('Call to a member function getId() on null'));
+
+        $this->repo->expects('rollback')->withNoArgs();
+        $this->repo->shouldReceive('commit')->never();
+
+        $this->sut->handleCommand($command);
+    }
+
     public function testCheckEnabled(): void
     {
         $isEnabled = true;

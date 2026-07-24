@@ -157,7 +157,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param int $id new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setId($id)
     {
@@ -181,7 +181,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -205,7 +205,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -229,7 +229,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -253,7 +253,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param string $sectionCode new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setSectionCode($sectionCode)
     {
@@ -277,7 +277,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param string $description new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setDescription($description)
     {
@@ -301,7 +301,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param bool $isReadOnly new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setIsReadOnly($isReadOnly)
     {
@@ -325,7 +325,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param bool $isNi new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setIsNi($isNi)
     {
@@ -349,7 +349,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param int $version new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setVersion($version)
     {
@@ -373,7 +373,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $licences collection being set as the value
      *
-     * @return Decision
+     * @return static
      */
     public function setLicences($licences)
     {
@@ -397,7 +397,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $licences collection being added
      *
-     * @return Decision
+     * @return static
      */
     public function addLicences($licences)
     {
@@ -420,7 +420,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $licences collection being removed
      *
-     * @return Decision
+     * @return static
      */
     public function removeLicences($licences)
     {
@@ -436,7 +436,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $pis collection being set as the value
      *
-     * @return Decision
+     * @return static
      */
     public function setPis($pis)
     {
@@ -460,7 +460,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $pis collection being added
      *
-     * @return Decision
+     * @return static
      */
     public function addPis($pis)
     {
@@ -483,7 +483,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $pis collection being removed
      *
-     * @return Decision
+     * @return static
      */
     public function removePis($pis)
     {

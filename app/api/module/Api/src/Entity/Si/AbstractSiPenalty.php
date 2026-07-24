@@ -168,7 +168,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @param int $id new value being set
      *
-     * @return SiPenalty
+     * @return static
      */
     public function setId($id)
     {
@@ -192,7 +192,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested $siPenaltyErruRequested new value being set
      *
-     * @return SiPenalty
+     * @return static
      */
     public function setSiPenaltyErruRequested($siPenaltyErruRequested)
     {
@@ -216,7 +216,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement $seriousInfringement new value being set
      *
-     * @return SiPenalty
+     * @return static
      */
     public function setSeriousInfringement($seriousInfringement)
     {
@@ -240,7 +240,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\Si\SiPenaltyType $siPenaltyType new value being set
      *
-     * @return SiPenalty
+     * @return static
      */
     public function setSiPenaltyType($siPenaltyType)
     {
@@ -264,7 +264,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return SiPenalty
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -288,7 +288,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return SiPenalty
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -312,7 +312,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @param string $imposed new value being set
      *
-     * @return SiPenalty
+     * @return static
      */
     public function setImposed($imposed)
     {
@@ -336,7 +336,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @param \DateTime $startDate new value being set
      *
-     * @return SiPenalty
+     * @return static
      */
     public function setStartDate($startDate)
     {
@@ -366,7 +366,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @param \DateTime $endDate new value being set
      *
-     * @return SiPenalty
+     * @return static
      */
     public function setEndDate($endDate)
     {
@@ -396,7 +396,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @param string $reasonNotImposed new value being set
      *
-     * @return SiPenalty
+     * @return static
      */
     public function setReasonNotImposed($reasonNotImposed)
     {
@@ -420,7 +420,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @param int $version new value being set
      *
-     * @return SiPenalty
+     * @return static
      */
     public function setVersion($version)
     {
@@ -444,7 +444,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @param int $olbsKey new value being set
      *
-     * @return SiPenalty
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

@@ -271,6 +271,8 @@ module "service" {
 
   legacy_environment = "QA"
 
+  dva_ni_export_s3uri = module.parameters.dva_ni_export_s3uri
+
   domain_env = "qa"
 
   domain_name    = "dev-dvsacloud.uk"
@@ -718,7 +720,7 @@ module "service" {
       },
       {
         name     = "ni-compliance",
-        commands = ["/mnt/data/scripts/ni_dvacompliance.sh"],
+        commands = ["/mnt/data/scripts/niextract/ni_dvacompliance.sh"],
         type     = "scripts"
       },
       {

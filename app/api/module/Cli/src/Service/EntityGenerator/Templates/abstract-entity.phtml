@@ -126,7 +126,7 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
      * @param <?php echo $methodGenerator->getPhpTypeFromType($field['property']['type']); ?> $<?php echo $methodGenerator->formatParamName($field); ?> new value being set
 <?php endif; ?>
      *
-     * @return <?php echo $methodGenerator->getFluidReturnType($className); ?>
+     * @return <?php echo $methodGenerator->getFluidReturnType(); ?>
 
      */
     public function set<?php echo $methodGenerator->getMethodNameForField($field); ?>($<?php echo $methodGenerator->formatParamName($field); ?>)
@@ -178,7 +178,7 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?> collection being added
      *
-     * @return <?php echo $methodGenerator->getFluidReturnType($className); ?>
+     * @return <?php echo $methodGenerator->getFluidReturnType(); ?>
 
      */
     public function add<?php echo $methodGenerator->getMethodNameForField($field); ?>($<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>)
@@ -203,7 +203,7 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?> collection being removed
      *
-     * @return <?php echo $methodGenerator->getFluidReturnType($className); ?>
+     * @return <?php echo $methodGenerator->getFluidReturnType(); ?>
 
      */
     public function remove<?php echo $methodGenerator->getMethodNameForField($field); ?>($<?php echo $field['property']['name'] ?? $methodGenerator->formatPropertyName($field); ?>)
@@ -224,6 +224,10 @@ abstract class <?php echo $className; ?> implements BundleSerializableInterface,
     #[\Override]
     public function __toString(): string
     {
+<?php if (count($idProperties ?? []) > 1): ?>
+        return implode('-', [<?php echo implode(', ', array_map(static fn ($property) => '(string) $this->' . $property, $idProperties)); ?>]);
+<?php else: ?>
         return (string) $this->getId();
+<?php endif; ?>
     }
 }

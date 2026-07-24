@@ -170,7 +170,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param string $id new value being set
      *
-     * @return Country
+     * @return static
      */
     public function setId($id)
     {
@@ -194,7 +194,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Country
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -218,7 +218,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Country
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -242,7 +242,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param string $countryDesc new value being set
      *
-     * @return Country
+     * @return static
      */
     public function setCountryDesc($countryDesc)
     {
@@ -266,7 +266,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param string $isMemberState new value being set
      *
-     * @return Country
+     * @return static
      */
     public function setIsMemberState($isMemberState)
     {
@@ -290,7 +290,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $isPermitState new value being set
      *
-     * @return Country
+     * @return static
      */
     public function setIsPermitState($isPermitState)
     {
@@ -314,7 +314,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $isEcmtState new value being set
      *
-     * @return Country
+     * @return static
      */
     public function setIsEcmtState($isEcmtState)
     {
@@ -338,7 +338,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $isEeaState new value being set
      *
-     * @return Country
+     * @return static
      */
     public function setIsEeaState($isEeaState)
     {
@@ -362,7 +362,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param int $version new value being set
      *
-     * @return Country
+     * @return static
      */
     public function setVersion($version)
     {
@@ -386,7 +386,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irfoPsvAuths collection being set as the value
      *
-     * @return Country
+     * @return static
      */
     public function setIrfoPsvAuths($irfoPsvAuths)
     {
@@ -410,7 +410,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irfoPsvAuths collection being added
      *
-     * @return Country
+     * @return static
      */
     public function addIrfoPsvAuths($irfoPsvAuths)
     {
@@ -433,7 +433,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irfoPsvAuths collection being removed
      *
-     * @return Country
+     * @return static
      */
     public function removeIrfoPsvAuths($irfoPsvAuths)
     {
@@ -449,7 +449,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpApplications collection being set as the value
      *
-     * @return Country
+     * @return static
      */
     public function setIrhpApplications($irhpApplications)
     {
@@ -473,7 +473,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpApplications collection being added
      *
-     * @return Country
+     * @return static
      */
     public function addIrhpApplications($irhpApplications)
     {
@@ -496,7 +496,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpApplications collection being removed
      *
-     * @return Country
+     * @return static
      */
     public function removeIrhpApplications($irhpApplications)
     {
@@ -512,7 +512,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitStockRanges collection being set as the value
      *
-     * @return Country
+     * @return static
      */
     public function setIrhpPermitStockRanges($irhpPermitStockRanges)
     {
@@ -536,7 +536,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitStockRanges collection being added
      *
-     * @return Country
+     * @return static
      */
     public function addIrhpPermitStockRanges($irhpPermitStockRanges)
     {
@@ -559,7 +559,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitStockRanges collection being removed
      *
-     * @return Country
+     * @return static
      */
     public function removeIrhpPermitStockRanges($irhpPermitStockRanges)
     {
@@ -575,7 +575,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitStocks collection being set as the value
      *
-     * @return Country
+     * @return static
      */
     public function setIrhpPermitStocks($irhpPermitStocks)
     {
@@ -599,7 +599,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitStocks collection being added
      *
-     * @return Country
+     * @return static
      */
     public function addIrhpPermitStocks($irhpPermitStocks)
     {
@@ -622,7 +622,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitStocks collection being removed
      *
-     * @return Country
+     * @return static
      */
     public function removeIrhpPermitStocks($irhpPermitStocks)
     {

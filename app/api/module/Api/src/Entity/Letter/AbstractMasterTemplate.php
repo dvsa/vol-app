@@ -91,9 +91,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     protected $isDefault = 0;
 
     /**
-     * Locale / chrome variant key — extended vocabulary beyond strict ISO codes,
-     * e.g. en_GB, en_NI, cy_GB, customN_GB, customN_NI. Picked at letter-generation
-     * time by MasterTemplateResolver from the letter context (currently isNi).
+     * Locale
      *
      * @var string
      */
@@ -101,37 +99,33 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     protected $locale;
 
     /**
-     * EditorJS JSON for the top-left header slot (typically the logo). Replaces
-     * the {{HEADER_LEFT_CONTENT}} placeholder in template_content at render time.
+     * Header left content
      *
-     * @var array|null
+     * @var array
      */
     #[ORM\Column(type: 'json', name: 'header_left_content', nullable: true)]
     protected $headerLeftContent;
 
     /**
-     * EditorJS JSON for the top-right header slot (typically the address block).
-     * Replaces the {{HEADER_RIGHT_CONTENT}} placeholder at render time.
+     * Header right content
      *
-     * @var array|null
+     * @var array
      */
     #[ORM\Column(type: 'json', name: 'header_right_content', nullable: true)]
     protected $headerRightContent;
 
     /**
-     * EditorJS JSON for the signoff slot (typically "Yours, ..." + caseworker name).
-     * Replaces the {{SIGNOFF_CONTENT}} placeholder at render time.
+     * Signoff content
      *
-     * @var array|null
+     * @var array
      */
     #[ORM\Column(type: 'json', name: 'signoff_content', nullable: true)]
     protected $signoffContent;
 
     /**
-     * EditorJS JSON for the footer slot (typically a single-line footer note).
-     * Replaces the {{FOOTER_CONTENT}} placeholder at render time.
+     * Footer content
      *
-     * @var array|null
+     * @var array
      */
     #[ORM\Column(type: 'json', name: 'footer_content', nullable: true)]
     protected $footerContent;
@@ -166,7 +160,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return MasterTemplate
+     * @return static
      */
     public function setId($id)
     {
@@ -190,7 +184,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return MasterTemplate
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -214,7 +208,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return MasterTemplate
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -238,7 +232,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
      *
      * @param string $name new value being set
      *
-     * @return MasterTemplate
+     * @return static
      */
     public function setName($name)
     {
@@ -262,7 +256,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
      *
      * @param string $templateContent new value being set
      *
-     * @return MasterTemplate
+     * @return static
      */
     public function setTemplateContent($templateContent)
     {
@@ -286,7 +280,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
      *
      * @param bool $isDefault new value being set
      *
-     * @return MasterTemplate
+     * @return static
      */
     public function setIsDefault($isDefault)
     {
@@ -310,7 +304,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
      *
      * @param string $locale new value being set
      *
-     * @return MasterTemplate
+     * @return static
      */
     public function setLocale($locale)
     {
@@ -330,11 +324,11 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the header left content (EditorJS JSON)
+     * Set the header left content
      *
-     * @param array|null $headerLeftContent
+     * @param array $headerLeftContent new value being set
      *
-     * @return MasterTemplate
+     * @return static
      */
     public function setHeaderLeftContent($headerLeftContent)
     {
@@ -344,9 +338,9 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     }
 
     /**
-     * Get the header left content (EditorJS JSON)
+     * Get the header left content
      *
-     * @return array|null
+     * @return array
      */
     public function getHeaderLeftContent()
     {
@@ -354,11 +348,11 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the header right content (EditorJS JSON)
+     * Set the header right content
      *
-     * @param array|null $headerRightContent
+     * @param array $headerRightContent new value being set
      *
-     * @return MasterTemplate
+     * @return static
      */
     public function setHeaderRightContent($headerRightContent)
     {
@@ -368,9 +362,9 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     }
 
     /**
-     * Get the header right content (EditorJS JSON)
+     * Get the header right content
      *
-     * @return array|null
+     * @return array
      */
     public function getHeaderRightContent()
     {
@@ -378,11 +372,11 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the signoff content (EditorJS JSON)
+     * Set the signoff content
      *
-     * @param array|null $signoffContent
+     * @param array $signoffContent new value being set
      *
-     * @return MasterTemplate
+     * @return static
      */
     public function setSignoffContent($signoffContent)
     {
@@ -392,9 +386,9 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     }
 
     /**
-     * Get the signoff content (EditorJS JSON)
+     * Get the signoff content
      *
-     * @return array|null
+     * @return array
      */
     public function getSignoffContent()
     {
@@ -402,11 +396,11 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     }
 
     /**
-     * Set the footer content (EditorJS JSON)
+     * Set the footer content
      *
-     * @param array|null $footerContent
+     * @param array $footerContent new value being set
      *
-     * @return MasterTemplate
+     * @return static
      */
     public function setFooterContent($footerContent)
     {
@@ -416,9 +410,9 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     }
 
     /**
-     * Get the footer content (EditorJS JSON)
+     * Get the footer content
      *
-     * @return array|null
+     * @return array
      */
     public function getFooterContent()
     {
@@ -430,7 +424,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return MasterTemplate
+     * @return static
      */
     public function setVersion($version)
     {

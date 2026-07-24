@@ -688,8 +688,8 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
     /**
      * Format a date as required by CPMS payment reference fields
      *
-     * @param string|DateTime $date
-     * @return string
+     * @param string|DateTime|null $date
+     * @return string|null
      */
     protected function formatDate($date)
     {
@@ -699,6 +699,8 @@ class CpmsV2HelperService implements FactoryInterface, CpmsHelperInterface
             }
             return $date->format(self::DATE_FORMAT);
         }
+
+        return null;
     }
 
     /**

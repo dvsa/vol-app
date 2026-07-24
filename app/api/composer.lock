@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "6f31f3c7407953fee4f770aae1642403",
+  "content-hash": "3b4ece173746cee178f411b37d8ed099",
   "packages": [
     {
       "name": "alphagov/notifications-php-client",
@@ -6133,13 +6133,11 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-transfer",
-        "reference": "b663654d38890dacaecd2eb3f4eeafd5d86a761d"
+        "reference": "ab1e2023bdd351ebeb124e89696b0216eaa6b9a3"
       },
       "require": {
         "ext-igbinary": "*",
         "ext-sodium": "*",
-        "laminas/laminas-cache": "^3.13",
-        "laminas/laminas-cache-storage-adapter-redis": "^2.10",
         "laminas/laminas-filter": "^2.41",
         "laminas/laminas-form": "^3.21",
         "laminas/laminas-http": "^2.15",
@@ -6151,7 +6149,9 @@
         "laminas/laminas-xml": "^1.7.0",
         "paragonie/halite": "^5",
         "php": "~8.4.0",
-        "psr/container": "^1.1|^2"
+        "psr/cache": "^1.0 || ^2.0 || ^3.0",
+        "psr/container": "^1.1|^2",
+        "symfony/cache": "^5.4 || ^6.4"
       },
       "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8.2",

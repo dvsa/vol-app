@@ -123,7 +123,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      *
      * @param int $id new value being set
      *
-     * @return SubmissionSectionComment
+     * @return static
      */
     public function setId($id)
     {
@@ -147,7 +147,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      *
      * @param \Dvsa\Olcs\Api\Entity\Submission\Submission $submission new value being set
      *
-     * @return SubmissionSectionComment
+     * @return static
      */
     public function setSubmission($submission)
     {
@@ -171,7 +171,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $submissionSection new value being set
      *
-     * @return SubmissionSectionComment
+     * @return static
      */
     public function setSubmissionSection($submissionSection)
     {
@@ -195,7 +195,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return SubmissionSectionComment
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -219,7 +219,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return SubmissionSectionComment
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -243,7 +243,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      *
      * @param string $comment new value being set
      *
-     * @return SubmissionSectionComment
+     * @return static
      */
     public function setComment($comment)
     {
@@ -267,7 +267,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      *
      * @param int $version new value being set
      *
-     * @return SubmissionSectionComment
+     * @return static
      */
     public function setVersion($version)
     {

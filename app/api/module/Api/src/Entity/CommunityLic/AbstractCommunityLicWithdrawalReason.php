@@ -128,7 +128,7 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
      *
      * @param int $id new value being set
      *
-     * @return CommunityLicWithdrawalReason
+     * @return static
      */
     public function setId($id)
     {
@@ -152,7 +152,7 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
      *
      * @param \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal $communityLicWithdrawal new value being set
      *
-     * @return CommunityLicWithdrawalReason
+     * @return static
      */
     public function setCommunityLicWithdrawal($communityLicWithdrawal)
     {
@@ -176,7 +176,7 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $type new value being set
      *
-     * @return CommunityLicWithdrawalReason
+     * @return static
      */
     public function setType($type)
     {
@@ -200,7 +200,7 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return CommunityLicWithdrawalReason
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -224,7 +224,7 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return CommunityLicWithdrawalReason
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -248,7 +248,7 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
      *
      * @param int $version new value being set
      *
-     * @return CommunityLicWithdrawalReason
+     * @return static
      */
     public function setVersion($version)
     {
@@ -272,7 +272,7 @@ abstract class AbstractCommunityLicWithdrawalReason implements BundleSerializabl
      *
      * @param int $olbsKey new value being set
      *
-     * @return CommunityLicWithdrawalReason
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

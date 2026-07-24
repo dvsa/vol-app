@@ -75,6 +75,41 @@ final class ProcessNtuCommandTest extends TestCase
         $this->command->run($input, $output);
     }
 
+    public function testExecuteContinuesToNextApplicationWhenOneFails(): void
+    {
+        $fakeResult = ['result' => [['id' => 1], ['id' => 2], ['id' => 3]]];
+        $this->mockQueryHandlerManager->expects($this->once())
+            ->method('handleQuery')
+            ->willReturn($fakeResult);
+        $matcher = $this->exactly(count($fakeResult['result']));
+
+        $this->mockCommandHandlerManager->expects($matcher)
+            ->method('handleCommand')->willReturnCallback(function (...$parameters) use ($matcher) {
+                if ($matcher->numberOfInvocations() === 1) {
+                    throw new \Exception('Resource not found');
+                }
+                if ($matcher->numberOfInvocations() === 2) {
+                    throw new \Error('Call to a member function getId() on null');
+                }
+                $this->assertEquals(NotTakenUpApplication::create(['id' => 3]), $parameters[0]);
+                return new Result();
+            });
+
+        $input = new ArrayInput([], $this->command->getDefinition());
+        $output = new BufferedOutput(BufferedOutput::VERBOSITY_VERBOSE);
+        $exitCode = $this->command->run($input, $output);
+
+        $this->assertSame(0, $exitCode);
+        $display = $output->fetch();
+        $this->assertStringContainsString('1 of 3 Application(s) processed to NTU', $display);
+        $this->assertStringContainsString('failed Application IDs: 1, 2', $display);
+        $this->assertStringContainsString('Application 1 failed: Exception: Resource not found (in ', $display);
+        $this->assertStringContainsString(
+            'Application 2 failed: Error: Call to a member function getId() on null (in ',
+            $display
+        );
+    }
+
     public function testExecuteNoApplicationsFound(): void
     {
         $this->mockQueryHandlerManager->expects($this->once())

@@ -212,7 +212,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      *
      * @param int $id new value being set
      *
-     * @return Note
+     * @return static
      */
     public function setId($id)
     {
@@ -236,7 +236,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $noteType new value being set
      *
-     * @return Note
+     * @return static
      */
     public function setNoteType($noteType)
     {
@@ -260,7 +260,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return Note
+     * @return static
      */
     public function setApplication($application)
     {
@@ -284,7 +284,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return Note
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -308,7 +308,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return Note
+     * @return static
      */
     public function setCase($case)
     {
@@ -332,7 +332,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return Note
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -356,7 +356,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return Note
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -380,7 +380,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return Note
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -404,7 +404,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication new value being set
      *
-     * @return Note
+     * @return static
      */
     public function setIrhpApplication($irhpApplication)
     {
@@ -428,7 +428,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Note
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -452,7 +452,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Note
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -476,7 +476,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      *
      * @param string $comment new value being set
      *
-     * @return Note
+     * @return static
      */
     public function setComment($comment)
     {
@@ -500,7 +500,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      *
      * @param string $priority new value being set
      *
-     * @return Note
+     * @return static
      */
     public function setPriority($priority)
     {
@@ -524,7 +524,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      *
      * @param int $version new value being set
      *
-     * @return Note
+     * @return static
      */
     public function setVersion($version)
     {
@@ -548,7 +548,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      *
      * @param int $olbsKey new value being set
      *
-     * @return Note
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -572,7 +572,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
      *
      * @param string $olbsType new value being set
      *
-     * @return Note
+     * @return static
      */
     public function setOlbsType($olbsType)
     {

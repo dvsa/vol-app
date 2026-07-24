@@ -272,6 +272,8 @@ module "service" {
 
   legacy_environment = "REG"
 
+  dva_ni_export_s3uri = module.parameters.dva_ni_export_s3uri
+
   domain_env = "reg"
 
   domain_name    = "dev-dvsacloud.uk"

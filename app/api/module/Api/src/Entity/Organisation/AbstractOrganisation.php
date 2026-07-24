@@ -311,7 +311,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setId($id)
     {
@@ -335,7 +335,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setContactDetails($contactDetails)
     {
@@ -359,7 +359,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $irfoContactDetails new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setIrfoContactDetails($irfoContactDetails)
     {
@@ -383,7 +383,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $type new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setType($type)
     {
@@ -407,7 +407,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\Country $irfoNationality new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setIrfoNationality($irfoNationality)
     {
@@ -431,7 +431,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $leadTcArea new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setLeadTcArea($leadTcArea)
     {
@@ -455,7 +455,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $cpid new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setCpid($cpid)
     {
@@ -479,7 +479,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -503,7 +503,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -527,7 +527,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param string $companyOrLlpNo new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setCompanyOrLlpNo($companyOrLlpNo)
     {
@@ -551,7 +551,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param string $name new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setName($name)
     {
@@ -575,7 +575,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param string $companyCertSeen new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setCompanyCertSeen($companyCertSeen)
     {
@@ -599,7 +599,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param string $isIrfo new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setIsIrfo($isIrfo)
     {
@@ -623,7 +623,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param string $allowEmail new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setAllowEmail($allowEmail)
     {
@@ -647,7 +647,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param string $confirmShareVehicleInfo new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setConfirmShareVehicleInfo($confirmShareVehicleInfo)
     {
@@ -671,7 +671,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param string $confirmShareTrailerInfo new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setConfirmShareTrailerInfo($confirmShareTrailerInfo)
     {
@@ -695,7 +695,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param bool $isUnlicensed new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setIsUnlicensed($isUnlicensed)
     {
@@ -719,7 +719,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param string $natureOfBusiness new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setNatureOfBusiness($natureOfBusiness)
     {
@@ -743,7 +743,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param bool $isMessagingDisabled new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setIsMessagingDisabled($isMessagingDisabled)
     {
@@ -767,7 +767,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param bool $isMessagingFileUploadEnabled new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setIsMessagingFileUploadEnabled($isMessagingFileUploadEnabled)
     {
@@ -791,7 +791,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param int $version new value being set
      *
-     * @return Organisation
+     * @return static
      */
     public function setVersion($version)
     {
@@ -815,7 +815,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $disqualifications collection being set as the value
      *
-     * @return Organisation
+     * @return static
      */
     public function setDisqualifications($disqualifications)
     {
@@ -839,7 +839,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $disqualifications collection being added
      *
-     * @return Organisation
+     * @return static
      */
     public function addDisqualifications($disqualifications)
     {
@@ -862,7 +862,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $disqualifications collection being removed
      *
-     * @return Organisation
+     * @return static
      */
     public function removeDisqualifications($disqualifications)
     {
@@ -878,7 +878,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irfoPartners collection being set as the value
      *
-     * @return Organisation
+     * @return static
      */
     public function setIrfoPartners($irfoPartners)
     {
@@ -902,7 +902,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irfoPartners collection being added
      *
-     * @return Organisation
+     * @return static
      */
     public function addIrfoPartners($irfoPartners)
     {
@@ -925,7 +925,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irfoPartners collection being removed
      *
-     * @return Organisation
+     * @return static
      */
     public function removeIrfoPartners($irfoPartners)
     {
@@ -941,7 +941,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $licences collection being set as the value
      *
-     * @return Organisation
+     * @return static
      */
     public function setLicences($licences)
     {
@@ -965,7 +965,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $licences collection being added
      *
-     * @return Organisation
+     * @return static
      */
     public function addLicences($licences)
     {
@@ -988,7 +988,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $licences collection being removed
      *
-     * @return Organisation
+     * @return static
      */
     public function removeLicences($licences)
     {
@@ -1004,7 +1004,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $organisationPersons collection being set as the value
      *
-     * @return Organisation
+     * @return static
      */
     public function setOrganisationPersons($organisationPersons)
     {
@@ -1028,7 +1028,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $organisationPersons collection being added
      *
-     * @return Organisation
+     * @return static
      */
     public function addOrganisationPersons($organisationPersons)
     {
@@ -1051,7 +1051,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $organisationPersons collection being removed
      *
-     * @return Organisation
+     * @return static
      */
     public function removeOrganisationPersons($organisationPersons)
     {
@@ -1067,7 +1067,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $readAudits collection being set as the value
      *
-     * @return Organisation
+     * @return static
      */
     public function setReadAudits($readAudits)
     {
@@ -1091,7 +1091,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $readAudits collection being added
      *
-     * @return Organisation
+     * @return static
      */
     public function addReadAudits($readAudits)
     {
@@ -1114,7 +1114,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $readAudits collection being removed
      *
-     * @return Organisation
+     * @return static
      */
     public function removeReadAudits($readAudits)
     {
@@ -1130,7 +1130,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $organisationUsers collection being set as the value
      *
-     * @return Organisation
+     * @return static
      */
     public function setOrganisationUsers($organisationUsers)
     {
@@ -1154,7 +1154,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $organisationUsers collection being added
      *
-     * @return Organisation
+     * @return static
      */
     public function addOrganisationUsers($organisationUsers)
     {
@@ -1177,7 +1177,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $organisationUsers collection being removed
      *
-     * @return Organisation
+     * @return static
      */
     public function removeOrganisationUsers($organisationUsers)
     {
@@ -1193,7 +1193,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tradingNames collection being set as the value
      *
-     * @return Organisation
+     * @return static
      */
     public function setTradingNames($tradingNames)
     {
@@ -1217,7 +1217,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tradingNames collection being added
      *
-     * @return Organisation
+     * @return static
      */
     public function addTradingNames($tradingNames)
     {
@@ -1240,7 +1240,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tradingNames collection being removed
      *
-     * @return Organisation
+     * @return static
      */
     public function removeTradingNames($tradingNames)
     {

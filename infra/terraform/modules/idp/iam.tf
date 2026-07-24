@@ -174,3 +174,116 @@ resource "aws_iam_role_policy" "eventbridge_invoke_classification" {
   role   = aws_iam_role.eventbridge_invoke_classification.id
   policy = data.aws_iam_policy_document.eventbridge_invoke_classification.json
 }
+
+# ============================================================
+# IAM — Step Functions execution role (Extraction SM)
+# ============================================================
+resource "aws_iam_role" "extraction_sm" {
+  name               = "${local.name_prefix}-extraction-sm"
+  assume_role_policy = data.aws_iam_policy_document.sfn_assume_role.json
+}
+
+data "aws_iam_policy_document" "extraction_sm" {
+  # BDA async invocation + status polling.
+  # Scoped to * to cover the cross-region inference profile.
+  statement {
+    sid = "BedrockDataAutomation"
+    actions = [
+      "bedrock:InvokeDataAutomationAsync",
+      "bedrock:GetDataAutomationStatus",
+    ]
+    resources = ["*"]
+  }
+
+  # Read input documents so BDA can be pointed at the S3 URI.
+  statement {
+    sid     = "S3ReadDocuments"
+    actions = ["s3:GetObject"]
+    resources = [
+      data.aws_s3_bucket.documents.arn,
+      "${data.aws_s3_bucket.documents.arn}/*",
+    ]
+  }
+
+  # Read/write access to the BDA output bucket where extraction
+  # results (result.json) are written by the BDA service.
+  statement {
+    sid = "S3OutputBucket"
+    actions = [
+      "s3:GetObject",
+      "s3:PutObject",
+      "s3:ListBucket",
+      "s3:GetBucketLocation",
+    ]
+    resources = [
+      aws_s3_bucket.idp_output.arn,
+      "${aws_s3_bucket.idp_output.arn}/*",
+    ]
+  }
+
+  # Emit DocumentProcessing-Extracted / ExtractionFailed / ExtractionSkipped
+  # events to the default EventBridge bus.
+  statement {
+    sid     = "EventBridgePutEvents"
+    actions = ["events:PutEvents"]
+    resources = [
+      "arn:aws:events:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:event-bus/default",
+    ]
+  }
+
+  statement {
+    sid = "CloudWatchLogs"
+    actions = [
+      "logs:CreateLogDelivery",
+      "logs:CreateLogStream",
+      "logs:GetLogDelivery",
+      "logs:UpdateLogDelivery",
+      "logs:DeleteLogDelivery",
+      "logs:ListLogDeliveries",
+      "logs:PutLogEvents",
+      "logs:PutResourcePolicy",
+      "logs:DescribeResourcePolicies",
+      "logs:DescribeLogGroups",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid = "XRayTracing"
+    actions = [
+      "xray:PutTraceSegments",
+      "xray:PutTelemetryRecords",
+      "xray:GetSamplingRules",
+      "xray:GetSamplingTargets",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "extraction_sm" {
+  name   = "${local.name_prefix}-extraction-sm"
+  role   = aws_iam_role.extraction_sm.id
+  policy = data.aws_iam_policy_document.extraction_sm.json
+}
+
+# ============================================================
+# IAM — EventBridge role (start Extraction SM execution)
+# ============================================================
+resource "aws_iam_role" "eventbridge_invoke_extraction" {
+  name               = "${local.name_prefix}-eventbridge-invoke-extraction"
+  assume_role_policy = data.aws_iam_policy_document.eventbridge_assume_role.json
+}
+
+data "aws_iam_policy_document" "eventbridge_invoke_extraction" {
+  statement {
+    sid       = "StartExtractionExecution"
+    actions   = ["states:StartExecution"]
+    resources = [aws_sfn_state_machine.extraction.arn]
+  }
+}
+
+resource "aws_iam_role_policy" "eventbridge_invoke_extraction" {
+  name   = "${local.name_prefix}-eventbridge-invoke-extraction"
+  role   = aws_iam_role.eventbridge_invoke_extraction.id
+  policy = data.aws_iam_policy_document.eventbridge_invoke_extraction.json
+}

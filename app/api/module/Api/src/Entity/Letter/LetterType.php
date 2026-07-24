@@ -17,7 +17,7 @@ class LetterType extends AbstractLetterType
     /**
      * Letter type sections
      *
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, LetterTypeSection>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection::class, mappedBy: 'letterType', cascade: ['persist'], orphanRemoval: true)]
     #[ORM\OrderBy(['displayOrder' => 'ASC'])]
@@ -26,7 +26,7 @@ class LetterType extends AbstractLetterType
     /**
      * Letter type issues
      *
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, LetterTypeIssue>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTypeIssue::class, mappedBy: 'letterType', cascade: ['persist'], orphanRemoval: true)]
     protected $letterTypeIssues;
@@ -34,7 +34,7 @@ class LetterType extends AbstractLetterType
     /**
      * Letter type appendices
      *
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, LetterTypeAppendix>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTypeAppendix::class, mappedBy: 'letterType', cascade: ['persist'], orphanRemoval: true)]
     #[ORM\OrderBy(['displayOrder' => 'ASC'])]
@@ -43,7 +43,7 @@ class LetterType extends AbstractLetterType
     /**
      * Letter type choices (which choices appear on the creation modal)
      *
-     * @var ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, LetterTypeChoice>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTypeChoice::class, mappedBy: 'letterType', cascade: ['persist'], orphanRemoval: true)]
     #[ORM\OrderBy(['displayOrder' => 'ASC'])]

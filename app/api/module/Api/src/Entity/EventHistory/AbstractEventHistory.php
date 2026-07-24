@@ -244,7 +244,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setId($id)
     {
@@ -268,7 +268,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType $eventHistoryType new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setEventHistoryType($eventHistoryType)
     {
@@ -292,7 +292,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setUser($user)
     {
@@ -316,7 +316,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -340,7 +340,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setApplication($application)
     {
@@ -364,7 +364,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -388,7 +388,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -412,7 +412,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setCase($case)
     {
@@ -436,7 +436,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -460,7 +460,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $account new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setAccount($account)
     {
@@ -484,7 +484,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\Task\Task $task new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setTask($task)
     {
@@ -508,7 +508,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setIrhpApplication($irhpApplication)
     {
@@ -532,7 +532,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param string $changeMadeBy new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setChangeMadeBy($changeMadeBy)
     {
@@ -556,7 +556,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param string $memberOfOrganisation new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setMemberOfOrganisation($memberOfOrganisation)
     {
@@ -580,7 +580,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param \DateTime $eventDatetime new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setEventDatetime($eventDatetime)
     {
@@ -610,7 +610,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param string $entityType new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setEntityType($entityType)
     {
@@ -634,7 +634,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param int $entityPk new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setEntityPk($entityPk)
     {
@@ -658,7 +658,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param int $entityVersion new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setEntityVersion($entityVersion)
     {
@@ -682,7 +682,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param string $eventData new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setEventData($eventData)
     {
@@ -706,7 +706,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param int $olbsKey new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -730,7 +730,7 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      *
      * @param string $olbsType new value being set
      *
-     * @return EventHistory
+     * @return static
      */
     public function setOlbsType($olbsType)
     {

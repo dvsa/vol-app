@@ -111,7 +111,7 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
      *
      * @param int $id new value being set
      *
-     * @return TeamPrinter
+     * @return static
      */
     public function setId($id)
     {
@@ -135,7 +135,7 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\Team $team new value being set
      *
-     * @return TeamPrinter
+     * @return static
      */
     public function setTeam($team)
     {
@@ -159,7 +159,7 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\PrintScan\Printer $printer new value being set
      *
-     * @return TeamPrinter
+     * @return static
      */
     public function setPrinter($printer)
     {
@@ -183,7 +183,7 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory new value being set
      *
-     * @return TeamPrinter
+     * @return static
      */
     public function setSubCategory($subCategory)
     {
@@ -207,7 +207,7 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $user new value being set
      *
-     * @return TeamPrinter
+     * @return static
      */
     public function setUser($user)
     {
@@ -231,7 +231,7 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
      *
      * @param int $version new value being set
      *
-     * @return TeamPrinter
+     * @return static
      */
     public function setVersion($version)
     {

@@ -246,7 +246,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param int $id new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setId($id)
     {
@@ -270,7 +270,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setCase($case)
     {
@@ -294,7 +294,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Opposition\Opposer $opposer new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setOpposer($opposer)
     {
@@ -318,7 +318,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $oppositionType new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setOppositionType($oppositionType)
     {
@@ -342,7 +342,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setStatus($status)
     {
@@ -366,7 +366,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $isValid new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setIsValid($isValid)
     {
@@ -390,7 +390,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -414,7 +414,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -438,7 +438,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param string $notes new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setNotes($notes)
     {
@@ -462,7 +462,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param string $isCopied new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setIsCopied($isCopied)
     {
@@ -486,7 +486,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $raisedDate new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setRaisedDate($raisedDate)
     {
@@ -516,7 +516,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param string $isInTime new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setIsInTime($isInTime)
     {
@@ -540,7 +540,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param string $isWithdrawn new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setIsWithdrawn($isWithdrawn)
     {
@@ -564,7 +564,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param string $validNotes new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setValidNotes($validNotes)
     {
@@ -588,7 +588,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param string $isWillingToAttendPi new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setIsWillingToAttendPi($isWillingToAttendPi)
     {
@@ -612,7 +612,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param int $version new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setVersion($version)
     {
@@ -636,7 +636,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param int $olbsKey new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -660,7 +660,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param string $olbsType new value being set
      *
-     * @return Opposition
+     * @return static
      */
     public function setOlbsType($olbsType)
     {
@@ -684,7 +684,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $operatingCentres collection being set as the value
      *
-     * @return Opposition
+     * @return static
      */
     public function setOperatingCentres($operatingCentres)
     {
@@ -708,7 +708,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $operatingCentres collection being added
      *
-     * @return Opposition
+     * @return static
      */
     public function addOperatingCentres($operatingCentres)
     {
@@ -731,7 +731,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $operatingCentres collection being removed
      *
-     * @return Opposition
+     * @return static
      */
     public function removeOperatingCentres($operatingCentres)
     {
@@ -747,7 +747,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $grounds collection being set as the value
      *
-     * @return Opposition
+     * @return static
      */
     public function setGrounds($grounds)
     {
@@ -771,7 +771,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $grounds collection being added
      *
-     * @return Opposition
+     * @return static
      */
     public function addGrounds($grounds)
     {
@@ -794,7 +794,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $grounds collection being removed
      *
-     * @return Opposition
+     * @return static
      */
     public function removeGrounds($grounds)
     {
