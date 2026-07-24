@@ -147,9 +147,6 @@ return [
             'PermitsBilateralMetadataCurrentFieldValuesGenerator'
                 => ApiSrv\Permits\Bilateral\Metadata\CurrentFieldValuesGenerator::class,
         ],
-        'abstract_factories' => [
-            \Laminas\Cache\Service\StorageCacheAbstractServiceFactory::class,
-        ],
         'factories' => [
             \Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class => \Dvsa\Olcs\Api\Service\EditorJs\ConverterServiceFactory::class,
             \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLogger::class => \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLoggerFactory::class,
@@ -542,6 +539,7 @@ return [
 
             Aws\S3\S3Client::class => Dvsa\Olcs\Api\Service\S3\S3ClientFactory::class,
             'default-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
+            'doctrine-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
             'cache.redis.connection'
                 =>  \Dvsa\Olcs\Api\Service\Cache\RedisConnectionFactory::class,
         ],
@@ -937,6 +935,13 @@ return [
     ],
     'entity_namespaces' => include(__DIR__ . '/namespace.config.php'),
     'doctrine' => [
+        'types' => [
+            'yesno' => \Dvsa\Olcs\Api\Entity\Types\YesNoType::class,
+            'yesnonull' => \Dvsa\Olcs\Api\Entity\Types\YesNoNullType::class,
+            'date' => \Dvsa\Olcs\Api\Entity\Types\DateType::class,
+            'datetime' => \Dvsa\Olcs\Api\Entity\Types\DateTimeType::class,
+            'encrypted_string' => \Dvsa\Olcs\Api\Entity\Types\EncryptedStringType::class,
+        ],
         'driver' => [
             'EntityDriver' => [
                 'class' => \Doctrine\ORM\Mapping\Driver\AttributeDriver::class,
@@ -951,13 +956,14 @@ return [
                 ],
             ],
             'orm_default' => [
+                'class' => \Doctrine\Persistence\Mapping\Driver\MappingDriverChain::class,
                 'drivers' => [
                     'Dvsa\Olcs\Api\Entity' => 'EntityDriver',
                     'Gedmo\Translatable\Entity' => 'translatable_metadata_driver'
                 ]
             ]
         ],
-        'eventmanager' => [
+        'event_manager' => [
             'orm_default' => [
                 'subscribers' => [
                     \Dvsa\Olcs\Api\Listener\OlcsEntityListener::class,
@@ -972,13 +978,6 @@ return [
                 'filters' => [
                     'soft-deleteable' => \Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter::class,
                 ],
-                'types' => [
-                    'yesno' => \Dvsa\Olcs\Api\Entity\Types\YesNoType::class,
-                    'yesnonull' => \Dvsa\Olcs\Api\Entity\Types\YesNoNullType::class,
-                    'date' => \Dvsa\Olcs\Api\Entity\Types\DateType::class,
-                    'datetime' => \Dvsa\Olcs\Api\Entity\Types\DateTimeType::class,
-                    'encrypted_string' => \Dvsa\Olcs\Api\Entity\Types\EncryptedStringType::class
-                ]
             ]
         ]
     ],
