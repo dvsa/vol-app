@@ -542,7 +542,26 @@ return [
             ApiSrv\AddressHelper\AddressHelperService::class => ApiSrv\AddressHelper\AddressHelperServiceFactory::class,
 
             Aws\S3\S3Client::class => Dvsa\Olcs\Api\Service\S3\S3ClientFactory::class,
-            EventBridgeClient::class => \Dvsa\Olcs\AwsSdk\Factories\EventBridgeClientFactory::class,
+            EventBridgeClient::class => function () {
+                return new class extends EventBridgeClient {
+                    public function __construct()
+                    {
+                        parent::__construct([
+                            'version' => 'latest',
+                            'region' => 'eu-west-1',
+                            'credentials' => [
+                                'key' => 'mock',
+                                'secret' => 'mock',
+                            ],
+                        ]);
+                    }
+
+                    public function putEvents(array $args = []): void
+                    {
+                        file_put_contents('/tmp/event.json', json_encode($args, JSON_PRETTY_PRINT));
+                    }
+                };
+            },
             'default-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
             'doctrine-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
             'cache.redis.connection'
