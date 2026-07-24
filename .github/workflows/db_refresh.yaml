@@ -78,20 +78,19 @@ jobs:
           fi
 
       - name: Send start notification to Slack
-        uses: slackapi/slack-github-action@v1.27.0
-        with:
-          payload: |
-            {
-              "channel": "${{ env.SLACK_CHAN }}",
-              "attachments": [
-                {
-                  "color": "${{ env.SLACK_COMPLETED }}",
-                  "text": "Starting refresh of OLCSDB from anonymised PROD db into ${{ inputs.platformEnv }}"
-                }
-              ]
-            }
+        if: ${{ secrets.SLACK_BOT_TOKEN != '' }}
+        shell: bash
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          curl -sS -X POST "https://slack.com/api/chat.postMessage" \
+            -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            --data "$(jq -cn \
+              --arg channel "${SLACK_CHAN}" \
+              --arg color "${SLACK_COMPLETED}" \
+              --arg text "Starting refresh of OLCSDB from anonymised PROD db into ${{ inputs.platformEnv }}" \
+              '{channel:$channel, attachments:[{color:$color, text:$text}]}')" >/dev/null
 
       - name: Run DB refresh flow
         shell: bash
@@ -201,7 +200,6 @@ jobs:
             return 1
           }
 
-          
           case "${PLATFORM_ENV}" in
             dev|reg)
               ENV_NAME="${PLATFORM_ENV}"
@@ -361,7 +359,7 @@ jobs:
             --argjson logs "${RDS_LOG_EXPORTS}" \
             --argjson tags "${RDS_TAGS}" \
             --argjson multiAz "${MULTI_AZ}" \
-            '{EventType:$eventType,RDSName:$rdsName,RDSOptionGroup:$optionGroup,RDSCloudwatchLogsExportConfiguration:$logs,RDSBaseSnap:$baseSnap,RDSSubnet:$subnet,EngineVersion:$engineVersion,RDSSnapSource:$snapSource,RDSTags:$tags,MultiAZ:$multiAz}'
+            '{EventType:$eventType,RDSName:$rdsName,RDSOptionGroup:$optionGroup,RDSCloudwatchLogsExportConfiguration:$logs,RDSBaseSnap:$baseSnap,RDSSubnet:$subnet,EngineVersion:$engineVersion,RDSSnapSource:$snapSource,RDSTags:$tags,RDSMultiAZ:$multiAz}'
           )"
           invoke_lambda "${payload}" "RestoreDBComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
             slack_send "${SLACK_FAIL}" "Error. Build failed restoring from DB snapshot"
@@ -416,7 +414,7 @@ jobs:
               --arg paramGroup "${RDS_PARAM_GROUP}" \
               --arg secGroup "${RDS_WRITER_SEC_GROUP}" \
               --argjson tags "${RDS_WRITER_TAGS}" \
-              '{EventType:$eventType,RDSDBInstanceClassWriter:$klass,RDSName:$rdsName,RDSWriterName:$writerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParameterGroup:$paramGroup,RDSSG:$secGroup,RDSWriterTags:$tags}'
+              '{EventType:$eventType,RDSDBInstanceClassWriter:$klass,RDSName:$rdsName,RDSWriterName:$writerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParamGroup:$paramGroup,RDSSG:$secGroup,RDSTags:$tags}'
             )"
             if ! invoke_lambda "${payload}" "CreateWriterSuccess" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
               slack_send "${SLACK_WARN}" "Warning. Failed to create Writer ${RDS_WRITER_NAME} for ${RDS_CLUSTER_NAME}. Build will continue - manually create Writer"
@@ -438,7 +436,7 @@ jobs:
               --arg paramGroup "${RDS_PARAM_GROUP}" \
               --arg secGroup "${RDS_SEC_GROUP}" \
               --argjson tags "${RDS_READER_TAGS}" \
-              '{EventType:$eventType,RDSDBInstanceClassReader:$klass,RDSName:$rdsName,RDSReaderName:$readerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParameterGroup:$paramGroup,RDSSG:$secGroup,RDSReaderTags:$tags}'
+              '{EventType:$eventType,RDSDBInstanceClassReader:$klass,RDSName:$rdsName,RDSReaderName:$readerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParamGroup:$paramGroup,RDSSG:$secGroup,RDSTags:$tags}'
             )"
             if ! invoke_lambda "${payload}" "CreateReaderSuccess" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
               slack_send "${SLACK_WARN}" "Warning. Failed to create Reader ${RDS_READER_NAME} for ${RDS_CLUSTER_NAME}. Build will continue - manually create Reader"
@@ -488,35 +486,31 @@ jobs:
           fi
 
       - name: Final success notification
-        if: success()
-        uses: slackapi/slack-github-action@v1.27.0
-        with:
-          payload: |
-            {
-              "channel": "${{ env.SLACK_CHAN }}",
-              "attachments": [
-                {
-                  "color": "${{ env.SLACK_COMPLETED }}",
-                  "text": "Refresh of OLCSDB from anonymised PROD db into ${{ inputs.platformEnv }} completed successfully"
-                }
-              ]
-            }
+        if: ${{ success() && secrets.SLACK_BOT_TOKEN != '' }}
+        shell: bash
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          curl -sS -X POST "https://slack.com/api/chat.postMessage" \
+            -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            --data "$(jq -cn \
+              --arg channel "${SLACK_CHAN}" \
+              --arg color "${SLACK_COMPLETED}" \
+              --arg text "Refresh of OLCSDB from anonymised PROD db into ${{ inputs.platformEnv }} completed successfully" \
+              '{channel:$channel, attachments:[{color:$color, text:$text}]}')" >/dev/null
 
       - name: Final failure notification
-        if: failure()
-        uses: slackapi/slack-github-action@v1.27.0
-        with:
-          payload: |
-            {
-              "channel": "${{ env.SLACK_CHAN }}",
-              "attachments": [
-                {
-                  "color": "${{ env.SLACK_FAIL }}",
-                  "text": "DB refresh failed for ${{ inputs.platformEnv }}. Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-                }
-              ]
-            }
+        if: ${{ failure() && secrets.SLACK_BOT_TOKEN != '' }}
+        shell: bash
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+        run: |
+          curl -sS -X POST "https://slack.com/api/chat.postMessage" \
+            -H "Authorization: Bearer ${SLACK_BOT_TOKEN}" \
+            -H "Content-Type: application/json; charset=utf-8" \
+            --data "$(jq -cn \
+              --arg channel "${SLACK_CHAN}" \
+              --arg color "${SLACK_FAIL}" \
+              --arg text "DB refresh failed for ${{ inputs.platformEnv }}. Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" \
+              '{channel:$channel, attachments:[{color:$color, text:$text}]}')" >/dev/null
