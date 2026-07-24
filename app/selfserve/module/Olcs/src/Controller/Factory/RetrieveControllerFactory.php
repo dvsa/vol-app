@@ -29,6 +29,7 @@ class RetrieveControllerFactory implements FactoryInterface
             new RemoteAddress(),
             is_string($retrieveConfig['presigned_fetch_proxy'] ?? null) ? $retrieveConfig['presigned_fetch_proxy'] : '',
             (int) ($retrieveConfig['presigned_fetch_timeout'] ?? 30),
+            (bool) ($retrieveConfig['grant_cookie_secure'] ?? true),
         );
     }
 }

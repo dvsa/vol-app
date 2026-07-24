@@ -401,4 +401,11 @@ return [
     'data-dva-ni-export' => [
         's3_uri' => 's3://devapp-olcs-pri-integration-dva-s3/',
     ],
+
+    // Retrieve-via-Link OTP session-grant secret. Any >=32 char value works locally; deployed
+    // environments must supply a strong secret via Secrets Manager. Without it the OTP verify step
+    // (SessionGrantService) errors, so the otp-gated download journey cannot be tested locally.
+    'retrieval' => [
+        'session_secret' => 'local-development-retrieval-session-secret-change-me',
+    ],
 ];

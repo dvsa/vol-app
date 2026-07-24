@@ -16,10 +16,7 @@ class RetrieveOtp
      * @Form\Type("Text")
      * @Form\Options({
      *     "label": "retrieve-document.otp.code.label",
-     *     "hint": "retrieve-document.otp.code.hint",
-     *     "label_attributes": {
-     *         "aria-label": "Enter the 6 digit security code"
-     *     }
+     *     "hint": "retrieve-document.otp.code.hint"
      * })
      * @Form\Attributes({
      *     "class": "govuk-input govuk-input--width-5",
@@ -31,7 +28,7 @@ class RetrieveOtp
      * })
      * @Form\Filter("Laminas\Filter\StringTrim")
      * @Form\Validator("Laminas\Validator\NotEmpty", options={"messages":{"isEmpty":"retrieve-document.otp.code.error.required"}})
-     * @Form\Validator("Laminas\Validator\Digits", options={"messages":{"notDigits":"retrieve-document.otp.code.error.format","stringEmpty":"retrieve-document.otp.code.error.required"}})
+     * @Form\Validator("Laminas\Validator\Digits", options={"messages":{"notDigits":"retrieve-document.otp.code.error.format"}})
      * @Form\Validator("Laminas\Validator\StringLength", options={"min":6,"max":6,"messages":{"stringLengthTooShort":"retrieve-document.otp.code.error.format","stringLengthTooLong":"retrieve-document.otp.code.error.format"}})
      */
     public $code = null;

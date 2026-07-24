@@ -22,6 +22,7 @@ use Dvsa\Olcs\Api\Entity\Publication\Publication as PublicationEntity;
 use Dvsa\Olcs\Api\Entity\System\FeatureToggle;
 use Dvsa\Olcs\Api\Service\Retrieval\RetrievalLinkCreator;
 use Dvsa\Olcs\Email\Data\Message;
+use Olcs\Logging\Log\Logger;
 use Psr\Container\ContainerInterface;
 
 /**
@@ -152,21 +153,34 @@ final class SendPublication extends AbstractCommandHandler implements EmailAware
         string $filename,
     ): void {
         foreach ($recipients as $email => $name) {
-            $link = $this->retrievalLinkCreator->create(
-                [$document->getId()],
-                (string) $email,
-                self::POLICE_FLOW_KEY,
-                'publication:' . $publication->getId(),
-            );
+            // Isolate each police recipient. SendPublication is a retryable queued command, and this
+            // branch fans out one send per recipient — so letting a single failure (bad address, a
+            // transient Notify error) bubble out would abort the loop and, on the queue's retry,
+            // re-run it from the top: re-minting a fresh OTP link and re-sending to every recipient
+            // already served. Catch per recipient, log, and continue so one address can't duplicate
+            // the rest; a genuine miss can be re-issued by an operator.
+            try {
+                $link = $this->retrievalLinkCreator->create(
+                    [$document->getId()],
+                    (string) $email,
+                    self::POLICE_FLOW_KEY,
+                    'publication:' . $publication->getId(),
+                );
 
-            $message = new Message(self::TO_EMAIL, $subject);
-            $message->setBcc([$email => $name]);
-            $message->setSubjectVariables($subjectVars);
+                $message = new Message(self::TO_EMAIL, $subject);
+                $message->setBcc([$email => $name]);
+                $message->setSubjectVariables($subjectVars);
 
-            $this->sendEmailTemplate($message, self::EMAIL_TEMPLATE, [
-                'filename' => $filename,
-                'retrievalLink' => $this->retrievalUrl($link->getToken()),
-            ]);
+                $this->sendEmailTemplate($message, self::EMAIL_TEMPLATE, [
+                    'filename' => $filename,
+                    'retrievalLink' => $this->retrievalUrl($link->getToken()),
+                ]);
+            } catch (\Throwable $e) {
+                Logger::err('SendPublication: police retrieval-link send failed for a recipient; skipping', [
+                    'publication' => $publication->getId(),
+                    'error' => $e->getMessage(),
+                ]);
+            }
         }
     }
 
