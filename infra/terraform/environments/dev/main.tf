@@ -707,7 +707,7 @@ module "service" {
       {
         name     = "import-anondb",
         commands = ["/mnt/data/scripts/import_anondb.sh"],
-        type     = "scripts_testing"
+        type     = "scripts"
         cpu      = 2,
         memory   = 8192,
       },
