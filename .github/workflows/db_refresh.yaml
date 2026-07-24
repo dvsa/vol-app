@@ -90,7 +90,7 @@ jobs:
               --arg channel "${SLACK_CHAN}" \
               --arg color "${SLACK_COMPLETED}" \
               --arg text "Starting refresh of OLCSDB from anonymised PROD db into ${{ inputs.platformEnv }}" \
-              '{channel:$channel, attachments:[{color:$color, text:$text}]}')" >/dev/null
+              '{channel:$channel, attachments:[{color:$color, text:$text}]}')" >/dev/null || true
 
       - name: Run DB refresh flow
         shell: bash
