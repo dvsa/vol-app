@@ -145,4 +145,15 @@ return [
     'auth' => [
         'user_unique_id_salt' => '1234',
     ],
+
+    // No outbound egress proxy locally: the S3 presigned-download fetch is not exercised on the
+    // WebDAV store, and there is no shared proxy in front of local dev. Empty => connect directly
+    // (RetrieveController::presignedFetchProxyOptions treats '' as "no proxy"). Deployed
+    // environments resolve %shd_proxy% from Parameter Store instead.
+    'retrieve_document' => [
+        'presigned_fetch_proxy' => '',
+        // Local dev is plain HTTP, so a Secure grant cookie would never be stored/returned by the
+        // browser and the otp-gated download could not be tested. Real environments keep it true.
+        'grant_cookie_secure' => false,
+    ],
 ];

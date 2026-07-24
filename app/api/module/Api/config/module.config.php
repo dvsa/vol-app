@@ -18,6 +18,24 @@ return [
     'router' => [
         'routes' => include(__DIR__ . '/../../../vendor/olcs/olcs-transfer/config/backend-routes.config.php')
     ],
+    // Retrieve-via-Link: per-flow delivery policy + post-OTP session-grant secret. Kept in module
+    // config (not the SSM-resolved config.global) so the literal policy values aren't treated as
+    // parameter tokens.
+    'retrieval' => [
+        // gate: none | otp. expiry: ISO-8601 duration or integer seconds. An unconfigured flow
+        // fails secure (OTP + short window) in RetrievalPolicyResolver.
+        'policies' => [
+            'publication' => ['gate' => 'none', 'expiry' => 'P42D'],
+            // Police copies are sensitive: OTP-gated, one link per recipient (tune the window as needed).
+            'publication-police' => ['gate' => 'otp', 'expiry' => 'P42D'],
+        ],
+        // HMAC secret (>=32 chars) for post-OTP session grants. Empty here so non-OTP envs boot
+        // fine; OTP-enabled envs MUST override via secrets/local config, or the OTP path errors.
+        'session_secret' => '',
+        // Seconds a presigned download URL is valid (S3 document store only). Kept short —
+        // selfserve fetches it server-side immediately, it never reaches the browser.
+        'presigned_ttl' => 300,
+    ],
     'service_manager' => [
         'alias' => [
             'PublicationContextPlugin' => \Dvsa\Olcs\Api\Service\Publication\Context\PluginManager::class,
@@ -151,6 +169,12 @@ return [
             \Laminas\Cache\Service\StorageCacheAbstractServiceFactory::class,
         ],
         'factories' => [
+            // Retrieve-via-Link services
+            \Dvsa\Olcs\Api\Service\Retrieval\TokenGenerator::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
+            \Dvsa\Olcs\Api\Service\Retrieval\OtpService::class => \Laminas\ServiceManager\Factory\InvokableFactory::class,
+            \Dvsa\Olcs\Api\Service\Retrieval\RetrievalPolicyResolver::class => \Dvsa\Olcs\Api\Service\Retrieval\RetrievalPolicyResolverFactory::class,
+            \Dvsa\Olcs\Api\Service\Retrieval\SessionGrantService::class => \Dvsa\Olcs\Api\Service\Retrieval\SessionGrantServiceFactory::class,
+            \Dvsa\Olcs\Api\Service\Retrieval\RetrievalLinkCreator::class => \Dvsa\Olcs\Api\Service\Retrieval\RetrievalLinkCreatorFactory::class,
             \Dvsa\Olcs\Api\Service\EditorJs\ConverterService::class => \Dvsa\Olcs\Api\Service\EditorJs\ConverterServiceFactory::class,
             \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLogger::class => \Dvsa\Olcs\Api\Domain\Logger\EntityAccessLoggerFactory::class,
             'ConvertToPdf' => \Dvsa\Olcs\Api\Service\ConvertToPdf\ConvertToPdfFactory::class,
@@ -840,6 +864,11 @@ return [
             Repository\LetterInstanceTodo::class => RepositoryFactory::class,
             Repository\LetterInstanceAppendix::class => RepositoryFactory::class,
             Repository\LetterChoice::class => RepositoryFactory::class,
+            // Retrieve-via-Link repositories
+            'RetrievalLink' => RepositoryFactory::class,
+            'RetrievalLinkDocument' => RepositoryFactory::class,
+            'RetrievalOtp' => RepositoryFactory::class,
+            'RetrievalLinkEvent' => RepositoryFactory::class,
             Repository\LetterSectionVariant::class => RepositoryFactory::class
         ],
         'aliases' => [

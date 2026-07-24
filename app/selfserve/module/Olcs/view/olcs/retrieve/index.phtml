@@ -1,0 +1,160 @@
+<?php
+/**
+ * Retrieve a document - landing page.
+ *
+ * Variables:
+ *   string      $token             opaque link token
+ *   string      $gateMode          'none' | 'otp'
+ *   array       $documents         [['memberRef' => ..., 'displayFilename' => ...], ...]
+ *   string|null $expiresAt         ISO date the link expires (display only)
+ *   bool        $unlocked          whether downloads are available
+ *   ?Form       $form              OTP entry form (only for otp links that are not yet unlocked)
+ *   bool        $otpRequested      whether a code has just been requested
+ *   bool        $otpError          whether the last code was incorrect/expired
+ *   ?int        $attemptsRemaining attempts left (when known)
+ *   string      $requestOtpUrl     URL the "send code" control posts to
+ */
+$title = $this->translate('retrieve-document.page.title');
+$this->placeholder('pageTitle')->set($title);
+
+echo $this->partial(
+    'partials/page-header-simple',
+    [
+        'pageTitle' => $title,
+    ]
+);
+?>
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <?php echo $this->flashMessengerAll(); ?>
+
+        <?php
+        // Wrong / expired code. GOV.UK error summary: alerts, takes focus (data-module) and links
+        // to the input. A submitted-but-invalid form (empty / non-numeric) is a separate path that
+        // renders its own summary + inline message via the form helper below.
+        ?>
+        <?php if (!empty($otpError)) : ?>
+            <div class="govuk-error-summary" data-module="govuk-error-summary">
+                <div role="alert">
+                    <h2 class="govuk-error-summary__title">
+                        <?php echo $this->translate('retrieve-document.otp.error.title'); ?>
+                    </h2>
+                    <div class="govuk-error-summary__body">
+                        <ul class="govuk-list govuk-error-summary__error-list">
+                            <li>
+                                <a href="#code">
+                                    <?php echo $this->translate('retrieve-document.otp.error.incorrect'); ?>
+                                    <?php if ($attemptsRemaining !== null) : ?>
+                                        <?php echo $this->translateReplace(
+                                            'retrieve-document.otp.error.attempts-remaining',
+                                            [(int) $attemptsRemaining]
+                                        ); ?>
+                                    <?php endif; ?>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+
+        <?php if (empty($documents)) : ?>
+
+            <p class="govuk-body"><?php echo $this->translate('retrieve-document.documents.none'); ?></p>
+
+        <?php else : ?>
+
+            <p class="govuk-body"><?php echo $this->translate('retrieve-document.documents.intro'); ?></p>
+
+            <ul class="govuk-list govuk-list--spaced">
+                <?php foreach ($documents as $document) : ?>
+                    <?php $filename = $document['displayFilename'] ?? ''; ?>
+                    <li>
+                        <?php if (!empty($unlocked)) : ?>
+                            <a class="govuk-link" href="<?php echo $this->escapeHtmlAttr(
+                                $this->url('retrieve/download', ['token' => $token, 'memberRef' => $document['memberRef']])
+                            ); ?>">
+                                <?php echo $this->escapeHtml($filename); ?>
+                            </a>
+                        <?php else : ?>
+                            <?php echo $this->escapeHtml($filename); ?>
+                        <?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+
+            <?php if (!empty($expiresAt)) : ?>
+                <p class="govuk-body-s govuk-hint">
+                    <?php echo $this->translateReplace(
+                        'retrieve-document.expires',
+                        [$this->escapeHtml($this->date(strtotime((string) $expiresAt)))]
+                    ); ?>
+                </p>
+            <?php endif; ?>
+
+        <?php endif; ?>
+
+        <?php if ($gateMode === 'otp' && empty($unlocked)) : ?>
+
+            <hr class="govuk-section-break govuk-section-break--visible govuk-section-break--l">
+
+            <h2 class="govuk-heading-m"><?php echo $this->translate('retrieve-document.otp.heading'); ?></h2>
+            <p class="govuk-body"><?php echo $this->translate('retrieve-document.otp.guidance'); ?></p>
+
+            <?php if (empty($otpRequested)) : ?>
+
+                <?php // Step 1 — request a code. No code field yet: the recipient has nothing to
+                      // enter until a code has been sent to their inbox. ?>
+                <form method="post" action="<?php echo $this->escapeHtmlAttr($requestOtpUrl); ?>">
+                    <button type="submit" class="govuk-button" data-module="govuk-button">
+                        <?php echo $this->translate('retrieve-document.otp.request.label'); ?>
+                    </button>
+                </form>
+
+            <?php else : ?>
+
+                <?php // Step 2 — a code has been sent (or an attempt just made). Confirm it was sent,
+                      // take the code, and offer a de-emphasised resend at the bottom. The wrong-code
+                      // error summary (if any) is rendered at the top of the page. ?>
+                <?php if (empty($otpError)) : ?>
+                    <div class="govuk-notification-banner govuk-notification-banner--success"
+                         role="alert"
+                         aria-labelledby="otp-sent-title"
+                         data-module="govuk-notification-banner">
+                        <div class="govuk-notification-banner__header">
+                            <h2 class="govuk-notification-banner__title" id="otp-sent-title">
+                                <?php echo $this->translate('retrieve-document.otp.sent.title'); ?>
+                            </h2>
+                        </div>
+                        <div class="govuk-notification-banner__content">
+                            <p class="govuk-notification-banner__heading">
+                                <?php echo $this->translate('retrieve-document.otp.sent'); ?>
+                            </p>
+                        </div>
+                    </div>
+                <?php endif; ?>
+
+                <?php if ($form !== null) : ?>
+                    <?php
+                    echo $this->formErrors($form);
+                    echo $this->form($form);
+                    ?>
+                <?php endif; ?>
+
+                <p class="govuk-body govuk-!-margin-top-6">
+                    <?php echo $this->translate('retrieve-document.otp.resend.prompt'); ?>
+                </p>
+                <form method="post" action="<?php echo $this->escapeHtmlAttr($requestOtpUrl); ?>">
+                    <button type="submit" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+                        <?php echo $this->translate('retrieve-document.otp.resend.label'); ?>
+                    </button>
+                </form>
+
+            <?php endif; ?>
+
+        <?php endif; ?>
+
+    </div>
+</div>
