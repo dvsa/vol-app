@@ -1,5 +1,29 @@
 # Changelog
 
+## [9.1.0](https://github.com/dvsa/vol-app/compare/v9.0.0...v9.1.0) (2026-07-24)
+
+
+### Features
+
+* add idp extraction state machine within vol app ([#1668](https://github.com/dvsa/vol-app/issues/1668)) ([9bc5c0a](https://github.com/dvsa/vol-app/commit/9bc5c0aa264305b287ae51e038ffbf07b6848577))
+* **api:** validate doctrine entities with phpstan-doctrine, fix entity generator docblocks VOL-6959 ([#1662](https://github.com/dvsa/vol-app/issues/1662)) ([1cad729](https://github.com/dvsa/vol-app/commit/1cad7296f90180b0909772f2fef4c50dcdf2526c))
+* enable gotenberg prod ([#1683](https://github.com/dvsa/vol-app/issues/1683)) ([6cd002b](https://github.com/dvsa/vol-app/commit/6cd002b3d51a0b877e7a7de92f85aba34f2acdc9))
+* integration test bootstrap VOL-7480 ([#1681](https://github.com/dvsa/vol-app/issues/1681)) ([052eee2](https://github.com/dvsa/vol-app/commit/052eee27df9bd4b341abee4d3f5d919d4a58db21))
+* replace doctrine-orm-module with roave/psr-container-doctrine VOL-7036 ([#1673](https://github.com/dvsa/vol-app/issues/1673)) ([dfcba35](https://github.com/dvsa/vol-app/commit/dfcba354ebb139f99300721bf3c106e5fde09b2f))
+* swap lamians cache for symfony cache (PSR-6) VOL-6110 ([#1651](https://github.com/dvsa/vol-app/issues/1651)) ([dc61599](https://github.com/dvsa/vol-app/commit/dc61599f43deb44a8ad26855d59efc53c3366b5a))
+
+
+### Bug Fixes
+
+* 7078 anon updates image ([#1682](https://github.com/dvsa/vol-app/issues/1682)) ([5d806d4](https://github.com/dvsa/vol-app/commit/5d806d48fbe78d3b1c0274a5f37251c009e4ec49))
+* **api:** apply revised general conditions wording to GB standard licence docs VOL-6958 ([#1677](https://github.com/dvsa/vol-app/issues/1677)) ([985083e](https://github.com/dvsa/vol-app/commit/985083e89f846ccff224942bf4feaea151a0af7b))
+* **api:** omit fatal error detail from the 500 response body VOL-2515 ([#1685](https://github.com/dvsa/vol-app/issues/1685)) ([1fe6277](https://github.com/dvsa/vol-app/commit/1fe627743ee82cf22a26dd270bb361caa112e774))
+* **api:** process remaining NTU applications when one fails and report each failure reason ([#1674](https://github.com/dvsa/vol-app/issues/1674)) ([7e3cd28](https://github.com/dvsa/vol-app/commit/7e3cd283cf963e84617f2ebc337af4fb33d7f77a))
+* bda project description to not fail regex check ([#1675](https://github.com/dvsa/vol-app/issues/1675)) ([b53260b](https://github.com/dvsa/vol-app/commit/b53260bba50b58f1481502afd4c772b7c43dcac0))
+* correct command in int, pp and prod for ni-compliance job ([#1678](https://github.com/dvsa/vol-app/issues/1678)) ([88fd67a](https://github.com/dvsa/vol-app/commit/88fd67a015ec232c3a2fef38780d917cf7fad2fc))
+* parameter dependencies and paths ([#1672](https://github.com/dvsa/vol-app/issues/1672)) ([3a74467](https://github.com/dvsa/vol-app/commit/3a744670f9b0ba12a281fe84640b82bda6088e98))
+* update proxy setup ([#1670](https://github.com/dvsa/vol-app/issues/1670)) ([937269e](https://github.com/dvsa/vol-app/commit/937269e5b251abce9eb14f332df72c168a1bcee2))
+
 ## [9.0.0](https://github.com/dvsa/vol-app/compare/v8.1.3...v9.0.0) (2026-07-21)
 
 
