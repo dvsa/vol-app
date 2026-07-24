@@ -27,7 +27,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_disqualification_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_disqualification_organisation_id', columns: ['organisation_id'])]
 #[ORM\Index(name: 'ix_disqualification_person_id', columns: ['person_id'])]
-#[ORM\Index(name: 'uk_disqualification_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_disqualification_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -45,7 +44,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -55,7 +54,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
     #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, inversedBy: 'disqualifications', fetch: 'LAZY')]
     protected $organisation;
 
     /**
@@ -64,7 +63,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      * @var \Dvsa\Olcs\Api\Entity\Person\Person
      */
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, inversedBy: 'disqualifications', fetch: 'LAZY')]
     protected $person;
 
     /**
@@ -116,7 +115,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'period', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'period', nullable: true, options: ['unsigned' => true])]
     protected $period;
 
     /**
@@ -124,7 +123,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -133,7 +132,7 @@ abstract class AbstractDisqualification implements BundleSerializableInterface, 
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

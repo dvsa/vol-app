@@ -29,7 +29,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_licence_operating_centre_licence_id', columns: ['licence_id'])]
 #[ORM\Index(name: 'ix_licence_operating_centre_operating_centre_id', columns: ['operating_centre_id'])]
 #[ORM\Index(name: 'ix_licence_operating_centre_s4_id', columns: ['s4_id'])]
-#[ORM\Index(name: 'uk_licence_operating_centre_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_licence_operating_centre_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -49,7 +48,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -58,8 +57,8 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
-    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'operatingCentres', fetch: 'LAZY')]
     protected $licence;
 
     /**
@@ -67,7 +66,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
      */
-    #[ORM\JoinColumn(name: 'operating_centre_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'operating_centre_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre::class, fetch: 'LAZY')]
     protected $operatingCentre;
 
@@ -137,7 +136,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'no_of_trailers_required', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'no_of_trailers_required', nullable: true, options: ['unsigned' => true])]
     protected $noOfTrailersRequired;
 
     /**
@@ -145,7 +144,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'no_of_vehicles_required', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'no_of_vehicles_required', nullable: true, options: ['unsigned' => true])]
     protected $noOfVehiclesRequired;
 
     /**
@@ -153,7 +152,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'no_of_vehicles_possessed', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'no_of_vehicles_possessed', nullable: true, options: ['unsigned' => true])]
     protected $noOfVehiclesPossessed;
 
     /**
@@ -161,7 +160,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'no_of_trailers_possessed', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'no_of_trailers_possessed', nullable: true, options: ['unsigned' => true])]
     protected $noOfTrailersPossessed;
 
     /**
@@ -193,7 +192,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -202,7 +201,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_organisation_user_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_organisation_user_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_organisation_user_user_id', columns: ['user_id'])]
-#[ORM\Index(name: 'uk_organisation_user_organisation_id_user_id', columns: ['organisation_id', 'user_id'])]
 #[ORM\Index(name: 'IDX_CFD7D6519E6B1585', columns: ['organisation_id'])]
 #[ORM\UniqueConstraint(name: 'uk_organisation_user_organisation_id_user_id', columns: ['organisation_id', 'user_id'])]
 #[ORM\MappedSuperclass]
@@ -45,7 +44,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -54,8 +53,8 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
-    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, inversedBy: 'organisationUsers', fetch: 'LAZY')]
     protected $organisation;
 
     /**
@@ -63,8 +62,8 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, inversedBy: 'organisationUsers', fetch: 'LAZY')]
     protected $user;
 
     /**
@@ -108,7 +107,7 @@ abstract class AbstractOrganisationUser implements BundleSerializableInterface, 
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

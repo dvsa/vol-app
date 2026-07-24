@@ -24,7 +24,6 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\Index(name: 'ix_irhp_application_read_audit_created_on', columns: ['created_on'])]
 #[ORM\Index(name: 'ix_irhp_application_read_audit_irhp_application_id', columns: ['irhp_application_id'])]
 #[ORM\Index(name: 'ix_irhp_application_read_audit_user_id', columns: ['user_id'])]
-#[ORM\Index(name: 'uk_irhp_app_read_audit_irhp_app_id_user_id_created_on', columns: ['irhp_application_id', 'user_id', 'created_on'])]
 #[ORM\UniqueConstraint(name: 'uk_irhp_app_read_audit_irhp_app_id_user_id_created_on', columns: ['irhp_application_id', 'user_id', 'created_on'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -41,7 +40,7 @@ abstract class AbstractIrhpApplicationReadAudit implements BundleSerializableInt
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -50,7 +49,7 @@ abstract class AbstractIrhpApplicationReadAudit implements BundleSerializableInt
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
      */
-    #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
     protected $irhpApplication;
 
@@ -59,7 +58,7 @@ abstract class AbstractIrhpApplicationReadAudit implements BundleSerializableInt
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 

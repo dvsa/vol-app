@@ -182,3 +182,23 @@ SELECT u.login_id, r.description, IF(u.team_id IS NULL, "Selfserve", "Internal")
 ```
 
 :::
+
+## Troubleshooting
+
+### Containers lose the in-tree lib mounts after `composer install`
+
+The PHP services (`api`, `cli`, `selfserve`, `internal`) bind-mount the in-tree
+shared libraries (`./lib/olcs-*`) over their `vendor/olcs/*` paths so live edits
+work on both host and container. Running `composer install`/`update` on the
+**host** recreates those `vendor/olcs/*` symlinks, which detaches the running
+container's bind mounts. Symptoms include module init failures
+(`Module (Dvsa\Olcs\Transfer) could not be initialized`), "class not found"
+errors for `Dvsa\Olcs\*` lib classes, or `Invalid argument` when listing the
+vendor path inside the container.
+
+Recreate the affected container (a plain `restart` will not re-establish the
+mounts):
+
+```bash
+docker compose up -d --force-recreate cli    # or api / selfserve / internal
+```

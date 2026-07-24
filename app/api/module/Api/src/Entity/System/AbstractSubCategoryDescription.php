@@ -21,7 +21,6 @@ use Doctrine\Common\Collections\Collection;
  */
 #[ORM\Table(name: 'sub_category_description')]
 #[ORM\Index(name: 'ix_sub_category_description_sub_category_id', columns: ['sub_category_id'])]
-#[ORM\Index(name: 'uk_sub_category_description_sub_category_id_description', columns: ['sub_category_id', 'description'])]
 #[ORM\UniqueConstraint(name: 'uk_sub_category_description_sub_category_id_description', columns: ['sub_category_id', 'description'])]
 #[ORM\MappedSuperclass]
 abstract class AbstractSubCategoryDescription implements BundleSerializableInterface, JsonSerializable, \Stringable
@@ -36,7 +35,7 @@ abstract class AbstractSubCategoryDescription implements BundleSerializableInter
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -45,7 +44,7 @@ abstract class AbstractSubCategoryDescription implements BundleSerializableInter
      *
      * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
      */
-    #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SubCategory::class, fetch: 'LAZY')]
     protected $subCategory;
 

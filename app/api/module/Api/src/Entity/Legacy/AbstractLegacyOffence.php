@@ -42,7 +42,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     protected $id = 0;
 
     /**
@@ -50,8 +50,8 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
-    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'legacyOffences', fetch: 'LAZY')]
     protected $case;
 
     /**
@@ -103,7 +103,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'num_of_offences', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'num_of_offences', nullable: true, options: ['unsigned' => true])]
     protected $numOfOffences;
 
     /**
@@ -143,7 +143,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'points', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'points', nullable: true, options: ['unsigned' => true])]
     protected $points;
 
     /**
@@ -175,7 +175,7 @@ abstract class AbstractLegacyOffence implements BundleSerializableInterface, Jso
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

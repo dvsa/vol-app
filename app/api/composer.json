@@ -107,6 +107,7 @@
       "Dvsa\\OlcsTest\\Cpms\\": "test/module/Cpms/src",
       "Dvsa\\OlcsTest\\Db\\": "test/module/Olcs/Db/src",
       "Dvsa\\OlcsTest\\": "test/src",
+      "Dvsa\\OlcsTest\\Integration\\": "test/integration/src",
       "Dvsa\\OlcsTest\\Address\\": "test/module/Address/src",
       "Dvsa\\OlcsTest\\Api\\": "test/module/Api/src",
       "Dvsa\\OlcsTest\\Cli\\": "test/module/Cli/src",
@@ -128,6 +129,7 @@
   },
   "scripts": {
     "test": "vendor/bin/phpunit",
+    "test:integration": "vendor/bin/phpunit -c phpunit-integration.xml",
     "phpcs": "vendor/bin/phpcs -d memory_limit=512M",
     "psalm": "vendor/bin/psalm",
     "phpstan": "vendor/bin/phpstan --memory-limit=1G",

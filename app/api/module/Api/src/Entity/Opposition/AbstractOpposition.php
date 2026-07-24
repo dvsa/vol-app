@@ -31,7 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_opposition_opposer_id', columns: ['opposer_id'])]
 #[ORM\Index(name: 'ix_opposition_opposition_type', columns: ['opposition_type'])]
 #[ORM\Index(name: 'ix_opposition_status', columns: ['status'])]
-#[ORM\Index(name: 'uk_opposition_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\UniqueConstraint(name: 'uk_opposition_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -51,7 +50,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -60,8 +59,8 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
-    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'oppositions', fetch: 'LAZY')]
     protected $case;
 
     /**
@@ -69,7 +68,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @var \Dvsa\Olcs\Api\Entity\Opposition\Opposer
      */
-    #[ORM\JoinColumn(name: 'opposer_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'opposer_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Opposition\Opposer::class, fetch: 'LAZY', cascade: ['persist'])]
     protected $opposer;
 
@@ -78,7 +77,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'opposition_type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'opposition_type', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $oppositionType;
 
@@ -96,7 +95,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'is_valid', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'is_valid', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $isValid;
 
@@ -181,7 +180,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -190,7 +189,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
@@ -220,7 +219,7 @@ abstract class AbstractOpposition implements BundleSerializableInterface, JsonSe
     #[ORM\JoinTable(name: 'opposition_grounds')]
     #[ORM\JoinColumn(name: 'opposition_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'ground_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'oppositions', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $grounds;
 
     /**

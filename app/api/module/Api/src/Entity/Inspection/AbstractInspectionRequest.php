@@ -34,7 +34,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_inspection_request_requestor_user_id', columns: ['requestor_user_id'])]
 #[ORM\Index(name: 'ix_inspection_request_result_type', columns: ['result_type'])]
 #[ORM\Index(name: 'ix_inspection_request_task_id', columns: ['task_id'])]
-#[ORM\Index(name: 'uk_inspection_request_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_inspection_request_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -52,7 +51,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -61,7 +60,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
-    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
     protected $licence;
 
@@ -88,7 +87,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
-    #[ORM\JoinColumn(name: 'requestor_user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'requestor_user_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $requestorUser;
 
@@ -115,7 +114,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'request_type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'request_type', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $requestType;
 
@@ -124,7 +123,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'result_type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'result_type', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $resultType;
 
@@ -234,7 +233,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'trailers_examined_no', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'trailers_examined_no', nullable: true, options: ['unsigned' => true])]
     protected $trailersExaminedNo;
 
     /**
@@ -242,7 +241,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'vehicles_examined_no', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'vehicles_examined_no', nullable: true, options: ['unsigned' => true])]
     protected $vehiclesExaminedNo;
 
     /**
@@ -250,7 +249,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -259,7 +258,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

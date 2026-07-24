@@ -31,7 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_propose_to_revoke_final_submission_presiding_tc', columns: ['final_submission_presiding_tc'])]
 #[ORM\Index(name: 'ix_propose_to_revoke_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_propose_to_revoke_presiding_tc_id', columns: ['presiding_tc_id'])]
-#[ORM\Index(name: 'uk_propose_to_revoke_case_id', columns: ['case_id'])]
 #[ORM\UniqueConstraint(name: 'uk_propose_to_revoke_case_id', columns: ['case_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -49,7 +48,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -58,7 +57,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
-    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
@@ -67,7 +66,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
      */
-    #[ORM\JoinColumn(name: 'presiding_tc_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'presiding_tc_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\PresidingTc::class, fetch: 'LAZY')]
     protected $presidingTc;
 
@@ -156,7 +155,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

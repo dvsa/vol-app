@@ -45,7 +45,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -54,8 +54,8 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant
      */
-    #[ORM\JoinColumn(name: 'letter_section_variant_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'letter_section_variant_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant::class, inversedBy: 'versions', fetch: 'LAZY')]
     protected $letterSectionVariant;
 
     /**
@@ -63,7 +63,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'section_type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'section_type', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $sectionType;
 
@@ -125,7 +125,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'min_length', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'min_length', nullable: true, options: ['unsigned' => true])]
     protected $minLength;
 
     /**
@@ -133,7 +133,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'max_length', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'max_length', nullable: true, options: ['unsigned' => true])]
     protected $maxLength;
 
     /**
@@ -173,7 +173,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'version_number', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'version_number', nullable: false, options: ['unsigned' => true])]
     protected $versionNumber = 0;
 
     /**
@@ -181,7 +181,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

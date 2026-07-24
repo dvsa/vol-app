@@ -25,7 +25,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Table(name: 'replacement')]
 #[ORM\Index(name: 'fk_replacement_users_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'fk_replacement_users_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'placeholder', columns: ['placeholder'])]
 #[ORM\UniqueConstraint(name: 'placeholder', columns: ['placeholder'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -43,7 +42,7 @@ abstract class AbstractReplacement implements BundleSerializableInterface, JsonS
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -88,7 +87,7 @@ abstract class AbstractReplacement implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: true, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: true, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

@@ -31,8 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_user_partner_contact_details_id', columns: ['partner_contact_details_id'])]
 #[ORM\Index(name: 'ix_user_team_id', columns: ['team_id'])]
 #[ORM\Index(name: 'ix_user_transport_manager_id', columns: ['transport_manager_id'])]
-#[ORM\Index(name: 'uk_user_login_id', columns: ['login_id'])]
-#[ORM\Index(name: 'uk_user_pid', columns: ['pid'])]
 #[ORM\UniqueConstraint(name: 'uk_user_login_id', columns: ['login_id'])]
 #[ORM\UniqueConstraint(name: 'uk_user_pid', columns: ['pid'])]
 #[ORM\MappedSuperclass]
@@ -53,7 +51,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -72,7 +70,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'users', fetch: 'LAZY')]
     protected $transportManager;
 
     /**
@@ -81,7 +79,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
      * @var \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority
      */
     #[ORM\JoinColumn(name: 'local_authority_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority::class, inversedBy: 'users', fetch: 'LAZY')]
     protected $localAuthority;
 
     /**
@@ -183,7 +181,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

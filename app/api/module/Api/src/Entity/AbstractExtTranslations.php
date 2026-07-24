@@ -19,7 +19,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ORM\Table(name: 'ext_translations')]
 #[ORM\Index(name: 'ix_ext_translations_locale_object_class_foreign_key', columns: ['locale', 'object_class', 'foreign_key'])]
-#[ORM\Index(name: 'uk_ext_translations_locale_object_class_field_foreign_key', columns: ['locale', 'object_class', 'field', 'foreign_key'])]
 #[ORM\UniqueConstraint(name: 'uk_ext_translations_locale_object_class_field_foreign_key', columns: ['locale', 'object_class', 'field', 'foreign_key'])]
 #[ORM\MappedSuperclass]
 abstract class AbstractExtTranslations implements BundleSerializableInterface, JsonSerializable, \Stringable
@@ -34,7 +33,7 @@ abstract class AbstractExtTranslations implements BundleSerializableInterface, J
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 

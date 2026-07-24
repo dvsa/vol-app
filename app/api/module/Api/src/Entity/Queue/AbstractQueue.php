@@ -48,7 +48,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -57,7 +57,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'type', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $type;
 
@@ -66,7 +66,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
@@ -95,7 +95,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'entity_id', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'entity_id', nullable: true, options: ['unsigned' => true])]
     protected $entityId;
 
     /**
@@ -119,7 +119,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'attempts', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'smallint', name: 'attempts', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $attempts = 0;
 
     /**
@@ -135,7 +135,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

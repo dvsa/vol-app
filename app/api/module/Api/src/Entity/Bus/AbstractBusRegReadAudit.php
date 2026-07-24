@@ -24,7 +24,6 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\Index(name: 'ix_bus_reg_read_audit_bus_reg_id', columns: ['bus_reg_id'])]
 #[ORM\Index(name: 'ix_bus_reg_read_audit_created_on', columns: ['created_on'])]
 #[ORM\Index(name: 'ix_bus_reg_read_audit_user_id', columns: ['user_id'])]
-#[ORM\Index(name: 'uk_bus_reg_read_audit_bus_reg_id_user_id_created_on', columns: ['bus_reg_id', 'user_id', 'created_on'])]
 #[ORM\UniqueConstraint(name: 'uk_bus_reg_read_audit_bus_reg_id_user_id_created_on', columns: ['bus_reg_id', 'user_id', 'created_on'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -41,7 +40,7 @@ abstract class AbstractBusRegReadAudit implements BundleSerializableInterface, J
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -50,8 +49,8 @@ abstract class AbstractBusRegReadAudit implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      */
-    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'readAudits', fetch: 'LAZY')]
     protected $busReg;
 
     /**
@@ -59,7 +58,7 @@ abstract class AbstractBusRegReadAudit implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 

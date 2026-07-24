@@ -43,7 +43,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -53,7 +53,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'irhpPermitRequests', fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**
@@ -62,7 +62,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
      */
     #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, inversedBy: 'irhpPermitRequests', fetch: 'LAZY')]
     protected $irhpPermitApplication;
 
     /**
@@ -90,7 +90,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'permits_required', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'permits_required', nullable: false, options: ['unsigned' => true])]
     protected $permitsRequired = 0;
 
     /**
@@ -98,7 +98,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -110,7 +110,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     #[ORM\JoinTable(name: 'irhp_permit_request_attribute')]
     #[ORM\JoinColumn(name: 'irhp_permit_request_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'irhp_permit_request_attribute_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'irhpPermitRequests', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $irhpPermitRequestAttributes;
 
     /**

@@ -24,7 +24,6 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\Index(name: 'ix_licence_read_audit_created_on', columns: ['created_on'])]
 #[ORM\Index(name: 'ix_licence_read_audit_licence_id', columns: ['licence_id'])]
 #[ORM\Index(name: 'ix_licence_read_audit_user_id', columns: ['user_id'])]
-#[ORM\Index(name: 'uk_licence_read_audit_licence_id_user_id_created_on', columns: ['licence_id', 'user_id', 'created_on'])]
 #[ORM\UniqueConstraint(name: 'uk_licence_read_audit_licence_id_user_id_created_on', columns: ['licence_id', 'user_id', 'created_on'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -41,7 +40,7 @@ abstract class AbstractLicenceReadAudit implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -50,8 +49,8 @@ abstract class AbstractLicenceReadAudit implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
-    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'readAudits', fetch: 'LAZY')]
     protected $licence;
 
     /**
@@ -59,7 +58,7 @@ abstract class AbstractLicenceReadAudit implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 

@@ -24,7 +24,6 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\Index(name: 'ix_cases_read_audit_case_id', columns: ['case_id'])]
 #[ORM\Index(name: 'ix_cases_read_audit_created_on', columns: ['created_on'])]
 #[ORM\Index(name: 'ix_cases_read_audit_user_id', columns: ['user_id'])]
-#[ORM\Index(name: 'uk_cases_read_audit_case_id_user_id_created_on', columns: ['case_id', 'user_id', 'created_on'])]
 #[ORM\UniqueConstraint(name: 'uk_cases_read_audit_case_id_user_id_created_on', columns: ['case_id', 'user_id', 'created_on'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -41,7 +40,7 @@ abstract class AbstractCasesReadAudit implements BundleSerializableInterface, Js
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -50,8 +49,8 @@ abstract class AbstractCasesReadAudit implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
-    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'readAudits', fetch: 'LAZY')]
     protected $case;
 
     /**
@@ -59,7 +58,7 @@ abstract class AbstractCasesReadAudit implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 

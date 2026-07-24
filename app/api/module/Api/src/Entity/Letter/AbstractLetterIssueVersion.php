@@ -46,7 +46,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -55,8 +55,8 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssue
      */
-    #[ORM\JoinColumn(name: 'letter_issue_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssue::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'letter_issue_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssue::class, inversedBy: 'versions', fetch: 'LAZY')]
     protected $letterIssue;
 
     /**
@@ -73,7 +73,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Category
      */
-    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Category::class, fetch: 'LAZY')]
     protected $category;
 
@@ -152,7 +152,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'min_length', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'min_length', nullable: true, options: ['unsigned' => true])]
     protected $minLength;
 
     /**
@@ -160,7 +160,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'max_length', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'max_length', nullable: true, options: ['unsigned' => true])]
     protected $maxLength;
 
     /**
@@ -200,7 +200,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'version_number', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'version_number', nullable: false, options: ['unsigned' => true])]
     protected $versionNumber = 0;
 
     /**
@@ -208,7 +208,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

@@ -27,7 +27,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'fk_answer_irhp_permit_application_id_irhp_permit_application_id', columns: ['irhp_permit_application_id'])]
 #[ORM\Index(name: 'fk_answer_last_modified_by_user_id', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_answer_question_text_id', columns: ['question_text_id'])]
-#[ORM\Index(name: 'uk_answer_irhp_application_id_question_text_id', columns: ['irhp_application_id', 'irhp_permit_application_id', 'question_text_id'])]
 #[ORM\Index(name: 'IDX_DADD4A25DC41CE69', columns: ['irhp_application_id'])]
 #[ORM\UniqueConstraint(name: 'uk_answer_irhp_application_id_question_text_id', columns: ['irhp_application_id', 'irhp_permit_application_id', 'question_text_id'])]
 #[ORM\MappedSuperclass]
@@ -46,7 +45,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -55,7 +54,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @var \Dvsa\Olcs\Api\Entity\Generic\QuestionText
      */
-    #[ORM\JoinColumn(name: 'question_text_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'question_text_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\QuestionText::class, fetch: 'LAZY')]
     protected $questionText;
 
@@ -65,7 +64,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'answers', fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**
@@ -74,7 +73,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
      */
     #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, inversedBy: 'answers', fetch: 'LAZY')]
     protected $irhpPermitApplication;
 
     /**
@@ -166,7 +165,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

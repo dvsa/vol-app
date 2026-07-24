@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_doc_paragraph_bookmark_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_doc_paragraph_bookmark_doc_paragraph_id', columns: ['doc_paragraph_id'])]
 #[ORM\Index(name: 'ix_doc_paragraph_bookmark_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'uk_doc_paragraph_bookmark_doc_bookmark_id_doc_paragraph_id', columns: ['doc_bookmark_id', 'doc_paragraph_id'])]
 #[ORM\Index(name: 'IDX_34C39149C1FDC79C', columns: ['doc_bookmark_id'])]
 #[ORM\UniqueConstraint(name: 'uk_doc_paragraph_bookmark_doc_bookmark_id_doc_paragraph_id', columns: ['doc_bookmark_id', 'doc_paragraph_id'])]
 #[ORM\MappedSuperclass]
@@ -45,7 +44,7 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -54,8 +53,8 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\DocBookmark
      */
-    #[ORM\JoinColumn(name: 'doc_bookmark_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocBookmark::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'doc_bookmark_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocBookmark::class, inversedBy: 'docParagraphBookmarks', fetch: 'LAZY')]
     protected $docBookmark;
 
     /**
@@ -63,7 +62,7 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\DocParagraph
      */
-    #[ORM\JoinColumn(name: 'doc_paragraph_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'doc_paragraph_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocParagraph::class, fetch: 'LAZY')]
     protected $docParagraph;
 
@@ -92,7 +91,7 @@ abstract class AbstractDocParagraphBookmark implements BundleSerializableInterfa
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

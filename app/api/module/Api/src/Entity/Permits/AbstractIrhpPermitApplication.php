@@ -46,7 +46,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -55,7 +55,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow
      */
-    #[ORM\JoinColumn(name: 'irhp_permit_window_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'irhp_permit_window_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow::class, fetch: 'LAZY')]
     protected $irhpPermitWindow;
 
@@ -74,7 +74,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'irhpPermitApplications', fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**
@@ -144,7 +144,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'required_euro5', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'required_euro5', nullable: true, options: ['unsigned' => true])]
     protected $requiredEuro5;
 
     /**
@@ -152,7 +152,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'required_euro6', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'required_euro6', nullable: true, options: ['unsigned' => true])]
     protected $requiredEuro6;
 
     /**
@@ -160,7 +160,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'required_standard', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'required_standard', nullable: true, options: ['unsigned' => true])]
     protected $requiredStandard;
 
     /**
@@ -168,7 +168,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'required_cabotage', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'required_cabotage', nullable: true, options: ['unsigned' => true])]
     protected $requiredCabotage;
 
     /**
@@ -184,7 +184,7 @@ abstract class AbstractIrhpPermitApplication implements BundleSerializableInterf
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

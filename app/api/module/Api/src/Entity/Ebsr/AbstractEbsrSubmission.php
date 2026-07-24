@@ -26,8 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_ebsr_submission_ebsr_submission_status_id', columns: ['ebsr_submission_status_id'])]
 #[ORM\Index(name: 'ix_ebsr_submission_ebsr_submission_type_id', columns: ['ebsr_submission_type_id'])]
 #[ORM\Index(name: 'ix_ebsr_submission_organisation_id', columns: ['organisation_id'])]
-#[ORM\Index(name: 'uk_ebsr_submission_document_id', columns: ['document_id'])]
-#[ORM\Index(name: 'uk_ebsr_submission_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_ebsr_submission_document_id', columns: ['document_id'])]
 #[ORM\UniqueConstraint(name: 'uk_ebsr_submission_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
@@ -45,7 +43,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -54,7 +52,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'ebsr_submission_status_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'ebsr_submission_status_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $ebsrSubmissionStatus;
 
@@ -63,7 +61,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'ebsr_submission_type_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'ebsr_submission_type_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $ebsrSubmissionType;
 
@@ -73,7 +71,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      */
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'ebsrSubmission', fetch: 'LAZY')]
     protected $document;
 
     /**
@@ -82,7 +80,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'ebsrSubmissions', fetch: 'LAZY')]
     protected $busReg;
 
     /**
@@ -131,7 +129,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'variation_no', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'variation_no', nullable: true, options: ['unsigned' => true])]
     protected $variationNo;
 
     /**
@@ -252,7 +250,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

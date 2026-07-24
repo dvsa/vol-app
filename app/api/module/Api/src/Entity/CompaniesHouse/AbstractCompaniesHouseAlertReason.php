@@ -35,7 +35,7 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -44,8 +44,8 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
      *
      * @var \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert
      */
-    #[ORM\JoinColumn(name: 'companies_house_alert_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'companies_house_alert_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseAlert::class, inversedBy: 'reasons', fetch: 'LAZY')]
     protected $companiesHouseAlert;
 
     /**
@@ -62,7 +62,7 @@ abstract class AbstractCompaniesHouseAlertReason implements BundleSerializableIn
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

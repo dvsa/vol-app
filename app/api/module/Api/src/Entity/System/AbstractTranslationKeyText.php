@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'fk_translation_key_text_languages1_idx', columns: ['language_id'])]
 #[ORM\Index(name: 'fk_translation_key_text_users_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'fk_translation_key_text_users_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'one_transText_per_lang', columns: ['language_id', 'translation_key_id'])]
 #[ORM\Index(name: 'translation_key_text_translation_key_id_fk', columns: ['translation_key_id'])]
 #[ORM\UniqueConstraint(name: 'one_transText_per_lang', columns: ['language_id', 'translation_key_id'])]
 #[ORM\MappedSuperclass]
@@ -45,7 +44,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -54,7 +53,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Language
      */
-    #[ORM\JoinColumn(name: 'language_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'language_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Language::class, fetch: 'LAZY')]
     protected $language;
 
@@ -64,7 +63,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      * @var \Dvsa\Olcs\Api\Entity\System\TranslationKey
      */
     #[ORM\JoinColumn(name: 'translation_key_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\TranslationKey::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\TranslationKey::class, inversedBy: 'translationKeyTexts', fetch: 'LAZY')]
     protected $translationKey;
 
     /**
@@ -100,7 +99,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: true, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: true, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

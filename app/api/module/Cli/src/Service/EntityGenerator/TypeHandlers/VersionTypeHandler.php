@@ -30,6 +30,8 @@ class VersionTypeHandler extends AbstractTypeHandler
             $options[] = "'default' => " . $column->getDefault();
         }
 
+        $options = array_merge($options, $this->schemaFidelityOptions($column));
+
         $columnDef = sprintf(
             "#[ORM\Column(type: '%s', name: '%s', nullable: %s",
             $type,

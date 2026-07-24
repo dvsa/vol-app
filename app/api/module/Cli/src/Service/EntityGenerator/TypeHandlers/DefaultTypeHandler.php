@@ -63,6 +63,7 @@ class DefaultTypeHandler extends AbstractTypeHandler
         }
 
         // Add default value as option
+        $columnOptions = [];
         if ($column->getDefault() !== null) {
             // Convert string default values to proper types for boolean columns
             $default = $column->getDefault();
@@ -85,7 +86,12 @@ class DefaultTypeHandler extends AbstractTypeHandler
                 $defaultValue = $this->generateDefaultValue($default);
             }
 
-            $options[] = 'options: [\'default\' => ' . $defaultValue . ']';
+            $columnOptions[] = "'default' => " . $defaultValue;
+        }
+
+        $columnOptions = array_merge($columnOptions, $this->schemaFidelityOptions($column));
+        if ($columnOptions !== []) {
+            $options[] = 'options: [' . implode(', ', $columnOptions) . ']';
         }
 
         // Add precision and scale for decimal types

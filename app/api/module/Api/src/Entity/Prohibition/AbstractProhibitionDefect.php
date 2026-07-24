@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_prohibition_defect_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_prohibition_defect_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_prohibition_defect_prohibition_id', columns: ['prohibition_id'])]
-#[ORM\Index(name: 'uk_prohibition_defect_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_prohibition_defect_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -44,7 +43,7 @@ abstract class AbstractProhibitionDefect implements BundleSerializableInterface,
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -53,8 +52,8 @@ abstract class AbstractProhibitionDefect implements BundleSerializableInterface,
      *
      * @var \Dvsa\Olcs\Api\Entity\Prohibition\Prohibition
      */
-    #[ORM\JoinColumn(name: 'prohibition_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Prohibition\Prohibition::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'prohibition_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Prohibition\Prohibition::class, inversedBy: 'defects', fetch: 'LAZY')]
     protected $prohibition;
 
     /**
@@ -98,7 +97,7 @@ abstract class AbstractProhibitionDefect implements BundleSerializableInterface,
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -107,7 +106,7 @@ abstract class AbstractProhibitionDefect implements BundleSerializableInterface,
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

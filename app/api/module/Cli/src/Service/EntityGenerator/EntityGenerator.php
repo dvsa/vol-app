@@ -600,6 +600,13 @@ class EntityGenerator implements EntityGeneratorInterface
             }
         }
 
+        // RefData never declares inverse collections (its side of every ManyToMany
+        // is deliberately not generated), so an inversedBy would point at a property
+        // that does not exist. Emit a unidirectional owning side instead.
+        if ($isOwning && $entityName === 'RefData') {
+            $inversePropertyName = null;
+        }
+
         // Build annotation based on ownership
         $annotation = $isOwning
             ? $this->buildOwningManyToManyAnnotation($targetEntity, $inversePropertyName, $relationship)
@@ -641,20 +648,23 @@ class EntityGenerator implements EntityGeneratorInterface
     /**
      * Build owning side ManyToMany annotation
      */
-    private function buildOwningManyToManyAnnotation(string $targetEntity, string $inversePropertyName, array $relationship): string
+    private function buildOwningManyToManyAnnotation(string $targetEntity, ?string $inversePropertyName, array $relationship): string
     {
+        $manyToManyArguments = $inversePropertyName === null
+            ? sprintf("targetEntity: \\%s::class, fetch: 'LAZY'", ltrim($targetEntity, '\\'))
+            : sprintf("targetEntity: \\%s::class, inversedBy: '%s', fetch: 'LAZY'", ltrim($targetEntity, '\\'), $inversePropertyName);
+
         return sprintf(
             "#[ORM\\JoinTable(name: '%s')]\n    " .
             "#[ORM\\JoinColumn(name: '%s', referencedColumnName: '%s')]\n    " .
             "#[ORM\\InverseJoinColumn(name: '%s', referencedColumnName: '%s')]\n    " .
-            "#[ORM\\ManyToMany(targetEntity: \\%s::class, inversedBy: '%s', fetch: 'LAZY')]",
+            "#[ORM\\ManyToMany(%s)]",
             $relationship['join_table'],
             $relationship['join_columns'][0],
             $relationship['local_columns'][0],
             $relationship['inverse_join_columns'][0],
             $relationship['foreign_columns'][0],
-            ltrim($targetEntity, '\\'),
-            $inversePropertyName
+            $manyToManyArguments
         );
     }
 

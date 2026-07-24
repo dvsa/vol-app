@@ -52,7 +52,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -61,7 +61,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @var \Dvsa\Olcs\Api\Entity\Fee\FeeType
      */
-    #[ORM\JoinColumn(name: 'fee_type_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'fee_type_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\FeeType::class, fetch: 'LAZY')]
     protected $feeType;
 
@@ -70,7 +70,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'fee_status', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'fee_status', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $feeStatus;
 
@@ -89,7 +89,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'fees', fetch: 'LAZY')]
     protected $application;
 
     /**
@@ -98,7 +98,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'fees', fetch: 'LAZY')]
     protected $busReg;
 
     /**
@@ -107,7 +107,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'fees', fetch: 'LAZY')]
     protected $licence;
 
     /**
@@ -125,7 +125,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'fees', fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**
@@ -134,7 +134,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
      */
     #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, inversedBy: 'fees', fetch: 'LAZY')]
     protected $irhpPermitApplication;
 
     /**
@@ -204,7 +204,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'invoice_line_no', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'invoice_line_no', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     protected $invoiceLineNo = 1;
 
     /**
@@ -236,7 +236,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
