@@ -416,7 +416,7 @@ jobs:
               --arg rdsName "${RDS_CLUSTER_NAME}" \
               --arg writerName "${RDS_WRITER_NAME}" \
               --arg monitoringRoleArn "${RDS_MONITORING_ROLE_ARN}" \
-              --arg monitoringInterval "${RDS_MONITORING_INTERVAL}" \
+              --argjson monitoringInterval "${RDS_MONITORING_INTERVAL}" \
               --arg paramGroup "${RDS_PARAM_GROUP}" \
               --arg secGroup "${RDS_WRITER_SEC_GROUP}" \
               --argjson tags "${RDS_WRITER_TAGS}" \
