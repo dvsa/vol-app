@@ -98,6 +98,23 @@ final class GovUkNotifyTransportTest extends MockeryTestCase
         }
     }
 
+    public function testRetryableOnConnectionError(): void
+    {
+        // The Notify SDK surfaces connection/DNS/timeout/proxy failures (no HTTP response) as a
+        // NotifyException with getCode() === 0. These are transient and must be retried, not read as
+        // a permanent drop — so the thrown exception must NOT carry the \DomainException (DLQ) marker.
+        $email = $this->buildEmail(['markdownBody' => 'x']);
+        $this->notifyClient->shouldReceive('sendEmail')->andThrow(new NotifyException('cURL error 28: timeout', 0));
+
+        $this->expectException(EmailNotSentException::class);
+        try {
+            $this->sut->send($email);
+        } catch (EmailNotSentException $e) {
+            $this->assertNotInstanceOf(\DomainException::class, $e->getPrevious());
+            throw $e;
+        }
+    }
+
     public function testPermanentOn4xx(): void
     {
         $email = $this->buildEmail(['markdownBody' => 'x']);

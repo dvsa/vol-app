@@ -255,5 +255,9 @@ return [
     'retrieve_document' => [
         'presigned_fetch_proxy' => 'http://%shd_proxy%',
         'presigned_fetch_timeout' => 30,
+        // Secure flag for the post-OTP grant cookie. True everywhere real (HTTPS terminates at the
+        // load balancer); overridden to false only in local dev, where selfserve is served over
+        // plain HTTP and a Secure cookie would never be stored or returned by the browser.
+        'grant_cookie_secure' => true,
     ],
 ];

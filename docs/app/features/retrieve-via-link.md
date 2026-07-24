@@ -53,7 +53,7 @@ config), resolved by `RetrievalPolicyResolver`:
 | No oracle        | Unknown / expired / revoked links and incorrect / expired codes all return the same neutral response                                                                              |
 | Audit            | Every view / OTP request / OTP result / download / denial is recorded in `retrieval_link_event`                                                                                   |
 
-## Data model (olcs-etl, `8.3.0-schema`)
+## Data model (olcs-etl, `9.1.0-schema`)
 
 - `retrieval_link` — one row per issued link (token, `gate_mode`, `flow_key`, `source_context`,
   `recipient_email` for OTP flows, `expires_at`, `revoked_at`).

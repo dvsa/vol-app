@@ -45,7 +45,8 @@ class RetrieveController extends AbstractController
         protected FormHelperService $formHelper,
         protected RemoteAddress $remoteAddress,
         protected string $presignedFetchProxy = '',
-        protected int $presignedFetchTimeout = 30
+        protected int $presignedFetchTimeout = 30,
+        protected bool $grantCookieSecure = true
     ) {
         parent::__construct($niTextTranslationUtil, $authService);
     }
@@ -71,6 +72,12 @@ class RetrieveController extends AbstractController
     public function requestOtpAction()
     {
         $token = $this->getToken();
+
+        // Requesting a code is state-changing (it emails the recipient), so only accept the POST
+        // form — a prefetcher, email link-scanner or crafted GET must not be able to trigger a send.
+        if (!$this->getRequest()->isPost()) {
+            return $this->redirect()->toRoute('retrieve', ['token' => $token]);
+        }
 
         try {
             $this->handleCommand(
@@ -98,6 +105,10 @@ class RetrieveController extends AbstractController
     public function verifyOtpAction()
     {
         $token = $this->getToken();
+
+        if (!$this->getRequest()->isPost()) {
+            return $this->redirect()->toRoute('retrieve', ['token' => $token]);
+        }
 
         $form = $this->buildOtpForm($token);
         $form->setData((array) $this->params()->fromPost());
@@ -223,58 +234,48 @@ class RetrieveController extends AbstractController
      * Fetch a presigned URL server-side (it never reaches the browser) and stream the bytes to the
      * client as a forced attachment. Used for the S3 document store.
      *
-     * The presigned URL points at S3, which the frontends can only reach through the shared forward
-     * proxy (they have no direct outbound egress) — so this must NOT use a bare `fopen`, which would
-     * ignore the proxy and try to connect to S3 directly. We fetch with an HTTP client routed through
-     * the proxy, exactly like the API's Notify client. The URL is already authenticated by its
-     * signature, so no credentials are attached here. The response is buffered to a temporary stream
-     * before being handed to the client (documents are single-digit MB); on any transport or non-200
-     * upstream error we render the neutral "not available" page.
+     * The presigned URL points at S3, which the frontends reach through the shared forward proxy in
+     * deployed environments (see presignedFetchOptions) — so this fetches with a proxy-aware HTTP
+     * client, exactly like the API's Notify client, rather than a bare `fopen` that would ignore the
+     * proxy. The URL is already authenticated by its signature, so no credentials are attached here.
+     * The body is buffered and re-emitted via the MVC response (documents are single-digit MB); on
+     * any transport or non-200 upstream error we render the neutral "not available" page.
      *
      * @return \Laminas\Http\Response|ViewModel
      */
     private function streamFromPresignedUrl(string $url, ?string $displayFilename)
     {
-        // Buffer to memory, spilling to a temp file past 5 MB, so we never load a large file wholly
-        // into RAM and never expose the presigned URL to the browser.
-        $sink = fopen('php://temp/maxmemory:' . (5 * 1024 * 1024), 'w+b');
-        if ($sink === false) {
-            return $this->notAvailable();
-        }
-
         try {
             $client = new \GuzzleHttp\Client();
-            $upstream = $client->request('GET', $url, $this->presignedFetchOptions() + ['sink' => $sink]);
+            $upstream = $client->request('GET', $url, $this->presignedFetchOptions());
         } catch (\GuzzleHttp\Exception\GuzzleException) {
-            fclose($sink);
             return $this->notAvailable();
         }
 
         if ($upstream->getStatusCode() !== 200) {
-            fclose($sink);
             return $this->notAvailable();
         }
 
-        rewind($sink);
-
-        $response = new \Laminas\Http\Response\Stream();
-        $response->setStatusCode(200);
-        $response->setStream($sink);
+        // Buffer the body and emit it via the MVC response. Retrieve-via-Link documents are
+        // single-digit MB, so buffering is cheap and reliable (a Laminas Response\Stream is not
+        // emitted by the selfserve response sender). The presigned URL never reaches the client.
+        $body = (string) $upstream->getBody();
 
         $filename = ($displayFilename !== null && $displayFilename !== '') ? $displayFilename : 'document';
         $filename = str_replace(['"', '\\', "\r", "\n", '/'], '', $filename);
+
+        $response = $this->getResponse();
+        $response->setStatusCode(200);
+        $response->setContent($body);
 
         $headers = new Headers();
         $headers->addHeaderLine('Content-Type', 'application/octet-stream');
         $headers->addHeaderLine('Content-Disposition', 'attachment; filename="' . $filename . '"');
         $headers->addHeaderLine('X-Content-Type-Options', 'nosniff');
-
-        // Forward the upstream Content-Length when S3 provided it (nicer download UX).
-        $contentLength = $upstream->getHeaderLine('Content-Length');
-        if ($contentLength !== '') {
-            $headers->addHeaderLine('Content-Length', $contentLength);
-        }
-
+        // Sensitive (e.g. police) documents must not linger in a shared-machine browser cache.
+        $headers->addHeaderLine('Cache-Control', 'no-store');
+        $headers->addHeaderLine('Pragma', 'no-cache');
+        $headers->addHeaderLine('Content-Length', (string) strlen($body));
         $response->setHeaders($headers);
 
         return $response;
@@ -425,6 +426,9 @@ class RetrieveController extends AbstractController
         $filename = str_replace(['"', '\\', "\r", "\n", '/'], '', $filename);
         $headers->addHeaderLine('Content-Disposition', 'attachment; filename="' . $filename . '"');
         $headers->addHeaderLine('X-Content-Type-Options', 'nosniff');
+        // Sensitive (e.g. police) documents must not linger in a shared-machine browser cache.
+        $headers->addHeaderLine('Cache-Control', 'no-store');
+        $headers->addHeaderLine('Pragma', 'no-cache');
 
         $httpResponse->setHeaders($headers);
 
@@ -503,7 +507,7 @@ class RetrieveController extends AbstractController
             null,                       // expires: null => session cookie (cleared when the browser closes)
             $this->grantCookiePath($token),
             null,                       // domain: default (current host)
-            true,                       // secure
+            $this->grantCookieSecure,   // secure (config-driven: true in real envs, false in local HTTP dev)
             true,                       // httponly
             null,                       // maxAge
             null,                       // version
@@ -524,7 +528,7 @@ class RetrieveController extends AbstractController
             (int) strtotime('-1 year'),
             $this->grantCookiePath($token),
             null,
-            true,
+            $this->grantCookieSecure,
             true,
             null,
             null,

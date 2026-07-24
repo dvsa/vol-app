@@ -58,13 +58,20 @@ final class VerifyOtp extends AbstractCommandHandler
                 $remaining = $this->getRepo('RetrievalOtp')->claimAttempt($otp->getId());
 
                 if ($remaining >= 0 && $this->otpService->verify((string) $command->getCode(), (string) $otp->getCodeHash())) {
-                    // Correct code — consume single-use atomically so a concurrent replay can't reuse it.
+                    // Issue the grant FIRST: it validates the session secret and can throw when that
+                    // secret is missing/too short. Doing this before consume() means a misconfigured
+                    // environment can't burn the recipient's valid code — the request fails, the code
+                    // stays usable, and a retry succeeds once the secret is set. issue() is a pure
+                    // (stateless HMAC) computation, so a discarded grant leaves nothing behind.
+                    $issuedGrant = $this->sessionGrantService->issue((string) $link->getToken(), $now);
+
+                    // Consume single-use atomically so a concurrent replay can't reuse the code.
                     if ($this->getRepo('RetrievalOtp')->consume($otp->getId(), $nowDt)) {
                         $verified = true;
-                        $grant = $this->sessionGrantService->issue((string) $link->getToken(), $now);
+                        $grant = $issuedGrant;
                         $this->recordRetrievalEvent($link, 'otp_succeeded', null, $ip);
                     } else {
-                        // Lost the consume race (already used) — treat as a failure.
+                        // Lost the consume race (already used) — treat as a failure, discard the grant.
                         $this->recordRetrievalEvent($link, 'otp_failed', null, $ip);
                     }
                 } else {

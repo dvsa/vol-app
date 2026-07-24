@@ -192,7 +192,12 @@ final class GovUkNotifyTransport extends AbstractTransport
     {
         $code = (int) $e->getCode();
 
-        return $code === 429 || $code >= 500;
+        // 429 (rate limit) and 5xx are transient and must be retried. A code of 0 means the Notify
+        // SDK never received an HTTP response at all — a connection/DNS/timeout/proxy failure
+        // (php-http NetworkException, which is always code 0) — which is the most common transient
+        // class and must NOT be misread as permanent and dropped. Only genuine 4xx client errors
+        // (e.g. a malformed recipient address) are permanent.
+        return $code === 429 || $code < 400 || $code >= 500;
     }
 
     private function resolveTemplateId(string $locale): string
