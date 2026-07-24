@@ -46,14 +46,30 @@ return [
 
     // Doctrine
     'doctrine' => [
+        'entity_manager' => [
+            'orm_default' => [
+                'connection' => 'orm_default',
+                'configuration' => 'orm_default',
+            ],
+        ],
+        'cache' => [
+            'redis' => [
+                // Resolved from the container by Roave's CacheFactory, so this is a service name
+                'class' => 'doctrine-cache',
+            ],
+        ],
         'connection' => [
             'orm_default' => [
-                'driverClass' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
+                // Used by Roave
+                'driver_class' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
                 // Database connection details
                 'params' => $doctrine_connection_params,
             ],
             'export' => [
-                'driverClass' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
+                // Used by Roave
+                'driver_class' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
+                'configuration' => 'orm_default',
+                'event_manager' => 'orm_default',
                 // Database connection details
                 'params' => $doctrine_connection_params,
             ],
@@ -61,7 +77,7 @@ return [
         'configuration' => [
             'orm_default' => [
                 'metadata_cache' => 'redis',
-                'generate_proxies' => true,
+                'auto_generate_proxy_classes' => true,
                 'query_cache'       => 'redis',
                 'result_cache'      => 'redis',
                 'hydration_cache'   => 'redis',
@@ -548,27 +564,13 @@ return [
                 'namespace' => 'zfcache',
             ]
         ],
-        'doctrinemodule.cache.redis' => [
-            'adapter' => Laminas\Cache\Storage\Adapter\Redis::class,
+        // Keeps Doctrine ORM cache keys isolated from the general app cache (shares the
+        // same Redis connection, separate key namespace) so each can be cleared independently
+        'doctrine-cache' => [
             'options' => [
-                'server' => [
-                    'host' => '%redis_cache_fqdn%',
-                    'port' => 6379,
-                ],
-                'lib_options' => [
-                    \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
-                ],
-                'ttl' => 3600, //one hour, likely to be overridden based on use case
+                'ttl' => 3600,
                 'namespace' => 'doctrine',
-            ],
-            'plugins' => [
-                [
-                    'name' => 'exception_handler',
-                    'options' => [
-                        'throw_exceptions' => false,
-                    ],
-                ],
-            ],
+            ]
         ],
     ],
 

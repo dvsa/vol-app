@@ -36,7 +36,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_letter_instance_organisation_id', columns: ['organisation_id'])]
 #[ORM\Index(name: 'ix_letter_instance_status', columns: ['status'])]
 #[ORM\Index(name: 'ix_letter_instance_transport_manager_id', columns: ['transport_manager_id'])]
-#[ORM\Index(name: 'uk_letter_instance_reference', columns: ['reference'])]
 #[ORM\UniqueConstraint(name: 'uk_letter_instance_reference', columns: ['reference'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -56,7 +55,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -65,7 +64,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
      */
-    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, fetch: 'LAZY')]
     protected $letterType;
 
@@ -137,7 +136,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
@@ -191,7 +190,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

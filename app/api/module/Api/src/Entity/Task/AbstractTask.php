@@ -24,7 +24,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 #[ORM\Table(name: 'task')]
 #[ORM\Index(name: 'ix_task_assigned_by_user_id', columns: ['assigned_by_user_id'])]
-#[ORM\Index(name: 'uk_task_olbs_key', columns: ['olbs_key'])]
 #[ORM\Index(name: 'ix_task_transport_manager_id', columns: ['transport_manager_id'])]
 #[ORM\Index(name: 'ix_task_surrender_id', columns: ['surrender_id'])]
 #[ORM\Index(name: 'ix_task_submission_id', columns: ['submission_id'])]
@@ -58,7 +57,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -67,7 +66,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Category
      */
-    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Category::class, fetch: 'LAZY')]
     protected $category;
 
@@ -76,7 +75,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
      */
-    #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SubCategory::class, fetch: 'LAZY')]
     protected $subCategory;
 
@@ -95,7 +94,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      * @var \Dvsa\Olcs\Api\Entity\User\Team
      */
     #[ORM\JoinColumn(name: 'assigned_to_team_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\Team::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\Team::class, inversedBy: 'tasks', fetch: 'LAZY')]
     protected $assignedToTeam;
 
     /**
@@ -131,7 +130,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'tasks', fetch: 'LAZY')]
     protected $application;
 
     /**
@@ -140,7 +139,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'tasks', fetch: 'LAZY')]
     protected $busReg;
 
     /**
@@ -185,7 +184,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'tasks', fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**
@@ -253,7 +252,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -262,7 +261,7 @@ abstract class AbstractTask implements BundleSerializableInterface, JsonSerializ
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

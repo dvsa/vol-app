@@ -18,7 +18,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @source OLCS-Entity-Generator-v2
  */
 #[ORM\Table(name: 'event_history_type')]
-#[ORM\Index(name: 'uk_event_history_type_event_code', columns: ['event_code'])]
 #[ORM\UniqueConstraint(name: 'uk_event_history_type_event_code', columns: ['event_code'])]
 #[ORM\MappedSuperclass]
 abstract class AbstractEventHistoryType implements BundleSerializableInterface, JsonSerializable, \Stringable
@@ -33,7 +32,7 @@ abstract class AbstractEventHistoryType implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 

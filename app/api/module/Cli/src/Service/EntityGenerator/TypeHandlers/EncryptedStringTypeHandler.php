@@ -53,6 +53,11 @@ class EncryptedStringTypeHandler extends AbstractTypeHandler
             $options[] = 'length: ' . $column->getLength();
         }
 
+        $fidelityOptions = $this->schemaFidelityOptions($column);
+        if ($fidelityOptions !== []) {
+            $options[] = 'options: [' . implode(', ', $fidelityOptions) . ']';
+        }
+
         $optionsStr = !empty($options) ? ', ' . implode(', ', $options) : '';
 
         return sprintf(

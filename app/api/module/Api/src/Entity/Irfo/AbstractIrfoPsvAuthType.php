@@ -25,7 +25,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Table(name: 'irfo_psv_auth_type')]
 #[ORM\Index(name: 'ix_irfo_psv_auth_type_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_irfo_psv_auth_type_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'uk_irfo_psv_auth_type_irfo_fee_type', columns: ['irfo_fee_type'])]
 #[ORM\UniqueConstraint(name: 'uk_irfo_psv_auth_type_irfo_fee_type', columns: ['irfo_fee_type'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -43,7 +42,7 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -52,7 +51,7 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'irfo_fee_type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'irfo_fee_type', referencedColumnName: 'id', nullable: false)]
     #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $irfoFeeType;
 
@@ -97,7 +96,7 @@ abstract class AbstractIrfoPsvAuthType implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

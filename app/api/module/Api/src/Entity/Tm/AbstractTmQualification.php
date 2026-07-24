@@ -29,7 +29,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_tm_qualification_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_tm_qualification_qualification_type', columns: ['qualification_type'])]
 #[ORM\Index(name: 'ix_tm_qualification_transport_manager_id', columns: ['transport_manager_id'])]
-#[ORM\Index(name: 'uk_tm_qualification_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_tm_qualification_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -49,7 +48,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -58,8 +57,8 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      */
-    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'qualifications', fetch: 'LAZY')]
     protected $transportManager;
 
     /**
@@ -67,7 +66,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Country
      */
-    #[ORM\JoinColumn(name: 'country_code', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'country_code', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, fetch: 'LAZY')]
     protected $countryCode;
 
@@ -76,7 +75,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'qualification_type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'qualification_type', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $qualificationType;
 
@@ -121,7 +120,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -130,7 +129,7 @@ abstract class AbstractTmQualification implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

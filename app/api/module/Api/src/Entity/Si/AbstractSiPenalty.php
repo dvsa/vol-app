@@ -47,7 +47,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -57,7 +57,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      * @var \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested
      */
     #[ORM\JoinColumn(name: 'si_penalty_erru_requested_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested::class, inversedBy: 'appliedPenalties', fetch: 'LAZY')]
     protected $siPenaltyErruRequested;
 
     /**
@@ -65,8 +65,8 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @var \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement
      */
-    #[ORM\JoinColumn(name: 'serious_infringement_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'serious_infringement_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement::class, inversedBy: 'appliedPenalties', fetch: 'LAZY')]
     protected $seriousInfringement;
 
     /**
@@ -74,7 +74,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @var \Dvsa\Olcs\Api\Entity\Si\SiPenaltyType
      */
-    #[ORM\JoinColumn(name: 'si_penalty_type_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'si_penalty_type_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SiPenaltyType::class, fetch: 'LAZY')]
     protected $siPenaltyType;
 
@@ -135,7 +135,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -144,7 +144,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

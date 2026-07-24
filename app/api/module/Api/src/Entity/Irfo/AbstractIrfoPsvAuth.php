@@ -46,7 +46,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -55,7 +55,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
-    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 
@@ -64,7 +64,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType
      */
-    #[ORM\JoinColumn(name: 'irfo_psv_auth_type_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'irfo_psv_auth_type_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuthType::class, fetch: 'LAZY')]
     protected $irfoPsvAuthType;
 
@@ -73,7 +73,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
@@ -176,7 +176,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'copies_issued', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'smallint', name: 'copies_issued', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $copiesIssued = 0;
 
     /**
@@ -184,7 +184,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'copies_required', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'smallint', name: 'copies_required', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $copiesRequired = 0;
 
     /**
@@ -192,7 +192,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'copies_required_total', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'smallint', name: 'copies_required_total', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $copiesRequiredTotal = 0;
 
     /**
@@ -200,7 +200,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'copies_issued_total', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'smallint', name: 'copies_issued_total', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $copiesIssuedTotal = 0;
 
     /**
@@ -256,7 +256,7 @@ abstract class AbstractIrfoPsvAuth implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

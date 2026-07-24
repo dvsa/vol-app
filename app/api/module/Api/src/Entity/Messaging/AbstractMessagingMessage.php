@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'fk_messaging_message_created_by_user_id', columns: ['created_by'])]
 #[ORM\Index(name: 'fk_messaging_message_last_modified_by_user_id', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'fk_messaging_message_messaging_conversation_id', columns: ['messaging_conversation_id'])]
-#[ORM\Index(name: 'message_content_id', columns: ['messaging_content_id'])]
 #[ORM\UniqueConstraint(name: 'message_content_id', columns: ['messaging_content_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -44,7 +43,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -53,7 +52,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation
      */
-    #[ORM\JoinColumn(name: 'messaging_conversation_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'messaging_conversation_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation::class, fetch: 'LAZY')]
     protected $messagingConversation;
 
@@ -62,7 +61,7 @@ abstract class AbstractMessagingMessage implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingContent
      */
-    #[ORM\JoinColumn(name: 'messaging_content_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'messaging_content_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Messaging\MessagingContent::class, fetch: 'LAZY', cascade: ['persist', 'remove'])]
     protected $messagingContent;
 

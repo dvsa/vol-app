@@ -42,7 +42,11 @@ readonly class InverseRelationshipProcessor
                 $columnName = $column->getName();
                 $fieldConfig = $tableConfig[$columnName] ?? null;
 
-                if ($fieldConfig?->inversedBy !== null) {
+                // generateInverse: false marks associations whose inverse side is
+                // hand-written in the concrete entity (e.g. the Letter module) -
+                // the owning side still emits inversedBy, but no collection is
+                // generated here, which would duplicate the hand-written one.
+                if ($fieldConfig?->inversedBy !== null && $fieldConfig->inversedBy->generateInverse) {
                     $this->processInverseRelationship(
                         $inverseRelationships,
                         $tableName,

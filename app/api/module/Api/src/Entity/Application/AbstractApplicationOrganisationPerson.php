@@ -54,8 +54,8 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      *
      * @var \Dvsa\Olcs\Api\Entity\Person\Person
      */
-    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, inversedBy: 'applicationOrganisationPersons', fetch: 'LAZY')]
     protected $person;
 
     /**
@@ -72,7 +72,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
-    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 
@@ -81,8 +81,8 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
-    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'applicationOrganisationPersons', fetch: 'LAZY')]
     protected $application;
 
     /**
@@ -126,7 +126,7 @@ abstract class AbstractApplicationOrganisationPerson implements BundleSerializab
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

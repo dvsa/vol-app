@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'fk_letter_issue_current_version_id', columns: ['current_version_id'])]
 #[ORM\Index(name: 'ix_letter_issue_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_letter_issue_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'uk_letter_issue_key', columns: ['issue_key'])]
 #[ORM\UniqueConstraint(name: 'uk_letter_issue_key', columns: ['issue_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -44,7 +43,7 @@ abstract class AbstractLetterIssue implements BundleSerializableInterface, JsonS
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -90,7 +89,7 @@ abstract class AbstractLetterIssue implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

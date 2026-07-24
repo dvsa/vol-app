@@ -43,7 +43,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -53,7 +53,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      * @var \Dvsa\Olcs\Api\Entity\Generic\Question
      */
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\Question::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\Question::class, inversedBy: 'applicationValidations', fetch: 'LAZY')]
     protected $question;
 
     /**
@@ -62,7 +62,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      * @var \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep
      */
     #[ORM\JoinColumn(name: 'application_step_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep::class, inversedBy: 'applicationValidations', fetch: 'LAZY')]
     protected $applicationStep;
 
     /**
@@ -122,7 +122,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

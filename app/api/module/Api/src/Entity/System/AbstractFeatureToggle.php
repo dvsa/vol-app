@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_feature_toggle_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_feature_toggle_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_feature_toggle_status', columns: ['status'])]
-#[ORM\Index(name: 'uk_feature_toggle_config_name', columns: ['config_name'])]
 #[ORM\UniqueConstraint(name: 'uk_feature_toggle_config_name', columns: ['config_name'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -44,7 +43,7 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -53,7 +52,7 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
@@ -98,7 +97,7 @@ abstract class AbstractFeatureToggle implements BundleSerializableInterface, Jso
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

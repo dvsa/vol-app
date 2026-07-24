@@ -47,7 +47,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -65,7 +65,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'fee_type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'fee_type', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $feeType;
 
@@ -74,7 +74,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'accrual_rule', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'accrual_rule', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $accrualRule;
 
@@ -170,7 +170,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @var string
      */
-    #[ORM\Column(type: 'string', name: 'vat_code', length: 1, nullable: true)]
+    #[ORM\Column(type: 'string', name: 'vat_code', length: 1, nullable: true, options: ['fixed' => true])]
     protected $vatCode;
 
     /**
@@ -178,7 +178,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @var string
      */
-    #[ORM\Column(type: 'decimal', name: 'vat_rate', nullable: false, options: ['default' => '0.00'])]
+    #[ORM\Column(type: 'decimal', name: 'vat_rate', nullable: false, options: ['default' => '0.00', 'unsigned' => true])]
     protected $vatRate = 0.00;
 
     /**
@@ -234,7 +234,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

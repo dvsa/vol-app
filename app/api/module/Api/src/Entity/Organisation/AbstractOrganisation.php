@@ -52,7 +52,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -79,7 +79,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'type', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $type;
 
@@ -175,7 +175,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @var string
      */
-    #[ORM\Column(type: 'yesno', name: 'confirm_share_vehicle_info', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'yesno', name: 'confirm_share_vehicle_info', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $confirmShareVehicleInfo = 0;
 
     /**
@@ -183,7 +183,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @var string
      */
-    #[ORM\Column(type: 'yesno', name: 'confirm_share_trailer_info', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'yesno', name: 'confirm_share_trailer_info', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $confirmShareTrailerInfo = 0;
 
     /**
@@ -223,7 +223,7 @@ abstract class AbstractOrganisation implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

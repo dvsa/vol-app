@@ -18,7 +18,6 @@ use Doctrine\ORM\Mapping as ORM;
  * @source OLCS-Entity-Generator-v2
  */
 #[ORM\Table(name: 'sla')]
-#[ORM\Index(name: 'uniqueCategoryFieldCompare', columns: ['category', 'field', 'compare_to'])]
 #[ORM\UniqueConstraint(name: 'uniqueCategoryFieldCompare', columns: ['category', 'field', 'compare_to'])]
 #[ORM\MappedSuperclass]
 abstract class AbstractSla implements BundleSerializableInterface, JsonSerializable, \Stringable
@@ -33,7 +32,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 

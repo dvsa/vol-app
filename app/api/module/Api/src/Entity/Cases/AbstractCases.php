@@ -49,7 +49,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -58,7 +58,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'case_type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'case_type', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $caseType;
 
@@ -68,7 +68,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'cases', fetch: 'LAZY')]
     protected $application;
 
     /**
@@ -77,7 +77,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'cases', fetch: 'LAZY')]
     protected $transportManager;
 
     /**
@@ -86,7 +86,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'cases', fetch: 'LAZY')]
     protected $licence;
 
     /**
@@ -186,7 +186,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -195,7 +195,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
@@ -214,7 +214,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     #[ORM\JoinTable(name: 'case_category')]
     #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'category_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'cases', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $categorys;
 
     /**
@@ -225,7 +225,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     #[ORM\JoinTable(name: 'case_outcome')]
     #[ORM\JoinColumn(name: 'cases_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'outcome_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'cases', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $outcomes;
 
     /**

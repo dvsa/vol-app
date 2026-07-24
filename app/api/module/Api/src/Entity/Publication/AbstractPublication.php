@@ -46,7 +46,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -55,7 +55,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
      */
-    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
@@ -91,7 +91,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'pub_status', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'pub_status', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $pubStatus;
 
@@ -120,7 +120,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'publication_no', nullable: false)]
+    #[ORM\Column(type: 'smallint', name: 'publication_no', nullable: false, options: ['unsigned' => true])]
     protected $publicationNo = 0;
 
     /**
@@ -152,7 +152,7 @@ abstract class AbstractPublication implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

@@ -24,7 +24,6 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\Index(name: 'ix_transport_manager_read_audit_created_on', columns: ['created_on'])]
 #[ORM\Index(name: 'ix_transport_manager_read_audit_transport_manager_id', columns: ['transport_manager_id'])]
 #[ORM\Index(name: 'ix_transport_manager_read_audit_user_id', columns: ['user_id'])]
-#[ORM\Index(name: 'uk_tm_read_audit_tm_id_user_id_created_on', columns: ['transport_manager_id', 'user_id', 'created_on'])]
 #[ORM\UniqueConstraint(name: 'uk_tm_read_audit_tm_id_user_id_created_on', columns: ['transport_manager_id', 'user_id', 'created_on'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -41,7 +40,7 @@ abstract class AbstractTransportManagerReadAudit implements BundleSerializableIn
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -50,8 +49,8 @@ abstract class AbstractTransportManagerReadAudit implements BundleSerializableIn
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
      */
-    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'readAudits', fetch: 'LAZY')]
     protected $transportManager;
 
     /**
@@ -59,7 +58,7 @@ abstract class AbstractTransportManagerReadAudit implements BundleSerializableIn
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 

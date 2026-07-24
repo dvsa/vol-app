@@ -4,14 +4,22 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Cli\Service\EntityGenerator;
 
+use Doctrine\DBAL\Schema\Table;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\Adapters\Doctrine3SchemaIntrospector;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\EntityConfigService;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\EntityGenerator;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\ColumnMetadata;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\TableMetadata;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\InverseRelationshipProcessor;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\MethodGeneratorService;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\TemplateRenderer;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlerRegistry;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\BlameableTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\DefaultTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\RelationshipTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\InversedByConfig;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -36,7 +44,7 @@ final class AttributeEmissionTest extends TestCase
 
         // cf. AbstractApplication::$licence
         $this->assertSame(
-            "#[ORM\\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]\n    "
+            "#[ORM\\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]\n    "
             . "#[ORM\\ManyToOne(targetEntity: \\Dvsa\\Olcs\\Api\\Entity\\Licence\\Licence::class, fetch: 'LAZY')]",
             $sut->generateAnnotation($column, ['namespaces' => ['Licence' => 'Licence']])
         );
@@ -153,10 +161,201 @@ final class AttributeEmissionTest extends TestCase
         );
     }
 
+    public function testManyToOneWithConfiguredInverseSideEmitsInversedBy(): void
+    {
+        // cf. AbstractLicenceVehicle::$licence <-> AbstractLicence::$licenceVehicles:
+        // EntityConfig's inversedBy drives the generated inverse collection, so the
+        // owning side must name it with identical pluralization
+        $table = new TableMetadata('licence_vehicle', [], [], [], [
+            ['local_columns' => ['licence_id'], 'foreign_table' => 'licence'],
+        ]);
+        $sut = new RelationshipTypeHandler();
+        $sut->setCurrentTable($table);
+        $column = new ColumnMetadata('licence_id', 'integer', null, false);
+
+        $this->assertSame(
+            "#[ORM\\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]\n    "
+            . "#[ORM\\ManyToOne(targetEntity: \\Dvsa\\Olcs\\Api\\Entity\\Licence\\Licence::class,"
+            . " inversedBy: 'licenceVehicles', fetch: 'LAZY')]",
+            $sut->generateAnnotation($column, [
+                'namespaces' => ['Licence' => 'Licence'],
+                'fieldConfig' => new FieldConfig(
+                    inversedBy: new InversedByConfig(entity: 'Licence', property: 'licenceVehicle'),
+                ),
+            ])
+        );
+    }
+
+    public function testManyToOneWithoutConfiguredInverseSideStaysUnidirectional(): void
+    {
+        $table = new TableMetadata('application', [], [], [], [
+            ['local_columns' => ['licence_id'], 'foreign_table' => 'licence'],
+        ]);
+        $sut = new RelationshipTypeHandler();
+        $sut->setCurrentTable($table);
+        $column = new ColumnMetadata('licence_id', 'integer', null, false);
+
+        $this->assertStringNotContainsString(
+            'inversedBy',
+            $sut->generateAnnotation($column, ['namespaces' => ['Licence' => 'Licence']])
+        );
+    }
+
+    public function testGenerateInverseFalseStillEmitsOwningInversedBy(): void
+    {
+        // cf. AbstractLetterInstanceChoice::$letterInstance - the inverse collection
+        // is hand-written in the concrete LetterInstance, but the owning side must
+        // still name it
+        $table = new TableMetadata('letter_instance_choice', [], [], [], [
+            ['local_columns' => ['letter_instance_id'], 'foreign_table' => 'letter_instance'],
+        ]);
+        $sut = new RelationshipTypeHandler();
+        $sut->setCurrentTable($table);
+        $column = new ColumnMetadata('letter_instance_id', 'integer', null, false);
+
+        $this->assertStringContainsString(
+            "inversedBy: 'letterInstanceChoices'",
+            $sut->generateAnnotation($column, [
+                'namespaces' => ['LetterInstance' => 'Letter'],
+                'fieldConfig' => new FieldConfig(
+                    inversedBy: new InversedByConfig(
+                        entity: 'LetterInstance',
+                        property: 'letterInstanceChoice',
+                        generateInverse: false,
+                    ),
+                ),
+            ])
+        );
+    }
+
+    public function testGenerateInverseFalseSkipsInverseCollectionGeneration(): void
+    {
+        $appRoot = dirname(__DIR__, 6);
+        $configService = new EntityConfigService($appRoot . '/data/db/EntityConfig.php');
+        $processor = new InverseRelationshipProcessor($configService, new PropertyNameResolver());
+
+        $table = new TableMetadata('letter_instance_choice', [
+            new ColumnMetadata('letter_instance_id', 'integer', null, false),
+        ], [], [], [
+            ['local_columns' => ['letter_instance_id'], 'foreign_table' => 'letter_instance'],
+        ]);
+
+        $this->assertSame([], $processor->processInverseRelationships([$table]));
+    }
+
+    public function testUnsignedAndFixedColumnOptionsAreEmitted(): void
+    {
+        $sut = new DefaultTypeHandler();
+
+        // cf. address.olbs_key: int unsigned with no default
+        $unsigned = new ColumnMetadata('olbs_key', 'integer', null, true, false, false, null, null, ['unsigned' => true]);
+        $this->assertSame(
+            "#[ORM\\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]",
+            $sut->generateAnnotation($unsigned)
+        );
+
+        // cf. address.admin_area: char(40) - fixed, after any default
+        $fixed = new ColumnMetadata('admin_area', 'string', 40, true, false, false, null, null, ['fixed' => true]);
+        $this->assertSame(
+            "#[ORM\\Column(type: 'string', name: 'admin_area', length: 40, nullable: true, options: ['fixed' => true])]",
+            $sut->generateAnnotation($fixed)
+        );
+    }
+
+    public function testUniqueKeysAreEmittedOnlyAsUniqueConstraints(): void
+    {
+        // cf. AbstractTransaction: uk_txn_receipt_document_id must not be emitted as
+        // both #[ORM\Index] and #[ORM\UniqueConstraint] - DBAL rejects the name clash
+        $table = new Table('txn');
+        $table->addColumn('id', 'integer');
+        $table->addColumn('receipt_document_id', 'integer');
+        $table->addColumn('reference', 'string');
+        $table->setPrimaryKey(['id']);
+        $table->addUniqueIndex(['receipt_document_id'], 'uk_txn_receipt_document_id');
+        $table->addIndex(['reference'], 'ix_txn_reference');
+
+        $indexes = $this->invokeIntrospectorMethod('extractIndexes', [$table]);
+        $uniqueConstraints = $this->invokeIntrospectorMethod('extractUniqueConstraints', [$table]);
+
+        $this->assertSame(['ix_txn_reference'], array_column($indexes, 'name'));
+        $this->assertSame(['uk_txn_receipt_document_id'], array_column($uniqueConstraints, 'name'));
+    }
+
+    public function testOwningManyToManyToRefDataIsUnidirectional(): void
+    {
+        // cf. AbstractOpposition::$grounds - RefData never declares inverse
+        // collections, so an inversedBy would point at a nonexistent property
+        $field = $this->invokeConstructedGeneratorMethod('createManyToManyField', [
+            [
+                'join_table' => 'opposition_grounds',
+                'foreign_table' => 'ref_data',
+                'join_columns' => ['opposition_id'],
+                'local_columns' => ['id'],
+                'inverse_join_columns' => ['ground_id'],
+                'foreign_columns' => ['id'],
+                'is_owning' => true,
+            ],
+            'opposition',
+            [],
+        ]);
+
+        $this->assertStringContainsString(
+            "#[ORM\\ManyToMany(targetEntity: \\Dvsa\\Olcs\\Api\\Entity\\System\\RefData::class, fetch: 'LAZY')]",
+            $field['annotation']
+        );
+        $this->assertStringNotContainsString('inversedBy', $field['annotation']);
+    }
+
+    public function testOwningManyToManyToNonRefDataKeepsInversedBy(): void
+    {
+        // cf. AbstractOpposition::$operatingCentres - bidirectional sides are unaffected
+        $field = $this->invokeConstructedGeneratorMethod('createManyToManyField', [
+            [
+                'join_table' => 'operating_centre_opposition',
+                'foreign_table' => 'operating_centre',
+                'join_columns' => ['opposition_id'],
+                'local_columns' => ['id'],
+                'inverse_join_columns' => ['operating_centre_id'],
+                'foreign_columns' => ['id'],
+                'is_owning' => true,
+            ],
+            'opposition',
+            [],
+        ]);
+
+        $this->assertStringContainsString("inversedBy: 'oppositions'", $field['annotation']);
+    }
+
     private function invokeGeneratorMethod(string $method, array $args): string
     {
         $generator = (new \ReflectionClass(EntityGenerator::class))->newInstanceWithoutConstructor();
 
         return (new \ReflectionMethod(EntityGenerator::class, $method))->invoke($generator, ...$args);
+    }
+
+    private function invokeConstructedGeneratorMethod(string $method, array $args): mixed
+    {
+        $appRoot = dirname(__DIR__, 6);
+        $configService = new EntityConfigService($appRoot . '/data/db/EntityConfig.php');
+        $propertyNameResolver = new PropertyNameResolver();
+        $generator = new EntityGenerator(
+            new TypeHandlerRegistry(),
+            new TemplateRenderer(
+                $appRoot . '/module/Cli/src/Service/EntityGenerator/Templates',
+                new MethodGeneratorService()
+            ),
+            $configService,
+            new InverseRelationshipProcessor($configService, $propertyNameResolver),
+            $propertyNameResolver
+        );
+
+        return (new \ReflectionMethod(EntityGenerator::class, $method))->invoke($generator, ...$args);
+    }
+
+    private function invokeIntrospectorMethod(string $method, array $args): array
+    {
+        $introspector = (new \ReflectionClass(Doctrine3SchemaIntrospector::class))->newInstanceWithoutConstructor();
+
+        return (new \ReflectionMethod(Doctrine3SchemaIntrospector::class, $method))->invoke($introspector, ...$args);
     }
 }

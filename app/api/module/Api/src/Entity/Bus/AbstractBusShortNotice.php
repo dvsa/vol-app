@@ -25,8 +25,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Table(name: 'bus_short_notice')]
 #[ORM\Index(name: 'ix_bus_short_notice_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_bus_short_notice_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'uk_bus_short_notice_bus_reg_id', columns: ['bus_reg_id'])]
-#[ORM\Index(name: 'uk_bus_short_notice_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_bus_short_notice_bus_reg_id', columns: ['bus_reg_id'])]
 #[ORM\UniqueConstraint(name: 'uk_bus_short_notice_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
@@ -45,7 +43,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -54,8 +52,8 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      */
-    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
-    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'shortNotice', fetch: 'LAZY')]
     protected $busReg;
 
     /**
@@ -235,7 +233,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -244,7 +242,7 @@ abstract class AbstractBusShortNotice implements BundleSerializableInterface, Js
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

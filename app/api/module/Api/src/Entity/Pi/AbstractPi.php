@@ -34,8 +34,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_pi_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_pi_pi_status', columns: ['pi_status'])]
 #[ORM\Index(name: 'ix_pi_written_outcome', columns: ['written_outcome'])]
-#[ORM\Index(name: 'uk_pi_case_id', columns: ['case_id'])]
-#[ORM\Index(name: 'uk_pi_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\UniqueConstraint(name: 'uk_pi_case_id', columns: ['case_id'])]
 #[ORM\UniqueConstraint(name: 'uk_pi_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\MappedSuperclass]
@@ -56,7 +54,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -65,8 +63,8 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
-    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
-    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'publicInquiry', fetch: 'LAZY')]
     protected $case;
 
     /**
@@ -128,7 +126,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'pi_status', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'pi_status', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $piStatus;
 
@@ -198,7 +196,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'witnesses', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'witnesses', nullable: true, options: ['unsigned' => true])]
     protected $witnesses;
 
     /**
@@ -342,7 +340,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -351,7 +349,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
@@ -392,7 +390,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     #[ORM\JoinTable(name: 'pi_tm_decision')]
     #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'tm_decision_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'pis', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $tmDecisions;
 
     /**
@@ -403,7 +401,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
     #[ORM\JoinTable(name: 'pi_type')]
     #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'pi_type_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'pis', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $piTypes;
 
     /**

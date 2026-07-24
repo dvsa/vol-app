@@ -35,7 +35,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_publication_link_publication_section_id', columns: ['publication_section_id'])]
 #[ORM\Index(name: 'ix_publication_link_traffic_area_id', columns: ['traffic_area_id'])]
 #[ORM\Index(name: 'ix_publication_link_transport_manager_id', columns: ['transport_manager_id'])]
-#[ORM\Index(name: 'uk_publication_link_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\UniqueConstraint(name: 'uk_publication_link_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -55,7 +54,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -64,8 +63,8 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\Publication\Publication
      */
-    #[ORM\JoinColumn(name: 'publication_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\Publication::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'publication_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\Publication::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
     protected $publication;
 
     /**
@@ -73,7 +72,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
      */
-    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
@@ -92,7 +91,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
     protected $licence;
 
     /**
@@ -101,7 +100,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
     protected $application;
 
     /**
@@ -110,7 +109,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Pi\Pi
      */
     #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
     protected $pi;
 
     /**
@@ -119,7 +118,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'publicationLinks', fetch: 'LAZY')]
     protected $busReg;
 
     /**
@@ -136,7 +135,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\Publication\PublicationSection
      */
-    #[ORM\JoinColumn(name: 'publication_section_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'publication_section_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationSection::class, fetch: 'LAZY')]
     protected $publicationSection;
 
@@ -205,7 +204,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -214,7 +213,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

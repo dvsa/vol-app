@@ -43,8 +43,8 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
      */
     #[ORM\Id]
-    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, inversedBy: 'letterTypeAppendices', fetch: 'LAZY')]
     protected $letterType;
 
     /**
@@ -53,7 +53,7 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion
      */
     #[ORM\Id]
-    #[ORM\JoinColumn(name: 'letter_appendix_version_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'letter_appendix_version_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterAppendixVersion::class, fetch: 'LAZY')]
     protected $letterAppendixVersion;
 
@@ -82,7 +82,7 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['unsigned' => true])]
     protected $displayOrder = 0;
 
     /**
@@ -98,7 +98,7 @@ abstract class AbstractLetterTypeAppendix implements BundleSerializableInterface
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

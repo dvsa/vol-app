@@ -82,7 +82,7 @@ module "parameters" {
     olcs_txc_token_url                           = "https://login.microsoftonline.com/a455b827-244f-4c97-b5b4-ce5d13b4d00c/oauth2/v2.0/token"
     olcs_webdav                                  = "http://webdav.app.olcs.dvsacloud.uk:8080/documents/"
     operator_reports_api_url                     = "https://operator-reports-api.prod.edh.dvsacloud.uk/redirect"
-    pdf_service_uri                              = "http://renderer.%domain%:8080/convert-document"
+    pdf_service_uri                              = "https://renderer.%domain%/"
     redis_cache_fqdn                             = "cache.app.olcs.dvsacloud.uk"
     shd_proxy                                    = "proxy.app.olcs.dvsacloud.uk:3128"
     transxchange_aws_consumer_role               = "arn:aws:iam::259405524870:role/txc-prod-consumer-role"

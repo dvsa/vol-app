@@ -6,6 +6,8 @@ namespace Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers;
 
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\ColumnMetadata;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\TableMetadata;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\PropertyNameResolver;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig;
 
 /**
  * Type handler for relationship columns (foreign keys)
@@ -13,6 +15,13 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\Interfaces\TableMetadata;
 class RelationshipTypeHandler extends AbstractTypeHandler
 {
     private ?TableMetadata $currentTable = null;
+
+    private readonly PropertyNameResolver $propertyNameResolver;
+
+    public function __construct()
+    {
+        $this->propertyNameResolver = new PropertyNameResolver();
+    }
 
     /**
      * Set the current table being processed
@@ -55,16 +64,34 @@ class RelationshipTypeHandler extends AbstractTypeHandler
 
         $options = [
             'targetEntity: \\' . ltrim($targetEntity, '\\') . '::class',
-            "fetch: 'LAZY'"
         ];
+
+        // When EntityConfig declares an inversedBy for this column the
+        // InverseRelationshipProcessor generates the inverse side with mappedBy,
+        // so the owning side must name it - resolved with the same pluralization
+        // rules so the pair always matches.
+        $inversedBy = $this->getInversedByProperty($config, !$isOneToOne);
+        if ($inversedBy !== null) {
+            $options[] = "inversedBy: '" . $inversedBy . "'";
+        }
+
+        $options[] = "fetch: 'LAZY'";
 
         $joinOptions = [
             "name: '" . $column->getName() . "'",
             "referencedColumnName: '" . $referencedColumn . "'"
         ];
 
-        if ($column->isNullable()) {
-            $joinOptions[] = 'nullable: true';
+        // JoinColumn's default is nullable: true (the opposite of Column's), so
+        // NOT NULL foreign keys must say so explicitly or the metadata misreports
+        // the real constraint
+        $joinOptions[] = $column->isNullable() ? 'nullable: true' : 'nullable: false';
+
+        // Mirror the database's referential action (DDL-level only; app-level
+        // cascades are configured separately via EntityConfig cascade options)
+        $onDelete = $this->getOnDeleteAction($column);
+        if ($onDelete !== null) {
+            $joinOptions[] = "onDelete: '" . $onDelete . "'";
         }
 
         // Check for cascade options in config
@@ -113,6 +140,50 @@ class RelationshipTypeHandler extends AbstractTypeHandler
         }
 
         return implode("\n    ", $annotations);
+    }
+
+    /**
+     * Get the FK's ON DELETE action where it differs from the default
+     * (CASCADE / SET NULL); RESTRICT and NO ACTION are MySQL defaults and
+     * are left implicit.
+     */
+    private function getOnDeleteAction(ColumnMetadata $column): ?string
+    {
+        if ($this->currentTable === null) {
+            return null;
+        }
+
+        foreach ($this->currentTable->getForeignKeys() as $foreignKey) {
+            $localColumns = is_array($foreignKey) ? ($foreignKey['local_columns'] ?? []) : $foreignKey->getLocalColumns();
+            if (!in_array($column->getName(), $localColumns)) {
+                continue;
+            }
+
+            $onDelete = is_array($foreignKey) ? ($foreignKey['on_delete'] ?? null) : $foreignKey->onDelete();
+            $onDelete = $onDelete !== null ? strtoupper($onDelete) : null;
+
+            return in_array($onDelete, ['CASCADE', 'SET NULL'], true) ? $onDelete : null;
+        }
+
+        return null;
+    }
+
+    /**
+     * Resolve the inverse-side property name for this owning side, if and only
+     * if EntityConfig declares an inversedBy for the column - the same condition
+     * under which InverseRelationshipProcessor generates that inverse side.
+     */
+    private function getInversedByProperty(array $config, bool $isCollection): ?string
+    {
+        $fieldConfig = $config['fieldConfig'] ?? null;
+
+        if (!$fieldConfig instanceof FieldConfig || $fieldConfig->inversedBy === null) {
+            return null;
+        }
+
+        $property = $fieldConfig->inversedBy->property;
+
+        return $this->propertyNameResolver->resolvePropertyName($property, $isCollection, $property);
     }
 
     /**

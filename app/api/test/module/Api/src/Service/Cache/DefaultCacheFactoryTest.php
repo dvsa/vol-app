@@ -9,6 +9,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Cache\Adapter\AbstractAdapter;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 
 final class DefaultCacheFactoryTest extends MockeryTestCase
@@ -45,6 +46,47 @@ final class DefaultCacheFactoryTest extends MockeryTestCase
 
         self::assertInstanceOf(RedisAdapter::class, $cache);
         self::assertInstanceOf(CacheItemPoolInterface::class, $cache);
+    }
+
+    public function testInvokeUsesOptionsForTheRequestedCacheName(): void
+    {
+        $redis = m::mock(\Redis::class);
+        $container = m::mock(ContainerInterface::class);
+
+        $config = [
+            'caches' => [
+                'default-cache' => [
+                    'options' => [
+                        'ttl' => 3600,
+                        'namespace' => 'zfcache',
+                    ],
+                ],
+                'doctrine-cache' => [
+                    'options' => [
+                        'ttl' => 3600,
+                        'namespace' => 'doctrine',
+                    ],
+                ],
+            ],
+        ];
+
+        $container
+            ->expects('get')
+            ->with('Config')
+            ->andReturn($config);
+
+        $container
+            ->expects('get')
+            ->with('cache.redis.connection')
+            ->andReturn($redis);
+
+        $factory = new DefaultCacheFactory();
+
+        $cache = $factory($container, 'doctrine-cache');
+
+        self::assertInstanceOf(RedisAdapter::class, $cache);
+        $namespace = new \ReflectionProperty(AbstractAdapter::class, 'namespace');
+        self::assertSame('doctrine:', $namespace->getValue($cache));
     }
 
     public function testInvokeUsesDefaultNamespaceAndTtlWhenNotConfigured(): void

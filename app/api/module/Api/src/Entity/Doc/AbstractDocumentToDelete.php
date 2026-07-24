@@ -34,7 +34,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -51,7 +51,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'document_id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'document_id', nullable: false, options: ['unsigned' => true])]
     protected $documentId = 0;
 
     /**
@@ -59,7 +59,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'attempts', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'smallint', name: 'attempts', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $attempts = 0;
 
     /**

@@ -43,7 +43,7 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     protected $id = 0;
 
     /**
@@ -51,7 +51,7 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
      *
      * @var \Dvsa\Olcs\Api\Entity\Legacy\LegacyRecommendation
      */
-    #[ORM\JoinColumn(name: 'legacy_recommendation_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'legacy_recommendation_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Legacy\LegacyRecommendation::class, fetch: 'LAZY')]
     protected $legacyRecommendation;
 
@@ -60,7 +60,7 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
      *
      * @var \Dvsa\Olcs\Api\Entity\Legacy\LegacyPiReason
      */
-    #[ORM\JoinColumn(name: 'legacy_pi_reason_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'legacy_pi_reason_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Legacy\LegacyPiReason::class, fetch: 'LAZY')]
     protected $legacyPiReason;
 
@@ -97,7 +97,7 @@ abstract class AbstractLegacyRecommendationPiReason implements BundleSerializabl
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

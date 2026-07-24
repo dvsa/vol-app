@@ -43,7 +43,7 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -52,7 +52,7 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\Sectors
      */
-    #[ORM\JoinColumn(name: 'sector_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'sector_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\Sectors::class, fetch: 'LAZY')]
     protected $sector;
 
@@ -61,8 +61,8 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock
      */
-    #[ORM\JoinColumn(name: 'irhp_permit_stock_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'irhp_permit_stock_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock::class, inversedBy: 'irhpPermitSectorQuotas', fetch: 'LAZY')]
     protected $irhpPermitStock;
 
     /**
@@ -98,7 +98,7 @@ abstract class AbstractIrhpPermitSectorQuota implements BundleSerializableInterf
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

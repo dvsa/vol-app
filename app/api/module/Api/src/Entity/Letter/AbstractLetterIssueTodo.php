@@ -43,8 +43,8 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion
      */
     #[ORM\Id]
-    #[ORM\JoinColumn(name: 'letter_issue_version_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'letter_issue_version_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion::class, inversedBy: 'letterIssueTodos', fetch: 'LAZY')]
     protected $letterIssueVersion;
 
     /**
@@ -53,7 +53,7 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion
      */
     #[ORM\Id]
-    #[ORM\JoinColumn(name: 'letter_todo_version_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'letter_todo_version_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion::class, fetch: 'LAZY')]
     protected $letterTodoVersion;
 
@@ -82,7 +82,7 @@ abstract class AbstractLetterIssueTodo implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['unsigned' => true])]
     protected $displayOrder = 0;
 
     /**

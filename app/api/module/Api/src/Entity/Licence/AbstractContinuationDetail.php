@@ -31,7 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_continuation_detail_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_continuation_detail_licence_id', columns: ['licence_id'])]
 #[ORM\Index(name: 'ix_continuation_detail_status', columns: ['status'])]
-#[ORM\Index(name: 'uk_continuation_detail_licence_id_continuation_id', columns: ['licence_id', 'continuation_id'])]
 #[ORM\UniqueConstraint(name: 'uk_continuation_detail_licence_id_continuation_id', columns: ['licence_id', 'continuation_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -49,7 +48,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -58,7 +57,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Continuation
      */
-    #[ORM\JoinColumn(name: 'continuation_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'continuation_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Continuation::class, fetch: 'LAZY')]
     protected $continuation;
 
@@ -67,8 +66,8 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
-    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'continuationDetails', fetch: 'LAZY')]
     protected $licence;
 
     /**
@@ -77,7 +76,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      */
     #[ORM\JoinColumn(name: 'checklist_document_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'continuationDetails', fetch: 'LAZY')]
     protected $checklistDocument;
 
     /**
@@ -140,7 +139,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'tot_auth_vehicles', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'tot_auth_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totAuthVehicles;
 
     /**
@@ -148,7 +147,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'tot_psv_discs', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'tot_psv_discs', nullable: true, options: ['unsigned' => true])]
     protected $totPsvDiscs;
 
     /**
@@ -156,7 +155,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'tot_community_licences', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'tot_community_licences', nullable: true, options: ['unsigned' => true])]
     protected $totCommunityLicences;
 
     /**
@@ -260,7 +259,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

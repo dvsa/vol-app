@@ -44,7 +44,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -53,8 +53,8 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\Fee\Fee
      */
-    #[ORM\JoinColumn(name: 'fee_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, fetch: 'LAZY', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'fee_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, inversedBy: 'feeTransactions', fetch: 'LAZY', cascade: ['persist'])]
     protected $fee;
 
     /**
@@ -62,8 +62,8 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\Fee\Transaction
      */
-    #[ORM\JoinColumn(name: 'txn_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Transaction::class, fetch: 'LAZY', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'txn_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Transaction::class, inversedBy: 'feeTransactions', fetch: 'LAZY', cascade: ['persist'])]
     protected $transaction;
 
     /**
@@ -72,7 +72,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction
      */
     #[ORM\JoinColumn(name: 'reversed_fee_txn_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction::class, inversedBy: 'reversingFeeTransactions', fetch: 'LAZY')]
     protected $reversedFeeTransaction;
 
     /**
@@ -108,7 +108,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

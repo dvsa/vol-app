@@ -75,11 +75,17 @@ class YesNoTypeHandler extends AbstractTypeHandler
         }
 
         // Add default value option
+        $columnOptions = [];
         if ($column->getDefault() !== null) {
             // For yesno fields, the default is always numeric (0 or 1)
             $default = $column->getDefault();
             $defaultValue = is_numeric($default) ? (string)$default : '0';
-            $options[] = "options: ['default' => " . $defaultValue . ']';
+            $columnOptions[] = "'default' => " . $defaultValue;
+        }
+
+        $columnOptions = array_merge($columnOptions, $this->schemaFidelityOptions($column));
+        if ($columnOptions !== []) {
+            $options[] = 'options: [' . implode(', ', $columnOptions) . ']';
         }
 
         $optionsStr = !empty($options) ? ', ' . implode(', ', $options) : '';
@@ -106,11 +112,17 @@ class YesNoTypeHandler extends AbstractTypeHandler
         $options[] = $isNullable ? 'nullable: true' : 'nullable: false';
 
         // Add default value option
+        $columnOptions = [];
         if ($column->getDefault() !== null) {
             // For yesno fields, the default is always numeric (0 or 1)
             $default = $column->getDefault();
             $defaultValue = is_numeric($default) ? (string)$default : '0';
-            $options[] = "options: ['default' => " . $defaultValue . ']';
+            $columnOptions[] = "'default' => " . $defaultValue;
+        }
+
+        $columnOptions = array_merge($columnOptions, $this->schemaFidelityOptions($column));
+        if ($columnOptions !== []) {
+            $options[] = 'options: [' . implode(', ', $columnOptions) . ']';
         }
 
         $optionsStr = !empty($options) ? ', ' . implode(', ', $options) : '';

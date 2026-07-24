@@ -77,6 +77,11 @@ class PrimaryKeyTypeHandler extends AbstractTypeHandler
             $columnDef .= ', nullable: false';
         }
 
+        $fidelityOptions = $this->schemaFidelityOptions($column);
+        if ($fidelityOptions !== []) {
+            $columnDef .= ', options: [' . implode(', ', $fidelityOptions) . ']';
+        }
+
         $columnDef .= ')]';
         $annotations[] = $columnDef;
 

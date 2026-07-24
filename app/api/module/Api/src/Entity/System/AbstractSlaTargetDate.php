@@ -31,7 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_sla_target_date_propose_to_revoke_idx', columns: ['propose_to_revoke_id'])]
 #[ORM\Index(name: 'ix_sla_target_date_sla_id', columns: ['sla_id'])]
 #[ORM\Index(name: 'ix_sla_target_date_submission_id', columns: ['submission_id'])]
-#[ORM\Index(name: 'uk_sla_target_date_document_id', columns: ['document_id'])]
 #[ORM\UniqueConstraint(name: 'uk_sla_target_date_document_id', columns: ['document_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -51,7 +50,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -61,7 +60,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      */
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'slaTargetDate', fetch: 'LAZY')]
     protected $document;
 
     /**
@@ -70,7 +69,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      * @var \Dvsa\Olcs\Api\Entity\Pi\Pi
      */
     #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, inversedBy: 'slaTargetDates', fetch: 'LAZY')]
     protected $pi;
 
     /**
@@ -79,7 +78,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
      */
     #[ORM\JoinColumn(name: 'submission_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\Submission::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\Submission::class, inversedBy: 'slaTargetDates', fetch: 'LAZY')]
     protected $submission;
 
     /**
@@ -88,7 +87,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      * @var \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke
      */
     #[ORM\JoinColumn(name: 'propose_to_revoke_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke::class, inversedBy: 'slaTargetDates', fetch: 'LAZY')]
     protected $proposeToRevoke;
 
     /**
@@ -97,7 +96,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      * @var \Dvsa\Olcs\Api\Entity\Cases\Statement
      */
     #[ORM\JoinColumn(name: 'statement_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Statement::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Statement::class, inversedBy: 'slaTargetDates', fetch: 'LAZY')]
     protected $statement;
 
     /**
@@ -174,7 +173,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

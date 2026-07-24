@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_bus_reg_other_service_bus_reg_id', columns: ['bus_reg_id'])]
 #[ORM\Index(name: 'ix_bus_reg_other_service_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_bus_reg_other_service_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'uk_bus_reg_other_service_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_bus_reg_other_service_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -44,7 +43,7 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -53,8 +52,8 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      */
-    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'otherServices', fetch: 'LAZY')]
     protected $busReg;
 
     /**
@@ -90,7 +89,7 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -99,7 +98,7 @@ abstract class AbstractBusRegOtherService implements BundleSerializableInterface
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

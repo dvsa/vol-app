@@ -29,7 +29,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_contact_details_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_contact_details_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_contact_details_person_id', columns: ['person_id'])]
-#[ORM\Index(name: 'uk_contact_details_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\UniqueConstraint(name: 'uk_contact_details_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -49,7 +48,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -58,7 +57,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'contact_type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'contact_type', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $contactType;
 
@@ -68,7 +67,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Address
      */
     #[ORM\JoinColumn(name: 'address_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Address::class, fetch: 'LAZY', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Address::class, inversedBy: 'contactDetails', fetch: 'LAZY', cascade: ['persist'])]
     protected $address;
 
     /**
@@ -77,7 +76,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Person\Person
      */
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, fetch: 'LAZY', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, inversedBy: 'contactDetails', fetch: 'LAZY', cascade: ['persist'])]
     protected $person;
 
     /**
@@ -137,7 +136,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -146,7 +145,7 @@ abstract class AbstractContactDetails implements BundleSerializableInterface, Js
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

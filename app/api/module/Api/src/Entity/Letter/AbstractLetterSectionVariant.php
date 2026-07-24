@@ -31,7 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_letter_section_variant_letter_choice_id', columns: ['letter_choice_id'])]
 #[ORM\Index(name: 'ix_letter_section_variant_letter_section_id', columns: ['letter_section_id'])]
 #[ORM\Index(name: 'ix_letter_section_variant_organisation_type', columns: ['organisation_type'])]
-#[ORM\Index(name: 'uk_letter_section_variant_conditions', columns: ['letter_section_id', 'goods_or_psv', 'is_variation', 'is_ni', 'organisation_type', 'letter_choice_id'])]
 #[ORM\UniqueConstraint(name: 'uk_letter_section_variant_conditions', columns: ['letter_section_id', 'goods_or_psv', 'is_variation', 'is_ni', 'organisation_type', 'letter_choice_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -51,7 +50,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -60,8 +59,8 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSection
      */
-    #[ORM\JoinColumn(name: 'letter_section_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSection::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'letter_section_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSection::class, inversedBy: 'variants', fetch: 'LAZY')]
     protected $letterSection;
 
     /**
@@ -141,7 +140,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $displayOrder = 0;
 
     /**
@@ -149,7 +148,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

@@ -27,7 +27,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_traffic_area_enforcement_area_enforcement_area_id', columns: ['enforcement_area_id'])]
 #[ORM\Index(name: 'ix_traffic_area_enforcement_area_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_traffic_area_enforcement_area_traffic_area_id', columns: ['traffic_area_id'])]
-#[ORM\Index(name: 'uk_ta_enforcement_area_traffic_area_id_enforcement_area_id', columns: ['traffic_area_id', 'enforcement_area_id'])]
 #[ORM\UniqueConstraint(name: 'uk_ta_enforcement_area_traffic_area_id_enforcement_area_id', columns: ['traffic_area_id', 'enforcement_area_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -45,7 +44,7 @@ abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableI
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -54,8 +53,8 @@ abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableI
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
      */
-    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, inversedBy: 'trafficAreaEnforcementAreas', fetch: 'LAZY')]
     protected $trafficArea;
 
     /**
@@ -63,7 +62,7 @@ abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableI
      *
      * @var \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea
      */
-    #[ORM\JoinColumn(name: 'enforcement_area_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'enforcement_area_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea::class, fetch: 'LAZY')]
     protected $enforcementArea;
 
@@ -92,7 +91,7 @@ abstract class AbstractTrafficAreaEnforcementArea implements BundleSerializableI
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

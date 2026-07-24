@@ -203,6 +203,16 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
      */
     private function convertColumn(Column $column): ColumnMetadata
     {
+        // unsigned/fixed are first-class DBAL column properties; surface them as
+        // options so handlers can emit them for schema fidelity
+        $options = $column->getCustomSchemaOptions();
+        if ($column->getUnsigned()) {
+            $options['unsigned'] = true;
+        }
+        if ($column->getFixed()) {
+            $options['fixed'] = true;
+        }
+
         return new ColumnMetadata(
             name: $column->getName(),
             type: $column->getType()->getName(),
@@ -212,7 +222,7 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
             autoIncrement: $column->getAutoincrement(),
             default: $column->getDefault(),
             comment: $column->getComment(),
-            options: $column->getCustomSchemaOptions()
+            options: $options
         );
     }
 
@@ -226,6 +236,10 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
         foreach ($table->getIndexes() as $index) {
             if ($index->isPrimary()) {
                 continue; // Skip primary key index
+            }
+
+            if ($index->isUnique()) {
+                continue; // Unique keys are emitted as #[ORM\UniqueConstraint] by extractUniqueConstraints()
             }
 
             $indexes[] = [
