@@ -201,11 +201,7 @@ jobs:
             return 1
           }
 
-          # Jenkins-compatible environment mapping:
-          # - platformEnv is the GitHub Actions input/environment name
-          # - some AWS resource names still use legacy prefixes:
-          #   int  -> qa
-          #   prep -> pp
+          
           case "${PLATFORM_ENV}" in
             dev|reg)
               ENV_NAME="${PLATFORM_ENV}"
