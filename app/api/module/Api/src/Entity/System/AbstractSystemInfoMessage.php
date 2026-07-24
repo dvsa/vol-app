@@ -45,7 +45,7 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -106,7 +106,7 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
      *
      * @var bool
      */
-    #[ORM\Column(type: 'boolean', name: 'importance', nullable: true)]
+    #[ORM\Column(type: 'boolean', name: 'importance', nullable: true, options: ['unsigned' => true])]
     protected $importance;
 
     /**
@@ -114,7 +114,7 @@ abstract class AbstractSystemInfoMessage implements BundleSerializableInterface,
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

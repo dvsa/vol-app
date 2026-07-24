@@ -28,7 +28,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_vehicle_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_vehicle_vi_action', columns: ['vi_action'])]
 #[ORM\Index(name: 'ix_vehicle_vrm', columns: ['vrm'])]
-#[ORM\Index(name: 'uk_vehicle_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_vehicle_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -48,7 +47,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -85,7 +84,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'plated_weight', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'plated_weight', nullable: true, options: ['unsigned' => true])]
     protected $platedWeight;
 
     /**
@@ -149,7 +148,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -158,7 +157,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

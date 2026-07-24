@@ -42,7 +42,7 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     protected $id = 0;
 
     /**
@@ -50,7 +50,7 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Category
      */
-    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Category::class, fetch: 'LAZY')]
     protected $category;
 
@@ -127,7 +127,7 @@ abstract class AbstractSubCategory implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

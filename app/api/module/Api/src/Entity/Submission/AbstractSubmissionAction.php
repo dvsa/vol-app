@@ -42,7 +42,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -51,8 +51,8 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
      */
-    #[ORM\JoinColumn(name: 'submission_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\Submission::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'submission_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\Submission::class, inversedBy: 'submissionActions', fetch: 'LAZY')]
     protected $submission;
 
     /**
@@ -96,7 +96,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -119,7 +119,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     #[ORM\JoinTable(name: 'submission_action_type')]
     #[ORM\JoinColumn(name: 'submission_action_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'action_type', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'submissionActions', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $actionTypes;
 
     /**

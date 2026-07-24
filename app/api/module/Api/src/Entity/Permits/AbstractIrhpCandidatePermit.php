@@ -45,7 +45,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -54,8 +54,8 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
      */
-    #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, inversedBy: 'irhpCandidatePermits', fetch: 'LAZY')]
     protected $irhpPermitApplication;
 
     /**
@@ -64,7 +64,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange
      */
     #[ORM\JoinColumn(name: 'irhp_permit_range_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange::class, inversedBy: 'irhpCandidatePermits', fetch: 'LAZY')]
     protected $irhpPermitRange;
 
     /**
@@ -150,7 +150,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @var bool
      */
-    #[ORM\Column(type: 'boolean', name: 'wanted', nullable: true, options: ['default' => 0])]
+    #[ORM\Column(type: 'boolean', name: 'wanted', nullable: true, options: ['default' => 0, 'unsigned' => true])]
     protected $wanted = 0;
 
     /**
@@ -158,7 +158,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

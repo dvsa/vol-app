@@ -28,7 +28,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_prohibition_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_prohibition_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_prohibition_prohibition_type', columns: ['prohibition_type'])]
-#[ORM\Index(name: 'uk_prohibition_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_prohibition_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -48,7 +47,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -57,8 +56,8 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
-    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'prohibitions', fetch: 'LAZY')]
     protected $case;
 
     /**
@@ -66,7 +65,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'prohibition_type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'prohibition_type', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $prohibitionType;
 
@@ -135,7 +134,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -144,7 +143,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

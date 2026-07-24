@@ -31,7 +31,7 @@ abstract class AbstractLegacyCaseAction implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     protected $id = 0;
 
     /**

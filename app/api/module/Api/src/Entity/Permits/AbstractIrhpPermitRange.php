@@ -28,7 +28,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'fk_irhp_permit_range_journey_ref_data_id', columns: ['journey'])]
 #[ORM\Index(name: 'fk_irhp_permit_range_last_modified_by_user_id', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'fk_irhp_permit_stock_ranges_irhp_permit_stocks1_idx', columns: ['irhp_permit_stock_id'])]
-#[ORM\Index(name: 'uniqueRange', columns: ['irhp_permit_stock_id', 'prefix', 'from_no', 'to_no'])]
 #[ORM\UniqueConstraint(name: 'uniqueRange', columns: ['irhp_permit_stock_id', 'prefix', 'from_no', 'to_no'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -46,7 +45,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -55,8 +54,8 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock
      */
-    #[ORM\JoinColumn(name: 'irhp_permit_stock_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'irhp_permit_stock_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock::class, inversedBy: 'irhpPermitRanges', fetch: 'LAZY')]
     protected $irhpPermitStock;
 
     /**
@@ -110,7 +109,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'from_no', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'from_no', nullable: true, options: ['unsigned' => true])]
     protected $fromNo;
 
     /**
@@ -118,7 +117,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'to_no', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'to_no', nullable: true, options: ['unsigned' => true])]
     protected $toNo;
 
     /**
@@ -150,7 +149,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -162,7 +161,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
     #[ORM\JoinTable(name: 'irhp_permit_range_attribute')]
     #[ORM\JoinColumn(name: 'irhp_permit_range_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'irhp_permit_range_attribute_id', referencedColumnName: 'id')]
-    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, inversedBy: 'irhpPermitRanges', fetch: 'LAZY')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $irhpPermitRangeAttributes;
 
     /**

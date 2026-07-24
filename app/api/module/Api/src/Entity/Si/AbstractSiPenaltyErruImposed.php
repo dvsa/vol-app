@@ -47,7 +47,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -56,8 +56,8 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @var \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement
      */
-    #[ORM\JoinColumn(name: 'serious_infringement_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'serious_infringement_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement::class, inversedBy: 'imposedErrus', fetch: 'LAZY')]
     protected $seriousInfringement;
 
     /**
@@ -65,7 +65,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @var \Dvsa\Olcs\Api\Entity\Si\SiPenaltyImposedType
      */
-    #[ORM\JoinColumn(name: 'si_penalty_imposed_type_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'si_penalty_imposed_type_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SiPenaltyImposedType::class, fetch: 'LAZY')]
     protected $siPenaltyImposedType;
 
@@ -103,7 +103,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'penalty_imposed_identifier', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'penalty_imposed_identifier', nullable: true, options: ['unsigned' => true])]
     protected $penaltyImposedIdentifier;
 
     /**
@@ -135,7 +135,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -144,7 +144,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

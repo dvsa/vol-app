@@ -44,7 +44,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -53,8 +53,8 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterAppendix
      */
-    #[ORM\JoinColumn(name: 'letter_appendix_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterAppendix::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'letter_appendix_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterAppendix::class, inversedBy: 'versions', fetch: 'LAZY')]
     protected $letterAppendix;
 
     /**
@@ -139,7 +139,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'version_number', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'version_number', nullable: false, options: ['unsigned' => true])]
     protected $versionNumber = 0;
 
     /**
@@ -147,7 +147,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

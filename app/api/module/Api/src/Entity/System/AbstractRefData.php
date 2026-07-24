@@ -23,7 +23,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Table(name: 'ref_data')]
 #[ORM\Index(name: 'ix_ref_data_parent_id', columns: ['parent_id'])]
 #[ORM\Index(name: 'ix_ref_data_ref_data_category_id', columns: ['ref_data_category_id'])]
-#[ORM\Index(name: 'uk_ref_data_ref_data_category_id_olbs_key', columns: ['ref_data_category_id', 'olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_ref_data_ref_data_category_id_olbs_key', columns: ['ref_data_category_id', 'olbs_key'])]
 #[ORM\MappedSuperclass]
 abstract class AbstractRefData implements BundleSerializableInterface, JsonSerializable, \Stringable
@@ -80,7 +79,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'display_order', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'display_order', nullable: true, options: ['unsigned' => true])]
     protected $displayOrder;
 
     /**
@@ -88,7 +87,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'integer', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

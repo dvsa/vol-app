@@ -28,7 +28,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'fk_question_last_modified_by_user_id', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'fk_question_question_type_ref_data_id', columns: ['question_type'])]
 #[ORM\Index(name: 'fk_question_submit_options_ref_data_id', columns: ['submit_options'])]
-#[ORM\Index(name: 'question_slug_uindex', columns: ['slug'])]
 #[ORM\UniqueConstraint(name: 'question_slug_uindex', columns: ['slug'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -46,7 +45,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -134,7 +133,7 @@ abstract class AbstractQuestion implements BundleSerializableInterface, JsonSeri
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

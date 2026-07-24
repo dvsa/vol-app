@@ -42,7 +42,7 @@ abstract class AbstractAdminAreaTrafficArea implements BundleSerializableInterfa
      * @var string
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'string', name: 'id', length: 40, nullable: false)]
+    #[ORM\Column(type: 'string', name: 'id', length: 40, nullable: false, options: ['fixed' => true])]
     protected $id = '';
 
     /**
@@ -50,7 +50,7 @@ abstract class AbstractAdminAreaTrafficArea implements BundleSerializableInterfa
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
      */
-    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
@@ -79,7 +79,7 @@ abstract class AbstractAdminAreaTrafficArea implements BundleSerializableInterfa
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

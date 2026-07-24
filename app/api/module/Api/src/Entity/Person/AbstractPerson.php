@@ -29,7 +29,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_person_forename', columns: ['forename'])]
 #[ORM\Index(name: 'ix_person_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_person_title', columns: ['title'])]
-#[ORM\Index(name: 'uk_person_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\UniqueConstraint(name: 'uk_person_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -49,7 +48,7 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -127,7 +126,7 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -136,7 +135,7 @@ abstract class AbstractPerson implements BundleSerializableInterface, JsonSerial
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

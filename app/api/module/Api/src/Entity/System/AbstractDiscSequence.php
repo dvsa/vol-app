@@ -43,7 +43,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     protected $id = 0;
 
     /**
@@ -51,7 +51,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $goodsOrPsv;
 
@@ -89,7 +89,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'restricted', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'restricted', nullable: true, options: ['unsigned' => true])]
     protected $restricted;
 
     /**
@@ -97,7 +97,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'special_restricted', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'special_restricted', nullable: true, options: ['unsigned' => true])]
     protected $specialRestricted;
 
     /**
@@ -105,7 +105,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'standard_national', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'standard_national', nullable: true, options: ['unsigned' => true])]
     protected $standardNational;
 
     /**
@@ -113,7 +113,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'standard_international', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'standard_international', nullable: true, options: ['unsigned' => true])]
     protected $standardInternational;
 
     /**
@@ -169,7 +169,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

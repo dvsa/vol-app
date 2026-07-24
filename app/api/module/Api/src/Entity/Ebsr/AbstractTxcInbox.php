@@ -47,7 +47,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -56,8 +56,8 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
      */
-    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'txcInboxs', fetch: 'LAZY')]
     protected $busReg;
 
     /**
@@ -138,7 +138,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'variation_no', nullable: false)]
+    #[ORM\Column(type: 'smallint', name: 'variation_no', nullable: false, options: ['unsigned' => true])]
     protected $variationNo = 0;
 
     /**
@@ -146,7 +146,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_application_tracking_application_id', columns: ['application_id'])]
 #[ORM\Index(name: 'ix_application_tracking_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_application_tracking_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'uk_application_tracking_application_id', columns: ['application_id'])]
 #[ORM\UniqueConstraint(name: 'uk_application_tracking_application_id', columns: ['application_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -44,7 +43,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -53,8 +52,8 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
-    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id')]
-    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'applicationTracking', fetch: 'LAZY')]
     protected $application;
 
     /**
@@ -170,7 +169,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'vehicles_size_status', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'vehicles_size_status', nullable: true, options: ['unsigned' => true])]
     protected $vehiclesSizeStatus;
 
     /**
@@ -178,7 +177,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'psv_operate_small_status', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'psv_operate_small_status', nullable: true, options: ['unsigned' => true])]
     protected $psvOperateSmallStatus;
 
     /**
@@ -186,7 +185,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'psv_operate_large_status', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'psv_operate_large_status', nullable: true, options: ['unsigned' => true])]
     protected $psvOperateLargeStatus;
 
     /**
@@ -194,7 +193,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'psv_small_conditions_status', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'psv_small_conditions_status', nullable: true, options: ['unsigned' => true])]
     protected $psvSmallConditionsStatus;
 
     /**
@@ -202,7 +201,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'psv_operate_novelty_status', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'psv_operate_novelty_status', nullable: true, options: ['unsigned' => true])]
     protected $psvOperateNoveltyStatus;
 
     /**
@@ -210,7 +209,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'psv_small_part_written_status', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'psv_small_part_written_status', nullable: true, options: ['unsigned' => true])]
     protected $psvSmallPartWrittenStatus;
 
     /**
@@ -218,7 +217,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'psv_documentary_evidence_small_status', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'psv_documentary_evidence_small_status', nullable: true, options: ['unsigned' => true])]
     protected $psvDocumentaryEvidenceSmallStatus;
 
     /**
@@ -226,7 +225,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'psv_documentary_evidence_large_status', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'psv_documentary_evidence_large_status', nullable: true, options: ['unsigned' => true])]
     protected $psvDocumentaryEvidenceLargeStatus;
 
     /**
@@ -234,7 +233,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'psv_main_occupation_undertakings_status', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'psv_main_occupation_undertakings_status', nullable: true, options: ['unsigned' => true])]
     protected $psvMainOccupationUndertakingsStatus;
 
     /**
@@ -314,7 +313,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

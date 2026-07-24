@@ -45,7 +45,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     protected $id = 0;
 
     /**
@@ -53,7 +53,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'action_type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'action_type', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $actionType;
 
@@ -98,7 +98,7 @@ abstract class AbstractDataRetentionRule implements BundleSerializableInterface,
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'max_data_set', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'max_data_set', nullable: true, options: ['unsigned' => true])]
     protected $maxDataSet;
 
     /**

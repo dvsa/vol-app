@@ -22,7 +22,6 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\Table(name: 'organisation_type')]
 #[ORM\Index(name: 'ix_organisation_type_org_person_type_id', columns: ['org_person_type_id'])]
 #[ORM\Index(name: 'ix_organisation_type_org_type_id', columns: ['org_type_id'])]
-#[ORM\Index(name: 'uk_organisation_type_org_type_id_org_person_type_id', columns: ['org_type_id', 'org_person_type_id'])]
 #[ORM\UniqueConstraint(name: 'uk_organisation_type_org_type_id_org_person_type_id', columns: ['org_type_id', 'org_person_type_id'])]
 #[ORM\MappedSuperclass]
 abstract class AbstractOrganisationType implements BundleSerializableInterface, JsonSerializable, \Stringable
@@ -37,7 +36,7 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -46,7 +45,7 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'org_type_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'org_type_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $orgType;
 
@@ -55,7 +54,7 @@ abstract class AbstractOrganisationType implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'org_person_type_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'org_person_type_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $orgPersonType;
 

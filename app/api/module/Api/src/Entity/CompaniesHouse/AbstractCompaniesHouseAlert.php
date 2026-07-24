@@ -42,7 +42,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -51,7 +51,7 @@ abstract class AbstractCompaniesHouseAlert implements BundleSerializableInterfac
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
      */
-    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 

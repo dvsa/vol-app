@@ -26,7 +26,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_letter_type_choice_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_letter_type_choice_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_letter_type_choice_letter_choice_id', columns: ['letter_choice_id'])]
-#[ORM\Index(name: 'uk_letter_type_choice', columns: ['letter_type_id', 'letter_choice_id'])]
 #[ORM\Index(name: 'IDX_89D7E87430450394', columns: ['letter_type_id'])]
 #[ORM\UniqueConstraint(name: 'uk_letter_type_choice', columns: ['letter_type_id', 'letter_choice_id'])]
 #[ORM\MappedSuperclass]
@@ -45,7 +44,7 @@ abstract class AbstractLetterTypeChoice implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -54,8 +53,8 @@ abstract class AbstractLetterTypeChoice implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
      */
-    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, inversedBy: 'letterTypeChoices', fetch: 'LAZY')]
     protected $letterType;
 
     /**
@@ -63,7 +62,7 @@ abstract class AbstractLetterTypeChoice implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterChoice
      */
-    #[ORM\JoinColumn(name: 'letter_choice_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'letter_choice_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterChoice::class, fetch: 'LAZY')]
     protected $letterChoice;
 
@@ -92,7 +91,7 @@ abstract class AbstractLetterTypeChoice implements BundleSerializableInterface, 
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $displayOrder = 0;
 
     /**

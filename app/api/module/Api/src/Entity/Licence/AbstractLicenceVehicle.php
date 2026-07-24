@@ -31,7 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_licence_vehicle_licence_id', columns: ['licence_id'])]
 #[ORM\Index(name: 'ix_licence_vehicle_vehicle_id', columns: ['vehicle_id'])]
 #[ORM\Index(name: 'ix_licence_vehicle_vi_action', columns: ['vi_action'])]
-#[ORM\Index(name: 'uk_licence_vehicle_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_licence_vehicle_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -51,7 +50,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -60,8 +59,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
      */
-    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'licenceVehicles', fetch: 'LAZY')]
     protected $licence;
 
     /**
@@ -69,8 +68,8 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @var \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle
      */
-    #[ORM\JoinColumn(name: 'vehicle_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle::class, fetch: 'LAZY', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'vehicle_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle::class, inversedBy: 'licenceVehicles', fetch: 'LAZY', cascade: ['persist', 'remove'])]
     protected $vehicle;
 
     /**
@@ -79,7 +78,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'licenceVehicles', fetch: 'LAZY')]
     protected $application;
 
     /**
@@ -88,7 +87,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
      */
     #[ORM\JoinColumn(name: 'interim_application_id', referencedColumnName: 'id', nullable: true)]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'interimLicenceVehicles', fetch: 'LAZY')]
     protected $interimApplication;
 
     /**
@@ -172,7 +171,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -181,7 +180,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

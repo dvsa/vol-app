@@ -28,7 +28,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_irfo_permit_stock_irfo_gv_permit_id', columns: ['irfo_gv_permit_id'])]
 #[ORM\Index(name: 'ix_irfo_permit_stock_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_irfo_permit_stock_status', columns: ['status'])]
-#[ORM\Index(name: 'uk_irfo_permit_stock_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_irfo_permit_stock_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -46,7 +45,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -64,7 +63,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry
      */
-    #[ORM\JoinColumn(name: 'irfo_country_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'irfo_country_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry::class, fetch: 'LAZY')]
     protected $irfoCountry;
 
@@ -73,7 +72,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
@@ -102,7 +101,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'serial_no', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'serial_no', nullable: false, options: ['unsigned' => true])]
     protected $serialNo = 0;
 
     /**
@@ -110,7 +109,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'valid_for_year', nullable: false)]
+    #[ORM\Column(type: 'smallint', name: 'valid_for_year', nullable: false, options: ['unsigned' => true])]
     protected $validForYear = 0;
 
     /**
@@ -126,7 +125,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -135,7 +134,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

@@ -23,7 +23,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @source OLCS-Entity-Generator-v2
  */
 #[ORM\Table(name: 'messaging_user_message_read')]
-#[ORM\Index(name: 'ck_unique_user_id_message_id', columns: ['user_id', 'messaging_message_id'])]
 #[ORM\Index(name: 'fk_messaging_user_message_read_created_by_user_id', columns: ['created_by'])]
 #[ORM\Index(name: 'fk_messaging_user_message_read_last_modified_by_user_id', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'fk_messaging_user_message_read_messaging_message_id', columns: ['messaging_message_id'])]
@@ -45,7 +44,7 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -54,7 +53,7 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
      */
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $user;
 
@@ -63,8 +62,8 @@ abstract class AbstractMessagingUserMessageRead implements BundleSerializableInt
      *
      * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage
      */
-    #[ORM\JoinColumn(name: 'messaging_message_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'messaging_message_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage::class, inversedBy: 'userMessageReads', fetch: 'LAZY')]
     protected $messagingMessage;
 
     /**

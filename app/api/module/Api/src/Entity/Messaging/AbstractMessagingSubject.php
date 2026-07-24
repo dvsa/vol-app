@@ -43,7 +43,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -52,7 +52,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Category
      */
-    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Category::class, fetch: 'LAZY')]
     protected $category;
 

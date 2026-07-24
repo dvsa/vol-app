@@ -32,7 +32,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_statement_licence_type', columns: ['licence_type'])]
 #[ORM\Index(name: 'ix_statement_requestors_contact_details_id', columns: ['requestors_contact_details_id'])]
 #[ORM\Index(name: 'ix_statement_statement_type', columns: ['statement_type'])]
-#[ORM\Index(name: 'uk_statement_olbs_key', columns: ['olbs_key'])]
 #[ORM\UniqueConstraint(name: 'uk_statement_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -52,7 +51,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -61,8 +60,8 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
      */
-    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
-    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'statements', fetch: 'LAZY')]
     protected $case;
 
     /**
@@ -70,7 +69,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
      */
-    #[ORM\JoinColumn(name: 'statement_type', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'statement_type', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $statementType;
 
@@ -191,7 +190,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -200,7 +199,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true)]
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**

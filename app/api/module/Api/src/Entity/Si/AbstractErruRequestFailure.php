@@ -25,7 +25,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Table(name: 'erru_request_failure')]
 #[ORM\Index(name: 'ix_erru_request_failure_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_erru_request_failure_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'uk_erru_request_failure_document_id', columns: ['document_id'])]
 #[ORM\UniqueConstraint(name: 'uk_erru_request_failure_document_id', columns: ['document_id'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
@@ -43,7 +42,7 @@ abstract class AbstractErruRequestFailure implements BundleSerializableInterface
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -97,7 +96,7 @@ abstract class AbstractErruRequestFailure implements BundleSerializableInterface
      *
      * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 
