@@ -14,6 +14,7 @@ use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Entity\Doc\Document as Entity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\System\Category as CategoryEntity;
+use Dvsa\Olcs\Api\Entity\System\SubCategory as SubCategoryEntity;
 
 /**
  * Document
@@ -74,6 +75,22 @@ class Document extends AbstractRepository
             ->orderBy($this->alias . '.id', 'DESC');
 
         return $qb->getQuery()->execute();
+    }
+
+    public function fetchLatestFinancialEvidenceForApplication(ApplicationEntity $application): ?Entity
+    {
+        $qb = $this->createQueryBuilder();
+
+        $qb->andWhere($qb->expr()->eq($this->alias . '.application', ':application'))
+            ->andWhere($qb->expr()->eq($this->alias . '.category', ':category'))
+            ->andWhere($qb->expr()->eq($this->alias . '.subCategory', ':subCategory'))
+            ->setParameter('application', $application)
+            ->setParameter('category', CategoryEntity::CATEGORY_APPLICATION)
+            ->setParameter('subCategory', SubCategoryEntity::DOC_SUB_CATEGORY_FINANCIAL_EVIDENCE_DIGITAL)
+            ->orderBy($this->alias . '.id', 'DESC')
+            ->setMaxResults(1);
+
+        return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_OBJECT);
     }
 
     /**
