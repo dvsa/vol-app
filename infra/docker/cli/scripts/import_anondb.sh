@@ -6,7 +6,7 @@ set -euo pipefail
 : "${PROXY:?PROXY not set}"
 : "${DOMAIN:?DOMAIN not set}"
 : "${PRODTODEV_ASSUME_ROLE_ID:?PRODTODEV_ASSUME_ROLE_ID not set}"
-: "${DB_PASSWORD:?DB_PASSWORD not set}"
+: "${M_DB_PASSWORD:?M_DB_PASSWORD not set}"
 
 S3_BUCKET="devapp-olcs-pri-olcs-deploy-s3"
 S3_PREFIX="anondata/olcs-db-anon-prod"
