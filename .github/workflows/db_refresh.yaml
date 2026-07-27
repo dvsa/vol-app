@@ -132,7 +132,7 @@ jobs:
           export http_proxy="${PROXY_URL}"
           export HTTP_PROXY="${PROXY_URL}"
 
-          export no_proxy="169.254.169.254,localhost,127.0.0.1,.amazonaws.com"
+          export no_proxy="169.254.169.254,localhost,127.0.0.1,s3.${AWS_REGION}.amazonaws.com"
           export NO_PROXY="${no_proxy}"
 
           slack_send() {
