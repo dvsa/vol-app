@@ -14,6 +14,7 @@ DUMP_DIR="/mnt/data/anondump"
 DUMP_FILE="olcs-db-anon-latest-import.sql.gz"
 RDS_HOST="olcsanondb-rds.${DOMAIN}"
 DB_USER="master"
+PASS=${M_DB_PASSWORD}
 
 # ===== PROXY =====
 export http_proxy="http://${PROXY}"
@@ -69,7 +70,7 @@ log_msg "Downloaded: ${LATEST_KEY}"
 # ===== IMPORT DATABASE =====
 log_msg "Importing dump into ${RDS_HOST}"
 
-export MYSQL_PWD="${DB_PASSWORD}"
+export MYSQL_PWD="${PASS}"
 
 zcat "${DEST_FILE}" \
   | sed 's/`OLCS_RDS_OLCSDB`/`OLCS_RDS_OLCSANONDB`/g' \
