@@ -120,6 +120,38 @@ final class FileControllerTest extends TestCase
         $this->assertSame('CONTENT', $response->getContent());
     }
 
+    /**
+     * The API sets these on document responses; this controller is the shared getfile handler for
+     * both frontend apps, so dropping them here would silently undo the protection for every user
+     * -facing download while leaving the API-direct path protected.
+     */
+    public function testSecurityHeadersAreForwarded(): void
+    {
+        $this->mockParams
+            ->shouldReceive('fromRoute')->once()->with('identifier')->andReturn('99999')
+            ->shouldReceive('fromQuery')->once()->with('inline')->andReturn(1)
+            ->shouldReceive('fromQuery')->once()->with('slug')->andReturn(0);
+
+        $origResponse = new \Laminas\Http\Response();
+        $origResponse->getHeaders()->addHeaderLine('Content-Type', 'text/html');
+        $origResponse->getHeaders()->addHeaderLine('X-Content-Type-Options', 'nosniff');
+        $origResponse->getHeaders()->addHeaderLine('Content-Security-Policy', 'sandbox allow-scripts');
+        $origResponse->getHeaders()->addHeaderLine('should', 'not-appear');
+
+        $mockResp = m::mock(Response::class)
+            ->shouldReceive('isOk')->once()->andReturn(true)
+            ->shouldReceive('getHttpResponse')->once()->andReturn($origResponse)
+            ->getMock();
+
+        $this->sut->shouldReceive('handleQuery')->once()->andReturn($mockResp);
+
+        $headers = $this->sut->downloadAction()->getHeaders()->toString();
+
+        $this->assertStringContainsString('X-Content-Type-Options: nosniff', $headers);
+        $this->assertStringContainsString('Content-Security-Policy: sandbox allow-scripts', $headers);
+        $this->assertStringNotContainsString('not-appear', $headers);
+    }
+
     public function testFailExceptionErrDownload(): void
     {
         $identifier = '8999';

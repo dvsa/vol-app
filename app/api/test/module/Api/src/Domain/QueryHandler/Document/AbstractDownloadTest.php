@@ -83,13 +83,103 @@ final class AbstractDownloadTest extends QueryHandlerTestCase
         $this->assertEquals($tmpFilePath, $actual->getStreamName());
         $this->assertEquals($expectContent, $actual->getBody());
 
+        // Compared as serialised headers rather than via toArray(): Laminas parses
+        // Content-Security-Policy into a directive structure, so toArray() does not show what
+        // actually goes on the wire.
         $expectHeaders = [
-            'Content-Type' => $expect['mime'] . '; charset=UTF-8',
-            'Content-Length' => $expectSize,
-            'Content-Disposition' => ($expect['isDownload'] ? 'attachment' : 'inline') .
+            'Content-Type: ' . $expect['mime'] . '; charset=UTF-8',
+            'Content-Length: ' . $expectSize,
+            'Content-Disposition: ' . ($expect['isDownload'] ? 'attachment' : 'inline') .
                 ';filename="' . $expect['filename'] . '"',
+            'X-Content-Type-Options: nosniff',
         ];
-        $this->assertEquals($expectHeaders, $actual->getHeaders()->toArray());
+
+        // The sandbox is only applied to content that can execute in our own origin.
+        $isScriptable = in_array(
+            strtolower(pathinfo((string)$identifier, PATHINFO_EXTENSION)),
+            ['html', 'htm', 'xhtml', 'svg', 'xml'],
+            true,
+        );
+        if ($isScriptable) {
+            $expectHeaders[] = 'Content-Security-Policy: sandbox allow-scripts;';
+        }
+
+        $this->assertSame(
+            $expectHeaders,
+            array_map(
+                static fn($header) => $header->toString(),
+                iterator_to_array($actual->getHeaders()),
+            ),
+        );
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpScriptableTypes')]
+    public function testSandboxAppliedOnlyToContentThatExecutesInOurOrigin(
+        string $identifier,
+        string $mimeType,
+        bool $expectSandbox,
+    ): void {
+        $headers = $this->downloadHeaders($identifier, $mimeType);
+
+        if ($expectSandbox) {
+            $this->assertStringContainsString('Content-Security-Policy: sandbox', $headers);
+        } else {
+            $this->assertStringNotContainsString('Content-Security-Policy', $headers);
+        }
+
+        // nosniff is unconditional — it is what protects the non-scriptable types.
+        $this->assertStringContainsString('X-Content-Type-Options: nosniff', $headers);
+    }
+
+    public static function dpScriptableTypes(): \Iterator
+    {
+        yield 'html snapshot' => ['snapshot.html', 'text/html', true];
+        yield 'svg can script in origin' => ['image.svg', 'image/svg+xml', true];
+        yield 'xml' => ['data.xml', 'application/xml', true];
+
+        // Sandboxing an inline PDF risks breaking the browser's built-in viewer, and PDF script
+        // runs in that viewer's sandbox rather than our origin.
+        yield 'pdf is not sandboxed' => ['report.pdf', 'application/pdf', false];
+
+        // The bulk of the document store.
+        yield 'rtf is not sandboxed' => ['letter.rtf', 'application/rtf', false];
+        yield 'jpg is not sandboxed' => ['scan.jpg', 'image/jpeg', false];
+        yield 'docx is not sandboxed' => ['form.docx', 'application/vnd.openxmlformats', false];
+
+        // Type is decided by the served MIME type as well as the extension, so a mismatch still
+        // gets the sandbox.
+        yield 'html mime with odd extension' => ['file.dat', 'text/html', true];
+    }
+
+    private function downloadHeaders(string $identifier, string $mimeType): string
+    {
+        $vfs = vfsStream::setup('temp');
+        $tmpFilePath = vfsStream::newFile('stream')->withContent('content')->at($vfs)->url();
+
+        $mockFile = m::mock(ContentStoreFile::class)
+            ->shouldReceive('getResource')->andReturn($tmpFilePath)
+            ->shouldReceive('getSize')->andReturn('7')
+            ->shouldReceive('getMimeType')->andReturn($mimeType)
+            ->getMock();
+
+        $this->mockedSmServices['FileUploader']
+            ->shouldReceive('download')
+            ->andReturn($mockFile);
+
+        return $this->sut->download($identifier)->getHeaders()->toString();
+    }
+
+    /**
+     * allow-same-origin re-grants the real origin and cancels the sandbox entirely. It is a
+     * one-token change that silently removes the protection, so it is asserted against explicitly
+     * rather than left to review.
+     */
+    public function testSandboxNeverGrantsSameOrigin(): void
+    {
+        $headers = $this->downloadHeaders('snapshot.html', 'text/html');
+
+        $this->assertStringContainsString('Content-Security-Policy: sandbox', $headers);
+        $this->assertStringNotContainsString('allow-same-origin', $headers);
     }
 
     public static function dpTestDownload(): \Iterator
