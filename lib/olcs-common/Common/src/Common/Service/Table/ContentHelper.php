@@ -176,19 +176,38 @@ class ContentHelper
      *
      * @param string $content
      * @param array $vars
+     * @param bool $escapeValues Escape substituted values. Use when $content is a developer-authored
+     *                           template and $vars are row data — the template stays raw, the values
+     *                           do not. Leave false when a value is itself rendered markup, such as
+     *                           the {{content}} of a <td> that a formatter has already produced.
      * @return string
      */
-    public function replaceContent($content, $vars = [])
+    public function replaceContent($content, $vars = [], $escapeValues = false)
     {
         $content = $this->replacePartials($content);
 
         foreach ($vars as $key => $val) {
             if (is_string($val) || is_numeric($val)) {
-                $content = str_replace('{{' . $key . '}}', (string)$val, $content);
+                $replacement = $escapeValues ? self::escapeValue($val) : (string)$val;
+                $content = str_replace('{{' . $key . '}}', $replacement, $content);
             }
         }
 
         return preg_replace('/(\{\{[a-zA-Z0-9\/\[\]]+\}\})/', '', $content);
+    }
+
+    /**
+     * Escape a row value for interpolation into table markup.
+     *
+     * ENT_QUOTES because a template may interpolate into an attribute as readily as into element
+     * content, and the cell renderer cannot tell which from the placeholder alone.
+     *
+     * @param mixed $value
+     * @return string
+     */
+    public static function escapeValue($value)
+    {
+        return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     /**

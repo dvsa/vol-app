@@ -2597,8 +2597,10 @@ final class TableBuilderTest extends MockeryTestCase
 
         $mockContentHelper = m::mock(ContentHelper::class)->makePartial();
 
+        // Third argument true: a 'format' template is developer markup with row data substituted
+        // into it, so the values are escaped while the template is left raw.
         $mockContentHelper->expects('replaceContent')
-            ->with('FOO', $row)
+            ->with('FOO', $row, true)
             ->andReturn('FOOBAR');
 
         $table = $this->getMockTableBuilder(['getContentHelper']);

@@ -1552,12 +1552,18 @@ class TableBuilder implements \Stringable
         }
 
         if (isset($column['format'])) {
-            $content = $this->replaceContent($column['format'], $row);
+            // The format string is developer-authored markup and $row is data, so the values are
+            // escaped on the way in and the template itself is left alone.
+            $content = $this->getContentHelper()->replaceContent($column['format'], $row, true);
         }
 
         if (!isset($content) || (empty($content) && !in_array($content, [0, 0.0, '0']))) {
-            $content =  isset($column['name']) && isset($row[$column['name']]) ?
-                $row[$column['name']] : '';
+            // Nothing produced content, so this column is a bare row value going straight into the
+            // cell. There is no formatter or type involved that could have escaped it, and no
+            // markup here to damage — escaping is unambiguously correct.
+            $content = isset($column['name']) && isset($row[$column['name']])
+                ? ContentHelper::escapeValue($row[$column['name']])
+                : '';
         }
 
         $replacements = [
