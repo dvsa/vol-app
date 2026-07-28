@@ -11,7 +11,9 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceChoice;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
+use Dvsa\Olcs\Api\Service\Letter\SectionVariantResolver;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate as Cmd;
+use Psr\Container\ContainerInterface;
 
 /**
  * Generate LetterInstance
@@ -35,6 +37,15 @@ final class Generate extends AbstractCommandHandler
         'IrhpApplication',
         'Organisation',
     ];
+
+    private SectionVariantResolver $sectionVariantResolver;
+
+    #[\Override]
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    {
+        $this->sectionVariantResolver = $container->get(SectionVariantResolver::class);
+        return parent::__invoke($container, $requestedName, $options);
+    }
 
     #[\Override]
     public function handleCommand(CommandInterface $command): Result
@@ -63,47 +74,30 @@ final class Generate extends AbstractCommandHandler
         $context = $this->buildVariantContext($letterInstance, $command);
 
         // Populate instance sections from letter type assembly, resolving variants
-        $unresolvedRequiredSections = [];
-        $unresolvedOptionalSections = [];
+        $resolution = $this->sectionVariantResolver->resolveForLetterType($letterType, $context);
 
-        foreach ($letterType->getLetterTypeSections() ?? [] as $typeSection) {
-            $section = $typeSection->getLetterSection();
-            $variant = $section->getVariantForContext($context);
-
-            if ($variant === null || $variant->getCurrentVersion() === null) {
-                // Section was skipped. Report it either way -- a section silently vanishing from a
-                // letter is indistinguishable, to the caseworker, from one that was never configured.
-                $sectionName = $section->getName() ?? $section->getSectionKey();
-
-                if ($typeSection->getIsRequired()) {
-                    $unresolvedRequiredSections[] = $sectionName;
-                } else {
-                    $unresolvedOptionalSections[] = $sectionName;
-                }
-                continue;
-            }
-
+        foreach ($resolution->resolved as $resolvedSection) {
             $instanceSection = new LetterInstanceSection();
             $instanceSection->setLetterInstance($letterInstance);
-            $instanceSection->setLetterSectionVersion($variant->getCurrentVersion());
-            $instanceSection->setDisplayOrder($typeSection->getDisplayOrder());
+            $instanceSection->setLetterSectionVersion($resolvedSection->version);
+            $instanceSection->setDisplayOrder($resolvedSection->displayOrder);
             $letterInstance->addLetterInstanceSection($instanceSection);
         }
 
         // Warn about any sections that couldn't be resolved
-        foreach ($unresolvedRequiredSections as $sectionName) {
+        foreach ($resolution->getUnresolvedRequired() as $unresolvedSection) {
             $this->result->addMessage(
-                'Required section "' . $sectionName . '" could not be included — no matching variant for the current context'
+                'Required section "' . $unresolvedSection->getSectionName() . '" could not be included — no matching variant for the current context'
             );
         }
 
-        foreach ($unresolvedOptionalSections as $sectionName) {
+        foreach ($resolution->getUnresolvedOptional() as $unresolvedSection) {
             $this->result->addMessage(
-                'Optional section "' . $sectionName . '" could not be included — no matching variant for the current context'
+                'Optional section "' . $unresolvedSection->getSectionName() . '" could not be included — no matching variant for the current context'
             );
         }
 
-        if (!empty($unresolvedRequiredSections) || !empty($unresolvedOptionalSections)) {
+        if ($resolution->hasUnresolved()) {
             $this->result->setFlag('hasRequiredSectionWarnings', true);
         }
 

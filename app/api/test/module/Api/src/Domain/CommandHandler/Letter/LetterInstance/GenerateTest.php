@@ -30,6 +30,7 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection as LetterTypeSectionEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Service\Letter\SectionVariantResolver;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
@@ -41,6 +42,12 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
+        // The resolver is pure (no repos, no persistence), so the handler is exercised
+        // against the real one — a mock here would let Generate drift from the shared path.
+        $this->mockedSmServices = [
+            SectionVariantResolver::class => new SectionVariantResolver(),
+        ];
+
         $this->sut = new CommandHandler();
         $this->mockRepo('LetterInstance', LetterInstanceRepo::class);
         $this->mockRepo('LetterType', LetterTypeRepo::class);

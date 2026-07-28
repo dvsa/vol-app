@@ -233,6 +233,10 @@ return [
             \Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolver::class =>
                 \Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolverFactory::class,
 
+            // Section variant resolution shared by letter generation and builder preview
+            \Dvsa\Olcs\Api\Service\Letter\SectionVariantResolver::class =>
+                \Dvsa\Olcs\Api\Service\Letter\SectionVariantResolverFactory::class,
+
             \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClient::class =>
                 \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClientFactory::class,
             \Dvsa\Olcs\Api\Rbac\IdentityProviderInterface::class => \Dvsa\Olcs\Api\Rbac\IdentityProviderFactory::class,
