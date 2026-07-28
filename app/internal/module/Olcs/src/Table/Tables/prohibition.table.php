@@ -42,6 +42,8 @@ return [
                         ['prohibition' => $data['id']],
                         'case_prohibition_defect',
                         true
+                    // Not escaped: another formatter's rendered output, which may legitimately be
+                    // markup. Escaping its own values is that formatter's responsibility.
                     ) . '">' . $this->callFormatter($column, $data) . '</a>';
             },
             'name' => 'prohibitionDate'

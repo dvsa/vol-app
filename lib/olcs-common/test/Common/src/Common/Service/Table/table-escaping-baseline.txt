@@ -4,12 +4,7 @@
 # accepted risks. It should only ever shrink. A table not listed here that starts leaking
 # fails TableEscapingInvariantTest.
 #
-# 7 leaking, 26 rendered clean, 10 could not be rendered by the probe.
+# 2 leaking, 31 rendered clean, 10 could not be rendered by the probe.
 #
-lva-external-vehicles.table.php
-lva-internal-vehicles.table.php
-lva-operating-centres.table.php
-lva-taxi-phv.table.php
 lva-variation-conditions-undertakings.table.php
-lva-variation-operating-centres.table.php
 operator.table.php

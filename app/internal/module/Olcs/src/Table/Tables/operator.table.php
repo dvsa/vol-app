@@ -93,7 +93,7 @@ return [
                         ['licence' => $data['licenceId']],
                         'licence/cases',
                         false
-                    ) . '">' . $data['caseCount'] . '</a>';
+                    ) . '">' . \Common\Util\Escape::html($data['caseCount']) . '</a>';
                 } else {
                     return '<a class="govuk-link" href="' . $this->generateUrl(
                         ['licence' => $data['licenceId'], 'action' => 'add'],

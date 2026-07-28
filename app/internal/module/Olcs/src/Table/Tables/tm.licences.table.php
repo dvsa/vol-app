@@ -33,7 +33,7 @@ return [
                  */
                 $routeParams = ['licence' => $row['licence']['id']];
                 $url = $this->generateUrl($routeParams, 'lva-licence/transport_managers');
-                return '<a class="govuk-link" href="' . $url . '">' . $row['licence']['licNo'] . '</a>';
+                return '<a class="govuk-link" href="' . $url . '">' . \Common\Util\Escape::html($row['licence']['licNo']) . '</a>';
             },
         ],
         [

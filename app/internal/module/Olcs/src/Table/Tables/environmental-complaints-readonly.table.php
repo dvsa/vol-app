@@ -24,7 +24,7 @@ return [
                     ['case' => $row['case']['id'], 'tab' => 'overview'],
                     'case_opposition',
                     false
-                ) . '">' . $row['case']['id'] . '</a>'
+                ) . '">' . \Common\Util\Escape::html($row['case']['id']) . '</a>'
         ],
         [
             'title' => 'Date received',
