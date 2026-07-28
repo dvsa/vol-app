@@ -206,12 +206,14 @@ class LetterGenerationController extends AbstractInternalController implements L
 
         $letterInstanceData = $this->fetchLetterInstanceById($letterInstanceId);
 
-        // Extract required section warnings if present
+        // Extract section warnings if present. Optional sections are reported too: a section
+        // dropping out of a letter is worth telling the caseworker about whether or not the
+        // letter type marked it required.
         $warnings = [];
         if (!empty($result['flags']['hasRequiredSectionWarnings'])) {
             $warnings = array_values(array_filter(
                 $result['messages'] ?? [],
-                fn($m) => str_starts_with($m, 'Required section')
+                fn($m) => str_starts_with($m, 'Required section') || str_starts_with($m, 'Optional section')
             ));
         }
 

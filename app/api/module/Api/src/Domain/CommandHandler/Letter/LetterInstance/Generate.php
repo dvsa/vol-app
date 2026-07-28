@@ -64,15 +64,21 @@ final class Generate extends AbstractCommandHandler
 
         // Populate instance sections from letter type assembly, resolving variants
         $unresolvedRequiredSections = [];
+        $unresolvedOptionalSections = [];
 
         foreach ($letterType->getLetterTypeSections() ?? [] as $typeSection) {
             $section = $typeSection->getLetterSection();
             $variant = $section->getVariantForContext($context);
 
             if ($variant === null || $variant->getCurrentVersion() === null) {
-                // Section was skipped -- check if it was required
+                // Section was skipped. Report it either way -- a section silently vanishing from a
+                // letter is indistinguishable, to the caseworker, from one that was never configured.
+                $sectionName = $section->getName() ?? $section->getSectionKey();
+
                 if ($typeSection->getIsRequired()) {
-                    $unresolvedRequiredSections[] = $section->getName() ?? $section->getSectionKey();
+                    $unresolvedRequiredSections[] = $sectionName;
+                } else {
+                    $unresolvedOptionalSections[] = $sectionName;
                 }
                 continue;
             }
@@ -84,13 +90,20 @@ final class Generate extends AbstractCommandHandler
             $letterInstance->addLetterInstanceSection($instanceSection);
         }
 
-        // Warn about any required sections that couldn't be resolved
-        if (!empty($unresolvedRequiredSections)) {
-            foreach ($unresolvedRequiredSections as $sectionName) {
-                $this->result->addMessage(
-                    'Required section "' . $sectionName . '" could not be included — no matching variant for the current context'
-                );
-            }
+        // Warn about any sections that couldn't be resolved
+        foreach ($unresolvedRequiredSections as $sectionName) {
+            $this->result->addMessage(
+                'Required section "' . $sectionName . '" could not be included — no matching variant for the current context'
+            );
+        }
+
+        foreach ($unresolvedOptionalSections as $sectionName) {
+            $this->result->addMessage(
+                'Optional section "' . $sectionName . '" could not be included — no matching variant for the current context'
+            );
+        }
+
+        if (!empty($unresolvedRequiredSections) || !empty($unresolvedOptionalSections)) {
             $this->result->setFlag('hasRequiredSectionWarnings', true);
         }
 

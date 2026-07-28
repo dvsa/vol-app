@@ -143,6 +143,22 @@ class LetterSectionVariant extends AbstractLetterSectionVariant
     }
 
     /**
+     * How many conditions this variant pins down.
+     *
+     * Used to pick the narrowest matching variant when several match the same context.
+     *
+     * @return int 0 for the default variant, up to 5 for a fully conditioned one
+     */
+    public function getSpecificity(): int
+    {
+        return (int) ($this->goodsOrPsv !== null)
+            + (int) ($this->isVariation !== null)
+            + (int) ($this->isNi !== null)
+            + (int) ($this->organisationType !== null)
+            + (int) ($this->letterChoice !== null);
+    }
+
+    /**
      * Set a specific version as current
      *
      * @param LetterSectionVersion $version

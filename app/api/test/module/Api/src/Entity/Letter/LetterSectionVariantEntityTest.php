@@ -299,4 +299,34 @@ final class LetterSectionVariantEntityTest extends EntityTester
 
         $this->assertFalse($variant->isDefault());
     }
+
+    public function testGetSpecificityIsZeroForTheDefaultVariant(): void
+    {
+        $this->assertSame(0, $this->createVariant()->getSpecificity());
+    }
+
+    public function testGetSpecificityCountsEachConditionThatIsPinnedDown(): void
+    {
+        $goodsOrPsv = m::mock(RefData::class)->makePartial();
+        $goodsOrPsv->setId('lcat_gv');
+
+        $choice = m::mock(LetterChoice::class)->makePartial();
+        $choice->setId(2);
+
+        $this->assertSame(1, $this->createVariant(goodsOrPsv: $goodsOrPsv)->getSpecificity());
+        $this->assertSame(
+            2,
+            $this->createVariant(goodsOrPsv: $goodsOrPsv, isVariation: false)->getSpecificity()
+        );
+        $this->assertSame(
+            3,
+            $this->createVariant(goodsOrPsv: $goodsOrPsv, isVariation: false, letterChoice: $choice)->getSpecificity()
+        );
+    }
+
+    public function testGetSpecificityCountsFalseConditionsAsPinnedDown(): void
+    {
+        // isVariation/isNi are tri-state: null means "any", false is a real condition to match.
+        $this->assertSame(2, $this->createVariant(isVariation: false, isNi: false)->getSpecificity());
+    }
 }
