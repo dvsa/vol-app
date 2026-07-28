@@ -67,9 +67,11 @@ class Selector extends AbstractType
             $idx = $column['idIndex'];
         }
 
-        $attributes[] = 'id="' . $fieldset . '[id][' . $data[$idx] . ']"';
+        // $data[$idx] is a row value going into two quoted attributes. It is an identifier, never
+        // markup, so escaping it cannot change what renders.
+        $attributes[] = 'id="' . $fieldset . '[id][' . Escape::html($data[$idx]) . ']"';
 
-        return sprintf($this->format, $name, $data[$idx], implode(' ', $attributes));
+        return sprintf($this->format, $name, Escape::html($data[$idx]), implode(' ', $attributes));
     }
 
     public function transformDataAttributes(array $column, array $data): array
@@ -79,10 +81,12 @@ class Selector extends AbstractType
         if (isset($column['data-attributes'])) {
             foreach ($column['data-attributes'] as $attrName) {
                 if (isset($data[$attrName])) {
+                    // Row data into a quoted data-* attribute; the attribute name comes from column
+                    // config, the value does not.
                     if (is_array($data[$attrName]) && isset($data[$attrName]['id'])) {
-                        $attributes[] = 'data-' . $attrName . '="' . $data[$attrName]['id'] . '"';
+                        $attributes[] = 'data-' . $attrName . '="' . Escape::html($data[$attrName]['id']) . '"';
                     } else {
-                        $attributes[] = 'data-' . $attrName . '="' . $data[$attrName] . '"';
+                        $attributes[] = 'data-' . $attrName . '="' . Escape::html($data[$attrName]) . '"';
                     }
                 }
             }

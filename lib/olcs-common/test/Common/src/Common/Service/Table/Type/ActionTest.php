@@ -35,7 +35,9 @@ final class ActionTest extends MockeryTestCase
             ->andReturn($isInternalReadOnly);
         $this->table->expects('getFieldset')
             ->andReturn($isFieldset ? 'unit_Fieldset' : null);
-        $this->table->shouldReceive('replaceContent')
+        // value_format is a template with row data substituted in, so it goes through the
+        // escaping variant.
+        $this->table->shouldReceive('replaceContentEscapingValues')
             ->andReturn('unit_ValueFormat');
 
         $data['id'] = self::ID;

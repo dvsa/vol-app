@@ -4,20 +4,12 @@
 # accepted risks. It should only ever shrink. A table not listed here that starts leaking
 # fails TableEscapingInvariantTest.
 #
-# 60 leaking, 66 rendered clean, 22 could not be rendered by the probe.
+# 45 leaking, 81 rendered clean, 22 could not be rendered by the probe.
 #
-admin-cases-open-report.table.php
-admin-data-retention-records.table.php
-admin-data-retention-rules.table.php
-admin-financial-standing.table.php
 admin-irfo-psv-auth-continuation.table.php
 admin-irfo-stock-control.table.php
-admin-irhp-permit-print.table.php
 admin-pi-report.table.php
 admin-printers.table.php
-admin-public-holiday.table.php
-admin-system-info-message.table.php
-admin-system-parameters.table.php
 admin-teams.table.php
 cases.table.php
 complaint.table.php
@@ -26,19 +18,14 @@ condition.table.php
 conviction-fpn-offence-history.table.php
 conviction.table.php
 data-retention-export.table.php
-documents.table.php
 environmental-complaints-readonly.table.php
 environmental-complaints.table.php
 erru-applied.table.php
 erru-imposed.table.php
 erru-requested.table.php
-erru-si.table.php
-interim.operatingcentres.table.php
-interim.vehicles.table.php
 irhp-permits-ecmt-candidate-partial-select.table.php
 legacyOffences.table.php
 licence-surrender-busreg.table.php
-licence.grace-periods.table.php
 note.table.php
 open-cases.table.php
 operating-centres.table.php
@@ -62,7 +49,5 @@ task-allocation-rules.table.php
 tm-details.table.php
 tm-other-employment.table.php
 tm.licences.table.php
-tm.otherlicences-licences.table.php
 tm.qualifications.table.php
 undertakings.table.php
-unlicensed-vehicles.table.php

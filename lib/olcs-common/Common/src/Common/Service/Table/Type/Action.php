@@ -2,6 +2,8 @@
 
 namespace Common\Service\Table\Type;
 
+use Common\Util\Escape;
+
 class Action extends AbstractType
 {
     private string $format = '<button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit" class="action-button-link %s" name="%s" %s>%s</button>';
@@ -11,14 +13,23 @@ class Action extends AbstractType
     {
         $class = $column['class'] ?? '';
 
+        // Each branch has a different provenance, so each is treated differently rather than the
+        // whole lot being escaped or left raw.
         if ($formattedContent !== null) {
+            // A formatter already rendered this; it may legitimately be markup, and escaping it
+            // here would double-escape. Escaping is that formatter's responsibility.
             $value = $formattedContent;
         } elseif (isset($column['text'])) {
+            // Developer-authored column config, not row data.
             $value = $column['text'];
         } elseif (isset($column['value_format'])) {
-            $value = $this->getTable()->replaceContent($column['value_format'], $data);
+            // A template with row data substituted in — escape the values, keep the template.
+            $value = $this->getTable()->replaceContentEscapingValues($column['value_format'], $data);
         } else {
-            $value = (isset($column['name']) && isset($data[$column['name']]) ? $data[$column['name']] : '');
+            // A bare row value going straight into the button label.
+            $value = isset($column['name']) && isset($data[$column['name']])
+                ? Escape::html($data[$column['name']])
+                : '';
         }
 
         $name = 'action';
@@ -28,7 +39,8 @@ class Action extends AbstractType
             $name = $fieldset . '[action]';
         }
 
-        $name .= '[' . $column['action'] . '][' . $data['id'] . ']';
+        // $data['id'] is a row value landing in the quoted name attribute.
+        $name .= '[' . $column['action'] . '][' . Escape::html($data['id']) . ']';
 
         $attributes = $column['action-attributes'] ?? [];
 

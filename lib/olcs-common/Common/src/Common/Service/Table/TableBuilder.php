@@ -1554,7 +1554,7 @@ class TableBuilder implements \Stringable
         if (isset($column['format'])) {
             // The format string is developer-authored markup and $row is data, so the values are
             // escaped on the way in and the template itself is left alone.
-            $content = $this->getContentHelper()->replaceContent($column['format'], $row, true);
+            $content = $this->replaceContentEscapingValues($column['format'], $row);
         }
 
         if (!isset($content) || (empty($content) && !in_array($content, [0, 0.0, '0']))) {
@@ -1736,6 +1736,23 @@ class TableBuilder implements \Stringable
     public function replaceContent($content, $vars = [])
     {
         return $this->getContentHelper()->replaceContent($content, $vars);
+    }
+
+    /**
+     * Substitute row data into a developer-authored template, escaping the values.
+     *
+     * Use this wherever $content is markup written by us and $vars are row data. Named rather than
+     * a boolean argument on replaceContent() because the distinction it encodes — who authored the
+     * markup versus who authored the values — is the whole basis of the escaping contract, and
+     * reads better at the call site than a bare `true`.
+     *
+     * @param string $content
+     * @param array $vars
+     * @return string
+     */
+    public function replaceContentEscapingValues($content, $vars = [])
+    {
+        return $this->getContentHelper()->replaceContent($content, $vars, true);
     }
 
     /**

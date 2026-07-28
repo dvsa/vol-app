@@ -4,32 +4,12 @@
 # accepted risks. It should only ever shrink. A table not listed here that starts leaking
 # fails TableEscapingInvariantTest.
 #
-# 27 leaking, 6 rendered clean, 10 could not be rendered by the probe.
+# 7 leaking, 26 rendered clean, 10 could not be rendered by the probe.
 #
-lva-convictions-penalties.table.php
 lva-external-vehicles.table.php
 lva-internal-vehicles.table.php
-lva-licence-history-prevBeenAtPi.table.php
-lva-licence-history-prevBeenDisqualifiedTc.table.php
-lva-licence-history-prevBeenRefused.table.php
-lva-licence-history-prevBeenRevoked.table.php
-lva-licence-history-prevHadLicence.table.php
-lva-licence-history-prevHasLicence.table.php
-lva-licence-history-prevPurchasedAssets.table.php
 lva-operating-centres.table.php
-lva-phone-contacts.table.php
-lva-psv-discs.table.php
-lva-psv-vehicles.table.php
-lva-safety.table.php
-lva-subsidiaries.table.php
 lva-taxi-phv.table.php
-lva-trailers.table.php
-lva-transport-manangers.table.php
 lva-variation-conditions-undertakings.table.php
 lva-variation-operating-centres.table.php
 operator.table.php
-tm.convictionsandpenalties.table.php
-tm.employments.table.php
-tm.int_employments.table.php
-tm.otherlicences-applications.table.php
-tm.previouslicences.table.php
