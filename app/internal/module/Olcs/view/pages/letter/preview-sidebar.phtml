@@ -16,7 +16,8 @@
     <?php if (!empty($sectionsList)): ?>
     <div class="govuk-checkboxes govuk-checkboxes--small small-module__details">
         <?php foreach ($sectionsList as $section): ?>
-        <div class="govuk-checkboxes__item">
+        <div class="govuk-checkboxes__item"
+             <?= !empty($section['inputPending']) ? 'data-input-pending="1" data-section-name="' . $this->escapeHtmlAttr($section['name']) . '"' : '' ?>>
             <input class="govuk-checkboxes__input" type="checkbox"
                    id="section-<?= $this->escapeHtmlAttr($section['id']) ?>"
                    name="sections[]"
@@ -41,7 +42,8 @@
     <h4 class="title">Edit Instance Sections:</h4>
     <div class="govuk-checkboxes govuk-checkboxes--small small-module__details">
         <?php foreach ($instanceSectionsList as $instanceSection): ?>
-        <div class="govuk-checkboxes__item">
+        <div class="govuk-checkboxes__item"
+             <?= !empty($instanceSection['inputPending']) ? 'data-input-pending="1" data-section-name="' . $this->escapeHtmlAttr($instanceSection['name']) . '"' : '' ?>>
             <input class="govuk-checkboxes__input" type="checkbox"
                    id="letter-section-<?= $this->escapeHtmlAttr($instanceSection['id']) ?>"
                    name="letterSections[]"

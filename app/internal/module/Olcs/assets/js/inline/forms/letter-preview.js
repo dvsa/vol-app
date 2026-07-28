@@ -77,27 +77,45 @@ OLCS.ready(function () {
     window.location.href = url;
   });
 
-  // Handle "Save letter and exit" button click
+  // Handle "Save letter and exit" button click.
+  //
+  // Nothing is written from this page: the letter_instance row is persisted by
+  // generateAction, and section, issue and appendix edits are each saved via their own
+  // AJAX call on /letter/edit. So this button confirms rather than saves.
+  //
+  // It must not confirm unconditionally, though. Sections flagged "Input required" still
+  // hold placeholder text at this point, and the only enforcement of that lives in the
+  // PrepareToSend command handler -- a path this button does not go through. Reporting
+  // "saved" over an unfilled placeholder is how a letter reaches an operator still
+  // reading "*** Free Text ***".
   $("#save-letter-exit").on("click", function (e) {
     e.preventDefault();
 
     var $btn = $(this);
-    var letterInstanceId = $btn.data("letter-instance-id");
+    var $error = $("#input-required-error");
+    var $errorList = $("#input-required-error-list");
+    var pending = $("[data-input-pending='1']");
 
-    // Disable button and show loading state
-    $btn.prop("disabled", true).text("Saving...");
+    if (pending.length) {
+      $errorList.empty();
+      pending.each(function () {
+        var name =
+          $(this).data("section-name") || $(this).find("label").text().trim();
+        $errorList.append($("<li>").text(name));
+      });
 
-    // For now, simulate save (actual API call can be added in future ticket)
-    // The letter instance was already created/saved when generated
-    setTimeout(function () {
-      // Show success banner
-      $("#success-banner").show();
-
-      // Update button state
-      $btn.text("Saved").addClass("govuk-button--secondary");
-
-      // Scroll to top to show banner
+      $("#success-banner").hide();
+      $error.show();
       window.scrollTo({ top: 0, behavior: "smooth" });
-    }, 500);
+      return;
+    }
+
+    $error.hide();
+    $("#success-banner").show();
+    $btn
+      .prop("disabled", true)
+      .text("Saved")
+      .addClass("govuk-button--secondary");
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 });
