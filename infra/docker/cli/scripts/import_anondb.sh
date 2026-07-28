@@ -9,7 +9,7 @@ set -euo pipefail
 : "${M_DB_PASSWORD:?M_DB_PASSWORD not set}"
 
 S3_BUCKET="devapp-olcs-pri-olcs-deploy-s3"
-S3_PREFIX="anondata/olcs-db-anon-prod"
+S3_PREFIX="anondata"
 DUMP_DIR="/mnt/data/anondump"
 DUMP_FILE="olcs-db-anon-latest-import.sql.gz"
 RDS_HOST="olcsanondb-rds.${DOMAIN}"
@@ -46,15 +46,20 @@ log_msg "Fetching latest anonymised DB dump from S3"
 
 mkdir -p "${DUMP_DIR}"
 
-LATEST_KEY=$(
-  aws s3 ls "s3://${S3_BUCKET}/${S3_PREFIX}/" --recursive \
-    | sort \
-    | tail -n 1 \
-    | awk '{print $4}'
-)
+S3_LIST_OUTPUT="$(aws s3 ls "s3://${S3_BUCKET}/${S3_PREFIX}/" --recursive 2>&1)" || {
+  log_err "Failed to list dumps in s3://${S3_BUCKET}/${S3_PREFIX}/"
+  log_err "aws s3 ls output: ${S3_LIST_OUTPUT}"
+  exit 1
+}
+
+LATEST_KEY="$(printf '%s\n' "${S3_LIST_OUTPUT}" \
+  | awk '/olcs-db-anon-prod-[0-9]{4}-[0-9]{2}-[0-9]{2}\.sql\.gz$/ {print $1" "$2" "$4}' \
+  | sort \
+  | tail -n 1 \
+  | awk '{print $3}')"
 
 if [[ -z "${LATEST_KEY}" ]]; then
-  log_err "No dump file found in S3"
+  log_err "No anonymised prod dump found in s3://${S3_BUCKET}/${S3_PREFIX}/"
   exit 1
 fi
 
