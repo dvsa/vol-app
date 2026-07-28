@@ -1,0 +1,66 @@
+// Letters
+//
+// Long issue labels dropped onto the line below their checkbox in the Create
+// Letter modal, leaving a stranded tick box with its text underneath.
+//
+// govuk-frontend lays each checkbox row out as `display: flex; flex-wrap: wrap`
+// and keeps the label on the same line by capping it at
+// `max-width: calc(100% - 50px)` (the --small variant). That calc assumes the
+// label is border-box, so its own padding counts inside the cap. This
+// application has no global `box-sizing: border-box` reset, so the label is
+// content-box and its 1px + 15px of horizontal padding is added on top:
+//
+//   checkbox advance   44px - 10px margin-left + 9px  =  43px
+//   label              (570 - 50) + 16px padding      = 536px
+//                                                       -----
+//                                                       579px  in a 570px row
+//
+// Nine pixels over, so flex-wrap pushes the label down. It only shows on labels
+// long enough to actually reach the cap, which is why most rows look fine and a
+// handful do not.
+//
+// Scoped to the letters modal rather than fixed globally: the same arithmetic
+// applies to every `govuk-checkboxes--small` list in the application, but
+// correcting it site-wide would change wrapping on screens well outside this
+// work. Worth doing separately.
+// Preview and edit letter
+//
+// The section list down the left is the working control of this page -- it is how
+// a caseworker picks what to edit -- but it inherited the standard 200px left
+// sidebar, which is sized for short link lists. Section names are full sentences
+// ("The bank statements you provided are not in the required name"), so they were
+// breaking over five or six lines each and the list stopped being scannable.
+//
+// The space comes from the letter's own gutters rather than from anywhere useful.
+// The preview is capped at A4 (210mm) and centred, so on a 1536px-wide laptop
+// roughly 200px of empty grey sat either side of it. Widening the sidebar takes
+// 100px of that back; the letter is unaffected, since it was never using it.
+body[id="pg:letter/preview:preview"] {
+  .sidebar--left {
+    width: 300px;
+  }
+}
+
+// Radios carry the identical rule and so the identical bug. Nothing trips it
+// today because the only choices are "First request" and "Final request", but
+// those labels are admin-editable, so a longer one would.
+//
+// Applies to both places letters list sections against a control: the Create
+// Letter modal, and the sidebar on Preview and edit letter. The sidebar shows it
+// worst -- the column is narrow, so almost every label is long enough to trip it.
+#letter-create-form,
+body[id="pg:letter/preview:preview"] .sidebar--left {
+  .govuk-checkboxes__label,
+  .govuk-radios__label {
+    // Count the padding inside the cap, as govuk-frontend intends.
+    box-sizing: border-box;
+
+    // Then let the label simply take the space the control leaves, instead of
+    // relying on a fixed-pixel cap that has to be kept in step with it. In a
+    // narrow column the label still wraps -- it just wraps in its own column,
+    // beside the box, instead of dropping underneath it.
+    flex: 1 1 0%;
+    min-width: 0;
+    max-width: none;
+  }
+}
