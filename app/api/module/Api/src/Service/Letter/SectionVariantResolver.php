@@ -41,7 +41,8 @@ class SectionVariantResolver
 
         foreach ($candidates as $candidate) {
             $section = $candidate->section;
-            $variant = $section->getVariantForContext($context);
+            $variantResolution = $section->explainVariantForContext($context);
+            $variant = $variantResolution->chosen;
 
             if ($variant === null) {
                 $unresolved[] = new UnresolvedSection(
@@ -69,7 +70,8 @@ class SectionVariantResolver
                 $variant,
                 $version,
                 $candidate->displayOrder,
-                $candidate->isRequired
+                $candidate->isRequired,
+                $variantResolution
             );
         }
 

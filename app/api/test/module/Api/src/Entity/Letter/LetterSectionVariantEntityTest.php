@@ -329,4 +329,78 @@ final class LetterSectionVariantEntityTest extends EntityTester
         // isVariation/isNi are tri-state: null means "any", false is a real condition to match.
         $this->assertSame(2, $this->createVariant(isVariation: false, isNi: false)->getSpecificity());
     }
+
+    public function testExplainMatchReturnsNothingWhenTheVariantMatches(): void
+    {
+        $goodsOrPsv = m::mock(RefData::class)->makePartial();
+        $goodsOrPsv->setId('lcat_gv');
+
+        $variant = $this->createVariant(goodsOrPsv: $goodsOrPsv, isVariation: false);
+
+        $this->assertSame([], $variant->explainMatch(['goodsOrPsv' => 'lcat_gv', 'isVariation' => false]));
+    }
+
+    public function testExplainMatchNamesEveryFailingDimension(): void
+    {
+        $goodsOrPsv = m::mock(RefData::class)->makePartial();
+        $goodsOrPsv->setId('lcat_psv');
+
+        $choice = m::mock(LetterChoice::class)->makePartial();
+        $choice->setId(5);
+
+        $variant = $this->createVariant(
+            goodsOrPsv: $goodsOrPsv,
+            isVariation: true,
+            isNi: true,
+            letterChoice: $choice
+        );
+
+        $failed = $variant->explainMatch([
+            'goodsOrPsv' => 'lcat_gv',
+            'isVariation' => false,
+            'isNi' => false,
+            'selectedChoiceIds' => [2],
+        ]);
+
+        $this->assertSame(['goodsOrPsv', 'isVariation', 'isNi', 'letterChoice'], $failed);
+    }
+
+    /**
+     * A letter generated from a licence has no application, so isVariation is null. Naming the
+     * dimension is the whole point -- "rejected on isVariation" tells an admin their wording is
+     * unreachable from the Documents page, which a bare false never did.
+     */
+    public function testExplainMatchNamesIsVariationWhenTheContextHasNoApplication(): void
+    {
+        $variant = $this->createVariant(isVariation: false);
+
+        $this->assertSame(['isVariation'], $variant->explainMatch(['isVariation' => null]));
+    }
+
+    /**
+     * matchesContext() defers to explainMatch(), so the two cannot disagree. Asserting it keeps
+     * anyone from reintroducing a second copy of the rules.
+     */
+    public function testMatchesContextAgreesWithExplainMatch(): void
+    {
+        $goodsOrPsv = m::mock(RefData::class)->makePartial();
+        $goodsOrPsv->setId('lcat_gv');
+
+        $variant = $this->createVariant(goodsOrPsv: $goodsOrPsv, isVariation: false);
+
+        foreach (
+            [
+                ['goodsOrPsv' => 'lcat_gv', 'isVariation' => false],
+                ['goodsOrPsv' => 'lcat_psv', 'isVariation' => false],
+                ['goodsOrPsv' => 'lcat_gv', 'isVariation' => null],
+                [],
+            ] as $context
+        ) {
+            $this->assertSame(
+                $variant->explainMatch($context) === [],
+                $variant->matchesContext($context),
+                'matchesContext must stay a restatement of explainMatch'
+            );
+        }
+    }
 }

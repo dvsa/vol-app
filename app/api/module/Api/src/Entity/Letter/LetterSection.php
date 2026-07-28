@@ -6,6 +6,7 @@ namespace Dvsa\Olcs\Api\Entity\Letter;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Dvsa\Olcs\Api\Service\Letter\Resolution\VariantResolution;
 
 /**
  * LetterSection Entity
@@ -342,24 +343,50 @@ class LetterSection extends AbstractLetterSection
      */
     public function getVariantForContext(array $context): ?LetterSectionVariant
     {
+        return $this->explainVariantForContext($context)->chosen;
+    }
+
+    /**
+     * Resolve a variant and explain the outcome.
+     *
+     * Carries the same rules as getVariantForContext(), which defers to this so the two cannot
+     * drift. The extra bookkeeping exists for the letter type builder, which has to tell an admin
+     * why their wording is or is not being used.
+     *
+     * @param array $context Keys: goodsOrPsv, isVariation, isNi, organisationType, selectedChoiceIds
+     * @return VariantResolution
+     */
+    public function explainVariantForContext(array $context): VariantResolution
+    {
         $default = null;
         $best = null;
         $bestSpecificity = -1;
+
+        $liveDefaults = [];
+        $deleted = [];
+        $rejections = [];
+        $conditionedCount = 0;
 
         foreach ($this->variants as $variant) {
             // A variant an admin deleted must never reach an operator, even though the row is
             // retained so historic letter instances keep resolving their versions.
             if ($variant->isDeleted()) {
+                $deleted[] = $variant;
                 continue;
             }
 
             if ($variant->isDefault()) {
                 // First default wins; duplicates can exist because MySQL unique keys ignore NULLs.
+                $liveDefaults[] = $variant;
                 $default ??= $variant;
                 continue;
             }
 
-            if (!$variant->matchesContext($context)) {
+            $conditionedCount++;
+
+            $failed = $variant->explainMatch($context);
+            if ($failed !== []) {
+                $rejections[spl_object_id($variant)] = $failed;
                 continue;
             }
 
@@ -370,7 +397,16 @@ class LetterSection extends AbstractLetterSection
             }
         }
 
-        return $best ?? $default;
+        $chosen = $best ?? $default;
+
+        return new VariantResolution(
+            $chosen,
+            $best === null && $chosen !== null,
+            $conditionedCount,
+            $liveDefaults,
+            $deleted,
+            $rejections
+        );
     }
 
     /**

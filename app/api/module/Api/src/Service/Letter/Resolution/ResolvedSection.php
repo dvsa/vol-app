@@ -18,7 +18,8 @@ final readonly class ResolvedSection
         public LetterSectionVariant $variant,
         public LetterSectionVersion $version,
         public int $displayOrder,
-        public bool $isRequired
+        public bool $isRequired,
+        public ?VariantResolution $variantResolution = null
     ) {
     }
 }
