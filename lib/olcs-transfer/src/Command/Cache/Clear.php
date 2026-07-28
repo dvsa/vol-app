@@ -1,6 +1,6 @@
 <?php
 
-namespace Dvsa\Olcs\Cli\Domain\Command;
+namespace Dvsa\Olcs\Transfer\Command\Cache;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 
@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\AbstractCommand;
  *
  * @author OLCS Team
  */
-class CacheClear extends AbstractCommand
+class Clear extends AbstractCommand
 {
     protected ?bool $flushAll = null;
     protected ?string $namespace = null;
