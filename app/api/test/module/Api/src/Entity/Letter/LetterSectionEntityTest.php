@@ -164,7 +164,7 @@ final class LetterSectionEntityTest extends EntityTester
         $this->assertNotSame($defaultVariant, $result);
     }
 
-    public function testGetVariantForContextWithMultipleConditionedVariantsReturnsFirstMatch(): void
+    public function testGetVariantForContextWithMultipleConditionedVariantsReturnsMostSpecificMatch(): void
     {
         $section = new Entity();
 
@@ -180,7 +180,8 @@ final class LetterSectionEntityTest extends EntityTester
         $gvVariationVariant = $this->createVariant(goodsOrPsv: $gvRefData, isVariation: true);
         $section->addVariant($gvVariationVariant);
 
-        // The context matches both conditioned variants; first one wins
+        // Both conditioned variants match. The GV+variation one pins down more conditions, so it is
+        // the wording an admin wrote specifically for this case and it must beat the broader GV one.
         $result = $section->getVariantForContext([
             'goodsOrPsv' => 'lcat_gv',
             'isVariation' => true,
@@ -188,7 +189,63 @@ final class LetterSectionEntityTest extends EntityTester
             'selectedChoiceIds' => [],
         ]);
 
-        $this->assertSame($gvVariant, $result);
+        $this->assertSame($gvVariationVariant, $result);
+    }
+
+    public function testGetVariantForContextIgnoresDeletedVariants(): void
+    {
+        $section = new Entity();
+
+        $defaultVariant = $this->createVariant();
+        $section->addVariant($defaultVariant);
+
+        $gvRefData = m::mock(RefData::class)->makePartial();
+        $gvRefData->setId('lcat_gv');
+        $deletedVariant = $this->createVariant(goodsOrPsv: $gvRefData);
+        $deletedVariant->setDeletedDate(new \DateTime('2026-07-02 07:26:19'));
+        $section->addVariant($deletedVariant);
+
+        // The deleted variant matches the context, but wording an admin removed must never be sent.
+        $result = $section->getVariantForContext([
+            'goodsOrPsv' => 'lcat_gv',
+            'selectedChoiceIds' => [],
+        ]);
+
+        $this->assertSame($defaultVariant, $result);
+    }
+
+    public function testGetDefaultVariantIgnoresDeletedVariants(): void
+    {
+        $section = new Entity();
+
+        $deletedDefault = $this->createVariant();
+        $deletedDefault->setDeletedDate(new \DateTime('2026-07-02 07:26:19'));
+        $section->addVariant($deletedDefault);
+
+        $liveDefault = $this->createVariant();
+        $section->addVariant($liveDefault);
+
+        $this->assertSame($liveDefault, $section->getDefaultVariant());
+    }
+
+    public function testGetVariantForContextWithDuplicateDefaultsUsesTheFirst(): void
+    {
+        $section = new Entity();
+
+        // Duplicate defaults exist in live data: the unique key on the condition columns cannot
+        // catch them because MySQL treats NULLs as distinct.
+        $firstDefault = $this->createVariant();
+        $section->addVariant($firstDefault);
+
+        $secondDefault = $this->createVariant();
+        $section->addVariant($secondDefault);
+
+        $result = $section->getVariantForContext([
+            'goodsOrPsv' => 'lcat_psv',
+            'selectedChoiceIds' => [],
+        ]);
+
+        $this->assertSame($firstDefault, $result);
     }
 
     public function testGetVariantForContextWithChoiceBasedVariant(): void

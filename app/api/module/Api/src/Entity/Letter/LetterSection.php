@@ -315,6 +315,10 @@ class LetterSection extends AbstractLetterSection
     public function getDefaultVariant(): ?LetterSectionVariant
     {
         foreach ($this->variants as $variant) {
+            if ($variant->isDeleted()) {
+                continue;
+            }
+
             if ($variant->isDefault()) {
                 return $variant;
             }
@@ -325,9 +329,12 @@ class LetterSection extends AbstractLetterSection
     /**
      * Find the best matching variant for the given context.
      *
-     * Returns the first non-default variant whose conditions all match the context.
-     * Priority is determined by the variant's displayOrder (ASC) -- admins control
-     * which variant wins when multiple could match by setting display order.
+     * Of the non-deleted, non-default variants whose conditions all match the context, the most
+     * specific one wins -- that is, the one that pins down the most conditions. A variant for
+     * "PSV + variation" beats one for "PSV, any application type", because the former is a
+     * deliberately narrower piece of wording and the latter is the catch-all it was written to
+     * override. Ties are settled by displayOrder (ASC), since the collection is ordered that way.
+     *
      * Falls back to the default variant (all NULL conditions) if no conditioned variant matches.
      *
      * @param array $context Keys: goodsOrPsv, isVariation, isNi, organisationType, selectedChoiceIds
@@ -336,19 +343,34 @@ class LetterSection extends AbstractLetterSection
     public function getVariantForContext(array $context): ?LetterSectionVariant
     {
         $default = null;
+        $best = null;
+        $bestSpecificity = -1;
 
         foreach ($this->variants as $variant) {
-            if ($variant->isDefault()) {
-                $default = $variant;
+            // A variant an admin deleted must never reach an operator, even though the row is
+            // retained so historic letter instances keep resolving their versions.
+            if ($variant->isDeleted()) {
                 continue;
             }
 
-            if ($variant->matchesContext($context)) {
-                return $variant;
+            if ($variant->isDefault()) {
+                // First default wins; duplicates can exist because MySQL unique keys ignore NULLs.
+                $default ??= $variant;
+                continue;
+            }
+
+            if (!$variant->matchesContext($context)) {
+                continue;
+            }
+
+            $specificity = $variant->getSpecificity();
+            if ($specificity > $bestSpecificity) {
+                $best = $variant;
+                $bestSpecificity = $specificity;
             }
         }
 
-        return $default;
+        return $best ?? $default;
     }
 
     /**
