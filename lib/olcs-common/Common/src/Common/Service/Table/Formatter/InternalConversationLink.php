@@ -116,7 +116,7 @@ class InternalConversationLink implements FormatterPluginManagerInterface
             $statusCSS,
             $this->urlHelper->fromRoute($route, $params),
             $idMatrix,
-            $row["subject"],
+            Escape::html($row["subject"]),
             $tagColor,
             ucfirst(strtolower(str_replace('_', ' ', $row['userContextStatus']))),
             $dtOutput,

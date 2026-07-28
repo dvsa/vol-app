@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use DateTimeImmutable;
 use DateTimeInterface;
 
@@ -20,7 +21,9 @@ abstract class AbstractConversationMessage implements FormatterPluginManagerInte
     #[\Override]
     public function format(array $data, array $column = []): string
     {
-        $senderName = $this->getSenderName($data);
+        // The row template is developer-authored markup, so the structure is returned raw; every value
+        // interpolated into it is user-supplied and must be escaped here.
+        $senderName = Escape::html($this->getSenderName($data));
 
         // $data["createdOn"] already contains a timezone so createFromFormat will ignore any timezone passed as the
         // third parameter. to override it we need to force set the timezone to the default one
@@ -41,7 +44,8 @@ abstract class AbstractConversationMessage implements FormatterPluginManagerInte
         return strtr($this->rowTemplate, [
             '{senderName}' => $senderName,
             '{messageDate}' => $date,
-            '{messageBody}' => nl2br($data['messagingContent']['text']),
+            // Escape first, then nl2br — the reverse would escape the <br/> tags nl2br just inserted.
+            '{messageBody}' => nl2br(Escape::html($data['messagingContent']['text'])),
             '{caseworkerFooter}' => $internalCaseworkerTeam,
             '{fileList}' => $fileList,
             '{firstReadBy}' => $firstReadBy,
@@ -102,7 +106,7 @@ abstract class AbstractConversationMessage implements FormatterPluginManagerInte
 
         return sprintf(
             '<hr/><p><em>First read by %s on %s</em></p>',
-            $firstReadBy,
+            Escape::html($firstReadBy),
             $firstReadOn->format('l j F Y \a\t H:ia'),
         );
     }
@@ -115,8 +119,10 @@ abstract class AbstractConversationMessage implements FormatterPluginManagerInte
         $fileList = array_map(
             fn($doc) => sprintf(
                 '<li class="file"><a href="/file/%s" class="govuk-link">%s</a> <span>%s</span></li>',
-                $doc['id'],
-                $doc['description'],
+                // htmlAttr, not html — this one lands inside a quoted attribute, where escaping the
+                // quote characters is what prevents an attribute breakout.
+                Escape::htmlAttr($doc['id']),
+                Escape::html($doc['description']),
                 $this->readableBytes($doc['size']),
             ),
             $row['documents'],

@@ -71,6 +71,30 @@ final class InternalConversationLinkTest extends MockeryTestCase
         $this->assertEquals($expectedOutput, $this->sut->format($row));
     }
 
+    public function testSubjectIsEscaped(): void
+    {
+        $payload = '<script>alert(document.domain)</script>';
+
+        $this->mockRouteMatch->expects('getParam')->with('type')->andReturns('licence');
+
+        $this->urlHelper
+            ->allows('fromRoute')
+            ->andReturns('licence/conversation/view');
+
+        $result = $this->sut->format([
+            'id' => 1,
+            'userContextStatus' => 'OPEN',
+            'createdOn' => '2025-05-09T09:36:02+0000',
+            'subject' => $payload,
+            'task' => [
+                'licence' => ['id' => 7, 'licNo' => 'AB123'],
+            ],
+        ]);
+
+        $this->assertStringNotContainsString($payload, (string) $result);
+        $this->assertStringContainsString('&lt;script&gt;', (string) $result);
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('conversationTimezoneProvider')]
     public function testInternalFormatSetsCreatedOnToDefaultTimezone(
         $routeType,
