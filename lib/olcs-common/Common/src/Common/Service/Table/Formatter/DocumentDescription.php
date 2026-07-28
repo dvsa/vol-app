@@ -45,7 +45,9 @@ class DocumentDescription implements FormatterPluginManagerInterface
             $attr = 'target="_blank"';
         }
 
-        return '<a class="govuk-link" href="' . Escape::htmlAttr($url) . '" ' . $attr . '>'
+        // $url is assembled by the router, which percent-encodes its parameters, so no quote can
+        // reach here. Escaping it again would only render every document link as &#x2F;-noise.
+        return '<a class="govuk-link" href="' . $url . '" ' . $attr . '>'
             . $this->getAnchor($data, $this->translator) . '</a>';
     }
 

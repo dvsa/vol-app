@@ -149,10 +149,26 @@ class ContentHelper
         $attributes = [];
 
         foreach ($attrs as $name => $value) {
-            $attributes[] = $name .= '="' . $value . '"';
+            $attributes[] = $name .= '="' . self::escapeAttributeValue($value) . '"';
         }
 
         return implode(' ', $attributes);
+    }
+
+    /**
+     * Escape a value for interpolation into a double-quoted HTML attribute.
+     *
+     * Deliberately not Laminas' escapeHtmlAttr: that targets *unquoted* attribute contexts, so it
+     * also encodes spaces and slashes. Every attribute built in the table renderer is quoted, where
+     * the only way out is a quote character — so encoding the HTML special characters is sufficient
+     * and leaves space-separated class lists and URL paths readable.
+     *
+     * @param mixed $value
+     * @return string
+     */
+    public static function escapeAttributeValue($value)
+    {
+        return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     /**

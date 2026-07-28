@@ -1607,7 +1607,7 @@ class TableBuilder implements \Stringable
                 continue;
             }
 
-            $plainAttributes .= ' ' . $attribute . '="' . $value . '"';
+            $plainAttributes .= ' ' . $attribute . '="' . ContentHelper::escapeAttributeValue($value) . '"';
         }
 
         return $plainAttributes;
@@ -2042,7 +2042,7 @@ class TableBuilder implements \Stringable
         if (isset($this->variables['dataAttributes']) && is_array($this->variables['dataAttributes'])) {
             $attrs = [];
             foreach ($this->variables['dataAttributes'] as $attribute => $value) {
-                $attrs[] = $attribute . '="' . $value . '"';
+                $attrs[] = $attribute . '="' . ContentHelper::escapeAttributeValue($value) . '"';
             }
 
             $this->variables['dataAttributes'] = implode(' ', $attrs);
