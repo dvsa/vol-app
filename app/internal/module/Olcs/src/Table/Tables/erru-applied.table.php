@@ -41,7 +41,7 @@ return [
                     ],
                     'case_penalty_applied',
                     true
-                ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>',
+                ) . '" class="govuk-link js-modal-ajax">' . \Common\Util\Escape::html($data['id']) . '</a>',
             'hideWhenDisabled' => true
         ],
         [

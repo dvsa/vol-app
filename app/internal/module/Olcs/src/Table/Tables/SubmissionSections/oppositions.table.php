@@ -46,7 +46,7 @@ return [
                     ['action' => 'edit', 'opposition' => $data['id']],
                     'case_opposition',
                     true
-                ) . '">' . $data['dateReceived'] . '</a>',
+                ) . '">' . \Common\Util\Escape::html($data['dateReceived']) . '</a>',
         ],
         [
             'title' => 'Contact name',

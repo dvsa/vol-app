@@ -4,11 +4,9 @@
 # accepted risks. It should only ever shrink. A table not listed here that starts leaking
 # fails TableEscapingInvariantTest.
 #
-# 6 leaking, 24 rendered clean, 10 could not be rendered by the probe.
+# 4 leaking, 26 rendered clean, 10 could not be rendered by the probe.
 #
-bus-reg-variation-history.table.php
 busreg-registrations.table.php
 ebsr-submissions.table.php
-entity-view-related-operator-licences.table.php
 entity-view-vehicles-partner.table.php
 txc-inbox.table.php

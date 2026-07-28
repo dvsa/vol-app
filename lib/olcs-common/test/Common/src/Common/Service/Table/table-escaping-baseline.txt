@@ -4,7 +4,6 @@
 # accepted risks. It should only ever shrink. A table not listed here that starts leaking
 # fails TableEscapingInvariantTest.
 #
-# 2 leaking, 31 rendered clean, 10 could not be rendered by the probe.
+# 1 leaking, 32 rendered clean, 10 could not be rendered by the probe.
 #
 lva-variation-conditions-undertakings.table.php
-operator.table.php

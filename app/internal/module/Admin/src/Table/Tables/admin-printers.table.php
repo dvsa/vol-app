@@ -37,7 +37,7 @@ return [
                 $routeParams = ['printer' => $row['id'], 'action' => 'edit'];
                 $route = 'admin-dashboard/admin-printing/admin-printer-management';
                 $url = $this->generateUrl($routeParams, $route);
-                return '<a href="' . $url . '" class="govuk-link js-modal-ajax">' . $row['printerName'] . '</a>';
+                return '<a href="' . $url . '" class="govuk-link js-modal-ajax">' . \Common\Util\Escape::html($row['printerName']) . '</a>';
             },
         ],
         [
