@@ -30,6 +30,7 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection as LetterTypeSectionEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer;
 use Dvsa\Olcs\Api\Service\Letter\Resolution\VariantResolution;
 use Dvsa\Olcs\Api\Service\Letter\SectionVariantResolver;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate as Cmd;
@@ -59,6 +60,7 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
         // against the real one — a mock here would let Generate drift from the shared path.
         $this->mockedSmServices = [
             SectionVariantResolver::class => new SectionVariantResolver(),
+            LetterInstanceComposer::class => new LetterInstanceComposer(),
         ];
 
         $this->sut = new CommandHandler();

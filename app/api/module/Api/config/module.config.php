@@ -237,6 +237,10 @@ return [
             \Dvsa\Olcs\Api\Service\Letter\SectionVariantResolver::class =>
                 \Dvsa\Olcs\Api\Service\Letter\SectionVariantResolverFactory::class,
 
+            // Letter instance assembly shared by letter generation and builder preview
+            \Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer::class =>
+                \Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposerFactory::class,
+
             \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClient::class =>
                 \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClientFactory::class,
             \Dvsa\Olcs\Api\Rbac\IdentityProviderInterface::class => \Dvsa\Olcs\Api\Rbac\IdentityProviderFactory::class,
