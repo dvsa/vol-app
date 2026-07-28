@@ -1,0 +1,327 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CommonTest\Common\Service\Table\Harness;
+
+use Common\Service\Helper\UrlHelperService;
+use Common\Service\Table\Formatter\FormatterPluginManager;
+use Common\Service\Table\TableBuilder;
+use Laminas\ServiceManager\ServiceManager;
+use Common\Rbac\Service\Permission;
+use LmcRbacMvc\Service\AuthorizationService;
+use Mockery as m;
+
+/**
+ * Renders every table definition against a hostile row and reports which columns emit it raw.
+ *
+ * This is an invariant test, not a golden master: it asserts the property "no table emits an
+ * unescaped payload" rather than pinning exact output. That means it needs no updating when the UI
+ * changes, has nothing to rubber-stamp, and — because it globs the table directory — covers new
+ * tables automatically.
+ *
+ * Coverage is partial by design. The probe cannot satisfy definitions that parse dates, call
+ * array_map on a row value, or otherwise require real data shapes; those are reported as skipped
+ * with the reason rather than silently passing. A skip is "not covered here", never "safe".
+ */
+final class TableEscapingHarness
+{
+    public const MARKER = '<script>xss-probe</script>';
+
+    /**
+     * Inspect every *.table.php under the given directories.
+     *
+     * @param string[] $directories
+     * @return array{leaking: array<string, string[]>, skipped: array<string, string>, rendered: string[]}
+     */
+    public function inspect(array $directories): array
+    {
+        $leaking = [];
+        $skipped = [];
+        $rendered = [];
+
+        $tableBuilder = $this->tableBuilder($directories);
+
+        foreach ($this->tableFiles($directories) as $name => $path) {
+            try {
+                $html = $this->render($tableBuilder, $name, $path);
+            } catch (\Throwable $e) {
+                $skipped[$name] = $e::class . ': ' . $e->getMessage();
+                continue;
+            }
+
+            $rendered[] = $name;
+
+            $leaks = $this->findLeaks($html);
+            if ($leaks !== []) {
+                $leaking[$name] = $leaks;
+            }
+        }
+
+        ksort($leaking);
+        ksort($skipped);
+        sort($rendered);
+
+        return ['leaking' => $leaking, 'skipped' => $skipped, 'rendered' => $rendered];
+    }
+
+    /**
+     * @param string[] $directories
+     * @return array<string, string> name => path
+     */
+    public function tableFiles(array $directories): array
+    {
+        $files = [];
+
+        foreach ($directories as $directory) {
+            if (!is_dir($directory)) {
+                continue;
+            }
+
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator($directory, \FilesystemIterator::SKIP_DOTS),
+            );
+
+            foreach ($iterator as $file) {
+                if (!$file->isFile() || !str_ends_with($file->getFilename(), '.table.php')) {
+                    continue;
+                }
+
+                $files[$file->getFilename()] = $file->getPathname();
+            }
+        }
+
+        ksort($files);
+
+        return $files;
+    }
+
+    private function render(TableBuilder $tableBuilder, string $fileName, string $path): string
+    {
+        // Passed by name, not as a loaded array. Definitions are include()d by TableBuilder and
+        // several call $this->callFormatter(...) in inline closures, where $this is meant to be the
+        // TableBuilder. Loading the file here instead would bind $this to the harness.
+        $tableName = substr($fileName, 0, -strlen('.table.php'));
+
+        // Some table partials echo directly rather than returning, so capture anything written to
+        // stdout — both to keep it out of the test output and because a leak could appear there.
+        //
+        // The buffer level is restored explicitly: TableBuilder renders partials inside its own
+        // ob_start()/ob_end_clean() pair, and a partial that throws leaves that buffer open.
+        $bufferLevel = ob_get_level();
+
+        // The probe is deliberately nonsense data, so undefined-key notices and null-argument
+        // deprecations are expected noise from a formatter meeting a shape it was not written for.
+        // They are not what is under test, and left unhandled they drown the signal.
+        set_error_handler(static fn(): bool => true, E_WARNING | E_NOTICE | E_DEPRECATED);
+
+        ob_start();
+        try {
+            $returned = (string)$tableBuilder->buildTable($tableName, [$this->row($path)], [], true);
+        } finally {
+            $echoed = '';
+            while (ob_get_level() > $bufferLevel) {
+                $echoed = (string)ob_get_clean() . $echoed;
+            }
+
+            restore_error_handler();
+        }
+
+        return $returned . $echoed;
+    }
+
+    /**
+     * The row handed to the table.
+     *
+     * A bare RecursiveProbe would be neater, but several column types declare `array $data` and
+     * PHP's array type rejects ArrayAccess. So the top level is a real array and every value is a
+     * probe — nested access of any depth still resolves.
+     *
+     * The keys are harvested from the definition's source rather than by loading it, for the same
+     * $this-binding reason as above: every ['literal'] subscript and every 'name' => 'x' column
+     * declaration, which between them cover both plain columns and inline closures.
+     *
+     * @return array<string, RecursiveProbe>
+     */
+    private function row(string $path): array
+    {
+        $probe = new RecursiveProbe(self::MARKER);
+        $source = (string)file_get_contents($path);
+
+        $keys = ['id', 'version', 'action'];
+
+        if (preg_match_all('/\[\s*[\'"]([A-Za-z0-9_]+)[\'"]\s*\]/', $source, $matches)) {
+            $keys = array_merge($keys, $matches[1]);
+        }
+
+        if (preg_match_all('/[\'"]name[\'"]\s*=>\s*[\'"]([A-Za-z0-9_>-]+)[\'"]/', $source, $matches)) {
+            foreach ($matches[1] as $name) {
+                // "licence->organisation->name" style references index the first segment.
+                $keys[] = explode('->', $name)[0];
+            }
+        }
+
+        return array_fill_keys(array_unique($keys), $probe);
+    }
+
+    /**
+     * Every place the marker reached the output without being escaped.
+     *
+     * @return string[]
+     */
+    private function findLeaks(string $html): array
+    {
+        $leaks = [];
+
+        if (str_contains($html, self::MARKER)) {
+            $leaks[] = 'raw marker in cell content';
+        }
+
+        // A marker inside an attribute that still carries its quote characters means the value
+        // could have closed the attribute.
+        if (preg_match('/="[^"]*<script>xss-probe/', $html) === 1) {
+            $leaks[] = 'raw marker inside an attribute';
+        }
+
+        return $leaks;
+    }
+
+    /**
+     * @param string[] $directories
+     */
+    private function tableBuilder(array $directories): TableBuilder
+    {
+        $container = $this->container();
+
+        $tableBuilder = new TableBuilder(
+            $container,
+            $container->get(Permission::class),
+            $container->get('translator'),
+            $container->get('Helper\Url'),
+            [
+                'tables' => [
+                    'config' => $this->configLocations($directories),
+                    'partials' => [
+                        'html' => __DIR__ . '/../../../../../../../Common/view/table/',
+                        'csv' => __DIR__ . '/../../../../../../../Common/view/table/csv',
+                    ],
+                ],
+                'csrf' => ['timeout' => 9999],
+            ],
+            $container->get(FormatterPluginManager::class),
+        );
+
+        // Some formatters resolve 'TableBuilder' to render nested tables; give them the real one.
+        $container->setService('TableBuilder', $tableBuilder);
+
+        return $tableBuilder;
+    }
+
+    /**
+     * Every directory holding a definition, so TableBuilder can resolve a table by name. Includes
+     * nested directories, since definitions live in subfolders such as Tables/Bus.
+     *
+     * @param string[] $directories
+     * @return string[]
+     */
+    private function configLocations(array $directories): array
+    {
+        $locations = [];
+
+        foreach ($this->tableFiles($directories) as $path) {
+            $locations[dirname($path) . '/'] = true;
+        }
+
+        return array_keys($locations);
+    }
+
+    /**
+     * A container carrying the services the real formatter factories ask for, so that real
+     * formatters execute. Using mocked formatters would test the harness, not the formatters.
+     */
+    private function container(): ServiceManager
+    {
+        $urlHelper = m::mock(UrlHelperService::class);
+        $urlHelper->shouldReceive('fromRoute')->andReturn('/stub-url');
+        $urlHelper->shouldIgnoreMissing('/stub-url');
+
+        // TranslatorDelegator implements the I18n TranslatorInterface, so a single mock satisfies
+        // both TableBuilder (which wants the interface) and the ~19 formatters whose constructors
+        // name the delegator concretely. The factories fetch it as 'translator'.
+        $translator = m::mock(\Dvsa\Olcs\Utils\Translation\TranslatorDelegator::class);
+        $translator->shouldReceive('translate')->andReturnUsing(
+            static fn($message) => is_string($message) ? $message : ''
+        );
+        $translator->shouldIgnoreMissing('');
+
+        $permission = m::mock(Permission::class);
+        $permission->shouldReceive('isGranted')->andReturn(true);
+        $permission->shouldReceive('isInternalReadOnly')->andReturn(false);
+        $permission->shouldIgnoreMissing(false);
+
+        $viewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
+        $viewHelperManager->shouldReceive('get')->andReturn(static fn(...$args) => '');
+
+        $router = m::mock(\Laminas\Router\RouteStackInterface::class);
+        $router->shouldIgnoreMissing('/stub-url');
+
+        $request = new \Laminas\Http\Request();
+
+        $authorization = m::mock(AuthorizationService::class);
+        $authorization->shouldReceive('isGranted')->andReturn(true);
+        $authorization->shouldIgnoreMissing(true);
+
+        // Formatter constructors are typed, so these have to be mocks of the real classes — a
+        // generic mock is rejected by the parameter type and the formatter never runs.
+        $dataHelper = m::mock(\Common\Service\Helper\DataHelperService::class);
+        $dataHelper->shouldReceive('fetchNestedData')->andReturnUsing(
+            static fn($data) => $data
+        );
+        $dataHelper->shouldIgnoreMissing('');
+
+        $stackHelper = m::mock(\Common\Service\Helper\StackHelperService::class);
+        $stackHelper->shouldIgnoreMissing('');
+
+        $dateHelper = m::mock(\Common\Service\Helper\DateHelperService::class);
+        $dateHelper->shouldIgnoreMissing('');
+
+        $routeStack = m::mock(\Laminas\Router\Http\TreeRouteStack::class);
+        $routeStack->shouldIgnoreMissing('/stub-url');
+
+        $services = [
+            'Helper\Url' => $urlHelper,
+            UrlHelperService::class => $urlHelper,
+            'translator' => $translator,
+            'Translator' => $translator,
+            \Laminas\I18n\Translator\TranslatorInterface::class => $translator,
+            \Dvsa\Olcs\Utils\Translation\TranslatorDelegator::class => $translator,
+            Permission::class => $permission,
+            'ViewHelperManager' => $viewHelperManager,
+            \Laminas\View\HelperPluginManager::class => $viewHelperManager,
+            'Router' => $routeStack,
+            'router' => $routeStack,
+            \Laminas\Router\Http\TreeRouteStack::class => $routeStack,
+            \Laminas\Router\RouteStackInterface::class => $router,
+            'Request' => $request,
+            'request' => $request,
+            \Laminas\Http\Request::class => $request,
+            AuthorizationService::class => $authorization,
+            'Helper\Stack' => $stackHelper,
+            \Common\Service\Helper\StackHelperService::class => $stackHelper,
+            'Helper\Data' => $dataHelper,
+            \Common\Service\Helper\DataHelperService::class => $dataHelper,
+            'Helper\Date' => $dateHelper,
+            \Common\Service\Helper\DateHelperService::class => $dateHelper,
+        ];
+
+        $container = new ServiceManager(['services' => $services]);
+
+        $formatterConfig = require __DIR__ . '/../../../../../../../Common/config/formatter-plugins.config.php';
+        $container->setService(
+            FormatterPluginManager::class,
+            new FormatterPluginManager($container, $formatterConfig),
+        );
+
+        return $container;
+    }
+}
