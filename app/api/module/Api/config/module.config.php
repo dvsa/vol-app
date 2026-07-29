@@ -241,6 +241,10 @@ return [
             \Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer::class =>
                 \Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposerFactory::class,
 
+            // Explains a proposed composition for the letter type builder
+            \Dvsa\Olcs\Api\Service\Letter\CompositionDiagnostics::class =>
+                \Dvsa\Olcs\Api\Service\Letter\CompositionDiagnosticsFactory::class,
+
             \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClient::class =>
                 \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClientFactory::class,
             \Dvsa\Olcs\Api\Rbac\IdentityProviderInterface::class => \Dvsa\Olcs\Api\Rbac\IdentityProviderFactory::class,

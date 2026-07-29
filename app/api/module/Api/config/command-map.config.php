@@ -1356,6 +1356,7 @@ return [
     TransferCommand\Letter\LetterType\Create::class => CommandHandler\Letter\LetterType\Create::class,
     TransferCommand\Letter\LetterType\Update::class => CommandHandler\Letter\LetterType\Update::class,
     TransferCommand\Letter\LetterType\Delete::class => CommandHandler\Letter\LetterType\Delete::class,
+    TransferCommand\Letter\LetterType\PreviewComposition::class => CommandHandler\Letter\LetterType\PreviewComposition::class,
     TransferCommand\Letter\LetterSection\Create::class => CommandHandler\Letter\LetterSection\Create::class,
     TransferCommand\Letter\LetterSection\Update::class => CommandHandler\Letter\LetterSection\Update::class,
     TransferCommand\Letter\LetterSection\Delete::class => CommandHandler\Letter\LetterSection\Delete::class,
