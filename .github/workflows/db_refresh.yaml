@@ -456,7 +456,7 @@ jobs:
               --arg paramGroup "${RDS_PARAM_GROUP}" \
               --arg secGroup "${RDS_SEC_GROUP}" \
               --argjson tags "${RDS_READER_TAGS}" \
-              '{EventType:$eventType,RDSDBInstanceClassReader:$klass,RDSName:$rdsName,RDSReaderName:$readerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParamGroup:$paramGroup,RDSSecGroup:$secGroup,RDSTags:$tags}'
+              '{EventType:$eventType,RDSDBInstanceClassReader:$klass,RDSName:$rdsName,RDSReaderName:$readerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParameterGroup:$paramGroup,RDSSG:$secGroup,RDSTags:$tags}'
             )"
             if ! invoke_lambda "${payload}" "CreateReaderSuccess" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
               slack_send "${SLACK_WARN}" "Warning. Failed to create Reader ${RDS_READER_NAME} for ${RDS_CLUSTER_NAME}. Build will continue - manually create Reader"
