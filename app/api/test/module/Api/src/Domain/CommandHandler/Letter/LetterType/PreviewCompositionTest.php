@@ -16,6 +16,7 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterSection as LetterSectionEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant as LetterSectionVariantEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion as LetterSectionVersionEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterType as LetterTypeEntity;
+use Dvsa\Olcs\Api\Entity\Letter\MasterTemplate as MasterTemplateEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection as LetterTypeSectionEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
@@ -125,6 +126,7 @@ final class PreviewCompositionTest extends AbstractCommandHandlerTestCase
 
     private function expectRender(string $html = '<p>rendered</p>'): void
     {
+        $this->mockMasterTemplateResolver->shouldReceive('resolve')->andReturn(null);
         $this->mockPreviewService->shouldReceive('renderPreview')->once()->andReturn($html);
     }
 
@@ -154,6 +156,7 @@ final class PreviewCompositionTest extends AbstractCommandHandlerTestCase
         $this->repoMap['LetterSection']->shouldReceive('fetchById')->with(42)->once()->andReturn($proposed);
 
         $captured = null;
+        $this->mockMasterTemplateResolver->shouldReceive('resolve')->andReturn(null);
         $this->mockPreviewService->shouldReceive('renderPreview')->once()
             ->andReturnUsing(function ($letterInstance) use (&$captured) {
                 $captured = $letterInstance;
@@ -183,6 +186,7 @@ final class PreviewCompositionTest extends AbstractCommandHandlerTestCase
         $this->repoMap['LetterSection']->shouldReceive('fetchById')->with(2)->andReturn($second);
 
         $captured = null;
+        $this->mockMasterTemplateResolver->shouldReceive('resolve')->andReturn(null);
         $this->mockPreviewService->shouldReceive('renderPreview')->once()
             ->andReturnUsing(function ($letterInstance) use (&$captured) {
                 $captured = $letterInstance;
@@ -209,6 +213,7 @@ final class PreviewCompositionTest extends AbstractCommandHandlerTestCase
             ->andReturn($this->sectionOnlyMatchingPsv('psv-only'));
 
         $captured = null;
+        $this->mockMasterTemplateResolver->shouldReceive('resolve')->andReturn(null);
         $this->mockPreviewService->shouldReceive('renderPreview')->once()
             ->andReturnUsing(function ($letterInstance) use (&$captured) {
                 $captured = $letterInstance;
@@ -267,31 +272,21 @@ final class PreviewCompositionTest extends AbstractCommandHandlerTestCase
         $this->assertSame([2], $context['selectedChoiceIds']);
     }
 
+
     /**
-     * The chrome costs roughly 200KB and a few hundred milliseconds, almost all of it re-purifying
-     * the inline logo, and does not change while composing -- so the pane can refresh on every
-     * reorder without it.
+     * The letter is always rendered through the master template. Without it the renderer returns
+     * bare content with no A4 page, stylesheet or letterhead -- which is not a preview of a letter.
      */
-    public function testChromeIsLeftOutUnlessAskedFor(): void
+    public function testAlwaysRendersThroughTheMasterTemplate(): void
     {
-        $this->repoMap['LetterType']->shouldReceive('fetchById')->andReturn($this->letterType(7));
-        $this->mockMasterTemplateResolver->shouldReceive('resolve')->never();
-        $this->mockPreviewService->shouldReceive('renderPreview')->once()
-            ->with(m::any(), null)->andReturn('');
-
-        $this->sut->handleCommand(Cmd::create(['letterType' => 7]));
-    }
-
-    public function testChromeIsResolvedWhenRequested(): void
-    {
-        $masterTemplate = m::mock(\Dvsa\Olcs\Api\Entity\Letter\MasterTemplate::class)->makePartial();
+        $masterTemplate = m::mock(MasterTemplateEntity::class)->makePartial();
 
         $this->repoMap['LetterType']->shouldReceive('fetchById')->andReturn($this->letterType(7));
         $this->mockMasterTemplateResolver->shouldReceive('resolve')->once()->andReturn($masterTemplate);
         $this->mockPreviewService->shouldReceive('renderPreview')->once()
             ->with(m::any(), $masterTemplate)->andReturn('');
 
-        $this->sut->handleCommand(Cmd::create(['letterType' => 7, 'withChrome' => true]));
+        $this->sut->handleCommand(Cmd::create(['letterType' => 7]));
     }
 
     /**

@@ -117,15 +117,6 @@ final class PreviewComposition extends AbstractCommand
      */
     protected $selectedChoiceIds;
 
-    /**
-     * Render the full master template chrome. Off by default: the chrome costs roughly 200KB and a
-     * few hundred milliseconds per render, dominated by re-purifying the inline logo, and it does
-     * not change while an admin is composing.
-     *
-     * @var bool
-     * @Transfer\Optional
-     */
-    protected $withChrome;
 
     public function getLetterType()
     {
@@ -187,8 +178,4 @@ final class PreviewComposition extends AbstractCommand
         return $this->selectedChoiceIds;
     }
 
-    public function getWithChrome()
-    {
-        return $this->withChrome;
-    }
 }

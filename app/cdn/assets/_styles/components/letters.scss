@@ -46,6 +46,39 @@
     min-width: 0;
   }
 
+  // Collapsed, the context is one line stating what is being previewed. Expanded, it is the full
+  // set of controls. Six controls and a checkbox list came to 416px -- half a laptop viewport --
+  // for something set once and then watched, which pushed the letter itself below the fold.
+  &__context-summary {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid $grey-2;
+    margin-bottom: 15px;
+  }
+
+  &__context-label {
+    font-weight: bold;
+  }
+
+  &__context-value {
+    flex: 1 1 auto;
+    min-width: 0;
+    color: $grey-1;
+  }
+
+  &__context-toggle {
+    flex: 0 0 auto;
+    padding: 0;
+    background: none;
+    border: 0;
+    color: $link-colour;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
   &__context-row {
     display: flex;
     flex-wrap: wrap;

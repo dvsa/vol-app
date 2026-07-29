@@ -24,9 +24,16 @@ $this->placeholder('pageTitle')->set($letterType['name'] ?? 'Letter Type Builder
     <?php else: ?>
 
     <div class="letter-builder__context" id="builder-context">
-        <div class="govuk-form-group govuk-!-margin-bottom-2">
+        <div class="letter-builder__context-summary">
+            <span class="letter-builder__context-label">Preview as</span>
+            <span id="context-summary" class="letter-builder__context-value"></span>
+            <button type="button" class="letter-builder__context-toggle" id="context-toggle"
+                    aria-expanded="false" aria-controls="context-controls">Change</button>
+        </div>
+
+        <div class="govuk-form-group govuk-!-margin-bottom-2" id="context-controls" hidden>
             <fieldset class="govuk-fieldset">
-                <legend class="govuk-fieldset__legend govuk-fieldset__legend--s">Preview this letter as</legend>
+                <legend class="govuk-visually-hidden">Preview this letter as</legend>
 
                 <div class="letter-builder__context-row">
                     <div>
@@ -102,16 +109,6 @@ $this->placeholder('pageTitle')->set($letterType['name'] ?? 'Letter Type Builder
                 </div>
                 <?php endif; ?>
 
-                <div class="govuk-!-margin-top-2">
-                    <div class="govuk-checkboxes govuk-checkboxes--small">
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" type="checkbox" id="ctx-with-chrome">
-                            <label class="govuk-label govuk-checkboxes__label" for="ctx-with-chrome">
-                                Show letterhead and sign-off
-                            </label>
-                        </div>
-                    </div>
-                </div>
             </fieldset>
         </div>
     </div>

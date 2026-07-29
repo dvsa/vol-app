@@ -71,6 +71,11 @@ final class PreviewComposition extends AbstractCommandHandler
 
         $letterInstance = new LetterInstanceEntity();
         $letterInstance->setLetterType($letterType);
+
+        // Real generation stamps a reference, and the letterhead prints it. Without one the
+        // preview shows a bare "Our ref:", which reads as a fault in the letter rather than an
+        // artefact of previewing it.
+        $letterInstance->setReference(LetterInstanceEntity::generateReference());
         $this->attachContextRecords($letterInstance, $command);
 
         $context = $this->buildContext($letterInstance, $command);
@@ -88,10 +93,11 @@ final class PreviewComposition extends AbstractCommandHandler
         $this->letterInstanceComposer->composeTodos($letterInstance);
         $this->letterInstanceComposer->composeAppendices($letterInstance, $this->fetchAppendixVersions($command));
 
-        // The chrome costs roughly 200KB and a few hundred milliseconds per render -- almost all of
-        // it re-purifying the inline logo -- and does not change while an admin composes. It is
-        // opt-in so the pane can update on every reorder without that cost.
-        $masterTemplate = $command->getWithChrome() ? $this->masterTemplateResolver->resolve($letterInstance) : null;
+        // Always rendered with the master template. Without it the renderer returns bare content
+        // with no A4 page, stylesheet or letterhead, which is not a letter and so not a preview.
+        // Measured on a warm local stack the chrome costs ~119ms of a ~1s round trip, which is
+        // well inside the debounce and nowhere near the cost the design assumed.
+        $masterTemplate = $this->masterTemplateResolver->resolve($letterInstance);
 
         $html = $this->previewService->renderPreview($letterInstance, $masterTemplate);
 

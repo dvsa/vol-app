@@ -42,22 +42,24 @@ OLCS.ready(function () {
       name.textContent = item.name;
       li.appendChild(name);
 
-      li.appendChild(
-        button("↑", "Move up", index === 0, function () {
-          swap(items, index, index - 1);
-        }),
-      );
-      li.appendChild(
-        button("↓", "Move down", index === items.length - 1, function () {
+      var btnMoveup = button("↑", "Move up", index === 0, function () {
+        swap(items, index, index - 1);
+      });
+      li.appendChild(btnMoveup);
+      var btnMovedown = button(
+        "↓",
+        "Move down",
+        index === items.length - 1,
+        function () {
           swap(items, index, index + 1);
-        }),
+        },
       );
-      li.appendChild(
-        button("✕", "Remove", false, function () {
-          items.splice(index, 1);
-          redraw();
-        }),
-      );
+      li.appendChild(btnMovedown);
+      var btnRemove = button("✕", "Remove", false, function () {
+        items.splice(index, 1);
+        redraw();
+      });
+      li.appendChild(btnRemove);
 
       list.appendChild(li);
     });
@@ -83,7 +85,48 @@ OLCS.ready(function () {
   function redraw() {
     renderList("composition-sections", composition.sections);
     renderList("composition-appendices", composition.appendices);
+    renderContextSummary();
     schedulePreview();
+  }
+
+  // The bar collapses to what it is previewing as, because that is what an admin needs to keep an
+  // eye on while reordering -- the controls themselves are only wanted while actually changing it.
+  function renderContextSummary() {
+    var parts = [];
+
+    var licence = document.getElementById("ctx-licence").value.trim();
+    var application = document.getElementById("ctx-application").value.trim();
+    if (licence) {
+      parts.push("Licence " + licence);
+    }
+    if (application) {
+      parts.push("Application " + application);
+    }
+
+    [
+      "ctx-goods-or-psv",
+      "ctx-is-variation",
+      "ctx-is-ni",
+      "ctx-org-type",
+    ].forEach(function (id) {
+      var select = document.getElementById(id);
+      if (select.value !== "") {
+        parts.push(select.options[select.selectedIndex].textContent.trim());
+      }
+    });
+
+    document
+      .querySelectorAll('input[name="ctxChoices[]"]:checked')
+      .forEach(function (input) {
+        var label = document.querySelector('label[for="' + input.id + '"]');
+        parts.push(label ? label.textContent.trim() : input.value);
+      });
+
+    var summaryText = "No record chosen — bookmarks will not resolve";
+    if (parts.length) {
+      summaryText = parts.join(" · ");
+    }
+    document.getElementById("context-summary").textContent = summaryText;
   }
 
   function readContext() {
@@ -107,7 +150,6 @@ OLCS.ready(function () {
       sectionsRequired: [],
       issues: [],
       selectedChoiceIds: choices,
-      withChrome: document.getElementById("ctx-with-chrome").checked,
     };
 
     // An empty context field means "take it from the record", so it is omitted entirely rather
@@ -214,10 +256,8 @@ OLCS.ready(function () {
     }).length;
 
     wrapper.hidden = false;
-    wrapper.classList.toggle(
-      "letter-builder__diagnostics--blocking",
-      blocking > 0,
-    );
+    var blockingClass = "letter-builder__diagnostics--blocking";
+    wrapper.classList.toggle(blockingClass, blocking > 0);
 
     summary.textContent =
       diagnostics.length +
@@ -264,7 +304,19 @@ OLCS.ready(function () {
 
   document
     .getElementById("builder-context")
-    .addEventListener("change", schedulePreview);
+    .addEventListener("change", function () {
+      renderContextSummary();
+      schedulePreview();
+    });
+
+  document
+    .getElementById("context-toggle")
+    .addEventListener("click", function () {
+      var controls = document.getElementById("context-controls");
+      controls.hidden = !controls.hidden;
+      this.setAttribute("aria-expanded", controls.hidden ? "false" : "true");
+      this.textContent = controls.hidden ? "Change" : "Done";
+    });
 
   redraw();
 });
