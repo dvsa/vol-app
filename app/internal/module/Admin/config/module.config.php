@@ -187,7 +187,7 @@ return [
                         'options' => [
                             'route' => 'letter-type-builder[/:action][/:id][/]',
                             'constraints' => [
-                                'action' => '(index|preview)',
+                                'action' => '(index|preview|save)',
                                 'id' => '[0-9]+',
                             ],
                             'defaults' => [

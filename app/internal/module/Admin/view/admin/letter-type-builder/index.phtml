@@ -10,9 +10,46 @@
  */
 
 $this->placeholder('pageTitle')->set($letterType['name'] ?? 'Letter Type Builder');
+
+// The composition as saved. The builder hydrates from this so that pressing Save writes back what
+// is on screen rather than replacing the stored composition with an empty one.
+$savedComposition = ['sections' => [], 'appendices' => []];
+
+foreach ($letterType['letterTypeSections'] ?? [] as $typeSection) {
+    $savedComposition['sections'][] = [
+        'id' => $typeSection['letterSection']['id'] ?? null,
+        'name' => $typeSection['letterSection']['name']
+            ?? $typeSection['letterSection']['sectionKey']
+            ?? 'Untitled section',
+        'isRequired' => (bool) ($typeSection['isRequired'] ?? false),
+        'displayOrder' => (int) ($typeSection['displayOrder'] ?? 0),
+    ];
+}
+
+// The composition is keyed on the appendix, but only the version carries a name -- letter_appendix
+// has no name column of its own.
+foreach ($letterType['letterTypeAppendices'] ?? [] as $typeAppendix) {
+    $version = $typeAppendix['letterAppendixVersion'] ?? [];
+
+    $savedComposition['appendices'][] = [
+        'id' => $version['letterAppendix']['id'] ?? null,
+        'name' => $version['name'] ?? 'Untitled appendix',
+        'displayOrder' => (int) ($typeAppendix['displayOrder'] ?? 0),
+    ];
+}
+
+// display_order is the source of truth on the stored side; array position becomes it on save.
+foreach (['sections', 'appendices'] as $listKey) {
+    usort(
+        $savedComposition[$listKey],
+        static fn(array $a, array $b): int => $a['displayOrder'] <=> $b['displayOrder']
+    );
+}
 ?>
 
-<div id="letter-type-builder" data-letter-type-id="<?= $this->escapeHtmlAttr($letterTypeId) ?>">
+<div id="letter-type-builder"
+     data-letter-type-id="<?= $this->escapeHtmlAttr($letterTypeId) ?>"
+     data-saved-composition="<?= $this->escapeHtmlAttr(json_encode($savedComposition)) ?>">
 
     <?php if ($letterTypeId === 0): ?>
         <div class="govuk-inset-text">
@@ -96,7 +133,7 @@ $this->placeholder('pageTitle')->set($letterType['name'] ?? 'Letter Type Builder
                     <div class="govuk-checkboxes govuk-checkboxes--small">
                         <?php foreach ($availableChoices as $choice): ?>
                         <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input" type="checkbox" name="ctxChoices[]"
+                            <input class="govuk-checkboxes__input js-ctx-choice" type="checkbox" name="ctxChoices[]"
                                    id="ctx-choice-<?= $this->escapeHtmlAttr($choice['id']) ?>"
                                    value="<?= $this->escapeHtmlAttr($choice['id']) ?>">
                             <label class="govuk-label govuk-checkboxes__label"
@@ -153,6 +190,15 @@ $this->placeholder('pageTitle')->set($letterType['name'] ?? 'Letter Type Builder
                     <span id="diagnostics-summary"></span>
                 </button>
                 <ul class="govuk-list letter-builder__diagnostics-list" id="diagnostics-list" hidden></ul>
+            </div>
+
+            <div class="letter-builder__actions">
+                <button class="govuk-button" type="button" id="save-composition" disabled>Save</button>
+                <button class="govuk-button govuk-button--secondary" type="button" id="revert-composition" disabled>
+                    Discard changes
+                </button>
+                <span class="letter-builder__dirty" id="composition-dirty" hidden>unsaved changes</span>
+                <span class="letter-builder__save-status" id="save-status" role="status"></span>
             </div>
 
             <div class="letter-builder__frame-container">

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Admin\Controller\Letter;
 
 use Dvsa\Olcs\Transfer\Command\Letter\LetterType\PreviewComposition as PreviewCompositionDTO;
+use Dvsa\Olcs\Transfer\Command\Letter\LetterType\Update as UpdateDTO;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterAppendix\GetList as AppendixListDTO;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterChoice\GetList as ChoiceListDTO;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterSection\GetList as SectionListDTO;
@@ -143,6 +144,61 @@ class LetterTypeBuilderController extends AbstractInternalController implements 
         }
 
         return $response->getResult()['results'] ?? [];
+    }
+
+    /**
+     * Save the composition through the same command the existing edit screen uses.
+     *
+     * Update replaces each list it is given wholesale, and sets name and description
+     * unconditionally, so the payload has to carry everything the builder is responsible for AND
+     * echo back what it merely displays. Anything the builder does not manage -- issues, choices,
+     * category -- is omitted so the handler leaves it alone.
+     */
+    public function saveAction(): JsonModel
+    {
+        $payload = json_decode((string) $this->getRequest()->getContent(), true);
+
+        if (!is_array($payload) || empty($payload['id'])) {
+            return $this->jsonError('A letter type is required to save');
+        }
+
+        $letterType = $this->fetchLetterType((int) $payload['id']);
+
+        if ($letterType === null) {
+            return $this->jsonError('That letter type no longer exists');
+        }
+
+        $sections = array_map('intval', $payload['sections'] ?? []);
+        $appendices = array_map('intval', $payload['appendices'] ?? []);
+
+        // A section may appear at most once per letter type: the join is keyed on the pair, so a
+        // duplicate fails the insert AFTER the existing rows have already been cleared.
+        $hasDuplicates = count($sections) !== count(array_unique($sections))
+            || count($appendices) !== count(array_unique($appendices));
+
+        if ($hasDuplicates) {
+            return $this->jsonError('Each section and appendix can only be added once');
+        }
+
+        $command = UpdateDTO::create([
+            'id' => $letterType['id'],
+            'version' => $letterType['version'],
+            // Echoed rather than edited here: Update sets both unconditionally, so omitting
+            // description would silently clear it.
+            'name' => $letterType['name'],
+            'description' => $letterType['description'] ?? null,
+            'sections' => $sections,
+            'sectionsRequired' => array_map('intval', $payload['sectionsRequired'] ?? []),
+            'appendices' => $appendices,
+        ]);
+
+        $response = $this->handleCommand($command);
+
+        if (!$response->isOk()) {
+            return $this->jsonError('Could not save this composition');
+        }
+
+        return new JsonModel(['status' => 200, 'message' => 'Composition saved']);
     }
 
     private function jsonError(string $message): JsonModel

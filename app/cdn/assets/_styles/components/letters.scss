@@ -131,6 +131,29 @@
     }
   }
 
+  // Sits above the preview so the state of the composition is next to the thing it produces,
+  // rather than at the bottom of a column the reader has already scrolled past.
+  &__actions {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+
+    .govuk-button {
+      margin-bottom: 0;
+    }
+  }
+
+  &__dirty {
+    color: $grey-1;
+    font-style: italic;
+  }
+
+  &__save-status {
+    color: $grey-1;
+  }
+
   &__frame-container {
     position: relative;
     border: 1px solid $grey-2;

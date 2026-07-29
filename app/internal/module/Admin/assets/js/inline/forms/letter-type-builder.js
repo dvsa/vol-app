@@ -21,11 +21,26 @@ OLCS.ready(function () {
     appendices: [],
   };
 
+  // What is stored, so Save writes back the screen rather than an empty list, and so a change can
+  // be told from no change at all.
+  var savedComposition = { sections: [], appendices: [] };
+
+  try {
+    savedComposition =
+      JSON.parse(root.getAttribute("data-saved-composition")) ||
+      savedComposition;
+  } catch (e) {
+    savedComposition = { sections: [], appendices: [] };
+  }
+
+  composition.sections = savedComposition.sections.slice();
+  composition.appendices = savedComposition.appendices.slice();
+
   var previewTimer = null;
   var inFlight = null;
 
   function labelFor(select, id) {
-    var option = select.querySelector('option[value="' + id + '"]');
+    var option = select.querySelector("option[value=" + id + "]");
     return option ? option.textContent.trim() : String(id);
   }
 
@@ -86,7 +101,86 @@ OLCS.ready(function () {
     renderList("composition-sections", composition.sections);
     renderList("composition-appendices", composition.appendices);
     renderContextSummary();
+    renderDirtyState();
     schedulePreview();
+  }
+
+  function idsOf(items) {
+    return items
+      .map(function (item) {
+        return item.id;
+      })
+      .join(",");
+  }
+
+  function isDirty() {
+    return (
+      idsOf(composition.sections) !== idsOf(savedComposition.sections) ||
+      idsOf(composition.appendices) !== idsOf(savedComposition.appendices)
+    );
+  }
+
+  function renderDirtyState() {
+    var dirty = isDirty();
+    document.getElementById("composition-dirty").hidden = !dirty;
+    document.getElementById("save-composition").disabled = !dirty;
+    document.getElementById("revert-composition").disabled = !dirty;
+    if (dirty) {
+      document.getElementById("save-status").textContent = "";
+    }
+  }
+
+  function saveComposition() {
+    var status = document.getElementById("save-status");
+    var button = document.getElementById("save-composition");
+
+    button.disabled = true;
+    status.textContent = "Saving…";
+
+    window
+      .fetch("/admin/letter-type-builder/save/", {
+        method: "POST",
+        credentials: "same-origin",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: letterTypeId,
+          sections: composition.sections.map(function (s) {
+            return s.id;
+          }),
+          // Echoed from what was loaded: omitting it clears every is_required flag, which quietly
+          // turns blocking diagnostics into advisory ones.
+          sectionsRequired: composition.sections
+            .filter(function (s) {
+              return s.isRequired;
+            })
+            .map(function (s) {
+              return s.id;
+            }),
+          appendices: composition.appendices.map(function (a) {
+            return a.id;
+          }),
+        }),
+      })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        if (data.status !== 200) {
+          status.textContent = data.message || "Could not save";
+          button.disabled = false;
+          return;
+        }
+        savedComposition = {
+          sections: composition.sections.slice(),
+          appendices: composition.appendices.slice(),
+        };
+        renderDirtyState();
+        status.textContent = "Saved";
+      })
+      .catch(function () {
+        status.textContent = "Could not reach the server";
+        button.disabled = false;
+      });
   }
 
   // The bar collapses to what it is previewing as, because that is what an admin needs to keep an
@@ -116,9 +210,9 @@ OLCS.ready(function () {
     });
 
     document
-      .querySelectorAll('input[name="ctxChoices[]"]:checked')
+      .querySelectorAll(".js-ctx-choice:checked")
       .forEach(function (input) {
-        var label = document.querySelector('label[for="' + input.id + '"]');
+        var label = document.querySelector("label[for=" + input.id + "]");
         parts.push(label ? label.textContent.trim() : input.value);
       });
 
@@ -132,7 +226,7 @@ OLCS.ready(function () {
   function readContext() {
     var choices = [];
     document
-      .querySelectorAll('input[name="ctxChoices[]"]:checked')
+      .querySelectorAll(".js-ctx-choice:checked")
       .forEach(function (input) {
         choices.push(parseInt(input.value, 10));
       });
@@ -301,6 +395,18 @@ OLCS.ready(function () {
 
   wireAdder("add-section", composition.sections);
   wireAdder("add-appendix", composition.appendices);
+
+  document
+    .getElementById("save-composition")
+    .addEventListener("click", saveComposition);
+
+  document
+    .getElementById("revert-composition")
+    .addEventListener("click", function () {
+      composition.sections = savedComposition.sections.slice();
+      composition.appendices = savedComposition.appendices.slice();
+      redraw();
+    });
 
   document
     .getElementById("builder-context")
