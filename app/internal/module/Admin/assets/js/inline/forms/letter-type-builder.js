@@ -39,9 +39,19 @@ OLCS.ready(function () {
   var previewTimer = null;
   var inFlight = null;
 
+  // Read from select.options rather than querySelector. An unquoted attribute value has to be a
+  // CSS identifier, and identifiers cannot begin with a digit -- so `option[value=20]` throws a
+  // SyntaxError, which took out the whole change handler and made the picker do nothing at all.
   function labelFor(select, id) {
-    var option = select.querySelector("option[value=" + id + "]");
-    return option ? option.textContent.trim() : String(id);
+    var wanted = String(id);
+
+    for (var i = 0; i < select.options.length; i++) {
+      if (select.options[i].value === wanted) {
+        return select.options[i].textContent.trim();
+      }
+    }
+
+    return wanted;
   }
 
   function renderList(listId, items) {
@@ -212,7 +222,8 @@ OLCS.ready(function () {
     document
       .querySelectorAll(".js-ctx-choice:checked")
       .forEach(function (input) {
-        var label = document.querySelector("label[for=" + input.id + "]");
+        // input.labels rather than a built selector, for the same reason as labelFor
+        var label = input.labels && input.labels[0];
         parts.push(label ? label.textContent.trim() : input.value);
       });
 

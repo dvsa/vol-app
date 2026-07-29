@@ -18,7 +18,7 @@ $savedComposition = ['sections' => [], 'appendices' => []];
 foreach ($letterType['letterTypeSections'] ?? [] as $typeSection) {
     $savedComposition['sections'][] = [
         'id' => $typeSection['letterSection']['id'] ?? null,
-        'name' => $typeSection['letterSection']['name']
+        'name' => $typeSection['letterSection']['currentVersion']['name']
             ?? $typeSection['letterSection']['sectionKey']
             ?? 'Untitled section',
         'isRequired' => (bool) ($typeSection['isRequired'] ?? false),
@@ -161,7 +161,7 @@ foreach (['sections', 'appendices'] as $listKey) {
                     <option value="">Choose…</option>
                     <?php foreach ($availableSections as $section): ?>
                         <option value="<?= $this->escapeHtmlAttr($section['id']) ?>">
-                            <?= $this->escapeHtml($section['name'] ?? $section['sectionKey'] ?? '') ?>
+                            <?= $this->escapeHtml($section['currentVersion']['name'] ?? $section['sectionKey'] ?? '') ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
@@ -176,7 +176,7 @@ foreach (['sections', 'appendices'] as $listKey) {
                     <option value="">Choose…</option>
                     <?php foreach ($availableAppendices as $appendix): ?>
                         <option value="<?= $this->escapeHtmlAttr($appendix['id']) ?>">
-                            <?= $this->escapeHtml($appendix['name'] ?? '') ?>
+                            <?= $this->escapeHtml($appendix['currentVersion']['name'] ?? $appendix['appendixKey'] ?? '') ?>
                         </option>
                     <?php endforeach; ?>
                 </select>
