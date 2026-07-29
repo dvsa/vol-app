@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Service\Letter;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Entity\Letter\LetterChoice;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSection;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion;
+use Dvsa\Olcs\Api\Entity\Letter\LetterType;
+use Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Service\Letter\Resolution\SectionCandidate;
 use Dvsa\Olcs\Api\Service\Letter\Resolution\UnresolvedSection;
@@ -264,5 +267,47 @@ class SectionVariantResolverTest extends TestCase
 
         $this->assertSame([], $result->resolved);
         $this->assertFalse($result->hasUnresolved());
+    }
+
+    /**
+     * The saved composition is the fallback the builder previews before an admin changes anything,
+     * so it has to carry display order and the required flag across from the join rows.
+     */
+    public function testBuildsCandidatesFromASavedLetterType(): void
+    {
+        $first = $this->section([$this->variant()], 'first');
+        $second = $this->section([$this->variant()], 'second');
+
+        $letterType = m::mock(LetterType::class)->makePartial();
+        $letterType->shouldReceive('getLetterTypeSections')->andReturn(new ArrayCollection([
+            $this->typeSection($first, 0, true),
+            $this->typeSection($second, 1, false),
+        ]));
+
+        $candidates = SectionCandidate::listFromLetterType($letterType);
+
+        $this->assertCount(2, $candidates);
+        $this->assertSame($first, $candidates[0]->section);
+        $this->assertSame(0, $candidates[0]->displayOrder);
+        $this->assertTrue($candidates[0]->isRequired);
+        $this->assertFalse($candidates[1]->isRequired);
+    }
+
+    public function testALetterTypeWithNoSectionsYieldsNoCandidates(): void
+    {
+        $letterType = m::mock(LetterType::class)->makePartial();
+        $letterType->shouldReceive('getLetterTypeSections')->andReturn(new ArrayCollection([]));
+
+        $this->assertSame([], SectionCandidate::listFromLetterType($letterType));
+    }
+
+    private function typeSection(LetterSection $section, int $displayOrder, bool $isRequired): LetterTypeSection
+    {
+        $typeSection = m::mock(LetterTypeSection::class)->makePartial();
+        $typeSection->shouldReceive('getLetterSection')->andReturn($section);
+        $typeSection->shouldReceive('getDisplayOrder')->andReturn($displayOrder);
+        $typeSection->shouldReceive('getIsRequired')->andReturn($isRequired);
+
+        return $typeSection;
     }
 }
