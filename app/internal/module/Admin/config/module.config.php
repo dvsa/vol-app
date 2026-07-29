@@ -182,6 +182,20 @@ return [
                             ]
                         ],
                     ],
+                    'admin-letter-type-builder' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'letter-type-builder[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|preview)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\Letter\LetterTypeBuilderController::class,
+                                'action' => 'index',
+                            ]
+                        ],
+                    ],
                     'admin-letter-section' => [
                         'type' => 'Segment',
                         'options' => [
@@ -1100,6 +1114,7 @@ return [
             Admin\Controller\EditableTranslationsController::class => Admin\Controller\EditableTranslationsControllerFactory::class,
             Admin\Controller\Letter\MasterTemplateController::class => Admin\Controller\Letter\MasterTemplateControllerFactory::class,
             Admin\Controller\Letter\LetterTypeController::class => Admin\Controller\Letter\LetterTypeControllerFactory::class,
+            Admin\Controller\Letter\LetterTypeBuilderController::class => Admin\Controller\Letter\LetterTypeBuilderControllerFactory::class,
             Admin\Controller\Letter\LetterSectionController::class => Admin\Controller\Letter\LetterSectionControllerFactory::class,
             Admin\Controller\Letter\LetterIssueController::class => Admin\Controller\Letter\LetterIssueControllerFactory::class,
             Admin\Controller\Letter\LetterAppendixController::class => Admin\Controller\Letter\LetterAppendixControllerFactory::class,

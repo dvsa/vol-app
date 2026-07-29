@@ -23,6 +23,137 @@
 // applies to every `govuk-checkboxes--small` list in the application, but
 // correcting it site-wide would change wrapping on screens well outside this
 // work. Worth doing separately.
+// Letter type builder
+//
+// Composition on the left, preview on the right, context across the top -- the context governs
+// both panes so it belongs above them rather than inside either.
+//
+// The preview is capped at A4 by the letter's own stylesheet, so the pane only needs to be wide
+// enough to hold it: 300px for the composition list matches Preview and edit letter, and leaves
+// the letter its full width at the laptop sizes this is used at.
+.letter-builder {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+
+  &__composition {
+    flex: 0 0 300px;
+    min-width: 0;
+  }
+
+  &__preview {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  &__context-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    // An empty list would otherwise collapse to nothing, leaving no hint that anything belongs here
+    &:empty::after {
+      content: attr(data-empty);
+      display: block;
+      padding: 10px 0;
+      color: $grey-1;
+    }
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    margin-bottom: 4px;
+    background: $grey-4;
+    border-left: 4px solid $grey-2;
+
+    &-name {
+      flex: 1 1 auto;
+      min-width: 0;
+      word-break: break-word;
+    }
+
+    // Reorder and remove are icon-sized targets, so they need to stay legible without
+    // dominating the row
+    button {
+      flex: 0 0 auto;
+      padding: 2px 8px;
+      background: none;
+      border: 1px solid $grey-2;
+      cursor: pointer;
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: default;
+      }
+    }
+  }
+
+  &__frame-container {
+    position: relative;
+    border: 1px solid $grey-2;
+    background: $grey-3;
+    padding: 10px;
+
+    iframe {
+      width: 100%;
+      height: 70vh;
+      border: none;
+      background: $white;
+    }
+  }
+
+  // Sits over the preview rather than beside it: always visible, never squeezing the letter
+  &__preview-status {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.9);
+    color: $grey-1;
+  }
+
+  &__diagnostics {
+    margin-bottom: 10px;
+    border-left: 5px solid $govuk-blue;
+    background: $grey-4;
+
+    &--blocking {
+      border-left-color: $error-colour;
+    }
+
+    &-toggle {
+      width: 100%;
+      padding: 10px;
+      text-align: left;
+      background: none;
+      border: 0;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    &-list {
+      margin: 0;
+      padding: 0 10px 10px 10px;
+
+      li {
+        padding: 4px 0;
+      }
+    }
+  }
+}
+
 // Preview and edit letter
 //
 // The section list down the left is the working control of this page -- it is how
