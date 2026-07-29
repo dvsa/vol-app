@@ -105,11 +105,31 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [[ "${PLATFORM_ENV}" == "prep" ]]; then
-            PROXY_URL="http://proxy.ci.olcs.dvsacloud.uk:3128"
-          else
-            PROXY_URL="http://proxy.ci.olcs.dev-dvsacloud.uk:3128"
-          fi
+          case "${PLATFORM_ENV}" in
+            prep)
+              PROXY_ENV="pp"
+              PROXY_DOMAIN="olcs.dvsacloud.uk"
+              ;;
+            reg)
+              PROXY_ENV="reg"
+              PROXY_DOMAIN="olcs.dev-dvsacloud.uk"
+              ;;
+            dev)
+              PROXY_ENV="dev"
+              PROXY_DOMAIN="olcs.dev-dvsacloud.uk"
+              ;;
+            int)
+              PROXY_ENV="qa"
+              PROXY_DOMAIN="olcs.dev-dvsacloud.uk"
+              ;;
+            *)
+              echo "Unsupported platformEnv for proxy: ${PLATFORM_ENV}" >&2
+              exit 1
+              ;;
+          esac
+
+          PROXY_HOST="proxy.${PROXY_ENV}.${PROXY_DOMAIN}"
+          PROXY_URL="http://${PROXY_HOST}:3128"
 
           export https_proxy="${PROXY_URL}"
           export HTTPS_PROXY="${PROXY_URL}"
@@ -359,7 +379,7 @@ jobs:
             --argjson logs "${RDS_LOG_EXPORTS}" \
             --argjson tags "${RDS_TAGS}" \
             --argjson multiAz "${MULTI_AZ}" \
-            '{EventType:$eventType,RDSName:$rdsName,RDSOptionGroup:$optionGroup,RDSCloudwatchLogsExportConfiguration:$logs,RDSBaseSnap:$baseSnap,RDSSubnet:$subnet,EngineVersion:$engineVersion,RDSSnapSource:$snapSource,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSMultiAZ:$multiAz,RDSTags:$tags}'
+            '{EventType:$eventType,RDSName:$rdsName,RDSOptionGroup:$optionGroup,RDSCloudwatchLogsExportConfiguration:$logs,RDSBaseSnap:$baseSnap,RDSSubnet:$subnet,EngineVersion:$engineVersion,RDSSnapSource:$snapSource,RDSTags:$tags,MultiAZ:$multiAz}'
           )"
           invoke_lambda "${payload}" "RestoreDBComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
             slack_send "${SLACK_FAIL}" "Error. Build failed restoring from DB snapshot"
@@ -414,7 +434,7 @@ jobs:
               --arg paramGroup "${RDS_PARAM_GROUP}" \
               --arg secGroup "${RDS_WRITER_SEC_GROUP}" \
               --argjson tags "${RDS_WRITER_TAGS}" \
-              '{EventType:$eventType,RDSDBInstanceClassWriter:$klass,RDSName:$rdsName,RDSWriterName:$writerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParameterGroup:$paramGroup,RDSSG:$secGroup,RDSTags:$tags}'
+              '{EventType:$eventType,RDSDBInstanceClassWriter:$klass,RDSName:$rdsName,RDSWriterName:$writerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParamGroup:$paramGroup,RDSSecGroup:$secGroup,RDSTags:$tags}'
             )"
             if ! invoke_lambda "${payload}" "CreateWriterSuccess" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
               slack_send "${SLACK_WARN}" "Warning. Failed to create Writer ${RDS_WRITER_NAME} for ${RDS_CLUSTER_NAME}. Build will continue - manually create Writer"
