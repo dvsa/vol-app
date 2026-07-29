@@ -165,6 +165,12 @@ foreach (['sections', 'appendices'] as $listKey) {
                         </option>
                     <?php endforeach; ?>
                 </select>
+                <p class="govuk-body-s govuk-!-margin-top-1 govuk-!-margin-bottom-0">
+                    <a class="govuk-link" id="new-section"
+                       href="<?= $this->url('admin-dashboard/admin-letter-section', ['action' => 'add']) ?>">
+                        Create a new section
+                    </a>
+                </p>
             </div>
 
             <h3 class="govuk-heading-s govuk-!-margin-top-4">Appendices</h3>

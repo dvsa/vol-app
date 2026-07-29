@@ -111,6 +111,24 @@ class LetterTypeBuilderController extends AbstractInternalController implements 
         ]);
     }
 
+    /**
+     * The section catalogue, for refreshing the picker after one is created without reloading the
+     * page -- a reload would discard whatever composition is on screen.
+     */
+    public function sectionsAction(): JsonModel
+    {
+        return new JsonModel([
+            'status' => 200,
+            'sections' => array_map(
+                static fn(array $section): array => [
+                    'id' => $section['id'],
+                    'name' => $section['currentVersion']['name'] ?? $section['sectionKey'] ?? 'Untitled section',
+                ],
+                $this->fetchList(SectionListDTO::class)
+            ),
+        ]);
+    }
+
     private function fetchLetterType(int $id): ?array
     {
         $response = $this->handleQuery(LetterTypeDTO::create(['id' => $id]));

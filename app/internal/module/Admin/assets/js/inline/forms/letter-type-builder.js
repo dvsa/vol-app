@@ -407,6 +407,89 @@ OLCS.ready(function () {
   wireAdder("add-section", composition.sections);
   wireAdder("add-appendix", composition.appendices);
 
+  // Creating a section from here has to leave the builder standing. The stock `.js-modal-ajax`
+  // path cannot: its success handler follows the add form's 302 with OLCS.url.load(), which
+  // navigates to the section list and takes the unsaved composition with it. So this opens the
+  // same modal against the same URL, but supplies its own success handler -- one that treats the
+  // redirect as "created", closes the modal, and refreshes the picker in place.
+  //
+  // A distinct class rather than `js-modal-ajax` so the global binding never fires on it. The
+  // alternative, stopImmediatePropagation, depends on this file's listener being bound first.
+  document
+    .getElementById("new-section")
+    .addEventListener("click", function (event) {
+      event.preventDefault();
+      openNewSectionModal(this.getAttribute("href"));
+    });
+
+  function openNewSectionModal(url) {
+    if (!window.OLCS || !OLCS.ajax || !OLCS.modalForm) {
+      window.location.href = url;
+      return;
+    }
+
+    OLCS.ajax({
+      url: url,
+      preloaderType: "modal",
+      success: OLCS.normaliseResponse(function (response) {
+        // modalForm reads body/title off this object and passes `success` straight to the form
+        // handler it binds, which is the only way to displace the default redirect-following one.
+        response.success = onNewSectionSubmitted;
+        OLCS.modalForm(response);
+      }),
+    });
+  }
+
+  function onNewSectionSubmitted(raw) {
+    OLCS.normaliseResponse({
+      // The add command answers a successful save with a redirect to the section list. Following
+      // it is exactly what must not happen here.
+      followRedirects: false,
+      callback: function (response) {
+        if (response.status === 302) {
+          OLCS.modal.hide();
+          refreshSections();
+          return;
+        }
+
+        // Anything else is the form coming back with its errors on it. Put it back in the modal
+        // so the admin can correct it, rather than closing over the top of the message.
+        OLCS.modal.updateBody(response.body);
+        OLCS.formHelper.renderModalTitle(response.title);
+      },
+    })(raw);
+  }
+
+  function refreshSections() {
+    window
+      .fetch("/admin/letter-type-builder/sections/", {
+        credentials: "same-origin",
+      })
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        if (data.status !== 200) {
+          return;
+        }
+        var select = document.getElementById("add-section");
+        var placeholder = select.options[0];
+
+        select.innerHTML = "";
+        select.appendChild(placeholder);
+
+        data.sections.forEach(function (section) {
+          var option = document.createElement("option");
+          option.value = section.id;
+          option.textContent = section.name;
+          select.appendChild(option);
+        });
+      })
+      .catch(function () {
+        // Leaving the old list in place is the safe failure: the admin can still reload by hand.
+      });
+  }
+
   document
     .getElementById("save-composition")
     .addEventListener("click", saveComposition);
