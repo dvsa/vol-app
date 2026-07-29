@@ -1,9 +1,13 @@
-# Tables known to emit an unescaped value through the table render pipeline.
+# Tables not yet covered by the table escaping contract.
 #
-# The pipeline does not escape, so this is the backlog for the systemic fix, not a list of
-# accepted risks. It should only ever shrink. A table not listed here that starts leaking
-# fails TableEscapingInvariantTest.
+# TableEscapingInvariantTest renders every *.table.php in this app and asserts that row
+# values reach the output escaped. Tables listed here are known exceptions and are exempt
+# from that assertion.
 #
-# 1 leaking, 32 rendered clean, 10 could not be rendered by the probe.
+# The list should only ever shrink. A table that is not listed and fails the assertion is a
+# regression; a listed table that passes is a stale entry and also fails, so the list cannot
+# silently rot.
+#
+# 1 exempt, 32 covered, 10 could not be rendered by the probe.
 #
 lva-variation-conditions-undertakings.table.php
