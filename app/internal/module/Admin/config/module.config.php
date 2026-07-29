@@ -698,6 +698,16 @@ return [
                             ]
                         ]
                     ],
+                    'admin-cache-clear' => [
+                        'type' => 'segment',
+                        'options' => [
+                            'route' => 'cache-clear[/]',
+                            'defaults' => [
+                                'controller' => Admin\Controller\CacheClearController::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                    ],
                     // Super-admin S3 document-store browser
                     'admin-s3-browser' => [
                         'type' => 'Segment',
@@ -1108,6 +1118,7 @@ return [
             Admin\Controller\Letter\LetterTodoController::class => Admin\Controller\Letter\LetterTodoControllerFactory::class,
             Admin\Controller\Letter\LetterChoiceController::class => Admin\Controller\Letter\LetterChoiceControllerFactory::class,
             Admin\Controller\FeatureToggleController::class => Admin\Controller\FeatureToggleControllerFactory::class,
+            Admin\Controller\CacheClearController::class => Admin\Controller\CacheClearControllerFactory::class,
             Admin\Controller\S3\BrowserController::class => Admin\Controller\S3\BrowserControllerFactory::class,
             Admin\Controller\FeeRateController::class => Admin\Controller\FeeRateControllerFactory::class,
             Admin\Controller\FinancialStandingRateController::class => Admin\Controller\FinancialStandingRateControllerFactory::class,
