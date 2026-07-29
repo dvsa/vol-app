@@ -9,6 +9,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Monolog\Logger as MonologLogger;
 use Olcs\Logging\Log\Logger as StaticLogger;
+use Olcs\Logging\Log\Processor\HideCredentials;
 use Olcs\Logging\Log\Processor\HidePassword;
 use Olcs\Logging\Module;
 use Psr\Log\LoggerInterface;
@@ -41,16 +42,19 @@ final class ModuleTest extends MockeryTestCase
         $event = m::mock(EventInterface::class);
         $logger = m::mock(MonologLogger::class);
         $hidePassword = m::mock(HidePassword::class);
+        $hideCredentials = m::mock(HideCredentials::class);
 
         $serviceManager = m::mock();
         $serviceManager->shouldReceive('get')->with('Logger')->once()->andReturn($logger);
         $serviceManager->shouldReceive('get')->with('Config')->once()->andReturn($logConfig);
         $serviceManager->shouldReceive('get')->with(HidePassword::class)->times($hideTimes)->andReturn($hidePassword);
+        // Always attached, whatever allowPasswordLogging says.
+        $serviceManager->expects('get')->with(HideCredentials::class)->andReturn($hideCredentials);
 
         $event->shouldReceive('getApplication->getServiceManager')->andReturn($serviceManager);
 
         $logger->shouldReceive('pushProcessor')
-            ->times($hideTimes)
+            ->times($hideTimes + 1)
             ->andReturnSelf();
 
         $sut = new Module();
