@@ -64,7 +64,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v5
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
@@ -379,7 +379,7 @@ jobs:
             --argjson logs "${RDS_LOG_EXPORTS}" \
             --argjson tags "${RDS_TAGS}" \
             --argjson multiAz "${MULTI_AZ}" \
-            '{EventType:$eventType,RDSName:$rdsName,RDSOptionGroup:$optionGroup,RDSCloudwatchLogsExportConfiguration:$logs,RDSBaseSnap:$baseSnap,RDSSubnet:$subnet,EngineVersion:$engineVersion,RDSSnapSource:$snapSource,RDSTags:$tags,MultiAZ:$multiAz}'
+            '{EventType:$eventType,RDSName:$rdsName,RDSOptionGroup:$optionGroup,RDSCloudwatchLogsExportConfiguration:$logs,RDSBaseSnap:$baseSnap,RDSSubnet:$subnet,EngineVersion:$engineVersion,RDSSnapSource:$snapSource,RDSMonitoringRoleArn:"'${RDS_MONITORING_ROLE_ARN}'",RDSMonitoringInterval:'${RDS_MONITORING_INTERVAL}',RDSDBInstanceClass:"'${RDS_DB_INSTANCE_CLASS}'",RDSParameterGroupName:"'${RDS_PARAM_GROUP}'",RDSSecurityGroupNames:["'${RDS_SEC_GROUP}'"],Tags:$tags,MultiAZ:$multiAz}'
           )"
           invoke_lambda "${payload}" "RestoreDBComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
             slack_send "${SLACK_FAIL}" "Error. Build failed restoring from DB snapshot"
@@ -434,7 +434,7 @@ jobs:
               --arg paramGroup "${RDS_PARAM_GROUP}" \
               --arg secGroup "${RDS_WRITER_SEC_GROUP}" \
               --argjson tags "${RDS_WRITER_TAGS}" \
-              '{EventType:$eventType,RDSDBInstanceClassWriter:$klass,RDSName:$rdsName,RDSWriterName:$writerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParamGroup:$paramGroup,RDSSecGroup:$secGroup,RDSTags:$tags}'
+              '{EventType:$eventType,RDSDBInstanceClassWriter:$klass,RDSName:$rdsName,RDSWriterName:$writerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParameterGroupName:$paramGroup,RDSSecurityGroupNames:[$secGroup],Tags:$tags}'
             )"
             if ! invoke_lambda "${payload}" "CreateWriterSuccess" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
               slack_send "${SLACK_WARN}" "Warning. Failed to create Writer ${RDS_WRITER_NAME} for ${RDS_CLUSTER_NAME}. Build will continue - manually create Writer"
@@ -456,7 +456,7 @@ jobs:
               --arg paramGroup "${RDS_PARAM_GROUP}" \
               --arg secGroup "${RDS_SEC_GROUP}" \
               --argjson tags "${RDS_READER_TAGS}" \
-              '{EventType:$eventType,RDSDBInstanceClassReader:$klass,RDSName:$rdsName,RDSReaderName:$readerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParameterGroup:$paramGroup,RDSSG:$secGroup,RDSTags:$tags}'
+              '{EventType:$eventType,RDSDBInstanceClassReader:$klass,RDSName:$rdsName,RDSReaderName:$readerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParameterGroupName:$paramGroup,RDSSecurityGroupNames:[$secGroup],Tags:$tags}'
             )"
             if ! invoke_lambda "${payload}" "CreateReaderSuccess" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
               slack_send "${SLACK_WARN}" "Warning. Failed to create Reader ${RDS_READER_NAME} for ${RDS_CLUSTER_NAME}. Build will continue - manually create Reader"
