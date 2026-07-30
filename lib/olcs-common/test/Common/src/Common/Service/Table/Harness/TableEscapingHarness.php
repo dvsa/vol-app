@@ -29,6 +29,16 @@ final class TableEscapingHarness
     public const MARKER = '<script>xss-probe</script>';
 
     /**
+     * The row value used for snapshot rendering.
+     *
+     * Contains an ampersand deliberately. A value of plain alphanumerics would be unchanged by
+     * escaping, so escaping it twice would be invisible and the snapshot would not catch it. "&"
+     * becomes "&amp;" once and "&amp;amp;" twice, so both show up as drift. No angle brackets: this
+     * is not a payload, and the snapshot should stay readable as ordinary output.
+     */
+    public const BENIGN = 'Ampersand & Co';
+
+    /**
      * Inspect every *.table.php under the given directories.
      *
      * @param string[] $directories
@@ -44,7 +54,7 @@ final class TableEscapingHarness
 
         foreach ($this->tableFiles($directories) as $name => $path) {
             try {
-                $html = $this->render($tableBuilder, $name, $path);
+                $html = $this->render($tableBuilder, $name, $path, self::MARKER);
             } catch (\Throwable $e) {
                 $skipped[$name] = $e::class . ': ' . $e->getMessage();
                 continue;
@@ -63,6 +73,88 @@ final class TableEscapingHarness
         sort($rendered);
 
         return ['leaking' => $leaking, 'skipped' => $skipped, 'rendered' => $rendered];
+    }
+
+    /**
+     * Render every table against benign data and return a digest of each result.
+     *
+     * The companion to inspect(). inspect() catches "a row value reached the output raw"; this
+     * catches the opposite mistake — developer-authored markup that got escaped, or a row value
+     * escaped twice. Those are invisible to inspect() and, unlike a leak, they are visible to
+     * users as literal &lt;b&gt; on the page.
+     *
+     * Digests rather than the rendered HTML, because 185 tables of markup would be unreviewable in
+     * a diff and nobody would read it. When one changes, re-render locally and compare against the
+     * previous commit to see what moved.
+     *
+     * @param string[] $directories
+     * @return array{digests: array<string, string>, skipped: array<string, string>}
+     */
+    public function snapshot(array $directories): array
+    {
+        $digests = [];
+        $skipped = [];
+
+        $tableBuilder = $this->tableBuilder($directories);
+
+        // Pin the timezone for the duration of the run. Six tests in the olcs-common suite call
+        // date_default_timezone_set() and never restore it — some to UTC, some to Europe/London.
+        // That is not a global variable, so backupGlobals does not undo it, and with
+        // executionOrder="random" whichever ran last decides how Formatter\DateTime renders. Three
+        // tables drifted intermittently because of it. UTC matches the date.timezone ini that every
+        // phpunit.xml.dist already declares, so this restores the intended environment rather than
+        // inventing one.
+        $timezone = date_default_timezone_get();
+        date_default_timezone_set('UTC');
+
+        try {
+            foreach ($this->tableFiles($directories) as $name => $path) {
+                try {
+                    $html = $this->render($tableBuilder, $name, $path, self::BENIGN);
+                } catch (\Throwable $e) {
+                    $skipped[$name] = $e::class . ': ' . $e->getMessage();
+                    continue;
+                }
+
+                $digests[$name] = hash('sha256', $this->normalise($html));
+            }
+        } finally {
+            date_default_timezone_set($timezone);
+        }
+
+        ksort($digests);
+        ksort($skipped);
+
+        return ['digests' => $digests, 'skipped' => $skipped];
+    }
+
+    /**
+     * Strip the parts of a render that legitimately differ between runs.
+     *
+     * TableBuilder mints a Laminas\Form\Element\Csrf named "security" on every renderTable(), so
+     * its value differs every time and would make the digest of any table with a crud section
+     * unstable.
+     *
+     * Matched per-element rather than with one attribute-order-sensitive pattern, because the
+     * rendered form is `value="..." ... name="security"` — value first. A pattern anchored on
+     * name="security" looking forwards for value= silently matches nothing, and the failure mode
+     * is a snapshot that looks fine until it randomly fails.
+     */
+    private function normalise(string $html): string
+    {
+        return (string)preg_replace_callback(
+            '/<input\b[^>]*>/',
+            static function (array $match): string {
+                $tag = $match[0];
+
+                if (!str_contains($tag, 'name="security"') && !str_contains($tag, 'js-csrf-token')) {
+                    return $tag;
+                }
+
+                return (string)preg_replace('/value="[^"]*"/', 'value="CSRF"', $tag);
+            },
+            $html
+        );
     }
 
     /**
@@ -96,7 +188,7 @@ final class TableEscapingHarness
         return $files;
     }
 
-    private function render(TableBuilder $tableBuilder, string $fileName, string $path): string
+    private function render(TableBuilder $tableBuilder, string $fileName, string $path, string $probeValue): string
     {
         // Passed by name, not as a loaded array. Definitions are include()d by TableBuilder and
         // several call $this->callFormatter(...) in inline closures, where $this is meant to be the
@@ -117,7 +209,7 @@ final class TableEscapingHarness
 
         ob_start();
         try {
-            $returned = (string)$tableBuilder->buildTable($tableName, [$this->row($path)], [], true);
+            $returned = (string)$tableBuilder->buildTable($tableName, [$this->row($path, $probeValue)], [], true);
         } finally {
             $echoed = '';
             while (ob_get_level() > $bufferLevel) {
@@ -143,9 +235,9 @@ final class TableEscapingHarness
      *
      * @return array<string, RecursiveProbe>
      */
-    private function row(string $path): array
+    private function row(string $path, string $probeValue): array
     {
-        $probe = new RecursiveProbe(self::MARKER);
+        $probe = new RecursiveProbe($probeValue);
         $source = (string)file_get_contents($path);
 
         $keys = ['id', 'version', 'action'];

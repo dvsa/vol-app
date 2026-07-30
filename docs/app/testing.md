@@ -12,8 +12,9 @@ The API has three layers of automated verification:
 | Integration      | Real repository queries and schema checks against a local MySQL  | Locally via `composer test:integration` |
 | Functional (E2E) | WebDriver/Cucumber suites from `dvsa/vol-functional-tests`       | Post-deploy per environment (`cd.yaml`) |
 
-This page documents the integration layer and the two baseline mechanisms that
-guard the Doctrine entity metadata.
+This page documents the integration layer, the two baseline mechanisms that
+guard the Doctrine entity metadata, and the two tests that guard output escaping
+in the table render pipeline.
 
 ## Integration test suite
 
@@ -106,6 +107,68 @@ adding to it should be a conscious, reviewed act:
 REGENERATE_SCHEMA_DRIFT_BASELINE=1 vendor/bin/phpunit \
   -c phpunit-integration.xml --filter SchemaDriftTest
 ```
+
+## Table output escaping
+
+The table render pipeline does not escape. `ContentHelper::replaceContent()` is a
+raw `str_replace` into `<td>{{content}}</td>`, so whether a column is safe
+depends on whether something upstream escaped it. Two tests guard that, and they
+guard **opposite** mistakes — you need both, because each is blind to what the
+other catches.
+
+| Test                         | Catches                                                | Visible to users?                     |
+| ---------------------------- | ------------------------------------------------------ | ------------------------------------- |
+| `TableEscapingInvariantTest` | a row value reaching the output unescaped              | No — it is an XSS hole                |
+| `TableRenderSnapshotTest`    | something that was **not** a row value getting escaped | Yes — literal `&lt;b&gt;` on the page |
+
+Both exist three times, once per table location, all sharing one harness in
+olcs-common (`test/Common/src/Common/Service/Table/Harness/`): `app/internal`,
+`app/selfserve` and olcs-common's own `Common/src/Common/Table/Tables`. Both run
+on every PR — the apps via `php.yaml`, olcs-common via `php-lib.yaml`.
+
+### The escaping contract
+
+Escape by **provenance**, not by what the value looks like:
+
+| Where the value came from        | What to do                                                                              |
+| -------------------------------- | --------------------------------------------------------------------------------------- |
+| Row data                         | Escape, always, whatever it looks like                                                  |
+| Developer-authored markup        | Leave raw; escape the values you interpolate into it                                    |
+| Another formatter's return value | Leave raw — escaping it double-escapes, and escaping its values is that formatter's job |
+
+`TableBuilder::replaceContentEscapingValues()` exists for the middle case and is
+greppable. The third case is the one that catches people out: wrapping
+`$this->callFormatter(...)` in an escape call is always wrong.
+
+### When the invariant test fails
+
+A table you touched now emits a row value raw. Escape the value at the point it
+is interpolated. The baseline (`table-escaping-baseline.txt` beside each test)
+lists tables that are known exceptions and are exempt; it should only ever
+shrink, and a listed table that stops leaking also fails, so the list cannot rot.
+Tables the synthetic probe cannot drive are reported as **skipped**, which means
+"not covered here", never "safe".
+
+### When the snapshot test fails
+
+Rendered output moved. If you meant it — a column added, a label reworded —
+regenerate; if you did not, you have probably escaped developer markup, another
+formatter's output, or a value that was already escaped where it was assigned.
+
+```bash
+# from the app or lib directory that failed
+UPDATE_TABLE_SNAPSHOTS=1 vendor/bin/phpunit path/to/TableRenderSnapshotTest.php
+```
+
+Regenerate deliberately, and read the diff. Doing it reflexively to make a red
+build green defeats the entire point of the test.
+
+The snapshot stores a digest per table rather than the rendered HTML, because 185
+tables of markup would be unreviewable. It renders against benign data
+containing an ampersand — a value of plain alphanumerics would be unchanged by
+escaping, so escaping it twice would be invisible. The per-render CSRF token is
+normalised out; anything else non-deterministic in a render will make the digest
+unstable and needs normalising in `TableEscapingHarness::normalise()`.
 
 ## Adding integration tests
 

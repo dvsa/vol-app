@@ -1,0 +1,48 @@
+# Digest of every table definition rendered against benign data.
+#
+# Guards the direction the invariant test cannot see: output that changed because
+# something which was not a row value got escaped. Regenerate deliberately, never to
+# make a red build green.
+#
+# 30 rendered, 10 could not be rendered by the probe.
+#
+90b348dae6821ccd2d179e04fc1ae6c4d2a507c79b76f452ee9f70e24baa0795  bus-reg-variation-history.table.php
+4db8473a81d48f0cc5eaf80d0bc242a97a69be6ca99abb36111b8bcf500974ec  busreg-registrations.table.php
+e9004e1bce3c8cbaca9df269f3334a0afd7bc9e3efb9db533bbfd7605b689bea  candidate-permits-selection.table.php
+e5f0dfa0b251d51602d0a6701a8895bf3ec9cb6bca7f9f654c0af371db49838b  correspondence.table.php
+2f766773e7007eba15c3b1532ecb7c0bd855c8bf49271ef46e07b20f44f04ec3  dashboard-applications.table.php
+35bc971d32d742fd7e8b96192b1a4462fc37ad637fe17e326126de612e9fe502  dashboard-licences.table.php
+f80a061cdda9e003e99137b7e4832160acb65e6b8e4018463aad09d57e3a9645  dashboard-permit-application.table.php
+7338b24111b55904e8097b2cb68881900d780a67e5ab3330daa4e12fb452bb5d  dashboard-permits-issued.table.php
+97480a76bc5d6b5d9da9aae01d1939964592022fe50ca1479d15b8057024204b  dashboard-variations.table.php
+f40bae39f013393174eb5d1bf0550d0c6e2e8e173489303a735ece09b04d8618  ebsr-submissions.table.php
+83b71b26f9c42803964c0a13c639a0336fe5152f0bd923db16272fee33b1e09e  entity-view-conditions-undertakings-partner.table.php
+b29dc77945b8e169421162361aeece126f6ef3c32933b07225fb6d149ebef9ad  entity-view-current-applications-partner.table.php
+f116eed20a2512ecafa0bbda2921fd0b7f627c077105b854128f686fb0d2a56b  entity-view-operating-centres-anonymous.table.php
+f56a6ad1cf5b2e9ef7a2accef88cfec4c2159a19504fe716feb11408c9563fa0  entity-view-operating-centres-partner.table.php
+f116eed20a2512ecafa0bbda2921fd0b7f627c077105b854128f686fb0d2a56b  entity-view-oppositions-anonymous.table.php
+2cb136562dfb264f2cb4f71d3ec77155a55f4f6c2d7ce397e5c0357322acbcb0  entity-view-oppositions-partner.table.php
+94aadeacfaa909a68eb9dae5592cb06ce50d8fdab85190e5643880883940a13d  entity-view-related-operator-licences.table.php
+45a2bf6d97f38da23688d7ae15d84d1b8876ec83681b8d316a3e49af99cfc632  entity-view-transport-managers.table.php
+cadb2fd434a40566dcc87de42e6c820aefbc9432848bd8d4da724fb6af098e26  entity-view-vehicles-partner.table.php
+37b2bd1860137d3eb207607ea421001bd46a37c2f0e432aeda7b69a41719fae7  irhp-fee-breakdown-multilateral.table.php
+790bb5f565257c63d01923b83b8027b4d75ea7830c3fe32c00d1d21471f4a920  licence-vehicle-list-export-current-and-removed.table.php
+93cb0532c0bb4fe2ce12e24da663ad9ab027a9f68aa1e3188fdf1ae6932f08d9  lva-licence-operating-centres.table.php
+853344673aa194114f2d47055cf604a4d3eec6e75619bfa3d1549c16e32e73d7  txc-inbox.table.php
+1aaea2d6f7e9b462d27b8c0087c45c7da71530bc5cacef12d928aff9bffd1350  unpaid-irhp-permits.table.php
+b253a6d2f704f8c9984cdb481f9395e8f000bddc6a7882d85cb69418b48a900c  valid-irhp-permits-bilateral.table.php
+935f2e5f86dffa09ccf25c687670e7e01a11bbf8da797791078dfb27510b46ec  valid-irhp-permits-ecmt-removal.table.php
+246d45f386cc9ffdce054ca4760cc4faf72d9df094750da706affe48a622a034  valid-irhp-permits-ecmt-short-term.table.php
+e155d6030ddb7de63bb2526c7e930f7ae6afab959d602bd2834e701f0aadf0ba  valid-irhp-permits-multilateral.table.php
+6ef0029a051e51529cdc7802d4c4892fd5579a6d0a78ade5c97c22ba3ca088cb  valid-irhp-permits.table.php
+515b003688c9e303bf05e88be46ce60ff05862110c56c8e0db1993824010f30f  wanted-unpaid-irhp-permits.table.php
+skipped                                                           bus-reg-browse.table.php
+skipped                                                           dashboard-tm-applications.table.php
+skipped                                                           fees.table.php
+skipped                                                           irhp-fee-breakdown-bilateral.table.php
+skipped                                                           licence-vehicle-list-current.table.php
+skipped                                                           licence-vehicle-list-removed.table.php
+skipped                                                           licence-vehicles.table.php
+skipped                                                           messages-view.table.php
+skipped                                                           messages.table.php
+skipped                                                           users.table.php
