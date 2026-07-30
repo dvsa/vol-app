@@ -247,16 +247,13 @@ jobs:
                 return 0
               fi
 
-              if [[ ",${transient_csv}," == *",${status},"* ]]; then
-                i=$((i + 1))
-                sleep "${sleep_s}"
-                continue
+              if [[ ",${transient_csv}," != *",${status},"* ]]; then
+                echo "Unexpected RDS status '${status}' while waiting for ${event_type}(${rds_name}) to become '${expected}'." >&2
+                return 1
               fi
 
-              # Unknown non-terminal status: continue polling
               i=$((i + 1))
               sleep "${sleep_s}"
-            done
 
             echo "Timed out waiting for ${event_type}(${rds_name}) to become '${expected}'. Last status='${last_status}'." >&2
             return 1
