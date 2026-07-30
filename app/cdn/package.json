@@ -7,7 +7,9 @@
     "build:grunt:staging": "./node_modules/grunt-cli/bin/grunt --no-color build:staging",
     "build:production": "npm run build:grunt:production",
     "build:staging": "npm run build:grunt:staging",
-    "start": "./node_modules/grunt-cli/bin/grunt serve"
+    "start": "./node_modules/grunt-cli/bin/grunt serve",
+    "assets:save": "node tools/asset-snapshot.mjs save",
+    "assets:compare": "node tools/asset-snapshot.mjs compare"
   },
   "browserslist": [
     "last 2 versions"
