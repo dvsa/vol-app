@@ -19,17 +19,13 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="retrieval_link_event",
- *    indexes={
- *        @ORM\Index(name="ix_retrieval_link_event_retrieval_link_id", columns={"retrieval_link_id"}),
- *        @ORM\Index(name="ix_retrieval_link_event_type", columns={"event_type"}),
- *        @ORM\Index(name="ix_retrieval_link_event_created_on", columns={"created_on"})
- *    }
- * )
  */
+#[ORM\Table(name: 'retrieval_link_event')]
+#[ORM\Index(name: 'ix_retrieval_link_event_retrieval_link_id', columns: ['retrieval_link_id'])]
+#[ORM\Index(name: 'ix_retrieval_link_event_type', columns: ['event_type'])]
+#[ORM\Index(name: 'ix_retrieval_link_event_created_on', columns: ['created_on'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -41,75 +37,67 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="bigint", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'bigint', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to retrieval_link
      *
      * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink", fetch="LAZY")
-     * @ORM\JoinColumn(name="retrieval_link_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink::class, fetch: 'LAZY')]
     protected $retrievalLink;
 
     /**
      * Source context
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="source_context", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'source_context', length: 255, nullable: true)]
     protected $sourceContext;
 
     /**
      * Event type
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="event_type", length=32, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'event_type', length: 32, nullable: false)]
     protected $eventType = '';
 
     /**
      * Member ref
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="member_ref", length=64, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'member_ref', length: 64, nullable: true)]
     protected $memberRef;
 
     /**
      * Ip
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="ip", length=45, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'ip', length: 45, nullable: true)]
     protected $ip;
 
     /**
      * User agent
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="user_agent", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'user_agent', length: 255, nullable: true)]
     protected $userAgent;
 
     /**
      * Detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'detail', length: 255, nullable: true)]
     protected $detail;
 
     /**

@@ -21,22 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="retrieval_link",
- *    indexes={
- *        @ORM\Index(name="ix_retrieval_link_expires_at", columns={"expires_at"}),
- *        @ORM\Index(name="ix_retrieval_link_flow_key", columns={"flow_key"}),
- *        @ORM\Index(name="ix_retrieval_link_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_retrieval_link_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_retrieval_link_token", columns={"token"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_retrieval_link_token", columns={"token"})
- *    }
- * )
  */
+#[ORM\Table(name: 'retrieval_link')]
+#[ORM\Index(name: 'ix_retrieval_link_expires_at', columns: ['expires_at'])]
+#[ORM\Index(name: 'ix_retrieval_link_flow_key', columns: ['flow_key'])]
+#[ORM\Index(name: 'ix_retrieval_link_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_retrieval_link_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'uk_retrieval_link_token', columns: ['token'])]
+#[ORM\UniqueConstraint(name: 'uk_retrieval_link_token', columns: ['token'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractRetrievalLink implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,124 +43,111 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Token
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="token", length=64, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'token', length: 64, nullable: false)]
     protected $token = '';
 
     /**
      * Gate mode
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="gate_mode", length=16, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'gate_mode', length: 16, nullable: false)]
     protected $gateMode = '';
 
     /**
      * Flow key
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="flow_key", length=64, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'flow_key', length: 64, nullable: false)]
     protected $flowKey = '';
 
     /**
      * Source context
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="source_context", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'source_context', length: 255, nullable: true)]
     protected $sourceContext;
 
     /**
      * Recipient email
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="recipient_email", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'recipient_email', length: 255, nullable: true)]
     protected $recipientEmail;
 
     /**
      * Expires at
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="expires_at", nullable=false)
      */
+    #[ORM\Column(type: 'datetime', name: 'expires_at', nullable: false)]
     protected $expiresAt;
 
     /**
      * Revoked at
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="revoked_at", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'revoked_at', nullable: true)]
     protected $revokedAt;
 
     /**
      * Last accessed on
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="last_accessed_on", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'last_accessed_on', nullable: true)]
     protected $lastAccessedOn;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLinkDocument", mappedBy="retrievalLink")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLinkDocument::class, mappedBy: 'retrievalLink')]
     protected $documents;
 
     /**
