@@ -137,7 +137,7 @@ jobs:
             export HTTPS_PROXY="${PROXY_URL}"
             echo "Using proxy ${PROXY_URL}"
           else
-            unset https_proxy HTTPS_PROXY
+            unset https_proxy HTTPS_PROXY http_proxy HTTP_PROXY all_proxy ALL_PROXY
             echo "Proxy host not resolvable (${PROXY_HOST}); proceeding without proxy"
           fi
 
