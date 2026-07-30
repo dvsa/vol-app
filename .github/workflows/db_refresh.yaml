@@ -373,7 +373,7 @@ jobs:
 
           # 1. get RDS status
           payload="{ \"EventType\": \"GetRDSClusterStatus\", \"RDSName\": \"${RDS_CLUSTER_NAME}\" }"
-          invoke_lambda_expect_contains "${payload}" "available" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
+          wait_cluster_status "${RDS_CLUSTER_NAME}" "available" 0 1 || {
             slack_send "${SLACK_FAIL}" "Error. Build failed fetching RDS cluster status"
             exit 1
           }
