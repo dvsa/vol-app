@@ -254,6 +254,7 @@ jobs:
 
               i=$((i + 1))
               sleep "${sleep_s}"
+            done
 
             echo "Timed out waiting for ${event_type}(${rds_name}) to become '${expected}'. Last status='${last_status}'." >&2
             return 1
@@ -500,7 +501,7 @@ jobs:
               --arg paramGroup "${RDS_PARAM_GROUP}" \
               --arg secGroup "${RDS_WRITER_SEC_GROUP}" \
               --argjson tags "${RDS_WRITER_TAGS}" \
-              '{EventType:$eventType,RDSDBInstanceClassWriter:$klass,RDSName:$rdsName,RDSWriterName:$writerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParamGroup:$paramGroup,RDSSG:$secGroup,RDSTags:$tags}'
+              '{EventType:$eventType,RDSDBInstanceClassWriter:$klass,RDSName:$rdsName,RDSWriterName:$writerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParamGroup:$paramGroup,RDSSecGroup:$secGroup,RDSTags:$tags}'
             )"
             if ! invoke_lambda_expect_contains "${payload}" "CreateWriterSuccess" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
               slack_send "${SLACK_WARN}" "Warning. Failed to create Writer ${RDS_WRITER_NAME} for ${RDS_CLUSTER_NAME}. Build will continue - manually create Writer"
@@ -522,7 +523,7 @@ jobs:
               --arg paramGroup "${RDS_PARAM_GROUP}" \
               --arg secGroup "${RDS_SEC_GROUP}" \
               --argjson tags "${RDS_READER_TAGS}" \
-              '{EventType:$eventType,RDSDBInstanceClassReader:$klass,RDSName:$rdsName,RDSReaderName:$readerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParamGroup:$paramGroup,RDSSG:$secGroup,RDSTags:$tags}'
+              '{EventType:$eventType,RDSDBInstanceClassReader:$klass,RDSName:$rdsName,RDSReaderName:$readerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParamGroup:$paramGroup,RDSSecGroup:$secGroup,RDSTags:$tags}'
             )"
             if ! invoke_lambda_expect_contains "${payload}" "CreateReaderSuccess" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
               slack_send "${SLACK_WARN}" "Warning. Failed to create Reader ${RDS_READER_NAME} for ${RDS_CLUSTER_NAME}. Build will continue - manually create Reader"
