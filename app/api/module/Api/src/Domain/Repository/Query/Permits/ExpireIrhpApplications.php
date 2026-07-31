@@ -59,8 +59,8 @@ class ExpireIrhpApplications extends AbstractRawQuery
     protected function getParamTypes()
     {
         return [
-            'permitValidStatuses' => Connection::PARAM_STR_ARRAY,
-            'certificatePermitTypes' => Connection::PARAM_INT_ARRAY,
+            'permitValidStatuses' => \Doctrine\DBAL\ArrayParameterType::STRING,
+            'certificatePermitTypes' => \Doctrine\DBAL\ArrayParameterType::INTEGER,
         ];
     }
 }
