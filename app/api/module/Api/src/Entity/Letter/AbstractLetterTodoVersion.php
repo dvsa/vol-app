@@ -76,6 +76,14 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     protected $lastModifiedBy;
 
     /**
+     * Display name
+     *
+     * @var string
+     */
+    #[ORM\Column(type: 'string', name: 'name', length: 255, nullable: true)]
+    protected $name;
+
+    /**
      * EditorJS format
      *
      * @var array
@@ -234,6 +242,30 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the name
+     *
+     * @param string $name new value being set
+     *
+     * @return static
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * Get the name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
