@@ -95,7 +95,7 @@ class PsvDisc extends AbstractRepository
         return $this->getDbQueryManager()->get('Discs\PsvDiscsSetIsPrinting')
             ->execute(
                 ['isPrinting' => $type, 'ids' => $discIds],
-                ['isPrinting' => \PDO::PARAM_INT, 'ids' => Connection::PARAM_INT_ARRAY]
+                ['isPrinting' => \PDO::PARAM_INT, 'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
             );
     }
 
