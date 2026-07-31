@@ -15,7 +15,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 use DateTime;
 
-class AvailableStocksTest extends QueryHandlerTestCase
+final class AvailableStocksTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -126,35 +126,32 @@ class AvailableStocksTest extends QueryHandlerTestCase
         );
     }
 
-    public static function dpTestHandleQueryEcmtShortTerm(): array
+    public static function dpTestHandleQueryEcmtShortTerm(): \Iterator
     {
         $irhpPermitType = IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM;
         $year = 2020;
-
-        return [
-            'with year' => [
-                [
-                    'irhpPermitType' => $irhpPermitType,
-                    'year' => $year,
-                ],
-                'fetchOpenWindowsByTypeYear',
-                [
-                    $irhpPermitType,
-                    m::type(DateTime::class),
-                    $year,
-                    false
-                ]
+        yield 'with year' => [
+            [
+                'irhpPermitType' => $irhpPermitType,
+                'year' => $year,
             ],
-            'without year' => [
-                [
-                    'irhpPermitType' => $irhpPermitType,
-                ],
-                'fetchOpenWindowsByType',
-                [
-                    $irhpPermitType,
-                    m::type(DateTime::class),
-                    false
-                ]
+            'fetchOpenWindowsByTypeYear',
+            [
+                $irhpPermitType,
+                m::type(DateTime::class),
+                $year,
+                false
+            ]
+        ];
+        yield 'without year' => [
+            [
+                'irhpPermitType' => $irhpPermitType,
+            ],
+            'fetchOpenWindowsByType',
+            [
+                $irhpPermitType,
+                m::type(DateTime::class),
+                false
             ]
         ];
     }
@@ -208,35 +205,32 @@ class AvailableStocksTest extends QueryHandlerTestCase
         );
     }
 
-    public static function dpTestHandleQueryEcmtAnnual(): array
+    public static function dpTestHandleQueryEcmtAnnual(): \Iterator
     {
         $irhpPermitType = IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT;
         $year = 2020;
-
-        return [
-            'with year' => [
-                [
-                    'irhpPermitType' => $irhpPermitType,
-                    'year' => $year,
-                ],
-                'fetchOpenWindowsByTypeYear',
-                [
-                    $irhpPermitType,
-                    m::type(DateTime::class),
-                    $year,
-                    false
-                ]
+        yield 'with year' => [
+            [
+                'irhpPermitType' => $irhpPermitType,
+                'year' => $year,
             ],
-            'without year' => [
-                [
-                    'irhpPermitType' => $irhpPermitType,
-                ],
-                'fetchOpenWindowsByType',
-                [
-                    $irhpPermitType,
-                    m::type(DateTime::class),
-                    false
-                ]
+            'fetchOpenWindowsByTypeYear',
+            [
+                $irhpPermitType,
+                m::type(DateTime::class),
+                $year,
+                false
+            ]
+        ];
+        yield 'without year' => [
+            [
+                'irhpPermitType' => $irhpPermitType,
+            ],
+            'fetchOpenWindowsByType',
+            [
+                $irhpPermitType,
+                m::type(DateTime::class),
+                false
             ]
         ];
     }
@@ -261,13 +255,11 @@ class AvailableStocksTest extends QueryHandlerTestCase
         );
     }
 
-    public static function dpTestHandleQueryUnsupportedType(): array
+    public static function dpTestHandleQueryUnsupportedType(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL],
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQueryNoStocks')]
@@ -299,11 +291,9 @@ class AvailableStocksTest extends QueryHandlerTestCase
         );
     }
 
-    public static function dpHandleQueryNoStocks(): array
+    public static function dpHandleQueryNoStocks(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM],
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM];
     }
 }

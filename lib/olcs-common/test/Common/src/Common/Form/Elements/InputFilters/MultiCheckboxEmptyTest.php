@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\InputFilters;
 
 use Common\Form\Elements\InputFilters;
@@ -7,9 +9,9 @@ use Laminas\Validator\StringLength;
 
 /**
  * Test MultiCheckboxempty InputFilter
- * @covers \Common\Form\Elements\InputFilters\MultiCheckboxEmpty
  */
-class MultiCheckboxEmptyTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\Elements\InputFilters\MultiCheckboxEmpty::class)]
+final class MultiCheckboxEmptyTest extends \PHPUnit\Framework\TestCase
 {
     public $filter;
     /**

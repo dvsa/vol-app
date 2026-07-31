@@ -20,7 +20,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CanAccessOrganisationTest extends AbstractValidatorsTestCase
+final class CanAccessOrganisationTest extends AbstractValidatorsTestCase
 {
     /**
      * @var CanAccessOrganisation
@@ -63,11 +63,9 @@ class CanAccessOrganisationTest extends AbstractValidatorsTestCase
         $this->assertEquals(true, $this->sut->isValid(111));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false]
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

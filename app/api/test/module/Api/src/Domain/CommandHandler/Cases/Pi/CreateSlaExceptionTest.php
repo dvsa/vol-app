@@ -21,7 +21,7 @@ use Mockery as m;
  * Create SLA Exception Test
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Cases\Pi\CreateSlaException::class)]
-class CreateSlaExceptionTest extends AbstractCommandHandlerTestCase
+final class CreateSlaExceptionTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -109,7 +109,7 @@ class CreateSlaExceptionTest extends AbstractCommandHandlerTestCase
         $this->assertArrayHasKey('caseSlaException', $result->getIds());
 
         // Verify the entity was created correctly
-        $this->assertNotNull($capturedEntity);
+        $this->assertInstanceOf(\Dvsa\Olcs\Api\Entity\Pi\PiSlaException::class, $capturedEntity);
         $this->assertInstanceOf(PiSlaExceptionEntity::class, $capturedEntity);
     }
 

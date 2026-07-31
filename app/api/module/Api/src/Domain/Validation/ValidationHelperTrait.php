@@ -126,7 +126,7 @@ trait ValidationHelperTrait
         return call_user_func_array([$validator, 'isValid'], $params);
     }
 
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         if ($this instanceof AuthAwareInterface) {
             $this->setAuthService($container->get(AuthorizationService::class));

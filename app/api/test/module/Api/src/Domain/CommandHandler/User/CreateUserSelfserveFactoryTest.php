@@ -21,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class CreateUserSelfserveFactoryTest
  * @see CreateUserSelfserveFactory
  */
-class CreateUserSelfserveFactoryTest extends MockeryTestCase
+final class CreateUserSelfserveFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
     use MocksAbstractCommandHandlerServicesTrait;
@@ -55,6 +55,7 @@ class CreateUserSelfserveFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(CreateUserSelfserve::class, $result->getWrapped());
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();
@@ -77,7 +78,7 @@ class CreateUserSelfserveFactoryTest extends MockeryTestCase
     private function setupRespositories(): void
     {
         $repositoryServiceManager = $this->serviceManager->get('RepositoryServiceManager');
-        assert($repositoryServiceManager instanceof RepositoryServiceManager);
+        $this->assertInstanceOf(RepositoryServiceManager::class, $repositoryServiceManager);
         $mockUserRepository = m::mock(User::class);
         $repositoryServiceManager->setService('User', $mockUserRepository);
     }

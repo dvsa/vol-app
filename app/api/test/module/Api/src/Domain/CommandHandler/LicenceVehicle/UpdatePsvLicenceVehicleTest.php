@@ -29,7 +29,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdatePsvLicenceVehicleTest extends AbstractCommandHandlerTestCase
+final class UpdatePsvLicenceVehicleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -163,7 +163,7 @@ class UpdatePsvLicenceVehicleTest extends AbstractCommandHandlerTestCase
 
         $this->assertEquals($expected, $result->toArray());
 
-        $this->assertEquals('2015-01-01', $licenceVehicle->getRemovalDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $licenceVehicle->getRemovalDate()->format('Y-m-d'));
     }
 
     public function testHandleCommand(): void
@@ -218,8 +218,8 @@ class UpdatePsvLicenceVehicleTest extends AbstractCommandHandlerTestCase
 
         $this->assertEquals($expected, $result->toArray());
 
-        $this->assertEquals('2015-01-01', $licenceVehicle->getReceivedDate()->format('Y-m-d'));
-        $this->assertEquals(
+        $this->assertSame('2015-01-01', $licenceVehicle->getReceivedDate()->format('Y-m-d'));
+        $this->assertSame(
             '2015-01-01 12:00:00',
             $licenceVehicle->getSpecifiedDate()->format('Y-m-d H:i:s')
         );

@@ -27,16 +27,13 @@ use LmcRbacMvc\Service\AuthorizationService;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\DocTemplate\Update::class)]
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
-    public const BODY = 'expect_body';
-    public const IDENTIFIER = 'templates/fileName.rtf';
-    public const USER_ID = 291;
+    public const string BODY = 'expect_body';
+    public const string IDENTIFIER = 'templates/fileName.rtf';
+    public const int USER_ID = 291;
 
     protected $sut;
-
-    /** @var  m\MockInterface */
-    private $mockUploader;
 
     public function setUp(): void
     {
@@ -49,7 +46,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $this->mockRepo('User', UserRepo::class);
         $this->mockRepo('LetterType', LetterTypeRepo::class);
 
-        $this->mockUploader = m::mock(ContentStoreFileUploader::class);
+        $mockUploader = m::mock(ContentStoreFileUploader::class);
 
         $this->mockedSmServices = [
             AuthorizationService::class => m::mock(AuthorizationService::class),
@@ -149,8 +146,8 @@ class UpdateTest extends AbstractCommandHandlerTestCase
             ->once()
             ->andReturnUsing(
                 function ($fileName, DsFile $file) {
-                    static::assertSame(self::IDENTIFIER, $fileName);
-                    static::assertEquals(self::BODY, $file->getContent());
+                    $this->assertSame(self::IDENTIFIER, $fileName);
+                    $this->assertEquals(self::BODY, $file->getContent());
 
                     $file->setIdentifier(self::IDENTIFIER);
 

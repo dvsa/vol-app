@@ -16,7 +16,7 @@ class SplitScreenControllerFactory implements FactoryInterface
      * @return SplitScreenController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SplitScreenController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SplitScreenController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
 

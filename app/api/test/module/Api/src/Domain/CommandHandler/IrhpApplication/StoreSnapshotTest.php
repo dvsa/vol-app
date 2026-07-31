@@ -19,7 +19,7 @@ use Mockery as m;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class StoreSnapshotTest extends AbstractCreateSnapshotHandlerTestCase
+final class StoreSnapshotTest extends AbstractCreateSnapshotHandlerTestCase
 {
     protected $cmdClass = Cmd::class;
     protected $sutClass = Sut::class;

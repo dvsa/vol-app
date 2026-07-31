@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\ApplicationTrailerLimit;
  *
  * @author Alex Peskov <alex.peshkov@valtech.co.uk>
  */
-class ApplicationTrailerLimitTest extends \PHPUnit\Framework\TestCase
+final class ApplicationTrailerLimitTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

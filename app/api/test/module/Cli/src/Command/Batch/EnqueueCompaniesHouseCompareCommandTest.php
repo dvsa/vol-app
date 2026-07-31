@@ -9,7 +9,7 @@ use Dvsa\Olcs\Cli\Command\Batch\EnqueueCompaniesHouseCompareCommand;
 use Dvsa\Olcs\Cli\Domain\Command\MessageQueue\Enqueue;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class EnqueueCompaniesHouseCompareCommandTest extends AbstractBatchCommandCases
+final class EnqueueCompaniesHouseCompareCommandTest extends AbstractBatchCommandCases
 {
     use QueryHandlerExceptionTestsTrait;
 

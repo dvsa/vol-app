@@ -22,8 +22,9 @@ use Mockery as m;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class BusRegReadAuditTest extends AbstractReadAuditTestCase
+final class BusRegReadAuditTest extends AbstractReadAuditTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(BusRegReadAudit::class, true);

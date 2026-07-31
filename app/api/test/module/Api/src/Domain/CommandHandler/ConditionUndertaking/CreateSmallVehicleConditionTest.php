@@ -21,7 +21,7 @@ use Mockery as m;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class CreateSmallVehicleConditionTest extends AbstractCommandHandlerTestCase
+final class CreateSmallVehicleConditionTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -10,7 +10,7 @@ use Olcs\Service\Cookie\CookieState;
 use Olcs\Service\Cookie\Preferences;
 use RuntimeException;
 
-class CookieStateTest extends MockeryTestCase
+final class CookieStateTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValid')]
     public function testIsValid(bool $isValid): void
@@ -24,16 +24,14 @@ class CookieStateTest extends MockeryTestCase
     }
 
     /**
-     * @return bool[][]
+     * @return \Iterator<(int | string), array<bool>>
      *
      * @psalm-return list{list{true}, list{false}}
      */
-    public static function dpIsValid(): array
+    public static function dpIsValid(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
     public function testGetPreferencesWhenIsValid(): void

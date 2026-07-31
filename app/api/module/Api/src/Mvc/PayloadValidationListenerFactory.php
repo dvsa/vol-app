@@ -29,7 +29,7 @@ class PayloadValidationListenerFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PayloadValidationListener
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): PayloadValidationListener
     {
         return new PayloadValidationListener($container->get('TransferAnnotationBuilder'));
     }

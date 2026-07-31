@@ -22,72 +22,70 @@ use Laminas\Form\Element;
 /**
  * @see FormRadioVertical
  */
-class FormRadioVerticalTest extends MockeryTestCase
+final class FormRadioVerticalTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
-    protected const A_RADIO_NAME = 'RADIO_NAME';
+    protected const string A_RADIO_NAME = 'RADIO_NAME';
 
-    protected const RADIO_VERTICAL_TEMPLATE = 'partials/form/radio-vertical';
+    protected const string RADIO_VERTICAL_TEMPLATE = 'partials/form/radio-vertical';
 
-    protected const RENDERED_TEMPLATE = 'RENDERED TEMPLATE';
+    protected const string RENDERED_TEMPLATE = 'RENDERED TEMPLATE';
 
-    protected const RADIO_ELEMENT_VARIABLE_KEY = 'radioElement';
+    protected const string RADIO_ELEMENT_VARIABLE_KEY = 'radioElement';
 
-    protected const ELEMENT_VARIABLE_KEY = 'element';
+    protected const string ELEMENT_VARIABLE_KEY = 'element';
 
-    protected const VALUE_OPTIONS_VARIABLE_KEY = 'valueOptions';
+    protected const string VALUE_OPTIONS_VARIABLE_KEY = 'valueOptions';
 
-    protected const CONDITIONAL_CONTENT_KEY = 'conditional_content';
+    protected const string CONDITIONAL_CONTENT_KEY = 'conditional_content';
 
-    protected const A_SINGLE_STRING_FORMATTED_VALUE_OPTION = [self::A_VALUE_OPTION_VALUE => self::A_VALUE_OPTION_LABEL];
+    protected const array A_SINGLE_STRING_FORMATTED_VALUE_OPTION = [self::A_VALUE_OPTION_VALUE => self::A_VALUE_OPTION_LABEL];
 
-    protected const LABEL = 'label';
+    protected const string LABEL = 'label';
 
-    protected const VALUE = 'value';
+    protected const string VALUE = 'value';
 
-    protected const A_VALUE_OPTION_VALUE = 'A VALUE OPTION VALUE';
+    protected const string A_VALUE_OPTION_VALUE = 'A VALUE OPTION VALUE';
 
-    protected const A_VALUE_OPTION_LABEL = 'A VALUE OPTION LABEL';
+    protected const string A_VALUE_OPTION_LABEL = 'A VALUE OPTION LABEL';
 
-    protected const A_VALUE_OPTION_CONDITIONAL_CONTENT = 'A VALUE OPTION CONDITIONAL CONTENT';
+    protected const string A_VALUE_OPTION_CONDITIONAL_CONTENT = 'A VALUE OPTION CONDITIONAL CONTENT';
 
-    protected const AN_ARRAY_FORMATTED_VALUE_OPTION_FROM_A_STRING_FORMAT = [
+    protected const array AN_ARRAY_FORMATTED_VALUE_OPTION_FROM_A_STRING_FORMAT = [
         'value' => 0,
         'label' => self::A_VALUE_OPTION_LABEL,
     ];
 
-    protected const AN_ARRAY_FORMATTED_VALUE_OPTION_WITH_CONDITIONAL_CONTENT = [
+    protected const array AN_ARRAY_FORMATTED_VALUE_OPTION_WITH_CONDITIONAL_CONTENT = [
         'value' => self::A_VALUE_OPTION_VALUE,
         'label' => self::A_VALUE_OPTION_LABEL,
         'conditional_content' => self::A_VALUE_OPTION_CONDITIONAL_CONTENT,
     ];
 
-    protected const AN_ARRAY_FORMATTED_VALUE_OPTION_WITHOUT_CONDITIONAL_CONTENT = [
+    protected const array AN_ARRAY_FORMATTED_VALUE_OPTION_WITHOUT_CONDITIONAL_CONTENT = [
         'value' => self::A_VALUE_OPTION_VALUE,
         'label' => self::A_VALUE_OPTION_LABEL,
     ];
 
-    protected const CONDITIONAL_CONTENT_SIBLING_NAME = '0Content';
+    protected const string CONDITIONAL_CONTENT_SIBLING_NAME = '0Content';
 
-    protected const HINT = 'hint';
+    protected const string HINT = 'hint';
 
-    protected const AN_ELEMENT_HINT = 'AN ELEMENT HINT';
+    protected const string AN_ELEMENT_HINT = 'AN ELEMENT HINT';
 
-    protected const AN_ELEMENT_LABEL = 'AN ELEMENT LABEL';
+    protected const string AN_ELEMENT_LABEL = 'AN ELEMENT LABEL';
 
-    protected const LABEL_ATTRIBUTES = 'label_attributes';
+    protected const string LABEL_ATTRIBUTES = 'label_attributes';
 
-    protected const AN_ELEMENT_LABEL_ATTRIBUTES = ['LABEL_ATTRIBUTE_1' => 'LABEL ATTRIBUTES 1 VALUE'];
+    protected const array AN_ELEMENT_LABEL_ATTRIBUTES = ['LABEL_ATTRIBUTE_1' => 'LABEL ATTRIBUTES 1 VALUE'];
 
     /**
      * @var FormRadioVertical
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderIsCallable(): void
     {
         // Setup
@@ -97,10 +95,8 @@ class FormRadioVerticalTest extends MockeryTestCase
         $this->assertIsCallable(fn(\Laminas\Form\ElementInterface $element): string => $this->sut->render($element));
     }
 
-    /**
-     * @test
-     * @depends renderIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderRendersAFieldset(): void
     {
         // Setup
@@ -115,10 +111,8 @@ class FormRadioVerticalTest extends MockeryTestCase
         $this->assertTrue(true);
     }
 
-    /**
-     * @test
-     * @depends renderIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderRendersARadio(): void
     {
         // Setup
@@ -133,10 +127,8 @@ class FormRadioVerticalTest extends MockeryTestCase
         $this->assertTrue(true);
     }
 
-    /**
-     * @test
-     * @depends renderRendersARadio
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderRendersARadio')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderReturnsARenderedView(): void
     {
         // Setup
@@ -150,11 +142,9 @@ class FormRadioVerticalTest extends MockeryTestCase
         $this->assertEquals(static::RENDERED_TEMPLATE, $result);
     }
 
-    /**
-     * @test
-     * @depends renderRendersAFieldset
-     * @depends renderReturnsARenderedView
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderRendersAFieldset')]
+    #[\PHPUnit\Framework\Attributes\Depends('renderReturnsARenderedView')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderReturnsARenderedViewWithFieldsetElement(): void
     {
         // Setup
@@ -172,10 +162,8 @@ class FormRadioVerticalTest extends MockeryTestCase
         $this->assertEquals(static::RENDERED_TEMPLATE, $result);
     }
 
-    /**
-     * @test
-     * @depends renderReturnsARenderedViewWithFieldsetElement
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderReturnsARenderedViewWithFieldsetElement')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderReturnsARenderedViewWithFieldsetElementWhenPassedARadio(): void
     {
         // Setup
@@ -197,10 +185,8 @@ class FormRadioVerticalTest extends MockeryTestCase
         $this->assertEquals(static::RENDERED_TEMPLATE, $result);
     }
 
-    /**
-     * @test
-     * @depends renderReturnsARenderedViewWithFieldsetElement
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderReturnsARenderedViewWithFieldsetElement')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderReturnsARenderedViewWithFieldsetElementWhenPassedARadioWithRadioElementOptionSetToTheElementsName(): void
     {
         // Setup
@@ -210,7 +196,7 @@ class FormRadioVerticalTest extends MockeryTestCase
         // Expect
         $this->renderer()->expects('render')->withArgs(static function ($template, $vars) use ($element) {
             $fieldset = $vars[static::ELEMENT_VARIABLE_KEY];
-            assert($fieldset instanceof Fieldset, 'Expected instance of Fieldset');
+            \PHPUnit\Framework\Assert::assertInstanceOf(Fieldset::class, $fieldset, 'Expected instance of Fieldset');
             return $fieldset->getOption('radio-element') === $element->getName();
         })->andReturn(static::RENDERED_TEMPLATE);
 
@@ -221,11 +207,9 @@ class FormRadioVerticalTest extends MockeryTestCase
         $this->assertEquals(static::RENDERED_TEMPLATE, $result);
     }
 
-    /**
-     * @test
-     * @depends renderRendersARadio
-     * @depends renderReturnsARenderedView
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderRendersARadio')]
+    #[\PHPUnit\Framework\Attributes\Depends('renderReturnsARenderedView')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderReturnsARenderedViewWithRadioElement(): void
     {
         // Setup
@@ -243,11 +227,9 @@ class FormRadioVerticalTest extends MockeryTestCase
         $this->assertEquals(static::RENDERED_TEMPLATE, $result);
     }
 
-    /**
-     * @test
-     * @depends renderRendersARadio
-     * @depends renderReturnsARenderedView
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderRendersARadio')]
+    #[\PHPUnit\Framework\Attributes\Depends('renderReturnsARenderedView')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderReturnsARenderedViewWithValueOptions(): void
     {
         // Setup
@@ -265,11 +247,9 @@ class FormRadioVerticalTest extends MockeryTestCase
         $this->assertEquals(static::RENDERED_TEMPLATE, $result);
     }
 
-    /**
-     * @test
-     * @depends renderRendersARadio
-     * @depends renderReturnsARenderedView
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderRendersARadio')]
+    #[\PHPUnit\Framework\Attributes\Depends('renderReturnsARenderedView')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderReturnsARenderedViewWithValueOptionsFromAStringFormatToBeAnArray(): void
     {
         // Setup
@@ -292,11 +272,9 @@ class FormRadioVerticalTest extends MockeryTestCase
         $this->assertEquals(static::RENDERED_TEMPLATE, $result);
     }
 
-    /**
-     * @test
-     * @depends renderRendersARadio
-     * @depends renderReturnsARenderedView
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderRendersARadio')]
+    #[\PHPUnit\Framework\Attributes\Depends('renderReturnsARenderedView')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderReturnsARenderedViewWithValueOptionsFromAnArrayFormatToBeAnArrayIncludingConditionalContentFromAValueOptionConfiguration(): void
     {
         // Setup
@@ -320,11 +298,9 @@ class FormRadioVerticalTest extends MockeryTestCase
         $this->assertEquals(static::RENDERED_TEMPLATE, $result);
     }
 
-    /**
-     * @test
-     * @depends renderRendersARadio
-     * @depends renderReturnsARenderedView
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderRendersARadio')]
+    #[\PHPUnit\Framework\Attributes\Depends('renderReturnsARenderedView')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderReturnsARenderedViewWithValueOptionsFromAnArrayFormatToBeAnArrayIncludingConditionalContentFromASibling(): void
     {
         // Setup
@@ -353,10 +329,8 @@ class FormRadioVerticalTest extends MockeryTestCase
         $this->assertEquals(static::RENDERED_TEMPLATE, $result);
     }
 
-    /**
-     * @test
-     * @depends renderReturnsARenderedView
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('renderReturnsARenderedView')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function renderReturnsRenderedViewWithLabelAndHint(): void
     {
         // Setup

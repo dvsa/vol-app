@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Custom;
 
 use Common\Form\Elements\Custom\EcmtNoOfPermitsElement;
@@ -14,11 +16,9 @@ use Laminas\Validator\GreaterThan;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EcmtNoOfPermitsSingleElementTest extends MockeryTestCase
+final class EcmtNoOfPermitsSingleElementTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpGetInputSpecification
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetInputSpecification')]
     public function testGetInputSpecification($emissionsCategory, $skipAvailabilityValidation, $expectAvailabilityValidator): void
     {
         $maxPermitted = 77;
@@ -111,7 +111,7 @@ class EcmtNoOfPermitsSingleElementTest extends MockeryTestCase
      *
      * @psalm-return list{list{'euro5', false, true}, list{'euro5', true, false}, list{'euro6', false, true}, list{'euro6', true, false}}
      */
-    public function dpGetInputSpecification(): array
+    public static function dpGetInputSpecification(): array
     {
         return [
             ['euro5', false, true],

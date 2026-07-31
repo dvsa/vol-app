@@ -29,7 +29,7 @@ use Dvsa\Olcs\Api\Domain\Command\Vehicle\ProcessDuplicateVehicleWarning as Cmd;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ProcessDuplicateVehicleWarningTest extends AbstractCommandHandlerTestCase
+final class ProcessDuplicateVehicleWarningTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

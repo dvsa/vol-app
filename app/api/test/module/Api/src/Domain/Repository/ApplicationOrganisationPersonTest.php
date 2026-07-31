@@ -18,13 +18,14 @@ use Dvsa\Olcs\Api\Domain\Repository\ApplicationOrganisationPerson as Repo;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class ApplicationOrganisationPersonTest extends RepositoryTestCase
+final class ApplicationOrganisationPersonTest extends RepositoryTestCase
 {
     /**
      * @var Repo
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

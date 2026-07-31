@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Domain\Command\ContinuationDetail\GenerateCheckListReminder as
 use Dvsa\Olcs\Api\Domain\Repository;
 use Mockery as m;
 
-class GenerateChecklistReminderTest extends AbstractCommandHandlerTestCase
+final class GenerateChecklistReminderTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -53,7 +53,7 @@ class GenerateChecklistReminderTest extends AbstractCommandHandlerTestCase
                 'user' => 4,
                 'enforcePrint' => false,
             ],
-            (new Result())->addId('document', 76)
+            new Result()->addId('document', 76)
         );
 
         $command = Command::create(['id' => 87, 'user' => 4]);

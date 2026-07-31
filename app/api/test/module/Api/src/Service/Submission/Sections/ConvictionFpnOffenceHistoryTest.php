@@ -10,16 +10,16 @@ use Dvsa\Olcs\Api\Entity\Cases\Conviction;
  * Class ConvictionFpnOffenceHistoryTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class ConvictionFpnOffenceHistoryTest extends AbstractSubmissionSectionTestCase
+final class ConvictionFpnOffenceHistoryTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\ConvictionFpnOffenceHistory::class;
 
     /**
      * Filter provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
         $case = static::getCase();
 
@@ -61,8 +61,6 @@ class ConvictionFpnOffenceHistoryTest extends AbstractSubmissionSectionTestCase
             ]
         ];
 
-        return [
-            [$case, $expectedResult],
-        ];
+        yield [$case, $expectedResult];
     }
 }

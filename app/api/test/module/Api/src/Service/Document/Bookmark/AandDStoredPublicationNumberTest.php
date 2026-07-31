@@ -12,10 +12,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class AandDStoredPublicationNumberTest extends MockeryTestCase
+final class AandDStoredPublicationNumberTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new AandDStoredPublicationNumber();
@@ -34,84 +35,82 @@ class AandDStoredPublicationNumberTest extends MockeryTestCase
         $this->assertEquals($result, $this->sut->render());
     }
 
-    public static function publicationsProvider(): array
+    public static function publicationsProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'publicationLinks' => [
-                        [
-                            'publication' => [
-                                'pubDate' => '2015-10-31',
-                                'id' => 2,
-                                'publicationNo' => '4'
-                            ],
-                            'publicationSection' => [
-                                'id' => 1
-                            ]
+                'publicationLinks' => [
+                    [
+                        'publication' => [
+                            'pubDate' => '2015-10-31',
+                            'id' => 2,
+                            'publicationNo' => '4'
                         ],
-                        [
-                            'publication' => [
-                                'pubDate' => '2015-10-29',
-                                'id' => 3,
-                                'publicationNo' => '1'
-                            ],
-                            'publicationSection' => [
-                                'id' => 1
-                            ]
-                        ],
-                        [
-                            'publication' => [
-                                'pubDate' => '2015-10-30',
-                                'id' => 1,
-                                'publicationNo' => '2'
-                            ],
-                            'publicationSection' => [
-                                'id' => 1
-                            ]
-                        ],
-                        [
-                            'publication' => [
-                                'pubDate' => '2015-10-30',
-                                'id' => 2,
-                                'publicationNo' => '3'
-                            ],
-                            'publicationSection' => [
-                                'id' => 1
-                            ]
-                        ],
-                        [
-                            'publication' => [
-                                'pubDate' => '2015-10-30',
-                                'id' => 2,
-                                'publicationNo' => '3'
-                            ],
-                            'publicationSection' => [
-                                'id' => 1
-                            ]
-                        ],
-                        [
-                            'publication' => [
-                                'pubDate' => '2015-10-30',
-                                'id' => 1,
-                                'publicationNo' => '5'
-                            ],
-                            'publicationSection' => [
-                                'id' => 1
-                            ]
+                        'publicationSection' => [
+                            'id' => 1
                         ]
                     ],
+                    [
+                        'publication' => [
+                            'pubDate' => '2015-10-29',
+                            'id' => 3,
+                            'publicationNo' => '1'
+                        ],
+                        'publicationSection' => [
+                            'id' => 1
+                        ]
+                    ],
+                    [
+                        'publication' => [
+                            'pubDate' => '2015-10-30',
+                            'id' => 1,
+                            'publicationNo' => '2'
+                        ],
+                        'publicationSection' => [
+                            'id' => 1
+                        ]
+                    ],
+                    [
+                        'publication' => [
+                            'pubDate' => '2015-10-30',
+                            'id' => 2,
+                            'publicationNo' => '3'
+                        ],
+                        'publicationSection' => [
+                            'id' => 1
+                        ]
+                    ],
+                    [
+                        'publication' => [
+                            'pubDate' => '2015-10-30',
+                            'id' => 2,
+                            'publicationNo' => '3'
+                        ],
+                        'publicationSection' => [
+                            'id' => 1
+                        ]
+                    ],
+                    [
+                        'publication' => [
+                            'pubDate' => '2015-10-30',
+                            'id' => 1,
+                            'publicationNo' => '5'
+                        ],
+                        'publicationSection' => [
+                            'id' => 1
+                        ]
+                    ]
                 ],
-                '4'
             ],
-            [
-                ['publicationLinks' => []],
-                AandDStoredPublicationNumber::APP_NO_PUBLISHED
-            ],
-            [
-                [],
-                ''
-            ]
+            '4'
+        ];
+        yield [
+            ['publicationLinks' => []],
+            AandDStoredPublicationNumber::APP_NO_PUBLISHED
+        ];
+        yield [
+            [],
+            ''
         ];
     }
 }

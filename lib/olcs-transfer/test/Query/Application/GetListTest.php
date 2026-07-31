@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Application;
 
 use Dvsa\Olcs\Transfer\Query\Application\GetList;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Query\Application\GetList
- */
-class GetListTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\Application\GetList::class)]
+final class GetListTest extends MockeryTestCase
 {
     public function testGetSet()
     {
@@ -19,7 +19,7 @@ class GetListTest extends MockeryTestCase
             ]
         );
 
-        static::assertEquals('unit_Org', $sut->getOrganisation());
-        static::assertEquals('unit_Status', $sut->getStatus());
+        $this->assertEquals('unit_Org', $sut->getOrganisation());
+        $this->assertEquals('unit_Status', $sut->getStatus());
     }
 }

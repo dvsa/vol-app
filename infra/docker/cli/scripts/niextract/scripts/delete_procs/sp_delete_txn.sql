@@ -35,12 +35,16 @@ BEGIN
     
     WHILE(@rowcount = 10000) DO
 
-
-         
-        DELETE t FROM txn t
-        LEFT JOIN fee_txn ft ON t.id = ft.txn_id
-        WHERE ft.txn_id IS NULL
-        LIMIT 10000;
+        DELETE FROM txn
+        WHERE id IN (
+            SELECT id FROM (
+                SELECT t.id
+                FROM txn t
+                LEFT JOIN fee_txn ft ON t.id = ft.txn_id
+                WHERE ft.txn_id IS NULL
+                LIMIT 10000
+            ) AS batch
+        );
 
         SET @rowcount := row_count();
         SET @total := @total + @rowcount;

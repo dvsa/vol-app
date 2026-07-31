@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Bus\BusNoticePeriod as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class BusNoticePeriodEntityTest extends EntityTester
+final class BusNoticePeriodEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

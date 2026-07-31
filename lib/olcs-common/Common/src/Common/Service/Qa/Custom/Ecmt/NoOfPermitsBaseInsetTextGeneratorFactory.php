@@ -8,7 +8,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class NoOfPermitsBaseInsetTextGeneratorFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): NoOfPermitsBaseInsetTextGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): NoOfPermitsBaseInsetTextGenerator
     {
         return new NoOfPermitsBaseInsetTextGenerator(
             $container->get('Helper\Translation'),

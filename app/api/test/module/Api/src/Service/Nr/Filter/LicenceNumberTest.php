@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Nr\Filter\LicenceNumber;
  * @package Dvsa\OlcsTest\Api\Service\Nr\Filter
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class LicenceNumberTest extends \PHPUnit\Framework\TestCase
+final class LicenceNumberTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests that if a community licence number pattern is found then we split out the part we need.
@@ -38,13 +38,11 @@ class LicenceNumberTest extends \PHPUnit\Framework\TestCase
     /**
      * data provider for testFilter
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function filterProvider(): array
+    public static function filterProvider(): \Iterator
     {
-        return [
-            ['UKGB/OB1234567/00000', 'OB1234567'],
-            ['OB1234567', 'OB1234567'],
-        ];
+        yield ['UKGB/OB1234567/00000', 'OB1234567'];
+        yield ['OB1234567', 'OB1234567'];
     }
 }

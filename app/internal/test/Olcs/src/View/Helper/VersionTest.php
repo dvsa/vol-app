@@ -11,7 +11,7 @@ use Olcs\View\Helper\Version;
  * @package OlcsTest\View\Helper
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\OLCS\View\Helper\Version::class)]
-class VersionTest extends \PHPUnit\Framework\TestCase
+final class VersionTest extends \PHPUnit\Framework\TestCase
 {
     public function testVersionViewHelper(): void
     {

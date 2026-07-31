@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BrServiceTypes;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BrServiceTypesTest extends SingleValueTestAbstract
+final class BrServiceTypesTest extends SingleValueTestAbstract
 {
     public const SUT_CLASS_NAME = BrServiceTypes::class;
 }

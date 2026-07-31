@@ -18,7 +18,7 @@ class CandidatePermitsAvailableCountCalculatorFactory implements FactoryInterfac
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CandidatePermitsAvailableCountCalculator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CandidatePermitsAvailableCountCalculator
     {
         $repoServiceManager = $container->get('RepositoryServiceManager');
         return new CandidatePermitsAvailableCountCalculator(

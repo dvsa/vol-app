@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseOfficer as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class CompaniesHouseOfficerEntityTest extends EntityTester
+final class CompaniesHouseOfficerEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

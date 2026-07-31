@@ -1087,7 +1087,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      * @param array|null $data
      * @return Request
      */
-    protected function postRequest(array $data = null): Request
+    protected function postRequest(?array $data = null): Request
     {
         $request = new Request();
         $request->setMethod(Request::METHOD_POST);
@@ -1228,7 +1228,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      * @param int|null $statusCode
      * @return Response
      */
-    protected function invalidCqrsResponse(int $statusCode = null): Response
+    protected function invalidCqrsResponse(?int $statusCode = null): Response
     {
         $httpResponse = new HttpResponse();
         $httpResponse->setStatusCode($statusCode ?? \Laminas\Http\Response::STATUS_CODE_500);
@@ -1241,7 +1241,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      * @param array|null $data
      * @return Response
      */
-    protected function cqrsResponse(array $data = null): Response
+    protected function cqrsResponse(?array $data = null): Response
     {
         $response = new Response(new HttpResponse());
         $response->setResult($data ?? []);
@@ -1252,7 +1252,7 @@ class AddVehiclesQuestionControllerTest extends MockeryTestCase
      * @param array|null $data
      * @return Response
      */
-    protected function applicationCqrsResponse(array $data = null, bool $merge = true): Response
+    protected function applicationCqrsResponse(?array $data = null, bool $merge = true): Response
     {
         if (true === $merge || null === $data) {
             $data = array_merge(static::APPLICATION_DATA, $data ?? []);

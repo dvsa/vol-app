@@ -18,7 +18,7 @@ use Mockery as m;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class InitialiseScopeTest extends AbstractCommandHandlerTestCase
+final class InitialiseScopeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

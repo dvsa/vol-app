@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Api\Service\Document\Parser;
 
+use Dvsa\Olcs\Api\Service\Document\Rtf\RtfEncoder;
+
 /**
  * RTF parser
  *
@@ -168,6 +170,9 @@ class RtfParser implements ParserInterface
      */
     public function getEntitiesAndQuote($data)
     {
-        return \PHPRtfLite_Utf8::getUnicodeEntities(\PHPRtfLite::quoteRtfCode($data, true), 'UTF-8');
+        // bookmark values may be null (e.g. optional publication link text), so
+        // cast before handing to the strictly-typed encoder — matching the null
+        // tolerance the old untyped library provided.
+        return RtfEncoder::getUnicodeEntities(RtfEncoder::quoteRtfCode((string)$data, true));
     }
 }

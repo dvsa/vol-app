@@ -16,7 +16,7 @@ class CertRoadworthinessMotExpiryDateFormControlStrategyFactory implements Facto
      * @return BaseFormControlStrategy
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BaseFormControlStrategy
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): BaseFormControlStrategy
     {
         return new BaseFormControlStrategy(
             'cert_road_mot_expiry_date',

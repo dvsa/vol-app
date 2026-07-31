@@ -20,13 +20,14 @@ use Common\RefData;
 use Laminas\View\Model\ViewModel;
 use Laminas\View\Helper\Url;
 
-class IrhpApplicationFurnitureTest extends TestCase
+final class IrhpApplicationFurnitureTest extends TestCase
 {
     /**
      * @var IrhpApplicationFurniture
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(IrhpApplicationFurniture::class)
@@ -215,101 +216,99 @@ class IrhpApplicationFurnitureTest extends TestCase
         $this->sut->onIrhpApplicationFurniture($event);
     }
 
-    public static function dpOnIrhpApplicationFurniture(): array
+    public static function dpOnIrhpApplicationFurniture(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'canBeCancelled' => false,
-                    'canBeTerminated' => false,
-                    'canBeSubmitted' => false,
-                    'canBeWithdrawn' => false,
-                    'canBeDeclined' => false,
-                    'canBeGranted' => false,
-                    'canPreGrant' => true,
-                    'isGrantable' => false,
-                    'canBeRevivedFromWithdrawn' => false,
-                    'canBeRevivedFromUnsuccessful' => false,
-                    'canBeResetToNotYetSubmittedFromValid' => false,
-                    'canBeResetToNotYetSubmittedFromCancelled' => false,
-                ],
-                [
-                    'isCancelVisible' => false,
-                    'isTerminateVisible' => false,
-                    'isSubmitVisible' => false,
-                    'isWithdrawVisible' => false,
-                    'isGrantVisible' => false,
-                ]
+                'canBeCancelled' => false,
+                'canBeTerminated' => false,
+                'canBeSubmitted' => false,
+                'canBeWithdrawn' => false,
+                'canBeDeclined' => false,
+                'canBeGranted' => false,
+                'canPreGrant' => true,
+                'isGrantable' => false,
+                'canBeRevivedFromWithdrawn' => false,
+                'canBeRevivedFromUnsuccessful' => false,
+                'canBeResetToNotYetSubmittedFromValid' => false,
+                'canBeResetToNotYetSubmittedFromCancelled' => false,
             ],
             [
-                [
-                    'canBeCancelled' => false,
-                    'canBeTerminated' => false,
-                    'canBeSubmitted' => false,
-                    'canBeWithdrawn' => true,
-                    'canBeDeclined' => false,
-                    'canBeGranted' => false,
-                    'canPreGrant' => true,
-                    'isGrantable' => false,
-                    'canBeRevivedFromWithdrawn' => false,
-                    'canBeRevivedFromUnsuccessful' => false,
-                    'canBeResetToNotYetSubmittedFromValid' => true,
-                    'canBeResetToNotYetSubmittedFromCancelled' => true,
-                ],
-                [
-                    'isCancelVisible' => false,
-                    'isTerminateVisible' => false,
-                    'isSubmitVisible' => false,
-                    'isWithdrawVisible' => true,
-                    'isGrantVisible' => false,
-                ]
+                'isCancelVisible' => false,
+                'isTerminateVisible' => false,
+                'isSubmitVisible' => false,
+                'isWithdrawVisible' => false,
+                'isGrantVisible' => false,
+            ]
+        ];
+        yield [
+            [
+                'canBeCancelled' => false,
+                'canBeTerminated' => false,
+                'canBeSubmitted' => false,
+                'canBeWithdrawn' => true,
+                'canBeDeclined' => false,
+                'canBeGranted' => false,
+                'canPreGrant' => true,
+                'isGrantable' => false,
+                'canBeRevivedFromWithdrawn' => false,
+                'canBeRevivedFromUnsuccessful' => false,
+                'canBeResetToNotYetSubmittedFromValid' => true,
+                'canBeResetToNotYetSubmittedFromCancelled' => true,
             ],
             [
-                [
-                    'canBeCancelled' => false,
-                    'canBeTerminated' => false,
-                    'canBeSubmitted' => false,
-                    'canBeWithdrawn' => false,
-                    'canBeDeclined' => true,
-                    'canBeGranted' => false,
-                    'canPreGrant' => true,
-                    'isGrantable' => false,
-                    'canBeRevivedFromWithdrawn' => false,
-                    'canBeRevivedFromUnsuccessful' => false,
-                    'canBeResetToNotYetSubmittedFromValid' => false,
-                    'canBeResetToNotYetSubmittedFromCancelled' => false,
-                ],
-                [
-                    'isCancelVisible' => false,
-                    'isTerminateVisible' => false,
-                    'isSubmitVisible' => false,
-                    'isWithdrawVisible' => true,
-                    'isGrantVisible' => false,
-                ]
+                'isCancelVisible' => false,
+                'isTerminateVisible' => false,
+                'isSubmitVisible' => false,
+                'isWithdrawVisible' => true,
+                'isGrantVisible' => false,
+            ]
+        ];
+        yield [
+            [
+                'canBeCancelled' => false,
+                'canBeTerminated' => false,
+                'canBeSubmitted' => false,
+                'canBeWithdrawn' => false,
+                'canBeDeclined' => true,
+                'canBeGranted' => false,
+                'canPreGrant' => true,
+                'isGrantable' => false,
+                'canBeRevivedFromWithdrawn' => false,
+                'canBeRevivedFromUnsuccessful' => false,
+                'canBeResetToNotYetSubmittedFromValid' => false,
+                'canBeResetToNotYetSubmittedFromCancelled' => false,
             ],
             [
-                [
-                    'canBeCancelled' => true,
-                    'canBeTerminated' => true,
-                    'canBeSubmitted' => true,
-                    'canBeWithdrawn' => true,
-                    'canBeDeclined' => true,
-                    'canBeGranted' => true,
-                    'canPreGrant' => true,
-                    'isGrantable' => true,
-                    'canBeRevivedFromWithdrawn' => true,
-                    'canBeRevivedFromUnsuccessful' => false,
-                    'canBeResetToNotYetSubmittedFromValid' => false,
-                    'canBeResetToNotYetSubmittedFromCancelled' => false,
-                ],
-                [
-                    'isCancelVisible' => true,
-                    'isTerminateVisible' => true,
-                    'isSubmitVisible' => true,
-                    'isWithdrawVisible' => true,
-                    'isGrantVisible' => true,
-                ]
+                'isCancelVisible' => false,
+                'isTerminateVisible' => false,
+                'isSubmitVisible' => false,
+                'isWithdrawVisible' => true,
+                'isGrantVisible' => false,
+            ]
+        ];
+        yield [
+            [
+                'canBeCancelled' => true,
+                'canBeTerminated' => true,
+                'canBeSubmitted' => true,
+                'canBeWithdrawn' => true,
+                'canBeDeclined' => true,
+                'canBeGranted' => true,
+                'canPreGrant' => true,
+                'isGrantable' => true,
+                'canBeRevivedFromWithdrawn' => true,
+                'canBeRevivedFromUnsuccessful' => false,
+                'canBeResetToNotYetSubmittedFromValid' => false,
+                'canBeResetToNotYetSubmittedFromCancelled' => false,
             ],
+            [
+                'isCancelVisible' => true,
+                'isTerminateVisible' => true,
+                'isSubmitVisible' => true,
+                'isWithdrawVisible' => true,
+                'isGrantVisible' => true,
+            ]
         ];
     }
 

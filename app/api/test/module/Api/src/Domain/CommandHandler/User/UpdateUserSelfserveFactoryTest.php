@@ -20,7 +20,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\OlcsTest\Api\Domain\CommandHandler\User\UpdateUserSelfserveFactory::class)]
-class UpdateUserSelfserveFactoryTest extends MockeryTestCase
+final class UpdateUserSelfserveFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
     use MocksRepositoriesTrait;
@@ -59,6 +59,7 @@ class UpdateUserSelfserveFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(TransactioningCommandHandler::class, $result);
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();

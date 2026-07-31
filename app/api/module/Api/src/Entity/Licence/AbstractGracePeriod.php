@@ -21,21 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="grace_period",
- *    indexes={
- *        @ORM\Index(name="ix_grace_period_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_grace_period_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_grace_period_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="uk_grace_period_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_grace_period_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'grace_period')]
+#[ORM\Index(name: 'ix_grace_period_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_grace_period_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_grace_period_licence_id', columns: ['licence_id'])]
+#[ORM\UniqueConstraint(name: 'uk_grace_period_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -48,89 +41,80 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'gracePeriods', fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Description of why the grace period was granted.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=90, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 90, nullable: true)]
     protected $description;
 
     /**
      * Period can start on a future date.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="start_date", nullable=false)
      */
+    #[ORM\Column(type: 'date', name: 'start_date', nullable: false)]
     protected $startDate;
 
     /**
      * End date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="end_date", nullable=false)
      */
+    #[ORM\Column(type: 'date', name: 'end_date', nullable: false)]
     protected $endDate;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
@@ -154,7 +138,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param int $id new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setId($id)
     {
@@ -178,7 +162,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -202,7 +186,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -226,7 +210,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -250,7 +234,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param string $description new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setDescription($description)
     {
@@ -274,7 +258,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $startDate new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setStartDate($startDate)
     {
@@ -304,7 +288,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param \DateTime $endDate new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setEndDate($endDate)
     {
@@ -334,7 +318,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param int $version new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setVersion($version)
     {
@@ -358,7 +342,7 @@ abstract class AbstractGracePeriod implements BundleSerializableInterface, JsonS
      *
      * @param int $olbsKey new value being set
      *
-     * @return GracePeriod
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

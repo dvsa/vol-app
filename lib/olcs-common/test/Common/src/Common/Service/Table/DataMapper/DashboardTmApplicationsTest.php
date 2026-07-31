@@ -6,6 +6,8 @@
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\DataMapper;
 
 use Common\Service\Table\DataMapper\DashboardTmApplications;
@@ -15,7 +17,7 @@ use Common\Service\Table\DataMapper\DashboardTmApplications;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DashboardTmApplicationsTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class DashboardTmApplicationsTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     public $sut;
     #[\Override]

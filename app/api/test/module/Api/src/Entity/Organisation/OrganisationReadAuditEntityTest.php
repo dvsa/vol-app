@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Organisation\OrganisationReadAudit as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class OrganisationReadAuditEntityTest extends EntityTester
+final class OrganisationReadAuditEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

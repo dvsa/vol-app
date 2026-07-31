@@ -20,7 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class SupplementedApplicationStepsProviderTest extends MockeryTestCase
+final class SupplementedApplicationStepsProviderTest extends MockeryTestCase
 {
     public function testGet(): void
     {

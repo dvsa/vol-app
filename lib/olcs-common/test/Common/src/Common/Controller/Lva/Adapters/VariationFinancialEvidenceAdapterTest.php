@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Controller\Lva\Adapters;
 
 use Psr\Container\ContainerInterface;
@@ -7,7 +9,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Controller\Lva\Adapters\VariationFinancialEvidenceAdapter;
 
-class VariationFinancialEvidenceAdapterTest extends MockeryTestCase
+final class VariationFinancialEvidenceAdapterTest extends MockeryTestCase
 {
     public function testAlterFormForLva(): void
     {

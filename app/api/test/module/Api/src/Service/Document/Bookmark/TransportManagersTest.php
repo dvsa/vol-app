@@ -13,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TransportManagersTest extends MockeryTestCase
+final class TransportManagersTest extends MockeryTestCase
 {
     public function testGetQuery(): void
     {

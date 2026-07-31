@@ -20,7 +20,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 /**
  * Update IrfoPermitStock Test
  */
-class UpdateIrfoPermitStockTest extends AbstractCommandHandlerTestCase
+final class UpdateIrfoPermitStockTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -93,7 +93,7 @@ class UpdateIrfoPermitStockTest extends AbstractCommandHandlerTestCase
 
         $this->assertEquals($expected, $result->toArray());
 
-        $this->assertEquals(2, sizeof($savedIrfoPermitStocks));
+        $this->assertCount(2, $savedIrfoPermitStocks);
 
         foreach ($savedIrfoPermitStocks as $savedIrfoPermitStock) {
             $this->assertSame(

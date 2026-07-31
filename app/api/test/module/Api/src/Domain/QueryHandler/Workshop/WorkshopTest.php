@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Workshop as WorkshopRepo;
 use Dvsa\Olcs\Transfer\Query\Workshop\Workshop as Qry;
 use Mockery as m;
 
-class WorkshopTest extends QueryHandlerTestCase
+final class WorkshopTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

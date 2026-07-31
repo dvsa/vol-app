@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Type;
 
 use Common\Service\Table\TableBuilder;
@@ -7,10 +9,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Table\Type\OperatingCentreVariationRecordAction;
 
-/**
- * @covers Common\Service\Table\Type\OperatingCentreVariationRecordAction
- */
-class OperatingCentreVariationRecordActionTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Type\OperatingCentreVariationRecordAction::class)]
+final class OperatingCentreVariationRecordActionTest extends MockeryTestCase
 {
     /** @var  OperatingCentreVariationRecordAction */
     protected $sut;

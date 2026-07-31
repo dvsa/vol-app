@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData as RefDataEntity;
 /**
  * CancelIrfoPsvAuthFeesTest
  */
-class CancelIrfoPsvAuthFeesTest extends AbstractCommandHandlerTestCase
+final class CancelIrfoPsvAuthFeesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

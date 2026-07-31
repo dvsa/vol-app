@@ -15,7 +15,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class TmCaseDecisionEntityTest extends EntityTester
+final class TmCaseDecisionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -56,9 +56,9 @@ class TmCaseDecisionEntityTest extends EntityTester
         $this->assertSame($decision, $entity->getDecision());
         $this->assertEquals($data['isMsi'], $entity->getIsMsi());
         $this->assertInstanceOf(\DateTime::class, $entity->getDecisionDate());
-        $this->assertEquals($data['decisionDate'], $entity->getDecisionDate()->format('Y-m-d'));
+        $this->assertSame($data['decisionDate'], $entity->getDecisionDate()->format('Y-m-d'));
         $this->assertInstanceOf(\DateTime::class, $entity->getNotifiedDate());
-        $this->assertEquals($data['notifiedDate'], $entity->getNotifiedDate()->format('Y-m-d'));
+        $this->assertSame($data['notifiedDate'], $entity->getNotifiedDate()->format('Y-m-d'));
         $this->assertEquals($data['reputeNotLostReason'], $entity->getReputeNotLostReason());
     }
 
@@ -88,9 +88,9 @@ class TmCaseDecisionEntityTest extends EntityTester
         $this->assertSame($decision, $entity->getDecision());
         $this->assertEquals($data['isMsi'], $entity->getIsMsi());
         $this->assertInstanceOf(\DateTime::class, $entity->getDecisionDate());
-        $this->assertEquals($data['decisionDate'], $entity->getDecisionDate()->format('Y-m-d'));
+        $this->assertSame($data['decisionDate'], $entity->getDecisionDate()->format('Y-m-d'));
         $this->assertInstanceOf(\DateTime::class, $entity->getNotifiedDate());
-        $this->assertEquals($data['notifiedDate'], $entity->getNotifiedDate()->format('Y-m-d'));
+        $this->assertSame($data['notifiedDate'], $entity->getNotifiedDate()->format('Y-m-d'));
         $this->assertEquals($data['reputeNotLostReason'], $entity->getReputeNotLostReason());
     }
 
@@ -115,9 +115,9 @@ class TmCaseDecisionEntityTest extends EntityTester
         $this->assertSame($decision, $entity->getDecision());
         $this->assertEquals($data['isMsi'], $entity->getIsMsi());
         $this->assertInstanceOf(\DateTime::class, $entity->getDecisionDate());
-        $this->assertEquals($data['decisionDate'], $entity->getDecisionDate()->format('Y-m-d'));
+        $this->assertSame($data['decisionDate'], $entity->getDecisionDate()->format('Y-m-d'));
         $this->assertInstanceOf(\DateTime::class, $entity->getNotifiedDate());
-        $this->assertEquals($data['notifiedDate'], $entity->getNotifiedDate()->format('Y-m-d'));
+        $this->assertSame($data['notifiedDate'], $entity->getNotifiedDate()->format('Y-m-d'));
         $this->assertEquals($data['noFurtherActionReason'], $entity->getNoFurtherActionReason());
     }
 
@@ -147,9 +147,9 @@ class TmCaseDecisionEntityTest extends EntityTester
         $this->assertSame($decision, $entity->getDecision());
         $this->assertEquals($data['isMsi'], $entity->getIsMsi());
         $this->assertInstanceOf(\DateTime::class, $entity->getDecisionDate());
-        $this->assertEquals($data['decisionDate'], $entity->getDecisionDate()->format('Y-m-d'));
+        $this->assertSame($data['decisionDate'], $entity->getDecisionDate()->format('Y-m-d'));
         $this->assertInstanceOf(\DateTime::class, $entity->getNotifiedDate());
-        $this->assertEquals($data['notifiedDate'], $entity->getNotifiedDate()->format('Y-m-d'));
+        $this->assertSame($data['notifiedDate'], $entity->getNotifiedDate()->format('Y-m-d'));
         $this->assertEquals($data['noFurtherActionReason'], $entity->getNoFurtherActionReason());
     }
 
@@ -183,13 +183,13 @@ class TmCaseDecisionEntityTest extends EntityTester
         $this->assertSame($decision, $entity->getDecision());
         $this->assertEquals($data['isMsi'], $entity->getIsMsi());
         $this->assertInstanceOf(\DateTime::class, $entity->getDecisionDate());
-        $this->assertEquals($data['decisionDate'], $entity->getDecisionDate()->format('Y-m-d'));
+        $this->assertSame($data['decisionDate'], $entity->getDecisionDate()->format('Y-m-d'));
         $this->assertInstanceOf(\DateTime::class, $entity->getNotifiedDate());
-        $this->assertEquals($data['notifiedDate'], $entity->getNotifiedDate()->format('Y-m-d'));
+        $this->assertSame($data['notifiedDate'], $entity->getNotifiedDate()->format('Y-m-d'));
         $this->assertInstanceOf(\DateTime::class, $entity->getUnfitnessStartDate());
-        $this->assertEquals($data['unfitnessStartDate'], $entity->getUnfitnessStartDate()->format('Y-m-d'));
+        $this->assertSame($data['unfitnessStartDate'], $entity->getUnfitnessStartDate()->format('Y-m-d'));
         $this->assertInstanceOf(\DateTime::class, $entity->getUnfitnessEndDate());
-        $this->assertEquals($data['unfitnessEndDate'], $entity->getUnfitnessEndDate()->format('Y-m-d'));
+        $this->assertSame($data['unfitnessEndDate'], $entity->getUnfitnessEndDate()->format('Y-m-d'));
         $this->assertEquals($data['unfitnessReasons'], $entity->getUnfitnessReasons());
         $this->assertEquals($data['rehabMeasures'], $entity->getRehabMeasures());
     }
@@ -229,13 +229,13 @@ class TmCaseDecisionEntityTest extends EntityTester
         $this->assertSame($decision, $entity->getDecision());
         $this->assertEquals($data['isMsi'], $entity->getIsMsi());
         $this->assertInstanceOf(\DateTime::class, $entity->getDecisionDate());
-        $this->assertEquals($data['decisionDate'], $entity->getDecisionDate()->format('Y-m-d'));
+        $this->assertSame($data['decisionDate'], $entity->getDecisionDate()->format('Y-m-d'));
         $this->assertInstanceOf(\DateTime::class, $entity->getNotifiedDate());
-        $this->assertEquals($data['notifiedDate'], $entity->getNotifiedDate()->format('Y-m-d'));
+        $this->assertSame($data['notifiedDate'], $entity->getNotifiedDate()->format('Y-m-d'));
         $this->assertInstanceOf(\DateTime::class, $entity->getUnfitnessStartDate());
-        $this->assertEquals($data['unfitnessStartDate'], $entity->getUnfitnessStartDate()->format('Y-m-d'));
+        $this->assertSame($data['unfitnessStartDate'], $entity->getUnfitnessStartDate()->format('Y-m-d'));
         $this->assertInstanceOf(\DateTime::class, $entity->getUnfitnessEndDate());
-        $this->assertEquals($data['unfitnessEndDate'], $entity->getUnfitnessEndDate()->format('Y-m-d'));
+        $this->assertSame($data['unfitnessEndDate'], $entity->getUnfitnessEndDate()->format('Y-m-d'));
         $this->assertEquals($data['unfitnessReasons'], $entity->getUnfitnessReasons());
         $this->assertEquals($data['rehabMeasures'], $entity->getRehabMeasures());
     }

@@ -32,7 +32,7 @@ use Mockery as m;
  * @author Dan Eggleston <dan@stolenegg.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CompleteTransactionTest extends AbstractCommandHandlerTestCase
+final class CompleteTransactionTest extends AbstractCommandHandlerTestCase
 {
     protected $mockCpmsService;
 

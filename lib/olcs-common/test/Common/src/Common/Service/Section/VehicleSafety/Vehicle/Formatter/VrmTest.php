@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Section\VehicleSafety\Vehicle\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -17,18 +19,18 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VrmTest extends \PHPUnit\Framework\TestCase
+final class VrmTest extends \PHPUnit\Framework\TestCase
 {
     /**
-    protected function tearDown(): void
-    {
-    m::close();
-    }
+        protected function tearDown(): void
+        {
+        m::close();
+        }
 
-    /**
-     * @group VrmFormatter
-     * @dataProvider provider
-     */
+        /**
+    */
+    #[\PHPUnit\Framework\Attributes\Group('VrmFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $column, $expected): void
     {
         $mockUrlHelper = m::mock(UrlHelperService::class);
@@ -45,21 +47,19 @@ class VrmTest extends \PHPUnit\Framework\TestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            [
-                ['id' => 2, 'vrm' => 'ABC123'],
-                [],
-                '<a class="govuk-link" href="{"child_id":2,"action":"edit"}">ABC123</a>'
-            ],
-            [
-                ['id' => 2, 'vrm' => 'ABC123'],
-                ['action-type' => 'large'],
-                '<a class="govuk-link" href="{"child_id":2,"action":"large-edit"}">ABC123</a>'
-            ]
+        yield [
+            ['id' => 2, 'vrm' => 'ABC123'],
+            [],
+            '<a class="govuk-link" href="{"child_id":2,"action":"edit"}">ABC123</a>'
+        ];
+        yield [
+            ['id' => 2, 'vrm' => 'ABC123'],
+            ['action-type' => 'large'],
+            '<a class="govuk-link" href="{"child_id":2,"action":"large-edit"}">ABC123</a>'
         ];
     }
 }

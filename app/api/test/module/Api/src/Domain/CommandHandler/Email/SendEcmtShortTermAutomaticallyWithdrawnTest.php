@@ -17,7 +17,7 @@ use Mockery as m;
 /**
  * Test the short term permit automatically withdrawn email
  */
-class SendEcmtShortTermAutomaticallyWithdrawnTest extends AbstractPermitTestCase
+final class SendEcmtShortTermAutomaticallyWithdrawnTest extends AbstractPermitTestCase
 {
     public $orgEmails;
     public $contactDetails;

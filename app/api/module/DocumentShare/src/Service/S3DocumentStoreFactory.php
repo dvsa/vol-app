@@ -12,7 +12,7 @@ use RuntimeException;
 class S3DocumentStoreFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): S3DocumentStore
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): S3DocumentStore
     {
         $config = $container->get('config');
         $s3Config = $config['document_share']['s3'] ?? [];

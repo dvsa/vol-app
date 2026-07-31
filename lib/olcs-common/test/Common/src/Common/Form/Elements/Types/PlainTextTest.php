@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Types;
 
 use Common\Form\Elements\Types\PlainText;
@@ -9,13 +11,13 @@ use Common\Form\View\Helper\FormPlainText;
 use Mockery;
 use Laminas\View\Renderer\PhpRenderer;
 
-class PlainTextTest extends \PHPUnit\Framework\TestCase
+final class PlainTextTest extends \PHPUnit\Framework\TestCase
 {
-    public const INITIAL_TEXT_PAYLOAD = 'TEST';
+    public const string INITIAL_TEXT_PAYLOAD = 'TEST';
 
-    public const UPDATED_TEXT_PAYLOAD = 'TEST 2';
+    public const string UPDATED_TEXT_PAYLOAD = 'TEST 2';
 
-    public const MALICIOUS_HTML_PAYLOAD = '<script>alert("TEST")</script>';
+    public const string MALICIOUS_HTML_PAYLOAD = '<script>alert("TEST")</script>';
 
     /** @var PlainText */
     private $plainTextElement;

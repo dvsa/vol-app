@@ -350,7 +350,7 @@ class ProcessInsolvency extends AbstractConsumer
         return array_values(array_unique($practitionerData, SORT_REGULAR));
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->companiesHouseApi = $container->get(CompaniesHouseClient::class);
         return parent::__invoke($container, $requestedName, $options);

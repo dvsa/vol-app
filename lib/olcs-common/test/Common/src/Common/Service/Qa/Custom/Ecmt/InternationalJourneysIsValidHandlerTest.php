@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Ecmt;
 
 use Common\Form\QaForm;
@@ -13,11 +15,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class InternationalJourneysIsValidHandlerTest extends MockeryTestCase
+final class InternationalJourneysIsValidHandlerTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValid')]
     public function testIsValid($qaElementValue, $warningVisibleValue, $expectedIsValid): void
     {
         $questionFieldsetData = [
@@ -39,19 +39,17 @@ class InternationalJourneysIsValidHandlerTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|int|string)[][]
+     * @return \Iterator<(int | string), array<(bool | int | string)>>
      *
      * @psalm-return list{list{'inter_journey_less_60', 0, true}, list{'inter_journey_60_90', 0, true}, list{'inter_journey_more_90', 0, false}, list{'inter_journey_less_60', 1, true}, list{'inter_journey_60_90', 1, true}, list{'inter_journey_more_90', 1, true}}
      */
-    public function dpIsValid(): array
+    public static function dpIsValid(): \Iterator
     {
-        return [
-            [RefData::ECMT_APP_JOURNEY_LESS_60, 0, true],
-            [RefData::ECMT_APP_JOURNEY_60_90, 0, true],
-            [RefData::ECMT_APP_JOURNEY_OVER_90, 0, false],
-            [RefData::ECMT_APP_JOURNEY_LESS_60, 1, true],
-            [RefData::ECMT_APP_JOURNEY_60_90, 1, true],
-            [RefData::ECMT_APP_JOURNEY_OVER_90, 1, true],
-        ];
+        yield [RefData::ECMT_APP_JOURNEY_LESS_60, 0, true];
+        yield [RefData::ECMT_APP_JOURNEY_60_90, 0, true];
+        yield [RefData::ECMT_APP_JOURNEY_OVER_90, 0, false];
+        yield [RefData::ECMT_APP_JOURNEY_LESS_60, 1, true];
+        yield [RefData::ECMT_APP_JOURNEY_60_90, 1, true];
+        yield [RefData::ECMT_APP_JOURNEY_OVER_90, 1, true];
     }
 }

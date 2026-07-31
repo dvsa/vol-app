@@ -22,13 +22,14 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationFinancialHistoryReviewServiceTest extends MockeryTestCase
+final class VariationFinancialHistoryReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
     /** @var ApplicationFinancialHistoryReviewService */
     protected $mockApplicationService;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);

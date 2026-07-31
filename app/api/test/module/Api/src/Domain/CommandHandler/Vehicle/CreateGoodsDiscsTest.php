@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle as LicenceVehicleEntity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateGoodsDiscsTest extends AbstractCommandHandlerTestCase
+final class CreateGoodsDiscsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

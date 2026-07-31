@@ -16,11 +16,11 @@ use Dvsa\Olcs\Api\Domain\Repository\IrhpApplication as IrhpApplicationRepo;
 use Dvsa\Olcs\Api\Service\Permits\CandidatePermits\IrhpCandidatePermitsCreator;
 use Mockery as m;
 
-class PostSubmitTasksTest extends AbstractCommandHandlerTestCase
+final class PostSubmitTasksTest extends AbstractCommandHandlerTestCase
 {
-    public const IRHP_PERMIT_TYPE_ID = 15;
+    public const int IRHP_PERMIT_TYPE_ID = 15;
 
-    public const IRHP_APPLICATION_ID = 100;
+    public const int IRHP_APPLICATION_ID = 100;
 
     private $irhpApplication;
 
@@ -58,7 +58,7 @@ class PostSubmitTasksTest extends AbstractCommandHandlerTestCase
             [
                 'id' => self::IRHP_APPLICATION_ID,
             ],
-            (new Result())->addMessage('Snapshot created')
+            new Result()->addMessage('Snapshot created')
         );
 
         $result = $this->sut->handleCommand(
@@ -97,7 +97,7 @@ class PostSubmitTasksTest extends AbstractCommandHandlerTestCase
             [
                 'id' => self::IRHP_APPLICATION_ID,
             ],
-            (new Result())->addMessage('Snapshot created')
+            new Result()->addMessage('Snapshot created')
         );
 
         $this->expectedEmailQueueSideEffect(

@@ -18,10 +18,10 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Bus\PrintLetter::class)]
-class PrintLetterTest extends AbstractCommandHandlerTestCase
+final class PrintLetterTest extends AbstractCommandHandlerTestCase
 {
-    public const LIC_ID = 9999;
-    public const BUS_REG_ID = 7777;
+    public const int LIC_ID = 9999;
+    public const int BUS_REG_ID = 7777;
 
     public function setUp(): void
     {
@@ -126,82 +126,80 @@ class PrintLetterTest extends AbstractCommandHandlerTestCase
             $this->expectedSideEffect(SendBSRNotificationToLTAs::class, $emailDtoData, new Result());
         }
 
-        static::assertEquals($docResult, $this->sut->handleCommand($cmd));
+        $this->assertEquals($docResult, $this->sut->handleCommand($cmd));
     }
 
-    public static function dpTestHandleCommand(): array
+    public static function dpTestHandleCommand(): \Iterator
     {
-        return [
-            [
-                'status' => Entity\Bus\BusReg::STATUS_REGISTERED,
-                'isVariation' => false,
-                'isShortNoticeRefused' => false,
-                'docCmdData' => [
-                    'template' => Entity\Doc\Document::BUS_REG_NEW,
-                    'description' => 'Bus registration letter',
-                ],
-                "isFromEbsr" => true
+        yield [
+            'status' => Entity\Bus\BusReg::STATUS_REGISTERED,
+            'isVariation' => false,
+            'isShortNoticeRefused' => false,
+            'docCmdData' => [
+                'template' => Entity\Doc\Document::BUS_REG_NEW,
+                'description' => 'Bus registration letter',
             ],
-            [
-                'status' => Entity\Bus\BusReg::STATUS_REGISTERED,
-                'isVariation' => false,
-                'isShortNoticeRefused' => true,
-                'docCmdData' => [
-                    'template' => Entity\Doc\Document::BUS_REG_NEW_REFUSE_SHORT_NOTICE,
-                    'description' => 'Bus registration letter with refused short notice',
-                ],
-                "isFromEbsr" => true
+            "isFromEbsr" => true
+        ];
+        yield [
+            'status' => Entity\Bus\BusReg::STATUS_REGISTERED,
+            'isVariation' => false,
+            'isShortNoticeRefused' => true,
+            'docCmdData' => [
+                'template' => Entity\Doc\Document::BUS_REG_NEW_REFUSE_SHORT_NOTICE,
+                'description' => 'Bus registration letter with refused short notice',
             ],
-            [
-                'status' => Entity\Bus\BusReg::STATUS_REGISTERED,
-                'isVariation' => true,
-                'isShortNoticeRefused' => false,
-                'docCmdData' => [
-                    'template' => Entity\Doc\Document::BUS_REG_VARIATION,
-                    'description' => 'Bus variation letter',
-                ],
-                "isFromEbsr" => true
+            "isFromEbsr" => true
+        ];
+        yield [
+            'status' => Entity\Bus\BusReg::STATUS_REGISTERED,
+            'isVariation' => true,
+            'isShortNoticeRefused' => false,
+            'docCmdData' => [
+                'template' => Entity\Doc\Document::BUS_REG_VARIATION,
+                'description' => 'Bus variation letter',
             ],
-            [
-                'status' => Entity\Bus\BusReg::STATUS_REGISTERED,
-                'isVariation' => true,
-                'isShortNoticeRefused' => true,
-                'docCmdData' => [
-                    'template' => Entity\Doc\Document::BUS_REG_VARIATION_REFUSE_SHORT_NOTICE,
-                    'description' => 'Bus variation letter with refused short notice',
-                ],
-                "isFromEbsr" => true
+            "isFromEbsr" => true
+        ];
+        yield [
+            'status' => Entity\Bus\BusReg::STATUS_REGISTERED,
+            'isVariation' => true,
+            'isShortNoticeRefused' => true,
+            'docCmdData' => [
+                'template' => Entity\Doc\Document::BUS_REG_VARIATION_REFUSE_SHORT_NOTICE,
+                'description' => 'Bus variation letter with refused short notice',
             ],
-            [
-                'status' => Entity\Bus\BusReg::STATUS_CANCELLED,
-                'isVariation' => null,
-                'isShortNoticeRefused' => false,
-                'docCmdData' => [
-                    'template' => Entity\Doc\Document::BUS_REG_CANCELLATION,
-                    'description' => 'Bus cancelled letter',
-                ],
-                "isFromEbsr" => true
+            "isFromEbsr" => true
+        ];
+        yield [
+            'status' => Entity\Bus\BusReg::STATUS_CANCELLED,
+            'isVariation' => null,
+            'isShortNoticeRefused' => false,
+            'docCmdData' => [
+                'template' => Entity\Doc\Document::BUS_REG_CANCELLATION,
+                'description' => 'Bus cancelled letter',
             ],
-            [
-                'status' => Entity\Bus\BusReg::STATUS_CANCELLED,
-                'isVariation' => null,
-                'isShortNoticeRefused' => true,
-                'docCmdData' => [
-                    'template' => Entity\Doc\Document::BUS_REG_CANCELLATION_REFUSE_SHORT_NOTICE,
-                    'description' => 'Bus cancelled letter with refused short notice',
-                ],
-                "isFromEbsr" => true
+            "isFromEbsr" => true
+        ];
+        yield [
+            'status' => Entity\Bus\BusReg::STATUS_CANCELLED,
+            'isVariation' => null,
+            'isShortNoticeRefused' => true,
+            'docCmdData' => [
+                'template' => Entity\Doc\Document::BUS_REG_CANCELLATION_REFUSE_SHORT_NOTICE,
+                'description' => 'Bus cancelled letter with refused short notice',
             ],
-            [
-                'status' => Entity\Bus\BusReg::STATUS_CANCELLED,
-                'isVariation' => null,
-                'isShortNoticeRefused' => true,
-                'docCmdData' => [
-                    'template' => Entity\Doc\Document::BUS_REG_CANCELLATION_REFUSE_SHORT_NOTICE,
-                    'description' => 'Bus cancelled letter with refused short notice',
-                ],
-                "isFromEbsr" => false
+            "isFromEbsr" => true
+        ];
+        yield [
+            'status' => Entity\Bus\BusReg::STATUS_CANCELLED,
+            'isVariation' => null,
+            'isShortNoticeRefused' => true,
+            'docCmdData' => [
+                'template' => Entity\Doc\Document::BUS_REG_CANCELLATION_REFUSE_SHORT_NOTICE,
+                'description' => 'Bus cancelled letter with refused short notice',
             ],
+            "isFromEbsr" => false
         ];
     }
 }

@@ -19,7 +19,7 @@ use Dvsa\OlcsTest\MocksServicesTrait;
 /**
  * @see ChangeExpiredPasswordFactory
  */
-class ChangeExpiredPasswordFactoryTest extends MockeryTestCase
+final class ChangeExpiredPasswordFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
     use MocksRepositoriesTrait;
@@ -58,6 +58,7 @@ class ChangeExpiredPasswordFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(ChangeExpiredPassword::class, $result);
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Data\Object\Search;
 
 use Common\Data\Object\Search\Vehicle;
@@ -8,7 +10,7 @@ use Common\Data\Object\Search\Vehicle;
  * Class VehicleTest
  * @package CommonTest\Data\Object\Search
  */
-class VehicleTest extends SearchAbstractTest
+final class VehicleTest extends SearchAbstractTest
 {
     protected $class = Vehicle::class;
 }

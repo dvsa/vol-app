@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  * Class SubmissionSectionOverview
  * @package OlcsTest\View\Helper
  */
-class SubmissionSectionOverviewTest extends TestCase
+final class SubmissionSectionOverviewTest extends TestCase
 {
     /**
      * @param $input
@@ -66,24 +66,19 @@ class SubmissionSectionOverviewTest extends TestCase
         );
     }
 
-    public static function provideInvoke(): array
+    public static function provideInvoke(): \Iterator
     {
-        return [
-            [['submissionSection' => '', 'data' => []], ''],
-            [['submissionSection' => [], 'data' => []], ''],
-            [['submissionSection' => null, 'data' => []], ''],
-            [['submissionSection' => false, 'data' => []], ''],
-            [['submissionSection' => 'rubbish', 'data' => []], ''],
-            [['submissionSection' => 'introduction', 'data' => []], ''],
-
-        ];
+        yield [['submissionSection' => '', 'data' => []], ''];
+        yield [['submissionSection' => [], 'data' => []], ''];
+        yield [['submissionSection' => null, 'data' => []], ''];
+        yield [['submissionSection' => false, 'data' => []], ''];
+        yield [['submissionSection' => 'rubbish', 'data' => []], ''];
+        yield [['submissionSection' => 'introduction', 'data' => []], ''];
     }
 
-    public static function provideInvokeNotPluggable(): array
+    public static function provideInvokeNotPluggable(): \Iterator
     {
-        return [
-            [['submissionSection' => 'rubbish', 'data' => []], ''],
-            [['submissionSection' => 'submission_section_intr', 'data' => []], '']
-        ];
+        yield [['submissionSection' => 'rubbish', 'data' => []], ''];
+        yield [['submissionSection' => 'submission_section_intr', 'data' => []], ''];
     }
 }

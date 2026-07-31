@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BrTasNotified;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BrTasNotifiedTest extends SingleValueTestAbstract
+final class BrTasNotifiedTest extends SingleValueTestAbstract
 {
     public const SUT_CLASS_NAME = BrTasNotified::class;
 }

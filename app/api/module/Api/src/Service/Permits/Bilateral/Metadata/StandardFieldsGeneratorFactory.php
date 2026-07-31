@@ -18,7 +18,7 @@ class StandardFieldsGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): StandardFieldsGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): StandardFieldsGenerator
     {
         return new StandardFieldsGenerator(
             $container->get('PermitsBilateralMetadataCurrentFieldValuesGenerator')

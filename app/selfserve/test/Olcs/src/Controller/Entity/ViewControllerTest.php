@@ -21,34 +21,21 @@ use LmcRbacMvc\Mvc\Controller\Plugin\IsGranted;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class ViewControllerTest extends MockeryTestCase
+final class ViewControllerTest extends MockeryTestCase
 {
-    /**
-     * @var (\Dvsa\Olcs\Utils\Translation\NiTextTranslation & \Mockery\MockInterface)
-     */
-    public $mockNiUtil;
-    /**
-     * @var (\LmcRbacMvc\Service\AuthorizationService & \Mockery\MockInterface)
-     */
-    public $mockAuth;
-    /**
-     * @var (\Common\Service\Helper\FlashMessengerHelperService & \Mockery\MockInterface)
-     */
-    public $mockFlash;
     public $mockTable;
     /** @var  ViewController|m\MockInterface */
     private $sut;
-    /** @var  \Laminas\ServiceManager\ServiceLocatorInterface|m\MockInterface */
-    private $mockSl;
     /** @var  \Laminas\Mvc\Controller\PluginManager|m\MockInterface */
     private $mockPluginManager;
     /** @var  m\MockInterface */
     private $mockIsGrantedPlgn;
 
+    #[\Override]
     public function setUp(): void
     {
         //  mock plugins
-        $this->mockPluginManager = (new ControllerPluginManagerHelper())->getMockPluginManager(
+        $this->mockPluginManager = new ControllerPluginManagerHelper()->getMockPluginManager(
             [
                 'handleQuery' => 'handleQuery',
                 'url' => 'Url',
@@ -66,20 +53,21 @@ class ViewControllerTest extends MockeryTestCase
             ->andReturn($this->mockIsGrantedPlgn);
 
         //  instance of tested class
-        $this->mockNiUtil = m::mock(NiTextTranslation::class);
-        $this->mockAuth = m::mock(\LmcRbacMvc\Service\AuthorizationService::class);
-        $this->mockFlash = m::mock(FlashMessengerHelperService::class);
+        $mockNiUtil = m::mock(NiTextTranslation::class);
+        $mockAuth = m::mock(\LmcRbacMvc\Service\AuthorizationService::class);
+        $mockFlash = m::mock(FlashMessengerHelperService::class);
         $this->mockTable = m::mock(TableFactory::class);
         $this->sut = new ViewController(
-            $this->mockNiUtil,
-            $this->mockAuth,
-            $this->mockFlash,
+            $mockNiUtil,
+            $mockAuth,
+            $mockFlash,
             $this->mockTable
         );
 
         $this->sut->setPluginManager($this->mockPluginManager);
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         m::close();
@@ -172,15 +160,15 @@ class ViewControllerTest extends MockeryTestCase
 
         $content = reset($children);
 
-        static::assertInstanceOf(ViewModel::class, $result);
-        static::assertInstanceOf(ViewModel::class, $content);
+        $this->assertInstanceOf(ViewModel::class, $result);
+        $this->assertInstanceOf(ViewModel::class, $content);
 
-        static::assertEquals($result->pageTitle, 'MYCOMPANY');
-        static::assertEquals($result->pageSubtitle, 'OB12345');
-        static::assertEquals($result->userType, ViewController::USER_TYPE_ANONYMOUS);
-        static::assertEquals($content->relatedOperatorLicencesTable, 'otherLicencesTableResult');
-        static::assertEquals($content->transportManagerTable, 'transportManagersTableResult');
-        static::assertEquals($content->operatingCentresTable, $mockOperatingCentresTableBuilder);
+        $this->assertEquals('MYCOMPANY', $result->pageTitle);
+        $this->assertEquals('OB12345', $result->pageSubtitle);
+        $this->assertEquals(ViewController::USER_TYPE_ANONYMOUS, $result->userType);
+        $this->assertEquals('otherLicencesTableResult', $content->relatedOperatorLicencesTable);
+        $this->assertEquals('transportManagersTableResult', $content->transportManagerTable);
+        $this->assertEquals($content->operatingCentresTable, $mockOperatingCentresTableBuilder);
     }
 
     /**
@@ -249,15 +237,15 @@ class ViewControllerTest extends MockeryTestCase
 
         $content = reset($children);
 
-        static::assertInstanceOf(ViewModel::class, $result);
-        static::assertInstanceOf(ViewModel::class, $content);
+        $this->assertInstanceOf(ViewModel::class, $result);
+        $this->assertInstanceOf(ViewModel::class, $content);
 
-        static::assertEquals($result->pageTitle, 'MYCOMPANY');
-        static::assertEquals($result->pageSubtitle, 'OB12345');
-        static::assertEquals($result->userType, ViewController::USER_TYPE_ANONYMOUS);
-        static::assertEquals($content->relatedOperatorLicencesTable, 'otherLicencesTableResult');
-        static::assertEquals($content->transportManagerTable, 'transportManagersTableResult');
-        static::assertEquals($content->operatingCentresTable, $mockOperatingCentresTableBuilder);
+        $this->assertEquals('MYCOMPANY', $result->pageTitle);
+        $this->assertEquals('OB12345', $result->pageSubtitle);
+        $this->assertEquals(ViewController::USER_TYPE_ANONYMOUS, $result->userType);
+        $this->assertEquals('otherLicencesTableResult', $content->relatedOperatorLicencesTable);
+        $this->assertEquals('transportManagersTableResult', $content->transportManagerTable);
+        $this->assertEquals($content->operatingCentresTable, $mockOperatingCentresTableBuilder);
     }
 
     /**
@@ -362,18 +350,18 @@ class ViewControllerTest extends MockeryTestCase
 
         $content = reset($children);
 
-        static::assertInstanceOf(ViewModel::class, $result);
-        static::assertInstanceOf(ViewModel::class, $content);
+        $this->assertInstanceOf(ViewModel::class, $result);
+        $this->assertInstanceOf(ViewModel::class, $content);
 
-        static::assertEquals($result->pageTitle, 'MYCOMPANY');
-        static::assertEquals($result->pageSubtitle, 'OB12345');
-        static::assertEquals($result->userType, ViewController::USER_TYPE_PARTNER);
-        static::assertEquals($content->relatedOperatorLicencesTable, 'otherLicencesTableResult');
-        static::assertEquals($content->transportManagerTable, 'transportManagersTableResult');
-        static::assertEquals($content->operatingCentresTable, $mockOperatingCentresTableBuilder);
-        static::assertEquals($content->vehiclesTable, 'vehiclesTableResult');
-        static::assertEquals($content->currentApplicationsTable, 'currentApplicationsTableResult');
-        static::assertEquals($content->conditionsUndertakingsTable, 'conditionsUndertakingsTableResult');
+        $this->assertEquals('MYCOMPANY', $result->pageTitle);
+        $this->assertEquals('OB12345', $result->pageSubtitle);
+        $this->assertEquals(ViewController::USER_TYPE_PARTNER, $result->userType);
+        $this->assertEquals('otherLicencesTableResult', $content->relatedOperatorLicencesTable);
+        $this->assertEquals('transportManagersTableResult', $content->transportManagerTable);
+        $this->assertEquals($content->operatingCentresTable, $mockOperatingCentresTableBuilder);
+        $this->assertEquals('vehiclesTableResult', $content->vehiclesTable);
+        $this->assertEquals('currentApplicationsTableResult', $content->currentApplicationsTable);
+        $this->assertEquals('conditionsUndertakingsTableResult', $content->conditionsUndertakingsTable);
     }
 
     /**
@@ -457,17 +445,17 @@ class ViewControllerTest extends MockeryTestCase
 
         $content = reset($children);
 
-        static::assertInstanceOf(ViewModel::class, $result);
-        static::assertInstanceOf(ViewModel::class, $content);
+        $this->assertInstanceOf(ViewModel::class, $result);
+        $this->assertInstanceOf(ViewModel::class, $content);
 
-        static::assertEquals($result->pageTitle, 'MYCOMPANY');
-        static::assertEquals($result->pageSubtitle, 'OB12345');
-        static::assertEquals($result->userType, ViewController::USER_TYPE_PARTNER);
-        static::assertEquals($content->relatedOperatorLicencesTable, 'otherLicencesTableResult');
-        static::assertEquals($content->transportManagerTable, 'transportManagersTableResult');
-        static::assertEquals($content->operatingCentresTable, $mockOperatingCentresTableBuilder);
-        static::assertEquals($content->vehiclesTable, 'vehiclesTableResult');
-        static::assertEquals($content->currentApplicationsTable, 'currentApplicationsTableResult');
-        static::assertEquals($content->conditionsUndertakingsTable, 'conditionsUndertakingsTableResult');
+        $this->assertEquals('MYCOMPANY', $result->pageTitle);
+        $this->assertEquals('OB12345', $result->pageSubtitle);
+        $this->assertEquals(ViewController::USER_TYPE_PARTNER, $result->userType);
+        $this->assertEquals('otherLicencesTableResult', $content->relatedOperatorLicencesTable);
+        $this->assertEquals('transportManagersTableResult', $content->transportManagerTable);
+        $this->assertEquals($content->operatingCentresTable, $mockOperatingCentresTableBuilder);
+        $this->assertEquals('vehiclesTableResult', $content->vehiclesTable);
+        $this->assertEquals('currentApplicationsTableResult', $content->currentApplicationsTable);
+        $this->assertEquals('conditionsUndertakingsTableResult', $content->conditionsUndertakingsTable);
     }
 }

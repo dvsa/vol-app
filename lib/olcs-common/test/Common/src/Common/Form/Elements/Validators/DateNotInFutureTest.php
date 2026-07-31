@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Validators;
 
 use Common\Form\Elements\Validators\DateNotInFuture;
@@ -15,7 +17,7 @@ use Common\Form\Elements\Validators\DateNotInFuture;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DateNotInFutureTest extends \PHPUnit\Framework\TestCase
+final class DateNotInFutureTest extends \PHPUnit\Framework\TestCase
 {
     public $sut;
     #[\Override]
@@ -24,36 +26,32 @@ class DateNotInFutureTest extends \PHPUnit\Framework\TestCase
         $this->sut = new DateNotInFuture();
     }
 
-    /**
-     * @group validators
-     * @group date_validators
-     * @dataProvider providerIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\Group('validators')]
+    #[\PHPUnit\Framework\Attributes\Group('date_validators')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerIsValid')]
     public function testIsValid($input, $expected): void
     {
         $this->assertEquals($expected, $this->sut->isValid($input));
     }
 
     /**
-     * @return (bool|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string)>>
      *
      * @psalm-return list{list{string, true}, list{string, false}, list{string, true}}
      */
-    public function providerIsValid(): array
+    public static function providerIsValid(): \Iterator
     {
-        return [
-            [
-                date('Y-m-d'),
-                true
-            ],
-            [
-                date('Y-m-d', strtotime('+1 day')),
-                false
-            ],
-            [
-                date('Y-m-d', strtotime('-1 day')),
-                true
-            ]
+        yield [
+            date('Y-m-d'),
+            true
+        ];
+        yield [
+            date('Y-m-d', strtotime('+1 day')),
+            false
+        ];
+        yield [
+            date('Y-m-d', strtotime('-1 day')),
+            true
         ];
     }
 }

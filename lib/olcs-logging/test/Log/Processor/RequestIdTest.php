@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Logging\Log\Processor;
 
 use DateTimeImmutable;
@@ -8,7 +10,7 @@ use Monolog\LogRecord;
 use Olcs\Logging\Log\Processor\RequestId;
 use PHPUnit\Framework\TestCase;
 
-class RequestIdTest extends TestCase
+final class RequestIdTest extends TestCase
 {
     public function testProcess(): void
     {

@@ -6,10 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Sla Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="sla")
  */
+#[ORM\Table(name: 'sla')]
+#[ORM\Entity]
 class Sla extends AbstractSla
 {
     public const WRITTEN_OUTCOME_DECISION = 'piwo_decision';

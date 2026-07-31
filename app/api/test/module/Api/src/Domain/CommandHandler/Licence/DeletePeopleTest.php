@@ -23,7 +23,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DeletePeopleTest extends AbstractCommandHandlerTestCase
+final class DeletePeopleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -61,7 +61,7 @@ class DeletePeopleTest extends AbstractCommandHandlerTestCase
         $licence = new LicenceEntity($organisation, new \Dvsa\Olcs\Api\Entity\System\RefData());
         $licence->setId(52);
         $op1 = new \Dvsa\Olcs\Api\Entity\Organisation\OrganisationPerson();
-        $p1 = (new \Dvsa\Olcs\Api\Entity\Person\Person())->setId(185);
+        $p1 = new \Dvsa\Olcs\Api\Entity\Person\Person()->setId(185);
         $op1->setId(3)->setPerson($p1);
         $op2 = new \Dvsa\Olcs\Api\Entity\Organisation\OrganisationPerson();
         $op2->setId(54);
@@ -73,7 +73,7 @@ class DeletePeopleTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             \Dvsa\Olcs\Transfer\Command\OrganisationPerson\DeleteList::class,
             ['ids' => [3]],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('3 DELETED')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('3 DELETED')
         );
 
         $this->repoMap['OrganisationPerson']->shouldReceive('fetchListForOrganisationAndPerson')
@@ -81,7 +81,7 @@ class DeletePeopleTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             \Dvsa\Olcs\Transfer\Command\OrganisationPerson\DeleteList::class,
             ['ids' => [54]],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('54 DELETED')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('54 DELETED')
         );
 
         $this->expectedLicenceCacheClearSideEffect(52);

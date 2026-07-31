@@ -22,7 +22,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class TransactionByReferenceTest extends QueryHandlerTestCase
+final class TransactionByReferenceTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

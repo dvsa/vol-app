@@ -23,7 +23,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class ApggEmissionsCatCandidatePermitsCreatorTest extends MockeryTestCase
+final class ApggEmissionsCatCandidatePermitsCreatorTest extends MockeryTestCase
 {
     private $irhpPermitApplication;
 
@@ -37,6 +37,7 @@ class ApggEmissionsCatCandidatePermitsCreatorTest extends MockeryTestCase
 
     private $apggEmissionsCatCandidatePermitsCreator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpPermitApplication = m::mock(IrhpPermitApplication::class);
@@ -114,11 +115,9 @@ class ApggEmissionsCatCandidatePermitsCreatorTest extends MockeryTestCase
         $this->apggEmissionsCatCandidatePermitsCreator->createIfRequired($this->irhpApplication, $emissionsCategoryId);
     }
 
-    public static function dpEmissionsCategories(): array
+    public static function dpEmissionsCategories(): \Iterator
     {
-        return [
-            [RefData::EMISSIONS_CATEGORY_EURO5_REF],
-            [RefData::EMISSIONS_CATEGORY_EURO6_REF],
-        ];
+        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF];
+        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF];
     }
 }

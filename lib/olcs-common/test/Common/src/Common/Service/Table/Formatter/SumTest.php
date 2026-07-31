@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\Sum;
@@ -15,61 +17,59 @@ use Common\Service\Table\Formatter\Sum;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class SumTest extends \PHPUnit\Framework\TestCase
+final class SumTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group SumFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('SumFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $column, $expected): void
     {
-        $this->assertSame($expected, (new Sum())->format($data, $column));
+        $this->assertSame($expected, new Sum()->format($data, $column));
     }
 
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            [[], [], '0'],
-            [[], ['name' => 'subTotal'], '0'],
-            [[['subTotal' => 'A'], ['subTotal' => 'B']], ['name' => 'subTotal'], '0'],
-            [[['subTotal' => 5]], ['name' => 'subTotal'], '5'],
-            [[['subTotal' => 5], ['subTotal' => 7]], ['name' => 'subTotal'], '12'],
+        yield [[], [], '0'];
+        yield [[], ['name' => 'subTotal'], '0'];
+        yield [[['subTotal' => 'A'], ['subTotal' => 'B']], ['name' => 'subTotal'], '0'];
+        yield [[['subTotal' => 5]], ['name' => 'subTotal'], '5'];
+        yield [[['subTotal' => 5], ['subTotal' => 7]], ['name' => 'subTotal'], '12'];
+        yield [
             [
-                [
-                    ['subTotal' => 5],
-                    ['subTotal' => 7],
-                    ['subTotal' => 'A']
-                ],
-                ['name' => 'subTotal'],
-                '12'
+                ['subTotal' => 5],
+                ['subTotal' => 7],
+                ['subTotal' => 'A']
             ],
+            ['name' => 'subTotal'],
+            '12'
+        ];
+        yield [
             [
-                [
-                    ['subTotal' => 5],
-                    ['subTotal' => 7],
-                    ['subTotal' => 95]
-                ],
-                ['name' => 'subTotal'],
-                '107'
+                ['subTotal' => 5],
+                ['subTotal' => 7],
+                ['subTotal' => 95]
             ],
+            ['name' => 'subTotal'],
+            '107'
+        ];
+        yield [
             [
-                [
-                    ['subTotal' => '5.50'],
-                    ['subTotal' => '7'],
-                    ['subTotal' => '95.21']
-                ],
-                ['name' => 'subTotal'],
-                '107.71'
+                ['subTotal' => '5.50'],
+                ['subTotal' => '7'],
+                ['subTotal' => '95.21']
             ],
+            ['name' => 'subTotal'],
+            '107.71'
         ];
     }
 }

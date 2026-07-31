@@ -17,7 +17,7 @@ use Psr\Container\ContainerInterface;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class GrantValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class GrantValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     public $sectionAccessService;
     protected $sut;
@@ -25,6 +25,7 @@ class GrantValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestCas
     /**
      * Setup the helper
      */
+    #[\Override]
     public function setUp(): void
     {
         $this->sectionAccessService = m::mock();
@@ -32,7 +33,7 @@ class GrantValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestCas
         $sm = m::mock(ContainerInterface::class);
         $sm->shouldReceive('get')->with('SectionAccessService')->once()->andReturn($this->sectionAccessService);
 
-        $this->sut = (new GrantValidationService())->__invoke($sm, GrantValidationService::class);
+        $this->sut = new GrantValidationService()->__invoke($sm, GrantValidationService::class);
     }
 
     public function testHandleQueryNewApp(): void

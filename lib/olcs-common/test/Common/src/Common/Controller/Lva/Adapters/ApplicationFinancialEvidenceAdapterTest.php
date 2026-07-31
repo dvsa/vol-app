@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Controller\Lva\Adapters;
 
 use Common\Controller\Lva\Adapters\ApplicationFinancialEvidenceAdapter;
@@ -12,7 +14,7 @@ use Laminas\Form\Form;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class ApplicationFinancialEvidenceAdapterTest extends MockeryTestCase
+final class ApplicationFinancialEvidenceAdapterTest extends MockeryTestCase
 {
     protected $sut;
 

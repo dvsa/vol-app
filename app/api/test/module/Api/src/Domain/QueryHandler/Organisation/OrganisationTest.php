@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Repository\TrafficArea as TrafficAreaRepo;
 use Dvsa\Olcs\Transfer\Query\Organisation\Organisation as Qry;
 use Mockery as m;
 
-class OrganisationTest extends QueryHandlerTestCase
+final class OrganisationTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

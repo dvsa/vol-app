@@ -9,10 +9,10 @@ use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 use Laminas\I18n\Translator\Translator;
 use Laminas\I18n\Translator\TranslatorInterface as I18nTranslatorInterface;
 use Laminas\Validator\Translator\TranslatorInterface as ValidatorTranslatorInterface;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
-class TranslatorDelegatorTest extends TestCase
+final class TranslatorDelegatorTest extends TestCase
 {
     /**
      * @var TranslatorDelegator
@@ -20,13 +20,13 @@ class TranslatorDelegatorTest extends TestCase
     protected $sut;
 
     /**
-     * @var Translator|MockObject
+     * @var Translator&Stub
      */
     protected $mockTranslator;
 
     public function setUp(): void
     {
-        $this->mockTranslator = $this->createMock(Translator::class);
+        $this->mockTranslator = $this->createStub(Translator::class);
 
         $this->mockTranslator
             ->method('translate')
@@ -80,7 +80,7 @@ class TranslatorDelegatorTest extends TestCase
         // unchanged when no translation is found, so a numeric key passed in
         // would surface as an int. Replacements::apply() is strictly typed
         // (string), so we must cast before forwarding.
-        $translator = $this->createMock(Translator::class);
+        $translator = $this->createStub(Translator::class);
         $translator->method('translate')->willReturn(123);
 
         $sut = new TranslatorDelegator($translator, new Replacements([]));
@@ -104,9 +104,12 @@ class TranslatorDelegatorTest extends TestCase
 
     public function testCallForwardsUnknownMethodsToWrappedTranslator(): void
     {
-        $this->mockTranslator->expects($this->once())->method('setLocale');
+        $translator = $this->createMock(Translator::class);
+        $translator->expects($this->once())->method('setLocale');
+
+        $sut = new TranslatorDelegator($translator, new Replacements([]));
 
         // @phpstan-ignore-next-line `setLocale` is forwarded via `__call` to the wrapped translator.
-        $this->sut->setLocale('en_GB');
+        $sut->setLocale('en_GB');
     }
 }

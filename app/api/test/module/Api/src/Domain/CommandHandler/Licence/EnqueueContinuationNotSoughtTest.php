@@ -16,7 +16,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class EnqueueContinuationNotSoughtTest extends AbstractCommandHandlerTestCase
+final class EnqueueContinuationNotSoughtTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

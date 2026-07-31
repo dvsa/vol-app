@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class GrantNewText3
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class GrantNewText3Test extends MockeryTestCase
+final class GrantNewText3Test extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\Group('publicationFilter
 Test the Bus Reg GrantNewText3 filter')]

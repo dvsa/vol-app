@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpPermitStock\AvailableCountries as AvailableCoun
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class AvailableCountriesTest extends QueryHandlerTestCase
+final class AvailableCountriesTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

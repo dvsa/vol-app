@@ -11,7 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class ApplicationPeopleAdapterFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationPeopleAdapter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ApplicationPeopleAdapter
     {
         return new ApplicationPeopleAdapter($container);
     }

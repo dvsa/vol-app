@@ -2,22 +2,25 @@
 
 namespace Dvsa\Olcs\Cli\Domain\CommandHandler;
 
-use Dvsa\Olcs\Api\Domain\CacheAwareInterface;
-use Dvsa\Olcs\Api\Domain\CacheAwareTrait;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Cli\Domain\Command\CacheClear as CacheClearCmd;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
-use Dvsa\Olcs\Transfer\Service\CacheEncryption;
-use Laminas\Cache\Storage\Adapter\Redis as RedisAdapter;
+use Dvsa\Olcs\Api\Domain\RedisAwareInterface;
+use Dvsa\Olcs\Api\Domain\RedisAwareTrait;
+use Dvsa\Olcs\Api\Domain\ConfigAwareInterface;
+use Dvsa\Olcs\Api\Domain\ConfigAwareTrait;
 
 /**
  * Cache Clear Command Handler
  *
  */
-class CacheClear extends AbstractCommandHandler implements CacheAwareInterface
+class CacheClear extends AbstractCommandHandler implements
+    RedisAwareInterface,
+    ConfigAwareInterface
 {
-    use CacheAwareTrait;
+    use RedisAwareTrait;
+    use ConfigAwareTrait;
 
     /**
      * Valid cache namespace identifiers from CacheEncryption service
@@ -72,7 +75,7 @@ class CacheClear extends AbstractCommandHandler implements CacheAwareInterface
      */
     private function flushAll(bool $dryRun): Result
     {
-        $redis = $this->getRedisResource();
+        $redis = $this->getRedis();
 
         if ($dryRun) {
             $keyCount = $redis->dbSize();
@@ -180,7 +183,7 @@ class CacheClear extends AbstractCommandHandler implements CacheAwareInterface
      */
     private function deleteByPattern(string $pattern, bool $dryRun): int
     {
-        $redis = $this->getRedisResource();
+        $redis = $this->getRedis();
         $iterator = null;
         $count = 0;
         $batchSize = 100;
@@ -210,68 +213,10 @@ class CacheClear extends AbstractCommandHandler implements CacheAwareInterface
      */
     private function getNamespacePrefix(string $namespace): string
     {
-        $options = $this->getCacheOptions();
-        $cacheNamespace = $options->getNamespace() ?? 'zfcache';
+        $cacheNamespace =
+            $this->getConfig()['caches']['default-cache']['options']['namespace']
+            ?? 'zfcache';
 
         return $cacheNamespace . ':' . $namespace;
-    }
-
-    /**
-     * Get the cache adapter options
-     *
-     * @return \Laminas\Cache\Storage\Adapter\AdapterOptions
-     * @throws \RuntimeException
-     */
-    private function getCacheOptions(): \Laminas\Cache\Storage\Adapter\AdapterOptions
-    {
-        $cacheStorage = $this->getCacheStorage();
-        return $cacheStorage->getOptions();
-    }
-
-    /**
-     * Get the underlying cache storage adapter
-     *
-     * @return RedisAdapter
-     * @throws \RuntimeException
-     */
-    private function getCacheStorage(): RedisAdapter
-    {
-        // CacheEncryption has a private $cache property of type StorageInterface
-        // We need to use reflection to access it since there's no getter
-        $reflection = new \ReflectionClass($this->getCache());
-        $cacheProperty = $reflection->getProperty('cache');
-        $cacheStorage = $cacheProperty->getValue($this->getCache());
-
-        if (!$cacheStorage instanceof RedisAdapter) {
-            throw new \RuntimeException('Cache adapter is not Redis');
-        }
-
-        return $cacheStorage;
-    }
-
-    /**
-     * Get the underlying Redis resource from CacheEncryption service
-     *
-     *
-     * @return \Redis
-     * @throws \RuntimeException
-     */
-    private function getRedisResource(): \Redis
-    {
-        $cacheStorage = $this->getCacheStorage();
-
-        // Get resource manager and ID from options
-        $options = $cacheStorage->getOptions();
-        $resourceManager = $options->getResourceManager();
-        $resourceId = $options->getResourceId();
-
-        // Get the actual Redis resource with the ID
-        $redis = $resourceManager->getResource($resourceId);
-
-        if (!$redis instanceof \Redis) {
-            throw new \RuntimeException('Could not get Redis resource');
-        }
-
-        return $redis;
     }
 }

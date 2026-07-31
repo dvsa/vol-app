@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Form;
 
 use Common\Test\MockeryTestCase;
@@ -12,24 +14,22 @@ use Common\Form\Form;
 /**
  * @see FormWithCsrfTrait
  */
-class FormWithCsrfTraitTest extends MockeryTestCase
+final class FormWithCsrfTraitTest extends MockeryTestCase
 {
-    protected const EMPTY_ARRAY_VALUE = [];
+    protected const array EMPTY_ARRAY_VALUE = [];
 
-    protected const INVALID_CSRF_VALUE = 'AN INVALID CSRF VALUE';
+    protected const string INVALID_CSRF_VALUE = 'AN INVALID CSRF VALUE';
 
-    protected const CSRF_KEY = 'security';
+    protected const string CSRF_KEY = 'security';
 
-    protected const EMPTY_STRING_VALUE = '';
+    protected const string EMPTY_STRING_VALUE = '';
 
     /**
      * @var FormWithCsrfInterface|Form
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getCsrfElementIsCallable(): void
     {
         // Setup
@@ -39,10 +39,8 @@ class FormWithCsrfTraitTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'getCsrfElement']);
     }
 
-    /**
-     * @test
-     * @depends getCsrfElementIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getCsrfElementIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getCsrfElementReturnsACsrfElement(): void
     {
         // Setup
@@ -52,10 +50,8 @@ class FormWithCsrfTraitTest extends MockeryTestCase
         $this->assertInstanceOf(Csrf::class, $this->sut->getCsrfElement());
     }
 
-    /**
-     * @test
-     * @depends getCsrfElementReturnsACsrfElement
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getCsrfElementReturnsACsrfElement')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getCsrfElementReturnsACsrfElementWithAName(): void
     {
         // Setup
@@ -65,9 +61,7 @@ class FormWithCsrfTraitTest extends MockeryTestCase
         $this->assertEquals(static::CSRF_KEY, $this->sut->getCsrfElement()->getName());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getCsrfInputIsCallable(): void
     {
         // Setup
@@ -77,10 +71,8 @@ class FormWithCsrfTraitTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'getCsrfInput']);
     }
 
-    /**
-     * @test
-     * @depends getCsrfInputIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getCsrfInputIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getCsrfInputReturnsInstanceOfInput(): void
     {
         // Setup
@@ -93,10 +85,8 @@ class FormWithCsrfTraitTest extends MockeryTestCase
         $this->assertInstanceOf(InputInterface::class, $result);
     }
 
-    /**
-     * @test
-     * @depends getCsrfInputReturnsInstanceOfInput
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getCsrfInputReturnsInstanceOfInput')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getCsrfInputReturnsInstanceOfInputThatIsRequired(): void
     {
         // Setup
@@ -110,10 +100,8 @@ class FormWithCsrfTraitTest extends MockeryTestCase
         $this->assertNotNull($this->sut->getMessages()[static::CSRF_KEY] ?? null);
     }
 
-    /**
-     * @test
-     * @depends getCsrfInputReturnsInstanceOfInput
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getCsrfInputReturnsInstanceOfInput')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getCsrfInputReturnsInstanceOfInputThatAcceptsAValidValue(): void
     {
         // Setup
@@ -121,7 +109,7 @@ class FormWithCsrfTraitTest extends MockeryTestCase
 
         // Execute
         $csrfValidator = $this->sut->getCsrfInput()->getValidatorChain()->getValidators()[0]['instance'];
-        assert($csrfValidator instanceof \Laminas\Validator\Csrf);
+        $this->assertInstanceOf(\Laminas\Validator\Csrf::class, $csrfValidator);
         $this->sut->setData([static::CSRF_KEY => $csrfValidator->getHash()]);
         $this->sut->isValid();
 
@@ -129,20 +117,16 @@ class FormWithCsrfTraitTest extends MockeryTestCase
         $this->assertNull($this->sut->getMessages()[static::CSRF_KEY] ?? null);
     }
 
-    public function csrfInvalidValueDataProvider(): array
+    public static function csrfInvalidValueDataProvider(): \Iterator
     {
-        return [
-            'non-empty invalid csrf value' => [static::INVALID_CSRF_VALUE],
-            'empty csrf value - string' => [static::EMPTY_STRING_VALUE],
-            'empty csrf value - null' => [null],
-        ];
+        yield 'non-empty invalid csrf value' => [static::INVALID_CSRF_VALUE];
+        yield 'empty csrf value - string' => [static::EMPTY_STRING_VALUE];
+        yield 'empty csrf value - null' => [null];
     }
 
-    /**
-     * @test
-     * @depends getCsrfInputReturnsInstanceOfInput
-     * @dataProvider csrfInvalidValueDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getCsrfInputReturnsInstanceOfInput')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('csrfInvalidValueDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getCsrfInputReturnsInstanceOfInputThatRejectsAnInvalidValue(mixed $value): void
     {
         // Setup

@@ -15,7 +15,7 @@ use Mockery as m;
 /**
  * Class IrhpPermitPrintCountry Test
  */
-class IrhpPermitPrintCountryTest extends AbstractDataServiceTestCase
+final class IrhpPermitPrintCountryTest extends AbstractDataServiceTestCase
 {
     /** @var IrhpPermitPrintCountry */
     private $sut;
@@ -35,7 +35,7 @@ class IrhpPermitPrintCountryTest extends AbstractDataServiceTestCase
             ->once()
             ->andReturnUsing(
                 function (Qry $dto) {
-                    $this->assertEquals(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID, $dto->getIrhpPermitType());
+                    $this->assertSame(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID, $dto->getIrhpPermitType());
                     return $this->query;
                 }
             );
@@ -57,36 +57,34 @@ class IrhpPermitPrintCountryTest extends AbstractDataServiceTestCase
         $this->assertEquals(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID, $this->sut->getIrhpPermitType());
     }
 
-    public static function dpTestFetchListOptions(): array
+    public static function dpTestFetchListOptions(): \Iterator
     {
-        return [
-            'with data' => [
+        yield 'with data' => [
+            'results' => [
                 'results' => [
-                    'results' => [
-                        [
-                            'id' => 'AB',
-                            'countryDesc' => 'Country AB',
-                        ],
-                        [
-                            'id' => 'CD',
-                            'countryDesc' => 'Country CD',
-                        ],
-                        [
-                            'id' => 'EF',
-                            'countryDesc' => 'Country EF',
-                        ],
-                    ]
-                ],
-                'expected' => [
-                    'AB' => 'Country AB',
-                    'CD' => 'Country CD',
-                    'EF' => 'Country EF',
+                    [
+                        'id' => 'AB',
+                        'countryDesc' => 'Country AB',
+                    ],
+                    [
+                        'id' => 'CD',
+                        'countryDesc' => 'Country CD',
+                    ],
+                    [
+                        'id' => 'EF',
+                        'countryDesc' => 'Country EF',
+                    ],
                 ]
             ],
-            'no data' => [
-                'results' => null,
-                'expected' => []
+            'expected' => [
+                'AB' => 'Country AB',
+                'CD' => 'Country CD',
+                'EF' => 'Country EF',
             ]
+        ];
+        yield 'no data' => [
+            'results' => null,
+            'expected' => []
         ];
     }
 

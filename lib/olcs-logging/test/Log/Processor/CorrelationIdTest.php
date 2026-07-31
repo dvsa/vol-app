@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Logging\Log\Processor;
 
 use DateTimeImmutable;
@@ -12,7 +14,7 @@ use Monolog\Level;
 use Monolog\LogRecord;
 use Olcs\Logging\Log\Processor\CorrelationId;
 
-class CorrelationIdTest extends TestCase
+final class CorrelationIdTest extends TestCase
 {
     public function testProcess(): void
     {

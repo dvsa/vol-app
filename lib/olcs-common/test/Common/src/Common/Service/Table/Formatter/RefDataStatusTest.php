@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\RefData;
@@ -13,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * RefDataStatus test
  */
-class RefDataStatusTest extends MockeryTestCase
+final class RefDataStatusTest extends MockeryTestCase
 {
     protected $viewHelperManager;
 

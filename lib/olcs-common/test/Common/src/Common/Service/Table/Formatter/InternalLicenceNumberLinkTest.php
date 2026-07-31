@@ -4,6 +4,8 @@
  * LicenceNumberLinkTest.php
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -16,17 +18,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @package CommonTest\Service\Table\Formatter
  */
-class InternalLicenceNumberLinkTest extends TestCase
+final class InternalLicenceNumberLinkTest extends TestCase
 {
     protected $urlHelper;
-
-    protected $translator;
-
-    protected $viewHelperManager;
-
-    protected $router;
-
-    protected $request;
 
     protected $sut;
 

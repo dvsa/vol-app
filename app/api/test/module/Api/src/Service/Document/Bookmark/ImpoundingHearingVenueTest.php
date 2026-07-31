@@ -13,14 +13,14 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\ImpoundingHearingVenue;
 /**
  * Impounding Hearing Venue Test
  */
-class ImpoundingHearingVenueTest extends \PHPUnit\Framework\TestCase
+final class ImpoundingHearingVenueTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
         $bookmark = new ImpoundingHearingVenue();
         $query = $bookmark->getQuery(['impounding' => 123]);
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
-        $this->assertTrue(is_null($bookmark->getQuery([])));
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Domain\Query\Bookmark\ImpoundingBundle::class, $bookmark->getQuery([]));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
@@ -32,22 +32,20 @@ class ImpoundingHearingVenueTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'venue' => ['name' => 'impounding hearing venue'],
-                    'venueOther' => 'other venue'
-                ],
-                'impounding hearing venue'
+                'venue' => ['name' => 'impounding hearing venue'],
+                'venueOther' => 'other venue'
             ],
+            'impounding hearing venue'
+        ];
+        yield [
             [
-                [
-                    'venueOther' => 'other venue'
-                ],
-                'other venue'
+                'venueOther' => 'other venue'
             ],
+            'other venue'
         ];
     }
 }

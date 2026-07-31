@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper;
 
 use Common\View\Helper\UniqidGenerator;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class UniqidGeneratorTest extends MockeryTestCase
+final class UniqidGeneratorTest extends MockeryTestCase
 {
     public function testGetLastId(): void
     {
@@ -23,8 +25,8 @@ class UniqidGeneratorTest extends MockeryTestCase
         $this->assertTrue(is_string($secondId) && ($secondId !== '' && $secondId !== '0'));
         $thirdId = trim($sut->generateId());
         $this->assertTrue(is_string($thirdId) && ($thirdId !== '' && $thirdId !== '0'));
-        $this->assertNotEquals($id, $secondId);
-        $this->assertNotEquals($id, $thirdId);
-        $this->assertNotEquals($secondId, $thirdId);
+        $this->assertNotSame($id, $secondId);
+        $this->assertNotSame($id, $thirdId);
+        $this->assertNotSame($secondId, $thirdId);
     }
 }

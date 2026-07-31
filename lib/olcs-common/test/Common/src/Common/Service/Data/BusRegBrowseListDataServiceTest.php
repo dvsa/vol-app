@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -11,7 +13,7 @@ use Mockery as m;
  * Class BusRegBrowseListDataServiceTest
  * @package OlcsTest\Service\Data
  */
-class BusRegBrowseListDataServiceTest extends AbstractDataServiceTestCase
+final class BusRegBrowseListDataServiceTest extends AbstractDataServiceTestCase
 {
     private BusRegBrowseListDataService $sut;
 
@@ -19,52 +21,45 @@ class BusRegBrowseListDataServiceTest extends AbstractDataServiceTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->sut = new BusRegBrowseListDataService($this->abstractDataServiceServices);
     }
 
-    /**
-     * @dataProvider provideFetchListOptions
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFetchListOptions')]
     public function testFetchListOptions($context, $result, $expected): void
     {
-        $this->sut->setData('BusRegBrowse' . ucfirst($context), $result);
+        $this->sut->setData('BusRegBrowse' . ucfirst((string) $context), $result);
 
         $this->assertEquals($expected, $this->sut->fetchListOptions($context));
     }
 
     /**
-     * @return ((string|string[])[]|false|string)[][]
+     * @return \Iterator<(int | string), array<(array<(array<string> | string)> | string | false)>>
      *
      * @psalm-return list{list{'eventRegistrationStatus', false, array<never, never>}, list{'eventRegistrationStatus', list{array{eventRegistrationStatus: 'A'}, array{eventRegistrationStatus: 'B'}, array{eventRegistrationStatus: 'C'}}, array{A: 'A', B: 'B', C: 'C'}}}
      */
-    public function provideFetchListOptions(): array
+    public static function provideFetchListOptions(): \Iterator
     {
-        return [
+        yield [
+            'eventRegistrationStatus',
+            false,
+            []
+        ];
+        yield [
+            'eventRegistrationStatus',
             [
-                'eventRegistrationStatus',
-                false,
-                []
+                ['eventRegistrationStatus' => 'A'],
+                ['eventRegistrationStatus' => 'B'],
+                ['eventRegistrationStatus' => 'C'],
             ],
             [
-                'eventRegistrationStatus',
-                [
-                    ['eventRegistrationStatus' => 'A'],
-                    ['eventRegistrationStatus' => 'B'],
-                    ['eventRegistrationStatus' => 'C'],
-                ],
-                [
-                    'A' => 'A',
-                    'B' => 'B',
-                    'C' => 'C',
-                ]
-            ],
+                'A' => 'A',
+                'B' => 'B',
+                'C' => 'C',
+            ]
         ];
     }
 
-    /**
-     * @dataProvider provideFetchListData
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFetchListData')]
     public function testFetchListData($context, $result, $expected): void
     {
         $params = [
@@ -94,7 +89,7 @@ class BusRegBrowseListDataServiceTest extends AbstractDataServiceTestCase
             ->once()
             ->getMock();
 
-        $this->sut->setData('BusRegBrowse' . ucfirst($context), null);
+        $this->sut->setData('BusRegBrowse' . ucfirst((string) $context), null);
 
         $this->mockHandleQuery($mockResponse);
 
@@ -104,26 +99,24 @@ class BusRegBrowseListDataServiceTest extends AbstractDataServiceTestCase
     }
 
     /**
-     * @return (string|string[][])[][]
+     * @return \Iterator<(int | string), array<(array<array<string>> | string)>>
      *
      * @psalm-return list{list{'eventRegistrationStatus', list{array{eventRegistrationStatus: 'A'}, array{eventRegistrationStatus: 'B'}, array{eventRegistrationStatus: 'C'}}, list{array{eventRegistrationStatus: 'A'}, array{eventRegistrationStatus: 'B'}, array{eventRegistrationStatus: 'C'}}}}
      */
-    public function provideFetchListData(): array
+    public static function provideFetchListData(): \Iterator
     {
-        return [
+        yield [
+            'eventRegistrationStatus',
             [
-                'eventRegistrationStatus',
-                [
-                    ['eventRegistrationStatus' => 'A'],
-                    ['eventRegistrationStatus' => 'B'],
-                    ['eventRegistrationStatus' => 'C'],
-                ],
-                [
-                    ['eventRegistrationStatus' => 'A'],
-                    ['eventRegistrationStatus' => 'B'],
-                    ['eventRegistrationStatus' => 'C'],
-                ]
+                ['eventRegistrationStatus' => 'A'],
+                ['eventRegistrationStatus' => 'B'],
+                ['eventRegistrationStatus' => 'C'],
             ],
+            [
+                ['eventRegistrationStatus' => 'A'],
+                ['eventRegistrationStatus' => 'B'],
+                ['eventRegistrationStatus' => 'C'],
+            ]
         ];
     }
 

@@ -22,23 +22,10 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * @see RefreshTokens
  */
-class RefreshTokenTest extends AbstractCommandHandlerTestCase
+final class RefreshTokenTest extends AbstractCommandHandlerTestCase
 {
     use MocksServicesTrait;
     use MocksAbstractCommandHandlerServicesTrait;
-
-    /** @var RefreshTokens  */
-    private $command;
-
-    /**
-     * @var AuthenticationServiceInterface|m\LegacyMockInterface|m\MockInterface
-     */
-    private $mockAuthenticationService;
-
-    /**
-     * @var ValidatableAdapterInterface|m\LegacyMockInterface|m\MockInterface
-     */
-    private $mockAdapter;
 
     protected $sut;
 

@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\GovUkAccount\Data\Attributes;
 /**
  * Based on the GDS Verify original, now being used for GovUk Account
  */
-class AttributesTest extends \PHPUnit\Framework\TestCase
+final class AttributesTest extends \PHPUnit\Framework\TestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetFullName')]
     public function testGetFullName(array $attributes, string $expected): void
@@ -18,29 +18,27 @@ class AttributesTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $attributes->getFullName());
     }
 
-    public static function dpGetFullName(): array
+    public static function dpGetFullName(): \Iterator
     {
-        return [
-            [
-                [Attributes::FIRST_NAME => 'John', Attributes::SURNAME => 'Smith'],
-                'John Smith'
-            ],
-            [
-                [Attributes::FIRST_NAME => 'John', Attributes::SURNAME => 'Smith'],
-                'John Smith'
-            ],
-            [
-                [Attributes::FIRST_NAME => 'John'],
-                'John'
-            ],
-            [
-                [Attributes::SURNAME => 'Smith'],
-                'Smith'
-            ],
-            [
-                [],
-                ''
-            ],
+        yield [
+            [Attributes::FIRST_NAME => 'John', Attributes::SURNAME => 'Smith'],
+            'John Smith'
+        ];
+        yield [
+            [Attributes::FIRST_NAME => 'John', Attributes::SURNAME => 'Smith'],
+            'John Smith'
+        ];
+        yield [
+            [Attributes::FIRST_NAME => 'John'],
+            'John'
+        ];
+        yield [
+            [Attributes::SURNAME => 'Smith'],
+            'Smith'
+        ];
+        yield [
+            [],
+            ''
         ];
     }
 
@@ -63,40 +61,38 @@ class AttributesTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($expected, $attributes->isValidSignature());
     }
 
-    public static function dpIsValidSignature(): array
+    public static function dpIsValidSignature(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    Attributes::FIRST_NAME => 'John',
-                    Attributes::SURNAME => 'Smith',
-                    Attributes::DATE_OF_BIRTH => '1999-10-10'],
-                true
-            ],
+                Attributes::FIRST_NAME => 'John',
+                Attributes::SURNAME => 'Smith',
+                Attributes::DATE_OF_BIRTH => '1999-10-10'],
+            true
+        ];
+        yield [
             [
-                [
-                    Attributes::FIRST_NAME => 'John',
-                    Attributes::SURNAME => 'Smith',
-                    Attributes::DATE_OF_BIRTH => '1999-10-10'
-                ],
-                true
+                Attributes::FIRST_NAME => 'John',
+                Attributes::SURNAME => 'Smith',
+                Attributes::DATE_OF_BIRTH => '1999-10-10'
             ],
-            [
-                [Attributes::SURNAME => 'Smith', Attributes::DATE_OF_BIRTH => '1999-10-10'],
-                false
-            ],
-            [
-                [Attributes::FIRST_NAME => 'John', Attributes::DATE_OF_BIRTH => '1999-10-10'],
-                false
-            ],
-            [
-                [Attributes::FIRST_NAME => 'John', Attributes::SURNAME => 'Smith'],
-                false
-            ],
-            [
-                [],
-                false
-            ],
+            true
+        ];
+        yield [
+            [Attributes::SURNAME => 'Smith', Attributes::DATE_OF_BIRTH => '1999-10-10'],
+            false
+        ];
+        yield [
+            [Attributes::FIRST_NAME => 'John', Attributes::DATE_OF_BIRTH => '1999-10-10'],
+            false
+        ];
+        yield [
+            [Attributes::FIRST_NAME => 'John', Attributes::SURNAME => 'Smith'],
+            false
+        ];
+        yield [
+            [],
+            false
         ];
     }
 }

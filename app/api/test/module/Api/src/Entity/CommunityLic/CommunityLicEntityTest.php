@@ -19,7 +19,7 @@ use Doctrine\Common\Collections\Criteria;
  *
  * Initially auto-generated but won't be overridden
  */
-class CommunityLicEntityTest extends EntityTester
+final class CommunityLicEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -259,15 +259,13 @@ class CommunityLicEntityTest extends EntityTester
         $this->assertFalse($sut->isActive());
     }
 
-    public static function dpTestIsActiveFalse(): array
+    public static function dpTestIsActiveFalse(): \Iterator
     {
-        return [
-            [CommunityLicEntity::STATUS_PENDING],
-            [CommunityLicEntity::STATUS_EXPIRED],
-            [CommunityLicEntity::STATUS_WITHDRAWN],
-            [CommunityLicEntity::STATUS_SUSPENDED],
-            [CommunityLicEntity::STATUS_ANNUL],
-            [CommunityLicEntity::STATUS_RETURNDED],
-        ];
+        yield [CommunityLicEntity::STATUS_PENDING];
+        yield [CommunityLicEntity::STATUS_EXPIRED];
+        yield [CommunityLicEntity::STATUS_WITHDRAWN];
+        yield [CommunityLicEntity::STATUS_SUSPENDED];
+        yield [CommunityLicEntity::STATUS_ANNUL];
+        yield [CommunityLicEntity::STATUS_RETURNDED];
     }
 }

@@ -16,7 +16,7 @@ class CreateVariationProcessingServiceFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CreateVariationProcessingService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CreateVariationProcessingService
     {
         return new CreateVariationProcessingService(
             $container->get('Helper\Form'),

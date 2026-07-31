@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Entity\Pi\PresidingTc;
 /**
  * @see Create
  */
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class GenericAnswerProviderTest extends MockeryTestCase
+final class GenericAnswerProviderTest extends MockeryTestCase
 {
     public function testGet(): void
     {

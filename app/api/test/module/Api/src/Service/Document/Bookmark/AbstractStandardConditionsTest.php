@@ -13,10 +13,8 @@ use Dvsa\OlcsTest\Api\Service\Document\Bookmark\Stub\AbstractStandardConditionsS
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Document\Bookmark\AbstractStandardConditions
- */
-class AbstractStandardConditionsTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\AbstractStandardConditions::class)]
+final class AbstractStandardConditionsTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetQuery')]
     public function testGetQuery(mixed $service, mixed $expectClass): void
@@ -36,28 +34,26 @@ class AbstractStandardConditionsTest extends MockeryTestCase
         $actual = $sut->getQuery(['data_key' => 9999]);
 
         if ($expectClass === null) {
-            static::assertNull($actual);
+            $this->assertNull($actual);
         } else {
-            static::assertInstanceOf($expectClass, $actual);
-            static::assertEquals(9999, $actual->getId());
+            $this->assertInstanceOf($expectClass, $actual);
+            $this->assertEquals(9999, $actual->getId());
         }
     }
 
-    public static function dpTestGetQuery(): array
+    public static function dpTestGetQuery(): \Iterator
     {
-        return [
-            [
-                'service' => 'application',
-                'expectClass' => DomainQry\Bookmark\ApplicationBundle::class,
-            ],
-            [
-                'service' => 'licence',
-                'expectClass' => DomainQry\Bookmark\LicenceBundle::class,
-            ],
-            [
-                'service' => 'invalid',
-                'expectClass' => null,
-            ],
+        yield [
+            'service' => 'application',
+            'expectClass' => DomainQry\Bookmark\ApplicationBundle::class,
+        ];
+        yield [
+            'service' => 'licence',
+            'expectClass' => DomainQry\Bookmark\LicenceBundle::class,
+        ];
+        yield [
+            'service' => 'invalid',
+            'expectClass' => null,
         ];
     }
 
@@ -86,24 +82,22 @@ class AbstractStandardConditionsTest extends MockeryTestCase
         $sut->render();
     }
 
-    public static function dbTestRender(): array
+    public static function dbTestRender(): \Iterator
     {
-        return [
-            [
-                'licType' => Entity\Licence\Licence::LICENCE_TYPE_RESTRICTED,
-                'vehType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'expect' => 'RESTRICTED',
-            ],
-            [
-                'licType' => Entity\Licence\Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                'vehType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'expect' => 'STANDARD',
-            ],
-            [
-                'licType' => Entity\Licence\Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                'vehType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'expect' => 'STANDARD_INT',
-            ],
+        yield [
+            'licType' => Entity\Licence\Licence::LICENCE_TYPE_RESTRICTED,
+            'vehType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'expect' => 'RESTRICTED',
+        ];
+        yield [
+            'licType' => Entity\Licence\Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'vehType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'expect' => 'STANDARD',
+        ];
+        yield [
+            'licType' => Entity\Licence\Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            'vehType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'expect' => 'STANDARD_INT',
         ];
     }
 }

@@ -34,7 +34,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class CreateUnlicensedTest extends AbstractCommandHandlerTestCase
+final class CreateUnlicensedTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -199,25 +199,23 @@ class CreateUnlicensedTest extends AbstractCommandHandlerTestCase
         );
 
         $phoneContacts = $savedLicence->getCorrespondenceCd()->getPhoneContacts();
-        $this->assertEquals(2, $phoneContacts->count());
+        $this->assertCount(2, $phoneContacts);
         $this->assertEquals('01234567890', $phoneContacts->get(0)->getPhoneNumber());
         $this->assertEquals('phone_t_primary', $phoneContacts->get(0)->getPhoneContactType()->getId());
         $this->assertEquals('01234567891', $phoneContacts->get(1)->getPhoneNumber());
         $this->assertEquals('phone_t_secondary', $phoneContacts->get(1)->getPhoneContactType()->getId());
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
-            'notExempt' => [
-                'isExempt' => 'N',
-                'expectedLicenceNo' => 'UPN1234567'
+        yield 'notExempt' => [
+            'isExempt' => 'N',
+            'expectedLicenceNo' => 'UPN1234567'
 
-            ],
-            'isExempt' => [
-                'isExempt' => 'Y',
-                'expectedLicenceNo' => 'EPN1234567'
-            ]
+        ];
+        yield 'isExempt' => [
+            'isExempt' => 'Y',
+            'expectedLicenceNo' => 'EPN1234567'
         ];
     }
 }

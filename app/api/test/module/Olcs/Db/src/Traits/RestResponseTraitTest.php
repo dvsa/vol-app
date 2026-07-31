@@ -26,7 +26,7 @@ class RestResponseTraitStub
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 // phpcs:ignore PSR1.Classes.ClassDeclaration.MultipleClasses
-class RestResponseTraitTest extends \PHPUnit\Framework\TestCase
+final class RestResponseTraitTest extends \PHPUnit\Framework\TestCase
 {
     use \Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
 
@@ -41,13 +41,13 @@ class RestResponseTraitTest extends \PHPUnit\Framework\TestCase
 
         $response = $trait->getNewResponse();
 
-        $this->assertTrue($response instanceof Response);
+        $this->assertInstanceOf(\Laminas\Http\Response::class, $response);
 
         $response2 = $trait->getNewResponse();
 
-        $this->assertTrue($response2 instanceof Response);
+        $this->assertInstanceOf(\Laminas\Http\Response::class, $response2);
 
-        $this->assertFalse($response === $response2);
+        $this->assertNotSame($response2, $response);
     }
 
     /**
@@ -100,37 +100,35 @@ class RestResponseTraitTest extends \PHPUnit\Framework\TestCase
     /**
      * Provider for respond
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function providerRespond(): array
+    public static function providerRespond(): \Iterator
     {
-        return [
+        yield [
+            [Response::STATUS_CODE_200],
             [
-                [Response::STATUS_CODE_200],
-                [
-                    'code' => Response::STATUS_CODE_200,
-                    'reasonPhrase' => 'Some Phrase',
-                    'summary' => null,
-                    'data' => []
-                ]
-            ],
+                'code' => Response::STATUS_CODE_200,
+                'reasonPhrase' => 'Some Phrase',
+                'summary' => null,
+                'data' => []
+            ]
+        ];
+        yield [
+            [Response::STATUS_CODE_400, 'Summary'],
             [
-                [Response::STATUS_CODE_400, 'Summary'],
-                [
-                    'code' => Response::STATUS_CODE_400,
-                    'reasonPhrase' => 'Some Phrase',
-                    'summary' => 'Summary',
-                    'data' => []
-                ]
-            ],
+                'code' => Response::STATUS_CODE_400,
+                'reasonPhrase' => 'Some Phrase',
+                'summary' => 'Summary',
+                'data' => []
+            ]
+        ];
+        yield [
+            [Response::STATUS_CODE_404, 'Summary', ['foo' => 'bar']],
             [
-                [Response::STATUS_CODE_404, 'Summary', ['foo' => 'bar']],
-                [
-                    'code' => Response::STATUS_CODE_404,
-                    'reasonPhrase' => 'Some Phrase',
-                    'summary' => 'Summary',
-                    'data' => ['foo' => 'bar']
-                ]
+                'code' => Response::STATUS_CODE_404,
+                'reasonPhrase' => 'Some Phrase',
+                'summary' => 'Summary',
+                'data' => ['foo' => 'bar']
             ]
         ];
     }

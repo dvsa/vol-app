@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Publication\CreateNextPublication;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class CreateNextPublicationTest extends \PHPUnit\Framework\TestCase
+final class CreateNextPublicationTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

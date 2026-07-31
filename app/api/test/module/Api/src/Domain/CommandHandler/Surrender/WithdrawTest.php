@@ -23,7 +23,7 @@ use Dvsa\Olcs\Transfer\Command\Task\CloseTasks;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class WithdrawTest extends AbstractCommandHandlerTestCase
+final class WithdrawTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var WithdrawHandler

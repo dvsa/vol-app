@@ -30,7 +30,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateDocumentSpecificTest extends AbstractCommandHandlerTestCase
+final class CreateDocumentSpecificTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -92,7 +92,7 @@ class CreateDocumentSpecificTest extends AbstractCommandHandlerTestCase
                     $this->assertSame($this->subCategoryReferences[2], $document->getSubCategory());
                     $this->assertNull($document->getLicence());
                     $this->assertInstanceOf('\DateTime', $document->getIssuedDate());
-                    $this->assertEquals('2015-01-01', $document->getIssuedDate()->format('Y-m-d'));
+                    $this->assertSame('2015-01-01', $document->getIssuedDate()->format('Y-m-d'));
                     $this->assertEquals('foo', $document->getMetadata());
                     $this->assertEquals(1, $document->getIsPostSubmissionUpload());
                 }
@@ -148,7 +148,7 @@ class CreateDocumentSpecificTest extends AbstractCommandHandlerTestCase
                     $this->assertSame($this->subCategoryReferences[2], $document->getSubCategory());
                     $this->assertNull($document->getLicence());
                     $this->assertInstanceOf('\DateTime', $document->getIssuedDate());
-                    $this->assertEquals('2015-01-01', $document->getIssuedDate()->format('Y-m-d'));
+                    $this->assertSame('2015-01-01', $document->getIssuedDate()->format('Y-m-d'));
                     $this->assertEquals('foo', $document->getMetadata());
                     $this->assertEquals(0, $document->getIsPostSubmissionUpload());
                 }

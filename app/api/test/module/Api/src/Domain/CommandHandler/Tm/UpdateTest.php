@@ -28,7 +28,7 @@ use Dvsa\OlcsTest\MocksServicesTrait;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\MocksAbstractCommandHandlerServicesTrait;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     use MocksServicesTrait;
     use MocksAbstractCommandHandlerServicesTrait;
@@ -189,7 +189,7 @@ class UpdateTest extends AbstractCommandHandlerTestCase
         $res = $result->toArray();
         $this->assertEquals($res['id']['transportManager'], $id);
         $this->assertEquals($res['id']['homeAddress'], $data['homeAddressId']);
-        $this->assertEquals($res['id']['workAddress'], 10);
+        $this->assertEquals(10, $res['id']['workAddress']);
         $this->assertEquals($res['id']['homeContactDetails'], $data['homeCdId']);
         $this->assertEquals($res['id']['person'], $data['personId']);
     }

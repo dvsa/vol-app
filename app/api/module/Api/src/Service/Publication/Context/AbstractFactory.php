@@ -20,7 +20,7 @@ class AbstractFactory implements AbstractFactoryInterface
      * {@inheritdoc}
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         return new $requestedName($container->get('QueryHandlerManager'));
     }

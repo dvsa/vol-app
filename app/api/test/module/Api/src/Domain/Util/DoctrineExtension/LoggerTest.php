@@ -8,7 +8,7 @@ use Olcs\Logging\Log\Logger;
 use Olcs\Logging\Test\RecordingLogger;
 use Psr\Log\LogLevel;
 
-class LoggerTest extends \PHPUnit\Framework\TestCase
+final class LoggerTest extends \PHPUnit\Framework\TestCase
 {
     public function testStopQuery(): void
     {

@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  * EditorJsParser Test
  *
  */
-class EditorJsParserTest extends TestCase
+final class EditorJsParserTest extends TestCase
 {
     private EditorJsParser $parser;
 

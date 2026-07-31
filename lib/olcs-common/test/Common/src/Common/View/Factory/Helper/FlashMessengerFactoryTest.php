@@ -13,7 +13,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-class FlashMessengerFactoryTest extends MockeryTestCase
+final class FlashMessengerFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

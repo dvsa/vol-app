@@ -10,7 +10,7 @@ use Dvsa\Olcs\Cli\Domain\Command\Permits\UploadScoringLog;
  * Upload scoring log test
  *
  */
-class UploadScoringLogTest extends \PHPUnit\Framework\TestCase
+final class UploadScoringLogTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {
@@ -20,6 +20,6 @@ class UploadScoringLogTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals('TEST', $sut->getLogContent());
+        $this->assertEquals('TEST', $sut->getLogContent());
     }
 }

@@ -19,7 +19,7 @@ use Laminas\I18n\Translator\Translator;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class GenerateCacheTest extends AbstractCommandHandlerTestCase
+final class GenerateCacheTest extends AbstractCommandHandlerTestCase
 {
     private $translator;
 

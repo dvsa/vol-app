@@ -14,7 +14,7 @@ use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email as SymfonyEmail;
 
-class DevNotifyTransportTest extends MockeryTestCase
+final class DevNotifyTransportTest extends MockeryTestCase
 {
     /** @var TransportInterface&\Mockery\MockInterface */
     private $inner;
@@ -22,6 +22,7 @@ class DevNotifyTransportTest extends MockeryTestCase
     private $converter;
     private DevNotifyTransport $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->inner = m::mock(TransportInterface::class);
@@ -35,7 +36,7 @@ class DevNotifyTransportTest extends MockeryTestCase
 
     public function testRendersMarkdownAndStripsHeader(): void
     {
-        $email = (new SymfonyEmail())
+        $email = new SymfonyEmail()
             ->from(new Address('from@example.com'))
             ->to(new Address('user@example.com'))
             ->subject('Hello')
@@ -50,9 +51,9 @@ class DevNotifyTransportTest extends MockeryTestCase
         $this->converter->shouldReceive('convert')->with('A short message')->andReturn($rendered);
 
         $this->inner->shouldReceive('send')->once()->withArgs(function (SymfonyEmail $msg) {
-            $this->assertStringContainsString('<p style=', $msg->getHtmlBody()); // Notify inline styles applied
-            $this->assertStringContainsString('A short message', $msg->getHtmlBody());
-            $this->assertStringContainsString('Hello', $msg->getHtmlBody());
+            $this->assertStringContainsString('<p style=', (string) $msg->getHtmlBody()); // Notify inline styles applied
+            $this->assertStringContainsString('A short message', (string) $msg->getHtmlBody());
+            $this->assertStringContainsString('Hello', (string) $msg->getHtmlBody());
             $this->assertFalse($msg->getHeaders()->has(GovUkNotifyTransport::PAYLOAD_HEADER));
             return true;
         })->andReturn(null);
@@ -62,7 +63,7 @@ class DevNotifyTransportTest extends MockeryTestCase
 
     public function testPassesThroughWhenHeaderAbsent(): void
     {
-        $email = (new SymfonyEmail())
+        $email = new SymfonyEmail()
             ->from(new Address('from@example.com'))
             ->to(new Address('user@example.com'))
             ->subject('Legacy')

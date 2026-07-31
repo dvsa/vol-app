@@ -19,7 +19,7 @@ use Dvsa\Olcs\Cli\Domain\Query\CommunityLic\CommunityLicencesForActivationList;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class ProcessCommunityLicencesCommandTest extends TestCase
+final class ProcessCommunityLicencesCommandTest extends TestCase
 {
     private CommandTester $commandTester;
     private CommandHandlerManager $mockCommandHandlerManager;
@@ -52,7 +52,7 @@ class ProcessCommunityLicencesCommandTest extends TestCase
 
         $this->commandTester->execute(['--dry-run' => true, '-vv' => true]);
 
-        $this->assertEquals(0, $this->commandTester->getStatusCode());
+        $this->assertSame(0, $this->commandTester->getStatusCode());
     }
 
     public function testExecuteSuspensionAndActivation(): void
@@ -71,16 +71,16 @@ class ProcessCommunityLicencesCommandTest extends TestCase
         $this->mockCommandHandlerManager->expects($matcher)
             ->method('handleCommand')->willReturnCallback(function (...$parameters) use ($matcher) {
                 if ($matcher->numberOfInvocations() === 1) {
-                    $this->assertSame($this->isInstanceOf(SuspendCommunityLic::class), $parameters[0]);
+                    $this->assertInstanceOf(SuspendCommunityLic::class, $parameters[0]);
                 }
                 if ($matcher->numberOfInvocations() === 2) {
-                    $this->assertSame($this->isInstanceOf(ActivateCommunityLic::class), $parameters[0]);
+                    $this->assertInstanceOf(ActivateCommunityLic::class, $parameters[0]);
                 }
                 return new Result();
             });
 
         $this->commandTester->execute([]);
 
-        $this->assertEquals(0, $this->commandTester->getStatusCode());
+        $this->assertSame(0, $this->commandTester->getStatusCode());
     }
 }

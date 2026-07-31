@@ -16,7 +16,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 /**
  * Update MyAccount Internal Test
  */
-class UpdateMyAccountInternalTest extends AbstractCommandHandlerTestCase
+final class UpdateMyAccountInternalTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

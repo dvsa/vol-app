@@ -14,7 +14,7 @@ use Mockery as m;
 use Olcs\Listener\RouteParams;
 use Olcs\Service\Marker\MarkerService;
 
-class BusRegMarkerTest extends TestCase
+final class BusRegMarkerTest extends TestCase
 {
     private BusRegMarker $sut;
     public function setUp(): void

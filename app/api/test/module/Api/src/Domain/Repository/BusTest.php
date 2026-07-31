@@ -29,8 +29,9 @@ use Hamcrest\Text\MatchesPattern;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusTest extends RepositoryTestCase
+final class BusTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(BusRepo::class);

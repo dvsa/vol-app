@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Controller\Plugin;
 
 use Common\Controller\Plugin\FeaturesEnabledForMethod;
@@ -7,7 +9,7 @@ use Common\Service\Cqrs\Query\QuerySender;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-class FeaturesEnabledForMethodTest extends MockeryTestCase
+final class FeaturesEnabledForMethodTest extends MockeryTestCase
 {
     protected $querySender;
 

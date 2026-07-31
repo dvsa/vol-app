@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\Undertakings;
@@ -12,7 +14,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class UndertakingsTest extends AbstractLvaFormServiceTestCase
+final class UndertakingsTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = Undertakings::class;
 

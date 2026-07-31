@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Update Short Notice Test
  */
-class UpdateShortNoticeTest extends AbstractCommandHandlerTestCase
+final class UpdateShortNoticeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

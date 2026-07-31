@@ -23,13 +23,14 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationTypeOfLicenceReviewServiceTest extends MockeryTestCase
+final class VariationTypeOfLicenceReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
     /** @var TranslatorInterface */
     protected $mockTranslator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);
@@ -65,33 +66,31 @@ class VariationTypeOfLicenceReviewServiceTest extends MockeryTestCase
         $this->assertEquals(['freetext' => 'translated-text-bar-foo'], $this->sut->getConfigFromData($data));
     }
 
-    public static function dpGetConfigFromData(): array
+    public static function dpGetConfigFromData(): \Iterator
     {
-        return [
-            [
-                Licence::LICENCE_TYPE_RESTRICTED,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-            ],
-            [
-                Licence::LICENCE_TYPE_RESTRICTED,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-            ],
-            [
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                Licence::LICENCE_TYPE_RESTRICTED,
-            ],
-            [
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-            ],
-            [
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-            ],
-            [
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                Licence::LICENCE_TYPE_RESTRICTED,
-            ],
+        yield [
+            Licence::LICENCE_TYPE_RESTRICTED,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+        ];
+        yield [
+            Licence::LICENCE_TYPE_RESTRICTED,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+        ];
+        yield [
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            Licence::LICENCE_TYPE_RESTRICTED,
+        ];
+        yield [
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+        ];
+        yield [
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+        ];
+        yield [
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            Licence::LICENCE_TYPE_RESTRICTED,
         ];
     }
 
@@ -147,19 +146,17 @@ class VariationTypeOfLicenceReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public static function dpGetConfigFromDataStandardInternational(): array
+    public static function dpGetConfigFromDataStandardInternational(): \Iterator
     {
-        return [
-            [
-                RefData::APP_VEHICLE_TYPE_MIXED,
-                RefData::APP_VEHICLE_TYPE_LGV,
-                'translated-template translated-mixed translated-lgv'
-            ],
-            [
-                RefData::APP_VEHICLE_TYPE_LGV,
-                RefData::APP_VEHICLE_TYPE_MIXED,
-                'translated-template translated-lgv translated-mixed'
-            ],
+        yield [
+            RefData::APP_VEHICLE_TYPE_MIXED,
+            RefData::APP_VEHICLE_TYPE_LGV,
+            'translated-template translated-mixed translated-lgv'
+        ];
+        yield [
+            RefData::APP_VEHICLE_TYPE_LGV,
+            RefData::APP_VEHICLE_TYPE_MIXED,
+            'translated-template translated-lgv translated-mixed'
         ];
     }
 }

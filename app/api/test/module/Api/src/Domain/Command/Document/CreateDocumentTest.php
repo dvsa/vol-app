@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Document\CreateDocument;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateDocumentTest extends \PHPUnit\Framework\TestCase
+final class CreateDocumentTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

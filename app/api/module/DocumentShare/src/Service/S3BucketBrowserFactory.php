@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
 class S3BucketBrowserFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): S3BucketBrowser
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): S3BucketBrowser
     {
         $config = $container->get('config');
 

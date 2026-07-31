@@ -3,7 +3,7 @@
 namespace Dvsa\Olcs\Transfer\Service;
 
 use Psr\Container\ContainerInterface;
-use Laminas\Cache\Storage\StorageInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
 class CacheEncryptionFactory implements FactoryInterface
@@ -21,7 +21,7 @@ class CacheEncryptionFactory implements FactoryInterface
      * @return CacheEncryption
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CacheEncryption
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CacheEncryption
     {
         $config = $container->get('Config');
 
@@ -30,7 +30,7 @@ class CacheEncryptionFactory implements FactoryInterface
         }
 
         $cache = $container->get('default-cache');
-        assert($cache instanceof StorageInterface);
+        assert($cache instanceof CacheItemPoolInterface);
 
         return new CacheEncryption(
             $cache,

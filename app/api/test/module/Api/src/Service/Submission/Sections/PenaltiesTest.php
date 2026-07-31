@@ -8,16 +8,16 @@ namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
  * Class PenaltiesTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class PenaltiesTest extends AbstractSubmissionSectionTestCase
+final class PenaltiesTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\Penalties::class;
 
     /**
      * Filter provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
         $case = static::getCase();
 
@@ -70,8 +70,6 @@ class PenaltiesTest extends AbstractSubmissionSectionTestCase
             ]
         ];
 
-        return [
-            [$case, $expectedResult],
-        ];
+        yield [$case, $expectedResult];
     }
 }

@@ -22,7 +22,7 @@ use Dvsa\Olcs\Transfer\Command\Document\DeleteDocuments as Cmd;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DeleteDocumentsTest extends AbstractCommandHandlerTestCase
+final class DeleteDocumentsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -1,24 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Common\Service\Table\Formatter;
 
 use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 use Mockery;
 use Mockery as m;
 
-class VehicleRegistrationMarkTest extends \PHPUnit\Framework\TestCase
+final class VehicleRegistrationMarkTest extends \PHPUnit\Framework\TestCase
 {
-    protected $translator;
-
     protected $sut;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->translator = m::mock(TranslatorDelegator::class);
-        $this->sut = new VehicleRegistrationMark($this->translator);
+        $translator = m::mock(TranslatorDelegator::class);
+        $this->sut = new VehicleRegistrationMark($translator);
 
-        $this->translator
+        $translator
             ->shouldReceive('translate')
             ->with('application_vehicle-safety_vehicle.table.vrm.interim-marker')
             ->andReturn('TEST_INTERIM_TRANSLATION');

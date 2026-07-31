@@ -17,20 +17,17 @@ use Mockery as m;
 use Olcs\Logging\Log\Logger;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class EnqueueTest extends AbstractCommandHandlerTestCase
+final class EnqueueTest extends AbstractCommandHandlerTestCase
 {
     protected $sut;
-    protected $queueService;
-    protected $messageBuilderService;
-    protected $mockSl;
     protected $logger;
 
     public function setUp(): void
     {
         $this->sut = new Enqueue();
 
-        $this->queueService = m::mock(Queue::class);
-        $this->messageBuilderService = m::mock(MessageBuilder::class);
+        $queueService = m::mock(Queue::class);
+        $messageBuilderService = m::mock(MessageBuilder::class);
 
         $this->mockedSmServices = [
             MessageBuilder::class => m::mock(MessageBuilder::class),

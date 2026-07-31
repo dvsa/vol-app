@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -14,14 +16,10 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class FeeUrlExternalTest extends MockeryTestCase
+final class FeeUrlExternalTest extends MockeryTestCase
 {
     public $mockRouteMatch;
     protected $urlHelper;
-
-    protected $router;
-
-    protected $request;
 
     protected $sut;
 
@@ -29,13 +27,13 @@ class FeeUrlExternalTest extends MockeryTestCase
     protected function setUp(): void
     {
         $this->urlHelper = m::mock(UrlHelperService::class);
-        $this->router = m::mock(TreeRouteStack::class);
-        $this->request = m::mock(Request::class);
-        $this->sut = new FeeUrlExternal($this->router, $this->request, $this->urlHelper);
+        $router = m::mock(TreeRouteStack::class);
+        $request = m::mock(Request::class);
+        $this->sut = new FeeUrlExternal($router, $request, $this->urlHelper);
 
         $this->mockRouteMatch = m::mock(\Laminas\Router\RouteMatch::class);
 
-        $this->request
+        $request
             ->shouldReceive('getQuery')
             ->andReturn(
                 m::mock()
@@ -47,9 +45,9 @@ class FeeUrlExternalTest extends MockeryTestCase
             ->once()
             ->getMock();
 
-        $this->router
+        $router
             ->shouldReceive('match')
-            ->with($this->request)
+            ->with($request)
             ->andReturn($this->mockRouteMatch)
             ->getMock();
     }
@@ -63,11 +61,11 @@ class FeeUrlExternalTest extends MockeryTestCase
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group FeeStatusFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('FeeStatusFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $routeMatch, $expectedRoute, $expectedRouteParams, $expectedLink, $expectedUrl): void
     {
         $this->mockRouteMatch
@@ -85,34 +83,32 @@ class FeeUrlExternalTest extends MockeryTestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'dashboard fee link' => [
-                [
-                    'id' => '99',
-                    'description' => 'my fee',
-                ],
-                'fees',
-                'fees/pay',
-                ['fee' => '99'],
-                '<a class="govuk-link" href="feeurl">my fee</a>',
-                'feeurl'
+        yield 'dashboard fee link' => [
+            [
+                'id' => '99',
+                'description' => 'my fee',
             ],
-            'dashboard late fee link' => [
-                [
-                    'id' => '99',
-                    'description' => 'my fee',
-                    'isExpiredForLicence' => 1
-                ],
-                'fees',
-                'fees/late',
-                ['fee' => '99'],
-                '<a class="govuk-link" href="lateurl">my fee</a>',
-                'lateurl'
-            ]
+            'fees',
+            'fees/pay',
+            ['fee' => '99'],
+            '<a class="govuk-link" href="feeurl">my fee</a>',
+            'feeurl'
+        ];
+        yield 'dashboard late fee link' => [
+            [
+                'id' => '99',
+                'description' => 'my fee',
+                'isExpiredForLicence' => 1
+            ],
+            'fees',
+            'fees/late',
+            ['fee' => '99'],
+            '<a class="govuk-link" href="lateurl">my fee</a>',
+            'lateurl'
         ];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper;
 
 use Psr\Container\ContainerInterface;
@@ -13,7 +15,7 @@ use Laminas\Router\Http\RouteMatch;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class PageIdTest extends MockeryTestCase
+final class PageIdTest extends MockeryTestCase
 {
     /**
      * @var PageId

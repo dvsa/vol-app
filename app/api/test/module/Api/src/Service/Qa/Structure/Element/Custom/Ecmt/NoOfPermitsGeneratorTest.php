@@ -26,9 +26,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsGeneratorTest extends MockeryTestCase
+final class NoOfPermitsGeneratorTest extends MockeryTestCase
 {
-    public const ISSUE_FEE_PER_PERMIT = '5.00';
+    public const string ISSUE_FEE_PER_PERMIT = '5.00';
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate(
@@ -172,19 +172,17 @@ class NoOfPermitsGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpGenerate(): array
+    public static function dpGenerate(): \Iterator
     {
-        return [
-            [43, 19, 19, true, true, true, false, 'N/A'],
-            [17, 40, 17, true, true, true, false, 'N/A'],
-            [17, 40, 17, false, true, false, false, 'N/A'],
-            [17, 40, 17, true, false, false, false, 'N/A'],
-            [17, 40, 17, false, false, false, false, 'N/A'],
-            [43, 19, 19, true, true, true, true, self::ISSUE_FEE_PER_PERMIT],
-            [17, 40, 17, true, true, true, true, self::ISSUE_FEE_PER_PERMIT],
-            [17, 40, 17, false, true, false, true, self::ISSUE_FEE_PER_PERMIT],
-            [17, 40, 17, true, false, false, true, self::ISSUE_FEE_PER_PERMIT],
-            [17, 40, 17, false, false, false, true, self::ISSUE_FEE_PER_PERMIT],
-        ];
+        yield [43, 19, 19, true, true, true, false, 'N/A'];
+        yield [17, 40, 17, true, true, true, false, 'N/A'];
+        yield [17, 40, 17, false, true, false, false, 'N/A'];
+        yield [17, 40, 17, true, false, false, false, 'N/A'];
+        yield [17, 40, 17, false, false, false, false, 'N/A'];
+        yield [43, 19, 19, true, true, true, true, self::ISSUE_FEE_PER_PERMIT];
+        yield [17, 40, 17, true, true, true, true, self::ISSUE_FEE_PER_PERMIT];
+        yield [17, 40, 17, false, true, false, true, self::ISSUE_FEE_PER_PERMIT];
+        yield [17, 40, 17, true, false, false, true, self::ISSUE_FEE_PER_PERMIT];
+        yield [17, 40, 17, false, false, false, true, self::ISSUE_FEE_PER_PERMIT];
     }
 }

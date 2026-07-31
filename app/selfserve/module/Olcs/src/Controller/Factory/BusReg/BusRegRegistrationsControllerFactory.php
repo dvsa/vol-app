@@ -20,7 +20,7 @@ class BusRegRegistrationsControllerFactory implements FactoryInterface
      * @return BusRegRegistrationsController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusRegRegistrationsController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): BusRegRegistrationsController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

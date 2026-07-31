@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Rbac\Service\Permission;
@@ -16,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class DisqualifyUrlTest extends MockeryTestCase
+final class DisqualifyUrlTest extends MockeryTestCase
 {
     protected $urlHelper;
 
@@ -35,7 +37,7 @@ class DisqualifyUrlTest extends MockeryTestCase
     {
         // Upstream wont fix this, so we need to suppress the deprecation - https://github.com/laminas/laminas-stdlib/issues/85
         set_error_handler(function ($severity, $message, $file, $line) {
-            if (strpos($message, 'Serializable') !== false) {
+            if (str_contains($message, 'Serializable')) {
                 return true;
             }
             return false;
@@ -52,6 +54,7 @@ class DisqualifyUrlTest extends MockeryTestCase
     #[\Override]
     protected function tearDown(): void
     {
+        restore_error_handler();
         m::close();
     }
 
@@ -63,9 +66,7 @@ class DisqualifyUrlTest extends MockeryTestCase
         $this->assertEquals('foo&gt;', $this->sut->format($data));
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $routeMatch, $expectedRoute, $expectedRouteParams, $params, $expectedLink): void
     {
         $mockParams = m::mock(ParametersInterface::class);
@@ -95,64 +96,62 @@ class DisqualifyUrlTest extends MockeryTestCase
         $this->assertEquals($expectedLink, $this->sut->format($data, []));
     }
 
-    public function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            'licence' => [
-                [
-                    'id' => '99',
-                    'disqualificationStatus' => 'foo_licence>',
-                ],
-                'lva-licence/people',
-                'disqualify-person/licence',
-                ['person' => '99', 'licence' => 1],
-                ['licence' => 1],
-                '<a href="the_url" class="govuk-link js-modal-ajax">foo_licence&gt;</a>',
+        yield 'licence' => [
+            [
+                'id' => '99',
+                'disqualificationStatus' => 'foo_licence>',
             ],
-            'application' => [
-                [
-                    'id' => '99',
-                    'disqualificationStatus' => 'foo_application>',
-                ],
-                'lva-application/people',
-                'disqualify-person/application',
-                ['person' => '99', 'application' => 2],
-                ['application' => 2],
-                '<a href="the_url" class="govuk-link js-modal-ajax">foo_application&gt;</a>',
+            'lva-licence/people',
+            'disqualify-person/licence',
+            ['person' => '99', 'licence' => 1],
+            ['licence' => 1],
+            '<a href="the_url" class="govuk-link js-modal-ajax">foo_licence&gt;</a>',
+        ];
+        yield 'application' => [
+            [
+                'id' => '99',
+                'disqualificationStatus' => 'foo_application>',
             ],
-            'variation' => [
-                [
-                    'id' => '99',
-                    'disqualificationStatus' => 'foo_variation>',
-                ],
-                'lva-variation/people',
-                'disqualify-person/variation',
-                ['person' => '99', 'variation' => 3],
-                ['application' => 3],
-                '<a href="the_url" class="govuk-link js-modal-ajax">foo_variation&gt;</a>',
+            'lva-application/people',
+            'disqualify-person/application',
+            ['person' => '99', 'application' => 2],
+            ['application' => 2],
+            '<a href="the_url" class="govuk-link js-modal-ajax">foo_application&gt;</a>',
+        ];
+        yield 'variation' => [
+            [
+                'id' => '99',
+                'disqualificationStatus' => 'foo_variation>',
             ],
-            'operator' => [
-                [
-                    'personId' => '99',
-                    'disqualificationStatus' => 'foo_operator>',
-                ],
-                'operator/people',
-                'operator/disqualify_person',
-                ['person' => '99'],
-                [],
-                '<a href="the_url" class="govuk-link js-modal-ajax">foo_operator&gt;</a>',
+            'lva-variation/people',
+            'disqualify-person/variation',
+            ['person' => '99', 'variation' => 3],
+            ['application' => 3],
+            '<a href="the_url" class="govuk-link js-modal-ajax">foo_variation&gt;</a>',
+        ];
+        yield 'operator' => [
+            [
+                'personId' => '99',
+                'disqualificationStatus' => 'foo_operator>',
             ],
-            'unknown' => [
-                [
-                    'id' => '99',
-                    'disqualificationStatus' => 'foo_unknown>',
-                ],
-                'bar',
-                null,
-                null,
-                null,
-                '<a href="" class="govuk-link js-modal-ajax">foo_unknown&gt;</a>',
+            'operator/people',
+            'operator/disqualify_person',
+            ['person' => '99'],
+            [],
+            '<a href="the_url" class="govuk-link js-modal-ajax">foo_operator&gt;</a>',
+        ];
+        yield 'unknown' => [
+            [
+                'id' => '99',
+                'disqualificationStatus' => 'foo_unknown>',
             ],
+            'bar',
+            null,
+            null,
+            null,
+            '<a href="" class="govuk-link js-modal-ajax">foo_unknown&gt;</a>',
         ];
     }
 }

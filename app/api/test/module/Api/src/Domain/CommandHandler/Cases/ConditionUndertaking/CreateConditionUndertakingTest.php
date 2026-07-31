@@ -31,7 +31,7 @@ use Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre as OperatingCentreEntit
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class CreateConditionUndertakingTest extends AbstractCommandHandlerTestCase
+final class CreateConditionUndertakingTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

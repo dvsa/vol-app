@@ -14,11 +14,11 @@ use Dvsa\OlcsTest\MocksServicesTrait;
  * Class CognitoClientFactoryTest
  * @see CognitoClientFactory
  */
-class CognitoClientFactoryTest extends MockeryTestCase
+final class CognitoClientFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
-    public const CONFIG_WITH_WITH_VALID_SETTINGS = [
+    public const array CONFIG_WITH_WITH_VALID_SETTINGS = [
         CognitoClientFactory::CONFIG_CLIENT_ID => 'client_id',
         CognitoClientFactory::CONFIG_CLIENT_SECRET => 'client_secret',
         CognitoClientFactory::CONFIG_POOL_ID => 'pool_id',
@@ -90,6 +90,7 @@ class CognitoClientFactoryTest extends MockeryTestCase
         $this->sut->__invoke($this->serviceManager(), null);
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();
@@ -100,44 +101,42 @@ class CognitoClientFactoryTest extends MockeryTestCase
         $this->sut = new CognitoClientFactory();
     }
 
-    public static function incorrectSettingsProvider(): array
+    public static function incorrectSettingsProvider(): \Iterator
     {
-        return [
-            'Missing clientId' => [
-                CognitoClientFactory::CONFIG_ADAPTER => [
-                    CognitoClientFactory::CONFIG_CLIENT_SECRET => 'client_secret',
-                    CognitoClientFactory::CONFIG_POOL_ID => 'pool_id',
-                    CognitoClientFactory::CONFIG_REGION => 'region',
-                ]
-            ],
-            'Missing clientSecret' => [
-                CognitoClientFactory::CONFIG_ADAPTER => [
-                    CognitoClientFactory::CONFIG_CLIENT_ID => 'client_id',
-                    CognitoClientFactory::CONFIG_POOL_ID => 'pool_id',
-                    CognitoClientFactory::CONFIG_REGION => 'region',
-                ]
-            ],
-            'Missing poolId' => [
-                CognitoClientFactory::CONFIG_ADAPTER => [
-                    CognitoClientFactory::CONFIG_CLIENT_ID => 'client_id',
-                    CognitoClientFactory::CONFIG_CLIENT_SECRET => 'client_secret',
-                    CognitoClientFactory::CONFIG_REGION => 'region',
-                ]
-            ],
-            'Missing region' => [
-                CognitoClientFactory::CONFIG_ADAPTER => [
-                    CognitoClientFactory::CONFIG_CLIENT_ID => 'client_id',
-                    CognitoClientFactory::CONFIG_CLIENT_SECRET => 'client_secret',
-                    CognitoClientFactory::CONFIG_POOL_ID => 'pool_id',
-                ]
-            ],
-            'Missing http' => [
-                CognitoClientFactory::CONFIG_ADAPTER => [
-                    CognitoClientFactory::CONFIG_CLIENT_ID => 'client_id',
-                    CognitoClientFactory::CONFIG_CLIENT_SECRET => 'client_secret',
-                    CognitoClientFactory::CONFIG_POOL_ID => 'pool_id',
-                    CognitoClientFactory::CONFIG_REGION => 'region'
-                ]
+        yield 'Missing clientId' => [
+            CognitoClientFactory::CONFIG_ADAPTER => [
+                CognitoClientFactory::CONFIG_CLIENT_SECRET => 'client_secret',
+                CognitoClientFactory::CONFIG_POOL_ID => 'pool_id',
+                CognitoClientFactory::CONFIG_REGION => 'region',
+            ]
+        ];
+        yield 'Missing clientSecret' => [
+            CognitoClientFactory::CONFIG_ADAPTER => [
+                CognitoClientFactory::CONFIG_CLIENT_ID => 'client_id',
+                CognitoClientFactory::CONFIG_POOL_ID => 'pool_id',
+                CognitoClientFactory::CONFIG_REGION => 'region',
+            ]
+        ];
+        yield 'Missing poolId' => [
+            CognitoClientFactory::CONFIG_ADAPTER => [
+                CognitoClientFactory::CONFIG_CLIENT_ID => 'client_id',
+                CognitoClientFactory::CONFIG_CLIENT_SECRET => 'client_secret',
+                CognitoClientFactory::CONFIG_REGION => 'region',
+            ]
+        ];
+        yield 'Missing region' => [
+            CognitoClientFactory::CONFIG_ADAPTER => [
+                CognitoClientFactory::CONFIG_CLIENT_ID => 'client_id',
+                CognitoClientFactory::CONFIG_CLIENT_SECRET => 'client_secret',
+                CognitoClientFactory::CONFIG_POOL_ID => 'pool_id',
+            ]
+        ];
+        yield 'Missing http' => [
+            CognitoClientFactory::CONFIG_ADAPTER => [
+                CognitoClientFactory::CONFIG_CLIENT_ID => 'client_id',
+                CognitoClientFactory::CONFIG_CLIENT_SECRET => 'client_secret',
+                CognitoClientFactory::CONFIG_POOL_ID => 'pool_id',
+                CognitoClientFactory::CONFIG_REGION => 'region'
             ]
         ];
     }

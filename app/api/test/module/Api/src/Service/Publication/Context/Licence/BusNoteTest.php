@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class BusNoteTest
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BusNoteTest extends MockeryTestCase
+final class BusNoteTest extends MockeryTestCase
 {
     /**
      *
@@ -76,16 +76,13 @@ class BusNoteTest extends MockeryTestCase
     /**
      * Filter provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function provideTestProvider(): array
+    public static function provideTestProvider(): \Iterator
     {
         $sut = new BusNote(m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class));
-
-        return [
-            [PublicationSectionEntity::LIC_TERMINATED_SECTION, $sut::BUS_SURRENDERED],
-            [PublicationSectionEntity::LIC_REVOKED_SECTION, $sut::BUS_REVOKED],
-            [PublicationSectionEntity::LIC_CNS_SECTION, $sut::BUS_CNS]
-        ];
+        yield [PublicationSectionEntity::LIC_TERMINATED_SECTION, $sut::BUS_SURRENDERED];
+        yield [PublicationSectionEntity::LIC_REVOKED_SECTION, $sut::BUS_REVOKED];
+        yield [PublicationSectionEntity::LIC_CNS_SECTION, $sut::BUS_CNS];
     }
 }

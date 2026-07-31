@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Common\FormService\Form\Lva\TypeOfLicence;
 
 use Common\FormService\Form\Lva\Application;
@@ -16,7 +18,7 @@ use Laminas\Form\Element;
 use Laminas\Form\Fieldset;
 use Laminas\Form\Form;
 
-class ApplicationTypeOfLicenceTest extends MockeryTestCase
+final class ApplicationTypeOfLicenceTest extends MockeryTestCase
 {
     public $permissionService;
     /** @var ApplicationTypeOfLicence */
@@ -86,11 +88,11 @@ class ApplicationTypeOfLicenceTest extends MockeryTestCase
     /**
      * Test set and lock operator location
      *
-     * @dataProvider lockOperatorLocationProvider
      * @param string $message
      * @param string $locationValue
      * @param string $location
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('lockOperatorLocationProvider')]
     public function testSetAndLockOperatorLocation($message, $location, $locationValue): void
     {
         $mockOperatorLocation = m::mock(\Laminas\Form\Element::class)
@@ -127,16 +129,14 @@ class ApplicationTypeOfLicenceTest extends MockeryTestCase
     /**
      * Lock operator location provider
      *
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return list{list{'alternative-operator-location-lock-message-ni', 'NI', 'Y'}, list{'alternative-operator-location-lock-message-gb', 'GB', 'N'}}
      */
-    public function lockOperatorLocationProvider(): array
+    public static function lockOperatorLocationProvider(): \Iterator
     {
-        return [
-            ['alternative-operator-location-lock-message-ni', 'NI', 'Y'],
-            ['alternative-operator-location-lock-message-gb', 'GB', 'N']
-        ];
+        yield ['alternative-operator-location-lock-message-ni', 'NI', 'Y'];
+        yield ['alternative-operator-location-lock-message-gb', 'GB', 'N'];
     }
 
     public function testMaybeAlterFormForNi(): void
@@ -187,9 +187,7 @@ class ApplicationTypeOfLicenceTest extends MockeryTestCase
         $this->sut->maybeAlterFormForNi($mockForm);
     }
 
-    /**
-     * @dataProvider dpMaybeAlterFormForGoodsStandardInternationalNoChange
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMaybeAlterFormForGoodsStandardInternationalNoChange')]
     public function testMaybeAlterFormForGoodsStandardInternationalNoChange(
         $operatorLocationValue,
         $operatorTypeValue,
@@ -251,37 +249,33 @@ class ApplicationTypeOfLicenceTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return array{'ni, psv, standard international, lgv': list{'Y', 'lcat_psv', 'ltyp_si', 'app_veh_type_lgv'}, 'ni, goods, standard international, lgv': list{'Y', 'lcat_gv', 'ltyp_si', 'app_veh_type_lgv'}, 'gb, goods, standard international, lgv': list{'N', 'lcat_gv', 'ltyp_si', 'app_veh_type_lgv'}}
      */
-    public function dpMaybeAlterFormForGoodsStandardInternationalNoChange(): array
+    public static function dpMaybeAlterFormForGoodsStandardInternationalNoChange(): \Iterator
     {
-        return [
-            'ni, psv, standard international, lgv' => [
-                'Y',
-                RefData::LICENCE_CATEGORY_PSV,
-                RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_LGV,
-            ],
-            'ni, goods, standard international, lgv' => [
-                'Y',
-                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
-                RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_LGV,
-            ],
-            'gb, goods, standard international, lgv' => [
-                'N',
-                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
-                RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_LGV,
-            ],
+        yield 'ni, psv, standard international, lgv' => [
+            'Y',
+            RefData::LICENCE_CATEGORY_PSV,
+            RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_LGV,
+        ];
+        yield 'ni, goods, standard international, lgv' => [
+            'Y',
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+            RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_LGV,
+        ];
+        yield 'gb, goods, standard international, lgv' => [
+            'N',
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+            RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_LGV,
         ];
     }
 
-    /**
-     * @dataProvider dpMaybeAlterFormForGoodsStandardInternationalRemoveDeclarationRequirement
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMaybeAlterFormForGoodsStandardInternationalRemoveDeclarationRequirement')]
     public function testMaybeAlterFormForGoodsStandardInternationalRemoveDeclarationRequirement(
         $operatorLocationValue,
         $operatorTypeValue,
@@ -364,37 +358,33 @@ class ApplicationTypeOfLicenceTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return array{'ni, psv, standard international, mixed': list{'Y', 'lcat_psv', 'ltyp_si', 'app_veh_type_mixed'}, 'ni, goods, standard international, mixed': list{'Y', 'lcat_gv', 'ltyp_si', 'app_veh_type_mixed'}, 'gb, goods, standard international, mixed': list{'N', 'lcat_gv', 'ltyp_si', 'app_veh_type_mixed'}}
      */
-    public function dpMaybeAlterFormForGoodsStandardInternationalRemoveDeclarationRequirement(): array
+    public static function dpMaybeAlterFormForGoodsStandardInternationalRemoveDeclarationRequirement(): \Iterator
     {
-        return [
-            'ni, psv, standard international, mixed' => [
-                'Y',
-                RefData::LICENCE_CATEGORY_PSV,
-                RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_MIXED,
-            ],
-            'ni, goods, standard international, mixed' => [
-                'Y',
-                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
-                RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_MIXED,
-            ],
-            'gb, goods, standard international, mixed' => [
-                'N',
-                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
-                RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_MIXED,
-            ],
+        yield 'ni, psv, standard international, mixed' => [
+            'Y',
+            RefData::LICENCE_CATEGORY_PSV,
+            RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_MIXED,
+        ];
+        yield 'ni, goods, standard international, mixed' => [
+            'Y',
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+            RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_MIXED,
+        ];
+        yield 'gb, goods, standard international, mixed' => [
+            'N',
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+            RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_MIXED,
         ];
     }
 
-    /**
-     * @dataProvider dpMaybeAlterFormForGoodsStandardInternationalRemoveVehicleTypeAndDeclarationRequirement
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMaybeAlterFormForGoodsStandardInternationalRemoveVehicleTypeAndDeclarationRequirement')]
     public function testMaybeAlterFormForGoodsStandardInternationalRemoveVehicleTypeAndDeclarationRequirement(
         $operatorLocationValue,
         $operatorTypeValue,
@@ -473,73 +463,71 @@ class ApplicationTypeOfLicenceTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return array{'gb, goods, restricted': list{'N', 'lcat_gv', 'ltyp_r'}, 'gb, goods, standard national': list{'N', 'lcat_gv', 'ltyp_sn'}, 'gb, goods, special restricted': list{'N', 'lcat_gv', 'ltyp_sr'}, 'gb, psv, restricted': list{'N', 'lcat_psv', 'ltyp_r'}, 'gb, psv, standard national': list{'N', 'lcat_psv', 'ltyp_sn'}, 'gb, psv, special restricted': list{'N', 'lcat_psv', 'ltyp_sr'}, 'ni, goods, restricted': list{'Y', 'lcat_gv', 'ltyp_r'}, 'ni, goods, standard national': list{'Y', 'lcat_gv', 'ltyp_sn'}, 'ni, goods, special restricted': list{'Y', 'lcat_gv', 'ltyp_sr'}, 'ni, psv, restricted': list{'Y', 'lcat_psv', 'ltyp_r'}, 'ni, psv, standard national': list{'Y', 'lcat_psv', 'ltyp_sn'}, 'ni, psv, special restricted': list{'Y', 'lcat_psv', 'ltyp_sr'}}
      */
-    public function dpMaybeAlterFormForGoodsStandardInternationalRemoveVehicleTypeAndDeclarationRequirement(): array
+    public static function dpMaybeAlterFormForGoodsStandardInternationalRemoveVehicleTypeAndDeclarationRequirement(): \Iterator
     {
-        return [
-            'gb, goods, restricted' => [
-                'N',
-                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
-                RefData::LICENCE_TYPE_RESTRICTED,
-            ],
-            'gb, goods, standard national' => [
-                'N',
-                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
-                RefData::LICENCE_TYPE_STANDARD_NATIONAL,
-            ],
-            'gb, goods, special restricted' => [
-                'N',
-                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
-                RefData::LICENCE_TYPE_SPECIAL_RESTRICTED,
-            ],
-            'gb, psv, restricted' => [
-                'N',
-                RefData::LICENCE_CATEGORY_PSV,
-                RefData::LICENCE_TYPE_RESTRICTED,
-            ],
-            'gb, psv, standard national' => [
-                'N',
-                RefData::LICENCE_CATEGORY_PSV,
-                RefData::LICENCE_TYPE_STANDARD_NATIONAL,
-            ],
-            'gb, psv, special restricted' => [
-                'N',
-                RefData::LICENCE_CATEGORY_PSV,
-                RefData::LICENCE_TYPE_SPECIAL_RESTRICTED,
-            ],
-            'ni, goods, restricted' => [
-                'Y',
-                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
-                RefData::LICENCE_TYPE_RESTRICTED,
-            ],
-            'ni, goods, standard national' => [
-                'Y',
-                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
-                RefData::LICENCE_TYPE_STANDARD_NATIONAL,
-            ],
-            'ni, goods, special restricted' => [
-                'Y',
-                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
-                RefData::LICENCE_TYPE_SPECIAL_RESTRICTED,
-            ],
-            'ni, psv, restricted' => [
-                'Y',
-                RefData::LICENCE_CATEGORY_PSV,
-                RefData::LICENCE_TYPE_RESTRICTED,
-            ],
-            'ni, psv, standard national' => [
-                'Y',
-                RefData::LICENCE_CATEGORY_PSV,
-                RefData::LICENCE_TYPE_STANDARD_NATIONAL,
-            ],
-            'ni, psv, special restricted' => [
-                'Y',
-                RefData::LICENCE_CATEGORY_PSV,
-                RefData::LICENCE_TYPE_SPECIAL_RESTRICTED,
-            ],
+        yield 'gb, goods, restricted' => [
+            'N',
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+            RefData::LICENCE_TYPE_RESTRICTED,
+        ];
+        yield 'gb, goods, standard national' => [
+            'N',
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+            RefData::LICENCE_TYPE_STANDARD_NATIONAL,
+        ];
+        yield 'gb, goods, special restricted' => [
+            'N',
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+            RefData::LICENCE_TYPE_SPECIAL_RESTRICTED,
+        ];
+        yield 'gb, psv, restricted' => [
+            'N',
+            RefData::LICENCE_CATEGORY_PSV,
+            RefData::LICENCE_TYPE_RESTRICTED,
+        ];
+        yield 'gb, psv, standard national' => [
+            'N',
+            RefData::LICENCE_CATEGORY_PSV,
+            RefData::LICENCE_TYPE_STANDARD_NATIONAL,
+        ];
+        yield 'gb, psv, special restricted' => [
+            'N',
+            RefData::LICENCE_CATEGORY_PSV,
+            RefData::LICENCE_TYPE_SPECIAL_RESTRICTED,
+        ];
+        yield 'ni, goods, restricted' => [
+            'Y',
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+            RefData::LICENCE_TYPE_RESTRICTED,
+        ];
+        yield 'ni, goods, standard national' => [
+            'Y',
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+            RefData::LICENCE_TYPE_STANDARD_NATIONAL,
+        ];
+        yield 'ni, goods, special restricted' => [
+            'Y',
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+            RefData::LICENCE_TYPE_SPECIAL_RESTRICTED,
+        ];
+        yield 'ni, psv, restricted' => [
+            'Y',
+            RefData::LICENCE_CATEGORY_PSV,
+            RefData::LICENCE_TYPE_RESTRICTED,
+        ];
+        yield 'ni, psv, standard national' => [
+            'Y',
+            RefData::LICENCE_CATEGORY_PSV,
+            RefData::LICENCE_TYPE_STANDARD_NATIONAL,
+        ];
+        yield 'ni, psv, special restricted' => [
+            'Y',
+            RefData::LICENCE_CATEGORY_PSV,
+            RefData::LICENCE_TYPE_SPECIAL_RESTRICTED,
         ];
     }
 }

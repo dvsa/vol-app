@@ -13,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class MarkersTest
  * @package OlcsTest\View\Helper
  */
-class MarkersTest extends MockeryTestCase
+final class MarkersTest extends MockeryTestCase
 {
     /**
      * @param $input
@@ -33,7 +33,7 @@ class MarkersTest extends MockeryTestCase
 
         $result = $sut($input['markers'], $input['type']);
         if (isset($expected['count']) && $expected['count'] == 0) {
-            $this->assertEquals($result, '');
+            $this->assertSame('', $result);
         } else {
             // count individual markers
             $this->assertEquals($expected['count'], substr_count($result, 'notice--warning'));
@@ -44,80 +44,78 @@ class MarkersTest extends MockeryTestCase
         }
     }
 
-    public static function provideInvoke(): array
+    public static function provideInvoke(): \Iterator
     {
-        return [
+        yield [
+            ['markers' => null, 'type' => null],
+            ['count' => 0]
+        ];
+        yield [
+            ['markers' => [], 'type' => ''],
+            ['count' => 0]
+        ];
+        yield [
             [
-                ['markers' => null, 'type' => null],
-                ['count' => 0]
+                'markers' =>
+                    ['sometype' =>
+                        [
+                            0 => ['content' => 'foo']
+                        ]
+                    ],
+                'type' => 'sometype'
             ],
+            ['count' => 1, 'contains' => 'foo'],
+        ];
+        yield [
             [
-                ['markers' => [], 'type' => ''],
-                ['count' => 0]
+                'markers' =>
+                    ['sometype' =>
+                        [
+                            0 => ['content' => 'bar'],
+                            1 => ['content' => 'bar'],
+                            2 => ['content' => 'bar']
+                        ]
+                    ],
+                'type' => 'sometype'
             ],
+            ['count' => 3, 'contains' => 'bar'],
+        ];
+        yield [
             [
-                [
-                    'markers' =>
-                        ['sometype' =>
-                            [
-                                0 => ['content' => 'foo']
-                            ]
-                        ],
-                    'type' => 'sometype'
-                ],
-                ['count' => 1, 'contains' => 'foo'],
-            ],
-            [
-                [
-                    'markers' =>
-                        ['sometype' =>
-                            [
-                                0 => ['content' => 'bar'],
-                                1 => ['content' => 'bar'],
-                                2 => ['content' => 'bar']
-                            ]
-                        ],
-                    'type' => 'sometype'
-                ],
-                ['count' => 3, 'contains' => 'bar'],
-            ],
-            [
-                [
-                    'markers' =>
-                        ['sometype' =>
-                            [
-                                0 => [
-                                    'content' => 'bar %s', 'data' => [
-                                        0 => [
-                                            'linkText' => 'blah',
-                                            'type' => 'url',
-                                            'route' => 'case',
-                                            'params' => [
-                                                'case' => 1
-                                            ]
+                'markers' =>
+                    ['sometype' =>
+                        [
+                            0 => [
+                                'content' => 'bar %s', 'data' => [
+                                    0 => [
+                                        'linkText' => 'blah',
+                                        'type' => 'url',
+                                        'route' => 'case',
+                                        'params' => [
+                                            'case' => 1
                                         ]
                                     ]
-                                ],
-                            ]
-                        ],
-                    'type' => 'sometype'
-                ],
-                ['count' => 1, 'contains' => 'blah'],
+                                ]
+                            ],
+                        ]
+                    ],
+                'type' => 'sometype'
             ],
+            ['count' => 1, 'contains' => 'blah'],
+        ];
+        yield [
             [
-                [
-                    'markers' =>
-                        ['sometype' =>
-                            [
-                                0 => [
-                                    'content' => 'bar %s', 'data' => null
-                                ],
-                            ]
-                        ],
-                    'type' => 'sometype'
-                ],
-                ['count' => 1, 'contains' => 'bar %s'],
-            ]
+                'markers' =>
+                    ['sometype' =>
+                        [
+                            0 => [
+                                'content' => 'bar %s', 'data' => null
+                            ],
+                        ]
+                    ],
+                'type' => 'sometype'
+            ],
+            ['count' => 1, 'contains' => 'bar %s'],
         ];
     }
 }

@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Vehicle\Application\ModifyList;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ModifyListTest extends AbstractHandlerTestCase
+final class ModifyListTest extends AbstractHandlerTestCase
 {
     /**
      * @var ModifyList
@@ -49,14 +49,12 @@ class ModifyListTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true, true, true],
-            [false, true, true, false],
-            [true, false, false, false],
-            [true, false, true, false],
-            [true, true, false, false],
-        ];
+        yield [true, true, true, true];
+        yield [false, true, true, false];
+        yield [true, false, false, false];
+        yield [true, false, true, false];
+        yield [true, true, false, false];
     }
 }

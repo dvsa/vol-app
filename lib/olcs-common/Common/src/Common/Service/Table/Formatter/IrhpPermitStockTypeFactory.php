@@ -13,7 +13,7 @@ class IrhpPermitStockTypeFactory implements FactoryInterface
      * @return IrhpPermitStockType
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $urlHelper = $container->get('Helper\Url');
         return new IrhpPermitStockType($urlHelper);

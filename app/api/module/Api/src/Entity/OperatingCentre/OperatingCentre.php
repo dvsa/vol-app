@@ -9,19 +9,13 @@ use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
 
 /**
  * OperatingCentre Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="operating_centre",
- *    indexes={
- *        @ORM\Index(name="ix_operating_centre_address_id", columns={"address_id"}),
- *        @ORM\Index(name="ix_operating_centre_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_operating_centre_last_modified_by", columns={"last_modified_by"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_operating_centre_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'operating_centre')]
+#[ORM\Index(name: 'ix_operating_centre_address_id', columns: ['address_id'])]
+#[ORM\Index(name: 'ix_operating_centre_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_operating_centre_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\UniqueConstraint(name: 'uk_operating_centre_olbs_key', columns: ['olbs_key'])]
+#[ORM\Entity]
 class OperatingCentre extends AbstractOperatingCentre implements OrganisationProviderInterface
 {
     protected $hasEnvironmentalComplaint;

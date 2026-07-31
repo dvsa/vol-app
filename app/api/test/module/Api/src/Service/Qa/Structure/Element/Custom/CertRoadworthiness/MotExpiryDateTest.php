@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class MotExpiryDateTest extends MockeryTestCase
+final class MotExpiryDateTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalse')]
     public function testGetRepresentation(mixed $enableFileUploads): void
@@ -41,11 +41,9 @@ class MotExpiryDateTest extends MockeryTestCase
         );
     }
 
-    public static function dpTrueFalse(): array
+    public static function dpTrueFalse(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 }

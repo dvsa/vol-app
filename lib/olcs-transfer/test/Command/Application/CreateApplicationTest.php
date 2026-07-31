@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\CreateApplication;
@@ -8,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Create Application test
  */
-class CreateApplicationTest extends TestCase
+final class CreateApplicationTest extends TestCase
 {
     public function testStructure()
     {

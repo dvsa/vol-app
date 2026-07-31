@@ -6,6 +6,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -20,13 +22,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TransactionUrlTest extends MockeryTestCase
+final class TransactionUrlTest extends MockeryTestCase
 {
     protected $urlHelper;
-
-    protected $router;
-
-    protected $request;
 
     protected $mockRouteMatch;
 
@@ -36,12 +34,12 @@ class TransactionUrlTest extends MockeryTestCase
     protected function setUp(): void
     {
         $this->urlHelper = m::mock(UrlHelperService::class);
-        $this->router = m::mock(TreeRouteStack::class);
-        $this->request = m::mock(Request::class);
-        $this->sut = new TransactionUrl($this->router, $this->request, $this->urlHelper);
+        $router = m::mock(TreeRouteStack::class);
+        $request = m::mock(Request::class);
+        $this->sut = new TransactionUrl($router, $request, $this->urlHelper);
 
         $this->mockRouteMatch = m::mock(\Laminas\Router\RouteMatch::class);
-        $this->request
+        $request
             ->shouldReceive('getQuery')
             ->andReturn(
                 m::mock()
@@ -52,9 +50,9 @@ class TransactionUrlTest extends MockeryTestCase
             )
             ->once();
 
-        $this->router
+        $router
             ->shouldReceive('match')
-            ->with($this->request)
+            ->with($request)
             ->andReturn($this->mockRouteMatch)
             ->getMock();
     }

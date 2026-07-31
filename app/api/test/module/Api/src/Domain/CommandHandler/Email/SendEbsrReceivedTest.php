@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Command\Email\SendEbsrReceived;
  * @author Craig R <uk@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\Group('ebsrEmails')]
-class SendEbsrReceivedTest extends SendEbsrEmailTestAbstract
+final class SendEbsrReceivedTest extends SendEbsrEmailTestAbstract
 {
     protected $template = 'ebsr-received';
     protected $sutClass = \Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendEbsrReceived::class;

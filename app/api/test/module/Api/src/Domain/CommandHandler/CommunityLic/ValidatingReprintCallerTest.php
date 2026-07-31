@@ -17,7 +17,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use RuntimeException;
 
-class ValidatingReprintCallerTest extends AbstractCommandHandlerTestCase
+final class ValidatingReprintCallerTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

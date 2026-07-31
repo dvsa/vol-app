@@ -15,14 +15,12 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\Licence\SaveBusinessDetails
- */
-class SaveBusinessDetailsTest extends AbstractCommandHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Licence\SaveBusinessDetails::class)]
+final class SaveBusinessDetailsTest extends AbstractCommandHandlerTestCase
 {
-    public const ID = 1111;
-    public const VERSION = 99;
-    public const CONTACT_DETAILS_ID = 8888;
+    public const int ID = 1111;
+    public const int VERSION = 99;
+    public const int CONTACT_DETAILS_ID = 8888;
 
     /** @var  SaveBusinessDetails */
     protected $sut;
@@ -93,20 +91,18 @@ class SaveBusinessDetailsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dpTestHandlerExceptionNotAllow(): array
+    public static function dpTestHandlerExceptionNotAllow(): \Iterator
     {
-        return [
-            [
-                'orgData' => [
-                    'name' => 'change me',
-                    'companyNo' => null,
-                ],
+        yield [
+            'orgData' => [
+                'name' => 'change me',
+                'companyNo' => null,
             ],
-            [
-                'orgData' => [
-                    'name' => 'unit_OrgName',
-                    'companyNo' => 'change me',
-                ],
+        ];
+        yield [
+            'orgData' => [
+                'name' => 'unit_OrgName',
+                'companyNo' => 'change me',
             ],
         ];
     }
@@ -187,19 +183,16 @@ class SaveBusinessDetailsTest extends AbstractCommandHandlerTestCase
         //  call
         $actual = $this->sut->handleCommand($command);
 
-        static::assertEquals(
-            [
-                'id' => [
-                    'contactDetails' => self::CONTACT_DETAILS_ID,
-                ],
-                'messages' => [
-                    'Address updated',
-                    'Trading names updated',
-                ],
-                'flags' => ['hasChanged' => 1, 'tradingNamesChanged' => 1]
+        $this->assertEquals([
+            'id' => [
+                'contactDetails' => self::CONTACT_DETAILS_ID,
             ],
-            $actual->toArray()
-        );
+            'messages' => [
+                'Address updated',
+                'Trading names updated',
+            ],
+            'flags' => ['hasChanged' => 1, 'tradingNamesChanged' => 1]
+        ], $actual->toArray());
     }
 
     public function testHandlerDetailsNotChanged(): void
@@ -241,17 +234,14 @@ class SaveBusinessDetailsTest extends AbstractCommandHandlerTestCase
         //  call
         $actual = $this->sut->handleCommand($command);
 
-        static::assertEquals(
-            [
-                'id' => [],
-                'messages' => [
-                    'Trading names are not changed',
-                ],
-                'flags' => ['hasChanged' => false]
+        $this->assertEquals([
+            'id' => [],
+            'messages' => [
+                'Trading names are not changed',
             ],
-            $actual->toArray()
-        );
-        static::assertFalse($actual->getFlag('hasChanged'));
+            'flags' => ['hasChanged' => false]
+        ], $actual->toArray());
+        $this->assertFalse($actual->getFlag('hasChanged'));
     }
 
     private function mockIsGranted(mixed $permission, mixed $result): void

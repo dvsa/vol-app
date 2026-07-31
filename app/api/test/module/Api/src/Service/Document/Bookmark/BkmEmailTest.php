@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BkmEmail as Sut;
 /**
  * BkmEmail bookmark test
  */
-class BkmEmailTest extends \PHPUnit\Framework\TestCase
+final class BkmEmailTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -28,21 +28,19 @@ class BkmEmailTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'irfoContactDetails' => [
-                        'emailAddress' => 'test@test.me'
-                    ]
-                ],
-                'test@test.me'
+                'irfoContactDetails' => [
+                    'emailAddress' => 'test@test.me'
+                ]
             ],
-            [
-                [],
-                ''
-            ],
+            'test@test.me'
+        ];
+        yield [
+            [],
+            ''
         ];
     }
 }

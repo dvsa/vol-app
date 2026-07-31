@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Service\Document\Parser\RtfParser;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class VehicleRowTest extends \PHPUnit\Framework\TestCase
+final class VehicleRowTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

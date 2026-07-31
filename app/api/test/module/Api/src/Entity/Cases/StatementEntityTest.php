@@ -17,7 +17,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class StatementEntityTest extends EntityTester
+final class StatementEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

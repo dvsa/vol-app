@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bus\TxcInboxList;
 /**
  * TxcInboxList test
  */
-class TxcInboxListTest extends \PHPUnit\Framework\TestCase
+final class TxcInboxListTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

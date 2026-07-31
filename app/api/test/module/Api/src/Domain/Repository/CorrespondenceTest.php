@@ -9,11 +9,12 @@ use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Correspondence::class)]
-class CorrespondenceTest extends RepositoryTestCase
+final class CorrespondenceTest extends RepositoryTestCase
 {
     /** @var  Repository\Correspondence */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repository\Correspondence::class, true);
@@ -32,13 +33,10 @@ class CorrespondenceTest extends RepositoryTestCase
         $this->sut->applyListJoins($mockQb);
         $this->sut->applyListFilters($mockQb, $mockQry);
 
-        static::assertEquals(
-            '{{QUERY}} ' .
-            'SELECT l, d ' .
-            'INNER JOIN co.licence l ' .
-            'INNER JOIN co.document d ' .
-            'AND l.organisation = [[' . $orgId . ']]',
-            $this->query
-        );
+        $this->assertEquals('{{QUERY}} ' .
+        'SELECT l, d ' .
+        'INNER JOIN co.licence l ' .
+        'INNER JOIN co.document d ' .
+        'AND l.organisation = [[' . $orgId . ']]', $this->query);
     }
 }

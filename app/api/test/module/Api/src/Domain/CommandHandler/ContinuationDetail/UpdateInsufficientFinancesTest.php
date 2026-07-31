@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail as ContinuationDetailEntity;
 /**
  * UpdateInsufficientFinancesTest
  */
-class UpdateInsufficientFinancesTest extends AbstractCommandHandlerTestCase
+final class UpdateInsufficientFinancesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

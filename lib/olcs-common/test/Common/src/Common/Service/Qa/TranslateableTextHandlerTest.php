@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa;
 
 use Common\Service\Helper\TranslationHelperService;
@@ -13,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class TranslateableTextHandlerTest extends MockeryTestCase
+final class TranslateableTextHandlerTest extends MockeryTestCase
 {
     public function testTranslate(): void
     {

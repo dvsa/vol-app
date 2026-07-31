@@ -26,7 +26,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class GrantCommunityLicenceTest extends AbstractCommandHandlerTestCase
+final class GrantCommunityLicenceTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -120,7 +120,7 @@ class GrantCommunityLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
 
         $this->assertSame($this->refData[CommunityLic::STATUS_ACTIVE], $pendingRecord->getStatus());
-        $this->assertEquals(date('Y-m-d'), $pendingRecord->getSpecifiedDate()->format('Y-m-d'));
+        $this->assertSame(date('Y-m-d'), $pendingRecord->getSpecifiedDate()->format('Y-m-d'));
     }
 
     public function testHandleCommandCantHave(): void
@@ -187,6 +187,6 @@ class GrantCommunityLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
 
         $this->assertSame($this->refData[CommunityLic::STATUS_RETURNDED], $activeRecord->getStatus());
-        $this->assertEquals(date('Y-m-d'), $activeRecord->getExpiredDate()->format('Y-m-d'));
+        $this->assertSame(date('Y-m-d'), $activeRecord->getExpiredDate()->format('Y-m-d'));
     }
 }

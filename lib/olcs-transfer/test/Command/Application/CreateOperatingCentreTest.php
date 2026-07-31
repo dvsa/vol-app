@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\CreateOperatingCentre;
@@ -7,7 +9,7 @@ use Dvsa\OlcsTest\Transfer\Command\CommandTest;
 use PHPUnit\Framework\TestCase;
 use Laminas\Stdlib\ArraySerializableInterface;
 
-class CreateOperatingCentreTest extends TestCase
+final class CreateOperatingCentreTest extends TestCase
 {
     use CommandTest;
 

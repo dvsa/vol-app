@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\ApplicationStatus;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Transfer\Validators\ApplicationStatus;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ApplicationStatusTest extends \PHPUnit\Framework\TestCase
+final class ApplicationStatusTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 
@@ -18,29 +20,25 @@ class ApplicationStatusTest extends \PHPUnit\Framework\TestCase
         $this->sut = new ApplicationStatus();
     }
 
-    /**
-     * @dataProvider isValidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($value, $expected)
     {
         $this->assertEquals($expected, $this->sut->isValid($value));
     }
 
-    public function isValidProvider()
+    public static function isValidProvider(): \Iterator
     {
-        return [
-            ['apsts_not_submitted', true],
-            ['apsts_granted', true],
-            ['apsts_consideration', true],
-            ['apsts_valid', true],
-            ['apsts_withdrawn', true],
-            ['apsts_refused', true],
-            ['apsts_ntu', true],
-            ['apsts_curtailed', true],
-            ['foobar', false],
-            [1, false],
-            [' ', false],
-            [null, false],
-        ];
+        yield ['apsts_not_submitted', true];
+        yield ['apsts_granted', true];
+        yield ['apsts_consideration', true];
+        yield ['apsts_valid', true];
+        yield ['apsts_withdrawn', true];
+        yield ['apsts_refused', true];
+        yield ['apsts_ntu', true];
+        yield ['apsts_curtailed', true];
+        yield ['foobar', false];
+        yield [1, false];
+        yield [' ', false];
+        yield [null, false];
     }
 }

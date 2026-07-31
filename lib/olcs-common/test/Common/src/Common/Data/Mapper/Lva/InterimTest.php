@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Lva;
 
 use Mockery as m;
@@ -18,7 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class InterimTest extends MockeryTestCase
+final class InterimTest extends MockeryTestCase
 {
     public function testMapFromResult(): void
     {

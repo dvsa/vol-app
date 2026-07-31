@@ -12,11 +12,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see LinkNewWindow
  */
-class LinkNewWindowTest extends MockeryTestCase
+final class LinkNewWindowTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpIsExternalLink
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsExternalLink')]
     public function testInvoke(bool $hideNewTabMessage, bool $isExternal, string $output): void
     {
         $linkText = 'link text';
@@ -57,21 +55,18 @@ class LinkNewWindowTest extends MockeryTestCase
         $sut = new LinkNewWindow();
         $sut->setView($view);
 
-        self::assertEquals($output, $sut->__invoke($url, $linkText, $linkClass, $hideNewTabMessage, $isExternal));
+        $this->assertSame($output, $sut->__invoke($url, $linkText, $linkClass, $hideNewTabMessage, $isExternal));
     }
 
-    public function dpIsExternalLink(): array
+    public static function dpIsExternalLink(): \Iterator
     {
         $internalLinkOutputHiddenNewTab = '<a href="http://url/escaped" class="escaped link class" target="_blank">escaped translated link text<span class="govuk-visually-hidden">escaped translated new tab text</span></a>';
         $externalLinkOutputHiddenNewTab = '<a href="http://url/escaped" class="escaped link class" target="_blank" rel="external noreferrer noopener">escaped translated link text<span class="govuk-visually-hidden">escaped translated new tab text</span></a>';
         $internalLinkOutputVisibleNewTab = '<a href="http://url/escaped" class="escaped link class" target="_blank">escaped translated link text escaped translated new tab text</a>';
         $externalLinkOutputVisibleNewTab = '<a href="http://url/escaped" class="escaped link class" target="_blank" rel="external noreferrer noopener">escaped translated link text escaped translated new tab text</a>';
-
-        return [
-            [true, false, $internalLinkOutputHiddenNewTab],
-            [true, true, $externalLinkOutputHiddenNewTab],
-            [false, false, $internalLinkOutputVisibleNewTab],
-            [false, true, $externalLinkOutputVisibleNewTab],
-        ];
+        yield [true, false, $internalLinkOutputHiddenNewTab];
+        yield [true, true, $externalLinkOutputHiddenNewTab];
+        yield [false, false, $internalLinkOutputVisibleNewTab];
+        yield [false, true, $externalLinkOutputVisibleNewTab];
     }
 }

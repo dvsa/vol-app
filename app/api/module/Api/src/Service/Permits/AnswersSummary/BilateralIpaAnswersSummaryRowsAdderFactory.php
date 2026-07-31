@@ -18,7 +18,7 @@ class BilateralIpaAnswersSummaryRowsAdderFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BilateralIpaAnswersSummaryRowsAdder
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): BilateralIpaAnswersSummaryRowsAdder
     {
         return new BilateralIpaAnswersSummaryRowsAdder(
             $container->get('PermitsAnswersSummaryRowFactory'),

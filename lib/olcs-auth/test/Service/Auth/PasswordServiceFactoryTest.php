@@ -13,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see PasswordServiceFactory
  */
-class PasswordServiceFactoryTest extends MockeryTestCase
+final class PasswordServiceFactoryTest extends MockeryTestCase
 {
     public function testMissingRealmConfig(): void
     {

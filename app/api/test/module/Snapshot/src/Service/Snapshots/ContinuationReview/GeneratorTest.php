@@ -23,13 +23,8 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class GeneratorTest extends MockeryTestCase
+final class GeneratorTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\MockInterface|AbstractGeneratorServices
-     */
-    protected $abstractGeneratorServices;
-
     /**
      * @var \Mockery\MockInterface|SectionAccessService
      */
@@ -49,6 +44,7 @@ class GeneratorTest extends MockeryTestCase
 
     protected PhpRenderer $viewRenderer;
 
+    #[\Override]
     public function setUp(): void
     {
         $sm = m::mock(ServiceLocatorInterface::class);
@@ -226,157 +222,155 @@ class GeneratorTest extends MockeryTestCase
             );
     }
 
-    public static function licenceTypeProvider(): array
+    public static function licenceTypeProvider(): \Iterator
     {
-        return [
-            'NotPsvAndNotRestricted' => [
-                'isPsv' => false,
-                'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'expectedSections' => [
-                    [
-                        'header' => 'continuation-review-type_of_licence',
-                        'config' => 'type-of-licence'
-                    ],
-                    [
-                        'header' => 'continuation-review-operating_centres',
-                        'config' => 'operating-centres',
-                        'summary' => 'operating-centres-summary',
-                        'summaryHeader' => 'operating-centres-summary-header',
-                    ],
-                    [
-                        'header' => 'continuation-review-people-org_typ_rc',
-                        'config' => ''
-                    ],
-                    [
-                        'header' => 'continuation-review-finance',
-                        'config' => ''
-                    ],
-                    [
-                        'header' => 'continuation-review-declaration',
-                        'config' => ''
-                    ],
-                ]
-            ],
-            'IsPsvAndNotRestricted' => [
-                'isPsv' => true,
-                'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'expectedSections' => [
-                    [
-                        'header' => 'continuation-review-type_of_licence',
-                        'config' => 'type-of-licence'
-                    ],
-                    [
-                        'header' => 'continuation-review-operating_centres',
-                        'config' => 'operating-centres',
-                        'summary' => 'operating-centres-summary',
-                        'summaryHeader' => 'operating-centres-summary-header',
-                    ],
-                    [
-                        'header' => 'continuation-review-people-org_typ_rc',
-                        'config' => ''
-                    ],
-                    [
-                        'header' => 'continuation-review-finance',
-                        'config' => ''
-                    ],
-                    [
-                        'header' => 'continuation-review-declaration',
-                        'config' => ''
-                    ],
-                ]
-            ],
-            'NotPsvAndIsRestricted' => [
-                'isPsv' => false,
-                'licenceType' => Licence::LICENCE_TYPE_RESTRICTED,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'expectedSections' => [
-                    [
-                        'header' => 'continuation-review-type_of_licence',
-                        'config' => 'type-of-licence'
-                    ],
-                    [
-                        'header' => 'continuation-review-operating_centres',
-                        'config' => 'operating-centres',
-                        'summary' => 'operating-centres-summary',
-                        'summaryHeader' => 'operating-centres-summary-header',
-                    ],
-                    [
-                        'header' => 'continuation-review-people-org_typ_rc',
-                        'config' => ''
-                    ],
-                    [
-                        'header' => 'continuation-review-finance',
-                        'config' => ''
-                    ],
-                    [
-                        'header' => 'continuation-review-declaration',
-                        'config' => ''
-                    ],
-                ]
-            ],
-            'IsPsvAndIsRestricted' => [
-                'isPsv' => true,
-                'licenceType' => Licence::LICENCE_TYPE_RESTRICTED,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'expectedSections' => [
-                    [
-                        'header' => 'continuation-review-type_of_licence',
-                        'config' => 'type-of-licence'
-                    ],
-                    [
-                        'header' => 'continuation-review-operating_centres',
-                        'config' => 'operating-centres',
-                        'summary' => 'operating-centres-summary',
-                        'summaryHeader' => 'operating-centres-summary-header',
-                    ],
-                    [
-                        'header' => 'continuation-review-people-org_typ_rc',
-                        'config' => ''
-                    ],
-                    [
-                        'header' => 'continuation-review-finance',
-                        'config' => ''
-                    ],
-                    [
-                        'header' => 'continuation-review-conditions_undertakings',
-                        'config' => ''
-                    ],
-                    [
-                        'header' => 'continuation-review-declaration',
-                        'config' => ''
-                    ],
-                ]
-            ],
-            'IsStandardInternationalLgv' => [
-                'isPsv' => true,
-                'licenceType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'expectedSections' => [
-                    [
-                        'header' => 'continuation-review-type_of_licence',
-                        'config' => 'type-of-licence'
-                    ],
-                    [
-                        'header' => 'continuation-review-operating_centres.lgv',
-                        'config' => 'operating-centres',
-                        'summary' => 'operating-centres-summary',
-                        'summaryHeader' => 'operating-centres-summary-header',
-                    ],
-                    [
-                        'header' => 'continuation-review-people-org_typ_rc',
-                        'config' => ''
-                    ],
-                    [
-                        'header' => 'continuation-review-finance',
-                        'config' => ''
-                    ],
-                    [
-                        'header' => 'continuation-review-declaration',
-                        'config' => ''
-                    ],
-                ]
+        yield 'NotPsvAndNotRestricted' => [
+            'isPsv' => false,
+            'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'expectedSections' => [
+                [
+                    'header' => 'continuation-review-type_of_licence',
+                    'config' => 'type-of-licence'
+                ],
+                [
+                    'header' => 'continuation-review-operating_centres',
+                    'config' => 'operating-centres',
+                    'summary' => 'operating-centres-summary',
+                    'summaryHeader' => 'operating-centres-summary-header',
+                ],
+                [
+                    'header' => 'continuation-review-people-org_typ_rc',
+                    'config' => ''
+                ],
+                [
+                    'header' => 'continuation-review-finance',
+                    'config' => ''
+                ],
+                [
+                    'header' => 'continuation-review-declaration',
+                    'config' => ''
+                ],
+            ]
+        ];
+        yield 'IsPsvAndNotRestricted' => [
+            'isPsv' => true,
+            'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'expectedSections' => [
+                [
+                    'header' => 'continuation-review-type_of_licence',
+                    'config' => 'type-of-licence'
+                ],
+                [
+                    'header' => 'continuation-review-operating_centres',
+                    'config' => 'operating-centres',
+                    'summary' => 'operating-centres-summary',
+                    'summaryHeader' => 'operating-centres-summary-header',
+                ],
+                [
+                    'header' => 'continuation-review-people-org_typ_rc',
+                    'config' => ''
+                ],
+                [
+                    'header' => 'continuation-review-finance',
+                    'config' => ''
+                ],
+                [
+                    'header' => 'continuation-review-declaration',
+                    'config' => ''
+                ],
+            ]
+        ];
+        yield 'NotPsvAndIsRestricted' => [
+            'isPsv' => false,
+            'licenceType' => Licence::LICENCE_TYPE_RESTRICTED,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'expectedSections' => [
+                [
+                    'header' => 'continuation-review-type_of_licence',
+                    'config' => 'type-of-licence'
+                ],
+                [
+                    'header' => 'continuation-review-operating_centres',
+                    'config' => 'operating-centres',
+                    'summary' => 'operating-centres-summary',
+                    'summaryHeader' => 'operating-centres-summary-header',
+                ],
+                [
+                    'header' => 'continuation-review-people-org_typ_rc',
+                    'config' => ''
+                ],
+                [
+                    'header' => 'continuation-review-finance',
+                    'config' => ''
+                ],
+                [
+                    'header' => 'continuation-review-declaration',
+                    'config' => ''
+                ],
+            ]
+        ];
+        yield 'IsPsvAndIsRestricted' => [
+            'isPsv' => true,
+            'licenceType' => Licence::LICENCE_TYPE_RESTRICTED,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'expectedSections' => [
+                [
+                    'header' => 'continuation-review-type_of_licence',
+                    'config' => 'type-of-licence'
+                ],
+                [
+                    'header' => 'continuation-review-operating_centres',
+                    'config' => 'operating-centres',
+                    'summary' => 'operating-centres-summary',
+                    'summaryHeader' => 'operating-centres-summary-header',
+                ],
+                [
+                    'header' => 'continuation-review-people-org_typ_rc',
+                    'config' => ''
+                ],
+                [
+                    'header' => 'continuation-review-finance',
+                    'config' => ''
+                ],
+                [
+                    'header' => 'continuation-review-conditions_undertakings',
+                    'config' => ''
+                ],
+                [
+                    'header' => 'continuation-review-declaration',
+                    'config' => ''
+                ],
+            ]
+        ];
+        yield 'IsStandardInternationalLgv' => [
+            'isPsv' => true,
+            'licenceType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'expectedSections' => [
+                [
+                    'header' => 'continuation-review-type_of_licence',
+                    'config' => 'type-of-licence'
+                ],
+                [
+                    'header' => 'continuation-review-operating_centres.lgv',
+                    'config' => 'operating-centres',
+                    'summary' => 'operating-centres-summary',
+                    'summaryHeader' => 'operating-centres-summary-header',
+                ],
+                [
+                    'header' => 'continuation-review-people-org_typ_rc',
+                    'config' => ''
+                ],
+                [
+                    'header' => 'continuation-review-finance',
+                    'config' => ''
+                ],
+                [
+                    'header' => 'continuation-review-declaration',
+                    'config' => ''
+                ],
             ]
         ];
     }

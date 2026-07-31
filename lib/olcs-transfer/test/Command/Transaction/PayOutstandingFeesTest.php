@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Transaction;
 
 use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Transaction\PayOutstandingFees;
 /**
  * Pay Outstanding Fees test
  */
-class PayOutstandingFeesTest extends \PHPUnit\Framework\TestCase
+final class PayOutstandingFeesTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

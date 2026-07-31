@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Ecmt;
 
 use Common\Service\Qa\Custom\Ecmt\YesNoRadio;
@@ -11,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class YesNoRadioTest extends MockeryTestCase
+final class YesNoRadioTest extends MockeryTestCase
 {
     private $yesNoRadio;
 

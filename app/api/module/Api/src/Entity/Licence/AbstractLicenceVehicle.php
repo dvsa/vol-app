@@ -22,26 +22,19 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="licence_vehicle",
- *    indexes={
- *        @ORM\Index(name="ix_licence_vehicle_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_licence_vehicle_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_licence_vehicle_interim_application_id", columns={"interim_application_id"}),
- *        @ORM\Index(name="ix_licence_vehicle_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_licence_vehicle_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_licence_vehicle_vehicle_id", columns={"vehicle_id"}),
- *        @ORM\Index(name="ix_licence_vehicle_vi_action", columns={"vi_action"}),
- *        @ORM\Index(name="uk_licence_vehicle_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_licence_vehicle_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'licence_vehicle')]
+#[ORM\Index(name: 'ix_licence_vehicle_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_licence_vehicle_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_licence_vehicle_interim_application_id', columns: ['interim_application_id'])]
+#[ORM\Index(name: 'ix_licence_vehicle_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_licence_vehicle_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_licence_vehicle_vehicle_id', columns: ['vehicle_id'])]
+#[ORM\Index(name: 'ix_licence_vehicle_vi_action', columns: ['vi_action'])]
+#[ORM\UniqueConstraint(name: 'uk_licence_vehicle_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractLicenceVehicle implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -55,165 +48,148 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'licenceVehicles', fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Foreign Key to vehicle
      *
      * @var \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Vehicle\Vehicle", fetch="LAZY", cascade={"persist", "remove"})
-     * @ORM\JoinColumn(name="vehicle_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'vehicle_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle::class, inversedBy: 'licenceVehicles', fetch: 'LAZY', cascade: ['persist', 'remove'])]
     protected $vehicle;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'licenceVehicles', fetch: 'LAZY')]
     protected $application;
 
     /**
      * InterimApplication
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="interim_application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'interim_application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'interimLicenceVehicles', fetch: 'LAZY')]
     protected $interimApplication;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Received date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="received_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'received_date', nullable: true)]
     protected $receivedDate;
 
     /**
      * Date vehicle removed from licence
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="removal_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'removal_date', nullable: true)]
     protected $removalDate;
 
     /**
      * Removal letter seed date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="removal_letter_seed_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'removal_letter_seed_date', nullable: true)]
     protected $removalLetterSeedDate;
 
     /**
      * Vi action
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="vi_action", length=1, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'vi_action', length: 1, nullable: true)]
     protected $viAction;
 
     /**
      * Warning letter seed date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="warning_letter_seed_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'warning_letter_seed_date', nullable: true)]
     protected $warningLetterSeedDate;
 
     /**
      * Warning letter sent date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="warning_letter_sent_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'warning_letter_sent_date', nullable: true)]
     protected $warningLetterSentDate;
 
     /**
      * Specified date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="specified_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'specified_date', nullable: true)]
     protected $specifiedDate;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
      * GoodsDiscs
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc", mappedBy="licenceVehicle")
-     * @ORM\OrderBy({"createdOn" = "DESC"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc::class, mappedBy: 'licenceVehicle')]
+    #[ORM\OrderBy(['createdOn' => 'DESC'])]
     protected $goodsDiscs;
 
     /**
@@ -238,7 +214,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setId($id)
     {
@@ -262,7 +238,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -286,7 +262,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Vehicle\Vehicle $vehicle new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setVehicle($vehicle)
     {
@@ -310,7 +286,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setApplication($application)
     {
@@ -334,7 +310,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $interimApplication new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setInterimApplication($interimApplication)
     {
@@ -358,7 +334,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -382,7 +358,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -406,7 +382,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \DateTime $receivedDate new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setReceivedDate($receivedDate)
     {
@@ -436,7 +412,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \DateTime $removalDate new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setRemovalDate($removalDate)
     {
@@ -466,7 +442,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \DateTime $removalLetterSeedDate new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setRemovalLetterSeedDate($removalLetterSeedDate)
     {
@@ -496,7 +472,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param string $viAction new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setViAction($viAction)
     {
@@ -520,7 +496,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \DateTime $warningLetterSeedDate new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setWarningLetterSeedDate($warningLetterSeedDate)
     {
@@ -550,7 +526,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \DateTime $warningLetterSentDate new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setWarningLetterSentDate($warningLetterSentDate)
     {
@@ -580,7 +556,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \DateTime $specifiedDate new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setSpecifiedDate($specifiedDate)
     {
@@ -610,7 +586,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setVersion($version)
     {
@@ -634,7 +610,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param int $olbsKey new value being set
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -658,7 +634,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $goodsDiscs collection being set as the value
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function setGoodsDiscs($goodsDiscs)
     {
@@ -682,7 +658,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $goodsDiscs collection being added
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function addGoodsDiscs($goodsDiscs)
     {
@@ -705,7 +681,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $goodsDiscs collection being removed
      *
-     * @return LicenceVehicle
+     * @return static
      */
     public function removeGoodsDiscs($goodsDiscs)
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Logging\Log\Processor;
 
 use DateTimeImmutable;
@@ -11,7 +13,7 @@ use Monolog\Level;
 use Monolog\LogRecord;
 use Olcs\Logging\Log\Processor\SessionId;
 
-class SessionIdTest extends TestCase
+final class SessionIdTest extends TestCase
 {
     public function testGetSessionManager(): void
     {

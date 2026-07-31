@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Ecmt;
 
 use DMS\PHPUnitExtensions\ArraySubset\Assert;
@@ -12,7 +14,7 @@ use Laminas\Form\Element\MultiCheckbox;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class RestrictedCountriesMultiCheckboxFactoryTest extends MockeryTestCase
+final class RestrictedCountriesMultiCheckboxFactoryTest extends MockeryTestCase
 {
     public function testCreate(): void
     {
@@ -37,7 +39,7 @@ class RestrictedCountriesMultiCheckboxFactoryTest extends MockeryTestCase
         $multiCheckbox = $restrictedCountriesMultiCheckboxFactory->create($name);
 
         $this->assertInstanceOf(MultiCheckbox::class, $multiCheckbox);
-        $this->assertEquals($name, $multiCheckbox->getName());
+        $this->assertSame($name, $multiCheckbox->getName());
         $this->assertArraySubsetRecursive($expectedOptions, $multiCheckbox->getOptions());
         $this->assertArraySubsetRecursive($expectedAttributes, $multiCheckbox->getAttributes());
     }

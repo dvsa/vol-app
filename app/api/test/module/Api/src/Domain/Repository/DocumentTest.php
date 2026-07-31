@@ -28,8 +28,9 @@ use Mockery as m;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DocumentTest extends RepositoryTestCase
+final class DocumentTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(DocumentRepo::class);
@@ -145,12 +146,10 @@ class DocumentTest extends RepositoryTestCase
         }
     }
 
-    public static function tmProvider(): array
+    public static function tmProvider(): \Iterator
     {
-        return [
-            ['licence'],
-            ['application'],
-        ];
+        yield ['licence'];
+        yield ['application'];
     }
 
     public function testFetchUnlinkedOcDocumentsForEntity(): void
@@ -197,11 +196,11 @@ class DocumentTest extends RepositoryTestCase
             m::mock()->shouldReceive('getResult')->with(Query::HYDRATE_OBJECT)->once()->andReturn('RESULT')
                 ->getMock()
         );
-        static::assertEquals('RESULT', $this->sut->fetchListForContinuationDetail(95));
+        $this->assertEquals('RESULT', $this->sut->fetchListForContinuationDetail(95));
 
         $expectedQuery = 'BLAH AND m.continuationDetail = [[95]] ORDER BY m.id DESC';
 
-        static::assertEquals($expectedQuery, $this->query);
+        $this->assertEquals($expectedQuery, $this->query);
     }
 
     public function testFetchListForStatement(): void
@@ -213,10 +212,10 @@ class DocumentTest extends RepositoryTestCase
             m::mock()->shouldReceive('getResult')->with(Query::HYDRATE_OBJECT)->once()->andReturn('RESULT')
                 ->getMock()
         );
-        static::assertEquals('RESULT', $this->sut->fetchListForStatement(123));
+        $this->assertEquals('RESULT', $this->sut->fetchListForStatement(123));
 
         $expectedQuery = 'BLAH AND m.statement = [[123]]';
 
-        static::assertEquals($expectedQuery, $this->query);
+        $this->assertEquals($expectedQuery, $this->query);
     }
 }

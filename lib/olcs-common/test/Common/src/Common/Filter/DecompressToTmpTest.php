@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Filter;
 
 use Laminas\Filter\Decompress;
@@ -14,9 +16,9 @@ use Mockery as m;
  * same namespace.
  *
  * @package CommonTest\Filter
- * @group UnsafeMocking
  */
-class DecompressToTmpTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\Group('UnsafeMocking')]
+final class DecompressToTmpTest extends MockeryTestCase
 {
     public function testFilter(): void
     {

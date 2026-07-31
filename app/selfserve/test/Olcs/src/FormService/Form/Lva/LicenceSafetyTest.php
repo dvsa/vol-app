@@ -14,7 +14,7 @@ use Olcs\FormService\Form\Lva\LicenceSafety;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class LicenceSafetyTest extends MockeryTestCase
+final class LicenceSafetyTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -22,6 +22,7 @@ class LicenceSafetyTest extends MockeryTestCase
 
     protected $formHelper;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class)->makePartial();

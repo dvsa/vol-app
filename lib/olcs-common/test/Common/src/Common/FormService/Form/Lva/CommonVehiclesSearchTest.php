@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\FormService\Form\Lva\CommonVehiclesSearch;
 
-/**
- * @covers \Common\FormService\Form\Lva\CommonVehiclesSearch
- */
-class CommonVehiclesSearchTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\FormService\Form\Lva\CommonVehiclesSearch::class)]
+final class CommonVehiclesSearchTest extends MockeryTestCase
 {
     /** @var CommonVehiclesSearch */
     protected $sut;

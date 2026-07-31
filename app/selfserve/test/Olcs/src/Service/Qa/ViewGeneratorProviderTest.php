@@ -10,7 +10,7 @@ use Olcs\Service\Qa\ViewGeneratorProvider;
 use Olcs\Service\Qa\ViewGenerator\ViewGeneratorInterface;
 use RuntimeException;
 
-class ViewGeneratorProviderTest extends MockeryTestCase
+final class ViewGeneratorProviderTest extends MockeryTestCase
 {
     private $irhpApplicationRouteName = 'permits/application/question';
 
@@ -18,6 +18,7 @@ class ViewGeneratorProviderTest extends MockeryTestCase
 
     private $viewGeneratorProvider;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpApplicationViewGenerator = m::mock(ViewGeneratorInterface::class);

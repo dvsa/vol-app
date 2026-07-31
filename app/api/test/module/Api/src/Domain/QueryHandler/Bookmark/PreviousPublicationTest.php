@@ -18,7 +18,7 @@ use Dvsa\Olcs\Api\Entity\Publication\PublicationLink as Entity;
 /**
  * Previous Publication Test
  */
-class PreviousPublicationTest extends QueryHandlerTestCase
+final class PreviousPublicationTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

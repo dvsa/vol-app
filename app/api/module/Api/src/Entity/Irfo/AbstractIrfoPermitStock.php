@@ -21,23 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irfo_permit_stock",
- *    indexes={
- *        @ORM\Index(name="ix_irfo_permit_stock_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_irfo_permit_stock_irfo_country_id", columns={"irfo_country_id"}),
- *        @ORM\Index(name="ix_irfo_permit_stock_irfo_gv_permit_id", columns={"irfo_gv_permit_id"}),
- *        @ORM\Index(name="ix_irfo_permit_stock_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_irfo_permit_stock_status", columns={"status"}),
- *        @ORM\Index(name="uk_irfo_permit_stock_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_irfo_permit_stock_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irfo_permit_stock')]
+#[ORM\Index(name: 'ix_irfo_permit_stock_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_irfo_permit_stock_irfo_country_id', columns: ['irfo_country_id'])]
+#[ORM\Index(name: 'ix_irfo_permit_stock_irfo_gv_permit_id', columns: ['irfo_gv_permit_id'])]
+#[ORM\Index(name: 'ix_irfo_permit_stock_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_irfo_permit_stock_status', columns: ['status'])]
+#[ORM\UniqueConstraint(name: 'uk_irfo_permit_stock_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -50,109 +43,98 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to irfo_gv_permit
      *
      * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_gv_permit_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irfo_gv_permit_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit::class, fetch: 'LAZY')]
     protected $irfoGvPermit;
 
     /**
      * Foreign Key to irfo_country
      *
      * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_country_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irfo_country_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry::class, fetch: 'LAZY')]
     protected $irfoCountry;
 
     /**
      * Status
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Serial no
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="serial_no", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'serial_no', nullable: false, options: ['unsigned' => true])]
     protected $serialNo = 0;
 
     /**
      * Valid for year
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="valid_for_year", nullable=false)
      */
+    #[ORM\Column(type: 'smallint', name: 'valid_for_year', nullable: false, options: ['unsigned' => true])]
     protected $validForYear = 0;
 
     /**
      * Void return date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="void_return_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'void_return_date', nullable: true)]
     protected $voidReturnDate;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
@@ -176,7 +158,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return IrfoPermitStock
+     * @return static
      */
     public function setId($id)
     {
@@ -200,7 +182,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit $irfoGvPermit new value being set
      *
-     * @return IrfoPermitStock
+     * @return static
      */
     public function setIrfoGvPermit($irfoGvPermit)
     {
@@ -224,7 +206,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry $irfoCountry new value being set
      *
-     * @return IrfoPermitStock
+     * @return static
      */
     public function setIrfoCountry($irfoCountry)
     {
@@ -248,7 +230,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return IrfoPermitStock
+     * @return static
      */
     public function setStatus($status)
     {
@@ -272,7 +254,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrfoPermitStock
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -296,7 +278,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrfoPermitStock
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -320,7 +302,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @param int $serialNo new value being set
      *
-     * @return IrfoPermitStock
+     * @return static
      */
     public function setSerialNo($serialNo)
     {
@@ -344,7 +326,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @param int $validForYear new value being set
      *
-     * @return IrfoPermitStock
+     * @return static
      */
     public function setValidForYear($validForYear)
     {
@@ -368,7 +350,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @param \DateTime $voidReturnDate new value being set
      *
-     * @return IrfoPermitStock
+     * @return static
      */
     public function setVoidReturnDate($voidReturnDate)
     {
@@ -398,7 +380,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return IrfoPermitStock
+     * @return static
      */
     public function setVersion($version)
     {
@@ -422,7 +404,7 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
      *
      * @param int $olbsKey new value being set
      *
-     * @return IrfoPermitStock
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

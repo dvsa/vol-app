@@ -12,7 +12,7 @@ use Olcs\Controller\Lva\Adapters\VariationPeopleAdapter;
 class VariationPeopleAdapterFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): VariationPeopleAdapter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): VariationPeopleAdapter
     {
         $peopleLvaService = $container->get(PeopleLvaService::class);
         return new VariationPeopleAdapter($container, $peopleLvaService);

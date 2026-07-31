@@ -8,10 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LetterTodoVersion Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="letter_todo_version")
  */
+#[ORM\Table(name: 'letter_todo_version')]
+#[ORM\Entity]
 class LetterTodoVersion extends AbstractLetterTodoVersion
 {
     /**

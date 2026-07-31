@@ -153,7 +153,6 @@ return [
             \Common\Util\AbstractServiceFactory::class
         ],
         'aliases' => [
-            'Cache' => \Laminas\Cache\Storage\StorageInterface::class,
             'DataServiceManager' => \Common\Service\Data\PluginManager::class,
             'translator' => 'MvcTranslator',
             'TableBuilder' => \Common\Service\Table\TableBuilderFactory::class,
@@ -324,7 +323,6 @@ return [
             'SectionService' => '\Common\Controller\Service\SectionServiceFactory',
             'FormAnnotationBuilder' => \Common\Service\FormAnnotationBuilderFactory::class,
             \Common\Service\Data\PluginManager::class => Common\Service\Data\PluginManagerFactory::class,
-            \Laminas\Cache\Storage\StorageInterface::class => \Laminas\Cache\Service\StorageCacheFactory::class,
             \Common\Rbac\Navigation\IsAllowedListener::class => Common\Rbac\Navigation\IsAllowedListener::class,
             \Common\Rbac\Service\Permission::class => \Common\Rbac\Service\PermissionFactory::class,
             \Common\Service\Data\Search\SearchTypeManager::class =>

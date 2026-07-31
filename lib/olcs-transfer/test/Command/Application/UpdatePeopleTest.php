@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\UpdatePeople;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Command\Application\UpdatePeople
- */
-class UpdatePeopleTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Application\UpdatePeople::class)]
+final class UpdatePeopleTest extends MockeryTestCase
 {
     public function testGetSet()
     {
@@ -21,8 +21,8 @@ class UpdatePeopleTest extends MockeryTestCase
 
         $sut = UpdatePeople::create($data);
 
-        static::assertEquals(9999, $sut->getVersion());
-        static::assertEquals('unit_person', $sut->getPerson());
-        static::assertEquals('unit_birthDate', $sut->getBirthDate());
+        $this->assertEquals(9999, $sut->getVersion());
+        $this->assertEquals('unit_person', $sut->getPerson());
+        $this->assertEquals('unit_birthDate', $sut->getBirthDate());
     }
 }

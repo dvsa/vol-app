@@ -1,17 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\ContactDetail;
 
 use Dvsa\Olcs\Transfer\Query\ContactDetail\CountrySelectList;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Query\ContactDetail\CountrySelectList
- */
-
-
-class CountrySelectListTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\ContactDetail\CountrySelectList::class)]
+final class CountrySelectListTest extends MockeryTestCase
 {
     public function testCountrySelectList()
     {
@@ -22,7 +20,7 @@ class CountrySelectListTest extends MockeryTestCase
             ]
         );
 
-        static::assertEquals(1, $sut->getIsEcmtState());
-        static::assertEquals(1, $sut->getIsEeaState());
+        $this->assertEquals(1, $sut->getIsEcmtState());
+        $this->assertEquals(1, $sut->getIsEeaState());
     }
 }

@@ -19,7 +19,7 @@ use Laminas\Filter\StringTrim;
  *
  * @author Jonathan Thomas <jonthan@opalise.co.uk>
  */
-class BilateralNoOfPermitsElementTest extends TestCase
+final class BilateralNoOfPermitsElementTest extends TestCase
 {
     public function testGetInputSpecification(): void
     {

@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Continuation;
 
 use Common\Data\Mapper\Continuation\OtherFinances;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Common\Data\Mapper\Continuation\OtherFinances
- */
-class OtherFinancesTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Data\Mapper\Continuation\OtherFinances::class)]
+final class OtherFinancesTest extends MockeryTestCase
 {
     /**
      * @var OtherFinances

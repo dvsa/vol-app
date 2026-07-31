@@ -21,20 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_section_version",
- *    indexes={
- *        @ORM\Index(name="ix_letter_section_version_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_section_version_goods_or_psv", columns={"goods_or_psv"}),
- *        @ORM\Index(name="ix_letter_section_version_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_section_version_letter_section_variant_id", columns={"letter_section_variant_id"}),
- *        @ORM\Index(name="ix_letter_section_version_section_type", columns={"section_type"}),
- *        @ORM\Index(name="ix_letter_section_version_type_goods_or_psv", columns={"section_type", "goods_or_psv"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_section_version')]
+#[ORM\Index(name: 'ix_letter_section_version_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_section_version_goods_or_psv', columns: ['goods_or_psv'])]
+#[ORM\Index(name: 'ix_letter_section_version_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_section_version_letter_section_variant_id', columns: ['letter_section_variant_id'])]
+#[ORM\Index(name: 'ix_letter_section_version_section_type', columns: ['section_type'])]
+#[ORM\Index(name: 'ix_letter_section_version_type_goods_or_psv', columns: ['section_type', 'goods_or_psv'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterSectionVersion implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -47,163 +43,146 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * LetterSectionVariant
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_section_variant_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_section_variant_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant::class, inversedBy: 'versions', fetch: 'LAZY')]
     protected $letterSectionVariant;
 
     /**
      * FK to ref_data
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="section_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'section_type', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $sectionType;
 
     /**
      * FK to ref_data lcat_gv or lcat_psv
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $goodsOrPsv;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="name", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'name', length: 255, nullable: false)]
     protected $name = '';
 
     /**
      * Editor.js format
      *
      * @var array
-     *
-     * @ORM\Column(type="json", name="default_content", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'default_content', nullable: true)]
     protected $defaultContent;
 
     /**
      * Help text for users
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="help_text", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'help_text', nullable: true)]
     protected $helpText;
 
     /**
      * Minimum content length
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="min_length", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'min_length', nullable: true, options: ['unsigned' => true])]
     protected $minLength;
 
     /**
      * Maximum content length
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="max_length", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'max_length', nullable: true, options: ['unsigned' => true])]
     protected $maxLength;
 
     /**
      * Is locked
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_locked", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_locked', nullable: false, options: ['default' => 0])]
     protected $isLocked = 0;
 
     /**
      * Section has placeholders that must be edited
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="requires_input", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'requires_input', nullable: false, options: ['default' => 0])]
     protected $requiresInput = 0;
 
     /**
      * Applicable in NI
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_ni", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_ni', nullable: false, options: ['default' => 0])]
     protected $isNi = 0;
 
     /**
      * Embargo until this date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="publish_from", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'publish_from', nullable: true)]
     protected $publishFrom;
 
     /**
      * Version number
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="version_number", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'version_number', nullable: false, options: ['unsigned' => true])]
     protected $versionNumber = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -227,7 +206,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param int $id new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setId($id)
     {
@@ -251,7 +230,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant $letterSectionVariant new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setLetterSectionVariant($letterSectionVariant)
     {
@@ -275,7 +254,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $sectionType new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setSectionType($sectionType)
     {
@@ -299,7 +278,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -323,7 +302,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -347,7 +326,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -371,7 +350,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param string $name new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setName($name)
     {
@@ -395,7 +374,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param array $defaultContent new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setDefaultContent($defaultContent)
     {
@@ -419,7 +398,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param string $helpText new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setHelpText($helpText)
     {
@@ -443,7 +422,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param int $minLength new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setMinLength($minLength)
     {
@@ -467,7 +446,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param int $maxLength new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setMaxLength($maxLength)
     {
@@ -491,7 +470,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param bool $isLocked new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setIsLocked($isLocked)
     {
@@ -515,7 +494,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param bool $requiresInput new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setRequiresInput($requiresInput)
     {
@@ -539,7 +518,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param bool $isNi new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setIsNi($isNi)
     {
@@ -563,7 +542,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param \DateTime $publishFrom new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setPublishFrom($publishFrom)
     {
@@ -593,7 +572,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param int $versionNumber new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setVersionNumber($versionNumber)
     {
@@ -617,7 +596,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
      *
      * @param int $version new value being set
      *
-     * @return LetterSectionVersion
+     * @return static
      */
     public function setVersion($version)
     {

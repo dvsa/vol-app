@@ -16,12 +16,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @package Dvsa\OlcsTest\AwsSdk
  */
-class S3ClientFactoryTest extends TestCase
+final class S3ClientFactoryTest extends TestCase
 {
     protected $sm;
 
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new S3ClientFactory();

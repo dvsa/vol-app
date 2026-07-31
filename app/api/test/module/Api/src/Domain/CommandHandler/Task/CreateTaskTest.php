@@ -30,7 +30,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Task\CreateTask::class)]
-class CreateTaskTest extends AbstractCommandHandlerTestCase
+final class CreateTaskTest extends AbstractCommandHandlerTestCase
 {
     /** @var  CreateTask */
     protected $sut;
@@ -185,7 +185,7 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
                     $this->assertSame($this->references[IrhpApplication::class][979], $task->getIrhpApplication());
                     $this->assertSame($this->references[Surrender::class][765], $task->getSurrender());
 
-                    $this->assertEquals('2015-01-01', $task->getActionDate()->format('Y-m-d'));
+                    $this->assertSame('2015-01-01', $task->getActionDate()->format('Y-m-d'));
                     $this->assertEquals('Some task', $task->getDescription());
                     $this->assertEquals(false, $task->getIsClosed());
                     $this->assertEquals(false, $task->getUrgent());
@@ -240,19 +240,17 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
     /**
      * Rules provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function rulesProvider(): array
+    public static function rulesProvider(): \Iterator
     {
-        return [
+        yield [
+            []
+        ];
+        yield [
             [
-                []
-            ],
-            [
-                [
-                    'foo',
-                    'bar'
-                ]
+                'foo',
+                'bar'
             ]
         ];
     }
@@ -649,14 +647,12 @@ class CreateTaskTest extends AbstractCommandHandlerTestCase
     /**
      * Organisation type provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function orgTypeProvider(): array
+    public static function orgTypeProvider(): \Iterator
     {
-        return [
-            [Organisation::ORG_TYPE_SOLE_TRADER],
-            [Organisation::ORG_TYPE_PARTNERSHIP]
-        ];
+        yield [Organisation::ORG_TYPE_SOLE_TRADER];
+        yield [Organisation::ORG_TYPE_PARTNERSHIP];
     }
 
     /**

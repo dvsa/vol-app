@@ -103,7 +103,9 @@ locals {
       ]
       resources = [
         "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3",
-        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*"
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*",
+        "arn:aws:s3:::devapp-olcs-pri-integration-dva-s3",
+        "arn:aws:s3:::devapp-olcs-pri-integration-dva-s3/*"
       ]
     },
     {
@@ -270,6 +272,8 @@ module "service" {
 
   legacy_environment = "DEV"
 
+  dva_ni_export_s3uri = module.parameters.dva_ni_export_s3uri
+
   domain_env = "dev"
 
   domain_name    = "dev-dvsacloud.uk"
@@ -432,6 +436,12 @@ module "service" {
     ]
 
     jobs = [
+      {
+        name     = "retrieval-link-purge",
+        commands = ["batch:retrieval-link-purge"],
+        timeout  = 3600,
+        schedule = ["cron(30 03 * * ? *)"],
+      },
       {
         name     = "cache-clear",
         commands = ["batch:cache-clear", "--flush-all", "--force"],
@@ -705,7 +715,7 @@ module "service" {
       {
         name     = "import-anondb",
         commands = ["/mnt/data/scripts/import_anondb.sh"],
-        type     = "scripts_testing"
+        type     = "scripts"
         cpu      = 2,
         memory   = 8192,
       },
@@ -736,6 +746,13 @@ module "service" {
       },
     ]
   }
+}
+
+module "idp" {
+  source = "../../modules/idp"
+
+  environment           = "dev"
+  documents_bucket_name = "olcs-devappdev-base-sabredav"
 }
 
 resource "null_resource" "deployed_versions" {

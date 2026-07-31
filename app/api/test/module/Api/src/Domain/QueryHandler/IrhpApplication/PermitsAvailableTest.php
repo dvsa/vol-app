@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpApplication\PermitsAvailable as PermitsAvailabl
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class PermitsAvailableTest extends QueryHandlerTestCase
+final class PermitsAvailableTest extends QueryHandlerTestCase
 {
     private $irhpApplication;
 

@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class CommunityLicWithdrawalEntityTest extends EntityTester
+final class CommunityLicWithdrawalEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

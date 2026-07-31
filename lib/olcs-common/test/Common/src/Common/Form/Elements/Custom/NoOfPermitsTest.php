@@ -6,6 +6,8 @@
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Custom;
 
 use Common\Form\Elements\Custom\NoOfPermits;
@@ -16,11 +18,9 @@ use PHPUnit\Framework\TestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsTest extends TestCase
+final class NoOfPermitsTest extends TestCase
 {
-    /**
-     * @dataProvider dpTestHasNonZeroValue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHasNonZeroValue')]
     public function testHasNonZeroValue($value, $expectedResult): void
     {
         $sut = new NoOfPermits();
@@ -30,16 +30,14 @@ class NoOfPermitsTest extends TestCase
     }
 
     /**
-     * @return (bool|int)[][]
+     * @return \Iterator<(int | string), array<(bool | int)>>
      *
      * @psalm-return list{list{0, false}, list{1, true}, list{2, true}}
      */
-    public function dpTestHasNonZeroValue(): array
+    public static function dpTestHasNonZeroValue(): \Iterator
     {
-        return [
-            [0, false],
-            [1, true],
-            [2, true],
-        ];
+        yield [0, false];
+        yield [1, true];
+        yield [2, true];
     }
 }

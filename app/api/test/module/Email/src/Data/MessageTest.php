@@ -13,10 +13,11 @@ use Dvsa\Olcs\Email\Domain\Command\SendEmail as SendEmailCmd;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class MessageTest extends MockeryTestCase
+final class MessageTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new Message(' TO ', 'SUBJECT');

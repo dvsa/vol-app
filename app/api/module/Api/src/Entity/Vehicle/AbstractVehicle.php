@@ -22,23 +22,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="vehicle",
- *    indexes={
- *        @ORM\Index(name="ix_vehicle_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_vehicle_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_vehicle_vi_action", columns={"vi_action"}),
- *        @ORM\Index(name="ix_vehicle_vrm", columns={"vrm"}),
- *        @ORM\Index(name="uk_vehicle_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_vehicle_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'vehicle')]
+#[ORM\Index(name: 'ix_vehicle_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_vehicle_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_vehicle_vi_action', columns: ['vi_action'])]
+#[ORM\Index(name: 'ix_vehicle_vrm', columns: ['vrm'])]
+#[ORM\UniqueConstraint(name: 'uk_vehicle_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractVehicle implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -52,142 +45,127 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Nullable for PSVs
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="vrm", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'vrm', length: 20, nullable: true)]
     protected $vrm;
 
     /**
      * Weight in Kg
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="plated_weight", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'plated_weight', nullable: true, options: ['unsigned' => true])]
     protected $platedWeight;
 
     /**
      * psv only
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="certificate_no", length=50, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'certificate_no', length: 50, nullable: true)]
     protected $certificateNo;
 
     /**
      * Flag to send vehicle data to mobile compliance system
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="vi_action", length=1, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'vi_action', length: 1, nullable: true)]
     protected $viAction;
 
     /**
      * section 26 applied to vehicle.  Section 26 is where a licence is revoked, suspended or curtailed for a period of time.
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="section_26", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'section_26', nullable: false, options: ['default' => 0])]
     protected $section26 = 0;
 
     /**
      * Vehicle is on curtailed licence, i.e. reduced authorisation
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="section_26_curtail", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'section_26_curtail', nullable: false, options: ['default' => 0])]
     protected $section26Curtail = 0;
 
     /**
      * Vehicle is on revoked licence.
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="section_26_revoked", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'section_26_revoked', nullable: false, options: ['default' => 0])]
     protected $section26Revoked = 0;
 
     /**
      * Vehicle is on suspended licence.
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="section_26_suspend", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'section_26_suspend', nullable: false, options: ['default' => 0])]
     protected $section26Suspend = 0;
 
     /**
      * For small PSV vehicles the make and model are recorded.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="make_model", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'make_model', length: 100, nullable: true)]
     protected $makeModel;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
      * LicenceVehicles
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle", mappedBy="vehicle")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle::class, mappedBy: 'vehicle')]
     protected $licenceVehicles;
 
     /**
@@ -212,7 +190,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param int $id new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setId($id)
     {
@@ -236,7 +214,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -260,7 +238,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -284,7 +262,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param string $vrm new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setVrm($vrm)
     {
@@ -308,7 +286,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param int $platedWeight new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setPlatedWeight($platedWeight)
     {
@@ -332,7 +310,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param string $certificateNo new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setCertificateNo($certificateNo)
     {
@@ -356,7 +334,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param string $viAction new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setViAction($viAction)
     {
@@ -380,7 +358,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $section26 new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setSection26($section26)
     {
@@ -404,7 +382,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $section26Curtail new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setSection26Curtail($section26Curtail)
     {
@@ -428,7 +406,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $section26Revoked new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setSection26Revoked($section26Revoked)
     {
@@ -452,7 +430,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param bool $section26Suspend new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setSection26Suspend($section26Suspend)
     {
@@ -476,7 +454,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param string $makeModel new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setMakeModel($makeModel)
     {
@@ -500,7 +478,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param int $version new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setVersion($version)
     {
@@ -524,7 +502,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param int $olbsKey new value being set
      *
-     * @return Vehicle
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -548,7 +526,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $licenceVehicles collection being set as the value
      *
-     * @return Vehicle
+     * @return static
      */
     public function setLicenceVehicles($licenceVehicles)
     {
@@ -572,7 +550,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $licenceVehicles collection being added
      *
-     * @return Vehicle
+     * @return static
      */
     public function addLicenceVehicles($licenceVehicles)
     {
@@ -595,7 +573,7 @@ abstract class AbstractVehicle implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $licenceVehicles collection being removed
      *
-     * @return Vehicle
+     * @return static
      */
     public function removeLicenceVehicles($licenceVehicles)
     {

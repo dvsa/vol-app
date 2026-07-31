@@ -8,7 +8,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class IsValidBasedWarningAdderFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IsValidBasedWarningAdder
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IsValidBasedWarningAdder
     {
         return new IsValidBasedWarningAdder(
             $container->get('QaCommonWarningAdder')

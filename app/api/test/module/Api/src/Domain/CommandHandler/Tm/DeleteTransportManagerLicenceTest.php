@@ -26,7 +26,7 @@ use Mockery as m;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class DeleteTransportManagerLicenceTest extends AbstractCommandHandlerTestCase
+final class DeleteTransportManagerLicenceTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

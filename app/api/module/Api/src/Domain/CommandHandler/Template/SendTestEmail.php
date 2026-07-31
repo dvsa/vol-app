@@ -126,7 +126,7 @@ final class SendTestEmail extends AbstractCommandHandler
     }
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->twigRenderer = $container->get('TemplateTwigRenderer');
         $this->testMailer = $container->get(NotifyTestMailer::class);

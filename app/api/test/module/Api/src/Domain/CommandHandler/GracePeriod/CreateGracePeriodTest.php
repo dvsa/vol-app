@@ -26,7 +26,7 @@ use Dvsa\Olcs\Transfer\Command\GracePeriod\CreateGracePeriod as Cmd;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class CreateGracePeriodTest extends AbstractCommandHandlerTestCase
+final class CreateGracePeriodTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -53,8 +53,8 @@ class CreateGracePeriodTest extends AbstractCommandHandlerTestCase
             ->with(m::type(GracePeriod::class))
             ->andReturnUsing(
                 function (GracePeriod $gracePeriod) use ($data) {
-                    $this->assertEquals($gracePeriod->getStartDate()->format('Y-m-d'), $data['startDate']);
-                    $this->assertEquals($gracePeriod->getEndDate()->format('Y-m-d'), $data['endDate']);
+                    $this->assertSame($gracePeriod->getStartDate()->format('Y-m-d'), $data['startDate']);
+                    $this->assertSame($gracePeriod->getEndDate()->format('Y-m-d'), $data['endDate']);
                     $this->assertEquals($gracePeriod->getDescription(), $data['description']);
                 }
             );

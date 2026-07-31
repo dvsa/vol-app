@@ -26,7 +26,7 @@ use Dvsa\Olcs\Api\Service\FinancialStandingHelperService;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class FStandingCapitalReservesTest extends QueryHandlerTestCase
+final class FStandingCapitalReservesTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

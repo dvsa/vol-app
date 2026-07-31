@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase as TestCase;
  * Class OperatorTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\XmlValidator
  */
-class OperatorTest extends TestCase
+final class OperatorTest extends TestCase
 {
     /**
      * @param $xml
@@ -28,15 +28,13 @@ class OperatorTest extends TestCase
         $this->assertEquals($valid, $sut->isValid($dom));
     }
 
-    public static function isValidProvider(): array
+    public static function isValidProvider(): \Iterator
     {
-        return [
-            ['<Operators></Operators>', false],
-            [
-                '<Operators><LicensedOperator></LicensedOperator><LicensedOperator></LicensedOperator></Operators>',
-                false
-            ],
-            ['<LicensedOperators><LicensedOperator></LicensedOperator></LicensedOperators>', true]
+        yield ['<Operators></Operators>', false];
+        yield [
+            '<Operators><LicensedOperator></LicensedOperator><LicensedOperator></LicensedOperator></Operators>',
+            false
         ];
+        yield ['<LicensedOperators><LicensedOperator></LicensedOperator></LicensedOperators>', true];
     }
 }

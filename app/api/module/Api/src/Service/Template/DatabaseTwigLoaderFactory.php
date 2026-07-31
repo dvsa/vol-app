@@ -18,7 +18,7 @@ class DatabaseTwigLoaderFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DatabaseTwigLoader
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DatabaseTwigLoader
     {
         return new DatabaseTwigLoader(
             $container->get('TemplateDatabaseTemplateFetcher')

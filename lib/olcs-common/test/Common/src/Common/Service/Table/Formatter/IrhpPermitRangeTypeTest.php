@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\RefData;
@@ -8,7 +10,7 @@ use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class IrhpPermitRangeTypeTest extends MockeryTestCase
+final class IrhpPermitRangeTypeTest extends MockeryTestCase
 {
     protected $translator;
 
@@ -21,9 +23,7 @@ class IrhpPermitRangeTypeTest extends MockeryTestCase
         $this->sut = new IrhpPermitRangeType($this->translator);
     }
 
-    /**
-     * @dataProvider dpFormat
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFormat')]
     public function testFormat($row, $expectedOutput): void
     {
         $column = ['name' => 'typeDescription'];
@@ -40,84 +40,82 @@ class IrhpPermitRangeTypeTest extends MockeryTestCase
     }
 
     /**
-     * @return ((((bool|string)[]|string)[]|bool)[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(array<(array<(bool | string)> | string)> | bool)> | string)>>
      *
      * @psalm-return list{list{array{irhpPermitStock: array{irhpPermitType: array{isBilateral: false}}}, 'N/A'}, list{array{irhpPermitStock: array{irhpPermitType: array{isBilateral: true}}, cabotage: false, journey: array{id: 'journey_single'}}, '_TRNSLT_permits.irhp.range.type.standard.single'}, list{array{irhpPermitStock: array{irhpPermitType: array{isBilateral: true}}, cabotage: false, journey: array{id: 'journey_multiple'}}, '_TRNSLT_permits.irhp.range.type.standard.multiple'}, list{array{irhpPermitStock: array{irhpPermitType: array{isBilateral: true}}, cabotage: true, journey: array{id: 'journey_single'}}, '_TRNSLT_permits.irhp.range.type.cabotage.single'}, list{array{irhpPermitStock: array{irhpPermitType: array{isBilateral: true}}, cabotage: true, journey: array{id: 'journey_multiple'}}, '_TRNSLT_permits.irhp.range.type.cabotage.multiple'}, list{array{irhpPermitStock: array{irhpPermitType: array{isBilateral: true}, permitCategory: array{description: 'category'}}}, '_TRNSLT_category'}}
      */
-    public function dpFormat(): array
+    public static function dpFormat(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'irhpPermitStock' => [
-                        'irhpPermitType' => [
-                            'isBilateral' => false,
-                        ]
+                'irhpPermitStock' => [
+                    'irhpPermitType' => [
+                        'isBilateral' => false,
+                    ]
+                ]
+            ],
+            'N/A',
+        ];
+        yield [
+            [
+                'irhpPermitStock' => [
+                    'irhpPermitType' => [
+                        'isBilateral' => true,
                     ]
                 ],
-                'N/A',
+                'cabotage' => false,
+                'journey' => ['id' => RefData::JOURNEY_SINGLE],
             ],
+            '_TRNSLT_permits.irhp.range.type.standard.single',
+        ];
+        yield [
             [
-                [
-                    'irhpPermitStock' => [
-                        'irhpPermitType' => [
-                            'isBilateral' => true,
-                        ]
-                    ],
-                    'cabotage' => false,
-                    'journey' => ['id' => RefData::JOURNEY_SINGLE],
+                'irhpPermitStock' => [
+                    'irhpPermitType' => [
+                        'isBilateral' => true,
+                    ]
                 ],
-                '_TRNSLT_permits.irhp.range.type.standard.single',
+                'cabotage' => false,
+                'journey' => ['id' => RefData::JOURNEY_MULTIPLE],
             ],
+            '_TRNSLT_permits.irhp.range.type.standard.multiple',
+        ];
+        yield [
             [
-                [
-                    'irhpPermitStock' => [
-                        'irhpPermitType' => [
-                            'isBilateral' => true,
-                        ]
-                    ],
-                    'cabotage' => false,
-                    'journey' => ['id' => RefData::JOURNEY_MULTIPLE],
+                'irhpPermitStock' => [
+                    'irhpPermitType' => [
+                        'isBilateral' => true,
+                    ]
                 ],
-                '_TRNSLT_permits.irhp.range.type.standard.multiple',
+                'cabotage' => true,
+                'journey' => ['id' => RefData::JOURNEY_SINGLE],
             ],
+            '_TRNSLT_permits.irhp.range.type.cabotage.single',
+        ];
+        yield [
             [
-                [
-                    'irhpPermitStock' => [
-                        'irhpPermitType' => [
-                            'isBilateral' => true,
-                        ]
-                    ],
-                    'cabotage' => true,
-                    'journey' => ['id' => RefData::JOURNEY_SINGLE],
+                'irhpPermitStock' => [
+                    'irhpPermitType' => [
+                        'isBilateral' => true,
+                    ]
                 ],
-                '_TRNSLT_permits.irhp.range.type.cabotage.single',
+                'cabotage' => true,
+                'journey' => ['id' => RefData::JOURNEY_MULTIPLE],
             ],
+            '_TRNSLT_permits.irhp.range.type.cabotage.multiple',
+        ];
+        yield [
             [
-                [
-                    'irhpPermitStock' => [
-                        'irhpPermitType' => [
-                            'isBilateral' => true,
-                        ]
+                'irhpPermitStock' => [
+                    'irhpPermitType' => [
+                        'isBilateral' => true,
                     ],
-                    'cabotage' => true,
-                    'journey' => ['id' => RefData::JOURNEY_MULTIPLE],
-                ],
-                '_TRNSLT_permits.irhp.range.type.cabotage.multiple',
-            ],
-            [
-                [
-                    'irhpPermitStock' => [
-                        'irhpPermitType' => [
-                            'isBilateral' => true,
-                        ],
-                        'permitCategory' => [
-                            'description' => 'category',
-                        ],
+                    'permitCategory' => [
+                        'description' => 'category',
                     ],
                 ],
-                '_TRNSLT_category',
             ],
+            '_TRNSLT_category',
         ];
     }
 }

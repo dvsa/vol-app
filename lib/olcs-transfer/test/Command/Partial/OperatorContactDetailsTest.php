@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Partial;
 
 use Dvsa\Olcs\Transfer\Command\Partial\OperatorContactDetails;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Partial\OperatorContactDetails;
 /**
  * Operator Contact Details Partial test
  */
-class OperatorContactDetailsTest extends \PHPUnit\Framework\TestCase
+final class OperatorContactDetailsTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

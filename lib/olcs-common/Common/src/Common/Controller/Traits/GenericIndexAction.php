@@ -18,7 +18,7 @@ trait GenericIndexAction
     /**
      * Render the section form
      *
-     * @return Response
+     * @return \Laminas\Http\Response
      */
     public function indexAction()
     {

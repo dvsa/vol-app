@@ -16,7 +16,7 @@ use Sabre\DAV\Exception\Forbidden;
 use Sabre\DAV\Exception\NotFound;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(VirtualFile::class)]
-class VirtualFileTest extends MockeryTestCase
+final class VirtualFileTest extends MockeryTestCase
 {
     private AnnotationBuilder&MockInterface $annotationBuilder;
     private CachingQueryService&MockInterface $queryService;
@@ -49,7 +49,7 @@ class VirtualFileTest extends MockeryTestCase
     {
         $sut = $this->createSut('my-document.rtf');
 
-        $this->assertEquals('my-document.rtf', $sut->getName());
+        $this->assertSame('my-document.rtf', $sut->getName());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -57,7 +57,7 @@ class VirtualFileTest extends MockeryTestCase
     {
         $sut = $this->createSut('document.rtf');
 
-        $this->assertEquals('application/rtf', $sut->getContentType());
+        $this->assertSame('application/rtf', $sut->getContentType());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -65,7 +65,7 @@ class VirtualFileTest extends MockeryTestCase
     {
         $sut = $this->createSut('document.doc');
 
-        $this->assertEquals('application/msword', $sut->getContentType());
+        $this->assertSame('application/msword', $sut->getContentType());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -73,7 +73,7 @@ class VirtualFileTest extends MockeryTestCase
     {
         $sut = $this->createSut('document.docx');
 
-        $this->assertEquals(
+        $this->assertSame(
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             $sut->getContentType()
         );
@@ -84,7 +84,7 @@ class VirtualFileTest extends MockeryTestCase
     {
         $sut = $this->createSut('document.xyz');
 
-        $this->assertEquals('application/octet-stream', $sut->getContentType());
+        $this->assertSame('application/octet-stream', $sut->getContentType());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -136,9 +136,7 @@ class VirtualFileTest extends MockeryTestCase
                 $data = $command->getArrayCopy();
                 return $data['id'] === 99 && $data['content'] === $content;
             }))
-            ->andReturnUsing(function ($command) {
-                return Mockery::mock(\Dvsa\Olcs\Transfer\Command\CommandContainerInterface::class);
-            });
+            ->andReturnUsing(fn($command) => Mockery::mock(\Dvsa\Olcs\Transfer\Command\CommandContainerInterface::class));
 
         $response = Mockery::mock(Response::class);
         $response->shouldReceive('isOk')->andReturn(true);
@@ -165,9 +163,7 @@ class VirtualFileTest extends MockeryTestCase
         $this->annotationBuilder
             ->shouldReceive('createCommand')
             ->once()
-            ->andReturnUsing(function ($command) {
-                return Mockery::mock(\Dvsa\Olcs\Transfer\Command\CommandContainerInterface::class);
-            });
+            ->andReturnUsing(fn($command) => Mockery::mock(\Dvsa\Olcs\Transfer\Command\CommandContainerInterface::class));
 
         $response = Mockery::mock(Response::class);
         $response->shouldReceive('isOk')->andReturn(false);
@@ -221,7 +217,7 @@ class VirtualFileTest extends MockeryTestCase
     {
         $sut = $this->createSut(initialSize: 12345);
 
-        $this->assertEquals(12345, $sut->getSize());
+        $this->assertSame(12345, $sut->getSize());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -234,9 +230,7 @@ class VirtualFileTest extends MockeryTestCase
         $this->annotationBuilder
             ->shouldReceive('createCommand')
             ->once()
-            ->andReturnUsing(function ($command) {
-                return Mockery::mock(\Dvsa\Olcs\Transfer\Command\CommandContainerInterface::class);
-            });
+            ->andReturnUsing(fn($command) => Mockery::mock(\Dvsa\Olcs\Transfer\Command\CommandContainerInterface::class));
 
         $response = Mockery::mock(Response::class);
         $response->shouldReceive('isOk')->andReturn(true);
@@ -248,7 +242,7 @@ class VirtualFileTest extends MockeryTestCase
 
         $sut->put($content);
 
-        $this->assertEquals(strlen($content), $sut->getSize());
+        $this->assertSame(strlen($content), $sut->getSize());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -256,7 +250,7 @@ class VirtualFileTest extends MockeryTestCase
     {
         $sut = $this->createSut();
 
-        $this->assertStringContainsString('doc-42', $sut->getETag());
+        $this->assertStringContainsString('doc-42', (string) $sut->getETag());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -267,9 +261,7 @@ class VirtualFileTest extends MockeryTestCase
         $this->annotationBuilder
             ->shouldReceive('createQuery')
             ->once()
-            ->andReturnUsing(function ($query) {
-                return Mockery::mock(\Dvsa\Olcs\Transfer\Query\QueryContainerInterface::class);
-            });
+            ->andReturnUsing(fn($query) => Mockery::mock(\Dvsa\Olcs\Transfer\Query\QueryContainerInterface::class));
 
         $this->queryService
             ->shouldReceive('send')
@@ -290,9 +282,7 @@ class VirtualFileTest extends MockeryTestCase
         $this->annotationBuilder
             ->shouldReceive('createQuery')
             ->once()
-            ->andReturnUsing(function ($query) {
-                return Mockery::mock(\Dvsa\Olcs\Transfer\Query\QueryContainerInterface::class);
-            });
+            ->andReturnUsing(fn($query) => Mockery::mock(\Dvsa\Olcs\Transfer\Query\QueryContainerInterface::class));
 
         $response = Mockery::mock(Response::class);
         $response->shouldReceive('isOk')->andReturn(false);

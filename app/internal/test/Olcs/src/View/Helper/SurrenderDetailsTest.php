@@ -8,7 +8,7 @@ use Common\RefData;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\View\Helper\SurrenderDetails;
 
-class SurrenderDetailsTest extends MockeryTestCase
+final class SurrenderDetailsTest extends MockeryTestCase
 {
     /**
      * @var SurrenderDetails
@@ -43,34 +43,32 @@ class SurrenderDetailsTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestGetDeclarationSignatureText(): array
+    public static function dpTestGetDeclarationSignatureText(): \Iterator
     {
-        return [
-            'digital_signature' => [
-                'surrenderData' => [
-                    'signatureType' => [
-                        'id' => RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE
-                    ],
-                    'digitalSignature' => [
-                        'createdOn' => '01/01/2014',
-                        'attributes' => json_encode(
-                            [
-                                'firstname' => 'SomeFirstName',
-                                'surname' => 'SomeLastName'
-                            ]
-                        )
-                    ]
+        yield 'digital_signature' => [
+            'surrenderData' => [
+                'signatureType' => [
+                    'id' => RefData::SIGNATURE_TYPE_DIGITAL_SIGNATURE
                 ],
-                'expectedText' => 'Digitally signed by SomeFirstName SomeLastName on 1 Jan 2014'
+                'digitalSignature' => [
+                    'createdOn' => '01/01/2014',
+                    'attributes' => json_encode(
+                        [
+                            'firstname' => 'SomeFirstName',
+                            'surname' => 'SomeLastName'
+                        ]
+                    )
+                ]
             ],
-            'physical_signature' => [
-                'surrenderData' => [
-                    'signatureType' => [
-                        'id' => RefData::SIGNATURE_TYPE_PHYSICAL_SIGNATURE
-                    ],
+            'expectedText' => 'Digitally signed by SomeFirstName SomeLastName on 1 Jan 2014'
+        ];
+        yield 'physical_signature' => [
+            'surrenderData' => [
+                'signatureType' => [
+                    'id' => RefData::SIGNATURE_TYPE_PHYSICAL_SIGNATURE
                 ],
-                'expectedText' => 'Physical signature',
-            ]
+            ],
+            'expectedText' => 'Physical signature',
         ];
     }
 
@@ -83,25 +81,23 @@ class SurrenderDetailsTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestReturnCommunityLicenceDocumentDetailsText(): array
+    public static function dpTestReturnCommunityLicenceDocumentDetailsText(): \Iterator
     {
-        return [
-            [
-                'surrenderData' => [
-                    'communityLicenceDocumentStatus' => [
-                        'id' => RefData::SURRENDER_DOC_STATUS_STOLEN
-                    ],
+        yield [
+            'surrenderData' => [
+                'communityLicenceDocumentStatus' => [
+                    'id' => RefData::SURRENDER_DOC_STATUS_STOLEN
                 ],
-                'expectedText' => 'Details of stolen community licence document'
             ],
-            [
-                'surrenderData' => [
-                    'communityLicenceDocumentStatus' => [
-                        'id' => RefData::SURRENDER_DOC_STATUS_LOST
-                    ],
+            'expectedText' => 'Details of stolen community licence document'
+        ];
+        yield [
+            'surrenderData' => [
+                'communityLicenceDocumentStatus' => [
+                    'id' => RefData::SURRENDER_DOC_STATUS_LOST
                 ],
-                'expectedText' => 'Details of lost community licence document'
-            ]
+            ],
+            'expectedText' => 'Details of lost community licence document'
         ];
     }
 
@@ -114,25 +110,23 @@ class SurrenderDetailsTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestReturnLicenceDocumentDetailsText(): array
+    public static function dpTestReturnLicenceDocumentDetailsText(): \Iterator
     {
-        return [
-            [
-                'surrenderData' => [
-                    'licenceDocumentStatus' => [
-                        'id' => RefData::SURRENDER_DOC_STATUS_STOLEN
-                    ],
+        yield [
+            'surrenderData' => [
+                'licenceDocumentStatus' => [
+                    'id' => RefData::SURRENDER_DOC_STATUS_STOLEN
                 ],
-                'expectedText' => 'Details of stolen operator licence document'
             ],
-            [
-                'surrenderData' => [
-                    'licenceDocumentStatus' => [
-                        'id' => RefData::SURRENDER_DOC_STATUS_LOST
-                    ],
+            'expectedText' => 'Details of stolen operator licence document'
+        ];
+        yield [
+            'surrenderData' => [
+                'licenceDocumentStatus' => [
+                    'id' => RefData::SURRENDER_DOC_STATUS_LOST
                 ],
-                'expectedText' => 'Details of lost operator licence document'
-            ]
+            ],
+            'expectedText' => 'Details of lost operator licence document'
         ];
     }
 }

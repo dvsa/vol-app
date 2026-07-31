@@ -16,5 +16,5 @@ interface AuthenticationServiceInterface extends LaminasAuthenticationServiceInt
      * @return Result
      */
     #[\Override]
-    public function authenticate(AdapterInterface $adapter = null): Result;
+    public function authenticate(?AdapterInterface $adapter = null): Result;
 }

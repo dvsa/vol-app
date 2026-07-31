@@ -12,7 +12,7 @@ use Mockery as m;
 /**
  * Class QueryTemplateTest
  */
-class QueryTemplateTest extends m\Adapter\Phpunit\MockeryTestCase
+final class QueryTemplateTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     public function testQueryTemplateMissing(): void
     {
@@ -43,440 +43,438 @@ class QueryTemplateTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertEquals($expected, $sut->getParam('query'));
     }
 
-    public static function queryTemplateDataProvider(): array
+    public static function queryTemplateDataProvider(): \Iterator
     {
-        return [
-            // simple query
+        // simple query
+        yield [
+            'SMITH',
+            [],
+            [],
+            [],
+            [],
             [
-                'SMITH',
-                [],
-                [],
-                [],
-                [],
-                [
-                    'bool' => [
-                        'must' => [
-                            'bool' => [
-                                'should' => [
-                                    [
-                                        'match' => [
-                                            'field_1' => 'SMITH'
-                                        ]
+                'bool' => [
+                    'must' => [
+                        'bool' => [
+                            'should' => [
+                                [
+                                    'match' => [
+                                        'field_1' => 'SMITH'
                                     ]
                                 ]
                             ]
                         ]
                     ]
                 ]
-            ],
-            // query with special chars
+            ]
+        ];
+        // query with special chars
+        yield [
+            'SM"\das\'[]{}ITH',
+            [],
+            [],
+            [],
+            [],
             [
-                'SM"\das\'[]{}ITH',
-                [],
-                [],
-                [],
-                [],
-                [
-                    'bool' => [
-                        'must' => [
-                            'bool' => [
-                                'should' => [
-                                    [
-                                        'match' => [
-                                            'field_1' => 'SM"\das\'[]{}ITH'
-                                        ]
+                'bool' => [
+                    'must' => [
+                        'bool' => [
+                            'should' => [
+                                [
+                                    'match' => [
+                                        'field_1' => 'SM"\das\'[]{}ITH'
                                     ]
                                 ]
                             ]
                         ]
                     ]
                 ]
-            ],
-            // query empty
+            ]
+        ];
+        // query empty
+        yield [
+            '',
+            [],
+            [],
+            [],
+            [],
             [
-                '',
-                [],
-                [],
-                [],
-                [],
-                [
-                    'bool' => [
-                        'must' => [
-                            'bool' => [
-                                'should' => [
-                                    [
-                                        'match' => [
-                                            'field_1' => ''
-                                        ]
+                'bool' => [
+                    'must' => [
+                        'bool' => [
+                            'should' => [
+                                [
+                                    'match' => [
+                                        'field_1' => ''
                                     ]
                                 ]
                             ]
                         ]
                     ]
                 ]
-            ],
-            // query single " (double quote)
+            ]
+        ];
+        // query single " (double quote)
+        yield [
+            '"',
+            [],
+            [],
+            [],
+            [],
             [
-                '"',
-                [],
-                [],
-                [],
-                [],
-                [
-                    'bool' => [
-                        'must' => [
-                            'bool' => [
-                                'should' => [
-                                    [
-                                        'match' => [
-                                            'field_1' => '"'
-                                        ]
+                'bool' => [
+                    'must' => [
+                        'bool' => [
+                            'should' => [
+                                [
+                                    'match' => [
+                                        'field_1' => '"'
                                     ]
                                 ]
                             ]
                         ]
                     ]
                 ]
-            ],
-            // query double " (double quote)
+            ]
+        ];
+        // query double " (double quote)
+        yield [
+            '""',
+            [],
+            [],
+            [],
+            [],
             [
-                '""',
-                [],
-                [],
-                [],
-                [],
-                [
-                    'bool' => [
-                        'must' => [
-                            'bool' => [
-                                'should' => [
-                                    [
-                                        'match' => [
-                                            'field_1' => '""'
-                                        ]
+                'bool' => [
+                    'must' => [
+                        'bool' => [
+                            'should' => [
+                                [
+                                    'match' => [
+                                        'field_1' => '""'
                                     ]
                                 ]
                             ]
                         ]
                     ]
                 ]
-            ],
-            // query ending with " (double quote)
+            ]
+        ];
+        // query ending with " (double quote)
+        yield [
+            '"SMITH"',
+            [],
+            [],
+            [],
+            [],
             [
-                '"SMITH"',
-                [],
-                [],
-                [],
-                [],
-                [
-                    'bool' => [
-                        'must' => [
-                            'bool' => [
-                                'should' => [
-                                    [
-                                        'match' => [
-                                            'field_1' => '"SMITH"'
-                                        ]
+                'bool' => [
+                    'must' => [
+                        'bool' => [
+                            'should' => [
+                                [
+                                    'match' => [
+                                        'field_1' => '"SMITH"'
                                     ]
                                 ]
                             ]
                         ]
                     ]
                 ]
-            ],
-            // query json
+            ]
+        ];
+        // query json
+        yield [
+            '{"key":"value"}',
+            [],
+            [],
+            [],
+            [],
             [
-                '{"key":"value"}',
-                [],
-                [],
-                [],
-                [],
-                [
-                    'bool' => [
-                        'must' => [
-                            'bool' => [
-                                'should' => [
-                                    [
-                                        'match' => [
-                                            'field_1' => '{"key":"value"}'
-                                        ]
+                'bool' => [
+                    'must' => [
+                        'bool' => [
+                            'should' => [
+                                [
+                                    'match' => [
+                                        'field_1' => '{"key":"value"}'
                                     ]
                                 ]
                             ]
                         ]
                     ]
                 ]
-            ],
-            // query with one filter
+            ]
+        ];
+        // query with one filter
+        yield [
+            'SMITH',
             [
-                'SMITH',
-                [
-                    'field_1' => 'value1',
-                ],
-                [
-                    'field_1' => 'DYNAMIC',
-                ],
-                [],
-                [],
-                [
-                    'bool' => [
-                        'must' => [
-                            'bool' => [
-                                'should' => [
-                                    [
-                                        'match' => [
-                                            'field_1' => 'SMITH'
-                                        ]
+                'field_1' => 'value1',
+            ],
+            [
+                'field_1' => 'DYNAMIC',
+            ],
+            [],
+            [],
+            [
+                'bool' => [
+                    'must' => [
+                        'bool' => [
+                            'should' => [
+                                [
+                                    'match' => [
+                                        'field_1' => 'SMITH'
                                     ]
                                 ]
                             ]
-                        ],
-                        'filter' => [
-                            [
-                                'term' => [
-                                    'field_1' => 'value1'
-                                ]
+                        ]
+                    ],
+                    'filter' => [
+                        [
+                            'term' => [
+                                'field_1' => 'value1'
                             ]
                         ]
                     ]
                 ]
-            ],
-            // query with multiple filters
+            ]
+        ];
+        // query with multiple filters
+        yield [
+            'SMITH',
             [
-                'SMITH',
-                [
-                    'field_1' => 'value1',
-                    'field_2' => 'value2',
-                    'field_3' => '0',
-                    'field_4|field_5' => 'value3|value4',
-                    'field_6' => 'value5',
-                ],
-                [
-                    'field_1' => 'DYNAMIC',
-                    'field_2' => 'DYNAMIC',
-                    'field_3' => 'BOOLEAN',
-                    'field_4|field_5' => 'FIXED',
-                    'field_6' => 'COMPLEX',
-                ],
-                [],
-                true,
-                [
-                    'bool' => [
-                        'must' => [
-                            'bool' => [
-                                'should' => [
-                                    [
-                                        'match' => [
-                                            'field_1' => 'SMITH'
-                                        ]
+                'field_1' => 'value1',
+                'field_2' => 'value2',
+                'field_3' => '0',
+                'field_4|field_5' => 'value3|value4',
+                'field_6' => 'value5',
+            ],
+            [
+                'field_1' => 'DYNAMIC',
+                'field_2' => 'DYNAMIC',
+                'field_3' => 'BOOLEAN',
+                'field_4|field_5' => 'FIXED',
+                'field_6' => 'COMPLEX',
+            ],
+            [],
+            true,
+            [
+                'bool' => [
+                    'must' => [
+                        'bool' => [
+                            'should' => [
+                                [
+                                    'match' => [
+                                        'field_1' => 'SMITH'
                                     ]
-                                ],
-                                'must' => [
-                                    'bool' => [
-                                        'should' => [
-                                            [
-                                                'terms' => [
-                                                    'field_4' => ['value3', 'value4'],
-                                                ]
-                                            ],
-                                            [
-                                                'terms' => [
-                                                    'field_5' => ['value3', 'value4'],
-                                                ]
-                                            ],
+                                ]
+                            ],
+                            'must' => [
+                                'bool' => [
+                                    'should' => [
+                                        [
+                                            'terms' => [
+                                                'field_4' => ['value3', 'value4'],
+                                            ]
+                                        ],
+                                        [
+                                            'terms' => [
+                                                'field_5' => ['value3', 'value4'],
+                                            ]
                                         ],
                                     ],
                                 ],
+                            ],
+                        ]
+                    ],
+                    'filter' => [
+                        [
+                            'term' => [
+                                'field_1' => 'value1'
                             ]
                         ],
-                        'filter' => [
-                            [
-                                'term' => [
-                                    'field_1' => 'value1'
-                                ]
-                            ],
-                            [
-                                'term' => [
-                                    'field_2' => 'value2'
-                                ]
-                            ],
+                        [
+                            'term' => [
+                                'field_2' => 'value2'
+                            ]
                         ],
-                        'must_not' => [
-                            0 => [
-                                'exists' => [
-                                    'field' => 'field_3',
-                                ]
-                            ],
+                    ],
+                    'must_not' => [
+                        0 => [
+                            'exists' => [
+                                'field' => 'field_3',
+                            ]
                         ],
-                        'apple' => 'banana',
-                    ]
+                    ],
+                    'apple' => 'banana',
                 ]
-            ],
-            // query with from_and_to date range
+            ]
+        ];
+        // query with from_and_to date range
+        yield [
+            'SMITH',
+            [],
+            [],
             [
-                'SMITH',
-                [],
-                [],
-                [
-                    'field_1_from_and_to' => '2010-09-30'
-                ],
-                [],
-                [
-                    'bool' => [
-                        'must' => [
-                            'bool' => [
-                                'should' => [
-                                    [
-                                        'match' => [
-                                            'field_1' => 'SMITH'
-                                        ]
+                'field_1_from_and_to' => '2010-09-30'
+            ],
+            [],
+            [
+                'bool' => [
+                    'must' => [
+                        'bool' => [
+                            'should' => [
+                                [
+                                    'match' => [
+                                        'field_1' => 'SMITH'
                                     ]
                                 ]
                             ]
-                        ],
-                        'filter' => [
-                            [
-                                'term' => [
-                                    'field_1' => '2010-09-30'
-                                ]
+                        ]
+                    ],
+                    'filter' => [
+                        [
+                            'term' => [
+                                'field_1' => '2010-09-30'
                             ]
                         ]
                     ]
                 ]
-            ],
-            // query with from only date range
+            ]
+        ];
+        // query with from only date range
+        yield [
+            'SMITH',
+            [],
+            [],
             [
-                'SMITH',
-                [],
-                [],
-                [
-                    'field_1_from' => '2010-09-30'
-                ],
-                [],
-                [
-                    'bool' => [
-                        'must' => [
-                            'bool' => [
-                                'should' => [
-                                    [
-                                        'match' => [
-                                            'field_1' => 'SMITH'
-                                        ]
+                'field_1_from' => '2010-09-30'
+            ],
+            [],
+            [
+                'bool' => [
+                    'must' => [
+                        'bool' => [
+                            'should' => [
+                                [
+                                    'match' => [
+                                        'field_1' => 'SMITH'
                                     ]
                                 ]
                             ]
-                        ],
-                        'filter' => [
-                            [
-                                'range' => [
-                                    'field_1' => ['from' => '2010-09-30']
-                                ]
+                        ]
+                    ],
+                    'filter' => [
+                        [
+                            'range' => [
+                                'field_1' => ['from' => '2010-09-30']
                             ]
                         ]
                     ]
                 ]
-            ],
-            // query with from and to date range
+            ]
+        ];
+        // query with from and to date range
+        yield [
+            'SMITH',
+            [],
+            [],
             [
-                'SMITH',
-                [],
-                [],
-                [
-                    'field_1_from' => '2010-09-30',
-                    'field_1_to' => '2010-10-30'
-                ],
-                [],
-                [
-                    'bool' => [
-                        'must' => [
-                            'bool' => [
-                                'should' => [
-                                    [
-                                        'match' => [
-                                            'field_1' => 'SMITH'
-                                        ]
+                'field_1_from' => '2010-09-30',
+                'field_1_to' => '2010-10-30'
+            ],
+            [],
+            [
+                'bool' => [
+                    'must' => [
+                        'bool' => [
+                            'should' => [
+                                [
+                                    'match' => [
+                                        'field_1' => 'SMITH'
                                     ]
                                 ]
                             ]
-                        ],
-                        'filter' => [
-                            [
-                                'range' => [
-                                    'field_1' => ['from' => '2010-09-30', 'to' => '2010-10-30']
-                                ]
+                        ]
+                    ],
+                    'filter' => [
+                        [
+                            'range' => [
+                                'field_1' => ['from' => '2010-09-30', 'to' => '2010-10-30']
                             ]
                         ]
                     ]
                 ]
-            ],
-            // query with filters and date ranges
+            ]
+        ];
+        // query with filters and date ranges
+        yield [
+            'SMITH',
             [
-                'SMITH',
-                [
-                    'field_1' => 'value1',
-                    'field_2' => 'value2',
-                    'field_3' => 'value3',
-                ],
-                [
-                    'field_1' => 'DYNAMIC',
-                    'field_2' => 'DYNAMIC',
-                    'field_3' => 'DYNAMIC',
-                ],
-                [
-                    'field_1_from_and_to' => '2010-09-30',
-                    'field_2_from' => '2010-09-30',
-                    'field_3_from' => '2010-09-30',
-                    'field_3_to' => '2010-10-30'
-                ],
-                [],
-                [
-                    'bool' => [
-                        'must' => [
-                            'bool' => [
-                                'should' => [
-                                    [
-                                        'match' => [
-                                            'field_1' => 'SMITH'
-                                        ]
+                'field_1' => 'value1',
+                'field_2' => 'value2',
+                'field_3' => 'value3',
+            ],
+            [
+                'field_1' => 'DYNAMIC',
+                'field_2' => 'DYNAMIC',
+                'field_3' => 'DYNAMIC',
+            ],
+            [
+                'field_1_from_and_to' => '2010-09-30',
+                'field_2_from' => '2010-09-30',
+                'field_3_from' => '2010-09-30',
+                'field_3_to' => '2010-10-30'
+            ],
+            [],
+            [
+                'bool' => [
+                    'must' => [
+                        'bool' => [
+                            'should' => [
+                                [
+                                    'match' => [
+                                        'field_1' => 'SMITH'
                                     ]
                                 ]
                             ]
+                        ]
+                    ],
+                    'filter' => [
+                        [
+                            'term' => [
+                                'field_1' => 'value1'
+                            ]
                         ],
-                        'filter' => [
-                            [
-                                'term' => [
-                                    'field_1' => 'value1'
-                                ]
-                            ],
-                            [
-                                'term' => [
-                                    'field_2' => 'value2'
-                                ]
-                            ],
-                            [
-                                'term' => [
-                                    'field_3' => 'value3'
-                                ]
-                            ],
-                            [
-                                'term' => [
-                                    'field_1' => '2010-09-30'
-                                ]
-                            ],
-                            [
-                                'range' => [
-                                    'field_2' => ['from' => '2010-09-30']
-                                ]
-                            ],
-                            [
-                                'range' => [
-                                    'field_3' => ['from' => '2010-09-30', 'to' => '2010-10-30']
-                                ]
+                        [
+                            'term' => [
+                                'field_2' => 'value2'
+                            ]
+                        ],
+                        [
+                            'term' => [
+                                'field_3' => 'value3'
+                            ]
+                        ],
+                        [
+                            'term' => [
+                                'field_1' => '2010-09-30'
+                            ]
+                        ],
+                        [
+                            'range' => [
+                                'field_2' => ['from' => '2010-09-30']
+                            ]
+                        ],
+                        [
+                            'range' => [
+                                'field_3' => ['from' => '2010-09-30', 'to' => '2010-10-30']
                             ]
                         ]
                     ]
                 ]
-            ],
+            ]
         ];
     }
 }

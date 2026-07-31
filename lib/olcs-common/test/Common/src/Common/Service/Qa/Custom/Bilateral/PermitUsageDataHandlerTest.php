@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Bilateral;
 
 use Common\Form\QaForm;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class PermitUsageDataHandlerTest extends MockeryTestCase
+final class PermitUsageDataHandlerTest extends MockeryTestCase
 {
     public function testSetData(): void
     {

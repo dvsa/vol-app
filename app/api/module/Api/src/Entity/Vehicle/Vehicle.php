@@ -6,19 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Vehicle Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="vehicle",
- *    indexes={
- *        @ORM\Index(name="ix_vehicle_vrm", columns={"vrm"}),
- *        @ORM\Index(name="ix_vehicle_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_vehicle_last_modified_by", columns={"last_modified_by"}),
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_vehicle_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'vehicle')]
+#[ORM\Index(name: 'ix_vehicle_vrm', columns: ['vrm'])]
+#[ORM\Index(name: 'ix_vehicle_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_vehicle_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\UniqueConstraint(name: 'uk_vehicle_olbs_key', columns: ['olbs_key'])]
+#[ORM\Entity]
 class Vehicle extends AbstractVehicle
 {
     public const ERROR_VRM_EXISTS = 'VE-VRM-1';

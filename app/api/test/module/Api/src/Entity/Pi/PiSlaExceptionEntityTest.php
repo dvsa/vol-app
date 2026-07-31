@@ -14,7 +14,7 @@ use Mockery as m;
  * PiSlaException Entity Unit Tests
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Pi\PiSlaException::class)]
-class PiSlaExceptionEntityTest extends EntityTester
+final class PiSlaExceptionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

@@ -14,10 +14,11 @@ use RuntimeException;
 /**
  * AvailableStocksTest
  */
-class AvailableStocksTest extends TestCase
+final class AvailableStocksTest extends TestCase
 {
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new AvailableStocks();
@@ -40,18 +41,16 @@ class AvailableStocksTest extends TestCase
     }
 
     /**
-     * @return int[][]
+     * @return \Iterator<(int | string), array<int>>
      *
      * @psalm-return list{list{1}, list{3}, list{4}, list{5}}
      */
-    public static function dpTestExceptionNotSupported(): array
+    public static function dpTestExceptionNotSupported(): \Iterator
     {
-        return [
-            [RefData::ECMT_PERMIT_TYPE_ID],
-            [RefData::ECMT_REMOVAL_PERMIT_TYPE_ID],
-            [RefData::IRHP_BILATERAL_PERMIT_TYPE_ID],
-            [RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID],
-        ];
+        yield [RefData::ECMT_PERMIT_TYPE_ID];
+        yield [RefData::ECMT_REMOVAL_PERMIT_TYPE_ID];
+        yield [RefData::IRHP_BILATERAL_PERMIT_TYPE_ID];
+        yield [RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID];
     }
 
     public function testEcmtShortTermSingleOption(): void

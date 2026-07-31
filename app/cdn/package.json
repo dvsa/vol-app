@@ -21,7 +21,7 @@
     "@editorjs/underline": "^1.2.1",
     "autoprefixer": "^10.4.20",
     "chosen-npm": "^1.4.2",
-    "govuk-frontend": "^6.2.0",
+    "govuk-frontend": "^6.3.0",
     "jquery": "^3.7.1",
     "pace-progress": "^1.0.2"
   },

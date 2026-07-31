@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Entity\IrhpInterface;
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\InternalApplicationsSummary as InternalApplicationsSummaryQry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 
-class InternalApplicationsSummaryTest extends QueryHandlerTestCase
+final class InternalApplicationsSummaryTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

@@ -26,7 +26,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class DeleteConditionUndertakingsTest extends AbstractCommandHandlerTestCase
+final class DeleteConditionUndertakingsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

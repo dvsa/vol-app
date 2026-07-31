@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\StackHelperService;
@@ -8,10 +10,8 @@ use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Common\Service\Table\Formatter\YesNo
- */
-class YesNoTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Formatter\YesNo::class)]
+final class YesNoTest extends MockeryTestCase
 {
     protected $stackHelper;
 
@@ -36,52 +36,50 @@ class YesNoTest extends MockeryTestCase
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group YesNoFormatter
      *
-     * @dataProvider dpTestFormatByName
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('YesNoFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFormatByName')]
     public function testFormatByName($data, $column, $expected): void
     {
         $this->translator
             ->shouldReceive('translate')->once()->with('common.table.' . $expected)->andReturn('EXPECT');
 
-        static::assertEquals('EXPECT', $this->sut->format($data, $column));
+        $this->assertEquals('EXPECT', $this->sut->format($data, $column));
     }
 
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function dpTestFormatByName()
+    public static function dpTestFormatByName(): \Iterator
     {
-        return [
-            [
-                'data' => ['yesorno' => 1],
-                'column' => ['name' => 'yesorno'],
-                'expect' => 'Yes',
-            ],
-            [
-                'data' => ['yesorno' => 0],
-                'column' => ['name' => 'yesorno'],
-                'expect' => 'No',
-            ],
-            [
-                'data' => ['yesorno' => 'Y'],
-                'column' => ['name' => 'yesorno'],
-                'expect' => 'Yes',
-            ],
-            [
-                'data' => ['yesorno' => 'N'],
-                'column' => ['name' => 'yesorno'],
-                'expect' => 'No',
-            ],
-            [
-                'data' => ['yesorno' => 'something'],
-                'column' => ['name' => 'yesorno'],
-                'expect' => 'Yes',
-            ],
+        yield [
+            'data' => ['yesorno' => 1],
+            'column' => ['name' => 'yesorno'],
+            'expected' => 'Yes',
+        ];
+        yield [
+            'data' => ['yesorno' => 0],
+            'column' => ['name' => 'yesorno'],
+            'expected' => 'No',
+        ];
+        yield [
+            'data' => ['yesorno' => 'Y'],
+            'column' => ['name' => 'yesorno'],
+            'expected' => 'Yes',
+        ];
+        yield [
+            'data' => ['yesorno' => 'N'],
+            'column' => ['name' => 'yesorno'],
+            'expected' => 'No',
+        ];
+        yield [
+            'data' => ['yesorno' => 'something'],
+            'column' => ['name' => 'yesorno'],
+            'expected' => 'Yes',
         ];
     }
 
@@ -99,6 +97,6 @@ class YesNoTest extends MockeryTestCase
                     ->with($data, ['fieldset', 'fieldset2', 'field'])
                     ->andReturn('Y');
 
-        static::assertEquals('EXPECT', $this->sut->format($data, $column));
+        $this->assertEquals('EXPECT', $this->sut->format($data, $column));
     }
 }

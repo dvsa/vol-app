@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -10,10 +12,8 @@ use Laminas\View\HelperPluginManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Common\Service\Table\Formatter\BusRegNumberLink
- */
-class BusRegNumberLinkTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Formatter\BusRegNumberLink::class)]
+final class BusRegNumberLinkTest extends MockeryTestCase
 {
     public $sut;
     protected $urlHelper;
@@ -42,9 +42,8 @@ class BusRegNumberLinkTest extends MockeryTestCase
 
     /**
      * Tests the formatting for the different possible input array formats
-     *
-     * @dataProvider dpFormat
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFormat')]
     public function testFormat($isTxcApp, $expectedOutputStatus): void
     {
         $id = 1234;
@@ -80,13 +79,11 @@ class BusRegNumberLinkTest extends MockeryTestCase
     /**
      * Data provider for testFormat
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function dpFormat()
+    public static function dpFormat(): \Iterator
     {
-        return [
-            [1, 'status label'],
-            [0, ''],
-        ];
+        yield [1, 'status label'];
+        yield [0, ''];
     }
 }

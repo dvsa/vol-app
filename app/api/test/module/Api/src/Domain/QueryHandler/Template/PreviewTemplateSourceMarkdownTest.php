@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Query\Template\PreviewTemplateSource as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class PreviewTemplateSourceMarkdownTest extends QueryHandlerTestCase
+final class PreviewTemplateSourceMarkdownTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -52,10 +52,10 @@ class PreviewTemplateSourceMarkdownTest extends QueryHandlerTestCase
 
         $this->assertArrayHasKey('Default', $result);
         // Notify-faithful: bold markers are shown literally, not rendered as <strong>.
-        $this->assertStringContainsString('Hello **world**', $result['Default']);
-        $this->assertStringNotContainsString('<strong>', $result['Default']);
+        $this->assertStringContainsString('Hello **world**', (string) $result['Default']);
+        $this->assertStringNotContainsString('<strong>', (string) $result['Default']);
         // Shared NotifyChrome wrap: GOV.UK header + description in the document title.
-        $this->assertStringContainsString('GOV.UK', $result['Default']);
-        $this->assertStringContainsString('Greeting template', $result['Default']);
+        $this->assertStringContainsString('GOV.UK', (string) $result['Default']);
+        $this->assertStringContainsString('Greeting template', (string) $result['Default']);
     }
 }

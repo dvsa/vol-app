@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EmissionsCategoryAvailabilityCheckerTest extends MockeryTestCase
+final class EmissionsCategoryAvailabilityCheckerTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHasAvailability')]
     public function testHasAvailability(mixed $irhpPermitStockId, mixed $emissionsCategoryId, mixed $availableCount, mixed $expectedReturn): void
@@ -35,15 +35,13 @@ class EmissionsCategoryAvailabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestHasAvailability(): array
+    public static function dpTestHasAvailability(): \Iterator
     {
-        return [
-            [1, RefData::EMISSIONS_CATEGORY_EURO5_REF, 0, false],
-            [2, RefData::EMISSIONS_CATEGORY_EURO5_REF, 1, true],
-            [3, RefData::EMISSIONS_CATEGORY_EURO5_REF, 2, true],
-            [4, RefData::EMISSIONS_CATEGORY_EURO6_REF, 0, false],
-            [5, RefData::EMISSIONS_CATEGORY_EURO6_REF, 1, true],
-            [6, RefData::EMISSIONS_CATEGORY_EURO6_REF, 2, true]
-        ];
+        yield [1, RefData::EMISSIONS_CATEGORY_EURO5_REF, 0, false];
+        yield [2, RefData::EMISSIONS_CATEGORY_EURO5_REF, 1, true];
+        yield [3, RefData::EMISSIONS_CATEGORY_EURO5_REF, 2, true];
+        yield [4, RefData::EMISSIONS_CATEGORY_EURO6_REF, 0, false];
+        yield [5, RefData::EMISSIONS_CATEGORY_EURO6_REF, 1, true];
+        yield [6, RefData::EMISSIONS_CATEGORY_EURO6_REF, 2, true];
     }
 }

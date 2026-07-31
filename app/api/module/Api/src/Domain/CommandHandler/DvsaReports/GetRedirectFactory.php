@@ -16,7 +16,7 @@ class GetRedirectFactory implements FactoryInterface
      * @param array|null $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): GetRedirect
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): GetRedirect
     {
         return (new GetRedirect(new Client()))->__invoke($container, $requestedName, $options);
     }

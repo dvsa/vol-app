@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Logging\Log\Formatter;
 
 use DateTimeImmutable;
@@ -8,7 +10,7 @@ use Monolog\LogRecord;
 use Olcs\Logging\Log\Formatter\Standard;
 use PHPUnit\Framework\TestCase;
 
-class StandardTest extends TestCase
+final class StandardTest extends TestCase
 {
     private Standard $sut;
 
@@ -80,9 +82,7 @@ class StandardTest extends TestCase
         $this->assertSame('REQ_ONLY', $decoded['correlation_id']);
     }
 
-    /**
-     * @dataProvider dpPriorityMapping
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpPriorityMapping')]
     public function testPriorityMapping(Level $level, int $expectedPriority, string $expectedName): void
     {
         $record = new LogRecord(
@@ -100,17 +100,15 @@ class StandardTest extends TestCase
         $this->assertSame($expectedName, $decoded['log_priority_name']);
     }
 
-    public static function dpPriorityMapping(): array
+    public static function dpPriorityMapping(): \Iterator
     {
-        return [
-            'emergency' => [Level::Emergency, 0, 'EMERG'],
-            'alert' => [Level::Alert, 1, 'ALERT'],
-            'critical' => [Level::Critical, 2, 'CRIT'],
-            'error' => [Level::Error, 3, 'ERR'],
-            'warning' => [Level::Warning, 4, 'WARN'],
-            'notice' => [Level::Notice, 5, 'NOTICE'],
-            'info' => [Level::Info, 6, 'INFO'],
-            'debug' => [Level::Debug, 7, 'DEBUG'],
-        ];
+        yield 'emergency' => [Level::Emergency, 0, 'EMERG'];
+        yield 'alert' => [Level::Alert, 1, 'ALERT'];
+        yield 'critical' => [Level::Critical, 2, 'CRIT'];
+        yield 'error' => [Level::Error, 3, 'ERR'];
+        yield 'warning' => [Level::Warning, 4, 'WARN'];
+        yield 'notice' => [Level::Notice, 5, 'NOTICE'];
+        yield 'info' => [Level::Info, 6, 'INFO'];
+        yield 'debug' => [Level::Debug, 7, 'DEBUG'];
     }
 }

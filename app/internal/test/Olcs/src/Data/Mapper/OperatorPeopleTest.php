@@ -12,10 +12,11 @@ use Laminas\Form\Form;
 /**
  * OperatorPeopleTest
  */
-class OperatorPeopleTest extends MockeryTestCase
+final class OperatorPeopleTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new \Olcs\Data\Mapper\OperatorPeople();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Logging\Listener;
 
 use Laminas\EventManager\EventManagerInterface;
@@ -11,7 +13,7 @@ use Olcs\Logging\Listener\LogError;
 use Olcs\Logging\Log\Processor\RequestId;
 use Psr\Container\ContainerInterface;
 
-class LogErrorTest extends TestCase
+final class LogErrorTest extends TestCase
 {
     public function testAttach(): void
     {

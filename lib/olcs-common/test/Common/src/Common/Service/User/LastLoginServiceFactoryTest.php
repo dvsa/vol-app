@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\User;
 
 use Common\Service\Cqrs\Command\CommandSender;
@@ -9,7 +11,7 @@ use Psr\Container\ContainerInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-class LastLoginServiceFactoryTest extends MockeryTestCase
+final class LastLoginServiceFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper\Readonly;
 
 use Common\Form\View\Helper\Readonly\FormSelect;
@@ -10,13 +12,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  * Class FormSelectTest
  * @package CommonTest\Form\View\Helper\Readonly
  */
-class FormSelectTest extends TestCase
+final class FormSelectTest extends TestCase
 {
     /**
      * @param $element
      * @param $expected
-     * @dataProvider provideTestInvoke
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideTestInvoke')]
     public function testInvoke($element, $expected): void
     {
         $sut =  new FormSelect();
@@ -29,7 +31,7 @@ class FormSelectTest extends TestCase
      *
      * @psalm-return list{list{m\LegacyMockInterface&m\MockInterface&\Laminas\Form\Element\Select, 'Val 1, Val 2'}, list{m\LegacyMockInterface&m\MockInterface&\Laminas\Form\Element\Select, 'Val 3'}, list{m\LegacyMockInterface&m\MockInterface&\Laminas\Form\ElementInterface, ''}, list{null, null}}
      */
-    public function provideTestInvoke(): array
+    public static function provideTestInvoke(): array
     {
         $valueOptions = [
             'group1' => [

@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Helper;
 
 use Laminas\View\Helper\Placeholder;
@@ -18,7 +20,7 @@ use Common\Service\Helper\GuidanceHelperService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class GuidanceHelperServiceTest extends MockeryTestCase
+final class GuidanceHelperServiceTest extends MockeryTestCase
 {
     protected $sut;
 

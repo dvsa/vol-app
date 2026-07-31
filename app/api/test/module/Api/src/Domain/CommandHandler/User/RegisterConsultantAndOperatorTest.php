@@ -15,7 +15,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Mockery as m;
 
-class RegisterConsultantAndOperatorTest extends AbstractCommandHandlerTestCase
+final class RegisterConsultantAndOperatorTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

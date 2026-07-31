@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Controller\Plugin;
 
 use Common\Controller\Plugin\CurrentUser;
@@ -12,7 +14,7 @@ use LmcRbacMvc\Service\AuthorizationServiceInterface;
  * Class CurrentUserTest
  * @package CommonTest\Controller\Plugin
  */
-class CurrentUserTest extends MockeryTestCase
+final class CurrentUserTest extends MockeryTestCase
 {
     public function testGetUserData(): void
     {
@@ -27,7 +29,7 @@ class CurrentUserTest extends MockeryTestCase
 
         $sut = new CurrentUser($mockAuth);
 
-        static::assertEquals($data, $sut->getUserData());
+        $this->assertEquals($data, $sut->getUserData());
     }
 
     public function testHasPermission(): void
@@ -37,6 +39,6 @@ class CurrentUserTest extends MockeryTestCase
         $mockAuth->shouldReceive('isGranted')->with('PERMISSION1')->once()->andReturn('RESULT');
 
         $sut = new CurrentUser($mockAuth);
-        static::assertEquals('RESULT', $sut->hasPermission('PERMISSION1'));
+        $this->assertEquals('RESULT', $sut->hasPermission('PERMISSION1'));
     }
 }

@@ -4,6 +4,8 @@
  * PI Report Name Test
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\DataHelperService;
@@ -19,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @package CommonTest\Service\Table\Formatter
  */
-class PiReportNameTest extends TestCase
+final class PiReportNameTest extends TestCase
 {
     protected $urlHelper;
 
@@ -40,9 +42,8 @@ class PiReportNameTest extends TestCase
 
     /**
      * Test the format method
-     *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $expected): void
     {
         $this->urlHelper
@@ -64,47 +65,45 @@ class PiReportNameTest extends TestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'licence' => [
-                [
-                    'pi' => [
-                        'case' => [
-                            'licence' => [
-                                'organisation' => [
-                                    'id' => 456,
-                                    'name' => 'Org name',
+        yield 'licence' => [
+            [
+                'pi' => [
+                    'case' => [
+                        'licence' => [
+                            'organisation' => [
+                                'id' => 456,
+                                'name' => 'Org name',
+                            ]
+                        ]
+                    ]
+                ],
+            ],
+            '<a class="govuk-link" href="ORG_URL">Org name</a>',
+        ];
+        yield 'tm' => [
+            [
+                'pi' => [
+                    'case' => [
+                        'transportManager' => [
+                            'homeCd' => [
+                                'person' => [
+                                    'forename' => 'TM',
+                                    'familyName' => 'Name',
                                 ]
                             ]
                         ]
-                    ],
+                    ]
                 ],
-                '<a class="govuk-link" href="ORG_URL">Org name</a>',
             ],
-            'tm' => [
-                [
-                    'pi' => [
-                        'case' => [
-                            'transportManager' => [
-                                'homeCd' => [
-                                    'person' => [
-                                        'forename' => 'TM',
-                                        'familyName' => 'Name',
-                                    ]
-                                ]
-                            ]
-                        ]
-                    ],
-                ],
-                'TM Name',
-            ],
-            'other' => [
-                [],
-                '',
-            ],
+            'TM Name',
+        ];
+        yield 'other' => [
+            [],
+            '',
         ];
     }
 }

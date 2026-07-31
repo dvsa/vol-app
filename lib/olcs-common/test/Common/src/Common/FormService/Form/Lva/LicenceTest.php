@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Laminas\Form\ElementInterface;
@@ -7,20 +9,16 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\FormService\Form\Lva\Licence;
 
-class LicenceTest extends MockeryTestCase
+final class LicenceTest extends MockeryTestCase
 {
     protected $sut;
-
-    protected $formHelper;
-
-    protected $authService;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
-        $this->authService = m::mock(\LmcRbacMvc\Service\AuthorizationService::class);
-        $this->sut = new Licence($this->formHelper, $this->authService);
+        $formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
+        $authService = m::mock(\LmcRbacMvc\Service\AuthorizationService::class);
+        $this->sut = new Licence($formHelper, $authService);
     }
 
     public function testAlterForm(): void

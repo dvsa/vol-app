@@ -16,27 +16,24 @@ use Mockery as m;
 /**
  * Class IrhpPermitPrintStock Test
  */
-class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
+final class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
 {
     /** @var IrhpPermitPrintStock */
     private $sut;
-
-    /** @var TranslationHelperService */
-    protected $translationHelper;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->translationHelper = m::mock(TranslationHelperService::class);
-        $this->translationHelper->shouldReceive('translate')
+        $translationHelper = m::mock(TranslationHelperService::class);
+        $translationHelper->shouldReceive('translate')
             ->andReturnUsing(
                 fn($text) => $text . '-translated'
             );
 
         $this->sut = new IrhpPermitPrintStock(
             $this->abstractDataServiceServices,
-            $this->translationHelper
+            $translationHelper
         );
     }
 
@@ -48,7 +45,7 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
             ->once()
             ->andReturnUsing(
                 function (Qry $dto) use ($country) {
-                    $this->assertEquals(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID, $dto->getIrhpPermitType());
+                    $this->assertSame(RefData::IRHP_BILATERAL_PERMIT_TYPE_ID, $dto->getIrhpPermitType());
                     $this->assertEquals($country, $dto->getCountry());
                     return $this->query;
                 }
@@ -73,86 +70,84 @@ class IrhpPermitPrintStockTest extends AbstractDataServiceTestCase
         $this->assertEquals($country, $this->sut->getCountry());
     }
 
-    public static function dpTestFetchListOptions(): array
+    public static function dpTestFetchListOptions(): \Iterator
     {
-        return [
-            'with validity dates' => [
-                'country' => 'DE',
+        yield 'with validity dates' => [
+            'country' => 'DE',
+            'results' => [
                 'results' => [
-                    'results' => [
-                        [
-                            'id' => 1,
-                            'validFrom' => '2019-01-01',
-                            'validTo' => '2019-12-31',
-                        ],
-                        [
-                            'id' => 2,
-                            'validFrom' => '2019-07-01',
-                            'validTo' => '2020-06-30',
-                        ],
-                        [
-                            'id' => 3,
-                            'validFrom' => '2020-01-01',
-                            'validTo' => '2020-12-31',
-                        ],
-                    ]
-                ],
-                'expected' => [
-                    1 => '2019-01-01 to 2019-12-31',
-                    2 => '2019-07-01 to 2020-06-30',
-                    3 => '2020-01-01 to 2020-12-31',
+                    [
+                        'id' => 1,
+                        'validFrom' => '2019-01-01',
+                        'validTo' => '2019-12-31',
+                    ],
+                    [
+                        'id' => 2,
+                        'validFrom' => '2019-07-01',
+                        'validTo' => '2020-06-30',
+                    ],
+                    [
+                        'id' => 3,
+                        'validFrom' => '2020-01-01',
+                        'validTo' => '2020-12-31',
+                    ],
                 ]
             ],
-            'without validity dates' => [
-                'country' => 'DE',
-                'results' => [
-                    'results' => [
-                        [
-                            'id' => 1,
-                        ],
-                        [
-                            'id' => 2,
-                        ],
-                        [
-                            'id' => 3,
-                        ],
-                    ]
-                ],
-                'expected' => [
-                    1 => 'Stock 1',
-                    2 => 'Stock 2',
-                    3 => 'Stock 3',
-                ]
-            ],
-            'morocco specific behaviour' => [
-                'country' => 'MA',
-                'results' => [
-                    'results' => [
-                        [
-                            'id' => 1,
-                            'periodNameKey' => 'stock.one.period.name.key',
-                        ],
-                        [
-                            'id' => 2,
-                            'periodNameKey' => 'stock.two.period.name.key',
-                        ],
-                        [
-                            'id' => 3,
-                            'periodNameKey' => 'stock.three.period.name.key',
-                        ],
-                    ]
-                ],
-                'expected' => [
-                    1 => 'stock.one.period.name.key-translated',
-                    2 => 'stock.two.period.name.key-translated',
-                    3 => 'stock.three.period.name.key-translated',
-                ]
-            ],
-            'no data' => [
-                'country' => 'DE',
-                'results' => null,
-                'expected' => []
+            'expected' => [
+                1 => '2019-01-01 to 2019-12-31',
+                2 => '2019-07-01 to 2020-06-30',
+                3 => '2020-01-01 to 2020-12-31',
             ]
+        ];
+        yield 'without validity dates' => [
+            'country' => 'DE',
+            'results' => [
+                'results' => [
+                    [
+                        'id' => 1,
+                    ],
+                    [
+                        'id' => 2,
+                    ],
+                    [
+                        'id' => 3,
+                    ],
+                ]
+            ],
+            'expected' => [
+                1 => 'Stock 1',
+                2 => 'Stock 2',
+                3 => 'Stock 3',
+            ]
+        ];
+        yield 'morocco specific behaviour' => [
+            'country' => 'MA',
+            'results' => [
+                'results' => [
+                    [
+                        'id' => 1,
+                        'periodNameKey' => 'stock.one.period.name.key',
+                    ],
+                    [
+                        'id' => 2,
+                        'periodNameKey' => 'stock.two.period.name.key',
+                    ],
+                    [
+                        'id' => 3,
+                        'periodNameKey' => 'stock.three.period.name.key',
+                    ],
+                ]
+            ],
+            'expected' => [
+                1 => 'stock.one.period.name.key-translated',
+                2 => 'stock.two.period.name.key-translated',
+                3 => 'stock.three.period.name.key-translated',
+            ]
+        ];
+        yield 'no data' => [
+            'country' => 'DE',
+            'results' => null,
+            'expected' => []
         ];
     }
 

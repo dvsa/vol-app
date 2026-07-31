@@ -17,7 +17,7 @@ use Olcs\FormService\Form\Lva\LicenceHistory;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class LicenceHistoryTest extends AbstractLvaFormServiceTestCase
+final class LicenceHistoryTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = LicenceHistory::class;
 }

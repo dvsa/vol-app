@@ -20,8 +20,9 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 /**
  * IrfoPermitStock Repo test
  */
-class IrfoPermitStockTest extends RepositoryTestCase
+final class IrfoPermitStockTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

@@ -21,8 +21,9 @@ use Dvsa\Olcs\Api\Entity\Cases\Complaint;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class LicenceOperatingCentreTest extends RepositoryTestCase
+final class LicenceOperatingCentreTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

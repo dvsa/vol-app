@@ -14,7 +14,7 @@ class DisqualifyUrlFactory implements FactoryInterface
      * @return DisqualifyUrl
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $urlHelper = $container->get('Helper\Url');
         $router = $container->get('Router');

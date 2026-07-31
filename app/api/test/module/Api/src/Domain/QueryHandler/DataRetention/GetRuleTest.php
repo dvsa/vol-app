@@ -15,7 +15,7 @@ use Mockery as m;
 /**
  * Get Rule Test
  */
-class GetRuleTest extends QueryHandlerTestCase
+final class GetRuleTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -44,9 +44,6 @@ class GetRuleTest extends QueryHandlerTestCase
         /** @var Result $actual */
         $actual = $this->sut->handleQuery($query);
 
-        static::assertSame(
-            ['unit_Result'],
-            $actual->serialize()
-        );
+        $this->assertSame(['unit_Result'], $actual->serialize());
     }
 }

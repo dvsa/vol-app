@@ -26,7 +26,7 @@ class SeriousInfringementInputFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Input
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Input
     {
         $service = new Input('serious_infringement');
         $filterChain = $service->getFilterChain();

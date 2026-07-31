@@ -33,7 +33,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateVariationTest extends AbstractCommandHandlerTestCase
+final class CreateVariationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -114,7 +114,7 @@ class CreateVariationTest extends AbstractCommandHandlerTestCase
             ->andReturnUsing(
                 function (ApplicationEntity $app) use ($expectedTargetCompletionDate) {
                     $app->setId(222);
-                    $this->assertEquals('2015-01-01', $app->getReceivedDate()->format('Y-m-d'));
+                    $this->assertSame('2015-01-01', $app->getReceivedDate()->format('Y-m-d'));
                     $this->assertEquals($expectedTargetCompletionDate, $app->getTargetCompletionDate());
                     $this->assertSame(
                         $this->refData[ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION],
@@ -252,7 +252,7 @@ class CreateVariationTest extends AbstractCommandHandlerTestCase
             ->andReturnUsing(
                 function (ApplicationEntity $app) {
                     $app->setId(222);
-                    $this->assertEquals('2015-01-01', $app->getReceivedDate()->format('Y-m-d'));
+                    $this->assertSame('2015-01-01', $app->getReceivedDate()->format('Y-m-d'));
                     $this->assertSame(
                         $this->refData[ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION],
                         $app->getStatus()
@@ -329,7 +329,7 @@ class CreateVariationTest extends AbstractCommandHandlerTestCase
             ->andReturnUsing(
                 function (ApplicationEntity $app) {
                     $app->setId(222);
-                    $this->assertEquals('2015-01-01', $app->getReceivedDate()->format('Y-m-d'));
+                    $this->assertSame('2015-01-01', $app->getReceivedDate()->format('Y-m-d'));
                     $this->assertSame(
                         $this->refData[ApplicationEntity::APPLICATION_STATUS_UNDER_CONSIDERATION],
                         $app->getStatus()

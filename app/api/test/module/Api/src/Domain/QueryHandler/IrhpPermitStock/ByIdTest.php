@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock as PermitStockEntity;
  *
  * @author Scott Callaway <scott.callaway@capgemini.com>
  */
-class ByIdTest extends AbstractQueryByIdHandlerTestCase
+final class ByIdTest extends AbstractQueryByIdHandlerTestCase
 {
     protected $sutClass = StockByIdHandler::class;
     protected $sutRepo = 'IrhpPermitStock';

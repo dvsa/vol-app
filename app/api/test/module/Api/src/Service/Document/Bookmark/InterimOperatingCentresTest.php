@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class InterimOperatingCentresTest extends m\Adapter\Phpunit\MockeryTestCase
+final class InterimOperatingCentresTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     public function testGetQuery(): void
     {
@@ -38,34 +38,32 @@ class InterimOperatingCentresTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertEquals('', $result);
     }
 
-    public static function dpRenderWithGoodsLicence(): array
+    public static function dpRenderWithGoodsLicence(): \Iterator
     {
-        return [
-            [
-                'vehicleTypeId' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'totAuthLgvVehicles' => null,
-                'expectedTabVeh' => 'Vehicles',
-            ],
-            [
-                'vehicleTypeId' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'totAuthLgvVehicles' => 0,
-                'expectedTabVeh' => 'Heavy goods vehicles',
-            ],
-            [
-                'vehicleTypeId' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'totAuthLgvVehicles' => 1,
-                'expectedTabVeh' => 'Heavy goods vehicles',
-            ],
-            [
-                'vehicleTypeId' => RefData::APP_VEHICLE_TYPE_HGV,
-                'totAuthLgvVehicles' => null,
-                'expectedTabVeh' => 'Vehicles',
-            ],
-            [
-                'vehicleTypeId' => RefData::APP_VEHICLE_TYPE_LGV,
-                'totAuthLgvVehicles' => 10,
-                'expectedTabVeh' => 'Vehicles',
-            ],
+        yield [
+            'vehicleTypeId' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'totAuthLgvVehicles' => null,
+            'expectedTabVeh' => 'Vehicles',
+        ];
+        yield [
+            'vehicleTypeId' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'totAuthLgvVehicles' => 0,
+            'expectedTabVeh' => 'Heavy goods vehicles',
+        ];
+        yield [
+            'vehicleTypeId' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'totAuthLgvVehicles' => 1,
+            'expectedTabVeh' => 'Heavy goods vehicles',
+        ];
+        yield [
+            'vehicleTypeId' => RefData::APP_VEHICLE_TYPE_HGV,
+            'totAuthLgvVehicles' => null,
+            'expectedTabVeh' => 'Vehicles',
+        ];
+        yield [
+            'vehicleTypeId' => RefData::APP_VEHICLE_TYPE_LGV,
+            'totAuthLgvVehicles' => 10,
+            'expectedTabVeh' => 'Vehicles',
         ];
     }
 

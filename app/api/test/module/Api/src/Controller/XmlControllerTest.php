@@ -18,10 +18,11 @@ use Laminas\Mvc\Controller\PluginManager;
 /**
  * Class XmlControllerTest
  */
-class XmlControllerTest extends TestCase
+final class XmlControllerTest extends TestCase
 {
     protected $commandHandlerManager;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->commandHandlerManager = m::mock(CommandHandlerManager::class);

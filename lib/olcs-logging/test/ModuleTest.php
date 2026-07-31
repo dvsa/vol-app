@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Logging;
 
 use Laminas\EventManager\EventInterface;
@@ -12,7 +14,7 @@ use Olcs\Logging\Module;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
-class ModuleTest extends MockeryTestCase
+final class ModuleTest extends MockeryTestCase
 {
     protected function tearDown(): void
     {
@@ -33,9 +35,7 @@ class ModuleTest extends MockeryTestCase
         $this->assertArrayHasKey('ExceptionLogger', $config['service_manager']['factories']);
     }
 
-    /**
-     * @dataProvider dpTestOnBootstrap
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestOnBootstrap')]
     public function testOnBootstrap(int $hideTimes, array $logConfig): void
     {
         $event = m::mock(EventInterface::class);
@@ -55,16 +55,22 @@ class ModuleTest extends MockeryTestCase
 
         $sut = new Module();
         $sut->onBootstrap($event);
+
+        // onBootstrap permanently installs Monolog's error + exception handlers
+        // (via ErrorHandler::register) and the user-error tolerance handler as a
+        // production side effect. Unwind them so the test leaves global handler
+        // state untouched (PHPUnit failOnRisky).
+        restore_error_handler();      // user-error tolerance handler
+        restore_error_handler();      // Monolog error handler
+        restore_exception_handler();  // Monolog exception handler
     }
 
-    public static function dpTestOnBootstrap(): array
+    public static function dpTestOnBootstrap(): \Iterator
     {
-        return [
-            'noConfigEntry' => [1, []],
-            'allowTrue' => [0, ['log' => ['allowPasswordLogging' => true]]],
-            'allowFalse' => [1, ['log' => ['allowPasswordLogging' => false]]],
-            'allowAmbiguous' => [0, ['log' => ['allowPasswordLogging' => 'somestring']]],
-        ];
+        yield 'noConfigEntry' => [1, []];
+        yield 'allowTrue' => [0, ['log' => ['allowPasswordLogging' => true]]];
+        yield 'allowFalse' => [1, ['log' => ['allowPasswordLogging' => false]]];
+        yield 'allowAmbiguous' => [0, ['log' => ['allowPasswordLogging' => 'somestring']]];
     }
 
     public function testToleranceHandlerToleratesUserError(): void
@@ -88,7 +94,7 @@ class ModuleTest extends MockeryTestCase
             return false;
         };
 
-        $handler = (new Module())->makeToleranceHandler($previous);
+        $handler = new Module()->makeToleranceHandler($previous);
         $result = $handler(E_USER_ERROR, 'boom', '/x.php', 42);
 
         $this->assertTrue($result, 'E_USER_ERROR must be tolerated (return true) so execution continues');
@@ -107,7 +113,7 @@ class ModuleTest extends MockeryTestCase
             return true;
         };
 
-        $handler = (new Module())->makeToleranceHandler($previous);
+        $handler = new Module()->makeToleranceHandler($previous);
         $result = $handler(E_USER_WARNING, 'warn', '/y.php', 7);
 
         $this->assertTrue($result, 'the previous handler return value should propagate');
@@ -116,7 +122,7 @@ class ModuleTest extends MockeryTestCase
 
     public function testToleranceHandlerReturnsFalseForOtherLevelsWhenNoPreviousHandler(): void
     {
-        $handler = (new Module())->makeToleranceHandler(null);
+        $handler = new Module()->makeToleranceHandler(null);
 
         $this->assertFalse(
             $handler(E_USER_WARNING, 'warn', '/z.php', 1),

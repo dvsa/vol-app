@@ -43,7 +43,7 @@ class FormErrors extends AbstractHelper
      *
      * @return static|string
      */
-    public function __invoke(FormInterface $form = null, $ignoreValidation = false)
+    public function __invoke(?FormInterface $form = null, $ignoreValidation = false)
     {
         if (!$form instanceof \Laminas\Form\FormInterface) {
             return $this;

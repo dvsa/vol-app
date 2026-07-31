@@ -12,13 +12,11 @@ use Common\Test\MocksServicesTrait;
 use Laminas\I18n\Translator\TranslatorInterface;
 use Laminas\ServiceManager\ServiceManager;
 
-class FormLabelFactoryTest extends MockeryTestCase
+final class FormLabelFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -28,10 +26,8 @@ class FormLabelFactoryTest extends MockeryTestCase
         $this->assertIsCallable(static fn(\Psr\Container\ContainerInterface $container, string $requestedName, ?array $options = null): \Laminas\Form\View\Helper\FormLabel => $sut->__invoke($container, $requestedName, $options));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeReturnsInstanceOfFormLabel(): void
     {
         // Setup

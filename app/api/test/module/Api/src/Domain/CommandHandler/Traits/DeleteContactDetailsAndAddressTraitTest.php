@@ -18,7 +18,7 @@ use Mockery as m;
  * as potential impact could be high
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class DeleteContactDetailsAndAddressTraitTest extends AbstractCommandHandlerTestCase
+final class DeleteContactDetailsAndAddressTraitTest extends AbstractCommandHandlerTestCase
 {
     /** @var DeleteContactDetailsAndAddressTraitStub $sut */
     protected $sut;

@@ -19,7 +19,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DoesOwnApplicationTest extends AbstractValidatorsTestCase
+final class DoesOwnApplicationTest extends AbstractValidatorsTestCase
 {
     /**
      * @var DoesOwnApplication
@@ -46,11 +46,9 @@ class DoesOwnApplicationTest extends AbstractValidatorsTestCase
         $this->assertEquals($expected, $this->sut->isValid(111));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false]
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

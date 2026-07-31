@@ -16,7 +16,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
 // phpcs:disable PSR1.Methods.CamelCapsMethodName.NotCamelCaps
-class OperatorAdminForOrganisationHasLoggedInTest extends QueryHandlerTestCase
+final class OperatorAdminForOrganisationHasLoggedInTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -30,17 +30,15 @@ class OperatorAdminForOrganisationHasLoggedInTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public static function dpHandleQuery_OrganisationHasOperatorAdminsWhoHaveLoggedIn(): array
+    public static function dpHandleQuery_OrganisationHasOperatorAdminsWhoHaveLoggedIn(): \Iterator
     {
-        return [
-            'HasLoggedIn' => [
-                'fetchCountResult' => 1,
-                'expectedOperatorAdminHasLoggedIn' => true,
-            ],
-            'HasNotLoggedIn' => [
-                'fetchCountResult' => 0,
-                'expectedOperatorAdminHasLoggedIn' => false,
-            ],
+        yield 'HasLoggedIn' => [
+            'fetchCountResult' => 1,
+            'expectedOperatorAdminHasLoggedIn' => true,
+        ];
+        yield 'HasNotLoggedIn' => [
+            'fetchCountResult' => 0,
+            'expectedOperatorAdminHasLoggedIn' => false,
         ];
     }
 
@@ -61,17 +59,15 @@ class OperatorAdminForOrganisationHasLoggedInTest extends QueryHandlerTestCase
         $this->assertEquals($expectedOperatorAdminHasLoggedIn, $result['operatorAdminHasLoggedIn']);
     }
 
-    public static function dpHandleQuery_UsesLastLoggedInFromFromQueryIfProvided(): array
+    public static function dpHandleQuery_UsesLastLoggedInFromFromQueryIfProvided(): \Iterator
     {
-        return [
-            'LastLoggedInFrom not specified' => [
-                'expectedLastLoggedInFrom' => QueryHandler::DEFAULT_LAST_LOGGED_IN_FROM,
-                'query' => Query::create(['organisation' => 1]),
-            ],
-            'LastLoggedInFrom specified' => [
-                'expectedLastLoggedInFrom' => $specifiedDate = '2020-01-01',
-                'query' => Query::create(['organisation' => 1, 'lastLoggedInFrom' => $specifiedDate]),
-            ],
+        yield 'LastLoggedInFrom not specified' => [
+            'expectedLastLoggedInFrom' => QueryHandler::DEFAULT_LAST_LOGGED_IN_FROM,
+            'query' => Query::create(['organisation' => 1]),
+        ];
+        yield 'LastLoggedInFrom specified' => [
+            'expectedLastLoggedInFrom' => $specifiedDate = '2020-01-01',
+            'query' => Query::create(['organisation' => 1, 'lastLoggedInFrom' => $specifiedDate]),
         ];
     }
 

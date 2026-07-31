@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva\People;
 
 use Common\Form\Model\Form\Licence\AddPerson;
@@ -9,10 +11,10 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class LicenceAddPersonTest extends MockeryTestCase
+final class LicenceAddPersonTest extends MockeryTestCase
 {
     public $authService;
-    public const TEST_ORGANISATION_TYPE = 'AOEOaedrTUIDAoeua';
+    public const string TEST_ORGANISATION_TYPE = 'AOEOaedrTUIDAoeua';
 
     public function testGetForm(): void
     {
@@ -28,6 +30,6 @@ class LicenceAddPersonTest extends MockeryTestCase
         $sut = new Sut($formHelper, $this->authService);
 
         $actual = $sut->getForm(['organisationType' => self::TEST_ORGANISATION_TYPE]);
-        self::assertSame($form, $actual);
+        $this->assertSame($form, $actual);
     }
 }

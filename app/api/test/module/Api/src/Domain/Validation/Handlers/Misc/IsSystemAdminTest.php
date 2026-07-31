@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * IsSystemAdminTest
  */
-class IsSystemAdminTest extends AbstractHandlerTestCase
+final class IsSystemAdminTest extends AbstractHandlerTestCase
 {
     /**
      * @var IsSystemAdmin

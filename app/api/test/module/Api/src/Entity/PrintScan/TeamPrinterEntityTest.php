@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\User\Team as TeamEntity;
  *
  * Initially auto-generated but won't be overridden
  */
-class TeamPrinterEntityTest extends EntityTester
+final class TeamPrinterEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -31,7 +31,7 @@ class TeamPrinterEntityTest extends EntityTester
         $printer = new PrinterEntity();
         $printer->setId(2);
         $teamPrinter = new TeamPrinter($team, $printer);
-        $this->assertEquals($teamPrinter->getTeam()->getId(), 1);
-        $this->assertEquals($teamPrinter->getPrinter()->getId(), 2);
+        $this->assertEquals(1, $teamPrinter->getTeam()->getId());
+        $this->assertEquals(2, $teamPrinter->getPrinter()->getId());
     }
 }
