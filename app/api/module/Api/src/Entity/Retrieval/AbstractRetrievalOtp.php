@@ -19,16 +19,12 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="retrieval_otp",
- *    indexes={
- *        @ORM\Index(name="ix_retrieval_otp_retrieval_link_id", columns={"retrieval_link_id"}),
- *        @ORM\Index(name="ix_retrieval_otp_expires_at", columns={"expires_at"})
- *    }
- * )
  */
+#[ORM\Table(name: 'retrieval_otp')]
+#[ORM\Index(name: 'ix_retrieval_otp_retrieval_link_id', columns: ['retrieval_link_id'])]
+#[ORM\Index(name: 'ix_retrieval_otp_expires_at', columns: ['expires_at'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractRetrievalOtp implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -40,84 +36,75 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to retrieval_link
      *
      * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink", fetch="LAZY")
-     * @ORM\JoinColumn(name="retrieval_link_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink::class, fetch: 'LAZY')]
     protected $retrievalLink;
 
     /**
      * Code hash
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="code_hash", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'code_hash', length: 255, nullable: false)]
     protected $codeHash = '';
 
     /**
      * Attempts
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="attempts", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'integer', name: 'attempts', nullable: false, options: ['default' => 0])]
     protected $attempts = 0;
 
     /**
      * Max attempts
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="max_attempts", nullable=false, options={"default": 5})
      */
+    #[ORM\Column(type: 'integer', name: 'max_attempts', nullable: false, options: ['default' => 5])]
     protected $maxAttempts = 5;
 
     /**
      * Expires at
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="expires_at", nullable=false)
      */
+    #[ORM\Column(type: 'datetime', name: 'expires_at', nullable: false)]
     protected $expiresAt;
 
     /**
      * Consumed at
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="consumed_at", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'consumed_at', nullable: true)]
     protected $consumedAt;
 
     /**
      * Invalidated at
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="invalidated_at", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'invalidated_at', nullable: true)]
     protected $invalidatedAt;
 
     /**
      * Request ip
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="request_ip", length=45, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'request_ip', length: 45, nullable: true)]
     protected $requestIp;
 
     /**
