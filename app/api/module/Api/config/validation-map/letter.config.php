@@ -70,6 +70,7 @@ return [
 
     // Letter Instance Section
     CommandHandler\Letter\LetterInstanceSection\UpdateContent::class => IsInternalUser::class,
+    CommandHandler\Letter\LetterInstanceTodo\UpdateContent::class => IsInternalUser::class,
 
     // Letter Instance Appendix
     CommandHandler\Letter\LetterInstanceAppendix\UpdateContent::class => IsInternalUser::class,
