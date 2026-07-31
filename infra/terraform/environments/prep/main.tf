@@ -43,7 +43,9 @@ locals {
         "sts:AssumeRole"
       ]
       resources = [
-        "arn:aws:iam::259405524870:role/txc-prep-consumer-role"
+        "arn:aws:iam::259405524870:role/txc-prep-consumer-role",
+        "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole",
+        "arn:aws:iam::146997448015:role/OLCS-APPCI-CI-Cognito_Pool_Admin"
       ]
     },
     {
@@ -94,15 +96,32 @@ locals {
     {
       effect = "Allow"
       actions = [
+        "s3:GetObject",
+        "s3:PutObject",
+        "s3:ListBucket",
+        "s3:DeleteObject"
+      ]
+      resources = [
+        "arn:aws:s3:::app-shd-pri-olcsci-build-s3",
+        "arn:aws:s3:::app-shd-pri-olcsci-build-s3/*"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
         "rds:CreateDBClusterSnapshot",
         "rds:DescribeDBClusterSnapshots",
         "rds:DeleteDBClusterSnapshot",
+        "rds:ModifyDBClusterSnapshotAttribute"
       ]
       resources = [
 
         "arn:aws:rds:eu-west-1:146997448015:cluster:apppp-aurora-olcsdb-cluster",
         "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*",
-        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-db-anon-*"
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-db-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
       ]
     },
     {
@@ -112,7 +131,8 @@ locals {
       ]
       resources = [
         "arn:aws:rds:eu-west-1:146997448015:cluster:apppp-aurora-olcsdb-cluster",
-        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-*"
+        "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
       ]
     },
     {
@@ -124,7 +144,9 @@ locals {
       resources = [
         "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
-        "arn:aws:rds:eu-west-1:146997448015:subgrp:apppp-olcs-rds-*"
+        "arn:aws:rds:eu-west-1:146997448015:subgrp:apppp-olcs-rds-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*"
       ]
     },
     {
@@ -135,7 +157,9 @@ locals {
       ]
       resources = [
         "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
-        "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*"
+        "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
       ]
     },
     {
@@ -147,6 +171,8 @@ locals {
       resources = [
         "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
+        "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
       ]
     },
     {
