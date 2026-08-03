@@ -12,6 +12,7 @@ use Olcs\Logging\Log\Logger as StaticLogger;
 use Olcs\Logging\Log\Processor\HideCredentials;
 use Olcs\Logging\Log\Processor\HidePassword;
 use Olcs\Logging\Module;
+use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -44,9 +45,13 @@ final class ModuleTest extends MockeryTestCase
         $hidePassword = m::mock(HidePassword::class);
         $hideCredentials = m::mock(HideCredentials::class);
 
-        $serviceManager = m::mock();
-        $serviceManager->shouldReceive('get')->with('Logger')->once()->andReturn($logger);
-        $serviceManager->shouldReceive('get')->with('Config')->once()->andReturn($logConfig);
+        // Typed, because onBootstrap only ever calls get() on it. An untyped m::mock() also works
+        // at runtime but leaves phpstan-mockery unable to narrow expects(), which then reports
+        // with() as undefined on the union it falls back to.
+        $serviceManager = m::mock(ContainerInterface::class);
+        $serviceManager->expects('get')->with('Logger')->andReturn($logger);
+        $serviceManager->expects('get')->with('Config')->andReturn($logConfig);
+        // times() rather than expects(), because $hideTimes is 0 in the allow-logging cases.
         $serviceManager->shouldReceive('get')->with(HidePassword::class)->times($hideTimes)->andReturn($hidePassword);
         // Always attached, whatever allowPasswordLogging says.
         $serviceManager->expects('get')->with(HideCredentials::class)->andReturn($hideCredentials);
