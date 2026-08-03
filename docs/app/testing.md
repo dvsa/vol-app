@@ -170,6 +170,42 @@ escaping, so escaping it twice would be invisible. The per-render CSRF token is
 normalised out; anything else non-deterministic in a render will make the digest
 unstable and needs normalising in `TableEscapingHarness::normalise()`.
 
+### The third test: formatters, directly
+
+`FormatterEscapingInvariantTest` (olcs-common only — formatters all live there and
+share one plugin config) calls every formatter directly with a hostile row.
+
+It exists because driving formatters _through_ a table leaves two blind spots:
+
+- a formatter reachable only from a table the probe cannot render never runs at all
+- `TableEscapingHarness` builds its row by harvesting `['literal']` subscripts from
+  the table **definition**, so a key read only inside a formatter class is absent
+  from the row and arrives as `null` — the formatter runs, but its leaking branch
+  does not
+
+`Formatter\PrinterDocumentCategory` is the worked example: it interpolates
+`$row['subCategory']['category']['description']` into an `<a>`, but
+`admin-printers-exceptions.table.php` never names `subCategory`, so `isset()` is
+false, the `'Default setting'` branch is taken, and the table-level test passes a
+formatter that leaks in production.
+
+This harness harvests keys from the formatter's own source (and its parents), so
+that cannot happen here by construction. Neither test subsumes the other — the
+table-level one still owns inline closures, cell attributes and wrapping.
+
+The baseline has two sections and **both** are asserted:
+
+| Section     | Fails when                                                      |
+| ----------- | --------------------------------------------------------------- |
+| `[leaking]` | a formatter starts leaking, or a listed one stops (stale entry) |
+| `[skipped]` | a formatter becomes undrivable, **or becomes drivable**         |
+
+Asserting `[skipped]` matters more than it looks. A skip is not "safe" — it is
+"unknown", and without this it would stay unknown long after the reason for it
+disappeared. If a formatter is skipped because `number_format()` rejects the probe,
+and someone later drops that call, the value starts flowing raw; comparing the set
+means that shows up as a failure rather than sitting unnoticed behind a stale entry.
+
 ## Adding integration tests
 
 Extend `Dvsa\OlcsTest\Integration\IntegrationTestCase` and use `$this->repo()`
