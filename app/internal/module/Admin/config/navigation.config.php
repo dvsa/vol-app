@@ -416,12 +416,6 @@ return [
                             'route' => 'admin-dashboard/admin-letter-type',
                         ],
                         [
-                            'id' => 'admin-dashboard/letter-management/letter-type-builder',
-                            'class' => 'govuk-link--no-visited-state',
-                            'label' => 'Letter Type Builder',
-                            'route' => 'admin-dashboard/admin-letter-type-builder',
-                        ],
-                        [
                             'id' => 'admin-dashboard/letter-management/letter-sections',
                             'class' => 'govuk-link--no-visited-state',
                             'label' => 'Letter Sections',

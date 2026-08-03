@@ -173,7 +173,7 @@ return [
                         'options' => [
                             'route' => 'letter-type[/:action][/:id][/]',
                             'constraints' => [
-                                'action' => '(index|add|edit|delete)',
+                                'action' => '(index|add|edit|delete|builder)',
                                 'id' => '[0-9]+',
                             ],
                             'defaults' => [
