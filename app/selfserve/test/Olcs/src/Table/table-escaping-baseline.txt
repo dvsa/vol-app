@@ -8,7 +8,7 @@
 # regression; a listed table that passes is a stale entry and also fails, so the list cannot
 # silently rot.
 #
-# 4 exempt, 26 covered, 10 could not be rendered by the probe.
+# 4 exempt, 27 covered, 9 could not be rendered by the probe.
 #
 busreg-registrations.table.php
 ebsr-submissions.table.php

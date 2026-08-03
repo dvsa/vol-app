@@ -19,31 +19,42 @@ use Mockery as m;
  * rendered table; FormatterEscapingHarness calls them directly. They need the same services, and a
  * second copy of these stubs would drift from this one the first time a formatter gained a
  * dependency.
+ *
+ * These are fakes, not expectations, and withAnyArgs() is deliberate rather than lazy. One
+ * container serves every formatter in the application: fromRoute() is called with a different route
+ * and parameters by each of the ~90 that use it, translate() with whatever key the formatter holds.
+ * A specific with() here could only be satisfied by one caller and would fail the other eighty-nine,
+ * so it would have to be widened again the moment a formatter changed — the assertion would be
+ * fiction. What each formatter is called with is asserted in that formatter's own unit test, where
+ * the arguments are actually known. withNoArgs() is used wherever the method genuinely takes none,
+ * because there the declaration is real.
  */
 final class HarnessContainer
 {
     public static function create(): ServiceManager
     {
         $urlHelper = m::mock(UrlHelperService::class);
-        $urlHelper->shouldReceive('fromRoute')->andReturn('/stub-url');
+        $urlHelper->shouldReceive('fromRoute')->withAnyArgs()->andReturn('/stub-url');
         $urlHelper->shouldIgnoreMissing('/stub-url');
 
         // TranslatorDelegator implements the I18n TranslatorInterface, so a single mock satisfies
         // both TableBuilder (which wants the interface) and the ~19 formatters whose constructors
         // name the delegator concretely. The factories fetch it as 'translator'.
         $translator = m::mock(\Dvsa\Olcs\Utils\Translation\TranslatorDelegator::class);
-        $translator->shouldReceive('translate')->andReturnUsing(
+        $translator->shouldReceive('translate')->withAnyArgs()->andReturnUsing(
             static fn($message) => is_string($message) ? $message : ''
         );
         $translator->shouldIgnoreMissing('');
 
         $permission = m::mock(Permission::class);
-        $permission->shouldReceive('isGranted')->andReturn(true);
-        $permission->shouldReceive('isInternalReadOnly')->andReturn(false);
+        $permission->shouldReceive('isGranted')->withAnyArgs()->andReturn(true);
+        $permission->shouldReceive('isInternalReadOnly')->withNoArgs()->andReturn(false);
         $permission->shouldIgnoreMissing(false);
 
+        // A real class, not a closure or a mock: helpers are called both as $helper(...) and as
+        // $helper->render(...), and neither of those alternatives satisfies both.
         $viewHelperManager = m::mock(\Laminas\View\HelperPluginManager::class);
-        $viewHelperManager->shouldReceive('get')->andReturn(static fn(...$args) => '');
+        $viewHelperManager->shouldReceive('get')->withAnyArgs()->andReturn(new HarnessViewHelper());
 
         $router = m::mock(\Laminas\Router\RouteStackInterface::class);
         $router->shouldIgnoreMissing('/stub-url');
@@ -51,13 +62,13 @@ final class HarnessContainer
         $request = new \Laminas\Http\Request();
 
         $authorization = m::mock(AuthorizationService::class);
-        $authorization->shouldReceive('isGranted')->andReturn(true);
+        $authorization->shouldReceive('isGranted')->withAnyArgs()->andReturn(true);
         $authorization->shouldIgnoreMissing(true);
 
         // Formatter constructors are typed, so these have to be mocks of the real classes — a
         // generic mock is rejected by the parameter type and the formatter never runs.
         $dataHelper = m::mock(\Common\Service\Helper\DataHelperService::class);
-        $dataHelper->shouldReceive('fetchNestedData')->andReturnUsing(
+        $dataHelper->shouldReceive('fetchNestedData')->withAnyArgs()->andReturnUsing(
             static fn($data) => $data
         );
         $dataHelper->shouldIgnoreMissing('');
@@ -68,8 +79,20 @@ final class HarnessContainer
         $dateHelper = m::mock(\Common\Service\Helper\DateHelperService::class);
         $dateHelper->shouldIgnoreMissing('');
 
+        // match() has to return a RouteMatch, not the catch-all string. Several formatters branch
+        // on $this->router->match($request)->getMatchedRouteName(), and answering with a string
+        // makes them die on "getMatchedRouteName() on string" before they format anything.
+        $routeMatch = m::mock(\Laminas\Router\RouteMatch::class);
+        $routeMatch->shouldReceive('getMatchedRouteName')->withNoArgs()->andReturn('stub-route');
+        $routeMatch->shouldReceive('getParams')->withNoArgs()->andReturn([]);
+        $routeMatch->shouldReceive('getParam')->withAnyArgs()->andReturn('stub-param');
+        $routeMatch->shouldIgnoreMissing('stub-route');
+
         $routeStack = m::mock(\Laminas\Router\Http\TreeRouteStack::class);
+        $routeStack->shouldReceive('match')->withAnyArgs()->andReturn($routeMatch);
         $routeStack->shouldIgnoreMissing('/stub-url');
+
+        $router->shouldReceive('match')->withAnyArgs()->andReturn($routeMatch);
 
         $services = [
             'Helper\Url' => $urlHelper,

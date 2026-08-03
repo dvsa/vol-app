@@ -52,6 +52,35 @@ abstract class FormatterEscapingInvariantTestCase extends TestCase
         ));
     }
 
+    public function testTheSetOfUnprobedValuesHasNotChanged(): void
+    {
+        $result = new FormatterEscapingHarness()->inspect();
+
+        $expected = $this->entries('unprobed');
+        $actual = [];
+
+        foreach ($result['unprobed'] as $formatter => $keys) {
+            foreach ($keys as $key => $type) {
+                $actual[] = "{$formatter}.{$key}={$type}";
+            }
+        }
+
+        sort($expected);
+        sort($actual);
+
+        $this->assertSame($expected, $actual, sprintf(
+            "The set of values the probe could not carry a payload into has changed.\n\n"
+            . "Newly unprobed: %s\nNow probed:     %s\n\n"
+            . "A value that has to be a number or a date cannot also contain a payload, so these\n"
+            . "columns render but are not asserted. That is a coverage gap, and it is listed rather\n"
+            . "than absorbed so it cannot grow quietly. One disappearing is good news — the\n"
+            . "constraint went away and the value is fully probed again; remove it from %s.",
+            implode(', ', array_diff($actual, $expected)) ?: '(none)',
+            implode(', ', array_diff($expected, $actual)) ?: '(none)',
+            basename($this->baselineFile()),
+        ));
+    }
+
     public function testTheSetOfUndrivableFormattersHasNotChanged(): void
     {
         $result = new FormatterEscapingHarness()->inspect();

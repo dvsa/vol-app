@@ -31,11 +31,24 @@ final class FormatterEscapingHarness
 {
     public const MARKER = TableEscapingHarness::MARKER;
 
+    private const TYPE_STRING = 'string';
+    private const TYPE_ARRAY = 'array';
+    private const TYPE_NUMERIC = 'numeric';
+    private const TYPE_DATE = 'date';
+
+    /**
+     * Enough for the deepest chain observed (string -> date, when a value is first required to be a
+     * string and then required to parse), with room to spare. A bound rather than a while(true):
+     * a formatter whose constraints contradict each other should be reported, not hang the suite.
+     */
+    private const MAX_ADAPTATIONS = 12;
+
     /**
      * @return array{
      *     leaking: array<string, string[]>,
      *     skipped: array<string, string>,
-     *     exercised: string[]
+     *     exercised: string[],
+     *     unprobed: array<string, array<string, string>>
      * }
      */
     public function inspect(): array
@@ -43,6 +56,7 @@ final class FormatterEscapingHarness
         $leaking = [];
         $skipped = [];
         $exercised = [];
+        $unprobed = [];
 
         $container = HarnessContainer::create();
         /** @var FormatterPluginManager $plugins */
@@ -61,26 +75,20 @@ final class FormatterEscapingHarness
                     continue;
                 }
 
-                // Output buffered for the same reason TableEscapingHarness buffers: a formatter may
-                // echo rather than return, and a leak could appear there.
-                $level = ob_get_level();
-                ob_start();
-
                 try {
-                    $output = (string)$formatter->format($this->row($class), $this->column());
+                    $result = $this->drive($formatter, $class);
                 } catch (\Throwable $e) {
                     $skipped[$short] = $e::class . ': ' . $e->getMessage();
                     continue;
-                } finally {
-                    $echoed = '';
-                    while (ob_get_level() > $level) {
-                        $echoed = (string)ob_get_clean() . $echoed;
-                    }
                 }
 
                 $exercised[] = $short;
 
-                $leaks = $this->findLeaks($output . $echoed);
+                if ($result['unprobed'] !== []) {
+                    $unprobed[$short] = $result['unprobed'];
+                }
+
+                $leaks = $this->findLeaks($result['output']);
                 if ($leaks !== []) {
                     $leaking[$short] = $leaks;
                 }
@@ -91,9 +99,283 @@ final class FormatterEscapingHarness
 
         ksort($leaking);
         ksort($skipped);
+        ksort($unprobed);
         sort($exercised);
 
-        return ['leaking' => $leaking, 'skipped' => $skipped, 'exercised' => $exercised];
+        return [
+            'leaking' => $leaking,
+            'skipped' => $skipped,
+            'exercised' => $exercised,
+            'unprobed' => $unprobed,
+        ];
+    }
+
+    /**
+     * Run the formatter, adapting the row when a type constraint rejects the probe.
+     *
+     * A formatter that calls number_format() or parses a date cannot be driven by an object that
+     * stringifies to "<script>…", so the alternative to adapting is recording it as undrivable —
+     * and that is worse than it sounds. "Undrivable" is not "safe", it is "unknown", and its
+     * justification can disappear silently: drop the number_format() call a year from now and the
+     * value starts flowing raw while the entry sits in the skip list unchanged.
+     *
+     * So the constraint is learned from the failure rather than declared up front. Nothing is
+     * substituted until the formatter actually rejects the probe, which means the adaptation
+     * disappears by itself the moment the constraint does, and full marker-probing resumes with no
+     * one having to remember. A hand-maintained "these keys are numeric" map would rot exactly the
+     * way the skip list would.
+     *
+     * Most substitutions keep the payload — a plain string carries the marker, and so does an array
+     * of probes. Only numeric and date values genuinely cannot, and those are reported as unprobed
+     * rather than quietly counted as covered.
+     *
+     * @return array{output: string, unprobed: array<string, string>}
+     */
+    private function drive(object $formatter, string $class): array
+    {
+        $row = $this->row($class);
+        $column = $this->column();
+        $adapted = [];
+
+        for ($attempt = 0; $attempt <= self::MAX_ADAPTATIONS; $attempt++) {
+            $level = ob_get_level();
+            ob_start();
+
+            try {
+                $output = (string)$formatter->format($row, $column);
+            } catch (\Throwable $e) {
+                $this->drainBuffers($level);
+
+                $type = $this->requiredType($e);
+
+                // Nothing learned, so retrying would loop on the same failure. This is where the
+                // container-fidelity failures land — a missing service is not a probe problem.
+                if ($type === null) {
+                    throw $e;
+                }
+
+                $keys = $this->offendingKeys($e, $class);
+
+                if ($keys === []) {
+                    // The value could not be traced to a key: it reached the failure through a
+                    // local alias, or the constraint is a return type rather than an argument.
+                    // Widening to every remaining probe is only acceptable when the substitution
+                    // still carries the marker, which is exactly the string and array cases — the
+                    // assertion stays as strong, so nothing is lost by being imprecise. For numeric
+                    // and date it would silently de-probe the whole row, so those give up instead
+                    // and are reported as undrivable, which is the honest answer.
+                    if ($type !== self::TYPE_STRING && $type !== self::TYPE_ARRAY) {
+                        throw $e;
+                    }
+
+                    $keys = array_keys(array_filter(
+                        $row,
+                        static fn(mixed $value): bool => $value instanceof RecursiveProbe
+                    ));
+                }
+
+                $progressed = false;
+
+                foreach ($keys as $key) {
+                    if (($adapted[$key] ?? null) === $type) {
+                        continue;
+                    }
+
+                    $adapted[$key] = $type;
+                    $row[$key] = $this->substitute($type);
+                    $progressed = true;
+                }
+
+                if (!$progressed) {
+                    throw $e;
+                }
+
+                continue;
+            }
+
+            $echoed = $this->drainBuffers($level);
+
+            return [
+                'output' => $output . $echoed,
+                'unprobed' => $this->payloadLosing($adapted),
+            ];
+        }
+
+        throw new \RuntimeException(sprintf(
+            'adaptation did not settle after %d attempts; last row shape: %s',
+            self::MAX_ADAPTATIONS,
+            implode(', ', array_map(
+                static fn(string $k, string $t): string => "{$k}={$t}",
+                array_keys($adapted),
+                $adapted
+            ))
+        ));
+    }
+
+    private function drainBuffers(int $level): string
+    {
+        $echoed = '';
+
+        while (ob_get_level() > $level) {
+            $echoed = (string)ob_get_clean() . $echoed;
+        }
+
+        return $echoed;
+    }
+
+    /**
+     * What the failure says the value has to be, or null when it is not about the value at all.
+     *
+     * Deliberately reads the engine's own wording rather than guessing from the key name: a key
+     * called "amount" is not necessarily numeric, and one called "reference" sometimes is.
+     */
+    private function requiredType(\Throwable $e): ?string
+    {
+        $message = $e->getMessage();
+
+        return match (true) {
+            str_contains($message, 'must be of type int|float'),
+            str_contains($message, 'must be of type ?int'),
+            str_contains($message, 'must be of type ?float'),
+            str_contains($message, 'Unsupported operand types') => self::TYPE_NUMERIC,
+
+            // A date that failed to parse has already been given a string; only a real date will do.
+            // createFromFormat signals that by *returning false* rather than throwing, so the
+            // failure surfaces one call later as a method call on a bool.
+            str_contains($message, 'Failed to parse time string'),
+            str_contains($message, 'DateMalformedStringException'),
+            (bool)preg_match(
+                '/Call to a member function (setTimezone|format|modify|diff|getTimestamp|setTime)\(\) on (bool|false)/',
+                $message
+            ) => self::TYPE_DATE,
+
+            (bool)preg_match('/must be of type \??array\b/', $message) => self::TYPE_ARRAY,
+
+            (bool)preg_match('/must be of type \??string/', $message),
+            str_contains($message, 'must be of type array|string'),
+            // Objects cannot be array keys, whatever __toString says.
+            str_contains($message, 'Cannot access offset of type') => self::TYPE_STRING,
+
+            default => null,
+        };
+    }
+
+    /**
+     * Which row keys the failing expression touched.
+     *
+     * Located from the stack rather than by adapting every key, so a single numeric column does not
+     * de-probe the whole row. A short window around the reported line covers multi-line calls,
+     * where the argument sits on a different line from the function name.
+     *
+     * @return string[]
+     */
+    private function offendingKeys(\Throwable $e, string $class): array
+    {
+        $files = [];
+
+        for ($r = new \ReflectionClass($class); $r !== false; $r = $r->getParentClass()) {
+            $file = $r->getFileName();
+
+            if ($file !== false) {
+                $files[$file] = true;
+            }
+        }
+
+        $sites = [[$e->getFile(), $e->getLine()]];
+
+        foreach ($e->getTrace() as $frame) {
+            if (isset($frame['file'], $frame['line'])) {
+                $sites[] = [$frame['file'], $frame['line']];
+            }
+        }
+
+        foreach ($sites as [$file, $line]) {
+            if (!isset($files[$file]) || !is_readable($file)) {
+                continue;
+            }
+
+            $lines = file($file) ?: [];
+            $window = implode('', array_slice($lines, max(0, $line - 3), 5));
+
+            if (
+                preg_match_all(
+                    '/\$(?:row|data)\s*\[\s*[\'"]([A-Za-z0-9_]+)[\'"]\s*\]/',
+                    $window,
+                    $matches
+                )
+            ) {
+                return array_values(array_unique($matches[1]));
+            }
+
+            // $data[$column['name']] — the key is indirect, so resolve it through the column config
+            // the harness supplied. Formatter\Money reads its amount this way, and without this the
+            // literal-subscript pattern above finds nothing on the line.
+            if (
+                preg_match_all(
+                    '/\$(?:row|data)\s*\[\s*\$column\s*\[\s*[\'"]([A-Za-z0-9_]+)[\'"]\s*\]\s*\]/',
+                    $window,
+                    $matches
+                )
+            ) {
+                $column = $this->column();
+                $keys = [];
+
+                foreach ($matches[1] as $columnKey) {
+                    if (isset($column[$columnKey])) {
+                        $keys[] = $column[$columnKey];
+                    }
+                }
+
+                if ($keys !== []) {
+                    return array_values(array_unique($keys));
+                }
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * A value satisfying the constraint, carrying the marker wherever the type permits.
+     */
+    private function substitute(string $type): mixed
+    {
+        return match ($type) {
+            // Both keep the payload: a plain string *is* the marker, and the array holds probes.
+            self::TYPE_STRING => self::MARKER,
+            self::TYPE_ARRAY => [new RecursiveProbe(self::MARKER), new RecursiveProbe(self::MARKER)],
+
+            // Neither can. A number or a timestamp that also contains "<script>" does not exist,
+            // which is the honest limit of this approach rather than an oversight.
+            self::TYPE_NUMERIC => 1234.56,
+            // ATOM, because that is what the conversation formatters pass to createFromFormat, and
+            // it is also parseable by new DateTime() for the ones that use that instead.
+            self::TYPE_DATE => '2020-01-01T00:00:00+00:00',
+
+            default => self::MARKER,
+        };
+    }
+
+    /**
+     * The adaptations that cost coverage, which are the only ones worth reporting.
+     *
+     * String and array substitutions still carry the marker, so the assertion is as strong as it
+     * was. Numeric and date ones are not, and saying so is the difference between "covered" and
+     * "rendered".
+     *
+     * @param array<string, string> $adapted
+     * @return array<string, string>
+     */
+    private function payloadLosing(array $adapted): array
+    {
+        $lost = array_filter(
+            $adapted,
+            static fn(string $type): bool => in_array($type, [self::TYPE_NUMERIC, self::TYPE_DATE], true)
+        );
+
+        ksort($lost);
+
+        return $lost;
     }
 
     /**
@@ -181,14 +463,18 @@ final class FormatterEscapingHarness
     }
 
     /**
-     * The column config. 'name' points at a key the row carries, so formatters that read
-     * $data[$column['name']] get the marker rather than a miss.
+     * The column config.
+     *
+     * Both entries point at a key the row carries, so formatters that read $data[$column['name']]
+     * or walk $column['stack'] reach the marker rather than a miss. StackValue and its two
+     * relatives throw outright without 'stack', which is a missing fixture rather than anything
+     * about the formatter.
      *
      * @return array<string, string>
      */
     private function column(): array
     {
-        return ['name' => 'name'];
+        return ['name' => 'name', 'stack' => 'name'];
     }
 
     /**

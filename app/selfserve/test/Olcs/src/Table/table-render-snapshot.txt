@@ -4,7 +4,7 @@
 # something which was not a row value got escaped. Regenerate deliberately, never to
 # make a red build green.
 #
-# 30 rendered, 10 could not be rendered by the probe.
+# 31 rendered, 9 could not be rendered by the probe.
 #
 90b348dae6821ccd2d179e04fc1ae6c4d2a507c79b76f452ee9f70e24baa0795  bus-reg-variation-history.table.php
 4db8473a81d48f0cc5eaf80d0bc242a97a69be6ca99abb36111b8bcf500974ec  busreg-registrations.table.php
@@ -14,6 +14,7 @@ e5f0dfa0b251d51602d0a6701a8895bf3ec9cb6bca7f9f654c0af371db49838b  correspondence
 35bc971d32d742fd7e8b96192b1a4462fc37ad637fe17e326126de612e9fe502  dashboard-licences.table.php
 f80a061cdda9e003e99137b7e4832160acb65e6b8e4018463aad09d57e3a9645  dashboard-permit-application.table.php
 7338b24111b55904e8097b2cb68881900d780a67e5ab3330daa4e12fb452bb5d  dashboard-permits-issued.table.php
+0eae7b28b5352bbfbafd3b10b89aaec9ef8b4cb50e932305512e3e16b36fd2aa  dashboard-tm-applications.table.php
 97480a76bc5d6b5d9da9aae01d1939964592022fe50ca1479d15b8057024204b  dashboard-variations.table.php
 f40bae39f013393174eb5d1bf0550d0c6e2e8e173489303a735ece09b04d8618  ebsr-submissions.table.php
 83b71b26f9c42803964c0a13c639a0336fe5152f0bd923db16272fee33b1e09e  entity-view-conditions-undertakings-partner.table.php
@@ -37,7 +38,6 @@ e155d6030ddb7de63bb2526c7e930f7ae6afab959d602bd2834e701f0aadf0ba  valid-irhp-per
 6ef0029a051e51529cdc7802d4c4892fd5579a6d0a78ade5c97c22ba3ca088cb  valid-irhp-permits.table.php
 515b003688c9e303bf05e88be46ce60ff05862110c56c8e0db1993824010f30f  wanted-unpaid-irhp-permits.table.php
 skipped                                                           bus-reg-browse.table.php
-skipped                                                           dashboard-tm-applications.table.php
 skipped                                                           fees.table.php
 skipped                                                           irhp-fee-breakdown-bilateral.table.php
 skipped                                                           licence-vehicle-list-current.table.php

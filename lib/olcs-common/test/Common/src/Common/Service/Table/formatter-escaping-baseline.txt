@@ -1,11 +1,11 @@
 # Formatters not yet covered by the table escaping contract.
 #
 # FormatterEscapingInvariantTest calls every formatter directly with a hostile row and
-# asserts the value reaches the output escaped. Both sections are compared, so neither
-# can rot: a formatter that starts leaking fails, one that stops leaking fails as a
-# stale entry, and one that moves into or out of [skipped] fails too.
+# asserts the value reaches the output escaped. All three sections are asserted, so none
+# of them can rot: a formatter that starts leaking fails, one that stops leaking fails as
+# a stale entry, and anything moving into or out of [skipped] or [unprobed] fails too.
 #
-# 118 exercised, 25 leaking, 31 could not be driven. 174 formatters in total.
+# 141 exercised, 32 leaking, 8 could not be driven. 149 formatters in total.
 #
 # The leaking list is a to-do list, not a permission slip. It should only ever shrink.
 
@@ -20,8 +20,13 @@ ConvictionDescription
 DocumentSubcategory
 EbsrDocumentLink
 EbsrRegNumberLink
+EventHistoryDescription
 EventHistoryUser
+ExternalConversationStatus
+FeeIdUrl
 FeeStatus
+FeeUrl
+InspectionRequestId
 IrhpPermitStockType
 LicenceNumberLink
 PiReportRecord
@@ -29,76 +34,43 @@ PrinterDocumentCategory
 PrinterException
 SearchOperatingCentreSelfserveLicNo
 SearchPeopleName
+TaskDescription
 TaskIdentifier
 TaskOwner
 TransactionStatus
+TransactionUrl
 ValidPermitCount
 VehicleLink
 VenueAddress
 
-# Why each cannot be driven, so the reason is reviewable rather than implied.
+# Values the probe renders but cannot carry a payload into, because the formatter
+# requires a number or a parseable date and neither can contain "<script>". The
+# column renders; that one value is not asserted.
+[unprobed]
+ExternalConversationLink.createdOn=date
+FeeAmount.name=numeric
+Money.name=numeric
+NoteUrl.createdOn=date
+TransactionAmount.name=numeric
+TransactionFeeAllocatedAmount.name=numeric
+
+# Formatters that still cannot be driven at all. A skip means "unknown", never "safe".
 [skipped]
-CommunityLicenceStatus
-DashboardTmApplicationStatus
-DisqualifyUrl
-EventHistoryDescription
-ExternalConversationLink
 ExternalConversationMessage
-ExternalConversationStatus
-FeeAmount
-FeeIdUrl
 FeeTransactionDate
-FeeUrl
-InspectionRequestId
 InternalConversationLink
 InternalConversationMessage
-LicencePermitReference
-LicenceTypeShort
-Money
-NoteUrl
 NumberStackValue
-SlaTargetDate
-StackValue
 TaskCheckbox
-TaskDescription
 TmApplicationManagerType
-TransactionAmount
-TransactionFeeAllocatedAmount
-TransactionFeeStatus
-TransactionNoAndStatus
-TransactionUrl
-UnlicensedVehicleWeight
 Vrm
 
 # reasons, informational only - not parsed
-#   CommunityLicenceStatus: Error: Call to a member function getMatchedRouteName() on string
-#   DashboardTmApplicationStatus: Error: Call to undefined method Closure::render()
-#   DisqualifyUrl: Error: Call to a member function getMatchedRouteName() on string
-#   EventHistoryDescription: Error: Call to a member function getMatchedRouteName() on string
-#   ExternalConversationLink: TypeError: DateTimeImmutable::createFromFormat(): Argument #2 ($datetime) must be of type string, Co
 #   ExternalConversationMessage: TypeError: Common\Service\Table\Formatter\ExternalConversationMessage::getSenderName(): Return value
-#   ExternalConversationStatus: TypeError: str_replace(): Argument #3 ($subject) must be of type array|string, CommonTest\Common\Ser
-#   FeeAmount: TypeError: number_format(): Argument #1 ($num) must be of type int|float, CommonTest\Common\Service\
-#   FeeIdUrl: Error: Call to a member function getMatchedRouteName() on string
 #   FeeTransactionDate: unresolvable: Laminas\ServiceManager\Exception\ServiceNotFoundException: Unable to resolve service "
-#   FeeUrl: Error: Call to a member function getMatchedRouteName() on string
-#   InspectionRequestId: Error: Call to a member function getMatchedRouteName() on string
 #   InternalConversationLink: unresolvable: TypeError: Common\Service\Table\Formatter\InternalConversationLink::__construct(): Arg
-#   InternalConversationMessage: TypeError: DateTimeImmutable::createFromFormat(): Argument #2 ($datetime) must be of type string, Co
-#   LicencePermitReference: TypeError: Cannot access offset of type CommonTest\Common\Service\Table\Harness\RecursiveProbe on ar
-#   LicenceTypeShort: TypeError: Cannot access offset of type CommonTest\Common\Service\Table\Harness\RecursiveProbe in is
-#   Money: TypeError: number_format(): Argument #1 ($num) must be of type int|float, CommonTest\Common\Service\
-#   NoteUrl: DateMalformedStringException: Failed to parse time string (<script>xss-probe</script>) at position 0
-#   NumberStackValue: InvalidArgumentException: No stack configuration found
-#   SlaTargetDate: Error: Call to a member function getMatchedRouteName() on string
-#   StackValue: InvalidArgumentException: No stack configuration found
+#   InternalConversationMessage: TypeError: Common\Service\Table\Formatter\AbstractConversationMessage::getSenderName(): Return value
+#   NumberStackValue: TypeError: number_format(): Argument #1 ($num) must be of type int|float, string given
 #   TaskCheckbox: unresolvable: Laminas\ServiceManager\Exception\ServiceNotFoundException: Unable to resolve service "
-#   TaskDescription: Error: Call to a member function getParams() on string
 #   TmApplicationManagerType: unresolvable: Laminas\ServiceManager\Exception\ServiceNotFoundException: Unable to resolve service "
-#   TransactionAmount: TypeError: number_format(): Argument #1 ($num) must be of type int|float, CommonTest\Common\Service\
-#   TransactionFeeAllocatedAmount: TypeError: number_format(): Argument #1 ($num) must be of type int|float, CommonTest\Common\Service\
-#   TransactionFeeStatus: Error: Call to a member function getMatchedRouteName() on string
-#   TransactionNoAndStatus: Error: Call to a member function getMatchedRouteName() on string
-#   TransactionUrl: Error: Call to a member function getMatchedRouteName() on string
-#   UnlicensedVehicleWeight: InvalidArgumentException: No stack configuration found
 #   Vrm: unresolvable: TypeError: Common\Service\Section\VehicleSafety\Vehicle\Formatter\Vrm::__construct(): 
