@@ -45,6 +45,16 @@ abstract class TableRenderSnapshotTestCase extends TestCase
 
         $this->assertNotSame([], $result['digests'], 'No tables rendered — the harness is broken.');
 
+        // Asserted absolutely, before the digests, because a digest can only detect change. A
+        // table that was already double-escaping when the baseline was first recorded would have
+        // that baked in as expected output and nothing here would ever object.
+        $this->assertSame([], $result['doubleEscaped'], sprintf(
+            "These tables escape a value twice, which users see as a literal &amp; on the page:\n  %s\n\n"
+            . "Usually a value escaped where it was assigned and escaped again where it was\n"
+            . "interpolated. Regenerating the snapshot will not help — this check does not read it.",
+            implode("\n  ", $result['doubleEscaped']),
+        ));
+
         $actual = $this->format($result);
 
         if (getenv(self::UPDATE_ENV) !== false) {

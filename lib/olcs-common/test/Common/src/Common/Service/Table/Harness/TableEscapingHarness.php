@@ -88,13 +88,26 @@ final class TableEscapingHarness
      * a diff and nobody would read it. When one changes, re-render locally and compare against the
      * previous commit to see what moved.
      *
+     * Also reports outright double-escaping, which the digests alone cannot catch. A digest only
+     * detects *change*, so anything already wrong when the baseline was first recorded is enshrined
+     * as expected output — which is exactly what happened to admin-presiding-tcs and operator-users,
+     * where a bulk transform wrapped a value that was already escaped at its assignment and the
+     * snapshot then recorded the result as correct. The benign probe contains an ampersand, so one
+     * escape gives "&amp;" and two give "&amp;amp;"; the latter can be asserted absolutely rather
+     * than relative to a baseline.
+     *
      * @param string[] $directories
-     * @return array{digests: array<string, string>, skipped: array<string, string>}
+     * @return array{
+     *     digests: array<string, string>,
+     *     skipped: array<string, string>,
+     *     doubleEscaped: string[]
+     * }
      */
     public function snapshot(array $directories): array
     {
         $digests = [];
         $skipped = [];
+        $doubleEscaped = [];
 
         $tableBuilder = $this->tableBuilder($directories);
 
@@ -118,6 +131,10 @@ final class TableEscapingHarness
                 }
 
                 $digests[$name] = hash('sha256', $this->normalise($html));
+
+                if (str_contains($html, htmlspecialchars(htmlspecialchars('&')))) {
+                    $doubleEscaped[] = $name;
+                }
             }
         } finally {
             date_default_timezone_set($timezone);
@@ -125,8 +142,9 @@ final class TableEscapingHarness
 
         ksort($digests);
         ksort($skipped);
+        sort($doubleEscaped);
 
-        return ['digests' => $digests, 'skipped' => $skipped];
+        return ['digests' => $digests, 'skipped' => $skipped, 'doubleEscaped' => $doubleEscaped];
     }
 
     /**

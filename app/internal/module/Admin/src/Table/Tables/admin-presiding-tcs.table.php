@@ -54,7 +54,7 @@ return [
                     ]
                 );
 
-                return '<a class="govuk-link" href="' . $url . '">' . \Common\Util\Escape::html(Escape::html($row['user']['loginId'])) . '</a>';
+                return '<a class="govuk-link" href="' . $url . '">' . Escape::html($row['user']['loginId']) . '</a>';
             }
         ],
         [
