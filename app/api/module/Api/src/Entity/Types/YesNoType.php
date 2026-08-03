@@ -21,7 +21,10 @@ class YesNoType extends Type
     public const YESNO = 'yesno';
 
     #[\Override]
-    public function getSqlDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSqlDeclaration(
+        array $fieldDeclaration,
+        AbstractPlatform $platform
+    ): string
     {
         unset($fieldDeclaration);
         unset($platform);
@@ -37,7 +40,10 @@ class YesNoType extends Type
      * @return null|string
      */
     #[\Override]
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue(
+        mixed $value,
+        AbstractPlatform $platform
+    ): mixed
     {
         unset($platform);
 
@@ -52,7 +58,10 @@ class YesNoType extends Type
      * @return int
      */
     #[\Override]
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue(
+        mixed $value,
+        AbstractPlatform $platform
+    ): mixed
     {
         unset($platform);
 
@@ -63,10 +72,5 @@ class YesNoType extends Type
         $upper = strtoupper((string) $value);
         return ($upper === 'Y' || $upper === 'YES') ? 1 : 0;
     }
-
-    #[\Override]
-    public function getName()
-    {
-        return self::YESNO;
-    }
+    
 }
