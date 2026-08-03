@@ -101,7 +101,7 @@ final class DocumentDescriptionTest extends MockeryTestCase
         $column = [];
 
         $this->translator
-            ->shouldReceive('translate')
+            ->expects('translate')
             ->with('internal.document-description.formatter.no-description')
             ->andReturn('File description missing')
             ->once()

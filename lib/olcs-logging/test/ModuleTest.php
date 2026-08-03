@@ -87,8 +87,7 @@ final class ModuleTest extends MockeryTestCase
     public function testToleranceHandlerToleratesUserError(): void
     {
         $logger = m::mock(LoggerInterface::class);
-        $logger->shouldReceive('error')
-            ->once()
+        $logger->expects('error')
             ->with(
                 'TOLERATED_USER_ERROR: boom',
                 m::on(static fn (array $ctx): bool =>
@@ -115,7 +114,7 @@ final class ModuleTest extends MockeryTestCase
     public function testToleranceHandlerDelegatesOtherLevelsToPreviousHandler(): void
     {
         $logger = m::mock(LoggerInterface::class);
-        $logger->shouldReceive('error')->never();
+        $logger->shouldReceive('error')->withAnyArgs()->never();
         StaticLogger::setLogger($logger);
 
         $previousArgs = null;

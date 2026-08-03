@@ -50,8 +50,7 @@ final class InternalConversationLinkTest extends MockeryTestCase
             $times = 0;
         }
         $this->mockRouteMatch
-            ->shouldReceive('getParam')
-            ->once()
+            ->expects('getParam')
             ->with('type')
             ->andReturn($routeType);
 

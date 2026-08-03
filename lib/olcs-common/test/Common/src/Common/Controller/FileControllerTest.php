@@ -26,17 +26,16 @@ final class FileControllerTest extends TestCase
         $this->mockParams = m::mock(Plugin\Params::class . '[fromRoute, fromQuery]');
 
         $this->sut = m::mock(FileController::class . '[handleQuery, params, notFoundAction]');
-        $this->sut->shouldReceive('params')->andReturn($this->mockParams);
+        $this->sut->shouldReceive('params')->withNoArgs()->andReturn($this->mockParams);
     }
 
     public function testDownloadOk(): void
     {
         $id = '99999';
 
-        $this->mockParams
-            ->shouldReceive('fromRoute')->once()->with('identifier')->andReturn($id)
-            ->shouldReceive('fromQuery')->once()->with('inline')->andReturn(1)
-            ->shouldReceive('fromQuery')->once()->with('slug')->andReturn(0);
+        $this->mockParams->expects('fromRoute')->with('identifier')->andReturn($id);
+        $this->mockParams->expects('fromQuery')->with('inline')->andReturn(1);
+        $this->mockParams->expects('fromQuery')->with('slug')->andReturn(0);
 
         $origResponse = new \Laminas\Http\Response();
         $origResponse->getHeaders()->addHeaderLine('should', 'not-appear');
@@ -46,14 +45,13 @@ final class FileControllerTest extends TestCase
         $origResponse->getHeaders()->addHeaderLine('foo', 'bar');
         $origResponse->setContent('CONTENT');
 
-        $mockResp = m::mock(Response::class)
-            ->shouldReceive('isOk')->once()->andReturn(true)
-            ->shouldReceive('getHttpResponse')->once()->andReturn($origResponse)
-            ->getMock();
+        $mockResp = m::mock(Response::class);
+        $mockResp->expects('isOk')->withNoArgs()->andReturn(true);
+        $mockResp->expects('getHttpResponse')->withNoArgs()->andReturn($origResponse);
 
         $this->sut
-            ->shouldReceive('handleQuery')
-            ->once()
+            ->expects('handleQuery')
+            ->with(m::type(TransferQry\Document\Download::class))
             ->andReturnUsing(
                 static function ($arg) use ($id, $mockResp) {
                     static::assertInstanceOf(TransferQry\Document\Download ::class, $arg);
@@ -78,10 +76,9 @@ final class FileControllerTest extends TestCase
     {
         $identifier = 'ABCDE12345';
 
-        $this->mockParams
-            ->shouldReceive('fromRoute')->once()->with('identifier')->andReturn(base64_encode($identifier))
-            ->shouldReceive('fromQuery')->once()->with('inline')->andReturn(0)
-            ->shouldReceive('fromQuery')->once()->with('slug')->andReturn(1);
+        $this->mockParams->expects('fromRoute')->with('identifier')->andReturn(base64_encode($identifier));
+        $this->mockParams->expects('fromQuery')->with('inline')->andReturn(0);
+        $this->mockParams->expects('fromQuery')->with('slug')->andReturn(1);
 
         $origResponse = new \Laminas\Http\Response();
         $origResponse->getHeaders()->addHeaderLine('should', 'not-appear');
@@ -91,14 +88,13 @@ final class FileControllerTest extends TestCase
         $origResponse->getHeaders()->addHeaderLine('foo', 'bar');
         $origResponse->setContent('CONTENT');
 
-        $mockResp = m::mock(Response::class)
-            ->shouldReceive('isOk')->once()->andReturn(true)
-            ->shouldReceive('getHttpResponse')->once()->andReturn($origResponse)
-            ->getMock();
+        $mockResp = m::mock(Response::class);
+        $mockResp->expects('isOk')->withNoArgs()->andReturn(true);
+        $mockResp->expects('getHttpResponse')->withNoArgs()->andReturn($origResponse);
 
         $this->sut
-            ->shouldReceive('handleQuery')
-            ->once()
+            ->expects('handleQuery')
+            ->with(m::type(TransferQry\Document\DownloadGuide::class))
             ->andReturnUsing(
                 static function ($arg) use ($identifier, $mockResp) {
                     static::assertInstanceOf(TransferQry\Document\DownloadGuide::class, $arg);
@@ -156,15 +152,15 @@ final class FileControllerTest extends TestCase
     {
         $identifier = '8999';
 
-        $this->mockParams
-            ->shouldReceive('fromRoute')->once()->with('identifier')->andReturn($identifier)
-            ->shouldReceive('fromQuery')->andReturn(null);
+        $this->mockParams->expects('fromRoute')->with('identifier')->andReturn($identifier);
+        $this->mockParams->shouldReceive('fromQuery')->withAnyArgs()->andReturn(null);
 
-        $mockResp = m::mock(Response::class)
-            ->shouldReceive('isOk')->once()->andReturn(false)
-            ->getMock();
+        $mockResp = m::mock(Response::class);
+        $mockResp->expects('isOk')->withNoArgs()->andReturn(false);
 
-        $this->sut->shouldReceive('handleQuery')->once()->andReturn($mockResp);
+        $this->sut->expects('handleQuery')
+            ->with(m::type(TransferQry\Document\Download::class))
+            ->andReturn($mockResp);
 
         $this->expectException(\RuntimeException::class);
 

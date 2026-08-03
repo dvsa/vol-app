@@ -237,11 +237,11 @@ final class TableBuilderTest extends MockeryTestCase
     {
         $table = m::mock(TableBuilder::class)->makePartial();
 
-        $table->expects('loadConfig');
-        $table->expects('loadData');
-        $table->expects('loadParams');
-        $table->expects('setupAction');
-        $table->expects('render')->andReturn('SomeHTML');
+        $table->expects('loadConfig')->with('test');
+        $table->expects('loadData')->with([]);
+        $table->expects('loadParams')->with([]);
+        $table->expects('setupAction')->withNoArgs();
+        $table->expects('render')->withNoArgs()->andReturn('SomeHTML');
 
         $this->assertEquals('SomeHTML', $table->buildTable('test'));
     }
@@ -253,10 +253,10 @@ final class TableBuilderTest extends MockeryTestCase
     {
         $table = m::mock(TableBuilder::class)->makePartial();
 
-        $table->expects('loadConfig');
-        $table->expects('loadData');
-        $table->expects('loadParams');
-        $table->expects('setupAction');
+        $table->expects('loadConfig')->with('test');
+        $table->expects('loadData')->with([]);
+        $table->expects('loadParams')->with([]);
+        $table->expects('setupAction')->withNoArgs();
 
         $this->assertEquals($table, $table->buildTable('test', [], [], false));
     }
@@ -1014,8 +1014,8 @@ final class TableBuilderTest extends MockeryTestCase
 
         $table = m::mock(TableBuilder::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
-        $table->expects('getContentHelper')->andReturn($mockContentHelper);
-        $table->expects('shouldPaginate')->andReturnFalse();
+        $table->expects('getContentHelper')->withNoArgs()->andReturn($mockContentHelper);
+        $table->expects('shouldPaginate')->withNoArgs()->andReturnFalse();
         $table->expects('getSetting')->with('overrideTotal', false)->andReturnFalse();
         $table->expects('getSetting')->with('showTotal', false)->andReturnTrue();
 
@@ -2679,9 +2679,6 @@ final class TableBuilderTest extends MockeryTestCase
         $table
             ->method('getContentHelper')
             ->willReturn($mockContentHelper);
-
-        $mockFormatterPluginManager = m::mock(FormatterPluginManager::class);
-        $mockFormatterPluginManager->shouldReceive('has')->andReturn(true);
 
         $this->mockFormatterPluginManager->shouldReceive('has')->with(Date::class)->andReturn(true);
         $mockDateFormatter = m::mock(Date::class)->makePartial();

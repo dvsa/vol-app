@@ -43,8 +43,7 @@ final class AbstractDownloadTest extends QueryHandlerTestCase
         $path = '/unit_dir/unit_file1.pdf';
 
         $this->mockedSmServices['FileUploader']
-            ->shouldReceive('download')
-            ->once()
+            ->expects('download')
             ->with($path)
             ->andReturnFalse();
 
@@ -62,17 +61,17 @@ final class AbstractDownloadTest extends QueryHandlerTestCase
         $vfs = vfsStream::setup('temp');
         $tmpFilePath = vfsStream::newFile('stream')->withContent($expectContent)->at($vfs)->url();
 
-        $mockFile = m::mock(ContentStoreFile::class)
-            ->shouldReceive('getResource')->once()->andReturn($tmpFilePath)
-            ->shouldReceive('getSize')->once()->andReturn($expectSize)
-            ->shouldReceive('getMimeType')
+        $mockFile = m::mock(ContentStoreFile::class);
+        $mockFile->expects('getResource')->withNoArgs()->andReturn($tmpFilePath);
+        $mockFile->expects('getSize')->withNoArgs()->andReturn($expectSize);
+        // times() rather than expects(), because the MIME type is not read for every case.
+        $mockFile->shouldReceive('getMimeType')
+            ->withNoArgs()
             ->times($expect['mime'] !== self::MIME_TYPE_EXCLUDE ? 1 : 0)
-            ->andReturn(self::MIME_TYPE)
-            ->getMock();
+            ->andReturn(self::MIME_TYPE);
 
         $this->mockedSmServices['FileUploader']
-            ->shouldReceive('download')
-            ->once()
+            ->expects('download')
             ->with($expect['path'])
             ->andReturn($mockFile);
 
