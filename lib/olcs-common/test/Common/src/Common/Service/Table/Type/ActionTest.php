@@ -32,15 +32,24 @@ final class ActionTest extends MockeryTestCase
     {
         $this->table
             ->expects('isInternalReadOnly')
+            ->withNoArgs()
             ->andReturn($isInternalReadOnly);
         $this->table->expects('getFieldset')
+            ->withNoArgs()
             ->andReturn($isFieldset ? 'unit_Fieldset' : null);
-        // value_format is a template with row data substituted in, so it goes through the
-        // escaping variant.
-        $this->table->shouldReceive('replaceContentEscapingValues')
-            ->andReturn('unit_ValueFormat');
 
         $data['id'] = self::ID;
+
+        // value_format is a template with row data substituted in, so it goes through the escaping
+        // variant — and only then. Declared inside the guard so the arguments can be the real ones
+        // rather than a wildcard, and so the columns without a value_format assert that it is not
+        // called at all. $data is stamped with the id first, because Mockery captures the expected
+        // arguments by value when the expectation is declared.
+        if (isset($column['value_format'])) {
+            $this->table->expects('replaceContentEscapingValues')
+                ->with($column['value_format'], $data)
+                ->andReturn('unit_ValueFormat');
+        }
 
         $this->assertEquals($expect, $this->sut->render($data, $column, $content));
     }

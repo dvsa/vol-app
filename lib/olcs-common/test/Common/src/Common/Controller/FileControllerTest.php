@@ -127,10 +127,9 @@ final class FileControllerTest extends TestCase
      */
     public function testSecurityHeadersAreForwarded(): void
     {
-        $this->mockParams
-            ->shouldReceive('fromRoute')->once()->with('identifier')->andReturn('99999')
-            ->shouldReceive('fromQuery')->once()->with('inline')->andReturn(1)
-            ->shouldReceive('fromQuery')->once()->with('slug')->andReturn(0);
+        $this->mockParams->expects('fromRoute')->with('identifier')->andReturn('99999');
+        $this->mockParams->expects('fromQuery')->with('inline')->andReturn(1);
+        $this->mockParams->expects('fromQuery')->with('slug')->andReturn(0);
 
         $origResponse = new \Laminas\Http\Response();
         $origResponse->getHeaders()->addHeaderLine('Content-Type', 'text/html');
@@ -138,12 +137,13 @@ final class FileControllerTest extends TestCase
         $origResponse->getHeaders()->addHeaderLine('Content-Security-Policy', 'sandbox allow-scripts');
         $origResponse->getHeaders()->addHeaderLine('should', 'not-appear');
 
-        $mockResp = m::mock(Response::class)
-            ->shouldReceive('isOk')->once()->andReturn(true)
-            ->shouldReceive('getHttpResponse')->once()->andReturn($origResponse)
-            ->getMock();
+        $mockResp = m::mock(Response::class);
+        $mockResp->expects('isOk')->withNoArgs()->andReturn(true);
+        $mockResp->expects('getHttpResponse')->withNoArgs()->andReturn($origResponse);
 
-        $this->sut->shouldReceive('handleQuery')->once()->andReturn($mockResp);
+        $this->sut->expects('handleQuery')
+            ->with(m::type(TransferQry\Document\Download::class))
+            ->andReturn($mockResp);
 
         $headers = $this->sut->downloadAction()->getHeaders()->toString();
 

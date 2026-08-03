@@ -56,11 +56,13 @@ final class ModuleTest extends MockeryTestCase
         // Always attached, whatever allowPasswordLogging says.
         $serviceManager->expects('get')->with(HideCredentials::class)->andReturn($hideCredentials);
 
-        $event->shouldReceive('getApplication->getServiceManager')->andReturn($serviceManager);
+        $event->shouldReceive('getApplication->getServiceManager')->withNoArgs()->andReturn($serviceManager);
 
-        $logger->shouldReceive('pushProcessor')
-            ->times($hideTimes + 1)
-            ->andReturnSelf();
+        // Split by processor rather than counted in aggregate, so the test says which one was
+        // attached. HideCredentials is unconditional; HidePassword only when password logging is
+        // disallowed, which is why it keeps times() instead of expects().
+        $logger->expects('pushProcessor')->with($hideCredentials)->andReturnSelf();
+        $logger->shouldReceive('pushProcessor')->with($hidePassword)->times($hideTimes)->andReturnSelf();
 
         $sut = new Module();
         $sut->onBootstrap($event);

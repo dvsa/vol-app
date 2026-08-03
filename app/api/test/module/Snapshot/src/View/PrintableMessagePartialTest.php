@@ -83,31 +83,31 @@ final class PrintableMessagePartialTest extends MockeryTestCase
         $createdOn = new \DateTime('2025-05-15T10:00:00+00:00');
 
         $createdBy = m::mock();
-        $createdBy->allows('getContactDetails')->andReturns(null);
-        $createdBy->allows('getTeam')->andReturns($team);
-        $createdBy->allows('getLoginId')->andReturns($loginId);
+        $createdBy->allows('getContactDetails')->withNoArgs()->andReturns(null);
+        $createdBy->allows('getTeam')->withNoArgs()->andReturns($team);
+        $createdBy->allows('getLoginId')->withNoArgs()->andReturns($loginId);
 
         $content = m::mock();
-        $content->allows('getText')->andReturns($body);
+        $content->allows('getText')->withNoArgs()->andReturns($body);
 
         $reads = [];
         if ($readByLoginId !== null) {
             $readUser = m::mock();
-            $readUser->allows('getContactDetails')->andReturns(null);
-            $readUser->allows('getLoginId')->andReturns($readByLoginId);
+            $readUser->allows('getContactDetails')->withNoArgs()->andReturns(null);
+            $readUser->allows('getLoginId')->withNoArgs()->andReturns($readByLoginId);
 
             $read = m::mock();
-            $read->allows('getUser')->andReturns($readUser);
+            $read->allows('getUser')->withNoArgs()->andReturns($readUser);
             $read->allows('getCreatedOn')->with(true)->andReturns(clone $createdOn);
 
             $reads[] = $read;
         }
 
         $message = m::mock();
-        $message->allows('getCreatedBy')->andReturns($createdBy);
-        $message->allows('getMessagingContent')->andReturns($content);
+        $message->allows('getCreatedBy')->withNoArgs()->andReturns($createdBy);
+        $message->allows('getMessagingContent')->withNoArgs()->andReturns($content);
         $message->allows('getCreatedOn')->with(true)->andReturns(clone $createdOn);
-        $message->allows('getUserMessageReads')->andReturns($reads);
+        $message->allows('getUserMessageReads')->withNoArgs()->andReturns($reads);
 
         return $this->renderer->render(
             'partials/read-only/printable-message',

@@ -157,13 +157,14 @@ final class AbstractDownloadTest extends QueryHandlerTestCase
         $tmpFilePath = vfsStream::newFile('stream')->withContent('content')->at($vfs)->url();
 
         $mockFile = m::mock(ContentStoreFile::class)
-            ->shouldReceive('getResource')->andReturn($tmpFilePath)
-            ->shouldReceive('getSize')->andReturn('7')
-            ->shouldReceive('getMimeType')->andReturn($mimeType)
+            ->shouldReceive('getResource')->withNoArgs()->andReturn($tmpFilePath)
+            ->shouldReceive('getSize')->withNoArgs()->andReturn('7')
+            ->shouldReceive('getMimeType')->withNoArgs()->andReturn($mimeType)
             ->getMock();
 
         $this->mockedSmServices['FileUploader']
-            ->shouldReceive('download')
+            ->expects('download')
+            ->with($identifier)
             ->andReturn($mockFile);
 
         return $this->sut->download($identifier)->getHeaders()->toString();

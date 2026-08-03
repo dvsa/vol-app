@@ -78,7 +78,8 @@ final class InternalConversationLinkTest extends MockeryTestCase
         $this->mockRouteMatch->expects('getParam')->with('type')->andReturns('licence');
 
         $this->urlHelper
-            ->allows('fromRoute')
+            ->expects('fromRoute')
+            ->with('licence/conversation/view', ['licence' => 7, 'conversation' => 1])
             ->andReturns('licence/conversation/view');
 
         $result = $this->sut->format([
