@@ -515,7 +515,7 @@ OLCS.ready(function () {
       var controls = document.getElementById("context-controls");
       controls.hidden = !controls.hidden;
       this.setAttribute("aria-expanded", controls.hidden ? "false" : "true");
-      this.textContent = controls.hidden ? "Change" : "Done";
+      this.textContent = controls.hidden ? "Edit preview context" : "Done";
     });
 
   redraw();
