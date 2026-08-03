@@ -8,13 +8,10 @@
 # regression; a listed table that passes is a stale entry and also fails, so the list cannot
 # silently rot.
 #
-# 30 exempt, 103 covered, 15 could not be rendered by the probe.
+# 22 exempt, 111 covered, 15 could not be rendered by the probe.
 #
 admin-irfo-psv-auth-continuation.table.php
 admin-irfo-stock-control.table.php
-admin-pi-report.table.php
-cases.table.php
-community.licence.table.php
 complaint.table.php
 compliance-complaints.table.php
 conviction-fpn-offence-history.table.php
@@ -24,19 +21,14 @@ environmental-complaints.table.php
 erru-applied.table.php
 erru-imposed.table.php
 erru-requested.table.php
-inspectionRequest.table.php
 irhp-permits-ecmt-candidate-partial-select.table.php
-legacyOffences.table.php
 note.table.php
-open-cases.table.php
 operator.table.php
 opposition-readonly.table.php
 opposition.table.php
 outstanding-applications.table.php
-prohibitionDefect.table.php
 registration-history.table.php
 serious-infringement.table.php
 statement.table.php
-statements.table.php
 tm.licences.table.php
 undertakings.table.php

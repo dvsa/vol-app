@@ -5,43 +5,11 @@
 # of them can rot: a formatter that starts leaking fails, one that stops leaking fails as
 # a stale entry, and anything moving into or out of [skipped] or [unprobed] fails too.
 #
-# 141 exercised, 32 leaking, 8 could not be driven. 149 formatters in total.
+# 141 exercised, 0 leaking, 8 could not be driven. 149 formatters in total.
 #
 # The leaking list is a to-do list, not a permission slip. It should only ever shrink.
 
 [leaking]
-CaseEntityName
-CaseEntityNrStatus
-CaseTrafficArea
-Comment
-CommunityLicenceIssueNo
-ConditionsUndertakingsType
-ConvictionDescription
-DocumentSubcategory
-EbsrDocumentLink
-EbsrRegNumberLink
-EventHistoryDescription
-EventHistoryUser
-ExternalConversationStatus
-FeeIdUrl
-FeeStatus
-FeeUrl
-InspectionRequestId
-IrhpPermitStockType
-LicenceNumberLink
-PiReportRecord
-PrinterDocumentCategory
-PrinterException
-SearchOperatingCentreSelfserveLicNo
-SearchPeopleName
-TaskDescription
-TaskIdentifier
-TaskOwner
-TransactionStatus
-TransactionUrl
-ValidPermitCount
-VehicleLink
-VenueAddress
 
 # Values the probe renders but cannot carry a payload into, because the formatter
 # requires a number or a parseable date and neither can contain "<script>". The

@@ -8,6 +8,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 // need to alias as RefData exists in Formatter namespace
 use Common\RefData as Ref;
 
@@ -55,7 +56,7 @@ class TransactionStatus implements FormatterPluginManagerInterface
         return sprintf(
             '<strong class="govuk-tag govuk-tag--%s">%s</strong>',
             $statusClass,
-            $row['status']['description']
+            Escape::html($row['status']['description'])
         );
     }
 }

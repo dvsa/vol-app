@@ -2,6 +2,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 
 /**
@@ -29,7 +30,7 @@ class ConditionsUndertakingsType implements FormatterPluginManagerInterface
         // supress PMD warning
         unset($column);
 
-        $content = $data['conditionType']['description'];
+        $content = Escape::html($data['conditionType']['description']);
 
         if ($data['s4'] !== null) {
             $content .= '<br>' . $this->translator->translate('(Schedule 4/1)');
