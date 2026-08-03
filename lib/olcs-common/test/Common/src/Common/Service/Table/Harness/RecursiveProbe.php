@@ -11,6 +11,13 @@ namespace CommonTest\Common\Service\Table\Harness;
  * so hand-writing a fixture per table would mean 233 fixtures. Instead this returns itself for any
  * key, to any depth, and stringifies to an XSS marker. Whatever a definition reaches for, it gets
  * the marker, and the harness then asks whether the marker survived into the output unescaped.
+ *
+ * Both interfaces are templated, and psalm requires the parameters to be named. They describe what
+ * this actually does: any offset is accepted and answered with the probe itself, and iterating
+ * yields the probe under an integer key.
+ *
+ * @implements \ArrayAccess<mixed, self>
+ * @implements \IteratorAggregate<int, self>
  */
 final class RecursiveProbe implements \ArrayAccess, \Countable, \IteratorAggregate, \Stringable, \JsonSerializable
 {
