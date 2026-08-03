@@ -13,8 +13,8 @@ The API has three layers of automated verification:
 | Functional (E2E) | WebDriver/Cucumber suites from `dvsa/vol-functional-tests`       | Post-deploy per environment (`cd.yaml`) |
 
 This page documents the integration layer, the two baseline mechanisms that
-guard the Doctrine entity metadata, and the two tests that guard output escaping
-in the table render pipeline.
+guard the Doctrine entity metadata, and the three tests that guard output
+escaping in the table render pipeline.
 
 ## Integration test suite
 
@@ -112,19 +112,22 @@ REGENERATE_SCHEMA_DRIFT_BASELINE=1 vendor/bin/phpunit \
 
 The table render pipeline does not escape. `ContentHelper::replaceContent()` is a
 raw `str_replace` into `<td>{{content}}</td>`, so whether a column is safe
-depends on whether something upstream escaped it. Two tests guard that, and they
-guard **opposite** mistakes — you need both, because each is blind to what the
-other catches.
+depends on whether something upstream escaped it. Three tests guard that, and no
+one of them subsumes another — the first two catch **opposite** mistakes, and the
+third reaches code the first two structurally cannot.
 
-| Test                         | Catches                                                | Visible to users?                     |
-| ---------------------------- | ------------------------------------------------------ | ------------------------------------- |
-| `TableEscapingInvariantTest` | a row value reaching the output unescaped              | No — it is an XSS hole                |
-| `TableRenderSnapshotTest`    | something that was **not** a row value getting escaped | Yes — literal `&lt;b&gt;` on the page |
+| Test                             | Catches                                                | Visible to users?                     |
+| -------------------------------- | ------------------------------------------------------ | ------------------------------------- |
+| `TableEscapingInvariantTest`     | a row value reaching the output unescaped              | No — it is an XSS hole                |
+| `TableRenderSnapshotTest`        | something that was **not** a row value getting escaped | Yes — literal `&lt;b&gt;` on the page |
+| `FormatterEscapingInvariantTest` | a formatter leaking, whatever any table does           | No — it is an XSS hole                |
 
-Both exist three times, once per table location, all sharing one harness in
-olcs-common (`test/Common/src/Common/Service/Table/Harness/`): `app/internal`,
-`app/selfserve` and olcs-common's own `Common/src/Common/Table/Tables`. Both run
-on every PR — the apps via `php.yaml`, olcs-common via `php-lib.yaml`.
+The first two exist three times, once per table location, all sharing one harness
+in olcs-common (`test/Common/src/Common/Service/Table/Harness/`): `app/internal`,
+`app/selfserve` and olcs-common's own `Common/src/Common/Table/Tables`. The third
+exists once, because formatters all live in olcs-common behind a single plugin
+config. All run on every PR — the apps via `php.yaml`, olcs-common via
+`php-lib.yaml`.
 
 ### The escaping contract
 
