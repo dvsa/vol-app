@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace CommonTest\Common\Service\Table\Harness;
 
+use Common\Module;
 use Common\Service\Helper\UrlHelperService;
 use Common\Service\Table\Formatter\FormatterPluginManager;
 use Common\Service\Table\TableBuilder;
@@ -139,10 +140,20 @@ final class TableEscapingHarness
      * rendered form is `value="..." ... name="security"` — value first. A pattern anchored on
      * name="security" looking forwards for value= silently matches nothing, and the failure mode
      * is a snapshot that looks fine until it randomly fails.
+     *
+     * Today's date goes the same way, for a subtler reason. row() harvests its keys from the
+     * *definition* source, so a key read only inside a formatter class is absent from the row —
+     * Formatter\NoteUrl reads $row['createdOn'], which note.table.php never mentions. The lookup
+     * yields null, the harness's error handler swallows the notice, and new \DateTime(null) means
+     * "now". The digest then encodes the day it was recorded and every later run is red. That is a
+     * property of the probe, not of the table, so it is normalised out rather than baselined.
+     *
+     * Only the current date is replaced, never dates in general: a table rendering a fixed date
+     * still has it covered by the digest.
      */
     private function normalise(string $html): string
     {
-        return (string)preg_replace_callback(
+        $html = (string)preg_replace_callback(
             '/<input\b[^>]*>/',
             static function (array $match): string {
                 $tag = $match[0];
@@ -155,6 +166,26 @@ final class TableEscapingHarness
             },
             $html
         );
+
+        return str_replace($this->todayInEveryRenderedFormat(), 'TODAY', $html);
+    }
+
+    /**
+     * Today, in each format a table might render it in.
+     *
+     * Callers run under the UTC pin snapshot() applies, so "today" here is the same day the render
+     * saw. Module::$dateFormat is what the application is configured to use and is therefore the
+     * one that matters; the rest are cheap insurance against a formatter that hardcodes its own.
+     *
+     * @return string[]
+     */
+    private function todayInEveryRenderedFormat(): array
+    {
+        $now = new \DateTimeImmutable();
+
+        $formats = array_unique([Module::$dateFormat, 'd/m/Y', 'Y-m-d', 'd M Y', 'j F Y']);
+
+        return array_map(static fn(string $format): string => $now->format($format), $formats);
     }
 
     /**
