@@ -45,7 +45,7 @@
     "grunt-scss-lint": "^0.5.0",
     "grunt-svg-sprite": "^2.0.2",
     "handlebars-helper-repeat": "^2.0.0",
-    "postcss": "^8.4.39",
+    "postcss": "^8.5.18",
     "sass": "^1.97.0"
   }
 }
