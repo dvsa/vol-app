@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Misc;
 
 use Dvsa\Olcs\Api\Entity\User\Permission;
-use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessFeeWithId;
+use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQuery;
 
 /**
  * Can access fee with id
@@ -29,15 +29,12 @@ class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
     public function testIsValidInternalNoContext(): void
     {
         $id = 1;
-        $dto = m::mock(CommandInterface::class);
+        $dto = m::mock(FeeQuery::class);
         $dto->shouldReceive('getId')->andReturn($id);
-        $dto->shouldReceive('getLicenceId')->andReturn(null);
-        $dto->shouldReceive('getApplicationId')->andReturn(null);
+        $dto->shouldReceive('getLicence')->once()->andReturn(null);
+        $dto->shouldReceive('getApplication')->once()->andReturn(null);
 
         $this->setIsGranted(Permission::INTERNAL_USER, true);
-
-        $fee = m::mock(Fee::class);
-        $this->mockRepo('Fee')->shouldReceive('fetchById')->with($id)->andReturn($fee);
 
         $this->assertTrue($this->sut->isValid($dto));
     }
@@ -45,16 +42,13 @@ class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
     public function testIsValidCanAccessFeeNoContext(): void
     {
         $id = 1;
-        $dto = m::mock(CommandInterface::class);
+        $dto = m::mock(FeeQuery::class);
         $dto->shouldReceive('getId')->andReturn($id);
-        $dto->shouldReceive('getLicenceId')->andReturn(null);
-        $dto->shouldReceive('getApplicationId')->andReturn(null);
+        $dto->shouldReceive('getLicence')->once()->andReturn(null);
+        $dto->shouldReceive('getApplication')->once()->andReturn(null);
         $this->setIsValid('canAccessFee', [$id], true);
 
         $this->setIsGranted(Permission::INTERNAL_USER, false);
-
-        $fee = m::mock(Fee::class);
-        $this->mockRepo('Fee')->shouldReceive('fetchById')->with($id)->andReturn($fee);
 
         $this->assertTrue($this->sut->isValid($dto));
     }
@@ -62,8 +56,10 @@ class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
     public function testIsNotValid(): void
     {
         $id = 1;
-        $dto = m::mock(CommandInterface::class);
+        $dto = m::mock(FeeQuery::class);
         $dto->shouldReceive('getId')->andReturn($id);
+        $dto->shouldReceive('getLicence')->once()->andReturn(null);
+        $dto->shouldReceive('getApplication')->once()->andReturn(null);
         $this->setIsValid('canAccessFee', [$id], false);
 
         $this->setIsGranted(Permission::INTERNAL_USER, false);
@@ -74,10 +70,10 @@ class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
     public function testIsValidWhenFeeBelongsToLicence(): void
     {
         $id = 1;
-        $dto = m::mock(CommandInterface::class);
+        $dto = m::mock(FeeQuery::class);
         $dto->shouldReceive('getId')->andReturn($id);
-        $dto->shouldReceive('getLicenceId')->once()->andReturn(212);
-        $dto->shouldReceive('getApplicationId')->never(); // proves licence check caught it
+        $dto->shouldReceive('getLicence')->once()->andReturn(212);
+        $dto->shouldReceive('getApplication')->never();
 
         $this->setIsGranted(Permission::INTERNAL_USER, true);
         $this->setIsValid('feeBelongsToLicence', [$id, 212], true);
@@ -88,10 +84,10 @@ class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
     public function testIsNotValidWhenFeeDoesNotBelongToLicence(): void
     {
         $id = 1;
-        $dto = m::mock(CommandInterface::class);
+        $dto = m::mock(FeeQuery::class);
         $dto->shouldReceive('getId')->andReturn($id);
-        $dto->shouldReceive('getLicenceId')->once()->andReturn(212);
-        $dto->shouldReceive('getApplicationId')->never(); // proves licence check caught it
+        $dto->shouldReceive('getLicence')->once()->andReturn(212);
+        $dto->shouldReceive('getApplication')->never();
 
         $this->setIsGranted(Permission::INTERNAL_USER, true);
         $this->setIsValid('feeBelongsToLicence', [$id, 212], false);
