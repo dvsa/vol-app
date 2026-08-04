@@ -33,6 +33,7 @@ class Clear extends AbstractCommandHandler implements
         'translation_replacement',
         'storage',
         'secretsmanager',
+        'cqrs'
     ];
 
     /**
@@ -216,6 +217,10 @@ class Clear extends AbstractCommandHandler implements
         $cacheNamespace =
             $this->getConfig()['caches']['default-cache']['options']['namespace']
             ?? 'zfcache';
+        
+        if ($namespace === 'cqrs') {
+            return 'cqrs:';
+        }
 
         return $cacheNamespace . ':' . $namespace;
     }

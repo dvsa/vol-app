@@ -183,4 +183,38 @@ final class ClearTest extends AbstractCommandHandlerTestCase
             $result->toArray()['messages']
         );
     }
+
+    public function testCqrsNamespaceUsesDedicatedPrefix(): void
+    {
+        $this->redis
+            ->shouldReceive('scan')
+            ->once()
+            ->withArgs(
+                static function (&$iterator, string $pattern, int $count): bool {
+                    $iterator = 0;
+
+                    return $pattern === 'cqrs:*'
+                        && $count === 100;
+                }
+            )
+            ->andReturnFalse();
+
+        $this->redis->shouldNotReceive('del');
+
+        $command = Command::create([
+            'namespace' => 'cqrs',
+            'dryRun' => true,
+        ]);
+
+        $result = $this->sut->handleCommand($command);
+
+        self::assertSame(
+            [
+                '[DRY RUN] Would delete 0 keys from namespace "cqrs" '
+                    . '(pattern: cqrs:*)',
+                '[DRY RUN] Total: would delete 0 keys',
+            ],
+            $result->toArray()['messages']
+        );
+    }
 }

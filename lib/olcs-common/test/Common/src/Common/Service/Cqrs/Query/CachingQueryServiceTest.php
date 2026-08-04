@@ -227,7 +227,7 @@ final class CachingQueryServiceTest extends MockeryTestCase
         $this->mockResult->expects('isOk')->withNoArgs()->andReturnTrue();
 
         $mockCache = m::mock(CacheEncryptionService::class);
-        $mockCache->expects('hasItem')->with('cache_key', 'encryption_mode')->andReturnFalse();
+        $mockCache->expects('hasItem')->with('cqrs:cache_key', 'encryption_mode')->andReturnFalse();
 
         $mockLogger = m::mock(\Psr\Log\LoggerInterface::class);
         $mockLogger->expects('debug')->with('Using encryption mode: encryption_mode')->ordered();
@@ -266,8 +266,18 @@ final class CachingQueryServiceTest extends MockeryTestCase
         $this->mockResult->expects('isOk')->withNoArgs()->andReturnTrue();
 
         $mockCache = m::mock(CacheEncryptionService::class);
-        $mockCache->expects('hasItem')->with('cache_key', 'encryption_mode')->andReturnFalse();
-        $mockCache->expects('setItem')->with('cache_key', 'encryption_mode', $this->mockResult, $cacheTtl)->andReturn();
+        $mockCache->expects('hasItem')
+            ->with('cqrs:cache_key', 'encryption_mode')
+            ->andReturnFalse();
+
+        $mockCache->expects('setItem')
+            ->with(
+                'cqrs:cache_key',
+                'encryption_mode',
+                $this->mockResult,
+                $cacheTtl
+            )
+            ->andReturn();
 
         $mockLogger = m::mock(\Psr\Log\LoggerInterface::class);
         $mockLogger->expects('debug')->with('Using encryption mode: encryption_mode')->ordered();
@@ -318,8 +328,13 @@ final class CachingQueryServiceTest extends MockeryTestCase
          * The query is sent twice, but we only go once to the persistent cache
          */
         $mockCache = m::mock(CacheEncryptionService::class);
-        $mockCache->expects('hasItem')->with('cache_key', 'encryption_mode')->andReturnTrue();
-        $mockCache->expects('getItem')->with('cache_key', true)->andReturn($this->mockResult);
+        $mockCache->expects('hasItem')
+            ->with('cqrs:cache_key', 'encryption_mode')
+            ->andReturnTrue();
+
+        $mockCache->expects('getItem')
+            ->with('cqrs:cache_key', 'encryption_mode')
+            ->andReturn($this->mockResult);
 
         $mockLogger = m::mock(\Psr\Log\LoggerInterface::class);
         $mockLogger->expects('debug')->with('Using encryption mode: encryption_mode')->ordered();
@@ -355,8 +370,13 @@ final class CachingQueryServiceTest extends MockeryTestCase
         $mockQS->expects('send')->with($mockQuery)->andReturn($this->mockResult);
 
         $mockCache = m::mock(CacheEncryptionService::class);
-        $mockCache->expects('hasItem')->with('cache_key', 'encryption_mode')->andReturnTrue();
-        $mockCache->expects('getItem')->with('cache_key', true)->andThrow(new \Exception('exception_msg'));
+        $mockCache->expects('hasItem')
+            ->with('cqrs:cache_key', 'encryption_mode')
+            ->andReturnTrue();
+
+        $mockCache->expects('getItem')
+            ->with('cqrs:cache_key', 'encryption_mode')
+            ->andThrow(new \Exception('exception_msg'));
 
         $mockLogger = m::mock(\Psr\Log\LoggerInterface::class);
         $mockLogger->expects('debug')->with('Using encryption mode: encryption_mode')->ordered();
