@@ -44,7 +44,7 @@ locals {
         "sts:AssumeRole"
       ]
       resources = [
-        "arn:aws:iam::259405524870:role/txc-prod-consumer-role",
+        "arn:aws:iam::259405524870:role/txc-APP-consumer-role",
         "arn:aws:iam::054614622558:role/DBAM-ProdToDev-AssumeRole"
       ]
     },
@@ -288,7 +288,7 @@ data "aws_vpc" "this" {
 module "service" {
   source = "../../modules/service"
 
-  environment = "prod"
+  environment = "APP"
 
   legacy_environment = "APP"
 
