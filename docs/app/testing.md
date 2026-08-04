@@ -129,6 +129,35 @@ exists once, because formatters all live in olcs-common behind a single plugin
 config. All run on every PR — the apps via `php.yaml`, olcs-common via
 `php-lib.yaml`.
 
+### Running them
+
+Nothing here needs a database, a container or a network. All three are ordinary
+PHPUnit tests and run as part of the normal suite; these are the commands for
+running them alone.
+
+```bash
+# all three, for one location
+cd lib/olcs-common   # or app/internal, or app/selfserve
+vendor/bin/phpunit --filter 'Escaping|RenderSnapshot'
+
+# one at a time
+cd lib/olcs-common
+vendor/bin/phpunit --filter TableEscapingInvariantTest
+vendor/bin/phpunit --filter TableRenderSnapshotTest
+vendor/bin/phpunit --filter FormatterEscapingInvariantTest   # olcs-common only
+```
+
+`FormatterEscapingInvariantTest` lives only in olcs-common. The other two need
+running in **all three** locations, because each has its own table directory and
+its own baseline — a change in olcs-common can move a digest in `app/selfserve`,
+so a green lib is not evidence on its own.
+
+Regenerating the snapshot is the one thing that is not just "run the test":
+
+```bash
+UPDATE_TABLE_SNAPSHOTS=1 vendor/bin/phpunit --filter TableRenderSnapshotTest
+```
+
 ### The escaping contract
 
 Escape by **provenance**, not by what the value looks like:
@@ -151,6 +180,13 @@ lists tables that are known exceptions and are exempt; it should only ever
 shrink, and a listed table that stops leaking also fails, so the list cannot rot.
 Tables the synthetic probe cannot drive are reported as **skipped**, which means
 "not covered here", never "safe".
+
+Adding a table to the baseline is not the fix, and neither is regenerating
+anything — the baseline only shrinks. A table that genuinely cannot be rendered
+by the probe is worth a look at `FormatterEscapingInvariantTest` instead, which
+reaches formatters no table can drive: `lva-psv-vehicles-readonly` renders with
+no data rows at all, so its `StackValue` columns are exercised only by the
+formatter-level test.
 
 ### When the snapshot test fails
 
@@ -196,18 +232,89 @@ This harness harvests keys from the formatter's own source (and its parents), so
 that cannot happen here by construction. Neither test subsumes the other — the
 table-level one still owns inline closures, cell attributes and wrapping.
 
-The baseline has two sections and **both** are asserted:
+All **149** formatters are driven, none leaks, and none is skipped. Keeping it
+that way is the point of the baseline below.
 
-| Section     | Fails when                                                      |
-| ----------- | --------------------------------------------------------------- |
-| `[leaking]` | a formatter starts leaking, or a listed one stops (stale entry) |
-| `[skipped]` | a formatter becomes undrivable, **or becomes drivable**         |
+### How the probe works
+
+Worth understanding before you change a formatter's signature, because that is
+what usually makes one of these tests go red for a reason that is not escaping.
+
+`RecursiveProbe` is a row stand-in that answers **any** key, to **any** depth,
+with itself, and stringifies to `<script>xss-probe</script>`. That is what lets
+one object drive a hundred formatters without anyone writing a fixture per table:
+whatever a formatter reaches for, it gets the marker, and the harness then asks
+whether the marker reached the output unescaped.
+
+A probe cannot satisfy a **type**, though. A formatter that calls
+`number_format()` or parses a date rejects it outright. So the harness does not
+declare types up front — it **learns them from the failure**:
+
+1. call the formatter; if it returns, check the output for the marker
+2. if it throws, read the engine's own wording to decide what the value has to be
+   (`must be of type int|float` → numeric, `Failed to parse time string` → date…)
+3. find which row key the failing expression touched, from the failing line first
+   and the whole statement second
+4. substitute a value of that type into that key, and go round again
+
+Learning rather than declaring matters: a hand-maintained "these keys are
+numeric" map would rot exactly the way a skip list does, whereas an adaptation
+disappears by itself the moment the constraint does.
+
+Most substitutions keep the payload — a string **is** the marker, and an array
+holds probes. Numbers and dates cannot, and those are reported rather than
+quietly counted as covered (see `[unprobed]` below).
+
+Two formatters need more than this. `RecursiveProbe` cannot satisfy a type at
+**depth** — `getSenderName(): string` returns `$row['createdBy'][…]['forename']`,
+and substituting at the root only moves the failure to the next subscript. The
+two conversation _message_ formatters therefore get a hand-written row from
+`FormatterEscapingHarness::fixtures()`. A fixture is merged **over** the
+generated row, so a key the formatter starts reading tomorrow still arrives as a
+probe rather than missing.
+
+### The three baseline sections
+
+`formatter-escaping-baseline.txt`. All three are asserted, so none can rot:
+
+| Section      | Fails when                                                          |
+| ------------ | ------------------------------------------------------------------- |
+| `[leaking]`  | a formatter starts leaking, or a listed one stops (stale entry)     |
+| `[unprobed]` | a value stops carrying the payload, **or starts carrying it again** |
+| `[skipped]`  | a formatter becomes undrivable, **or becomes drivable**             |
 
 Asserting `[skipped]` matters more than it looks. A skip is not "safe" — it is
 "unknown", and without this it would stay unknown long after the reason for it
 disappeared. If a formatter is skipped because `number_format()` rejects the probe,
 and someone later drops that call, the value starts flowing raw; comparing the set
 means that shows up as a failure rather than sitting unnoticed behind a stale entry.
+
+`[unprobed]` is the honest accounting for values that **render but are not
+asserted**: a number or a date cannot also contain `<script>`, so those columns
+are exercised without being proved safe. Entries are `Formatter.key=type`, and
+dotted paths (`ExternalConversationMessage.documents.0.size=numeric`) come from a
+fixture leaf. Fixture leaves are counted the same way adapted keys are,
+deliberately — otherwise a fixture could quietly de-probe a value and the
+formatter would still read as fully covered.
+
+### When a formatter's constructor or signature changes
+
+The most common way to make this test red without touching escaping:
+
+| Symptom in the failure                   | Usually means                                                                                  |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `unresolvable: …` in the skipped list    | the factory is broken, or a new dependency is missing from `HarnessContainer`                  |
+| a formatter moved into `[skipped]`       | a new type constraint the probe cannot satisfy — add the service, or a fixture if it is nested |
+| a formatter moved **out** of `[skipped]` | good news; delete the entry                                                                    |
+| a new `[unprobed]` entry                 | a value now has to be a number or a date, so it is no longer asserted — check that is intended |
+
+If you add a formatter dependency, add it to `HarnessContainer` as the **real**
+class wherever the real thing does not need the world. A mock that answers
+everything with `''` will let the formatter run while feeding it nothing, which
+looks like coverage and is not: `StackHelperService` was mocked that way, and
+`StackValue`, `NumberStackValue`, `UnlicensedVehicleWeight` and
+`FeeTransactionDate` all counted as exercised while formatting an empty string.
+Three live leaks were sitting behind it.
 
 ## Adding integration tests
 
