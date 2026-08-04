@@ -93,7 +93,12 @@ abstract class AbstractConversationMessage implements FormatterPluginManagerInte
             return '';
         }
 
-        $firstReadOn = DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $firstRead["createdOn"]);
+        // Same conversion as format() above, for the same reason: the stored value carries its own
+        // offset, so createFromFormat keeps it and the value renders in whatever timezone it was
+        // stored in. Without this the "first read by" line sits an hour behind the message date
+        // directly above it through BST, and agrees with it through GMT.
+        $firstReadOn = DateTimeImmutable::createFromFormat(DateTimeInterface::ATOM, $firstRead["createdOn"])
+            ->setTimezone(new \DateTimeZone(date_default_timezone_get()));
 
         if (isset($firstRead['user']['contactDetails']['person'])) {
             $firstReadBy = $firstRead['user']['contactDetails']['person']['forename'] . ' ' .

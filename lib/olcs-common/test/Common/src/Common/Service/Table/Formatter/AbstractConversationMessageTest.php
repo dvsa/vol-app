@@ -68,6 +68,46 @@ HTML;');
         $this->assertStringContainsString($expectedDate, $output);
     }
 
+    /**
+     * The provider above mocks getFirstReadBy away, so the real method was never executed and its
+     * timestamp went unasserted — which is how it came to be the one conversation date site of six
+     * that did not convert to the display timezone.
+     *
+     * Asserted against a literal rather than against the same conversion the production code
+     * performs: recomputing it here would agree with whatever the formatter does, including nothing.
+     * August is deliberate — the stored value and the London value differ only under BST.
+     */
+    public function testFirstReadByRendersInTheDisplayTimezone(): void
+    {
+        $row = [
+            'id' => 3,
+            'createdOn' => '2023-08-12T12:00:00+00:00',
+            'createdBy' => ['id' => 1, 'team' => null, 'contactDetails' => null],
+            'messagingContent' => ['text' => 'Hello'],
+            'documents' => [],
+            'userMessageReads' => [
+                [
+                    'createdOn' => '2023-08-12T12:00:00+00:00',
+                    'user' => [
+                        'id' => 2,
+                        'contactDetails' => ['person' => ['forename' => 'Ann', 'familyName' => 'Reader']],
+                    ],
+                ],
+            ],
+        ];
+
+        $this->sut->allows('getSenderName')->with($row)->andReturn('Jo Sender');
+        $this->sut->allows('getFileList')->with($row)->andReturn('');
+
+        $output = $this->sut->format($row);
+
+        $this->assertStringContainsString(
+            'First read by Ann Reader on Saturday 12 August 2023 at 13:00pm',
+            $output
+        );
+        $this->assertStringNotContainsString('12:00pm', $output);
+    }
+
     #[\Override]
     protected function tearDown(): void
     {
