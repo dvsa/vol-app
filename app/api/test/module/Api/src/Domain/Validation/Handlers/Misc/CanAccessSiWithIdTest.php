@@ -7,8 +7,8 @@ namespace Dvsa\OlcsTest\Api\Domain\Validation\Handlers\Misc;
 use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessSiWithId;
 use Dvsa\Olcs\Api\Entity\User\Permission;
+use Dvsa\Olcs\Transfer\Query\Cases\Si\Si as SiQuery;
 use Mockery as m;
-use Dvsa\Olcs\Transfer\Command\CommandInterface;
 
 class CanAccessSiWithIdTest extends AbstractHandlerTestCase
 {
@@ -23,8 +23,8 @@ class CanAccessSiWithIdTest extends AbstractHandlerTestCase
 
     public function testIsValidInternalNoContext(): void
     {
-        $dto = m::mock(CommandInterface::class);
-        $dto->shouldReceive('getCaseId')->andReturn(null);
+        $dto = m::mock(SiQuery::class);
+        $dto->shouldReceive('getCase')->once()->andReturn(null);
 
         $this->setIsGranted(Permission::INTERNAL_USER, true);
 
@@ -33,7 +33,8 @@ class CanAccessSiWithIdTest extends AbstractHandlerTestCase
 
     public function testIsNotValidNotInternalUser(): void
     {
-        $dto = m::mock(CommandInterface::class);
+        $dto = m::mock(SiQuery::class);
+        $dto->shouldReceive('getCase')->once()->andReturn(null);
 
         $this->setIsGranted(Permission::INTERNAL_USER, false);
 
@@ -42,9 +43,9 @@ class CanAccessSiWithIdTest extends AbstractHandlerTestCase
 
     public function testIsValidWhenSiBelongsToCase(): void
     {
-        $dto = m::mock(CommandInterface::class);
+        $dto = m::mock(SiQuery::class);
         $dto->shouldReceive('getId')->andReturn(1);
-        $dto->shouldReceive('getCaseId')->andReturn(2);
+        $dto->shouldReceive('getCase')->once()->andReturn(2);
 
         $this->setIsGranted(Permission::INTERNAL_USER, true);
         $this->setIsValid('seriousInfringementBelongsToCase', [1, 2], true);
@@ -54,11 +55,11 @@ class CanAccessSiWithIdTest extends AbstractHandlerTestCase
 
     public function testIsNotValidWhenSiDoesNotBelongToCase(): void
     {
-        $dto = m::mock(CommandInterface::class);
+        $dto = m::mock(SiQuery::class);
         $dto->shouldReceive('getId')->andReturn(1);
-        $dto->shouldReceive('getCaseId')->andReturn(2);
+        $dto->shouldReceive('getCase')->once()->andReturn(2);
 
-        $this->setIsGranted(Permission::INTERNAL_USER, true);
+        $this->setIsGranted(Permission::INTERNAL_USER, false);
         $this->setIsValid('seriousInfringementBelongsToCase', [1, 2], false);
 
         $this->assertFalse($this->sut->isValid($dto));

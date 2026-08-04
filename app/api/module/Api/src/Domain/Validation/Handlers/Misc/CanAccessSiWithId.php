@@ -15,12 +15,12 @@ class CanAccessSiWithId extends AbstractHandler implements AuthAwareInterface
     #[\Override]
     public function isValid($dto)
     {
-        if (!$this->isInternalUser()) {
+        if ($dto->getCase() !== null && !$this->seriousInfringementBelongsToCase($dto->getId(), $dto->getCase())) {
             return false;
         }
 
-        if ($dto->getCaseId() !== null) {
-            return $this->seriousInfringementBelongsToCase($dto->getId(), $dto->getCaseId());
+        if (!$this->isInternalUser()) {
+            return false;
         }
 
         return true;
