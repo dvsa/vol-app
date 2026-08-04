@@ -89,7 +89,6 @@ class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
         $dto->shouldReceive('getLicence')->once()->andReturn(212);
         $dto->shouldReceive('getApplication')->never();
 
-        $this->setIsGranted(Permission::INTERNAL_USER, true);
         $this->setIsValid('feeBelongsToLicence', [$id, 212], false);
 
         $this->assertFalse($this->sut->isValid($dto));
