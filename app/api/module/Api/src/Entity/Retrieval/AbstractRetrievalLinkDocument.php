@@ -21,22 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="retrieval_link_document",
- *    indexes={
- *        @ORM\Index(name="ix_retrieval_link_document_retrieval_link_id", columns={"retrieval_link_id"}),
- *        @ORM\Index(name="ix_retrieval_link_document_document_id", columns={"document_id"}),
- *        @ORM\Index(name="ix_retrieval_link_document_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_retrieval_link_document_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_retrieval_link_document_member_ref", columns={"member_ref"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_retrieval_link_document_member_ref", columns={"member_ref"})
- *    }
- * )
  */
+#[ORM\Table(name: 'retrieval_link_document')]
+#[ORM\Index(name: 'ix_retrieval_link_document_retrieval_link_id', columns: ['retrieval_link_id'])]
+#[ORM\Index(name: 'ix_retrieval_link_document_document_id', columns: ['document_id'])]
+#[ORM\Index(name: 'ix_retrieval_link_document_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_retrieval_link_document_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'uk_retrieval_link_document_member_ref', columns: ['member_ref'])]
+#[ORM\UniqueConstraint(name: 'uk_retrieval_link_document_member_ref', columns: ['member_ref'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,90 +43,85 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to retrieval_link
      *
      * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink", fetch="LAZY")
-     * @ORM\JoinColumn(name="retrieval_link_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(
+        targetEntity: \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink::class,
+        inversedBy: 'documents',
+        fetch: 'LAZY'
+    )]
     protected $retrievalLink;
 
     /**
      * Foreign Key to document
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
     protected $document;
 
     /**
      * Member ref
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="member_ref", length=64, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'member_ref', length: 64, nullable: false)]
     protected $memberRef = '';
 
     /**
      * Display filename
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="display_filename", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'display_filename', length: 255, nullable: false)]
     protected $displayFilename = '';
 
     /**
      * Display order
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="display_order", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['default' => 0])]
     protected $displayOrder = 0;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
