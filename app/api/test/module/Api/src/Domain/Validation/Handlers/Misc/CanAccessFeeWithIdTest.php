@@ -73,7 +73,7 @@ class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
         $dto = m::mock(FeeQuery::class);
         $dto->shouldReceive('getId')->andReturn($id);
         $dto->shouldReceive('getLicence')->once()->andReturn(212);
-        $dto->shouldReceive('getApplication')->never();
+        $dto->shouldReceive('getApplication')->once()->andReturn(null);
 
         $this->setIsGranted(Permission::INTERNAL_USER, true);
         $this->setIsValid('feeBelongsToLicence', [$id, 212], true);
