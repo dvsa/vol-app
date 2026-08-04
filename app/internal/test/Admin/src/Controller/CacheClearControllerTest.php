@@ -15,6 +15,9 @@ use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Common\Form\Form;
+use Laminas\Form\ElementInterface;
+use Laminas\Form\FieldsetInterface;
 
 final class CacheClearControllerTest extends MockeryTestCase
 {
@@ -33,10 +36,21 @@ final class CacheClearControllerTest extends MockeryTestCase
      */
     private $request;
 
+    /**
+     * @var FormHelperService&m\MockInterface
+     */
+    private $formHelper;
+
+    /**
+     * @var Form&m\MockInterface
+     */
+    private $form;
+
     public function setUp(): void
     {
         $translationHelper = m::mock(TranslationHelperService::class);
-        $formHelper = m::mock(FormHelperService::class);
+        $this->formHelper = m::mock(FormHelperService::class);
+        $this->form = m::mock(Form::class);
         $this->flashMessenger = m::mock(FlashMessengerHelperService::class);
         $navigation = m::mock(Navigation::class);
 
@@ -46,7 +60,7 @@ final class CacheClearControllerTest extends MockeryTestCase
             CacheClearController::class,
             [
                 $translationHelper,
-                $formHelper,
+                $this->formHelper,
                 $this->flashMessenger,
                 $navigation,
             ]
@@ -55,9 +69,15 @@ final class CacheClearControllerTest extends MockeryTestCase
             ->shouldAllowMockingProtectedMethods();
 
         $placeholder = m::mock();
+
         $placeholder
             ->shouldReceive('setPlaceholder')
             ->with('pageTitle', 'Clear cache')
+            ->once();
+
+        $placeholder
+            ->shouldReceive('setPlaceholder')
+            ->with('contentTitle', 'Clear cache')
             ->once();
 
         $this->sut
@@ -67,29 +87,81 @@ final class CacheClearControllerTest extends MockeryTestCase
         $this->sut
             ->shouldReceive('getRequest')
             ->andReturn($this->request);
+
+        $formActions = m::mock(FieldsetInterface::class);
+        $submit = m::mock(ElementInterface::class);
+
+        $this->formHelper
+            ->shouldReceive('createFormWithRequest')
+            ->with('CacheClear', $this->request)
+            ->andReturn($this->form);
+
+        $this->form
+            ->shouldReceive('get')
+            ->with('form-actions')
+            ->andReturn($formActions);
+
+        $formActions
+            ->shouldReceive('get')
+            ->with('submit')
+            ->andReturn($submit);
+
+        $submit
+            ->shouldReceive('setLabel')
+            ->with('Clear cache')
+            ->andReturnSelf();
+
+        $submit
+            ->shouldReceive('setAttribute')
+            ->with('aria-label', 'Clear cache')
+            ->andReturnSelf();
+
+        $formActions
+            ->shouldReceive('remove')
+            ->with('cancel');
+
+        $formActions
+            ->shouldReceive('remove')
+            ->with('addAnother');
     }
 
-    public function testIndexActionForGetRequestReturnsViewModel(): void
-    {
-        $this->request
-            ->shouldReceive('isPost')
-            ->once()
-            ->andReturnFalse();
-
-        $this->sut
-            ->shouldNotReceive('handleCommand');
-
-        $result = $this->sut->indexAction();
-
-        self::assertInstanceOf(ViewModel::class, $result);
-    }
-
-    public function testIndexActionClearsCacheSuccessfully(): void
+    public function testIndexActionShowsErrorWhenCacheClearFails(): void
     {
         $this->request
             ->shouldReceive('isPost')
             ->once()
             ->andReturnTrue();
+
+        $postData = [
+            'cacheTypes' => ['cqrs'],
+            'form-actions' => [
+                'submit' => '',
+            ],
+            'security' => 'test-token',
+        ];
+
+        $this->request
+            ->shouldReceive('getPost')
+            ->once()
+            ->andReturn($postData);
+
+        $this->form
+            ->shouldReceive('setData')
+            ->once()
+            ->with($postData)
+            ->andReturnSelf();
+
+        $this->form
+            ->shouldReceive('isValid')
+            ->once()
+            ->andReturnTrue();
+
+        $this->form
+            ->shouldReceive('getData')
+            ->once()
+            ->andReturn([
+                'cacheTypes' => ['cqrs'],
+            ]);
 
         $response = m::mock();
 
@@ -98,11 +170,7 @@ final class CacheClearControllerTest extends MockeryTestCase
             ->once()
             ->withArgs(
                 function (Clear $command): bool {
-                    self::assertSame(
-                        'translation_key,translation_replacement,sys_param,sys_param_list',
-                        $command->getNamespace()
-                    );
-                    self::assertFalse($command->getDryRun());
+                    self::assertSame('cqrs', $command->getNamespace());
 
                     return true;
                 }
@@ -110,7 +178,7 @@ final class CacheClearControllerTest extends MockeryTestCase
             ->andReturn($response);
 
         $response
-            ->shouldReceive('isServerError')
+            ->shouldReceive('isOk')
             ->once()
             ->andReturnFalse();
 
@@ -120,17 +188,17 @@ final class CacheClearControllerTest extends MockeryTestCase
             ->andReturnFalse();
 
         $response
-            ->shouldReceive('isOk')
+            ->shouldReceive('isServerError')
             ->once()
             ->andReturnTrue();
 
         $this->flashMessenger
-            ->shouldReceive('addSuccessMessage')
+            ->shouldReceive('addErrorMessage')
             ->once()
-            ->with('Cache cleared successfully');
+            ->with('Cache could not be cleared');
 
         $this->flashMessenger
-            ->shouldNotReceive('addErrorMessage');
+            ->shouldNotReceive('addSuccessMessage');
 
         $redirect = m::mock(Redirect::class);
 
@@ -147,42 +215,143 @@ final class CacheClearControllerTest extends MockeryTestCase
         $this->sut->indexAction();
     }
 
-    public function testIndexActionShowsErrorWhenCacheClearFails(): void
+    public function testIndexActionForGetRequestReturnsFormView(): void
+    {
+        $this->request
+            ->shouldReceive('isPost')
+            ->once()
+            ->andReturnFalse();
+
+        $this->form->shouldNotReceive('isValid');
+        $this->sut->shouldNotReceive('handleCommand');
+
+        $result = $this->sut->indexAction();
+
+        self::assertInstanceOf(ViewModel::class, $result);
+        self::assertSame('pages/form', $result->getTemplate());
+        self::assertSame($this->form, $result->getVariable('form'));
+    }
+
+    public function testIndexActionDoesNotClearCacheWhenFormIsInvalid(): void
     {
         $this->request
             ->shouldReceive('isPost')
             ->once()
             ->andReturnTrue();
 
+        $postData = [
+            'cacheTypes' => [],
+            'form-actions' => [
+                'submit' => '',
+            ],
+            'security' => 'test-token',
+        ];
+
+        $this->request
+            ->shouldReceive('getPost')
+            ->once()
+            ->andReturn($postData);
+
+        $this->form
+            ->shouldReceive('setData')
+            ->once()
+            ->with($postData)
+            ->andReturnSelf();
+
+        $this->form
+            ->shouldReceive('isValid')
+            ->once()
+            ->andReturnFalse();
+
+        $this->form->shouldNotReceive('getData');
+        $this->sut->shouldNotReceive('handleCommand');
+        $this->sut->shouldNotReceive('redirect');
+
+        $result = $this->sut->indexAction();
+
+        self::assertInstanceOf(ViewModel::class, $result);
+        self::assertSame('pages/form', $result->getTemplate());
+    }
+
+    public function testIndexActionClearsSelectedCachesSuccessfully(): void
+    {
+        $this->request
+            ->shouldReceive('isPost')
+            ->once()
+            ->andReturnTrue();
+
+        $postData = [
+            'cacheTypes' => [
+                'translations',
+                'system_parameters',
+                'cqrs',
+            ],
+            'form-actions' => [
+                'submit' => '',
+            ],
+            'security' => 'test-token',
+        ];
+
+        $this->request
+            ->shouldReceive('getPost')
+            ->once()
+            ->andReturn($postData);
+
+        $this->form
+            ->shouldReceive('setData')
+            ->once()
+            ->with($postData)
+            ->andReturnSelf();
+
+        $this->form
+            ->shouldReceive('isValid')
+            ->once()
+            ->andReturnTrue();
+
+        $this->form
+            ->shouldReceive('getData')
+            ->once()
+            ->andReturn([
+                'cacheTypes' => [
+                    'translations',
+                    'system_parameters',
+                    'cqrs',
+                ],
+            ]);
+
         $response = m::mock();
 
         $this->sut
             ->shouldReceive('handleCommand')
             ->once()
-            ->with(m::type(Clear::class))
+            ->withArgs(
+                function (Clear $command): bool {
+                    self::assertSame(
+                        'translation_key,translation_replacement,sys_param,sys_param_list,cqrs',
+                        $command->getNamespace()
+                    );
+                    self::assertFalse($command->getDryRun());
+
+                    return true;
+                }
+            )
             ->andReturn($response);
-
-        $response
-            ->shouldReceive('isServerError')
-            ->once()
-            ->andReturnTrue();
-
-        $response
-            ->shouldReceive('isClientError')
-            ->never();
 
         $response
             ->shouldReceive('isOk')
             ->once()
-            ->andReturnFalse();
+            ->andReturnTrue();
+
+        $response->shouldNotReceive('isClientError');
+        $response->shouldNotReceive('isServerError');
 
         $this->flashMessenger
-            ->shouldReceive('addErrorMessage')
+            ->shouldReceive('addSuccessMessage')
             ->once()
-            ->with('Cache could not be cleared');
+            ->with('Cache cleared successfully');
 
         $this->flashMessenger
-            ->shouldNotReceive('addSuccessMessage');
+            ->shouldNotReceive('addErrorMessage');
 
         $redirect = m::mock(Redirect::class);
 

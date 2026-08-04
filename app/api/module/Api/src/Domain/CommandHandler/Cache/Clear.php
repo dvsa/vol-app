@@ -36,6 +36,8 @@ class Clear extends AbstractCommandHandler implements
         'cqrs'
     ];
 
+    private const CQRS_CACHE_PREFIX = 'cqrs:';
+
     /**
      * Handle cache clear command
      *
@@ -217,9 +219,9 @@ class Clear extends AbstractCommandHandler implements
         $cacheNamespace =
             $this->getConfig()['caches']['default-cache']['options']['namespace']
             ?? 'zfcache';
-        
+
         if ($namespace === 'cqrs') {
-            return 'cqrs:';
+            return self::CQRS_CACHE_PREFIX;
         }
 
         return $cacheNamespace . ':' . $namespace;
