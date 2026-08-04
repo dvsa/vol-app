@@ -29,6 +29,7 @@ class CacheClearCommand extends AbstractBatchCommand
         'translation_replacement',
         'storage',
         'secretsmanager',
+        'cqrs',
     ];
 
     #[\Override]
