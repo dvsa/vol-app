@@ -5,31 +5,38 @@
 # of them can rot: a formatter that starts leaking fails, one that stops leaking fails as
 # a stale entry, and anything moving into or out of [skipped] or [unprobed] fails too.
 #
-# 146 exercised, 0 leaking, 3 could not be driven. 149 formatters in total.
+# 149 exercised, 0 leaking, 0 could not be driven. 149 formatters in total.
 #
 # The leaking list is a to-do list, not a permission slip. It should only ever shrink.
 
 [leaking]
 
-# Values the probe renders but cannot carry a payload into, because the formatter
-# requires a number or a parseable date and neither can contain "<script>". The
-# column renders; that one value is not asserted.
+# Values that render but cannot carry a payload, because the formatter requires a number
+# or a parseable date and neither can contain "<script>". The column renders; that one
+# value is not asserted. Dotted paths come from a hand-written fixture (see
+# FormatterEscapingHarness::fixtures) — the same accounting applies to those, so a fixture
+# cannot quietly de-probe a value and still read as covered.
 [unprobed]
 ExternalConversationLink.createdOn=date
+ExternalConversationMessage.createdBy.id=numeric
+ExternalConversationMessage.createdOn=date
+ExternalConversationMessage.documents.0.size=numeric
+ExternalConversationMessage.userMessageReads.0.createdOn=date
+ExternalConversationMessage.userMessageReads.0.user.id=numeric
 FeeAmount.name=numeric
 InternalConversationLink.createdOn=date
+InternalConversationMessage.createdBy.id=numeric
+InternalConversationMessage.createdOn=date
+InternalConversationMessage.documents.0.size=numeric
+InternalConversationMessage.userMessageReads.0.createdOn=date
+InternalConversationMessage.userMessageReads.0.user.id=numeric
 Money.name=numeric
 NoteUrl.createdOn=date
+NumberStackValue.name=numeric
 TransactionAmount.name=numeric
 TransactionFeeAllocatedAmount.name=numeric
 
 # Formatters that still cannot be driven at all. A skip means "unknown", never "safe".
+# Empty, and worth keeping that way: every formatter in the library now runs against a
+# hostile row.
 [skipped]
-ExternalConversationMessage
-InternalConversationMessage
-NumberStackValue
-
-# reasons, informational only - not parsed
-#   ExternalConversationMessage: TypeError: Common\Service\Table\Formatter\ExternalConversationMessage::getSenderName(): Return value
-#   InternalConversationMessage: TypeError: array_map(): Argument #2 ($array) must be of type array, CommonTest\Common\Service\Table\
-#   NumberStackValue: TypeError: number_format(): Argument #1 ($num) must be of type int|float, string given

@@ -73,8 +73,13 @@ final class HarnessContainer
         );
         $dataHelper->shouldIgnoreMissing('');
 
-        $stackHelper = m::mock(\Common\Service\Helper\StackHelperService::class);
-        $stackHelper->shouldIgnoreMissing('');
+        // Real, not a mock, and the distinction matters more than it looks. getStackValue() is a
+        // pure walk down a nested array with no dependencies of its own, and it is how StackValue,
+        // NumberStackValue and FeeTransactionDate read the value they format. Mocked with
+        // shouldIgnoreMissing(''), it handed all three an empty string instead of the row value —
+        // so they rendered nothing, could not leak by construction, and counted as exercised while
+        // asserting nothing at all. A fake is only safe where the real thing needs the world.
+        $stackHelper = new \Common\Service\Helper\StackHelperService();
 
         $dateHelper = m::mock(\Common\Service\Helper\DateHelperService::class);
         $dateHelper->shouldIgnoreMissing('');
