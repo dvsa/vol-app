@@ -7,7 +7,6 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSideEffect;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSystemUser;
 use Dvsa\Olcs\Cli\Domain\CommandHandler as CliCommandHandler;
 use Dvsa\Olcs\Cli\Domain\QueryHandler as CliQueryHandler;
-use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSystemUserOrSystemAdmin;
 
 return [
     //  cli commands
@@ -51,7 +50,6 @@ return [
     CommandHandler\Email\SendContinuationNotSought::class => IsSystemUser::class,
     CommandHandler\Correspondence\ProcessInboxDocuments::class => IsSystemUser::class,
     CommandHandler\Transaction\ResolveOutstandingPayments::class => IsSystemUser::class,
-    CommandHandler\Cache\Clear::class => IsSystemUserOrSystemAdmin::class,
     QueueCommandHandler\Complete::class => IsSideEffect::class,
     QueueCommandHandler\Failed::class => IsSideEffect::class,
     QueueCommandHandler\Retry::class => IsSideEffect::class,

@@ -6,6 +6,7 @@ use Dvsa\Olcs\Transfer\Command\Cache\Clear;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
+use Olcs\Mvc\Controller\ParameterProvider\AddFormDefaultData;
 
 class CacheClearController extends AbstractInternalController implements LeftViewProvider
 {
@@ -27,32 +28,16 @@ class CacheClearController extends AbstractInternalController implements LeftVie
     #[\Override]
     public function indexAction()
     {
-        $this->placeholder()->setPlaceholder('pageTitle', 'Clear cache');
-
-        if (!$this->getRequest()->isPost()) {
-            return new ViewModel();
-        }
-
-        // Clear the namespaces used by translations and feature-toggle/system-parameter changes.
-        $response = $this->handleCommand(
-            Clear::create([
+        return $this->confirmCommand(
+            new AddFormDefaultData([
                 'namespace' => 'translation_key,translation_replacement,sys_param,sys_param_list',
                 'dryRun' => false,
-            ])
-        );
-
-        if ($response->isServerError() || $response->isClientError()) {
-            $this->flashMessengerHelperService
-                ->addErrorMessage('Cache could not be cleared');
-        }
-
-        if ($response->isOk()) {
-            $this->flashMessengerHelperService
-                ->addSuccessMessage('Cache cleared successfully');
-        }
-
-        return $this->redirect()->toRoute(
-            'admin-dashboard/admin-cache-clear'
+            ]),
+            Clear::class,
+            'Clear cache',
+            'Are you sure you want to clear the cache?',
+            'Cache cleared successfully',
+            'Clear cache'
         );
     }
 }
