@@ -19,10 +19,12 @@ use Dvsa\Olcs\Api\Entity\Cases\Cases as CasesEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterChoice as LetterChoiceEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssue as LetterIssueEntity;
+use Dvsa\Olcs\Api\Entity\Letter\LetterIssueTodo as LetterIssueTodoEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion as LetterIssueVersionEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSection as LetterSectionEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant as LetterSectionVariantEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion as LetterSectionVersionEntity;
+use Dvsa\Olcs\Api\Entity\Letter\LetterTodoVersion as LetterTodoVersionEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterType as LetterTypeEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection as LetterTypeSectionEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
@@ -35,7 +37,7 @@ use Mockery as m;
 /**
  * Generate LetterInstance Test
  */
-class GenerateTest extends AbstractCommandHandlerTestCase
+final class GenerateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -109,8 +111,8 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         $result = $this->sut->handleCommand($command);
 
         $this->assertSame(999, $result->getId('letterInstance'));
-        $this->assertStringContainsString('Letter instance', $result->getMessages()[0]);
-        $this->assertStringContainsString('generated successfully', $result->getMessages()[0]);
+        $this->assertStringContainsString('Letter instance', (string) $result->getMessages()[0]);
+        $this->assertStringContainsString('generated successfully', (string) $result->getMessages()[0]);
 
         $this->assertNotNull($letterInstance->getReference());
         $this->assertStringStartsWith('LTR', $letterInstance->getReference());
@@ -597,7 +599,7 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         $messages = $result->getMessages();
         $warningFound = false;
         foreach ($messages as $msg) {
-            if (str_contains($msg, 'Required section "Introductory wording"')) {
+            if (str_contains((string) $msg, 'Required section "Introductory wording"')) {
                 $warningFound = true;
                 break;
             }
@@ -782,13 +784,13 @@ class GenerateTest extends AbstractCommandHandlerTestCase
         // Section with a conditioned variant that requires GV + Variation + NI + choice 10
         $section = m::mock(LetterSectionEntity::class)->makePartial();
         $section->shouldReceive('getVariantForContext')
-            ->with(m::on(function ($context) {
+            ->with(m::on(
                 // Verify the context was built correctly from application and licence
-                return $context['goodsOrPsv'] === 'lcat_gv'
-                    && $context['isVariation'] === true
-                    && $context['isNi'] === true
-                    && $context['selectedChoiceIds'] === [10, 20];
-            }))
+                fn($context) => $context['goodsOrPsv'] === 'lcat_gv'
+                && $context['isVariation'] === true
+                && $context['isNi'] === true
+                && $context['selectedChoiceIds'] === [10, 20]
+            ))
             ->andReturnUsing(function () use ($sectionVersion) {
                 $variant = m::mock(LetterSectionVariantEntity::class)->makePartial();
                 $variant->shouldReceive('getCurrentVersion')->andReturn($sectionVersion);
@@ -986,15 +988,15 @@ class GenerateTest extends AbstractCommandHandlerTestCase
 
         $section = m::mock(LetterSectionEntity::class)->makePartial();
         $section->shouldReceive('getVariantForContext')
-            ->with(m::on(function ($context) {
+            ->with(m::on(
                 // When no application, goodsOrPsv comes from licence
                 // isVariation is null (no application)
                 // isNi comes from licence
-                return $context['goodsOrPsv'] === 'lcat_psv'
-                    && $context['isVariation'] === null
-                    && $context['isNi'] === true
-                    && $context['selectedChoiceIds'] === [];
-            }))
+                fn($context) => $context['goodsOrPsv'] === 'lcat_psv'
+                && $context['isVariation'] === null
+                && $context['isNi'] === true
+                && $context['selectedChoiceIds'] === []
+            ))
             ->andReturnUsing(function () use ($sectionVersion) {
                 $variant = m::mock(LetterSectionVariantEntity::class)->makePartial();
                 $variant->shouldReceive('getCurrentVersion')->andReturn($sectionVersion);
@@ -1031,5 +1033,93 @@ class GenerateTest extends AbstractCommandHandlerTestCase
 
         $this->assertSame(999, $result->getId('letterInstance'));
         $this->assertCount(1, $letterInstance->getLetterInstanceSections());
+    }
+
+    /**
+     * VOL-7280: when two selected issues link to the same LetterTodoVersion, exactly one
+     * LetterInstanceTodo should be created and attached to the FIRST issue in display order.
+     */
+    public function testHandleCommandDedupesIssueTodosAcrossSelectedIssues(): void
+    {
+        $letterTypeId = 123;
+        $issueId1 = 789;
+        $issueId2 = 790;
+
+        $command = Cmd::create([
+            'letterType' => $letterTypeId,
+            'selectedIssues' => [$issueId1, $issueId2],
+        ]);
+
+        $letterType = m::mock(LetterTypeEntity::class)->makePartial();
+        $letterType->setId($letterTypeId);
+
+        $this->repoMap['LetterType']->shouldReceive('fetchById')
+            ->with($letterTypeId)
+            ->once()
+            ->andReturn($letterType);
+
+        // A single LetterTodoVersion is linked to both issues -> should dedupe to one
+        $sharedTodoVersion = m::mock(LetterTodoVersionEntity::class)->makePartial();
+        $sharedTodoVersion->setId(5000);
+
+        $junction1 = m::mock(LetterIssueTodoEntity::class)->makePartial();
+        $junction1->shouldReceive('getLetterTodoVersion')->andReturn($sharedTodoVersion);
+
+        $issueVersion1 = m::mock(LetterIssueVersionEntity::class)->makePartial();
+        $issueVersion1->setId(1001);
+        $issueVersion1->shouldReceive('getLetterIssueTodos')
+            ->andReturn(new ArrayCollection([$junction1]));
+
+        $letterIssue1 = m::mock(LetterIssueEntity::class)->makePartial();
+        $letterIssue1->setId($issueId1);
+        $letterIssue1->shouldReceive('getCurrentVersion')->andReturn($issueVersion1);
+
+        $this->repoMap['LetterIssue']->shouldReceive('fetchById')
+            ->with($issueId1)
+            ->once()
+            ->andReturn($letterIssue1);
+
+        $junction2 = m::mock(LetterIssueTodoEntity::class)->makePartial();
+        $junction2->shouldReceive('getLetterTodoVersion')->andReturn($sharedTodoVersion);
+
+        $issueVersion2 = m::mock(LetterIssueVersionEntity::class)->makePartial();
+        $issueVersion2->setId(1002);
+        $issueVersion2->shouldReceive('getLetterIssueTodos')
+            ->andReturn(new ArrayCollection([$junction2]));
+
+        $letterIssue2 = m::mock(LetterIssueEntity::class)->makePartial();
+        $letterIssue2->setId($issueId2);
+        $letterIssue2->shouldReceive('getCurrentVersion')->andReturn($issueVersion2);
+
+        $this->repoMap['LetterIssue']->shouldReceive('fetchById')
+            ->with($issueId2)
+            ->once()
+            ->andReturn($letterIssue2);
+
+        $letterInstance = null;
+
+        $this->repoMap['LetterInstance']->shouldReceive('save')
+            ->with(m::type(LetterInstanceEntity::class))
+            ->once()
+            ->andReturnUsing(
+                function (LetterInstanceEntity $entity) use (&$letterInstance) {
+                    $letterInstance = $entity;
+                    $entity->setId(999);
+                }
+            );
+
+        $this->sut->handleCommand($command);
+
+        $todos = $letterInstance->getLetterInstanceTodos();
+        $this->assertCount(1, $todos, 'Same to-do on two issues should be deduped to one');
+
+        $instanceTodo = $todos->first();
+        $this->assertSame($sharedTodoVersion, $instanceTodo->getLetterTodoVersion());
+        $this->assertSame(
+            $letterInstance->getLetterInstanceIssues()->first(),
+            $instanceTodo->getLetterInstanceIssue(),
+            'Deduped to-do should attach to the first issue in display order'
+        );
+        $this->assertSame($letterInstance, $instanceTodo->getLetterInstance());
     }
 }

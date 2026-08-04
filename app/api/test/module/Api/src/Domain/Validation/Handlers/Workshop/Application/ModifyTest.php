@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Workshop;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ModifyTest extends AbstractHandlerTestCase
+final class ModifyTest extends AbstractHandlerTestCase
 {
     /**
      * @var Modify
@@ -54,12 +54,10 @@ class ModifyTest extends AbstractHandlerTestCase
         $this->assertFalse($this->sut->isValid($dto));
     }
 
-    public static function contextProvider(): array
+    public static function contextProvider(): \Iterator
     {
-        return [
-            [null, null],
-            [1, [123]]
-        ];
+        yield [null, null];
+        yield [1, [123]];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('licenceProvider')]
@@ -93,12 +91,10 @@ class ModifyTest extends AbstractHandlerTestCase
         $this->assertEquals($expected, $this->sut->isValid($dto));
     }
 
-    public static function licenceProvider(): array
+    public static function licenceProvider(): \Iterator
     {
-        return [
-            [123, true],
-            [231, false]
-        ];
+        yield [123, true];
+        yield [231, false];
     }
 
     public function getLicenceFromApplication(): mixed

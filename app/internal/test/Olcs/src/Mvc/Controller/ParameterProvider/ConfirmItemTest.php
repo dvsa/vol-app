@@ -13,7 +13,7 @@ use Laminas\Mvc\Controller\Plugin\Params;
  * Class ConfirmItemTest
  * @package OlcsTest\Mvc\Controller\ParameterProvider
  */
-class ConfirmItemTest extends TestCase
+final class ConfirmItemTest extends TestCase
 {
     public function testProvideParameters(): void
     {

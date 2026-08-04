@@ -23,7 +23,7 @@ use Mockery as m;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class LegacyOffenceListTest extends QueryHandlerTestCase
+final class LegacyOffenceListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -52,7 +52,7 @@ class LegacyOffenceListTest extends QueryHandlerTestCase
             ->andReturn(1);
 
         $result = $this->sut->handleQuery($query);
-        $this->assertEquals($result['count'], 1);
+        $this->assertEquals(1, $result['count']);
         $this->assertEquals($result['result'], [['foo' => 'bar']]);
     }
 }

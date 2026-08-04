@@ -11,16 +11,13 @@ use Mockery as m;
 /**
  * WithCreatedTest
  */
-class WithCreatedTest extends QueryPartialTestCase
+final class WithCreatedTest extends QueryPartialTestCase
 {
-    /** @var m\Mock */
-    private $with;
-
     public function setUp(): void
     {
         // Cannot mock With as it is Final
-        $this->with = new With();
-        $this->sut = new WithCreatedBy($this->with);
+        $with = new With();
+        $this->sut = new WithCreatedBy($with);
 
         parent::setUp();
     }
@@ -35,24 +32,22 @@ class WithCreatedTest extends QueryPartialTestCase
         );
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
-            [
-                'SELECT a, u, cd, p FROM foo a LEFT JOIN a.createdBy u LEFT JOIN u.contactDetails cd ' .
-                    'LEFT JOIN cd.person p',
-                []
-            ],
-            [
-                'SELECT a, u, cd, p FROM foo a LEFT JOIN a.createdBy u LEFT JOIN u.contactDetails cd ' .
-                    'LEFT JOIN cd.person p',
-                ['ENTITY']
-            ],
-            [
-                'SELECT a, u, cd, p FROM foo a LEFT JOIN ALIAS.createdBy u LEFT JOIN u.contactDetails cd ' .
-                    'LEFT JOIN cd.person p',
-                ['ENTITY', 'ALIAS']
-            ],
+        yield [
+            'SELECT a, u, cd, p FROM foo a LEFT JOIN a.createdBy u LEFT JOIN u.contactDetails cd ' .
+                'LEFT JOIN cd.person p',
+            []
+        ];
+        yield [
+            'SELECT a, u, cd, p FROM foo a LEFT JOIN a.createdBy u LEFT JOIN u.contactDetails cd ' .
+                'LEFT JOIN cd.person p',
+            ['ENTITY']
+        ];
+        yield [
+            'SELECT a, u, cd, p FROM foo a LEFT JOIN ALIAS.createdBy u LEFT JOIN u.contactDetails cd ' .
+                'LEFT JOIN cd.person p',
+            ['ENTITY', 'ALIAS']
         ];
     }
 }

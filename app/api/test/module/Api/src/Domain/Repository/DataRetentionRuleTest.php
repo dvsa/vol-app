@@ -11,11 +11,12 @@ use Dvsa\Olcs\Transfer\Query\DataRetention\RuleAdmin;
 use Dvsa\Olcs\Transfer\Query\DataRetention\RuleList;
 use Mockery as m;
 
-class DataRetentionRuleTest extends RepositoryTestCase
+final class DataRetentionRuleTest extends RepositoryTestCase
 {
     /** @var DataRetentionRule */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(DataRetentionRule::class, true);

@@ -14,7 +14,7 @@ use Laminas\Form\FormInterface;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class EmploymentHistoryTest extends MockeryTestCase
+final class EmploymentHistoryTest extends MockeryTestCase
 {
     public function testMapFromResult(): void
     {

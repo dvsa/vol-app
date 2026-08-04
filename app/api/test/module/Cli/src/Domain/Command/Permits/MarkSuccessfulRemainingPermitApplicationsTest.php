@@ -11,7 +11,7 @@ use Dvsa\Olcs\Cli\Domain\Command\Permits\MarkSuccessfulRemainingPermitApplicatio
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class MarkSuccessfulRemainingPermitApplicationsTest extends \PHPUnit\Framework\TestCase
+final class MarkSuccessfulRemainingPermitApplicationsTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {
@@ -21,6 +21,6 @@ class MarkSuccessfulRemainingPermitApplicationsTest extends \PHPUnit\Framework\T
             ]
         );
 
-        static::assertEquals(7, $sut->getStockId());
+        $this->assertEquals(7, $sut->getStockId());
     }
 }

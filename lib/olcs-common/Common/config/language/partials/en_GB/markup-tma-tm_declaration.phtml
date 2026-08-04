@@ -1,0 +1,27 @@
+<h3 class="govuk-heading-m" xmlns="http://www.w3.org/1999/html">By signing the declaration you are confirming your status as an internal transport manager,
+    an external transport
+    manager, or both, and understand that your duties include:</h3>
+
+<?php
+echo $this->escapeHtml($this->translate('tma-tm-declaration-list-subheader'));
+echo $this->escapeHtml($this->translate('tma-tm-declaration-drivers-administration'));
+echo $this->escapeHtml($this->translate('tma-tm-declaration-drivers-management'));
+echo $this->escapeHtml($this->translate('tma-tm-declaration-drivers-operations'));
+echo $this->escapeHtml($this->translate('tma-tm-declaration-vehicle-administration'));
+echo $this->escapeHtml($this->translate('tma-tm-declaration-vehicle-management'));
+echo $this->escapeHtml($this->translate('tma-tm-declaration-licence-administration'));
+echo $this->escapeHtml($this->translate('tma-tm-declaration-internal'));
+?>
+<?php
+ echo $this->escapeHtml($this->translate('tma-tm-declaration-external'));
+?>
+<?php
+echo $this->escapeHtml($this->translate('tma-tm-declaration-warning'));
+?>
+
+<h3 class="govuk-heading-m">Declaration by the applicant for the licence, or the licence holder</h3>
+<p class="govuk-body">
+    I confirm that to the best of my knowledge and belief the details given in this form are correct and understand that
+    the above named applicant does not become a transport manager for the licence(s) named until this is confirmed in writing
+    by the Traffic Commissioner.
+</p>

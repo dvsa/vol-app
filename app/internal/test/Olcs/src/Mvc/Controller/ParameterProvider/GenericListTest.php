@@ -14,11 +14,12 @@ use Laminas\Mvc\Controller\Plugin\Params;
  *
  * @package OlcsTest\Mvc\Controller\ParameterProvider
  */
-class GenericListTest extends TestCase
+final class GenericListTest extends TestCase
 {
     /** @var  Params | m\MockInterface */
     private $mockParams;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockParams = m::mock(Params::class)->makePartial();
@@ -70,14 +71,11 @@ class GenericListTest extends TestCase
 
         $sut->setParams($this->mockParams);
 
-        static::assertEquals(
-            [
-                'page' => 1,
-                'sort' => 'unit_defSort',
-                'order' => 'unit_DefOrder',
-                'limit' => 9999,
-            ],
-            $sut->provideParameters()
-        );
+        $this->assertEquals([
+            'page' => 1,
+            'sort' => 'unit_defSort',
+            'order' => 'unit_DefOrder',
+            'limit' => 9999,
+        ], $sut->provideParameters());
     }
 }

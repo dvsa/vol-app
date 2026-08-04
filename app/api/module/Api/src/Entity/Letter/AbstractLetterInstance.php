@@ -22,31 +22,24 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="letter_instance",
- *    indexes={
- *        @ORM\Index(name="ix_letter_instance_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_letter_instance_bus_reg_id", columns={"bus_reg_id"}),
- *        @ORM\Index(name="ix_letter_instance_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_letter_instance_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_instance_document_id", columns={"document_id"}),
- *        @ORM\Index(name="ix_letter_instance_irfo_organisation_id", columns={"irfo_organisation_id"}),
- *        @ORM\Index(name="ix_letter_instance_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_instance_letter_type_id", columns={"letter_type_id"}),
- *        @ORM\Index(name="ix_letter_instance_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_letter_instance_organisation_id", columns={"organisation_id"}),
- *        @ORM\Index(name="ix_letter_instance_status", columns={"status"}),
- *        @ORM\Index(name="ix_letter_instance_transport_manager_id", columns={"transport_manager_id"}),
- *        @ORM\Index(name="uk_letter_instance_reference", columns={"reference"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_letter_instance_reference", columns={"reference"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_instance')]
+#[ORM\Index(name: 'ix_letter_instance_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_letter_instance_bus_reg_id', columns: ['bus_reg_id'])]
+#[ORM\Index(name: 'ix_letter_instance_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_letter_instance_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_instance_document_id', columns: ['document_id'])]
+#[ORM\Index(name: 'ix_letter_instance_irfo_organisation_id', columns: ['irfo_organisation_id'])]
+#[ORM\Index(name: 'ix_letter_instance_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_instance_letter_type_id', columns: ['letter_type_id'])]
+#[ORM\Index(name: 'ix_letter_instance_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_letter_instance_organisation_id', columns: ['organisation_id'])]
+#[ORM\Index(name: 'ix_letter_instance_status', columns: ['status'])]
+#[ORM\Index(name: 'ix_letter_instance_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\UniqueConstraint(name: 'uk_letter_instance_reference', columns: ['reference'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractLetterInstance implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -60,161 +53,145 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * LetterType
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterType", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, fetch: 'LAZY')]
     protected $letterType;
 
     /**
      * Licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
     protected $application;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * BusReg
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
-     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
     protected $busReg;
 
     /**
      * IrfoOrganisation
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_organisation_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irfo_organisation_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $irfoOrganisation;
 
     /**
      * Recipient organisation
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 
     /**
      * Recipient TM
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
     protected $transportManager;
 
     /**
      * FK to ref_data
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * FK to document when PDF generated
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
     protected $document;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * User-friendly reference (SQID)
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="reference", length=20, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'reference', length: 20, nullable: false)]
     protected $reference = '';
 
     /**
      * Sent on
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="sent_on", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'sent_on', nullable: true)]
     protected $sentOn;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -238,7 +215,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setId($id)
     {
@@ -262,7 +239,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterType $letterType new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setLetterType($letterType)
     {
@@ -286,7 +263,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -310,7 +287,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setApplication($application)
     {
@@ -334,7 +311,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setCase($case)
     {
@@ -358,7 +335,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -382,7 +359,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $irfoOrganisation new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setIrfoOrganisation($irfoOrganisation)
     {
@@ -406,7 +383,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -430,7 +407,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -454,7 +431,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setStatus($status)
     {
@@ -478,7 +455,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setDocument($document)
     {
@@ -502,7 +479,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -526,7 +503,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -550,7 +527,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param string $reference new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setReference($reference)
     {
@@ -574,7 +551,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param \DateTime $sentOn new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setSentOn($sentOn)
     {
@@ -604,7 +581,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return LetterInstance
+     * @return static
      */
     public function setVersion($version)
     {

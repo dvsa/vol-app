@@ -7,18 +7,12 @@ use Dvsa\Olcs\Api\Domain\Exception;
 
 /**
  * Recipient Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="recipient",
- *    indexes={
- *        @ORM\Index(name="ix_recipient_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_recipient_last_modified_by", columns={"last_modified_by"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_recipient_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'recipient')]
+#[ORM\Index(name: 'ix_recipient_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_recipient_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\UniqueConstraint(name: 'uk_recipient_olbs_key', columns: ['olbs_key'])]
+#[ORM\Entity]
 class Recipient extends AbstractRecipient
 {
     public const ERROR_INVALID_SUBSCRIPTION = 'PUB-REC-1';

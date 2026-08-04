@@ -9,13 +9,17 @@ S3BUCKET="devapp-shd-pri-olcsci-build-s3"
 S3BUCKETPATH="cognito"
 ASSUME_ROLE="arn:aws:iam::054614622558:role/OLCS-DEVAPPCI-DEVCI-Cognito_Pool_Admin"
 PASSPHRASE="56B03196-BB37-440C-AAD2-E0E2278CCF33"
+DELETE_BATCH_SIZE="${DELETE_BATCH_SIZE:-5000}"
+DELETE_PARALLELISM="${DELETE_PARALLELISM:-4}"
 
 SLACK_CHAN="#env-status"
 SLACK_FAIL="#FF9FA1"
 SLACK_COMPLETED="#36A64F"
 DEFAULT_EMAIL="no@emailaddress.com"
 
-
+ORIGINAL_AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID:-}"
+ORIGINAL_AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY:-}"
+ORIGINAL_AWS_SESSION_TOKEN="${AWS_SESSION_TOKEN:-}"
 
 label_for_branch() {
     case "$1" in
@@ -28,7 +32,6 @@ send_slack_notification() {
     local channel="$1"
     local color="$2"
     local message="$3"
-    # Replace with your Slack integration if needed.
     echo "SLACK [$color] ($channel): $message"
 }
 
@@ -37,9 +40,51 @@ usage() {
     echo "  environment: dev, reg, da, qa, demo, prodsupp"
     echo "  region: eu-west-1 or eu-west-2"
     echo "  delete_users: true or false (default true)"
+    echo "  env vars:"
+    echo "    DELETE_BATCH_SIZE: batch size for deletions (default 5000)"
+    echo "    DELETE_PARALLELISM: concurrent deletion workers (default 4)"
     exit 2
 }
 
+restore_base_credentials() {
+    export AWS_ACCESS_KEY_ID="$ORIGINAL_AWS_ACCESS_KEY_ID"
+    export AWS_SECRET_ACCESS_KEY="$ORIGINAL_AWS_SECRET_ACCESS_KEY"
+
+    if [[ -n "$ORIGINAL_AWS_SESSION_TOKEN" ]]; then
+        export AWS_SESSION_TOKEN="$ORIGINAL_AWS_SESSION_TOKEN"
+    else
+        unset AWS_SESSION_TOKEN
+    fi
+}
+
+assume_role() {
+    echo "Assuming AWS role..."
+
+    restore_base_credentials
+
+    ROLE_RESPONSE=$(aws sts assume-role \
+        --role-arn "$ASSUME_ROLE" \
+        --role-session-name jenkins \
+        --external-id "$PASSPHRASE" \
+        --duration-seconds 3600 \
+        --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' \
+        --output text
+    )
+    read -r AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN <<< "$ROLE_RESPONSE"
+    export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+}
+
+delete_batch() {
+    local batch_file="$1"
+    local batch_count
+
+    batch_count=$(grep -cve '^\s*$' "$batch_file" || true)
+    echo "Deleting batch from $batch_file ($batch_count users)..."
+
+    assume_role
+
+    /usr/local/bin/delete_users_from_user_pool.py "$USER_POOL_ID" "$REGION" --from-file "$batch_file"
+}
 
 ENV="$1"
 REGION="$2"
@@ -57,6 +102,11 @@ if ! [[ "$REGION" =~ ^(eu-west-1|eu-west-2)$ ]]; then
     echo "Invalid region."; usage
 fi
 
+if ! [[ "$DELETE_PARALLELISM" =~ ^[1-9][0-9]*$ ]]; then
+    echo "Invalid DELETE_PARALLELISM: must be a positive integer."
+    exit 2
+fi
+
 ENVIRONMENT="$(label_for_branch "$ENV")"
 UPP_ENVIRONMENT="$(echo "$ENVIRONMENT" | tr '[:lower:]' '[:upper:]')"
 
@@ -65,22 +115,14 @@ export HTTPS_PROXY="http://${PROXYHOST}:${PROXYPORT}"
 export NO_PROXY="$NOPROXY"
 export AWS_PAGER=""
 
-USER_FILE="users-${ENVIRONMENT}.txt"
+USER_FILE="$(mktemp "/tmp/users-${ENVIRONMENT}.txt.XXXXXX")"
+DELETE_LIST_FILE="$(mktemp "/tmp/delete-users-${ENVIRONMENT}.txt.XXXXXX")"
+trap 'rm -f "$USER_FILE" "$DELETE_LIST_FILE" "${DELETE_LIST_FILE}.batch."*' EXIT
 
 echo "Downloading user file from S3..."
-aws s3 cp "s3://${S3BUCKET}/${S3BUCKETPATH}/${USER_FILE}" "$USER_FILE" --region "$REGION"
+aws s3 cp "s3://${S3BUCKET}/${S3BUCKETPATH}/users-${ENVIRONMENT}.txt" "$USER_FILE" --region "$REGION"
 
-echo "Assuming AWS role..."
-ROLE_RESPONSE=$(aws sts assume-role \
-    --role-arn "$ASSUME_ROLE" \
-    --role-session-name jenkins \
-    --external-id "$PASSPHRASE" \
-    --duration-seconds 900 \
-    --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' \
-    --output text
-)
-read -r AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN <<< "$ROLE_RESPONSE"
-export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+assume_role
 
 echo "Determining Cognito User Pool ID..."
 USER_POOL_ID=$(aws cognito-idp list-user-pools \
@@ -96,21 +138,57 @@ if [[ -z "$USER_POOL_ID" ]]; then
 fi
 
 if [[ "$DELETE_USERS" == "true" ]]; then
-    echo "Deleting users from user pool..."
-    if ! /usr/local/bin/delete_users_from_user_pool.py "$USER_POOL_ID" "$REGION"; then
-        send_slack_notification "$SLACK_CHAN" "$SLACK_FAIL" "${ENVIRONMENT} Failed to delete users."
-        exit 1
+    echo "Exporting users from user pool..."
+
+    /usr/local/bin/delete_users_from_user_pool.py "$USER_POOL_ID" "$REGION" --list-only > "$DELETE_LIST_FILE"
+
+    TOTAL_USERS=$(grep -cve '^\s*$' "$DELETE_LIST_FILE" || true)
+    echo "Found $TOTAL_USERS users to delete."
+
+    if [[ "$TOTAL_USERS" -gt 0 ]]; then
+        split -l "$DELETE_BATCH_SIZE" "$DELETE_LIST_FILE" "${DELETE_LIST_FILE}.batch."
+
+        export USER_POOL_ID REGION
+        export -f restore_base_credentials assume_role delete_batch
+
+        running_jobs=0
+        pids=()
+
+        for batch_file in "${DELETE_LIST_FILE}.batch."*; do
+            [[ -e "$batch_file" ]] || continue
+
+            delete_batch "$batch_file" &
+            pids+=("$!")
+            ((running_jobs+=1))
+
+            if [[ "$running_jobs" -ge "$DELETE_PARALLELISM" ]]; then
+                if ! wait -n; then
+                    send_slack_notification "$SLACK_CHAN" "$SLACK_FAIL" "${ENVIRONMENT} Failed to delete users."
+                    exit 1
+                fi
+                ((running_jobs-=1))
+            fi
+        done
+
+        for pid in "${pids[@]}"; do
+            if ! wait "$pid"; then
+                send_slack_notification "$SLACK_CHAN" "$SLACK_FAIL" "${ENVIRONMENT} Failed to delete users."
+                exit 1
+            fi
+        done
     fi
+
     echo "Users deleted."
 fi
 
 echo "Loading users into the user pool..."
-if ! /usr/local/bin/load_user_pool.py "$USER_POOL_ID" "$REGION" "$ENVIRONMENT" "DEV/APP/CI-COG-KNOWN-PASSWORD" "$DEFAULT_EMAIL"; then
-    send_slack_notification "$SLACK_CHAN" "$SLACK_FAIL" "${ENVIRONMENT} Failed to load users."
-    exit 1
+
+assume_role
+
+if ! /usr/local/bin/load_user_pool.py "$USER_POOL_ID" "$REGION" "$ENVIRONMENT" "DEV/APP/CI-COG-KNOWN-PASSWORD" "$DEFAULT_EMAIL" "$USER_FILE"; then
+     send_slack_notification "$SLACK_CHAN" "$SLACK_FAIL" "${ENVIRONMENT} Failed to load users."
+     exit 1
 fi
 
 send_slack_notification "$SLACK_CHAN" "$SLACK_COMPLETED" "${ENVIRONMENT} User Pool loaded back to default status."
 echo "Workflow complete."
-
-rm -f "$USER_FILE"

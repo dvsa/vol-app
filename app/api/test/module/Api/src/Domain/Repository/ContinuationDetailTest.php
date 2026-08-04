@@ -19,11 +19,12 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class ContinuationDetailTest extends RepositoryTestCase
+final class ContinuationDetailTest extends RepositoryTestCase
 {
     /** @var m\MockInterface|Repo */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);
@@ -47,7 +48,7 @@ class ContinuationDetailTest extends RepositoryTestCase
                 ->andReturn(['RESULTS'])
                 ->getMock()
         );
-        static::assertEquals(['RESULTS'], $this->sut->fetchForLicence(95));
+        $this->assertEquals(['RESULTS'], $this->sut->fetchForLicence(95));
 
         $dateTime = new \Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime();
         $year = $dateTime->format('Y');
@@ -72,7 +73,7 @@ EOT;
         // remove indentation
         $expectedQuery = str_replace("  ", '', $expectedQuery);
 
-        static::assertEquals($expectedQuery, $this->query);
+        $this->assertEquals($expectedQuery, $this->query);
     }
 
     public function testFetchOngoingForLicence(): void
@@ -92,12 +93,12 @@ EOT;
                 ->andReturn('RESULT')
                 ->getMock()
         );
-        static::assertEquals('RESULT', $this->sut->fetchOngoingForLicence(95));
+        $this->assertEquals('RESULT', $this->sut->fetchOngoingForLicence(95));
 
         $expectedQuery = 'BLAH AND m.licence = [[95]] AND (m.status = [[con_det_sts_acceptable]] '
             . 'OR (m.status != [[con_det_sts_complete]] AND m.isDigital = 1))';
 
-        static::assertEquals($expectedQuery, $this->query);
+        $this->assertEquals($expectedQuery, $this->query);
     }
 
     /**
@@ -256,7 +257,7 @@ EOT;
             ->once()
             ->andReturn([$mockEntity1, $mockEntity2]);
 
-        static::assertEquals($expected, $this->sut->fetchChecklistReminders(['A', 'B'], 1, 2016, [1]));
+        $this->assertEquals($expected, $this->sut->fetchChecklistReminders(['A', 'B'], 1, 2016, [1]));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('statusProvider')]
@@ -306,18 +307,13 @@ EOT;
             ->once()
             ->andReturn(['result']);
 
-        static::assertEquals(
-            $this->sut->fetchDetails(1, ['st'], 'ln', $method, 'st'),
-            ['result']
-        );
+        $this->assertEquals($this->sut->fetchDetails(1, ['st'], 'ln', $method, 'st'), ['result']);
     }
 
-    public static function statusProvider(): array
+    public static function statusProvider(): \Iterator
     {
-        return [
-            [Entity::METHOD_EMAIL, 1],
-            [Entity::METHOD_POST, 0]
-        ];
+        yield [Entity::METHOD_EMAIL, 1];
+        yield [Entity::METHOD_POST, 0];
     }
 
     public function testFetchWithLicence(): void
@@ -342,10 +338,7 @@ EOT;
             ->once()
             ->andReturn(['result']);
 
-        static::assertEquals(
-            $this->sut->fetchWithLicence(1),
-            ['result']
-        );
+        $this->assertEquals($this->sut->fetchWithLicence(1), ['result']);
     }
 
     public function testFetchLicenceIdsForContinuationAndLicences(): void
@@ -375,10 +368,7 @@ EOT;
             ->once()
             ->andReturn([['licence' => ['id' => 123]]]);
 
-        static::assertEquals(
-            $this->sut->fetchLicenceIdsForContinuationAndLicences(111, [222, 333]),
-            [123]
-        );
+        $this->assertEquals($this->sut->fetchLicenceIdsForContinuationAndLicences(111, [222, 333]), [123]);
     }
 
     public function testCreateContinuationDetails(): void
@@ -405,10 +395,10 @@ EOT;
 
         $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn('RESULT');
 
-        static::assertEquals('RESULT', $this->sut->fetchListForDigitalReminders(54));
+        $this->assertEquals('RESULT', $this->sut->fetchListForDigitalReminders(54));
 
-        $fromDate = (new DateTime())->format('Y-m-d');
-        $toDate = (new DateTime())->add(new \DateInterval('P54D'))->format('Y-m-d');
+        $fromDate = new DateTime()->format('Y-m-d');
+        $toDate = new DateTime()->add(new \DateInterval('P54D'))->format('Y-m-d');
         $expectedQuery = 'BLAH AND l.status IN ["lsts_valid","lsts_curtailed","lsts_suspended"] ' .
             'AND l.expiryDate >= [[' . $fromDate . ']] ' .
             'AND l.expiryDate <= [[' . $toDate . ']] ' .
@@ -418,6 +408,6 @@ EOT;
             'AND m.digitalNotificationSent = 1 ' .
             'AND m.digitalReminderSent = 0';
 
-        static::assertEquals($expectedQuery, $this->query);
+        $this->assertEquals($expectedQuery, $this->query);
     }
 }

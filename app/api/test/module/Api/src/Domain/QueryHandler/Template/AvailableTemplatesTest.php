@@ -12,7 +12,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\AbstractListQueryHandlerTestCase;
 /**
  * AvailableTemplates Test
  */
-class AvailableTemplatesTest extends AbstractListQueryHandlerTestCase
+final class AvailableTemplatesTest extends AbstractListQueryHandlerTestCase
 {
     protected $sutClass = Handler::class;
     protected $sutRepo = 'Template';

@@ -1,32 +1,52 @@
 {
   "name": "olcs/backend",
   "description": "Back End Application for OLCS Project",
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../../lib/olcs-logging",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-utils",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
+      "url": "../../lib/olcs-transfer",
+      "options": {
+        "symlink": true
+      }
+    }
+  ],
   "require": {
-    "php": "~8.3.0",
+    "php": "~8.4.0",
     "ext-intl": "*",
     "ext-json": "*",
     "ext-curl": "*",
     "ext-redis": "*",
     "ext-pdo": "*",
     "ext-dom": "*",
-    "aws/aws-sdk-php": "^3.369",
+    "aws/aws-sdk-php": "^3.385",
     "beberlei/doctrineextensions": "^1.5",
     "caseyamcl/guzzle_retry_middleware": "^2.13",
-    "doctrine/doctrine-orm-module": "^6.3",
     "doctrine/orm": "^2.20",
     "dvsa/authentication-cognito": "^3.3",
-    "dvsa/laminas-config-cloud-parameters": "^1.0",
-    "dvsa/php-govuk-account": "dev-chore/modernise-dependencies as 3.1.0",
+    "dvsa/laminas-config-cloud-parameters": "^2.1",
+    "dvsa/php-govuk-account": "^4.0",
     "gedmo/doctrine-extensions": "^3.21",
-    "guzzlehttp/guzzle": "^7.10",
+    "guzzlehttp/guzzle": "^7.12.1",
     "league/flysystem": "^1.1",
     "league/flysystem-webdav": "1.0.10",
-    "olcs/olcs-logging": "^9.0",
-    "olcs/olcs-transfer": "^8.13.0",
-    "olcs/olcs-utils": "^7.1",
-    "olcs/olcs-xmltools": "^8.0",
+    "olcs/olcs-logging": "*",
+    "olcs/olcs-transfer": "*",
+    "olcs/olcs-utils": "*",
     "oro/doctrine-extensions": "^2",
-    "phprtflite/phprtflite": "~1.3.3",
     "phpseclib/phpseclib": "^3.0.47",
     "qandidate/toggle": "^2.0",
     "ramsey/uuid": "^3.9",
@@ -38,19 +58,29 @@
     "twig/twig": "^3.21",
     "lm-commons/lmc-rbac-mvc": "^3.5",
     "laminas/laminas-mvc": "^3.8",
-    "laminas/laminas-mvc-i18n": "^1.9",
     "laminas/laminas-servicemanager": "^3.24",
     "laminas/laminas-http": "^2.22",
     "laminas/laminas-view": "^2.43",
     "laminas/laminas-i18n": "^2.31",
     "laminas/laminas-eventmanager": "^3.14",
+    "laminas/laminas-xml": "^1.8",
+    "laminas/laminas-filter": "^2.42",
+    "laminas/laminas-validator": "^2.65",
+    "laminas/laminas-stdlib": "^3.21",
     "psr/container": "^1.1|^2",
     "laminas/laminas-cli": "^1.13",
     "doctrine/migrations": "^3.9",
     "setono/editorjs-php": "^1.3",
     "symfony/mailer": "^7.4",
     "symfony/mime": "^7.4",
-    "firebase/php-jwt": "^7.0"
+    "firebase/php-jwt": "^7.0",
+    "alphagov/notifications-php-client": "^7.0",
+    "league/commonmark": "^2.7",
+    "php-http/guzzle7-adapter": "^1.1",
+    "roave/psr-container-doctrine": "^4.2",
+    "psr/cache": "^3.0",
+    "symfony/cache": "^6.4",
+    "laminas/laminas-authentication": "^2.19"
   },
   "autoload": {
     "psr-4": {
@@ -68,7 +98,8 @@
       "Dvsa\\Olcs\\AwsSdk\\": "module/AwsSdk/src",
       "Dvsa\\Olcs\\Auth\\": "module/Auth/src",
       "Dvsa\\Olcs\\CompaniesHouse\\": "module/CompaniesHouse/src",
-      "Dvsa\\Olcs\\Cpms\\": "module/Cpms/src"
+      "Dvsa\\Olcs\\Cpms\\": "module/Cpms/src",
+      "Olcs\\XmlTools\\": "module/XmlTools/src"
     }
   },
   "autoload-dev": {
@@ -78,6 +109,7 @@
       "Dvsa\\OlcsTest\\Cpms\\": "test/module/Cpms/src",
       "Dvsa\\OlcsTest\\Db\\": "test/module/Olcs/Db/src",
       "Dvsa\\OlcsTest\\": "test/src",
+      "Dvsa\\OlcsTest\\Integration\\": "test/integration/src",
       "Dvsa\\OlcsTest\\Address\\": "test/module/Address/src",
       "Dvsa\\OlcsTest\\Api\\": "test/module/Api/src",
       "Dvsa\\OlcsTest\\Cli\\": "test/module/Cli/src",
@@ -86,7 +118,8 @@
       "Dvsa\\OlcsTest\\Scanning\\": "test/module/Scanning/src",
       "Dvsa\\OlcsTest\\Snapshot\\": "test/module/Snapshot/src",
       "Dvsa\\OlcsTest\\AwsSdk\\": "test/module/AwsSdk/src",
-      "Dvsa\\OlcsTest\\Queue\\": "test/module/Queue/src"
+      "Dvsa\\OlcsTest\\Queue\\": "test/module/Queue/src",
+      "OlcsTest\\XmlTools\\": "module/XmlTools/test"
     }
   },
   "minimum-stability": "dev",
@@ -98,6 +131,7 @@
   },
   "scripts": {
     "test": "vendor/bin/phpunit",
+    "test:integration": "vendor/bin/phpunit -c phpunit-integration.xml",
     "phpcs": "vendor/bin/phpcs -d memory_limit=512M",
     "psalm": "vendor/bin/psalm",
     "phpstan": "vendor/bin/phpstan --memory-limit=1G",
@@ -109,13 +143,12 @@
     ]
   },
   "require-dev": {
-    "phpunit/phpunit": "^12.5",
+    "phpunit/phpunit": "^13.0",
     "mockery/mockery": "^1.6",
     "mikey179/vfsstream": "^1.6",
     "dvsa/authentication-ldap": "^3.1",
     "rector/rector": "^2.3",
-    "squizlabs/php_codesniffer": "^3.7",
-    "dvsa/coding-standards": "^2.0",
+    "dvsa/coding-standards": "^2.1",
     "phpstan/phpstan": "^2.0",
     "phpstan/phpstan-doctrine": "^2.0",
     "vimeo/psalm": "^6.0"

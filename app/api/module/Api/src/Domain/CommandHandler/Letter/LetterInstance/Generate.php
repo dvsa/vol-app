@@ -10,6 +10,7 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceAppendix;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceChoice;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection;
+use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate as Cmd;
 
 /**
@@ -108,6 +109,35 @@ final class Generate extends AbstractCommandHandler
 
                     $letterInstance->addLetterInstanceIssue($instanceIssue);
                 }
+            }
+        }
+
+        // Materialise instance to-dos from issues' linked to-dos, deduplicated globally
+        // across the letter (VOL-7280). Each unique to-do attaches to the FIRST issue
+        // (in display order) that brought it, which gives the renderer "appears under
+        // the first issue type it relates to" for free.
+        $seenTodoVersionIds = [];
+        foreach ($letterInstance->getLetterInstanceIssues() as $instanceIssue) {
+            $issueVersion = $instanceIssue->getLetterIssueVersion();
+            if ($issueVersion === null) {
+                continue;
+            }
+            foreach ($issueVersion->getLetterIssueTodos() ?? [] as $issueTodo) {
+                $todoVersion = $issueTodo->getLetterTodoVersion();
+                if ($todoVersion === null) {
+                    continue;
+                }
+                $key = $todoVersion->getId();
+                if (isset($seenTodoVersionIds[$key])) {
+                    continue;
+                }
+                $seenTodoVersionIds[$key] = true;
+
+                $instanceTodo = new LetterInstanceTodo();
+                $instanceTodo->setLetterInstance($letterInstance);
+                $instanceTodo->setLetterInstanceIssue($instanceIssue);
+                $instanceTodo->setLetterTodoVersion($todoVersion);
+                $letterInstance->addLetterInstanceTodo($instanceTodo);
             }
         }
 

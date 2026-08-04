@@ -12,22 +12,16 @@ use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
 
 /**
  * PiHearing Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="pi_hearing",
- *    indexes={
- *        @ORM\Index(name="ix_pi_hearing_pi_id", columns={"pi_id"}),
- *        @ORM\Index(name="ix_pi_hearing_presiding_tc_id", columns={"presiding_tc_id"}),
- *        @ORM\Index(name="ix_pi_hearing_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_pi_hearing_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_pi_hearing_presided_by_role", columns={"presided_by_role"}),
- *        @ORM\Index(name="ix_pi_hearing_venue_id", columns={"venue_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_pi_hearing_olbs_key_olbs_type", columns={"olbs_key","olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'pi_hearing')]
+#[ORM\Index(name: 'ix_pi_hearing_pi_id', columns: ['pi_id'])]
+#[ORM\Index(name: 'ix_pi_hearing_presiding_tc_id', columns: ['presiding_tc_id'])]
+#[ORM\Index(name: 'ix_pi_hearing_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_pi_hearing_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_pi_hearing_presided_by_role', columns: ['presided_by_role'])]
+#[ORM\Index(name: 'ix_pi_hearing_venue_id', columns: ['venue_id'])]
+#[ORM\UniqueConstraint(name: 'uk_pi_hearing_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\Entity]
 class PiHearing extends AbstractPiHearing
 {
     public const MSG_HEARING_DATE_BEFORE_PI_DATE = 'HEARING_DATE_BEFORE_PI';

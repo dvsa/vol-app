@@ -18,7 +18,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class ReturnAllCommunityLicencesTest extends AbstractCommandHandlerTestCase
+final class ReturnAllCommunityLicencesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -65,7 +65,7 @@ class ReturnAllCommunityLicencesTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\Licence\UpdateTotalCommunityLicences::class,
             ['id' => 608],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('UpdateTotalCommunityLicences')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('UpdateTotalCommunityLicences')
         );
 
         $result = $this->sut->handleCommand($command);

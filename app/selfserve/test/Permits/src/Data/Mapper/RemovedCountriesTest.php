@@ -16,7 +16,7 @@ use Laminas\Form\Form;
 /**
  * RemovedCountriesTest
  */
-class RemovedCountriesTest extends TestCase
+final class RemovedCountriesTest extends TestCase
 {
     public function testMapForFormOptions(): void
     {

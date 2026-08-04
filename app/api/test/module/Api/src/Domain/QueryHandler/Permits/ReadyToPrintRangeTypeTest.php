@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange;
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintRangeType as ReadyToPrintRangeTypeQuery;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 
-class ReadyToPrintRangeTypeTest extends QueryHandlerTestCase
+final class ReadyToPrintRangeTypeTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

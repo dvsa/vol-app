@@ -1,0 +1,77 @@
+<?php
+use Common\Util\Escape;
+
+/**
+ * @var $this->object \Common\Service\Table\TableBuilder
+ */
+$sl = $this->object->getServiceLocator();
+
+/** @var \Common\Service\Helper\TranslationHelperService $translationHlp */
+$translationHlp = $sl->get('Helper\Translation');
+
+/** @var \Common\Service\Helper\UrlHelperService $urlHlp */
+$urlHlp = $sl->get('Helper\Url');
+?>
+
+<ul class="search-results">
+<?php if ($this->object->getTotal() === 0): ?>
+    <div class="article js-no-results">
+        <p><?php echo $this->translate('selfserve.search.busreg.browse.no-results');?></p>
+    </div>
+<?php else: ?>
+    <?php foreach ($this->object->getRows() as $row): ?>
+    <li class="search-result">
+        <div class="search-result__header">
+            <h4>
+                <a class="govuk-link" href="<?php echo $urlHlp->fromRoute('search-bus/details', ['busRegId' => $row['id']]); ?>">
+                    <?php echo Escape::html($row['regNo']); ?>
+                </a>
+                <?php echo Escape::html($row['brStatus']); ?>
+                <?php if (!empty($row['isShortNotice'])) { ?>
+                    (<?php echo $this->translate('selfserve.search.busreg.browse.result.short-notice');?>)
+                <?php } ?>
+            </h4>
+            <p><?php echo Escape::html($row['name']); ?></p>
+        </div>
+        <div class="search-result__meta">
+            <p>
+                <b><?php echo $this->translate('selfserve.search.busreg.browse.result.route.label');?>:</b>
+                <?php
+                    echo $translationHlp->translateReplace(
+                        'selfserve.search.busreg.browse.result.route',
+                        [
+                            Escape::html($row['startPoint']),
+                            Escape::html($row['finishPoint']),
+                        ]
+                    );
+                    if (!empty($row['via'])) {
+                        echo ' '.$translationHlp->translateReplace(
+                            'selfserve.search.busreg.browse.result.route.via',
+                            [
+                                Escape::html($row['via']),
+                            ]
+                        );
+                    }
+                ?>
+            </p>
+            <p>
+                <b><?php echo $this->translate('selfserve.search.busreg.browse.result.service-number.label');?>:</b>
+                <?php echo Escape::html($row['serviceNo']); ?>
+            </p>
+            <?php if (!empty($row['busServiceType'])) { ?>
+            <p>
+                <b><?php echo $this->translate('selfserve.search.busreg.browse.result.service-type.label');?>:</b>
+                <?php echo Escape::html($row['busServiceType']); ?>
+            </p>
+            <?php } ?>
+            <p>
+                <b><?php echo $this->translate('selfserve.search.busreg.browse.result.effective-date.label');?>:</b>
+                <?php echo (new \DateTime($row['effectiveDate']))->format(\Common\Module::$dateFormat); ?>
+            </p>
+        </div>
+    </li>
+    <?php endforeach; ?>
+
+    <?php echo $this->object->renderFooter(); ?>
+<?php endif; ?>
+</ul>

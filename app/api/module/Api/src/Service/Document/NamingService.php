@@ -39,9 +39,9 @@ class NamingService implements FactoryInterface
     public function generateName(
         $description,
         $extension,
-        Category $category = null,
-        SubCategory $subCategory = null,
-        ContextProviderInterface $entity = null
+        ?Category $category = null,
+        ?SubCategory $subCategory = null,
+        ?ContextProviderInterface $entity = null
     ) {
         $description = $this->formatDescription($description);
         $model = new NamingModel(new DateTime(), $description, $extension, $category, $subCategory, $entity);
@@ -80,7 +80,7 @@ class NamingService implements FactoryInterface
         return preg_replace('/[^a-zA-Z0-9_\(\)\-\&]/', '', $input);
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $config = $container->get('config');
         if (!isset($config['document_share']['path'])) {

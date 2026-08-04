@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_transport_manager;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_transport_manager()
@@ -21,33 +20,32 @@ BEGIN
   
     SET autocommit=0;
     
-   
     DROP TABLE IF EXISTS `tmpTM`;
     
     CREATE TEMPORARY TABLE `tmpTM`
     AS SELECT id from transport_manager;
 
-    SELECT 'Identifying address rows to delete.' AS '' ;
+    SELECT 'Identifying transport_manager rows to delete.' AS '' ;
     
     DELETE FROM tmpTM
     WHERE id IN (SELECT DISTINCT transport_manager_id
-                 FROM user
-                 WHERE transport_manager_id is not null);
+        FROM user
+        WHERE transport_manager_id is not null);
                  
     DELETE FROM tmpTM
     WHERE id IN (SELECT DISTINCT transport_manager_id
-                 FROM transport_manager_licence
-                 WHERE transport_manager_id is not null);             
+        FROM transport_manager_licence
+        WHERE transport_manager_id is not null);             
 
     DELETE FROM tmpTM
     WHERE id IN (SELECT DISTINCT transport_manager_id
-                 FROM transport_manager_application
-                 WHERE transport_manager_id is not null);     
+        FROM transport_manager_application
+        WHERE transport_manager_id is not null);     
 
     
     SELECT COUNT(*)
     INTO @total
-	FROM tmpTM;
+    FROM tmpTM;
 
     SELECT CONCAT(@total,' transport_manager rows to delete.') AS '' ;
 
@@ -61,30 +59,26 @@ BEGIN
     
     WHILE(@rowcount = 10000) DO
 
-        INSERT tmpTMBatch
+        INSERT INTO tmpTMBatch (id)
         SELECT id FROM tmpTM
         LIMIT 10000;
         
-
-    
-       DELETE FROM transport_manager
-       WHERE id IN ( select id FROM tmpTMBatch);
+        DELETE FROM transport_manager
+        WHERE id IN (SELECT id FROM tmpTMBatch);
 
         SET @rowcount := row_count();
         SET @total := @total + @rowcount;
     
         DELETE FROM tmpTM
-        WHERE id IN ( SELECT id from tmpTMBatch);
+        WHERE id IN (SELECT id FROM tmpTMBatch);
         
-
-    
         SELECT CONCAT(@total,' transport_manager rows deleted.') AS '';
 
-        truncate table tmpTMBatch;
+        TRUNCATE TABLE tmpTMBatch;
         
     END WHILE;
 
-    set autocommit=1;
+    SET autocommit=1;
 
     SELECT CONCAT('delete transport_manager finished at ',now()) AS '' ; 
     
@@ -93,7 +87,4 @@ BEGIN
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

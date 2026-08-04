@@ -13,7 +13,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class EmailTest extends AbstractCommandHandlerTestCase
+final class EmailTest extends AbstractCommandHandlerTestCase
 {
     private $mockFileUploader;
 

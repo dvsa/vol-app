@@ -25,7 +25,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class SendTmApplicationTest extends AbstractCommandHandlerTestCase
+final class SendTmApplicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -39,12 +39,10 @@ class SendTmApplicationTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public static function dataProviderTestHandleCommand(): array
+    public static function dataProviderTestHandleCommand(): \Iterator
     {
-        return [
-            [0, 'application'],
-            [1, 'variation']
-        ];
+        yield [0, 'application'];
+        yield [1, 'variation'];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHandleCommand')]

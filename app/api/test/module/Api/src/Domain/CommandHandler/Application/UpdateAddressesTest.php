@@ -30,7 +30,7 @@ use Mockery as m;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class UpdateAddressesTest extends AbstractCommandHandlerTestCase
+final class UpdateAddressesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -77,7 +77,7 @@ class UpdateAddressesTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             SaveAddresses::class,
             $addressData,
-            (new Result())->addMessage('SaveAddresses executed')
+            new Result()->addMessage('SaveAddresses executed')
         );
 
         $this->expectedSideEffect(
@@ -86,7 +86,7 @@ class UpdateAddressesTest extends AbstractCommandHandlerTestCase
                 'id' => 123,
                 'section' => 'addresses'
             ],
-            (new Result())->addMessage('UpdateApplicationCompletion executed')
+            new Result()->addMessage('UpdateApplicationCompletion executed')
         );
 
         $licence = m::mock(LicenceEntity::class);
@@ -146,7 +146,7 @@ class UpdateAddressesTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             SaveAddresses::class,
             $addressData,
-            (new Result())->addMessage('SaveAddresses executed')
+            new Result()->addMessage('SaveAddresses executed')
         );
 
         $application = m::mock(ApplicationEntity::class)->makePartial();
@@ -162,7 +162,7 @@ class UpdateAddressesTest extends AbstractCommandHandlerTestCase
                 'id' => 123,
                 'postcode' => $expectedPostcode,
             ],
-            (new Result())->addMessage('SetDefaultTrafficAreaAndEnforcementArea executed')
+            new Result()->addMessage('SetDefaultTrafficAreaAndEnforcementArea executed')
         );
 
         $this->expectedSideEffect(
@@ -171,7 +171,7 @@ class UpdateAddressesTest extends AbstractCommandHandlerTestCase
                 'id' => 123,
                 'section' => 'addresses'
             ],
-            (new Result())->addMessage('UpdateApplicationCompletion executed')
+            new Result()->addMessage('UpdateApplicationCompletion executed')
         );
 
         $licence = m::mock(LicenceEntity::class);
@@ -216,105 +216,103 @@ class UpdateAddressesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dpTestHandleCommandForLgv(): array
+    public static function dpTestHandleCommandForLgv(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'addressLine1' => 'e_addressLine1',
-                    'addressLine2' => 'e_addressLine2',
-                    'addressLine3' => 'e_addressLine3',
-                    'addressLine4' => 'e_addressLine4',
-                    'town' => 'e_town',
-                    'postcode' => 'e_postcode',
-                    'countryCode' => 'e_countryCode',
-                ],
-                'e_postcode',
+                'addressLine1' => 'e_addressLine1',
+                'addressLine2' => 'e_addressLine2',
+                'addressLine3' => 'e_addressLine3',
+                'addressLine4' => 'e_addressLine4',
+                'town' => 'e_town',
+                'postcode' => 'e_postcode',
+                'countryCode' => 'e_countryCode',
             ],
+            'e_postcode',
+        ];
+        yield [
             [
-                [
-                    'addressLine1' => 'e_addressLine1',
-                    'addressLine2' => '',
-                    'addressLine3' => '',
-                    'addressLine4' => '',
-                    'town' => '',
-                    'postcode' => '',
-                    'countryCode' => 'e_countryCode',
-                ],
-                '',
+                'addressLine1' => 'e_addressLine1',
+                'addressLine2' => '',
+                'addressLine3' => '',
+                'addressLine4' => '',
+                'town' => '',
+                'postcode' => '',
+                'countryCode' => 'e_countryCode',
             ],
+            '',
+        ];
+        yield [
             [
-                [
-                    'addressLine1' => '',
-                    'addressLine2' => 'e_addressLine2',
-                    'addressLine3' => '',
-                    'addressLine4' => '',
-                    'town' => '',
-                    'postcode' => '',
-                    'countryCode' => 'e_countryCode',
-                ],
-                '',
+                'addressLine1' => '',
+                'addressLine2' => 'e_addressLine2',
+                'addressLine3' => '',
+                'addressLine4' => '',
+                'town' => '',
+                'postcode' => '',
+                'countryCode' => 'e_countryCode',
             ],
+            '',
+        ];
+        yield [
             [
-                [
-                    'addressLine1' => '',
-                    'addressLine2' => '',
-                    'addressLine3' => 'e_addressLine3',
-                    'addressLine4' => '',
-                    'town' => '',
-                    'postcode' => '',
-                    'countryCode' => 'e_countryCode',
-                ],
-                '',
+                'addressLine1' => '',
+                'addressLine2' => '',
+                'addressLine3' => 'e_addressLine3',
+                'addressLine4' => '',
+                'town' => '',
+                'postcode' => '',
+                'countryCode' => 'e_countryCode',
             ],
+            '',
+        ];
+        yield [
             [
-                [
-                    'addressLine1' => '',
-                    'addressLine2' => '',
-                    'addressLine3' => '',
-                    'addressLine4' => 'e_addressLine4',
-                    'town' => '',
-                    'postcode' => '',
-                    'countryCode' => 'e_countryCode',
-                ],
-                '',
+                'addressLine1' => '',
+                'addressLine2' => '',
+                'addressLine3' => '',
+                'addressLine4' => 'e_addressLine4',
+                'town' => '',
+                'postcode' => '',
+                'countryCode' => 'e_countryCode',
             ],
+            '',
+        ];
+        yield [
             [
-                [
-                    'addressLine1' => '',
-                    'addressLine2' => '',
-                    'addressLine3' => '',
-                    'addressLine4' => '',
-                    'town' => 'e_town',
-                    'postcode' => '',
-                    'countryCode' => 'e_countryCode',
-                ],
-                '',
+                'addressLine1' => '',
+                'addressLine2' => '',
+                'addressLine3' => '',
+                'addressLine4' => '',
+                'town' => 'e_town',
+                'postcode' => '',
+                'countryCode' => 'e_countryCode',
             ],
+            '',
+        ];
+        yield [
             [
-                [
-                    'addressLine1' => '',
-                    'addressLine2' => '',
-                    'addressLine3' => '',
-                    'addressLine4' => '',
-                    'town' => '',
-                    'postcode' => 'e_postcode',
-                    'countryCode' => 'e_countryCode',
-                ],
-                'e_postcode',
+                'addressLine1' => '',
+                'addressLine2' => '',
+                'addressLine3' => '',
+                'addressLine4' => '',
+                'town' => '',
+                'postcode' => 'e_postcode',
+                'countryCode' => 'e_countryCode',
             ],
+            'e_postcode',
+        ];
+        yield [
             [
-                [
-                    'addressLine1' => '',
-                    'addressLine2' => '',
-                    'addressLine3' => '',
-                    'addressLine4' => '',
-                    'town' => '',
-                    'postcode' => '',
-                    'countryCode' => 'e_countryCode',
-                ],
-                'c_postcode',
+                'addressLine1' => '',
+                'addressLine2' => '',
+                'addressLine3' => '',
+                'addressLine4' => '',
+                'town' => '',
+                'postcode' => '',
+                'countryCode' => 'e_countryCode',
             ],
+            'c_postcode',
         ];
     }
 
@@ -355,7 +353,7 @@ class UpdateAddressesTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             SaveAddresses::class,
             $addressData,
-            (new Result())->addMessage('SaveAddresses executed')
+            new Result()->addMessage('SaveAddresses executed')
         );
 
         $application = m::mock(ApplicationEntity::class)->makePartial();

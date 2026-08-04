@@ -9,10 +9,9 @@ use JsonSerializable;
 
 /**
  * Bus Reg List View
- *
- * @ORM\Entity(readOnly=true)
- * @ORM\Table(name="bus_reg_search_view")
  */
+#[ORM\Table(name: 'bus_reg_search_view')]
+#[ORM\Entity(readOnly: true)]
 class BusRegSearchView implements BundleSerializableInterface, JsonSerializable
 {
     use BundleSerializableTrait;
@@ -21,163 +20,145 @@ class BusRegSearchView implements BundleSerializableInterface, JsonSerializable
      * Id
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id')]
     protected $id;
 
     /**
      * Service Number
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="service_no")
      */
+    #[ORM\Column(type: 'string', name: 'service_no')]
     protected $serviceNo;
 
     /**
      * Reg No
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="reg_no")
      */
+    #[ORM\Column(type: 'string', name: 'reg_no')]
     protected $regNo;
 
     /**
      * Licence ID
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="lic_id")
      */
+    #[ORM\Column(type: 'string', name: 'lic_id')]
     protected $licId;
 
     /**
      * Licence Number
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="lic_no")
      */
+    #[ORM\Column(type: 'string', name: 'lic_no')]
     protected $licNo;
 
     /**
      * Licence Status
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="lic_status")
      */
+    #[ORM\Column(type: 'string', name: 'lic_status')]
     protected $licStatus;
 
     /**
      * Organisation ID
      *
      * @var integer
-     *
-     * @ORM\Column(type="integer", name="organisation_id")
      */
+    #[ORM\Column(type: 'integer', name: 'organisation_id')]
     protected $organisationId;
 
     /**
      * Organisation name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="organisation_name")
      */
+    #[ORM\Column(type: 'string', name: 'organisation_name')]
     protected $organisationName;
 
     /**
      * Local Authority ID
      *
      * @var integer
-     *
-     * @ORM\Column(type="integer", name="local_authority_id")
      */
+    #[ORM\Column(type: 'integer', name: 'local_authority_id')]
     protected $localAuthorityId;
 
     /**
      * Start Point
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="start_point")
      */
+    #[ORM\Column(type: 'string', name: 'start_point')]
     protected $startPoint;
 
     /**
      * Start Point
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="finish_point")
      */
+    #[ORM\Column(type: 'string', name: 'finish_point')]
     protected $finishPoint;
 
     /**
      * Bus Reg Status
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="bus_reg_status_id")
      */
+    #[ORM\Column(type: 'string', name: 'bus_reg_status_id')]
     protected $busRegStatus;
 
     /**
      * Bus Reg Status Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="bus_reg_status")
      */
+    #[ORM\Column(type: 'string', name: 'bus_reg_status')]
     protected $busRegStatusDesc;
 
     /**
      * Route Number
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="route_no")
      */
+    #[ORM\Column(type: 'string', name: 'route_no')]
     protected $routeNo;
 
     /**
      * Variation Number
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="variation_no")
      */
+    #[ORM\Column(type: 'string', name: 'variation_no')]
     protected $variationNo;
 
     /**
      * date_1st_reg
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="date_1st_reg")
      */
+    #[ORM\Column(type: 'datetime', name: 'date_1st_reg')]
     protected $date1stReg;
 
     /**
      * Is short notice
      *
      * @var bool
-     *
-     * @ORM\Column(type="yesno", name="is_short_notice")
      */
+    #[ORM\Column(type: 'yesno', name: 'is_short_notice')]
     protected $isShortNotice;
 
     /**
      * Is txc app (EBSR)
      *
      * @var boolean
-     *
-     * @ORM\Column(type="boolean", name="is_txc_app")
      */
+    #[ORM\Column(type: 'boolean', name: 'is_txc_app')]
     protected $isTxcApp;
 
     /**

@@ -9,25 +9,18 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * LetterIssue Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="letter_issue")
  */
+#[ORM\Table(name: 'letter_issue')]
+#[ORM\Entity]
 class LetterIssue extends AbstractLetterIssue
 {
     /**
      * Letter issue versions
      *
-     * @var ArrayCollection
-     *
-     * @ORM\OneToMany(
-     *     targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion",
-     *     mappedBy="letterIssue",
-     *     cascade={"persist"},
-     *     orphanRemoval=false
-     * )
-     * @ORM\OrderBy({"versionNumber" = "DESC"})
+     * @var \Doctrine\Common\Collections\Collection<int, LetterIssueVersion>
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssueVersion::class, mappedBy: 'letterIssue', cascade: ['persist'], orphanRemoval: false)]
+    #[ORM\OrderBy(['versionNumber' => 'DESC'])]
     protected $versions;
 
     /**
@@ -418,7 +411,19 @@ class LetterIssue extends AbstractLetterIssue
         $newVersion->setRequiresInput($currentVersion->getRequiresInput());
         $newVersion->setIsNi($currentVersion->getIsNi());
         $newVersion->setGoodsOrPsv($currentVersion->getGoodsOrPsv());
+        $newVersion->setLetterIssueType($currentVersion->getLetterIssueType());
         $newVersion->setVersionNumber($currentVersion->getVersionNumber() + 1);
+
+        // Propagate the previous version's LetterTodo links so editing issue content
+        // doesn't silently lose them (VOL-7280). New junction rows point at the new
+        // issue version + the same letterTodoVersion that was previously linked.
+        foreach ($currentVersion->getLetterIssueTodos() ?? [] as $existing) {
+            $copy = new LetterIssueTodo();
+            $copy->setLetterIssueVersion($newVersion);
+            $copy->setLetterTodoVersion($existing->getLetterTodoVersion());
+            $copy->setDisplayOrder($existing->getDisplayOrder());
+            $newVersion->addLetterIssueTodo($copy);
+        }
 
         $this->addVersion($newVersion);
 

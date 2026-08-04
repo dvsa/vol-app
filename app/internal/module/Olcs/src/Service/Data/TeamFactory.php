@@ -17,7 +17,7 @@ class TeamFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Team
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Team
     {
         return new Team(
             $container->get(AbstractDataServiceServices::class),

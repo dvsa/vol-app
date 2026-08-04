@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class SuspendTest extends AbstractCommandHandlerTestCase
+final class SuspendTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

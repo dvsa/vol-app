@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\CreateApplicationFee;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateApplicationFeeTest extends \PHPUnit\Framework\TestCase
+final class CreateApplicationFeeTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

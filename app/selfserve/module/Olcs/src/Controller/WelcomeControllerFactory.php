@@ -15,7 +15,7 @@ use Permits\Data\Mapper\MapperManager;
 class WelcomeControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): WelcomeController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): WelcomeController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         $formHelper = $container->get(FormHelperService::class);

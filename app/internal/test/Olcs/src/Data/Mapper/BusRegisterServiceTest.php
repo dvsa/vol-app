@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * BusRegisterService Mapper Test
  */
-class BusRegisterServiceTest extends MockeryTestCase
+final class BusRegisterServiceTest extends MockeryTestCase
 {
     /**
      *
@@ -25,12 +25,28 @@ class BusRegisterServiceTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // edit
+        // edit
+        yield [
             [
-                [
+                'id' => 987,
+                'version' => 1,
+                'timetableAcceptable' => 'Y',
+                'mapSupplied' => 'Y',
+                'routeDescription' => 'test 1',
+                'trcConditionChecked' => 'Y',
+                'trcNotes' => 'test 2',
+                'variationReasons' => [
+                    ['id' => 101, 'description' => 'vr1'],
+                    ['id' => 102, 'description' => 'vr2'],
+                ],
+                'busNoticePeriod' => [
+                    'id' => 1,
+                ]
+            ],
+            [
+                'fields' => [
                     'id' => 987,
                     'version' => 1,
                     'timetableAcceptable' => 'Y',
@@ -42,36 +58,18 @@ class BusRegisterServiceTest extends MockeryTestCase
                         ['id' => 101, 'description' => 'vr1'],
                         ['id' => 102, 'description' => 'vr2'],
                     ],
-                    'busNoticePeriod' => [
-                        'id' => 1,
-                    ]
+                    'variationReasonsHtml' => 'vr1, vr2',
+                    'busNoticePeriod' => 1
                 ],
-                [
-                    'fields' => [
-                        'id' => 987,
-                        'version' => 1,
-                        'timetableAcceptable' => 'Y',
-                        'mapSupplied' => 'Y',
-                        'routeDescription' => 'test 1',
-                        'trcConditionChecked' => 'Y',
-                        'trcNotes' => 'test 2',
-                        'variationReasons' => [
-                            ['id' => 101, 'description' => 'vr1'],
-                            ['id' => 102, 'description' => 'vr2'],
-                        ],
-                        'variationReasonsHtml' => 'vr1, vr2',
-                        'busNoticePeriod' => 1
-                    ],
-                    'timetable' => [
-                        'timetableAcceptable' => 'Y',
-                        'mapSupplied' => 'Y',
-                        'routeDescription' => 'test 1',
-                    ],
-                    'conditions' => [
-                        'trcConditionChecked' => 'Y',
-                        'trcNotes' => 'test 2',
-                    ],
-                ]
+                'timetable' => [
+                    'timetableAcceptable' => 'Y',
+                    'mapSupplied' => 'Y',
+                    'routeDescription' => 'test 1',
+                ],
+                'conditions' => [
+                    'trcConditionChecked' => 'Y',
+                    'trcNotes' => 'test 2',
+                ],
             ]
         ];
     }
@@ -87,37 +85,35 @@ class BusRegisterServiceTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
 
-    public static function mapFromFormDataProvider(): array
+    public static function mapFromFormDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'fields' => [
-                        'id' => 987,
-                        'version' => 1,
-                    ],
-                    'timetable' => [
-                        'timetableAcceptable' => 'Y',
-                        'mapSupplied' => 'Y',
-                        'routeDescription' => 'test 1',
-                    ],
-                    'conditions' => [
-                        'trcConditionChecked' => 'Y',
-                        'trcNotes' => 'test 2',
-                    ],
-                ],
-                [
+                'fields' => [
                     'id' => 987,
                     'version' => 1,
+                ],
+                'timetable' => [
                     'timetableAcceptable' => 'Y',
                     'mapSupplied' => 'Y',
                     'routeDescription' => 'test 1',
+                ],
+                'conditions' => [
                     'trcConditionChecked' => 'Y',
                     'trcNotes' => 'test 2',
-                    'opNotifiedLaPte' => 'N',
-                    'laShortNote' => 'N',
-                ]
+                ],
             ],
+            [
+                'id' => 987,
+                'version' => 1,
+                'timetableAcceptable' => 'Y',
+                'mapSupplied' => 'Y',
+                'routeDescription' => 'test 1',
+                'trcConditionChecked' => 'Y',
+                'trcNotes' => 'test 2',
+                'opNotifiedLaPte' => 'N',
+                'laShortNote' => 'N',
+            ]
         ];
     }
 

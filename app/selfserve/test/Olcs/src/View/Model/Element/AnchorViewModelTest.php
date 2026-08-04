@@ -11,20 +11,20 @@ use InvalidArgumentException;
 /**
  * @see AnchorViewModel
  */
-class AnchorViewModelTest extends MockeryTestCase
+final class AnchorViewModelTest extends MockeryTestCase
 {
-    protected const A_URL = 'A URL';
-    protected const A_ROUTE = 'A ROUTE';
-    protected const A_CUSTOM_CLASS = 'A CLASS';
-    protected const THE_CLASS_VARIABLE_KEY = 'class';
-    protected const THE_ROUTE_VARIABLE_KEY = 'route';
-    protected const THE_URL_VARIABLE_KEY = 'url';
-    protected const GOVUK_LINK_CLASS = 'govuk-link';
-    protected const EXCEPTION_MESSAGE_WHEN_BOTH_URL_AND_ROUTE_VARIABLES_ARE_PROVIDED = 'Expected "url" variable or "route" variable but received both';
-    protected const EXCEPTION_MESSAGE_WHEN_SETTING_URL_WHILE_ROUTE_IS_ALREADY_SET = 'Unable to set "url" while "route" is set';
-    protected const EXCEPTION_MESSAGE_WHEN_SETTING_ROUTE_WHILE_URL_IS_ALREADY_SET = 'Unable to set "route" while "url" is set';
-    protected const OVERWRITE_EXISTING_VARIABLES = true;
-    protected const ANCHOR_TEMPLATE = 'element/anchor';
+    protected const string A_URL = 'A URL';
+    protected const string A_ROUTE = 'A ROUTE';
+    protected const string A_CUSTOM_CLASS = 'A CLASS';
+    protected const string THE_CLASS_VARIABLE_KEY = 'class';
+    protected const string THE_ROUTE_VARIABLE_KEY = 'route';
+    protected const string THE_URL_VARIABLE_KEY = 'url';
+    protected const string GOVUK_LINK_CLASS = 'govuk-link';
+    protected const string EXCEPTION_MESSAGE_WHEN_BOTH_URL_AND_ROUTE_VARIABLES_ARE_PROVIDED = 'Expected "url" variable or "route" variable but received both';
+    protected const string EXCEPTION_MESSAGE_WHEN_SETTING_URL_WHILE_ROUTE_IS_ALREADY_SET = 'Unable to set "url" while "route" is set';
+    protected const string EXCEPTION_MESSAGE_WHEN_SETTING_ROUTE_WHILE_URL_IS_ALREADY_SET = 'Unable to set "route" while "url" is set';
+    protected const bool OVERWRITE_EXISTING_VARIABLES = true;
+    protected const string ANCHOR_TEMPLATE = 'element/anchor';
 
     /**
      * @var AnchorViewModel

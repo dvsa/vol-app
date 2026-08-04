@@ -11,7 +11,7 @@ use Dvsa\Olcs\Transfer\Query\Irfo\IrfoCountryList as Qry;
 use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class IrfoCountryTest extends AbstractDataServiceTestCase
+final class IrfoCountryTest extends AbstractDataServiceTestCase
 {
     /** @var IrfoCountry */
     private $sut;
@@ -80,11 +80,9 @@ class IrfoCountryTest extends AbstractDataServiceTestCase
         $this->sut->fetchListData();
     }
 
-    public static function provideFetchListOptions(): array
+    public static function provideFetchListOptions(): \Iterator
     {
-        return [
-            [self::SINGLE_SOURCE, self::SINGLE_EXPECTED],
-            [false, []]
-        ];
+        yield [self::SINGLE_SOURCE, self::SINGLE_EXPECTED];
+        yield [false, []];
     }
 }

@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class DeletePrinterTest extends AbstractCommandHandlerTestCase
+final class DeletePrinterTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class SupplementedApplicationStepTest extends MockeryTestCase
+final class SupplementedApplicationStepTest extends MockeryTestCase
 {
     private $applicationStep;
 
@@ -23,6 +23,7 @@ class SupplementedApplicationStepTest extends MockeryTestCase
 
     private $supplementedApplicationStep;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->applicationStep = m::mock(ApplicationStep::class);

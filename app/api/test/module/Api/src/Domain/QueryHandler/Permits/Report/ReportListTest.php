@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Service\PermitsReportService;
 use Dvsa\Olcs\Transfer\Query\Permits\ReportList as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 
-class ReportListTest extends QueryHandlerTestCase
+final class ReportListTest extends QueryHandlerTestCase
 {
     #[\PHPUnit\Framework\Attributes\Test]
     public function handleQueryIsCallable(): void

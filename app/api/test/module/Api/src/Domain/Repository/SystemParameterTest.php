@@ -14,11 +14,12 @@ use Doctrine\ORM\EntityRepository;
 use Dvsa\Olcs\Api\Entity\System\SystemParameter as SystemParameterEntity;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\SystemParameter::class)]
-class SystemParameterTest extends RepositoryTestCase
+final class SystemParameterTest extends RepositoryTestCase
 {
     /** @var  SystemParameterRepo */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(SystemParameterRepo::class);
@@ -163,34 +164,30 @@ class SystemParameterTest extends RepositoryTestCase
         $this->assertSame($expected, $this->sut->getDisableDataRetentionDelete());
     }
 
-    public static function boolDataProvider(): array
+    public static function boolDataProvider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-            [false, 0],
-            [true, 1],
-            [false, '0'],
-            [true, '1'],
-            [false, null],
-            [false, ''],
-            [true, 'X'],
-        ];
+        yield [true, true];
+        yield [false, false];
+        yield [false, 0];
+        yield [true, 1];
+        yield [false, '0'];
+        yield [true, '1'];
+        yield [false, null];
+        yield [false, ''];
+        yield [true, 'X'];
     }
 
-    public static function boolDataProviderDeletes(): array
+    public static function boolDataProviderDeletes(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-            [false, 0],
-            [true, 1],
-            [false, '0'],
-            [true, '1'],
-            [true, null],
-            [false, ''],
-            [true, 'X'],
-        ];
+        yield [true, true];
+        yield [false, false];
+        yield [false, 0];
+        yield [true, 1];
+        yield [false, '0'];
+        yield [true, '1'];
+        yield [true, null];
+        yield [false, ''];
+        yield [true, 'X'];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestGetDigitalContinuationReminderPeriod')]
@@ -200,16 +197,14 @@ class SystemParameterTest extends RepositoryTestCase
         $this->assertSame($expected, $this->sut->getDigitalContinuationReminderPeriod());
     }
 
-    public static function dataProviderTestGetDigitalContinuationReminderPeriod(): array
+    public static function dataProviderTestGetDigitalContinuationReminderPeriod(): \Iterator
     {
-        return [
-            [20, 20],
-            [1, '1'],
-            [99, '99'],
-            [SystemParameterRepo::DIGITAL_CONTINUATION_REMINDER_PERIOD_DEFAULT, 'X'],
-            [SystemParameterRepo::DIGITAL_CONTINUATION_REMINDER_PERIOD_DEFAULT, ''],
-            [SystemParameterRepo::DIGITAL_CONTINUATION_REMINDER_PERIOD_DEFAULT, null],
-        ];
+        yield [20, 20];
+        yield [1, '1'];
+        yield [99, '99'];
+        yield [SystemParameterRepo::DIGITAL_CONTINUATION_REMINDER_PERIOD_DEFAULT, 'X'];
+        yield [SystemParameterRepo::DIGITAL_CONTINUATION_REMINDER_PERIOD_DEFAULT, ''];
+        yield [SystemParameterRepo::DIGITAL_CONTINUATION_REMINDER_PERIOD_DEFAULT, null];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestGetSystemDataRetentionUser')]
@@ -227,16 +222,14 @@ class SystemParameterTest extends RepositoryTestCase
         }
     }
 
-    public static function dataProviderTestGetSystemDataRetentionUser(): array
+    public static function dataProviderTestGetSystemDataRetentionUser(): \Iterator
     {
-        return [
-            [20, 20],
-            [1, '1'],
-            [99, '99'],
-            ['EXCEPTION', 'X'],
-            ['EXCEPTION', null],
-            ['EXCEPTION', 0],
-        ];
+        yield [20, 20];
+        yield [1, '1'];
+        yield [99, '99'];
+        yield ['EXCEPTION', 'X'];
+        yield ['EXCEPTION', null];
+        yield ['EXCEPTION', 0];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestGetDataRetentionDeleteLimit')]
@@ -247,16 +240,14 @@ class SystemParameterTest extends RepositoryTestCase
         $this->assertSame($expected, $this->sut->getDataRetentionDeleteLimit());
     }
 
-    public static function dataProviderTestGetDataRetentionDeleteLimit(): array
+    public static function dataProviderTestGetDataRetentionDeleteLimit(): \Iterator
     {
-        return [
-            [20, 20],
-            [1, '1'],
-            [99, '99'],
-            [0, 'X'],
-            [0, null],
-            [0, 0],
-        ];
+        yield [20, 20];
+        yield [1, '1'];
+        yield [99, '99'];
+        yield [0, 'X'];
+        yield [0, null];
+        yield [0, 0];
     }
 
     /**

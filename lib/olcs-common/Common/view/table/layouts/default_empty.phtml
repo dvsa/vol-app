@@ -1,0 +1,15 @@
+<div class="table__empty"<?php
+  echo !empty($this->object->getVariable('id')) ?
+      ' id="' . $this->object->getVariable('id') .'"' : '' ?>>
+      
+  <?php if (!empty($this->object->getVariable('title'))) { ?>
+    <h3 class="empty__title">{{title}}</h3>
+  <?php } ?>
+  
+  <?php if (!empty($this->object->getEmptyMessage())) { ?>
+  <div class="empty">
+    <p><?php echo $this->object->getEmptyMessage(); ?></p>
+  </div>
+  <?php } ?>
+  <?php echo $this->object->renderActions(); ?>
+</div>

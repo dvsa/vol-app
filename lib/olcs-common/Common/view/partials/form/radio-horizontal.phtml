@@ -1,0 +1,57 @@
+<?php
+/** @var Common\Form\Elements\Types\RadioHorizontal $element */
+$element = $this->element;
+
+/** @var \Laminas\Form\Element\Radio $radioElement */
+$radioElement = $element->get('yesNo');
+$errors = $this->formElementErrors()->render($radioElement);
+$hasValidationError = !empty($errors);
+?>
+
+<div class="<?php echo ($hasValidationError) ? 'field error__wrapper' : 'field' ?>">
+    <fieldset class="radio-button__fieldset radio-button__fieldset--horizontal">
+        <legend><?php echo $this->translate($element->getLabel()) ?></legend>
+
+        <?php if ($element->getOption('hint')) : ?>
+            <p class="form-hint"><?php echo $this->translate($element->getOption('hint')) ?></p>
+        <?php endif; ?>
+
+        <?php if ($hasValidationError) : ?>
+            <?php echo $errors ?>
+        <?php endif; ?>
+
+        <div class="radio-button__container radio-button__container--inline">
+            <?php echo $this->formRadioOption($radioElement, 'Y') ?>
+        </div>
+        <div class="radio-button__container radio-button__container--inline">
+            <?php echo $this->formRadioOption($radioElement, 'N') ?>
+        </div>
+
+        <?php
+        if ($element->has('yesContent'))  {
+            echo $this->render(
+                'partials/form/radio-content',
+                array_merge(
+                    $this->vars()->getArrayCopy(),
+                    [
+                        'element' => $element->get('yesContent'),
+                        'id' => $radioElement->getValueOptions()['Y']['attributes']['id'] .'_content',
+                    ]
+                )
+            );
+        }
+        if ($element->has('noContent'))  {
+            echo $this->render(
+                'partials/form/radio-content',
+                array_merge(
+                    $this->vars()->getArrayCopy(),
+                    [
+                        'element' => $element->get('noContent'),
+                        'id' => $radioElement->getValueOptions()['N']['attributes']['id'] .'_content',
+                    ]
+                )
+            );
+        }
+        ?>
+    </fieldset>
+</div>

@@ -18,7 +18,7 @@ class ValidatorGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ValidatorGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ValidatorGenerator
     {
         return new ValidatorGenerator(
             $container->get('QaValidatorFactory')

@@ -20,7 +20,7 @@ use Doctrine\DBAL\Connection;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class GoodsDiscsSetIsPrintingTest extends AbstractDbQueryTestCase
+final class GoodsDiscsSetIsPrintingTest extends AbstractDbQueryTestCase
 {
     protected $tableNameMap = [
         GoodsDisc::class => 'goods_disc'
@@ -43,15 +43,13 @@ class GoodsDiscsSetIsPrintingTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public static function paramProvider(): array
+    public static function paramProvider(): \Iterator
     {
-        return [
-            [
-                ['isPrinting' => 1, 'ids' => [1,2]],
-                ['isPrinting' => \PDO::PARAM_INT, 'ids' => Connection::PARAM_INT_ARRAY],
-                ['isPrinting' => 1, 'ids' => [1,2]],
-                ['isPrinting' => \PDO::PARAM_INT, 'ids' => Connection::PARAM_INT_ARRAY]
-            ]
+        yield [
+            ['isPrinting' => 1, 'ids' => [1,2]],
+            ['isPrinting' => \PDO::PARAM_INT, 'ids' => Connection::PARAM_INT_ARRAY],
+            ['isPrinting' => 1, 'ids' => [1,2]],
+            ['isPrinting' => \PDO::PARAM_INT, 'ids' => Connection::PARAM_INT_ARRAY]
         ];
     }
 

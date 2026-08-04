@@ -12,10 +12,8 @@ use Dvsa\Olcs\Api\Service\Submission\SubmissionGenerator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Submission\SubmissionGenerator
- */
-class SubmissionGeneratorTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Submission\SubmissionGenerator::class)]
+final class SubmissionGeneratorTest extends MockeryTestCase
 {
     public function testConstructor(): void
     {
@@ -108,7 +106,7 @@ class SubmissionGeneratorTest extends MockeryTestCase
         $result = $sut->generateSubmission($mockSubmission, $sections);
         $this->assertEquals('{"section1":"foo","section2":"foo"}', $mockSubmission->getDataSnapshot());
         $this->assertArrayHasKey('section1', $mockSubmission->getSectionData());
-        $this->assertEquals(count($mockConfig['section-types'][$sectionId]), count($mockSubmission->getSectionData()));
+        $this->assertCount(count($mockConfig['section-types'][$sectionId]), $mockSubmission->getSectionData());
         $this->assertArrayHasKey('section2', $mockSubmission->getSectionData());
         $this->assertEquals('foo', $mockSubmission->getSectionData()['section1']);
         $this->assertSame($result, $mockSubmission);
@@ -169,14 +167,14 @@ class SubmissionGeneratorTest extends MockeryTestCase
         $sut = new SubmissionGenerator($mockConfig, $mockSectionGeneratorPluginManager);
         $actual = $sut->generateSubmission($mockSubmission, $sections);
 
-        static::assertSame($actual, $mockSubmission);
+        $this->assertSame($actual, $mockSubmission);
 
         $actualSectionData = $mockSubmission->getSectionData();
-        static::assertEquals($expectSections, $actualSectionData);
+        $this->assertEquals($expectSections, $actualSectionData);
 
-        static::assertNotContains('case-outline', $actualSectionData);
-        static::assertNotContains('outstanding-applications', $actualSectionData);
-        static::assertNotContains('people', $actualSectionData);
+        $this->assertNotContains('case-outline', $actualSectionData);
+        $this->assertNotContains('outstanding-applications', $actualSectionData);
+        $this->assertNotContains('people', $actualSectionData);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerateSubmissionSectionData')]
@@ -200,24 +198,22 @@ class SubmissionGeneratorTest extends MockeryTestCase
 
         $sut = new SubmissionGenerator([], $mockSerctionGenPluginMngr);
 
-        static::assertEquals($expect, $sut->generateSubmissionSectionData($mockSubmission, $sectionId, $subSection));
+        $this->assertEquals($expect, $sut->generateSubmissionSectionData($mockSubmission, $sectionId, $subSection));
     }
 
-    public static function dpTestGenerateSubmissionSectionData(): array
+    public static function dpTestGenerateSubmissionSectionData(): \Iterator
     {
-        return [
-            [
-                'subSection' => null,
-                'data' => ['EXPECTED'],
-                'expect' => ['EXPECTED'],
+        yield [
+            'subSection' => null,
+            'data' => ['EXPECTED'],
+            'expect' => ['EXPECTED'],
+        ];
+        yield [
+            'subSection' => 'unit_SubSectKey',
+            'data' => [
+                'unit_SubSectKey' => 'SUB_EXPECTED',
             ],
-            [
-                'subSection' => 'unit_SubSectKey',
-                'data' => [
-                    'unit_SubSectKey' => 'SUB_EXPECTED',
-                ],
-                'expect' => 'SUB_EXPECTED',
-            ],
+            'expect' => 'SUB_EXPECTED',
         ];
     }
 }

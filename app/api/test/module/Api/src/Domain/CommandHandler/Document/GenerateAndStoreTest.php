@@ -27,7 +27,7 @@ use Dvsa\Olcs\Api\Entity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class GenerateAndStoreTest extends AbstractCommandHandlerTestCase
+final class GenerateAndStoreTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

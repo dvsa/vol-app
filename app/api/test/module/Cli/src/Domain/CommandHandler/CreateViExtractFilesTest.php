@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateViExtractFilesTest extends AbstractCommandHandlerTestCase
+final class CreateViExtractFilesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -95,7 +95,7 @@ class CreateViExtractFilesTest extends AbstractCommandHandlerTestCase
 
         $this->assertEquals($expected, $response->toArray());
 
-        $datetime = (new DateTime())->format('YmdHis');
+        $datetime = new DateTime()->format('YmdHis');
         $this->assertFileExists(sprintf('%s/tanopc%s.dat', $params['path'], $datetime));
         $this->assertFileExists(sprintf('%s/tanopo%s.dat', $params['path'], $datetime));
         $this->assertFileExists(sprintf('%s/tantnm%s.dat', $params['path'], $datetime));

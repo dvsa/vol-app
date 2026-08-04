@@ -298,6 +298,12 @@ return [
                     'route' => 'admin-dashboard/admin-feature-toggle',
                 ],
                 [
+                    'id' => 'admin-dashboard/admin-s3-browser',
+                    'class' => 'govuk-link--no-visited-state',
+                    'label' => 'Document store browser',
+                    'route' => 'admin-dashboard/admin-s3-browser',
+                ],
+                [
                     'id' => 'admin-dashboard/admin-permits',
                     'class' => 'govuk-link--no-visited-state',
                     'label' => 'Permits',

@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * FlagUrgentTasksTest
  */
-class FlagUrgentTasksTest extends AbstractCommandHandlerTestCase
+final class FlagUrgentTasksTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

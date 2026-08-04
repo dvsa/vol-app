@@ -20,7 +20,7 @@ class DisqualifyControllerFactory implements FactoryInterface
      * @return DisqualifyController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DisqualifyController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DisqualifyController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);

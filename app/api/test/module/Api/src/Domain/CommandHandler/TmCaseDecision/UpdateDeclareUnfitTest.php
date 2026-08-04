@@ -26,7 +26,7 @@ use Mockery as m;
 /**
  * Update DeclareUnfit Test
  */
-class UpdateDeclareUnfitTest extends AbstractCommandHandlerTestCase
+final class UpdateDeclareUnfitTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

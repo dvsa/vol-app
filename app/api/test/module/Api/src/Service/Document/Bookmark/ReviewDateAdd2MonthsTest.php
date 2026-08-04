@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\ReviewDateAdd2Months;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ReviewDateAdd2MonthsTest extends \PHPUnit\Framework\TestCase
+final class ReviewDateAdd2MonthsTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

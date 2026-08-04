@@ -10,8 +10,10 @@ data "aws_secretsmanager_secret" "infra" {
 
 locals {
 
-  account_prefix = contains(["DEV", "QA"], var.legacy_environment) ? "DEV" : ""
+  account_prefix = contains(["DEV", "QA", "REG"], var.legacy_environment) ? "DEV" : ""
   env_prefix     = var.legacy_environment == "APP" ? "APP" : "APP${var.legacy_environment}"
+
+  dva_ni_export_bucket = regex("^s3://([^/]+)", var.dva_ni_export_s3uri)[0]
 
   default_retry_policy = {
     attempts = 1
@@ -42,7 +44,7 @@ locals {
         },
       ]
 
-      secrets = []
+      secrets = null
     }
     liquibase = {
       image = "${var.batch.liquibase_repository}:latest"
@@ -84,7 +86,7 @@ locals {
         },
         {
           name  = "FULL_DOMAIN"
-          value = "${var.environment}.olcs.${var.domain_name}"
+          value = "${var.domain_env}.olcs.${var.domain_name}"
         },
         {
           name  = "DOMAIN"
@@ -108,7 +110,7 @@ locals {
         },
         {
           name  = "PROXY"
-          value = "proxy.${var.environment}.olcs.${var.domain_name}:3128"
+          value = "proxy.${var.domain_env}.olcs.${var.domain_name}:3128"
         },
         {
           name  = "APP_VERSION"
@@ -116,8 +118,12 @@ locals {
         },
         {
           name  = "READDB_HOST"
-          value = "olcsreaddb-rds.${var.environment}.olcs.${var.domain_name}"
+          value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
         },
+        {
+          name  = "DVA_REPORT_BUCKET"
+          value = local.dva_ni_export_bucket
+        }
       ]
 
       secrets = [
@@ -214,17 +220,17 @@ locals {
 
     container_properties = jsonencode({
 
-      command = (job.type == "default" ? concat([
+      command = (try(job.type, "default") == "default" ? concat([
         "/var/www/html/vendor/bin/laminas",
         "--container=/var/www/html/config/container-cli.php",
         "-v"
       ], job.commands) : job.commands)
 
-      image = lookup(local.job_types, job.type, local.job_types.default).image
+      image = lookup(local.job_types, try(job.type, "default"), local.job_types.default).image
 
-      environment = lookup(local.job_types, job.type, local.job_types.default).environment
+      environment = lookup(local.job_types, try(job.type, "default"), local.job_types.default).environment != null ? lookup(local.job_types, try(job.type, "default"), local.job_types.default).environment : []
 
-      secrets = lookup(local.job_types, job.type, local.job_types.default).secrets
+      secrets = lookup(local.job_types, try(job.type, "default"), local.job_types.default).secrets != null ? lookup(local.job_types, try(job.type, "default"), local.job_types.default).secrets : null
 
       runtimePlatform = {
         operatingSystemFamily = "LINUX",

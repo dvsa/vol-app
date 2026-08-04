@@ -19,7 +19,7 @@ use Laminas\Router\RouteStackInterface;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
 
-class VariationFurnitureTest extends TestCase
+final class VariationFurnitureTest extends TestCase
 {
     /**
      * @var VariationFurniture
@@ -30,6 +30,7 @@ class VariationFurnitureTest extends TestCase
     protected $mockQuerySender;
     protected $mockRouter;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockViewHelperManager = m::mock(HelperPluginManager::class);

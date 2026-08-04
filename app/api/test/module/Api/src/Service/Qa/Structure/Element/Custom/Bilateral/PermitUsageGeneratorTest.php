@@ -22,11 +22,10 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * PermitUsageGeneratorTest
  */
-class PermitUsageGeneratorTest extends MockeryTestCase
+final class PermitUsageGeneratorTest extends MockeryTestCase
 {
     public $answerValue;
     public $options;
-    public $applicationStepEntity;
     public $irhpPermitApplication;
     public $elementGeneratorContext;
     public $radioFactory;
@@ -42,15 +41,15 @@ class PermitUsageGeneratorTest extends MockeryTestCase
             'notSelectedMessage' => ['key' => 'notSelectedMessageKey'],
         ];
 
-        $this->applicationStepEntity = m::mock(ApplicationStepEntity::class);
-        $this->applicationStepEntity->shouldReceive('getDecodedOptionSource')
+        $applicationStepEntity = m::mock(ApplicationStepEntity::class);
+        $applicationStepEntity->shouldReceive('getDecodedOptionSource')
             ->andReturn($this->options);
 
         $this->irhpPermitApplication = m::mock(IrhpPermitApplication::class);
 
         $this->elementGeneratorContext = m::mock(ElementGeneratorContext::class);
         $this->elementGeneratorContext->shouldReceive('getApplicationStepEntity')
-            ->andReturn($this->applicationStepEntity);
+            ->andReturn($applicationStepEntity);
 
         $this->elementGeneratorContext->shouldReceive('getQaEntity')
             ->withNoArgs()
@@ -81,8 +80,8 @@ class PermitUsageGeneratorTest extends MockeryTestCase
     public function testGenerate(): void
     {
         $returnedOptions = [
-            (new RefData(RefData::JOURNEY_MULTIPLE))->setDescription('Multiple'),
-            (new RefData(RefData::JOURNEY_SINGLE))->setDescription('Single'),
+            new RefData(RefData::JOURNEY_MULTIPLE)->setDescription('Multiple'),
+            new RefData(RefData::JOURNEY_SINGLE)->setDescription('Single'),
         ];
 
         $this->irhpPermitApplication->shouldReceive('getIrhpPermitWindow->getIrhpPermitStock->getPermitUsageList')

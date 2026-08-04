@@ -1,0 +1,10 @@
+<p>Sorry, we're having technical problems. Please try again in a few minutes.</p>
+<p>If the page still doesn't work email <?php echo $this->partial('en_GB/markup-contact-email-link'); ?>.</p>
+<p>Let us know:</p>
+<ul>
+    <li>which page you were visiting</li>
+    <li>what you were trying to do</li>
+    <?php if (!empty($correlationId)): ?>
+        <li>quoting reference <?php echo $this->escapeHtml($correlationId); ?></li>
+    <?php endif; ?>
+</ul>

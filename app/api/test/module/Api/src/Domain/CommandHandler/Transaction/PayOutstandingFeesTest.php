@@ -49,7 +49,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
+final class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
 {
     protected $mockCpmsService;
 
@@ -567,17 +567,15 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals(PaymentEntity::STATUS_OUTSTANDING, $savedPayment->getStatus()->getId());
     }
 
-    public static function dpHandleForApplication(): array
+    public static function dpHandleForApplication(): \Iterator
     {
-        return [
-            'licence application' => [
-                'applicationId',
-                'getOutstandingFeesForApplication',
-            ],
-            'irhp application' => [
-                'irhpApplication',
-                'getOutstandingFeesForIrhpApplication',
-            ],
+        yield 'licence application' => [
+            'applicationId',
+            'getOutstandingFeesForApplication',
+        ];
+        yield 'irhp application' => [
+            'irhpApplication',
+            'getOutstandingFeesForIrhpApplication',
         ];
     }
 
@@ -1067,7 +1065,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
             $this->sut->handleCommand($command);
         } catch (ValidationException $e) {
             $messages = $e->getMessages();
-            $this->assertTrue(str_contains((string) reset($messages), 'Amount must be at least 99.00'));
+            $this->assertStringContainsString('Amount must be at least 99.00', (string) reset($messages));
         }
     }
 
@@ -1128,7 +1126,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
             $this->sut->handleCommand($command);
         } catch (RuntimeException $e) {
             $messages = $e->getMessages();
-            $this->assertTrue(str_contains((string) reset($messages), 'ohnoes'));
+            $this->assertStringContainsString('ohnoes', (string) reset($messages));
         }
     }
 
@@ -1353,7 +1351,7 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
             'category' => Task::CATEGORY_LICENSING,
             'subCategory' => Task::SUBCATEGORY_LICENSING_GENERAL_TASK,
             'description' => Task::TASK_DESCRIPTION_FEE_DUE,
-            'actionDate' => (new DateTime('now'))->format(\DateTime::W3C),
+            'actionDate' => new DateTime('now')->format(\DateTime::W3C),
             'licence' => 22,
             'application' => 33,
             'busReg' => 44,
@@ -1407,17 +1405,15 @@ class PayOutstandingFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('2015-06-10', $savedTransaction->getChequePoDate()->format('Y-m-d'));
     }
 
-    public static function feeDataProvider(): array
+    public static function feeDataProvider(): \Iterator
     {
-        return [
-            [
-                'psv',
-                55,
-            ],
-            [
-                'gv',
-                66,
-            ]
+        yield [
+            'psv',
+            55,
+        ];
+        yield [
+            'gv',
+            66,
         ];
     }
 

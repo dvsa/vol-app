@@ -1,0 +1,7 @@
+Mae'r trwyddedau canlynol sydd â ffioedd yn ddyledus rhwng <?php echo $this->startDate ?> a <?php echo $this->endDate ?> wedi'u gosod i CNS:
+
+<?php
+foreach ($this->licences as $licence){
+    echo $licence['licNo'] . ' ' . $licence['taName'] . "\n";
+}
+?>

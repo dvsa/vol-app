@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_licence;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_licence()
@@ -22,14 +21,17 @@ BEGIN
     SET autocommit=0;
     
     SELECT COUNT(*)
-	INTO @total
-	FROM licence 
+    INTO @total
+    FROM licence 
     WHERE traffic_area_id <> 'N' ;
 
     SELECT CONCAT(@total,' licence rows to delete.') AS '' ;
 
     SET @total:=0;
     SET @rowcount:=10000;
+    
+    START TRANSACTION;
+
     WHILE(@rowcount = 10000) DO
 
 
@@ -43,9 +45,12 @@ BEGIN
         
         SELECT CONCAT(@total,' licence rows deleted') AS '';
 
-
+        COMMIT;
+        START TRANSACTION;
 
     END WHILE;        
+
+    COMMIT;
 
     set autocommit=1;
 
@@ -53,7 +58,4 @@ BEGIN
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

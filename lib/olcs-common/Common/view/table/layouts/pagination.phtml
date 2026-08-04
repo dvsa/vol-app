@@ -1,0 +1,14 @@
+<?php assert($this->object instanceof Common\Service\Table\TableBuilder); ?>
+<div class="table__footer">
+    <?php if ($this->object->getTotal() > $this->object->getLimit()): ?>
+        <nav class="govuk-pagination govuk-grid-column-one-half" role="navigation" aria-label="<?php echo $this->translate('pagination.results-per-page');?>">
+            <ul class="govuk-pagination__list">
+                <?php echo $this->object->renderLimitOptions(); ?>
+            </ul>
+            <p class="govuk-pagination__item"><?php echo $this->translate('pagination.results-per-page');?></p>
+        </nav>
+        <nav class="govuk-pagination govuk-grid-column-one-half" role="navigation" aria-label="results">
+            <?php echo $this->object->renderPageOptions(); ?>
+        </nav>
+    <?php endif; ?>
+</div>

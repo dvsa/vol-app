@@ -18,7 +18,7 @@ class StockBasedRestrictedCountryIdsProviderFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): StockBasedRestrictedCountryIdsProvider
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): StockBasedRestrictedCountryIdsProvider
     {
         return new StockBasedRestrictedCountryIdsProvider(
             $container->get('PermitsCommonStockBasedPermitTypeConfigProvider')

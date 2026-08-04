@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Command\LicenceStatusRule\ProcessToValid;
 use Dvsa\Olcs\Cli\Command\Batch\LicenceStatusRulesCommand;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class LicenceStatusRulesCommandTest extends AbstractBatchCommandCases
+final class LicenceStatusRulesCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

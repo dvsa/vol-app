@@ -96,20 +96,6 @@ class LetterType
 
     /**
      * @Form\Options({
-     *     "label": "Test Data",
-     *     "disable_inarray_validator": false,
-     *     "service_name": "Olcs\Service\Data\Letter\LetterTestData",
-     *     "empty_option": "Please Select",
-     *     "use_groups": false
-     * })
-     * @Form\Type("DynamicSelect")
-     * @Form\Required(false)
-     * @Form\Attributes({"id":"letterTestData","class":"medium"})
-     */
-    public $letterTestData = null;
-
-    /**
-     * @Form\Options({
      *     "label": "Sections",
      *     "disable_inarray_validator": false,
      *     "service_name": "Olcs\Service\Data\Letter\LetterSection",

@@ -18,7 +18,7 @@ use Mockery as m;
  *
  * @author Scott Callaway <scott.callaway@capgemini.com>
  */
-class ByIdTest extends QueryHandlerTestCase
+final class ByIdTest extends QueryHandlerTestCase
 {
     protected $bundle = [
         'licence' => ['trafficArea', 'organisation'],

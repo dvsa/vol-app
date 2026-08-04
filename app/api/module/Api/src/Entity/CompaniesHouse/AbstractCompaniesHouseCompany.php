@@ -20,15 +20,11 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="companies_house_company",
- *    indexes={
- *        @ORM\Index(name="ix_companies_house_company_company_number", columns={"company_number"})
- *    }
- * )
  */
+#[ORM\Table(name: 'companies_house_company')]
+#[ORM\Index(name: 'ix_companies_house_company_company_number', columns: ['company_number'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -41,147 +37,131 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Company number
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="company_number", length=8, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'company_number', length: 8, nullable: false)]
     protected $companyNumber = '';
 
     /**
      * Company name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="company_name", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'company_name', length: 255, nullable: true)]
     protected $companyName;
 
     /**
      * Company status
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="company_status", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'company_status', length: 32, nullable: true)]
     protected $companyStatus;
 
     /**
      * Address line 1
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="address_line_1", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'address_line_1', length: 100, nullable: true)]
     protected $addressLine1;
 
     /**
      * Address line 2
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="address_line_2", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'address_line_2', length: 100, nullable: true)]
     protected $addressLine2;
 
     /**
      * Country
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="country", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'country', length: 32, nullable: true)]
     protected $country;
 
     /**
      * Locality
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="locality", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'locality', length: 100, nullable: true)]
     protected $locality;
 
     /**
      * Po box
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="po_box", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'po_box', length: 100, nullable: true)]
     protected $poBox;
 
     /**
      * Postal code
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="postal_code", length=10, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'postal_code', length: 10, nullable: true)]
     protected $postalCode;
 
     /**
      * Premises
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="premises", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'premises', length: 100, nullable: true)]
     protected $premises;
 
     /**
      * Region
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="region", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'region', length: 100, nullable: true)]
     protected $region;
 
     /**
      * Insolvency processed
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="insolvency_processed", nullable=true, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'insolvency_processed', nullable: true, options: ['default' => 0])]
     protected $insolvencyProcessed = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * InsolvencyPractitioners
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseInsolvencyPractitioner", mappedBy="companiesHouseCompany", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseInsolvencyPractitioner::class, mappedBy: 'companiesHouseCompany', cascade: ['persist'])]
     protected $insolvencyPractitioners;
 
     /**
      * Officers
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseOfficer", mappedBy="companiesHouseCompany", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseOfficer::class, mappedBy: 'companiesHouseCompany', cascade: ['persist'])]
     protected $officers;
 
     /**
@@ -207,7 +187,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setId($id)
     {
@@ -231,7 +211,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $companyNumber new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setCompanyNumber($companyNumber)
     {
@@ -255,7 +235,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $companyName new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setCompanyName($companyName)
     {
@@ -279,7 +259,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $companyStatus new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setCompanyStatus($companyStatus)
     {
@@ -303,7 +283,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $addressLine1 new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setAddressLine1($addressLine1)
     {
@@ -327,7 +307,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $addressLine2 new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setAddressLine2($addressLine2)
     {
@@ -351,7 +331,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $country new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setCountry($country)
     {
@@ -375,7 +355,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $locality new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setLocality($locality)
     {
@@ -399,7 +379,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $poBox new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setPoBox($poBox)
     {
@@ -423,7 +403,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $postalCode new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setPostalCode($postalCode)
     {
@@ -447,7 +427,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $premises new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setPremises($premises)
     {
@@ -471,7 +451,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param string $region new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setRegion($region)
     {
@@ -495,7 +475,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param bool $insolvencyProcessed new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setInsolvencyProcessed($insolvencyProcessed)
     {
@@ -519,7 +499,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setVersion($version)
     {
@@ -543,7 +523,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $insolvencyPractitioners collection being set as the value
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setInsolvencyPractitioners($insolvencyPractitioners)
     {
@@ -567,7 +547,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $insolvencyPractitioners collection being added
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function addInsolvencyPractitioners($insolvencyPractitioners)
     {
@@ -590,7 +570,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $insolvencyPractitioners collection being removed
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function removeInsolvencyPractitioners($insolvencyPractitioners)
     {
@@ -606,7 +586,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $officers collection being set as the value
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function setOfficers($officers)
     {
@@ -630,7 +610,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $officers collection being added
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function addOfficers($officers)
     {
@@ -653,7 +633,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $officers collection being removed
      *
-     * @return CompaniesHouseCompany
+     * @return static
      */
     public function removeOfficers($officers)
     {

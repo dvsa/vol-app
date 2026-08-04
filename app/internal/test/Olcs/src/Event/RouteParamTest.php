@@ -10,7 +10,7 @@ use Olcs\Event\RouteParam;
  * Class RouteParamTest
  * @package OlcsTest\Event
  */
-class RouteParamTest extends \PHPUnit\Framework\TestCase
+final class RouteParamTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetSetValue(): void
     {

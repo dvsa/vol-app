@@ -17,7 +17,7 @@ use Mockery as m;
 /**
  * IRFO PSV Auth Continuation List Test
  */
-class IrfoPsvAuthContinuationListTest extends QueryHandlerTestCase
+final class IrfoPsvAuthContinuationListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

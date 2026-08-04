@@ -6,16 +6,12 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * UserPasswordReset Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="user_password_reset",
- *    indexes={
- *        @ORM\Index(name="ix_user_password_reset_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_user_password_reset_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_user_password_reset_user_id", columns={"user_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'user_password_reset')]
+#[ORM\Index(name: 'ix_user_password_reset_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_user_password_reset_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_user_password_reset_user_id', columns: ['user_id'])]
+#[ORM\Entity]
 class UserPasswordReset extends AbstractUserPasswordReset
 {
     /**

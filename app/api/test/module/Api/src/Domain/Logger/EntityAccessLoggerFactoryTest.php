@@ -16,7 +16,7 @@ use Mockery\MockInterface;
 /**
  * @see EntityAccessLoggerFactory
  */
-class EntityAccessLoggerFactoryTest extends MockeryTestCase
+final class EntityAccessLoggerFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
@@ -48,6 +48,7 @@ class EntityAccessLoggerFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(EntityAccessLogger::class, $product);
     }
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->setUpServiceManager();

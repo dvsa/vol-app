@@ -22,7 +22,7 @@ class OperatorDeclarationControllerFactory implements FactoryInterface
      * @return OperatorDeclarationController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatorDeclarationController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): OperatorDeclarationController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

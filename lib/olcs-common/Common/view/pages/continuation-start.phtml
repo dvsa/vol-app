@@ -1,0 +1,33 @@
+<?php
+echo $this->partial(
+    'partials/page-header-continuation',
+    [
+        'pageTitle' => $this->pageTitle(),
+        'pageSubTitle' => $this->translate('continuation.sub-title.continue-licence') .' '. $this->licNo,
+        'stepHeader' => $this->stepHeader,
+        'backUrl' => ['url' => $this->url($this->backRoute, $this->backRouteParams, [], true)],
+    ]
+);
+?>
+
+<div class="row">
+
+  <div class="dashboard two-thirds js-body">
+      <p class="govuk-inset-text"><?php echo $this->translate('continuations.start-page.helptext'); ?></p>
+      <h3><?php echo $this->translate('continuations.start-page.recently-submitted-changes'); ?></h3>
+      <p><?php echo $this->translate('continuations.start-page.it-can-take-time'); ?></p>
+      <p class="article"><?php echo $this->translate('continuations.start-page.you-can-submit'); ?></p>
+      <br />
+      <?php
+      echo $this->flashMessengerAll();
+
+      echo $this->partial('partials/guidance');
+
+      if (isset($this->form)):
+          echo $this->formErrors($this->form);
+          echo $this->form($this->form);
+      endif;
+      ?>
+  </div>
+
+</div>

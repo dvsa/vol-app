@@ -1,0 +1,19 @@
+<h3><?php echo $this->translate($header); ?></h3>
+<div class="empty">
+    <p><?php echo(isset($helpText) ? $this->translate($helpText) : ''); ?></p>
+
+    <?php
+    //done in this way for backward compatibility ;)
+        if (isset($multiUrl)) {
+            foreach ($multiUrl as $multi) {
+    ?>
+                <a class="<?php echo (isset($multi['class']) ? $multi['class'] : 'govuk-button'); ?>" href="<?php echo $multi['url']; ?>"><?php echo $this->translate($multi['label']); ?></a>
+    <?php
+            }
+        } elseif (!empty($url)) {
+    ?>
+            <a class="<?php echo (isset($class) ? $class : 'govuk-button'); ?>" href="<?php echo $url; ?>"><?php echo $this->translate($label); ?></a>
+    <?php
+        }
+    ?>
+</div>

@@ -24,7 +24,7 @@ class S3ProcessorFactory implements FactoryInterface
      * @throws NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): S3Processor
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): S3Processor
     {
         $config = $container->get('config');
         $stsClient = new StsClient([
@@ -51,7 +51,6 @@ class S3ProcessorFactory implements FactoryInterface
 
         $bucketName = $config['ebsr']['input_s3_bucket'];
         $s3Client = new S3Client($s3ClientConfiguration);
-        $fileUploader = $container->get('FileUploader');
-        return new S3Processor($s3Client, $bucketName, $fileUploader, $container->get('Logger'));
+        return new S3Processor($s3Client, $bucketName);
     }
 }

@@ -24,7 +24,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OtherActiveLicencesTest extends QueryHandlerTestCase
+final class OtherActiveLicencesTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

@@ -12,12 +12,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class TranslateableTextParameterTest extends MockeryTestCase
+final class TranslateableTextParameterTest extends MockeryTestCase
 {
     private $value;
 
     private $formatter;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->value = 'value';

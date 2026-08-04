@@ -19,10 +19,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class ExternalControllerTraitTest extends MockeryTestCase
+final class ExternalControllerTraitTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     protected function setUp(): void
     {
         $this->sut = m::mock(\OlcsTest\Controller\Lva\Traits\Stubs\ExternalControllerTraitStub::class)

@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class ServiceTypesTest
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ServiceTypesTest extends MockeryTestCase
+final class ServiceTypesTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\Group('publicationFilter
 Test the bus reg service designation filter')]

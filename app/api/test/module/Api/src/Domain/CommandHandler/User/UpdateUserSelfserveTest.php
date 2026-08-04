@@ -31,7 +31,7 @@ use ReflectionClass;
 /**
  * Update User Selfserve Test
  */
-class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
+final class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var m\LegacyMockInterface|m\MockInterface|null
@@ -337,11 +337,9 @@ class UpdateUserSelfserveTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public static function dpTestHandleCommandWithUpdatedContactDetails(): array
+    public static function dpTestHandleCommandWithUpdatedContactDetails(): \Iterator
     {
-        return [
-            [UserEntity::USER_TYPE_OPERATOR, false, 'test2@test.me', 1],
-            [UserEntity::USER_TYPE_TRANSPORT_MANAGER, false, 'test1@test.me', 0]
-        ];
+        yield [UserEntity::USER_TYPE_OPERATOR, false, 'test2@test.me', 1];
+        yield [UserEntity::USER_TYPE_TRANSPORT_MANAGER, false, 'test1@test.me', 0];
     }
 }

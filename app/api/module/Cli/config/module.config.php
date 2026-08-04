@@ -29,6 +29,7 @@ return [
             'batch:cache-clear' => Dvsa\Olcs\Cli\Command\Batch\CacheClearCommand::class,
             'batch:ch-vs-olcs-diffs' => Dvsa\Olcs\Cli\Command\Batch\CompaniesHouseVsOlcsDiffsExportCommand::class,
             'batch:clean-up-variations' => Dvsa\Olcs\Cli\Command\Batch\CleanUpAbandonedVariationsCommand::class,
+            'batch:retrieval-link-purge' => Dvsa\Olcs\Cli\Command\Batch\RetrievalLinkPurgeCommand::class,
             'batch:cns' => Dvsa\Olcs\Cli\Command\Batch\ContinuationNotSoughtCommand::class,
             'batch:create-psv-licence-surrender-tasks' => Dvsa\Olcs\Cli\Command\Batch\CreatePsvLicenceSurrenderTasksCommand::class,
             'batch:data-dva-ni-export' => Dvsa\Olcs\Cli\Command\Batch\DataDvaNiExportCommand::class,
@@ -72,6 +73,9 @@ return [
             'migrations:status'     => MigrationCommands\StatusCommand::class,
             'migrations:version'    => MigrationCommands\VersionCommand::class,
             'entity:generate'       => Dvsa\Olcs\Cli\Command\EntityGenerator\GenerateEntitiesCommand::class,
+            'notify:hello-world'    => Dvsa\Olcs\Cli\Command\Email\NotifyHelloWorldCommand::class,
+            'template:render-all'   => Dvsa\Olcs\Cli\Command\Email\RenderAllTemplatesCommand::class,
+            'template:convert-to-md' => Dvsa\Olcs\Cli\Command\Email\ConvertToMarkdownCommand::class,
         ],
     ],
     'dependencies' => [
@@ -182,6 +186,7 @@ return [
     ConfigAbstractFactory::class => [
         BatchCommands\CacheClearCommand::class => $commonBatchCommandDeps,
         BatchCommands\CleanUpAbandonedVariationsCommand::class => $commonBatchCommandDeps,
+        BatchCommands\RetrievalLinkPurgeCommand::class => $commonBatchCommandDeps,
         BatchCommands\CompaniesHouseVsOlcsDiffsExportCommand::class => $commonBatchCommandDeps,
         BatchCommands\ContinuationNotSoughtCommand::class => $commonBatchCommandDeps,
         BatchCommands\CreatePsvLicenceSurrenderTasksCommand::class => $commonBatchCommandDeps,
@@ -218,6 +223,20 @@ return [
         QueueCommands\ProcessInsolvencyDlqSQSQueueCommand::class => $commonCommandDeps,
         QueueCommands\TransXChangeConsumerSQSQueueCommand::class => $commonCommandDeps,
         \Dvsa\Olcs\Cli\Command\EntityGenerator\GenerateEntitiesCommand::class => $commonCommandDeps,
+        \Dvsa\Olcs\Cli\Command\Email\NotifyHelloWorldCommand::class => [
+            ...$commonCommandDeps,
+            \Dvsa\Olcs\Email\Service\TemplateRenderer::class,
+        ],
+        \Dvsa\Olcs\Cli\Command\Email\RenderAllTemplatesCommand::class => [
+            ...$commonCommandDeps,
+            'doctrine.entitymanager.orm_default',
+            'TemplateTwigRenderer',
+        ],
+        \Dvsa\Olcs\Cli\Command\Email\ConvertToMarkdownCommand::class => [
+            ...$commonCommandDeps,
+            'doctrine.entitymanager.orm_default',
+            'TemplateTwigRenderer',
+        ],
     ],
     'cache' => [
         'adapter' => [

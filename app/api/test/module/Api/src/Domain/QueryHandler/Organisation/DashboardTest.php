@@ -17,7 +17,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Organisation\Dashboard::class)]
-class DashboardTest extends QueryHandlerTestCase
+final class DashboardTest extends QueryHandlerTestCase
 {
     /** @var  Dashboard | m\MockInterface */
     protected $sut;

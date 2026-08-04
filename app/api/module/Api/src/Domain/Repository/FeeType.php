@@ -47,8 +47,8 @@ class FeeType extends AbstractRepository
     public function fetchLatest(
         RefDataEntity $feeType,
         RefDataEntity $goodsOrPsv,
-        RefDataEntity $licenceType = null,
-        \DateTime $date = null,
+        ?RefDataEntity $licenceType = null,
+        ?\DateTime $date = null,
         mixed $trafficArea = null,
         $optional = false
     ) {

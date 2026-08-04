@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_venue;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_venue()
@@ -22,28 +21,37 @@ BEGIN
     SET autocommit=0;
 
     SELECT COUNT(*)
-	INTO @total
-	FROM venue 
+    INTO @total
+    FROM venue 
     WHERE traffic_area_id <> 'N';
 
     SELECT CONCAT(@total,' venue rows to delete.') AS '' ;
 
+    SET @total_deleted := 0;
+    SET @rowcount := 10000;
 
-    
-    DELETE FROM venue
-    WHERE traffic_area_id <> 'N'; 
-    
-    SET @rowcount := row_count();
-    
+    START TRANSACTION;
 
+    WHILE(@rowcount = 10000) DO
     
-    SELECT CONCAT(@rowcount,' venue rows deleted.') AS '';
+        DELETE FROM venue
+        WHERE traffic_area_id <> 'N'
+        LIMIT 10000;
+
+        SET @rowcount := row_count();
+        SET @total_deleted := @total_deleted + @rowcount;
+    
+        SELECT CONCAT(@total_deleted,' venue rows deleted.') AS '';
+
+        COMMIT;
+        START TRANSACTION;
+
+    END WHILE;
+    
+    COMMIT;
     
     SELECT CONCAT('delete venue finished at ',now()) AS '' ; 
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

@@ -1,0 +1,94 @@
+<section>
+  <h2 class="govuk-heading-l">You will need to send us some documents</h2>
+  <h3 class="govuk-heading-s">You need to advertise the application if you are applying for a Heavy Goods Vehicle (HGV)
+    operator licence.</h3>
+  <p class="govuk-body">
+    When you apply to use an operating centre, you must pay to advertise the application in a local newspaper and send a
+    copy of the advert to us.
+  </p>
+  <h3 class="govuk-heading-s">If you have more than one operating centre, you will need a licence for each if they are
+    in different traffic areas.</h3>
+  <p class="govuk-body">
+      <?php
+          echo $this->linkNewWindowExternal(
+              'https://www.gov.uk/being-a-goods-vehicle-operator/apply-for-a-licence#what-the-traffic-commissioners-do',
+              'Great Britain is divided into 8 traffic areas'
+          );
+      ?>.
+    Each area has a Traffic Commissioner who’s responsible for issuing licences. The Department for Infrastructure is responsible for Northern Ireland.
+  </p>
+  <p class="govuk-!-margin-bottom-6">
+    Your application will be refused if you do not advertise the operating centre correctly. Readvertising is estimated
+    to cost around £500.
+  </p>
+  <p class="govuk-!-margin-bottom-6">
+      <?php
+          echo $this->linkNewWindowExternal(
+              'https://www.gov.uk/being-a-goods-vehicle-operator/operating-centres#advertising-your-application-for-a-goods-vehicle-operators-licence',
+              'How to advertise your application'
+          );
+      ?>.
+  </p>
+  <h3 class="govuk-heading-s">You need to provide financial evidence to support your application.</h3>
+  <p class="govuk-body">
+    To be granted a licence you need to prove you have enough money to keep your vehicles and run your business. All
+    financial documents must be in the name of the business applying for this licence.
+  </p>
+  <p class="govuk-!-margin-bottom-6">
+      <?php
+        echo $this->linkNewWindowExternal(
+            'https://www.gov.uk/government/publications/traffic-commissioners-finance-march-2019/statutory-document-2-finance#annex-a---sources-of-financial-evidence',
+            'How to provide financial evidence'
+        );
+      ?>.
+  </p>
+  <div class="govuk-warning-text">
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+      <span class="govuk-warning-text__assistive">Warning</span>
+      <b>Your application will be declined if you do not provide the correct documents. The application fee is not
+        refundable.</b>
+    </strong>
+  </div>
+</section>
+
+<section>
+  <h2 class="govuk-heading-l">If you're a limited company</h2>
+  <h3 class="govuk-heading-s">You need to check who the directors of the company are.</h3>
+  <p class="govuk-body">
+    Your list of directors must match the ones you registered with Companies House and all the financial evidence must
+    be in the name of the limited company.
+  </p>
+</section>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-bottom-7">
+
+<section id="additional-info-section" class="govuk-!-margin-bottom-7">
+    <h2 class="govuk-heading-l">Now watch this video before you apply</h2>
+    <p class="govuk-body">
+        <iframe width="560" height="315" src="https://www.youtube-nocookie.com/embed/w1Vr3NIDITc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    </p>
+</section>
+
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible govuk-!-margin-bottom-7">
+
+<section id="ready" class="govuk-!-margin-bottom-3">
+  <h2 class="govuk-heading-l">
+    Ready to apply
+  </h2>
+  <div class="govuk-warning-text">
+    <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+    <strong class="govuk-warning-text__text">
+      <span class="govuk-warning-text__assistive">Warning</span>
+      <b>You are responsible for providing the correct information, failure to do so may result in the refusal of your
+        application to hold an operators licence.</b>
+    </strong>
+  </div>
+  <p class="govuk-body">
+    If you have now watched the video and are ready to apply, select the continue button to begin your application
+  </p>
+  <a href="<?php echo $this->url('auth/login/GET') ?>" title="Continue to application checker" role="button"
+     draggable="false" class="govuk-button govuk-!-margin-top-2 govuk-!-margin-bottom-8" data-module="govuk-button">
+    Continue
+  </a>
+</section>

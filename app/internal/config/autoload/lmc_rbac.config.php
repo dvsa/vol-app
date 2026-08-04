@@ -62,6 +62,7 @@ return [
             'admin-dashboard/admin-system-info-message*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/task-allocation-rules*' => [RefData::PERMISSION_INTERNAL_ADMIN],
             'admin-dashboard/admin-feature-toggle*' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-s3-browser*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/admin-master-template*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/admin-letter-type*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/admin-letter-section*' => [RefData::PERMISSION_SYSTEM_ADMIN],

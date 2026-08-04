@@ -11,10 +11,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Submission\SubmissionGeneratorFactory
- */
-class SubmissionGeneratorFactoryTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Submission\SubmissionGeneratorFactory::class)]
+final class SubmissionGeneratorFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {
@@ -35,8 +33,8 @@ class SubmissionGeneratorFactoryTest extends MockeryTestCase
             )
             ->getMock();
 
-        $actual = (new SubmissionGeneratorFactory())->__invoke($mockSl, SubmissionGenerator::class);
+        $actual = new SubmissionGeneratorFactory()->__invoke($mockSl, SubmissionGenerator::class);
 
-        static::assertInstanceOf(SubmissionGenerator::class, $actual);
+        $this->assertInstanceOf(SubmissionGenerator::class, $actual);
     }
 }

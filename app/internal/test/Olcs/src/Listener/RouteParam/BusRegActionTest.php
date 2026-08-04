@@ -19,7 +19,7 @@ use Laminas\EventManager\EventManagerInterface;
 use Laminas\Navigation\Navigation;
 use Laminas\Navigation\Page\AbstractPage;
 
-class BusRegActionTest extends MockeryTestCase
+final class BusRegActionTest extends MockeryTestCase
 {
     /** @var  BusRegAction */
     private $sut;
@@ -199,27 +199,25 @@ class BusRegActionTest extends MockeryTestCase
         $this->assertEquals($expected, $method->invoke($this->sut, $data));
     }
 
-    public static function shouldOpenGrantButtonInModalProvider(): array
+    public static function shouldOpenGrantButtonInModalProvider(): \Iterator
     {
-        return [
-            // variation
+        // variation
+        yield [
             [
-                [
-                    'status' => [
-                        'id' => RefData::BUSREG_STATUS_VARIATION
-                    ],
+                'status' => [
+                    'id' => RefData::BUSREG_STATUS_VARIATION
                 ],
-                true
             ],
-            // cancellation
+            true
+        ];
+        // cancellation
+        yield [
             [
-                [
-                    'status' => [
-                        'id' => RefData::BUSREG_STATUS_CANCELLATION
-                    ],
+                'status' => [
+                    'id' => RefData::BUSREG_STATUS_CANCELLATION
                 ],
-                false
             ],
+            false
         ];
     }
 }

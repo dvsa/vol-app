@@ -1,0 +1,12 @@
+<?php // Form for making direct request to payment system outside ?>
+
+<p>Please wait&hellip;</p>
+
+<form id="payment" class="js-hidden" action="<?php echo $gateway ?>" method="<?php echo strpos($gateway, 'card.payments.service.gov.uk') !== false ? 'get' : 'post' ?>">
+  <button type="submit" data-prevent-double-click="true" class="govuk-button js-submit" data-module="govuk-button">Proceed to payment</button>
+  <?php foreach ($data as $key => $value): ?>
+    <input type="hidden" name="<?php echo $key ?>" value="<?php echo $value ?>" />
+  <?php endforeach; ?>
+</form>
+
+<script>document.getElementById("payment").submit();</script>

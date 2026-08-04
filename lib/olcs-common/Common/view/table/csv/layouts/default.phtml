@@ -1,0 +1,17 @@
+<?php
+//  header
+$line = [];
+foreach ($this->object->getColumns() as $column) {
+    $line[] = $this->object->renderHeaderColumn($column);
+}
+echo implode(', ', $line) . "\n";
+
+//  body
+foreach ($this->object->getRows() as $row) {
+    $line = [];
+    foreach ($this->object->getColumns() as $column) {
+        $line[] = $this->object->renderBodyColumn($row, $column);
+    }
+
+    echo implode(', ', $line) . "\n";
+}

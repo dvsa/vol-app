@@ -26,7 +26,7 @@ use Dvsa\Olcs\Transfer\Command\Workshop\DeleteWorkshop as WorkshopDeleteWorkshop
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DeleteWorkshopTest extends AbstractCommandHandlerTestCase
+final class DeleteWorkshopTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

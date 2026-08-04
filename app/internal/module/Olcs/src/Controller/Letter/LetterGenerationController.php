@@ -167,9 +167,20 @@ class LetterGenerationController extends AbstractInternalController implements L
             'selectedAppendices' => $postData['letterAppendices'] ?? [],
         ];
 
+        // Checkbox choices post as letterChoices[]; radio "pick one" groups post as
+        // letterChoiceGroup[<groupIndex>] => choiceId. Merge both into selectedChoices.
+        $radioSelections = array_values($postData['letterChoiceGroup'] ?? []);
+        $selectedChoices = array_merge($postData['letterChoices'] ?? [], $radioSelections);
+
+        // Enforce "pick exactly one" for every radio group on this letter type
+        $radioError = $this->validateRequiredRadioChoices($templateId, $selectedChoices);
+        if ($radioError !== null) {
+            return $this->jsonError($radioError);
+        }
+
         // Only include selectedChoices if any were actually selected
-        if (!empty($postData['letterChoices'])) {
-            $commandData['selectedChoices'] = $postData['letterChoices'];
+        if (!empty($selectedChoices)) {
+            $commandData['selectedChoices'] = $selectedChoices;
         }
 
         if (!empty($entityContext['type'])) {
@@ -255,6 +266,10 @@ class LetterGenerationController extends AbstractInternalController implements L
                 'id' => $issue['id'],
                 'name' => $issue['letterIssueVersion']['heading'] ?? 'Issue',
                 'type' => 'issue',
+                // VOL-7402: flagged content must be edited before the letter can be
+                // sent (enforced server-side in PrepareToSend) — highlight it here.
+                'inputPending' => !empty($issue['letterIssueVersion']['requiresInput'])
+                    && empty($issue['editedContent']),
             ];
         }
 
@@ -300,6 +315,8 @@ class LetterGenerationController extends AbstractInternalController implements L
                 'name' => $name,
                 'position' => $instanceSection['positionInAssembly'] ?? 0,
                 'type' => 'section',
+                'inputPending' => !empty($sectionVersion['requiresInput'])
+                    && empty($instanceSection['editedContent']),
             ];
         }
 
@@ -716,9 +733,17 @@ class LetterGenerationController extends AbstractInternalController implements L
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            $messages = $response->getResult()['messages'] ?? [];
-            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
-            return $this->jsonError('Failed to prepare letter: ' . $errorMessage);
+            // Validation failures arrive keyed and nested (field => [message, ...]),
+            // so flatten before joining or the user sees the literal string "Array".
+            $messages = (array) ($response->getResult()['messages'] ?? []);
+            $flatMessages = [];
+            array_walk_recursive(
+                $messages,
+                static function ($message) use (&$flatMessages): void {
+                    $flatMessages[] = (string) $message;
+                }
+            );
+            return $this->jsonError('Failed to prepare letter: ' . implode(', ', $flatMessages));
         }
 
         $result = $response->getResult();
@@ -994,11 +1019,48 @@ class LetterGenerationController extends AbstractInternalController implements L
                     'label' => $letterChoice['label'] ?? '',
                     'groupLabel' => $letterChoice['groupLabel'] ?? 'Other letter choices',
                     'inputType' => $letterChoice['inputType'] ?? 'checkbox',
+                    'displayOrder' => (int) ($letterChoice['displayOrder'] ?? 0),
                 ];
             }
         }
 
+        // VOL-7282: honour the admin-configured ordering (label as tiebreak)
+        usort(
+            $choices,
+            fn(array $a, array $b) => [$a['displayOrder'], $a['label']] <=> [$b['displayOrder'], $b['label']]
+        );
+
         return $choices;
+    }
+
+    /**
+     * Validate that every radio "pick one" group on the letter type has exactly one option selected.
+     *
+     * Radio groups are mandatory by rule (no default, must pick one). Checkbox choices are optional
+     * and not validated here. Mirrors the client-side guard so the rule holds if JS is bypassed.
+     *
+     * @param int $templateId Doc template ID
+     * @param array $selectedChoices Selected letter choice IDs (checkbox + radio merged)
+     * @return string|null Error message if a radio group is unsatisfied, otherwise null
+     */
+    protected function validateRequiredRadioChoices(int $templateId, array $selectedChoices): ?string
+    {
+        $radioGroups = [];
+        foreach ($this->fetchLetterChoicesForLetterType($templateId) as $choice) {
+            if (($choice['inputType'] ?? 'checkbox') === 'radio') {
+                $radioGroups[$choice['groupLabel']][] = (int) $choice['id'];
+            }
+        }
+
+        $selectedIds = array_map('intval', $selectedChoices);
+
+        foreach ($radioGroups as $groupLabel => $optionIds) {
+            if (count(array_intersect($optionIds, $selectedIds)) !== 1) {
+                return sprintf('Select one option for "%s"', $groupLabel);
+            }
+        }
+
+        return null;
     }
 
     /**

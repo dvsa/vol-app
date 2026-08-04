@@ -12,12 +12,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class OptionTest extends MockeryTestCase
+final class OptionTest extends MockeryTestCase
 {
     private $value;
 
     private $label;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->value = '2';

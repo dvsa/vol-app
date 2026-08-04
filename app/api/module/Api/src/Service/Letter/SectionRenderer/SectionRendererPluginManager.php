@@ -26,7 +26,7 @@ class SectionRendererPluginManager extends AbstractPluginManager
     protected $aliases = [
         'content-section' => ContentSectionRenderer::class,
         'issue' => IssueSectionRenderer::class,
-        // Future: 'todo' => TodoSectionRenderer::class,
+        'todo' => TodoSectionRenderer::class,
         'appendix' => AppendixSectionRenderer::class,
     ];
 
@@ -38,6 +38,7 @@ class SectionRendererPluginManager extends AbstractPluginManager
     protected $factories = [
         ContentSectionRenderer::class => SectionRendererFactory::class,
         IssueSectionRenderer::class => SectionRendererFactory::class,
+        TodoSectionRenderer::class => SectionRendererFactory::class,
         AppendixSectionRenderer::class => SectionRendererFactory::class,
     ];
 }

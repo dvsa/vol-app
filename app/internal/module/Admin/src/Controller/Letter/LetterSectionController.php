@@ -25,6 +25,7 @@ use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractInternalController;
 use Olcs\Controller\Interfaces\LeftViewProvider;
 use Olcs\Mvc\Controller\ParameterProvider\GenericItem;
+use Olcs\Mvc\Controller\ParameterProvider\GenericList;
 use Olcs\Mvc\Controller\ParameterProvider\ConfirmItem;
 
 class LetterSectionController extends AbstractInternalController implements LeftViewProvider
@@ -85,6 +86,57 @@ class LetterSectionController extends AbstractInternalController implements Left
             'reUseParams' => false,
         ],
     ];
+
+    /**
+     * Standard index list, but the __ISSUES__ placeholder section must exist in the
+     * database (the letter assembler keys off it to position the issues block) yet
+     * never be visible, editable, or deletable in the admin UI. Filter it from the
+     * list results here; edit/delete are blocked at the command-handler layer.
+     */
+    #[\Override]
+    public function indexAction()
+    {
+        $paramProvider = new GenericList(
+            $this->listVars,
+            $this->defaultTableSortField,
+            $this->defaultTableOrderField
+        );
+        $paramProvider->setDefaultLimit($this->defaultTableLimit);
+        $paramProvider->setParams($this->plugin('params'));
+        $providedParameters = $this->modifyListQueryParameters($paramProvider->provideParameters());
+
+        $listDto = $this->listDto;
+        $response = $this->handleQuery($listDto::create($providedParameters));
+
+        if ($response->isOk()) {
+            $data = $response->getResult();
+
+            if (!empty($data['results'])) {
+                $filtered = array_values(array_filter(
+                    $data['results'],
+                    fn($row) => ($row['sectionKey'] ?? null) !== '__ISSUES__'
+                ));
+                if (count($filtered) !== count($data['results']) && isset($data['count'])) {
+                    $data['count'] = max(0, ((int) $data['count']) - 1);
+                }
+                $data['results'] = $filtered;
+            }
+
+            $this->listData = $data;
+
+            $table = $this->table()->buildTable($this->tableName, $data, $providedParameters);
+            $table = $this->alterTable($table, $data);
+
+            $this->placeholder()->setPlaceholder(
+                $this->tableViewPlaceholderName,
+                $table->render()
+            );
+        } elseif ($response->isClientError() || $response->isServerError()) {
+            $this->handleErrors($response->getResult());
+        }
+
+        return $this->viewBuilder()->buildViewFromTemplate($this->tableViewTemplate);
+    }
 
     /**
      * Detail page for a letter section - shows metadata, default content, variants, and version history

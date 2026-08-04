@@ -27,7 +27,7 @@ use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle as LicenceVehicleEntity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class LicenceVehicleTest extends QueryHandlerTestCase
+final class LicenceVehicleTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

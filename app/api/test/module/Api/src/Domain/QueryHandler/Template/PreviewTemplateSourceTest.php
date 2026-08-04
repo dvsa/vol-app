@@ -13,7 +13,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 use RuntimeException;
 
-class PreviewTemplateSourceTest extends QueryHandlerTestCase
+final class PreviewTemplateSourceTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -65,6 +65,8 @@ class PreviewTemplateSourceTest extends QueryHandlerTestCase
             ->andReturn($locale);
         $template->shouldReceive('getFormat')
             ->andReturn($format);
+        $template->shouldReceive('getDescription')
+            ->andReturn('Test template');
 
         $query = PreviewTemplateSourceQry::create(
             [
@@ -132,6 +134,8 @@ class PreviewTemplateSourceTest extends QueryHandlerTestCase
             ->andReturn($locale);
         $template->shouldReceive('getFormat')
             ->andReturn($format);
+        $template->shouldReceive('getDescription')
+            ->andReturn('Test template');
 
         $this->mockedSmServices['TemplateTwigRenderer']->shouldReceive('renderString')
             ->with($source, $dataset1Values)

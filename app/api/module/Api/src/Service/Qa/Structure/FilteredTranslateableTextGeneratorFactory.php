@@ -18,7 +18,7 @@ class FilteredTranslateableTextGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FilteredTranslateableTextGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): FilteredTranslateableTextGenerator
     {
         return new FilteredTranslateableTextGenerator(
             $container->get('QaFilteredTranslateableTextFactory'),

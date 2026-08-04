@@ -118,7 +118,8 @@ final class CopyDocument extends AbstractCommandHandler implements Transactioned
             }
 
             $sourceDocument = $this->getUploader()->download($document->getIdentifier());
-            if ($sourceDocument === null) {
+            // download() proxies read(), returning File|false (never null); handle the missing case.
+            if ($sourceDocument === null || $sourceDocument === false) {
                 throw new ValidationException(['targetId' => 'Can\'t download the source document']);
             }
             $uploadData = array_merge(

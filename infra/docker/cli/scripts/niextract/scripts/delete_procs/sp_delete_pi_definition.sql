@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_pi_definition;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_pi_definition()
@@ -28,22 +27,31 @@ BEGIN
 
     SELECT CONCAT(@total,' pi_definition rows to delete.') AS '' ;
 
+    SET @total_deleted := 0;
+    SET @rowcount := 10000;
 
-    
-    DELETE FROM pi_definition
-    WHERE is_ni = 0;
+    START TRANSACTION;
 
-    SET @rowcount := row_count();
+    WHILE(@rowcount = 10000) DO
     
+        DELETE FROM pi_definition
+        WHERE is_ni = 0
+        LIMIT 10000;
 
+        SET @rowcount := row_count();
+        SET @total_deleted := @total_deleted + @rowcount;
     
-    SELECT CONCAT(@rowcount,' pi_definition rows deleted.') AS '';
+        SELECT CONCAT(@total_deleted,' pi_definition rows deleted.') AS '';
+
+        COMMIT;
+        START TRANSACTION;
+
+    END WHILE;
+    
+    COMMIT;
     
     SELECT CONCAT('delete pi_definition finished at ',now()) AS '' ; 
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

@@ -20,7 +20,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class PersonEntityTest extends EntityTester
+final class PersonEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -44,12 +44,10 @@ class PersonEntityTest extends EntityTester
         $this->assertEquals('bplace', $entity->getBirthPlace());
     }
 
-    public static function birthDateProvider(): array
+    public static function birthDateProvider(): \Iterator
     {
-        return [
-            ['2015-01-01', new \DateTime('2015-01-01')],
-            ['', null]
-        ];
+        yield ['2015-01-01', new \DateTime('2015-01-01')];
+        yield ['', null];
     }
 
     public function testGetContactDetail(): void
@@ -85,7 +83,7 @@ class PersonEntityTest extends EntityTester
         $person = $this->instantiate($this->entityClass);
         $person->setDisqualifications(new \Doctrine\Common\Collections\ArrayCollection());
 
-        $this->assertSame(null, $person->getDisqualification());
+        $this->assertNull($person->getDisqualification());
     }
 
     public function testGetDisqualification(): void

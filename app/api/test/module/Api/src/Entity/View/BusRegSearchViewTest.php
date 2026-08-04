@@ -9,13 +9,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\View\BusRegSearchView::class)]
-class BusRegSearchViewTest extends MockeryTestCase
+final class BusRegSearchViewTest extends MockeryTestCase
 {
     /** @var  BusRegSearchView */
     private $sut;
     /** @var array */
     protected $testData;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->testData = [
@@ -48,7 +49,7 @@ class BusRegSearchViewTest extends MockeryTestCase
 
             $this->sut->{'set' . $methodName}($value);
 
-            static::assertEquals($value, $this->sut->{'get' . $methodName}());
+            $this->assertEquals($value, $this->sut->{'get' . $methodName}());
         }
     }
 }

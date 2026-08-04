@@ -12,7 +12,7 @@ use Olcs\Navigation\RightHandNavigationFactory;
  * Class RightHandNavigationFactoryTest
  * @author Craig Reasbeck <craig.reasbeck@valtech.co.uk>
  */
-class RightHandNavigationFactoryTest extends TestCase
+final class RightHandNavigationFactoryTest extends TestCase
 {
     public function testGetName(): void
     {

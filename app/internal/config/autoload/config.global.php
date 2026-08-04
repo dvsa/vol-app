@@ -75,8 +75,12 @@ return [
         'private_key' => '%webdav_jwt_private_key%',
         // The default length in seconds the JWT is valid for.
         'default_lifetime_seconds' => 21600,
-        // The URL pattern for a WebDAV URL. JWT followed by Document Path will be sprintf'ed into this value.
-        'url_pattern' => 'ms-word:ofe|u|https://iuweb.%domain%/documents-dav/%%s/olcs/%%s'
+        // Legacy URL pattern (Apache WebDAV, used when INTERNAL_WEBDAV toggle is OFF).
+        // Uses iuweb host — ALB path-based routing sends /documents-dav/** to WebDAV target group.
+        'url_pattern' => 'ms-word:ofe|u|https://iuweb.%domain%/documents-dav/%%s/olcs/%%s',
+        // Internal URL pattern (sabre/dav, used when INTERNAL_WEBDAV toggle is ON).
+        // Uses /internal-dav/ to avoid ALB rule that routes /documents-dav/** to legacy WebDAV instances.
+        'internal_url_pattern' => 'ms-word:ofe|u|https://iuweb.%domain%/internal-dav/%%s/%%s',
     ],
 
     'assets' => [
@@ -93,7 +97,7 @@ return [
             'writers' => [
                 'full' => [
                     'options' => [
-                        'stream' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? 'php://stdout' : '/var/log/dvsa/olcs-iuweb/iuweb.log'),
+                        'stream' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? 'php://stderr' : '/var/log/dvsa/olcs-iuweb/iuweb.log'),
                         'filters' => [
                             'priority' => [
                                 'name' => 'priority',
@@ -158,25 +162,13 @@ return [
 
     'caches' => [
         'default-cache' => [
-            'adapter' => Laminas\Cache\Storage\Adapter\Redis::class,
             'options' => [
                 'server' => [
                     'host' => '%redis_cache_fqdn%',
                     'port' => 6379,
                 ],
-                'lib_options' => [
-                    \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
-                ],
                 'ttl' => 3600, //one hour, likely to be overridden based on use case
                 'namespace' => 'zfcache',
-            ],
-            'plugins' => [
-                [
-                    'name' => 'exception_handler',
-                    'options' => [
-                        'throw_exceptions' => false,
-                    ],
-                ],
             ],
         ],
     ],

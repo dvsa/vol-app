@@ -19,7 +19,7 @@ use Mockery as m;
  * @see ChangeExpiredPassword
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class ChangeExpiredPasswordTest extends AbstractCommandHandlerTestCase
+final class ChangeExpiredPasswordTest extends AbstractCommandHandlerTestCase
 {
     private m\MockInterface $adapter;
     private string $newPassword = 'newPassword';
@@ -59,16 +59,14 @@ class ChangeExpiredPasswordTest extends AbstractCommandHandlerTestCase
         $this->assertSame($messages, $result->getFlag('messages'));
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            [ChangeExpiredPasswordResult::SUCCESS, [0 => ChangeExpiredPassword::MSG_GENERIC_SUCCESS], true],
-            [ChangeExpiredPasswordResult::SUCCESS_WITH_CHALLENGE, [0 => ChangeExpiredPassword::MSG_GENERIC_SUCCESS], true],
-            [ChangeExpiredPasswordResult::FAILURE_NEW_PASSWORD_INVALID, [0 => ChangeExpiredPassword::MSG_INVALID], false],
-            [ChangeExpiredPasswordResult::FAILURE_NOT_AUTHORIZED, [0 => ChangeExpiredPassword::MSG_NOT_AUTHORIZED], false],
-            [ChangeExpiredPasswordResult::FAILURE, [0 => ChangeExpiredPassword::MSG_GENERIC_FAIL], false],
-            [ChangeExpiredPasswordResult::FAILURE_CLIENT_ERROR, [0 => ChangeExpiredPassword::MSG_GENERIC_FAIL], false],
-        ];
+        yield [ChangeExpiredPasswordResult::SUCCESS, [0 => ChangeExpiredPassword::MSG_GENERIC_SUCCESS], true];
+        yield [ChangeExpiredPasswordResult::SUCCESS_WITH_CHALLENGE, [0 => ChangeExpiredPassword::MSG_GENERIC_SUCCESS], true];
+        yield [ChangeExpiredPasswordResult::FAILURE_NEW_PASSWORD_INVALID, [0 => ChangeExpiredPassword::MSG_INVALID], false];
+        yield [ChangeExpiredPasswordResult::FAILURE_NOT_AUTHORIZED, [0 => ChangeExpiredPassword::MSG_NOT_AUTHORIZED], false];
+        yield [ChangeExpiredPasswordResult::FAILURE, [0 => ChangeExpiredPassword::MSG_GENERIC_FAIL], false];
+        yield [ChangeExpiredPasswordResult::FAILURE_CLIENT_ERROR, [0 => ChangeExpiredPassword::MSG_GENERIC_FAIL], false];
     }
 
     public function testHandleCommandUpdatesUserLastLoginAtOnSuccessResult(): void
@@ -139,14 +137,12 @@ class ChangeExpiredPasswordTest extends AbstractCommandHandlerTestCase
         $this->mockUserRepo = $instance;
     }
 
-    public static function resultsDataProvider(): array
+    public static function resultsDataProvider(): \Iterator
     {
-        return [
-            'Challenge result' => [ChangeExpiredPasswordResult::SUCCESS_WITH_CHALLENGE],
-            'Failure result' => [ChangeExpiredPasswordResult::FAILURE],
-            'Invalid password result' => [ChangeExpiredPasswordResult::FAILURE_NEW_PASSWORD_INVALID],
-            'Client error result' => [ChangeExpiredPasswordResult::FAILURE_CLIENT_ERROR],
-            'Not authorized result' => [ChangeExpiredPasswordResult::FAILURE_NOT_AUTHORIZED],
-        ];
+        yield 'Challenge result' => [ChangeExpiredPasswordResult::SUCCESS_WITH_CHALLENGE];
+        yield 'Failure result' => [ChangeExpiredPasswordResult::FAILURE];
+        yield 'Invalid password result' => [ChangeExpiredPasswordResult::FAILURE_NEW_PASSWORD_INVALID];
+        yield 'Client error result' => [ChangeExpiredPasswordResult::FAILURE_CLIENT_ERROR];
+        yield 'Not authorized result' => [ChangeExpiredPasswordResult::FAILURE_NOT_AUTHORIZED];
     }
 }

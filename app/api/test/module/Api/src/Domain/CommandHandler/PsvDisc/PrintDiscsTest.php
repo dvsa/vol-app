@@ -29,7 +29,7 @@ use Dvsa\Olcs\Api\Entity\User\User;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class PrintDiscsTest extends AbstractCommandHandlerTestCase
+final class PrintDiscsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

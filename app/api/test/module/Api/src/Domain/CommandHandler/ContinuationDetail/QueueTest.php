@@ -18,7 +18,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class QueueTest extends AbstractCommandHandlerTestCase
+final class QueueTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

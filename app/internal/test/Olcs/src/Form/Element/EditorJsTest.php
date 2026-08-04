@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Form\Element\EditorJs::class)]
-class EditorJsTest extends TestCase
+final class EditorJsTest extends TestCase
 {
     private EditorJs $sut;
     private $mockHtmlConverter;
@@ -78,21 +78,19 @@ class EditorJsTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    public static function isValidEditorJsJsonProvider(): array
+    public static function isValidEditorJsJsonProvider(): \Iterator
     {
-        return [
-            'valid json' => [
-                json_encode(['blocks' => []]),
-                true
-            ],
-            'invalid json' => [
-                'not json',
-                false
-            ],
-            'html content' => [
-                '<p>HTML</p>',
-                false
-            ],
+        yield 'valid json' => [
+            json_encode(['blocks' => []]),
+            true
+        ];
+        yield 'invalid json' => [
+            'not json',
+            false
+        ];
+        yield 'html content' => [
+            '<p>HTML</p>',
+            false
         ];
     }
 }

@@ -1,23 +1,18 @@
-#!/bin/env bash
+#!/usr/bin/env bash
+
+if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "ERROR: Missing parameters."
+    echo "Usage: $(basename "$0") <connection_string> <database_name>"
+    exit 1
+fi
 
 CONNECTION=$1
 DB=$2
 
-# drop constraints  and indices not required for extract
-
-mysql $CONNECTION -e "use $DB;CALL sp_drop_constraints;"
-
-mysql $CONNECTION -e "use $DB;CALL sp_drop_indices;"
-
-# add required contraints for the extract
-
-mysql $CONNECTION -e "use $DB;CALL sp_add_NI_Extract_constraints;"
-
-# drop triggers
-
-mysql $CONNECTION -e "use $DB;CALL sp_drop_triggers;"
-
-# drop _hist tables
-
-mysql $CONNECTION -e "use $DB;CALL sp_drop_hist_tables;"
-
+mysql $CONNECTION "$DB" <<EOF
+CALL sp_drop_constraints;
+CALL sp_drop_indices;
+CALL sp_add_NI_Extract_constraints;
+CALL sp_drop_triggers;
+CALL sp_drop_hist_tables;
+EOF

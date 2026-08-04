@@ -1,0 +1,94 @@
+<?php
+//if we have a date, only try to format if it isn't blank
+if (array_key_exists('date', $item)) {
+    if ($item['date']) {
+        // this is an input format, we use it to create correct date from the string
+        $dateFormat = isset($item['dateFormat']) ? $item['dateFormat'] : \DateTime::ISO8601;
+
+        $outputDate = \DateTime::createFromFormat($dateFormat, $item['date']);
+        if (!$outputDate instanceof \DateTime) {
+            $outputDate = \DateTime::createFromFormat(\Common\Module::$dbDateFormat, $item['date']);
+        }
+
+        if ($outputDate instanceof \DateTime) {
+            $item['value'] = $outputDate->format(\Common\Module::$dateFormat);
+        } else {
+            $item['value'] = $item['date'];
+        }
+
+        if ($item['value'] === false) {
+            $item['value'] = $item['date'];
+        }
+    } elseif (array_key_exists('showNotSet', $item)) {
+        $item['value'] = 'Not set';
+    } else {
+        $item['value'] = '';
+    }
+}
+
+if (array_key_exists('money', $item)) {
+    if (!is_null($item['money'])) {
+        $item['value'] = '£'.number_format($item['money'], 2);
+    }
+}
+
+//if we're dealing with something supposed to be numeric but it's empty, echo out a zero
+if (array_key_exists('numeric', $item)) {
+    if(!is_numeric($item['numeric']) || $item['numeric'] == 0) {
+        $item['value'] = '0'; // for some reason a numeric zero breaks the switch below!
+    } else {
+        $item['value'] = $item['numeric'];
+    }
+}
+
+if (isset($item['value'])) {
+    //convert values into yes or no
+    if ($item['value'] === 'Y') {
+        $item['value'] = 'Yes';
+    } elseif ($item['value'] === 'N') {
+        $item['value'] = 'No';
+    }
+}
+
+if (isset($item['hideIfEmpty'])
+    && $item['hideIfEmpty']
+    && empty($item['value'])
+    && !(array_key_exists('numeric', $item) && $item['numeric']===0)
+):
+ // no-op, don't render
+else: ?>
+<li class="definition-list__item<?php echo (isset($item['class']) ? ' ' . $item['class'] : ''); ?>">
+    <?php
+    if (isset($item['full-content'])) {
+        echo $item['full-content'];
+    } elseif(isset($item['list'])) {
+        ?>
+    <ul>
+        <?php foreach ($item['list'] as $item) { ?>
+        <li><?php echo $item; ?></li>
+        <?php } ?>
+    </ul>
+        <?php
+    } else {
+        $value = (
+            isset($item['noEscape'])
+            ? $item['value']
+            : $this->escapeHtml($this->translate((string)$item['value']))
+        );
+        ?>
+        <dt><?php echo $this->translate($item['label']); ?></dt>
+        <dd>
+            <?php if (isset($item['url']) && $item['url'] != ''): ?>
+                <a class="govuk-link" href="<?php echo $item['url']; ?>"><?php echo $value; ?></a>
+            <?php else: ?>
+                <?php echo $value; ?>
+            <?php endif; ?>
+
+            <?php echo !empty($item['suffix']) ? $item['suffix'] : '';?>
+        </dd>
+        <?php
+    }
+    ?>
+</li>
+<?php endif;
+

@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Validators\CanAccessTxcInbox;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 use Mockery as m;
 
-class CanAccessTxcInboxTest extends AbstractValidatorsTestCase
+final class CanAccessTxcInboxTest extends AbstractValidatorsTestCase
 {
     /**
      * @var CanAccessTxcInbox
@@ -99,11 +99,9 @@ class CanAccessTxcInboxTest extends AbstractValidatorsTestCase
         $this->assertFalse($this->sut->isValid(5));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 }

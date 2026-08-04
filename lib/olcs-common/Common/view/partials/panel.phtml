@@ -1,0 +1,12 @@
+<div class="govuk-panel <?= $this->theme ?>">
+    <?php if (!empty($this->title)): ?>
+        <h1 class="govuk-panel__title">
+            <?= $this->title ?>
+        </h1>
+    <?php endif; ?>
+    <?php if (!empty($this->body)): ?>
+        <div class="govuk-panel__body">
+            <?= $this->body ?>
+        </div>
+    <?php endif; ?>
+</div>

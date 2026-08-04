@@ -13,7 +13,7 @@ use Mockery as m;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseCompany as CompaniesHouseCompanyEntity;
 
-class CompaniesHouseCompanyBundleTest extends QueryHandlerTestCase
+final class CompaniesHouseCompanyBundleTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

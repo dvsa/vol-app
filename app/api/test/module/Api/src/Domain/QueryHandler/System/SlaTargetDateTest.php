@@ -22,7 +22,7 @@ use Mockery as m;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class SlaTargetDateTest extends QueryHandlerTestCase
+final class SlaTargetDateTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

@@ -300,7 +300,7 @@ class PrintJob extends AbstractCommandHandler
      * @return string
      * @throws Exception
      */
-    protected function getDestination(Document $document, User $user = null)
+    protected function getDestination(Document $document, ?User $user = null)
     {
         // this method assumes that all documents in one message have the same destination
         if (!isset($this->destination)) {

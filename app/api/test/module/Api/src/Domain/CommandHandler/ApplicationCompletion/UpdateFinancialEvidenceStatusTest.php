@@ -15,13 +15,14 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateFinancialEvidenceSt
 use Dvsa\Olcs\Api\Domain\CommandHandler\ApplicationCompletion\UpdateFinancialEvidenceStatus;
 use Mockery as m;
 use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion as ApplicationCompletionEntity;
+use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 
 /**
  * Update Financial Evidence Status Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateFinancialEvidenceStatusTest extends AbstractUpdateStatusTestCase
+final class UpdateFinancialEvidenceStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'FinancialEvidence';
 
@@ -45,5 +46,20 @@ class UpdateFinancialEvidenceStatusTest extends AbstractUpdateStatusTestCase
         $this->applicationCompletion->setFinancialEvidenceStatus(ApplicationCompletionEntity::STATUS_COMPLETE);
 
         $this->expectStatusUnchanged(ApplicationCompletionEntity::STATUS_COMPLETE);
+    }
+
+    public function testHandleCommandWithUploadLaterSetsIncomplete(): void
+    {
+        $this->applicationCompletion->setFinancialEvidenceStatus(
+            ApplicationCompletionEntity::STATUS_COMPLETE
+        );
+
+        $this->application
+            ->shouldReceive('getFinancialEvidenceUploaded')
+            ->andReturn('2');
+
+        $this->expectStatusChange(
+            ApplicationCompletionEntity::STATUS_INCOMPLETE
+        );
     }
 }

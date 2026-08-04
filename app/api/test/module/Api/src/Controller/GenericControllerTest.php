@@ -22,11 +22,12 @@ use Laminas\Mvc\Controller\PluginManager;
 use Laminas\View\Model\JsonModel;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Controller\GenericController::class)]
-class GenericControllerTest extends TestCase
+final class GenericControllerTest extends TestCase
 {
     protected $commandHandlerManager;
     protected $queryHandlerManager;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->commandHandlerManager = m::mock(CommandHandlerManager::class);
@@ -264,7 +265,7 @@ class GenericControllerTest extends TestCase
         //  call & check
         $actual = $this->setupSut($mockSl)->getList();
 
-        static::assertSame('EXPECT', $actual);
+        $this->assertSame('EXPECT', $actual);
     }
 
     public function testGetListSingle(): void
@@ -295,7 +296,7 @@ class GenericControllerTest extends TestCase
         //  call & check
         $actual = $this->setupSut($mockSl)->getList();
 
-        static::assertSame($singleData, $actual);
+        $this->assertSame($singleData, $actual);
     }
 
     public function testGetListNotFound(): void

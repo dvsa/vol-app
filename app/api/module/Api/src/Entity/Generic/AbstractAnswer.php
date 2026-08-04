@@ -21,23 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="answer",
- *    indexes={
- *        @ORM\Index(name="fk_answer_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_answer_irhp_permit_application_id_irhp_permit_application_id", columns={"irhp_permit_application_id"}),
- *        @ORM\Index(name="fk_answer_last_modified_by_user_id", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_answer_question_text_id", columns={"question_text_id"}),
- *        @ORM\Index(name="uk_answer_irhp_application_id_question_text_id", columns={"irhp_application_id", "irhp_permit_application_id", "question_text_id"}),
- *        @ORM\Index(name="IDX_DADD4A25DC41CE69", columns={"irhp_application_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_answer_irhp_application_id_question_text_id", columns={"irhp_application_id", "irhp_permit_application_id", "question_text_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'answer')]
+#[ORM\Index(name: 'fk_answer_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_answer_irhp_permit_application_id_irhp_permit_application_id', columns: ['irhp_permit_application_id'])]
+#[ORM\Index(name: 'fk_answer_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_answer_question_text_id', columns: ['question_text_id'])]
+#[ORM\Index(name: 'IDX_DADD4A25DC41CE69', columns: ['irhp_application_id'])]
+#[ORM\UniqueConstraint(name: 'uk_answer_irhp_application_id_question_text_id', columns: ['irhp_application_id', 'irhp_permit_application_id', 'question_text_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -50,145 +43,130 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * QuestionText
      *
      * @var \Dvsa\Olcs\Api\Entity\Generic\QuestionText
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Generic\QuestionText", fetch="LAZY")
-     * @ORM\JoinColumn(name="question_text_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'question_text_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\QuestionText::class, fetch: 'LAZY')]
     protected $questionText;
 
     /**
      * IrhpApplication
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'answers', fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**
      * IrhpPermitApplication
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_permit_application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, inversedBy: 'answers', fetch: 'LAZY')]
     protected $irhpPermitApplication;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Ans integer
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="ans_integer", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'ans_integer', nullable: true)]
     protected $ansInteger;
 
     /**
      * Ans string
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="ans_string", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'ans_string', length: 255, nullable: true)]
     protected $ansString;
 
     /**
      * Ans decimal
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="ans_decimal", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'ans_decimal', nullable: true)]
     protected $ansDecimal;
 
     /**
      * Ans date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="ans_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'ans_date', nullable: true)]
     protected $ansDate;
 
     /**
      * Ans datetime
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="ans_datetime", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'ans_datetime', nullable: true)]
     protected $ansDatetime;
 
     /**
      * Ans boolean
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="ans_boolean", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'ans_boolean', nullable: true)]
     protected $ansBoolean;
 
     /**
      * Ans text
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="ans_text", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'ans_text', nullable: true)]
     protected $ansText;
 
     /**
      * Ans array
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="ans_array", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'ans_array', nullable: true)]
     protected $ansArray;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -212,7 +190,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param int $id new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setId($id)
     {
@@ -236,7 +214,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\Generic\QuestionText $questionText new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setQuestionText($questionText)
     {
@@ -260,7 +238,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setIrhpApplication($irhpApplication)
     {
@@ -284,7 +262,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication $irhpPermitApplication new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setIrhpPermitApplication($irhpPermitApplication)
     {
@@ -308,7 +286,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -332,7 +310,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -356,7 +334,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param int $ansInteger new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setAnsInteger($ansInteger)
     {
@@ -380,7 +358,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param string $ansString new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setAnsString($ansString)
     {
@@ -404,7 +382,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param string $ansDecimal new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setAnsDecimal($ansDecimal)
     {
@@ -428,7 +406,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $ansDate new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setAnsDate($ansDate)
     {
@@ -458,7 +436,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $ansDatetime new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setAnsDatetime($ansDatetime)
     {
@@ -488,7 +466,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param bool $ansBoolean new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setAnsBoolean($ansBoolean)
     {
@@ -512,7 +490,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param string $ansText new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setAnsText($ansText)
     {
@@ -536,7 +514,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param string $ansArray new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setAnsArray($ansArray)
     {
@@ -560,7 +538,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @param int $version new value being set
      *
-     * @return Answer
+     * @return static
      */
     public function setVersion($version)
     {

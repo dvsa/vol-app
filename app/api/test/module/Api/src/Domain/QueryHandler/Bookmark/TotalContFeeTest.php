@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Entity\Fee\FeeType as Entity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TotalContFeeTest extends QueryHandlerTestCase
+final class TotalContFeeTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

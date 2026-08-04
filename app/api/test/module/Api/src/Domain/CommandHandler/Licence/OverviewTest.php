@@ -25,7 +25,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class OverviewTest extends AbstractCommandHandlerTestCase
+final class OverviewTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -96,8 +96,8 @@ class OverviewTest extends AbstractCommandHandlerTestCase
 
         $this->assertEquals($expected, $result->toArray());
 
-        $this->assertEquals('2015-06-10', $licence->getReviewDate()->format('Y-m-d'));
-        $this->assertEquals('2016-01-02', $licence->getExpiryDate()->format('Y-m-d'));
+        $this->assertSame('2015-06-10', $licence->getReviewDate()->format('Y-m-d'));
+        $this->assertSame('2016-01-02', $licence->getExpiryDate()->format('Y-m-d'));
         $this->assertEquals('Y', $licence->getTranslateToWelsh());
         $this->assertEquals(
             $this->mapReference(TrafficAreaEntity::class, 'B'),

@@ -21,7 +21,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * @see RefreshTokensFactory
  */
-class RefreshTokenFactoryTest extends MockeryTestCase
+final class RefreshTokenFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
     use MocksRepositoriesTrait;
@@ -56,6 +56,7 @@ class RefreshTokenFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(RefreshTokens::class, $result);
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpServiceManager();

@@ -24,7 +24,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
+final class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -99,7 +99,7 @@ class CreateGoodsVehicleTest extends AbstractCommandHandlerTestCase
             'licence' => 111,
             'vrm' => 'ABC123',
             'platedWeight' => 100,
-            'specifiedDate' => (new DateTime('now'))->format(\DateTime::ISO8601),
+            'specifiedDate' => new DateTime('now')->format(\DateTime::ISO8601),
             'receivedDate' => null,
             'confirm' => 1
         ];

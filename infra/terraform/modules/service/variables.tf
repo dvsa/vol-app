@@ -89,9 +89,14 @@ variable "batch" {
       queue    = optional(string, "default")
       commands = optional(list(string))
       cpu      = optional(number, 1)
-      memory   = optional(number, 2048)
+      memory   = optional(number, 4096)
       timeout  = optional(number, 300)
       schedule = optional(list(string), [])
     }))
   })
+}
+
+variable "dva_ni_export_s3uri" {
+  type        = string
+  description = "The S3 URI for the DVA NI export bucket, sourced from SSM parameters"
 }

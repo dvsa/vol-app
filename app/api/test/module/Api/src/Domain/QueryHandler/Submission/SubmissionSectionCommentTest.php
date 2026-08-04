@@ -18,7 +18,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 /**
  * SubmissionSectionComment Test
  */
-class SubmissionSectionCommentTest extends QueryHandlerTestCase
+final class SubmissionSectionCommentTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Entity\User\Permission;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class PsvLicenceVehicleTest extends QueryHandlerTestCase
+final class PsvLicenceVehicleTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

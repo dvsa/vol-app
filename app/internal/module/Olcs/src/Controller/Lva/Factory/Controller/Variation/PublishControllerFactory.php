@@ -21,7 +21,7 @@ class PublishControllerFactory implements FactoryInterface
      * @return PublishController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PublishController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): PublishController
     {
 
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

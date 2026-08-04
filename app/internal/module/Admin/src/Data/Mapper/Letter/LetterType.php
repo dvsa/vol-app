@@ -68,7 +68,6 @@ class LetterType implements MapperInterface
                 'masterTemplate' => isset($data['masterTemplate']['id']) ? $data['masterTemplate']['id'] : null,
                 'category' => isset($data['category']['id']) ? $data['category']['id'] : null,
                 'subCategory' => isset($data['subCategory']['id']) ? $data['subCategory']['id'] : null,
-                'letterTestData' => isset($data['letterTestData']['id']) ? $data['letterTestData']['id'] : null,
                 'sections' => $sectionIds,
                 'sectionsOrder' => implode(',', $sectionIds),
                 'sectionsRequired' => implode(',', $requiredSectionIds),
@@ -111,10 +110,6 @@ class LetterType implements MapperInterface
 
         if (empty($commandData['subCategory'])) {
             unset($commandData['subCategory']);
-        }
-
-        if (empty($commandData['letterTestData'])) {
-            unset($commandData['letterTestData']);
         }
 
         // Use sectionsOrder (from hidden input) for ordered section IDs, fall back to sections multi-select

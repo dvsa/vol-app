@@ -1,0 +1,10 @@
+<p>Gwiriwch eich bod wedi defnyddio’r cyfeiriad cywir ar gyfer y wefan.</p>
+<p>Os credwch eich bod wedi canfod cyswllt e-bost nad yw’n gweithio<?php echo $this->partial('en_GB/markup-contact-email-link'); ?></p>
+<p>Gadewch i ni wybod:</p>
+<ul>
+    <li>pa dudalen oeddech chi arni</li>
+    <li>a beth oeddech chi’n ei geisio ei wneud</li>
+    <?php if (!empty($correlationId)): ?>
+        <li>gan ddyfynnu cyfeirnod <?php echo $this->escapeHtml($correlationId); ?></li>
+    <?php endif; ?>
+</ul>

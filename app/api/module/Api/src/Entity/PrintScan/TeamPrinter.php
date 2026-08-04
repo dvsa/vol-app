@@ -8,15 +8,11 @@ use Dvsa\Olcs\Api\Entity\User\Team as TeamEntity;
 
 /**
  * TeamPrinter Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="team_printer",
- *    indexes={
- *        @ORM\Index(name="ix_team_printer_printer_id", columns={"printer_id"}),
- *        @ORM\Index(name="ix_team_printer_team_id", columns={"team_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'team_printer')]
+#[ORM\Index(name: 'ix_team_printer_printer_id', columns: ['printer_id'])]
+#[ORM\Index(name: 'ix_team_printer_team_id', columns: ['team_id'])]
+#[ORM\Entity]
 class TeamPrinter extends AbstractTeamPrinter
 {
     public const ERROR_PRINTER_EXCEPTION_EXISTS = 'err_printer_exception_exist';

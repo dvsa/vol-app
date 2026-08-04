@@ -698,6 +698,40 @@ return [
                             ]
                         ]
                     ],
+                    // Super-admin S3 document-store browser
+                    'admin-s3-browser' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 's3-browser[/]',
+                            'defaults' => [
+                                'controller' => \Admin\Controller\S3\BrowserController::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                        'may_terminate' => true,
+                        'child_routes' => [
+                            'download' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'download[/]',
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\S3\BrowserController::class,
+                                        'action' => 'download',
+                                    ],
+                                ],
+                            ],
+                            'overwrite' => [
+                                'type' => 'Segment',
+                                'options' => [
+                                    'route' => 'overwrite[/]',
+                                    'defaults' => [
+                                        'controller' => \Admin\Controller\S3\BrowserController::class,
+                                        'action' => 'overwrite',
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                     // Admin IRHP Permits
                     'admin-permits' => [
                         'type' => 'Segment',
@@ -954,7 +988,7 @@ return [
                             'route' =>
                                 'email-templates[/:action][/:id][/]',
                             'constraints' => [
-                                'action' => '(index|add|edit|delete|previewTemplate)',
+                                'action' => '(index|add|edit|delete|previewTemplate|sendTestEmail)',
                                 'id' => '[0-9\,]+',
                             ],
                             'defaults' => [
@@ -1074,6 +1108,7 @@ return [
             Admin\Controller\Letter\LetterTodoController::class => Admin\Controller\Letter\LetterTodoControllerFactory::class,
             Admin\Controller\Letter\LetterChoiceController::class => Admin\Controller\Letter\LetterChoiceControllerFactory::class,
             Admin\Controller\FeatureToggleController::class => Admin\Controller\FeatureToggleControllerFactory::class,
+            Admin\Controller\S3\BrowserController::class => Admin\Controller\S3\BrowserControllerFactory::class,
             Admin\Controller\FeeRateController::class => Admin\Controller\FeeRateControllerFactory::class,
             Admin\Controller\FinancialStandingRateController::class => Admin\Controller\FinancialStandingRateControllerFactory::class,
             Admin\Controller\InterimRefundsController::class => Admin\Controller\InterimRefundsControllerFactory::class,

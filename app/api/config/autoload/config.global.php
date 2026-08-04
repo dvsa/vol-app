@@ -46,30 +46,38 @@ return [
 
     // Doctrine
     'doctrine' => [
+        'entity_manager' => [
+            'orm_default' => [
+                'connection' => 'orm_default',
+                'configuration' => 'orm_default',
+            ],
+        ],
+        'cache' => [
+            'redis' => [
+                // Resolved from the container by Roave's CacheFactory, so this is a service name
+                'class' => 'doctrine-cache',
+            ],
+        ],
         'connection' => [
             'orm_default' => [
-                'driverClass' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
+                // Used by Roave
+                'driver_class' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
                 // Database connection details
                 'params' => $doctrine_connection_params,
             ],
             'export' => [
-                'driverClass' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
+                // Used by Roave
+                'driver_class' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
+                'configuration' => 'orm_default',
+                'event_manager' => 'orm_default',
                 // Database connection details
                 'params' => $doctrine_connection_params,
             ],
         ],
-        'driver' => [
-            'EntityDriver' => [
-                'cache' => 'redis'
-            ],
-            'translatable_metadata_driver' => [
-                'cache' => 'redis',
-            ]
-        ],
         'configuration' => [
             'orm_default' => [
                 'metadata_cache' => 'redis',
-                'generate_proxies' => true,
+                'auto_generate_proxy_classes' => true,
                 'query_cache'       => 'redis',
                 'result_cache'      => 'redis',
                 'hydration_cache'   => 'redis',
@@ -108,6 +116,19 @@ return [
 
     // Document service
     'document_share' => [
+        // Document store backend selector: 'webdav' | 's3'. Resolved per environment from
+        // SSM / Secrets Manager; any value other than 's3' (including an unresolved placeholder)
+        // falls back to WebDAV, so this is a safe, instantly-reversible cutover toggle.
+        // (Only used by the WebDAV->S3 migration; the bucket browser ignores it.)
+        'backend' => '%olcs_document_store_backend%',
+        // Native S3 document store / bucket-browser settings. Bucket name + key prefix are
+        // environment-specific and resolved from SSM / Secrets Manager (the bucket name is the
+        // per-env `<project>-<env>-<component>-sabredav`; the key prefix aligns stored identifiers
+        // with the keys the EBS->S3 sync produced, and may resolve to '').
+        's3' => [
+            'bucket' => '%olcs_document_store_s3_bucket%',
+            'key_prefix' => '%olcs_document_store_s3_key_prefix%',
+        ],
         'client' => [
             // Document service workspace "olcs"
             'workspace' => 'olcs',
@@ -263,13 +284,34 @@ return [
 
     // Email config
     'email' => [
-        // Debugging option forces all email to be sent to an address
-        // Selfserve/external URI e.g. http://demo_dvsa-selfserve.web03.olcs.mgt.mtpdvsa *Environment specific*
-        'send_all_mail_to' => ($isProductionAccount && !$isProduction) ? '%olcs_send_all_mail_to%' : null,
+        // Debugging option: redirect ALL outbound email to a single address. Driven by the env's
+        // `olcs_send_all_mail_to` param — a real address enables it, a blank/"null" sentinel disables
+        // it (SSM String params cannot be empty, so envs opt out with " " or "null"). NEVER in
+        // production (APP): prod always sends to the real recipients regardless of the param.
+        'send_all_mail_to' => $isProduction ? null : '%olcs_send_all_mail_to%',
         'from_name' => 'OLCS do not reply',
         'from_email' => '%olcs_from_email%',
         'selfserve_uri' => '%olcs_ss_uri%',
         'internal_uri' => '%olcs_iu_uri%',
+        // GOV.UK Notify transport config. Populated from Secrets Manager / Parameter Store in
+        // deployed environments; overridden in local.php for local dev.
+        'notify' => [
+            'passthrough_templates' => [
+                'en_GB' => '%olcs_notify_template_en_gb%',
+                'cy_GB' => '%olcs_notify_template_cy_gb%',
+            ],
+            // Outbound egress in deployed environments is only reachable via the shared forward
+            // proxy, so the Notify HTTP client is routed through it like every other external
+            // integration. Overridden to empty in local.php where egress is direct.
+            'proxy' => 'http://%shd_proxy%',
+        ],
+        // VOL-7238: dedicated DSN for the admin "Send test via Notify" button. Populated only
+        // in pre-cutover envs (dev/int) so admins can exercise the Notify path against a
+        // Notify test-mode key while the main `mail.dsn` is still SMTP. Empty/unset hides the
+        // admin button.
+        'notify_test' => [
+            'dsn' => '%olcs_notify_test_dsn%',
+        ],
     ],
     'awsOptions' => array_filter([
         'region' => '%olcs_aws_region%',
@@ -286,6 +328,11 @@ return [
         ]
     ]),
     'mail' => [
+        // Optional explicit Symfony Mailer DSN. When set (e.g. `govuknotify://…` or
+        // `govuknotify+mailpit://mailpit:1025`), takes precedence over the legacy host/port
+        // SMTP composition below. Populated from Secrets Manager / Parameter Store once the
+        // Notify cutover has happened per-environment; overridden in local.php for dev.
+        'dsn' => '%olcs_mail_dsn%',
         'type' => '\Laminas\Mail\Transport\Smtp',
         'options' => [
             'name' => '%olcs_email_host%',
@@ -393,7 +440,7 @@ return [
             'writers' => [
                 'full' => [
                     'options' => [
-                        'stream' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? 'php://stdout' : '/var/log/dvsa/olcs-api/api.log'),
+                        'stream' => (\Aws\Credentials\CredentialProvider::shouldUseEcs() ? 'php://stderr' : '/var/log/dvsa/olcs-api/api.log'),
                         'filters' => [
                             'priority' => [
                                 'name' => 'priority',
@@ -508,48 +555,22 @@ return [
 
     'caches' => [
         'default-cache' => [
-            'adapter' => Laminas\Cache\Storage\Adapter\Redis::class,
             'options' => [
                 'server' => [
                     'host' => '%redis_cache_fqdn%',
                     'port' => 6379,
-                ],
-                'lib_options' => [
-                    \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
                 ],
                 'ttl' => 3600, //one hour, likely to be overridden based on use case
                 'namespace' => 'zfcache',
-            ],
-            'plugins' => [
-                [
-                    'name' => 'exception_handler',
-                    'options' => [
-                        'throw_exceptions' => false,
-                    ],
-                ],
-            ],
+            ]
         ],
-        'doctrinemodule.cache.redis' => [
-            'adapter' => Laminas\Cache\Storage\Adapter\Redis::class,
+        // Keeps Doctrine ORM cache keys isolated from the general app cache (shares the
+        // same Redis connection, separate key namespace) so each can be cleared independently
+        'doctrine-cache' => [
             'options' => [
-                'server' => [
-                    'host' => '%redis_cache_fqdn%',
-                    'port' => 6379,
-                ],
-                'lib_options' => [
-                    \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
-                ],
-                'ttl' => 3600, //one hour, likely to be overridden based on use case
+                'ttl' => 3600,
                 'namespace' => 'doctrine',
-            ],
-            'plugins' => [
-                [
-                    'name' => 'exception_handler',
-                    'options' => [
-                        'throw_exceptions' => false,
-                    ],
-                ],
-            ],
+            ]
         ],
     ],
 

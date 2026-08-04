@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class ComplaintEntityTest extends EntityTester
+final class ComplaintEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -49,12 +49,10 @@ class ComplaintEntityTest extends EntityTester
         $this->assertFalse($sut->isOpen());
     }
 
-    public static function isOpenProvider(): array
+    public static function isOpenProvider(): \Iterator
     {
-        return [
-            [Entity::COMPLAIN_STATUS_OPEN, true],
-            [Entity::COMPLAIN_STATUS_CLOSED, false],
-        ];
+        yield [Entity::COMPLAIN_STATUS_OPEN, true];
+        yield [Entity::COMPLAIN_STATUS_CLOSED, false];
     }
 
     /**
@@ -71,12 +69,10 @@ class ComplaintEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->isEnvironmentalComplaint());
     }
 
-    public static function isEnvironmentalComplaintProvider(): array
+    public static function isEnvironmentalComplaintProvider(): \Iterator
     {
-        return [
-            [false, true],
-            [true, false],
-        ];
+        yield [false, true];
+        yield [true, false];
     }
 
     /**
@@ -106,24 +102,20 @@ class ComplaintEntityTest extends EntityTester
         );
     }
 
-    public static function populateClosedDateProvider(): array
+    public static function populateClosedDateProvider(): \Iterator
     {
-        return [
-            // non-Environmental Complaint
-            [true, Entity::COMPLAIN_STATUS_CLOSED, null, null],
-            [true, Entity::COMPLAIN_STATUS_OPEN, null, null],
-
-            // Environmental Complaint
-            // closed - closed date not set yet
-            [false, Entity::COMPLAIN_STATUS_CLOSED, null, new \DateTime()],
-            // closed - closed date already set
-            [false, Entity::COMPLAIN_STATUS_CLOSED, new \DateTime('2015-02-10'), new \DateTime('2015-02-10')],
-
-            // open - closed date not set yet
-            [false, Entity::COMPLAIN_STATUS_OPEN, null, null],
-            // open - closed date already set
-            [false, Entity::COMPLAIN_STATUS_OPEN, new \DateTime('2015-02-10'), null],
-        ];
+        // non-Environmental Complaint
+        yield [true, Entity::COMPLAIN_STATUS_CLOSED, null, null];
+        yield [true, Entity::COMPLAIN_STATUS_OPEN, null, null];
+        // Environmental Complaint
+        // closed - closed date not set yet
+        yield [false, Entity::COMPLAIN_STATUS_CLOSED, null, new \DateTime()];
+        // closed - closed date already set
+        yield [false, Entity::COMPLAIN_STATUS_CLOSED, new \DateTime('2015-02-10'), new \DateTime('2015-02-10')];
+        // open - closed date not set yet
+        yield [false, Entity::COMPLAIN_STATUS_OPEN, null, null];
+        // open - closed date already set
+        yield [false, Entity::COMPLAIN_STATUS_OPEN, new \DateTime('2015-02-10'), null];
     }
 
     /**

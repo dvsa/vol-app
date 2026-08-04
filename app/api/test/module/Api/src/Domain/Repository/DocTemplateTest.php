@@ -9,8 +9,9 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DocTemplateTest extends RepositoryTestCase
+final class DocTemplateTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(\Dvsa\Olcs\Api\Domain\Repository\DocTemplate::class, true);

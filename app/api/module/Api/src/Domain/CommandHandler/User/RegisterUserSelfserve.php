@@ -62,7 +62,10 @@ final class RegisterUserSelfserve extends AbstractUserCommandHandler implements
             // create organisation and link with it
             $data['organisations'] = [$this->createOrganisation($data)];
         } elseif (!empty($data['organisation'])) {
-            // link with the organisation
+            // Link to an existing organisation by id. This branch is only reachable via the internal,
+            // routeless RegisterUserSelfserveByOrganisation command (the consultant journey) — the
+            // public RegisterUserSelfserve command no longer carries an `organisation` field, so an
+            // anonymous caller cannot reach it (VOL-7370).
             $data['organisations'] = [$this->getRepo('Organisation')->fetchById($data['organisation'])];
         }
 

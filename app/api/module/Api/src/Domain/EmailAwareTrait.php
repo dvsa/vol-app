@@ -49,7 +49,11 @@ trait EmailAwareTrait
     }
 
     /**
-     * Send an email in a HTML template
+     * Send an email rendered from a database/phtml template.
+     *
+     * The renderer internally routes between the legacy html+plain path and the Notify
+     * markdown path based on the active mailer DSN (see TemplateRenderer::renderBody and
+     * VOL-7238). Handlers do not branch.
      *
      * @param string|array $template
      * @param string       $layout

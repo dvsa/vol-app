@@ -1,0 +1,250 @@
+<p class="govuk-body">
+    This website is run by DVSA on behalf of the Traffic Commissioners for Great Britain, the Department for Infrastructure Northern Ireland and the International Road Haulage Permits.
+</p>
+
+<h2 id="how-you-should-be-able-to-use-this-website" class="govuk-heading-l">How you should be able to use this website</h2>
+<p class="govuk-body">
+    We want as many people as possible to be able to use this website. For example, that means you should be able to:
+</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>change colours, contrast levels and fonts using browser or device settings</li>
+    <li>zoom in up to 400% without the text spilling off the screen</li>
+    <li>navigate most of the website using a keyboard or speech recognition software</li>
+    <li>listen to most of the website using a screen reader (including the most recent versions of JAWS, NVDA and VoiceOver)</li>
+</ul>
+<p class="govuk-body">
+    We also make the website text as simple as possible to understand.
+</p>
+
+<h2 id="how-accessible-this-website-is" class="govuk-heading-l">How accessible this website is</h2>
+<p class="govuk-body">
+    Parts of this website are not fully accessible. For example, we use some custom controls which will be unfamiliar in the way they appear and operate.
+</p>
+
+<h2 id="feedback-and-contact-information" class="govuk-heading-l">Feedback and contact information</h2>
+<p class="govuk-body">
+    If you need information on this website in a different format, or you need assistance using this website call {{OPERATOR_LICENSING_PHONE}}.
+</p>
+
+<h3 id="contacting-us" class="govuk-heading-m">Contacting us</h3>
+<p class="govuk-body">
+    <a class="govuk-link"
+       rel="external noreferrer noopener"
+       target="_blank"
+       href="{{DVSA_CONTACT}}">
+        Find out how to contact DVSA
+        <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?>
+    </a>
+</p>
+
+<h2 id="reporting-accessibility-problems-with-this-website" class="govuk-heading-l">Reporting accessibility problems with this website</h2>
+<p class="govuk-body">
+    If you find any problems not listed on this page or think we're not meeting accessibility requirements, contact our dedicated accessibility team
+    <a class="govuk-link"
+       href="mailto:{{ACCESSIBILITY_EMAIL}}">
+        {{ACCESSIBILITY_EMAIL}}
+    </a>
+    and tell us:
+</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>the web address (URL) of the content</li>
+    <li>the problem that you encountered</li>
+</ul>
+
+<h2 id="enforcement-procedure" class="govuk-heading-l">Enforcement procedure</h2>
+<p class="govuk-body">
+    The Equality and Human Rights Commission (EHRC) is responsible for enforcing the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018 (the 'accessibility regulations').
+</p>
+<p class="govuk-body">
+    If you contact us with a complaint and you're not happy with our response
+    <a class="govuk-link"
+       rel="external noreferrer noopener"
+       target="_blank"
+       href="{{EQUALITY_ADVISORY_SERVICE}}">
+        contact the Equality Advisory and Support Service (EASS)
+        <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?>
+    </a>
+</p>
+<p class="govuk-body">
+    If you are an operator based in Northern Ireland, and you are not happy with how we respond to your complaint, contact the
+    <a class="govuk-link"
+       rel="external noreferrer noopener"
+       target="_blank"
+       href="{{EQUALITY_SERVICE_HOME}}">
+        Equalities Commission for Northern Ireland (ECNI)
+        <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?>
+    </a>
+</p>
+
+<h2 id="technical-information-about-this-websites-accessibility" class="govuk-heading-l">Technical information about this website's accessibility</h2>
+<p class="govuk-body">
+    DVSA is committed to making its website accessible, in accordance with the Public Sector Bodies (Websites and Mobile Applications) (No. 2) Accessibility Regulations 2018.
+</p>
+
+<h2 id="compliance-status" class="govuk-heading-l">Compliance status</h2>
+<p class="govuk-body">
+    This website is partially compliant with the
+    <a class="govuk-link"
+       rel="external noreferrer noopener"
+       target="_blank"
+       href="{{WEB_CONTENT_GUIDELINES}}">
+        Web Content Accessibility Guidelines
+        <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?>
+    </a>
+    AA standard.
+</p>
+
+<h2 id="non-accessible-content" class="govuk-heading-l">Non-accessible content</h2>
+<p class="govuk-body">
+    The content listed below is non-accessible for the following reasons.
+</p>
+
+<h3 id="wcag-2-2-level-a" class="govuk-heading-m">WCAG 2.2 level A</h3>
+
+<h4 id="info-and-relationships" class="govuk-heading-s">Info and Relationships</h4>
+<ul class="govuk-list govuk-list--bullet govuk-list--spaced">
+    <li>The visually styled heading "Help signing in" is not marked up as a programmatic heading.</li>
+    <li>Important information is indicated visually with a "!" symbol, but because it is added via CSS and has no text alternative.</li>
+    <li>Some of the page's heading structure is inconsistent and does not reflect the visual hierarchy for screen reader users.</li>
+    <li>The visually styled "Traffic area" heading is not marked up as a programmatic heading but as a <code>&lt;label&gt;</code>, which has no associated for or id attribute. The content is also placed inside a fieldset.</li>
+    <li>The page contains two visually styled "Safety inspectors" headings, but the markup is inconsistent and misleading. The first is not coded as a heading and is incorrectly titled, as the section actually describes the Maintenance Provision Rating Scheme (MPRS). The second is marked as an h3, creating an illogical hierarchy. All related content is also placed inside fieldsets, which are inappropriate for this type of information.</li>
+    <li>The error summary (h2 "There is a problem") is placed below the page h1 and above an h3, which implies that "Newspaper advert" is a subsection of the error message.</li>
+    <li>The radio buttons are placed in a fieldset, but the full question "Are you named on any other operator's licences as a Transport Manager, Director or Partner?" is not used as the legend. Instead, the legend "Other licences" provides incomplete context.</li>
+    <li>The "£12500" heading is non-descriptive and does not relate to the page's main "Financial evidence" heading. The text "How much will you need?" should be marked up as the h2.</li>
+    <li>When users select "Upload documents now", multiple input fields appear, but they are placed within several nested fieldsets.</li>
+</ul>
+<p class="govuk-body">WCAG Reference: 1.3.1 Info and Relationships (Level A)</p>
+
+<h4 id="label-in-name" class="govuk-heading-s">Label in name</h4>
+<p class="govuk-body">
+    The 'Nature of business' input field uses an invalid aria-label ('businessDetails_natureOfBusiness-error'), which is announced to screen readers and obscures the visible label. WCAG Reference: 2.5.3 Label in Name (Level A)
+</p>
+
+<h4 id="video" class="govuk-heading-s">Video</h4>
+<p class="govuk-body">
+    The advert video has no text alternative or audio description, which may prevent screen reader users from understanding the content shown. WCAG Reference: 1.2.3 Audio Description or Media Alternative (Pre-recorded) (Level A)
+</p>
+
+<h4 id="focus-order" class="govuk-heading-s">Focus order</h4>
+<p class="govuk-body">
+    When the "You're about to be signed out" modal appears, keyboard focus is not trapped inside it, allowing users to tab to content behind the modal. WCAG Reference: 2.4.3 Focus Order (Level A)
+</p>
+
+<h4 id="labels-or-instructions" class="govuk-heading-s">Labels or instructions</h4>
+<p class="govuk-body">
+    When users select "Enter the address yourself", additional input fields appear. The first field has a visual label "Address lines" but an aria-label that does not match, which is incorrect. The remaining fields use visually hidden labels, which may be difficult for voice-activation users who need to identify and reference fields such as "Address line 2, 3, 4". WCAG Reference: 3.3.2 Labels or Instructions (Level A)
+</p>
+
+<h4 id="page-title" class="govuk-heading-s">Page title</h4>
+<p class="govuk-body">
+    The page title is "Directors", which suggests that director details are required, but the page actually asks for owner details. WCAG Reference: 2.4.2 Page Titled (Level A)
+</p>
+
+<h4 id="error-identification" class="govuk-heading-s">Error identification</h4>
+<p class="govuk-body">
+    When users enter a future date in the date-of-birth fields, no error message is shown, allowing invalid data to be submitted. This can particularly affect screen reader users, who may not realise an error has occurred or what they need to correct. WCAG Reference: 3.3.1 Error Identification (Level A)
+</p>
+
+<h4 id="unlabelled-input" class="govuk-heading-s">Unlabelled input</h4>
+<p class="govuk-body">
+    The 'Trading names' input field is unlabelled. Both inputs on the page are placed inside unnecessary nested fieldsets, and 'Trading names' is incorrectly marked up as a legend, which is intended to label groups of related inputs such as checkboxes or radio buttons. WCAG Reference: 1.3.1 Info and Relationships (Level A)
+</p>
+
+<h3 id="wcag-2-2-level-aa" class="govuk-heading-m">WCAG 2.2 level AA</h3>
+
+<h4 id="reflow" class="govuk-heading-s">Reflow</h4>
+<ul class="govuk-list govuk-list--bullet govuk-list--spaced">
+    <li>When the page is viewed in reflow at 400% (1280px), the "Apply for a new licence" button becomes truncated and overlaps other content, making it unreadable.</li>
+    <li>When the page is viewed in reflow at 400% (1280px), the "Add Transport Manager" button becomes truncated and overlaps other content, making it unreadable.</li>
+    <li>When the page is viewed in reflow at 400% (1280px), several sections spill off the screen and become unreadable.</li>
+    <li>When the page is viewed in reflow at 400% (1280px), the input fields spill off the screen, causing content to be lost or unreadable.</li>
+</ul>
+<p class="govuk-body">WCAG Reference: 1.4.10 Reflow (Level AA)</p>
+
+<h4 id="input-type" class="govuk-heading-s">Input type</h4>
+<p class="govuk-body">
+    The date-of-birth fields use the input type "select", which is incorrect and not aligned with the GOV.UK Design System. This prevents voice-activation users from referencing the fields, which should use type="text". WCAG Reference: 1.3.5 Identify Input Purpose (Level AA)
+</p>
+
+<h4 id="error-suggestion" class="govuk-heading-s">Error suggestion</h4>
+<p class="govuk-body">
+    When users submit the date-of-birth fields with missing or incomplete data, the error message "Value is required" is too vague. WCAG Reference: 3.3.3 Error Suggestion (Level AA)
+</p>
+
+<h4 id="non-text-contrast" class="govuk-heading-s">Non-text contrast</h4>
+<ul class="govuk-list govuk-list--bullet govuk-list--spaced">
+    <li>When the checkbox receives keyboard focus, the yellow focus indicator does not meet the required non-text contrast ratio. It blends into the white background, and the checkbox border does not thicken. The contrast is approximately 1.3:1, below the WCAG minimum of 3:1.</li>
+    <li>When the "Attach file" button receives keyboard focus, the yellow focus indicator does not meet the required non-text contrast ratio. It blends into both the white page background and the light grey button background. The contrast levels (approx. 1.3:1 on white and 1:1 on light grey) fall below the WCAG minimum of 3:1.</li>
+    <li>When the "Remove" button receives keyboard focus, the yellow focus indicator does not meet the required non-text contrast ratio. It blends into the white background, giving a contrast of approximately 1.3:1, below the WCAG minimum of 3:1.</li>
+</ul>
+<p class="govuk-body">WCAG Reference: 1.4.11 Non-text Contrast (Level AA)</p>
+
+<h4 id="contrast-minimum" class="govuk-heading-s">Contrast (Minimum)</h4>
+<p class="govuk-body">
+    When users hover over the "Attach file(s)" button, the background changes to light grey, and the white text no longer meets the required contrast ratio. The contrast drops to 1.4:1, below the WCAG 2.2 minimum of 4.5:1. WCAG Reference: 1.4.3 Contrast (Minimum) (Level AA)
+</p>
+
+<h4 id="non-descriptive-labels" class="govuk-heading-s">Non-descriptive labels</h4>
+<ul class="govuk-list govuk-list--bullet govuk-list--spaced">
+    <li>The page contains two "Postcode search" fields—one for the home address and one for the work address—but both use identical labels and button text. Because the fields are placed inside nested fieldsets that do not correctly announce the "Home address" and "Work address" legends, screen reader users cannot distinguish between the two inputs. Additionally, placing each field inside a fieldset with the legend "Postcode search" alongside a label of the same name causes screen readers to announce "Postcode search Postcode search".</li>
+    <li>The "Attach file(s)" button is non-descriptive and not clearly associated with any group. The file upload component also does not follow GOV.UK Design System guidance, using incorrect labelling and styling across all upload elements in the service.</li>
+    <li>The "Add" button is non-descriptive, and screen reader users navigating out of context (such as through the form fields dialog) cannot tell what will be added when activating it.</li>
+    <li>The radio button groups depend on the heading "Has anyone named on your licence ever been:" for context, but this context is lost when screen reader users navigate out of sequence. The group legends do not make sense on their own, and the aria-describedby attribute is incorrectly applied to each legend, so the additional context is not announced.</li>
+    <li>The "Select all" checkbox has a non-descriptive label, making it unclear to screen reader users.</li>
+</ul>
+<p class="govuk-body">WCAG Reference: 2.4.6 Headings and Labels (Level AA)</p>
+
+<h2 id="non-compliance-with-the-accessibility-regulations" class="govuk-heading-l">Non-compliance with the accessibility regulations</h2>
+<p class="govuk-body">
+    We are currently addressing all non-accessible content identified in our last accessibility audit.
+</p>
+
+<h2 id="disproportionate-burden" class="govuk-heading-l">Disproportionate burden</h2>
+<p class="govuk-body">
+    We intend to make our services compliant with the
+    <a class="govuk-link"
+       rel="external noreferrer noopener"
+       target="_blank"
+       href="{{WEB_CONTENT_GUIDELINES}}">
+        Web Content Accessibility Guidelines
+        <?php echo $this->escapeHtml($this->translate('link.opens-new-window')); ?>
+    </a>
+    AA standard. We are not claiming disproportionate burden for any part of our accessibility plan.
+</p>
+
+<h2 id="content-thats-not-within-the-scope-of-the-accessibility-regulations" class="govuk-heading-l">
+    Content that's not within the scope of the accessibility regulations
+</h2>
+<p class="govuk-body">
+    Non-HTML documents published before September 2018 do not need to be accessible - unless users need them to use a service.
+</p>
+
+<h2 id="how-we-tested-this-website" class="govuk-heading-l">How we tested this website</h2>
+<p class="govuk-body">
+    We used this approach to decide a sample of pages to test:
+</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>our highest volume transaction (vehicle changes)</li>
+    <li>all sections of the 'Manage my licence' user journey (which duplicates the main pages of the 'Apply for a licence' journey</li>
+    <li>surrender of a licence</li>
+    <li>links to external pages containing further advice</li>
+    <li>critical pages underpinning compliance (the document/correspondence section of the website)</li>
+</ul>
+<p class="govuk-body">
+    Our public search pages and internal caseworker pages were tested internally using GDS guidance and insights from the independent accessibility audit conducted by DAC.
+</p>
+<p class="govuk-body">
+    This website was last tested on 07 to 16 January 2026 by The Digital Accessibility Centre (DAC).
+</p>
+
+<h2 id="improve-accessibility-statement" class="govuk-heading-l">What we're doing to improve accessibility</h2>
+<p class="govuk-body">
+    Following the audit conducted by the DAC in January 2026, we are urgently fixing content which fails to meet the Web Content Accessibility Guidelines AA standard. We expect to complete this by March 2027.
+</p>
+
+<h2 id="preparation-of-this-accessibility-statement" class="govuk-heading-l">
+    Preparation of this accessibility statement
+</h2>
+<p class="govuk-body">
+    This statement was prepared on 23 February 2026.
+</p>

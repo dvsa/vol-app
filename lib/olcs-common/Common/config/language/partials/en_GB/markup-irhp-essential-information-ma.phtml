@@ -1,0 +1,44 @@
+<p class="govuk-body"><?php echo $this->escapeHtml($this->translate('permits.page.bilateral.essential.morocco')); ?></p>
+
+<h2 class="govuk-heading-s govuk-!-margin-top-7"><?php echo $this->escapeHtml($this->translate('permits.page.bilateral.essential.morocco.standard.text1')); ?></h2>
+<p class="govuk-body"><?php echo $this->escapeHtml($this->translate('permits.page.bilateral.essential.morocco.standard.text2')); ?></p>
+
+<h2 class="govuk-heading-s govuk-!-margin-top-7"><?php echo $this->escapeHtml($this->translate('permits.page.bilateral.essential.morocco.multi.text1')); ?></h2>
+<p class="govuk-body"><?php echo $this->escapeHtml($this->translate('permits.page.bilateral.essential.morocco.multi.text2')); ?></p>
+
+<h2 class="govuk-heading-s govuk-!-margin-top-7"><?php echo $this->escapeHtml($this->translate('permits.page.bilateral.essential.morocco.hors')); ?></h2>
+<p class="govuk-body"><?php echo $this->escapeHtml($this->translate('permits.page.bilateral.essential.morocco.hors.text1')); ?></p>
+
+<h2 class="govuk-heading-s govuk-!-margin-top-7"><?php echo $this->escapeHtml($this->translate('permits.page.bilateral.essential.morocco.empty.entry')); ?></h2>
+<p class="govuk-body"><?php echo $this->escapeHtml($this->translate('permits.page.bilateral.essential.morocco.empty.entry.text1')); ?></p>
+
+<h2 class="govuk-heading-s govuk-!-margin-top-7"><?php echo $this->escapeHtml($this->translate('permits.page.bilateral.essential.morocco.fees.heading')); ?></h2>
+
+<table class="govuk-table">
+    <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+        <th class="govuk-table__header" scope="col"><?php echo $this->escapeHtml($this->translate('permits.page.fee.permit.type')); ?></th>
+        <th class="govuk-table__header" scope="col"><?php echo $this->escapeHtml($this->translate('permits.page.fee.total.fee.per.permit')); ?></th>
+    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+        <td class="govuk-table__cell">Standard single journey permit</td>
+        <td class="govuk-table__cell"><?php echo $this->currencyFormatter(8); ?></td>
+    </tr>
+    <tr class="govuk-table__row">
+        <td class="govuk-table__cell">Standard multiple journey permit</td>
+        <td class="govuk-table__cell"><?php echo $this->currencyFormatter(50); ?></td>
+    </tr>
+    <tr class="govuk-table__row">
+        <td class="govuk-table__cell">Hors contingent (single journey)</td>
+        <td class="govuk-table__cell"><?php echo $this->currencyFormatter(8); ?></td>
+    </tr>
+    <tr class="govuk-table__row">
+        <td class="govuk-table__cell">Empty entry (single journey)</td>
+        <td class="govuk-table__cell"><?php echo $this->currencyFormatter(8); ?></td>
+    </tr>
+    </tbody>
+</table>
+
+<p class="govuk-body"><?php echo $this->escapeHtml($this->translate('permits.page.bilateral.essential.morocco.fee.text1')); ?></p>

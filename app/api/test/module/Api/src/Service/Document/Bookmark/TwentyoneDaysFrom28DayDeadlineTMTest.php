@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\TwentyoneDaysFrom28DayDeadlineTM;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 
-class TwentyoneDaysFrom28DayDeadlineTMTest extends \PHPUnit\Framework\TestCase
+final class TwentyoneDaysFrom28DayDeadlineTMTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -50,7 +50,7 @@ class TwentyoneDaysFrom28DayDeadlineTMTest extends \PHPUnit\Framework\TestCase
             'deletedDate' => '2026-03-04',
         ]);
 
-        $this->assertEquals('22/04/2026', $bookmark->render());
+        $this->assertSame('22/04/2026', $bookmark->render());
     }
 
     public function testRenderWhenDeletedDateIsDateTimeAdds49Days(): void
@@ -61,6 +61,6 @@ class TwentyoneDaysFrom28DayDeadlineTMTest extends \PHPUnit\Framework\TestCase
             'deletedDate' => new \DateTime('2026-03-04'),
         ]);
 
-        $this->assertEquals('22/04/2026', $bookmark->render());
+        $this->assertSame('22/04/2026', $bookmark->render());
     }
 }

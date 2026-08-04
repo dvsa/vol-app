@@ -15,13 +15,11 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\Licence\CreateCompanySubsidiary
- */
-class CreateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Licence\CreateCompanySubsidiary::class)]
+final class CreateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
 {
-    public const LICENCE_ID = 1111;
-    public const TASK_ID = 877;
+    public const int LICENCE_ID = 1111;
+    public const int TASK_ID = 877;
 
     /** @var  CreateCompanySubsidiary|m\MockInterface */
     protected $sut;
@@ -60,7 +58,7 @@ class CreateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
             ->once()
             ->with($command, self::LICENCE_ID)
             ->andReturn(
-                (new Result())
+                new Result()
                     ->addMessage('Unit Company Subsidiary Added')
             );
 
@@ -70,7 +68,7 @@ class CreateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
                 ->once()
                 ->with(self::LICENCE_ID, 'Subsidiary company added - unit_Name')
                 ->andReturn(
-                    (new Result())
+                    new Result()
                         ->addId('task', self::TASK_ID)
                         ->addMessage('Task created')
                 );
@@ -81,7 +79,7 @@ class CreateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         //  call
         $actual = $this->sut->handleCommand($command);
 
-        static::assertInstanceOf(Result::class, $actual);
+        $this->assertInstanceOf(Result::class, $actual);
 
         if ($expectTask === true) {
             $expected = [
@@ -93,21 +91,19 @@ class CreateCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
                     'Task created',
                 ],
             ];
-            static::assertEquals($expected, $actual->toArray());
+            $this->assertEquals($expected, $actual->toArray());
         }
     }
 
-    public static function dpTestHandleCommand(): array
+    public static function dpTestHandleCommand(): \Iterator
     {
-        return [
-            [
-                'isGranted' => true,
-                'expectTask' => true,
-            ],
-            [
-                'isGranted' => false,
-                'expectTask' => false,
-            ],
+        yield [
+            'isGranted' => true,
+            'expectTask' => true,
+        ];
+        yield [
+            'isGranted' => false,
+            'expectTask' => false,
         ];
     }
 

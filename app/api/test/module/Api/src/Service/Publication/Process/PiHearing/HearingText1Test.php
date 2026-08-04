@@ -20,7 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class HearingText1Test
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class HearingText1Test extends MockeryTestCase
+final class HearingText1Test extends MockeryTestCase
 {
     /**
      *
@@ -121,14 +121,12 @@ Test the hearing text1 filter')]
     /**
      * Filter provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function processTestProvider(): array
+    public static function processTestProvider(): \Iterator
     {
-        return [
-            [OrganisationEntity::ORG_TYPE_REGISTERED_COMPANY, 'Director(s): '],
-            [OrganisationEntity::ORG_TYPE_LLP, 'Partner(s): '],
-            ['', '']
-        ];
+        yield [OrganisationEntity::ORG_TYPE_REGISTERED_COMPANY, 'Director(s): '];
+        yield [OrganisationEntity::ORG_TYPE_LLP, 'Partner(s): '];
+        yield ['', ''];
     }
 }

@@ -14,7 +14,7 @@ use Exception;
 use LmcRbacMvc\Identity\IdentityInterface;
 use Mockery as m;
 
-class CanDeleteDocumentTest extends AbstractValidatorsTestCase
+final class CanDeleteDocumentTest extends AbstractValidatorsTestCase
 {
     /**
      * @var CanDeleteDocument
@@ -117,8 +117,8 @@ class CanDeleteDocumentTest extends AbstractValidatorsTestCase
     private function getMockDocument(
         bool $isExternal,
         int $createdById = 123456,
-        m\MockInterface $relatedApplication = null,
-        m\MockInterface $relatedOrganisation = null
+        ?m\MockInterface $relatedApplication = null,
+        ?m\MockInterface $relatedOrganisation = null
     ): m\MockInterface {
         if ($relatedOrganisation === null) {
             $relatedOrganisation = m::mock(Entity\Organisation\Organisation::class);
@@ -157,7 +157,7 @@ class CanDeleteDocumentTest extends AbstractValidatorsTestCase
      * @throws NotFoundException
      * @throws Exception
      */
-    private function setupMockIdentity(int $userType, m\MockInterface $organisation = null, int $userId = 123456): void
+    private function setupMockIdentity(int $userType, ?m\MockInterface $organisation = null, int $userId = 123456): void
     {
         $mockIdentity = m::mock(IdentityInterface::class);
         if ($organisation === null) {

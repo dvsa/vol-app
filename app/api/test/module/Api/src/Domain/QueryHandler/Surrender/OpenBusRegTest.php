@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Entity\View\BusRegSearchView;
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenBusReg;
 use Mockery as m;
 
-class OpenBusRegTest extends QueryHandlerTestCase
+final class OpenBusRegTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

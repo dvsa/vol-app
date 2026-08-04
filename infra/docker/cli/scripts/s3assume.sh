@@ -9,14 +9,28 @@ unset AWS_ACCESS_KEY_ID
 unset AWS_SECRET_ACCESS_KEY
 unset AWS_SESSION_TOKEN
 
-export http_proxy=http://${PROXY}:3128
-export https_proxy=http://${PROXY}:3128
-export NO_PROXY=169.254.169.254
-token=$(curl -s -X PUT 'http://169.254.169.254/latest/api/token' -H 'X-aws-ec2-metadata-token-ttl-seconds: 21600')
-region=$(curl -s -H "X-aws-ec2-metadata-token: $token" http://169.254.169.254/latest/meta-data/placement/region)
-ec2_instance_id=$(curl -s -H "X-aws-ec2-metadata-token: $token" http://169.254.169.254/latest/meta-data/instance-id)
+if [[ "${PROXY}" == *":"* ]]; then
+  export http_proxy="http://${PROXY}"
+  export https_proxy="http://${PROXY}"
+else
+  export http_proxy="http://${PROXY}:3128"
+  export https_proxy="http://${PROXY}:3128"
+fi
+export NO_PROXY=169.254.169.254,169.254.170.2,localhost,127.0.0.1,.s3.eu-west-1.amazonaws.com,.s3.amazonaws.com,sts.eu-west-1.amazonaws.com,sts.amazonaws.com
 
-creds=`/usr/local/bin/aws sts assume-role --role-arn $1 --role-session-name $ec2_instance_id --region=$region --external-id $2 | /usr/bin/jq -r '.Credentials'`
-export AWS_ACCESS_KEY_ID=`echo $creds | /usr/bin/jq -r '.AccessKeyId'`
-export AWS_SECRET_ACCESS_KEY=`echo $creds | /usr/bin/jq -r '.SecretAccessKey'`
-export AWS_SESSION_TOKEN=`echo $creds | /usr/bin/jq -r '.SessionToken'`
+region="${AWS_DEFAULT_REGION:-${AWS_REGION:-eu-west-1}}"
+ec2_instance_id="ecs-task-$(date +%s)"
+
+error_file="/tmp/sts_error_$$.txt"
+
+creds=$(/usr/local/bin/aws sts assume-role --role-arn "$1" --role-session-name "$ec2_instance_id" --region="$region" --external-id "$2" 2>"$error_file") || {
+  echo "ERROR: AWS STS Assume-Role failed!"
+  echo "Reason: $(cat "$error_file")"
+  rm -f "$error_file"
+  exit 7
+}
+rm -f "$error_file"
+
+export AWS_ACCESS_KEY_ID=$(echo "$creds" | /usr/bin/jq -r '.Credentials.AccessKeyId')
+export AWS_SECRET_ACCESS_KEY=$(echo "$creds" | /usr/bin/jq -r '.Credentials.SecretAccessKey')
+export AWS_SESSION_TOKEN=$(echo "$creds" | /usr/bin/jq -r '.Credentials.SessionToken')

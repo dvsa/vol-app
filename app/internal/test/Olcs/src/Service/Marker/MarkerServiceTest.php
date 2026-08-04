@@ -10,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Service\Marker\MarkerPluginManager;
 use Olcs\Service\Marker\MarkerService;
 
-class MarkerServiceTest extends TestCase
+final class MarkerServiceTest extends TestCase
 {
     protected $sut;
 

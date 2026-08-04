@@ -40,7 +40,7 @@ class BusRegBrowseView extends AbstractRepository
      * @param array  $trafficAreas Traffic areas
      * @param string $status       Status
      *
-     * @return array
+     * @return iterable<array<int, mixed>>
      */
     public function fetchForExport($columns, $date, $trafficAreas, $status = null)
     {
@@ -67,7 +67,7 @@ class BusRegBrowseView extends AbstractRepository
                 ->setParameter('byStatus', $status);
         }
 
-        return $qb->getQuery()->iterate();
+        return $qb->getQuery()->toIterable();
     }
 
     /**

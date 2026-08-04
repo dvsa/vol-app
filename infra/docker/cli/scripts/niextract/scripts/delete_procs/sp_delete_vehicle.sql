@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_vehicle;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_vehicle()
@@ -23,25 +22,29 @@ BEGIN
     
     SELECT COUNT(*)
     INTO @total
-    FROM vehicle
-    WHERE id NOT IN (
-        SELECT vehicle_id
-        FROM licence_vehicle);
+    FROM vehicle v
+    LEFT JOIN licence_vehicle lv ON v.id = lv.vehicle_id
+    WHERE lv.vehicle_id IS NULL;
                      
     SELECT CONCAT(@total,' vehicle rows to delete.') AS ''; 
     
     SET @total:=0;
     SET @rowcount:=10000;
     
+    START TRANSACTION;
+    
     WHILE(@rowcount = 10000) DO
 
-
-
         DELETE FROM vehicle
-        WHERE id NOT IN (
-            SELECT vehicle_id
-            FROM licence_vehicle)
-        LIMIT 10000;
+        WHERE id IN (
+            SELECT id FROM (
+                SELECT v.id
+                FROM vehicle v
+                LEFT JOIN licence_vehicle lv ON v.id = lv.vehicle_id
+                WHERE lv.vehicle_id IS NULL
+                LIMIT 10000
+            ) AS batch
+        );
     
         SET @rowcount := row_count();
         SET @total := @total + @rowcount;
@@ -50,9 +53,12 @@ BEGIN
     
         SELECT CONCAT(@total,' vehicle rows deleted.') AS '';
 
+        COMMIT;
+        START TRANSACTION;
+
     END WHILE;
     
-    SELECT CONCAT(@rowcount,' vehicle rows deleted.') AS '';
+    COMMIT;
   
     set autocommit=1;
 
@@ -60,7 +66,4 @@ BEGIN
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

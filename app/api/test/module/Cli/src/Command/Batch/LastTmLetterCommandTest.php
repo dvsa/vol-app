@@ -18,7 +18,7 @@ use Laminas\Mvc\Application;
 use Symfony\Component\Console\Command\Command;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class LastTmLetterCommandTest extends AbstractBatchCommandCases
+final class LastTmLetterCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

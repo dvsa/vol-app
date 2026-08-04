@@ -130,14 +130,15 @@ class DeclarationReviewService extends AbstractReviewService
             // PSV
             if ($licence->isSpecialRestricted()) {
                 $markupKey = 'markup-continuation-declaration-psv-sr';
+            } elseif ($licence->isRestricted()) {
+                $markupKey = 'markup-continuation-declaration-psv-restricted';
             } else {
                 $markupKey = 'markup-continuation-declaration-psv';
-                $markupStandard = 'markup-continuation-declaration-psv-standard';
             }
         }
 
         if (!empty($markupStandard) && ($licence->isStandardNational() || $licence->isStandardInternational())) {
-            // add extra bullets if licence is a stanard
+            // add extra bullets if licence is a standard
             $additional[] = $this->translate($markupStandard);
         } else {
             $additional[] = '';

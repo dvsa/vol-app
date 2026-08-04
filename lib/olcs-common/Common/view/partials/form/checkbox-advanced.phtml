@@ -1,0 +1,23 @@
+<?php
+/** @var Common\Form\Elements\Types\CheckboxAdvanced $element */
+$element = $this->element;
+$errors = $this->formElementErrors()->render($element);
+$hasValidationError = !empty($errors);
+$name = $element->getName();
+?>
+<div class="checkbox__container">
+    <?php
+    $element->setAttribute(
+        'class',
+        $element->getAttribute('class') . ($hasValidationError ? ' checkbox--error' : '')
+    );
+    echo $this->formCheckbox($element);
+    ?>
+    <label class="checkbox__label <?php echo $hasValidationError ? 'checkbox__label--error' : ''; ?>"
+           for="<?php echo $element->getAttribute("id"); ?>">
+        <?php echo $this->translate($element->getLabel()); ?>
+    </label>
+    <div class="checkbox__hidden-content help__text" id="<?php echo $element->getAttribute("id"); ?>-hidden">
+        <?php echo $this->partial($this->content, ['data' => $this->data]); ?>
+    </div>
+</div>

@@ -14,7 +14,7 @@ use Laminas\View\Helper\Placeholder;
 class ContinuationControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ContinuationController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ContinuationController
     {
         $placeholder = $container->get('ViewHelperManager')->get(Placeholder::class);
         $flashMessengerHelper = $container->get(FlashMessengerHelperService::class);

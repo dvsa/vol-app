@@ -26,8 +26,9 @@ use Doctrine\DBAL\LockMode;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class WorkshopTest extends RepositoryTestCase
+final class WorkshopTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(WorkshopRepo::class);

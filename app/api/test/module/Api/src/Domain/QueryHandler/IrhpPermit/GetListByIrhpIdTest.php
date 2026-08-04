@@ -19,7 +19,7 @@ use Mockery as m;
 /**
  * GetListByIrhpId Test
  */
-class GetListByIrhpIdTest extends QueryHandlerTestCase
+final class GetListByIrhpIdTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -247,12 +247,10 @@ class GetListByIrhpIdTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public static function dpHandleQueryWithEmptyList(): array
+    public static function dpHandleQueryWithEmptyList(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
     public function testHandleQueryForConstrainedCountriesFalse(): void

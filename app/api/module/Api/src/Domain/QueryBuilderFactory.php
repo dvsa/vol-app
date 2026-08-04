@@ -29,7 +29,7 @@ class QueryBuilderFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): QueryBuilder
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): QueryBuilder
     {
         return new QueryBuilder($container->get('QueryPartialServiceManager'));
     }

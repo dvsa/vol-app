@@ -8,7 +8,7 @@ use Psr\Container\ContainerInterface;
 class RepositoryFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         if (!class_exists($requestedName)) {
             $requestedName = __NAMESPACE__ . '\\' . $requestedName;

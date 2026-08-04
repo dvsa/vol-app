@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Domain\Repository\LicenceVehicle as LicenceVehicleRepo;
 use Dvsa\Olcs\Transfer\Query\LicenceVehicle\LicenceVehiclesById as Qry;
 use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle as LicenceVehicleEntity;
 
-class LicenceVehiclesByIdTest extends QueryHandlerTestCase
+final class LicenceVehiclesByIdTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

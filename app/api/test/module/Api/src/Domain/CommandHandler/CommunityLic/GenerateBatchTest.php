@@ -29,7 +29,7 @@ use Olcs\Logging\Log\Logger;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class GenerateBatchTest extends AbstractCommandHandlerTestCase
+final class GenerateBatchTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -235,149 +235,147 @@ class GenerateBatchTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function licenceDataProvider(): array
+    public static function licenceDataProvider(): \Iterator
     {
-        return [
-            'reprint of PSV with new template switched off' => [
-                1,
-                true,
-                SystemParameter::DISABLE_UK_COMMUNITY_LIC_REPRINT,
-                true,
-                'N',
-                'PSV_European_Community_Licence',
-                SubCategory::DOC_SUB_CATEGORY_PSV_CERTIFIED_COPY,
-                false
-            ],
-            'reprint of GV NI with new template switched off' => [
-                1,
-                true,
-                SystemParameter::DISABLE_UK_COMMUNITY_LIC_REPRINT,
-                false,
-                'Y',
-                'GV_NI_European_Community_Licence',
-                SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
-                false
-            ],
-            'reprint of GV GB with new template switched off' => [
-                1,
-                true,
-                SystemParameter::DISABLE_UK_COMMUNITY_LIC_REPRINT,
-                false,
-                'N',
-                'GV_GB_European_Community_Licence',
-                SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
-                false
-            ],
-            'new PSV with new template switched off' => [
-                1,
-                false,
-                SystemParameter::DISABLE_UK_COMMUNITY_LIC_OFFICE,
-                true,
-                'N',
-                'PSV_European_Community_Licence',
-                SubCategory::DOC_SUB_CATEGORY_PSV_CERTIFIED_COPY,
-                false
-            ],
-            'new GV NI with new template switched off' => [
-                1,
-                false,
-                SystemParameter::DISABLE_UK_COMMUNITY_LIC_OFFICE,
-                false,
-                'Y',
-                'GV_NI_European_Community_Licence',
-                SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
-                false
-            ],
-            'new GV GB with new template switched off' => [
-                1,
-                false,
-                SystemParameter::DISABLE_UK_COMMUNITY_LIC_OFFICE,
-                false,
-                'N',
-                'GV_GB_European_Community_Licence',
-                SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
-                false
-            ],
-            'reprint PSV with new template switched on' => [
-                0,
-                true,
-                SystemParameter::DISABLE_UK_COMMUNITY_LIC_REPRINT,
-                true,
-                'N',
-                Document::GV_UK_COMMUNITY_LICENCE_PSV,
-                SubCategory::DOC_SUB_CATEGORY_PSV_CERTIFIED_COPY,
-                false
-            ],
-            'reprint GV NI with new template switched on' => [
-                0,
-                true,
-                SystemParameter::DISABLE_UK_COMMUNITY_LIC_REPRINT,
-                false,
-                'Y',
-                Document::GV_UK_COMMUNITY_LICENCE_NI,
-                SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
-                false
-            ],
-            'reprint GV GB with new template switched on' => [
-                0,
-                true,
-                SystemParameter::DISABLE_UK_COMMUNITY_LIC_REPRINT,
-                false,
-                'N',
-                Document::GV_UK_COMMUNITY_LICENCE_GB,
-                SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
-                false
-            ],
-            'new PSV with new template switched on' => [
-                0,
-                false,
-                SystemParameter::DISABLE_UK_COMMUNITY_LIC_OFFICE,
-                true,
-                'N',
-                Document::GV_UK_COMMUNITY_LICENCE_PSV,
-                SubCategory::DOC_SUB_CATEGORY_PSV_CERTIFIED_COPY,
-                false
-            ],
-            'new GV NI with new template switched on' => [
-                0,
-                false,
-                SystemParameter::DISABLE_UK_COMMUNITY_LIC_OFFICE,
-                false,
-                'Y',
-                Document::GV_UK_COMMUNITY_LICENCE_NI,
-                SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
-                false
-            ],
-            'new GV GB with new template switched on' => [
-                0,
-                false,
-                SystemParameter::DISABLE_UK_COMMUNITY_LIC_OFFICE,
-                false,
-                'N',
-                Document::GV_UK_COMMUNITY_LICENCE_GB,
-                SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
-                false
-            ],
-            'new LGV GB with new template switched on' => [
-                0,
-                false,
-                SystemParameter::DISABLE_UK_COMMUNITY_LIC_OFFICE,
-                false,
-                'N',
-                Document::LGV_UK_COMMUNITY_LICENCE_GB,
-                SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
-                true
-            ],
-            'new LGV NI with new template switched on' => [
-                0,
-                false,
-                SystemParameter::DISABLE_UK_COMMUNITY_LIC_OFFICE,
-                false,
-                'Y',
-                Document::LGV_UK_COMMUNITY_LICENCE_NI,
-                SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
-                true
-            ],
+        yield 'reprint of PSV with new template switched off' => [
+            1,
+            true,
+            SystemParameter::DISABLE_UK_COMMUNITY_LIC_REPRINT,
+            true,
+            'N',
+            'PSV_European_Community_Licence',
+            SubCategory::DOC_SUB_CATEGORY_PSV_CERTIFIED_COPY,
+            false
+        ];
+        yield 'reprint of GV NI with new template switched off' => [
+            1,
+            true,
+            SystemParameter::DISABLE_UK_COMMUNITY_LIC_REPRINT,
+            false,
+            'Y',
+            'GV_NI_European_Community_Licence',
+            SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
+            false
+        ];
+        yield 'reprint of GV GB with new template switched off' => [
+            1,
+            true,
+            SystemParameter::DISABLE_UK_COMMUNITY_LIC_REPRINT,
+            false,
+            'N',
+            'GV_GB_European_Community_Licence',
+            SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
+            false
+        ];
+        yield 'new PSV with new template switched off' => [
+            1,
+            false,
+            SystemParameter::DISABLE_UK_COMMUNITY_LIC_OFFICE,
+            true,
+            'N',
+            'PSV_European_Community_Licence',
+            SubCategory::DOC_SUB_CATEGORY_PSV_CERTIFIED_COPY,
+            false
+        ];
+        yield 'new GV NI with new template switched off' => [
+            1,
+            false,
+            SystemParameter::DISABLE_UK_COMMUNITY_LIC_OFFICE,
+            false,
+            'Y',
+            'GV_NI_European_Community_Licence',
+            SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
+            false
+        ];
+        yield 'new GV GB with new template switched off' => [
+            1,
+            false,
+            SystemParameter::DISABLE_UK_COMMUNITY_LIC_OFFICE,
+            false,
+            'N',
+            'GV_GB_European_Community_Licence',
+            SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
+            false
+        ];
+        yield 'reprint PSV with new template switched on' => [
+            0,
+            true,
+            SystemParameter::DISABLE_UK_COMMUNITY_LIC_REPRINT,
+            true,
+            'N',
+            Document::GV_UK_COMMUNITY_LICENCE_PSV,
+            SubCategory::DOC_SUB_CATEGORY_PSV_CERTIFIED_COPY,
+            false
+        ];
+        yield 'reprint GV NI with new template switched on' => [
+            0,
+            true,
+            SystemParameter::DISABLE_UK_COMMUNITY_LIC_REPRINT,
+            false,
+            'Y',
+            Document::GV_UK_COMMUNITY_LICENCE_NI,
+            SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
+            false
+        ];
+        yield 'reprint GV GB with new template switched on' => [
+            0,
+            true,
+            SystemParameter::DISABLE_UK_COMMUNITY_LIC_REPRINT,
+            false,
+            'N',
+            Document::GV_UK_COMMUNITY_LICENCE_GB,
+            SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
+            false
+        ];
+        yield 'new PSV with new template switched on' => [
+            0,
+            false,
+            SystemParameter::DISABLE_UK_COMMUNITY_LIC_OFFICE,
+            true,
+            'N',
+            Document::GV_UK_COMMUNITY_LICENCE_PSV,
+            SubCategory::DOC_SUB_CATEGORY_PSV_CERTIFIED_COPY,
+            false
+        ];
+        yield 'new GV NI with new template switched on' => [
+            0,
+            false,
+            SystemParameter::DISABLE_UK_COMMUNITY_LIC_OFFICE,
+            false,
+            'Y',
+            Document::GV_UK_COMMUNITY_LICENCE_NI,
+            SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
+            false
+        ];
+        yield 'new GV GB with new template switched on' => [
+            0,
+            false,
+            SystemParameter::DISABLE_UK_COMMUNITY_LIC_OFFICE,
+            false,
+            'N',
+            Document::GV_UK_COMMUNITY_LICENCE_GB,
+            SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
+            false
+        ];
+        yield 'new LGV GB with new template switched on' => [
+            0,
+            false,
+            SystemParameter::DISABLE_UK_COMMUNITY_LIC_OFFICE,
+            false,
+            'N',
+            Document::LGV_UK_COMMUNITY_LICENCE_GB,
+            SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
+            true
+        ];
+        yield 'new LGV NI with new template switched on' => [
+            0,
+            false,
+            SystemParameter::DISABLE_UK_COMMUNITY_LIC_OFFICE,
+            false,
+            'Y',
+            Document::LGV_UK_COMMUNITY_LICENCE_NI,
+            SubCategory::DOC_SUB_CATEGORY_COMMUNITY_LICENCE,
+            true
         ];
     }
 }

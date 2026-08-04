@@ -15,7 +15,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateCheckAnswers as UpdateCheck
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class UpdateCheckAnswersTest extends AbstractCommandHandlerTestCase
+final class UpdateCheckAnswersTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

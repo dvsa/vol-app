@@ -10,7 +10,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Psr\Container\ContainerInterface;
 
-class DvlaSearchServiceFactoryTest extends TestCase
+final class DvlaSearchServiceFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {

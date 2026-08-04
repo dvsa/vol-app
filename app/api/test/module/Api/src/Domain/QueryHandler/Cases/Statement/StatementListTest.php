@@ -21,7 +21,7 @@ use Mockery as m;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class StatementListTest extends QueryHandlerTestCase
+final class StatementListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -47,7 +47,7 @@ class StatementListTest extends QueryHandlerTestCase
             ->andReturn(2);
 
         $result = $this->sut->handleQuery($query);
-        $this->assertEquals($result['count'], 2);
+        $this->assertEquals(2, $result['count']);
         $this->assertEquals($result['result'], ['foo']);
     }
 }

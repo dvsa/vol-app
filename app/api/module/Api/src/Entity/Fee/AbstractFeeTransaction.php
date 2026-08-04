@@ -21,19 +21,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="fee_txn",
- *    indexes={
- *        @ORM\Index(name="ix_fee_txn_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_fee_txn_fee_id", columns={"fee_id"}),
- *        @ORM\Index(name="ix_fee_txn_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_fee_txn_reversed_fee_txn_id", columns={"reversed_fee_txn_id"}),
- *        @ORM\Index(name="ix_fee_txn_txn_id", columns={"txn_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'fee_txn')]
+#[ORM\Index(name: 'ix_fee_txn_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_fee_txn_fee_id', columns: ['fee_id'])]
+#[ORM\Index(name: 'ix_fee_txn_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_fee_txn_reversed_fee_txn_id', columns: ['reversed_fee_txn_id'])]
+#[ORM\Index(name: 'ix_fee_txn_txn_id', columns: ['txn_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractFeeTransaction implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -46,91 +42,82 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to fee
      *
      * @var \Dvsa\Olcs\Api\Entity\Fee\Fee
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Fee\Fee", fetch="LAZY", cascade={"persist"})
-     * @ORM\JoinColumn(name="fee_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'fee_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, inversedBy: 'feeTransactions', fetch: 'LAZY', cascade: ['persist'])]
     protected $fee;
 
     /**
      * Foreign Key to payment
      *
      * @var \Dvsa\Olcs\Api\Entity\Fee\Transaction
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Fee\Transaction", fetch="LAZY", cascade={"persist"})
-     * @ORM\JoinColumn(name="txn_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'txn_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Transaction::class, inversedBy: 'feeTransactions', fetch: 'LAZY', cascade: ['persist'])]
     protected $transaction;
 
     /**
      * ReversedFeeTxn
      *
      * @var \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Fee\FeeTransaction", fetch="LAZY")
-     * @ORM\JoinColumn(name="reversed_fee_txn_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'reversed_fee_txn_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction::class, inversedBy: 'reversingFeeTransactions', fetch: 'LAZY')]
     protected $reversedFeeTransaction;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Amount
      *
      * @var string
-     *
-     * @ORM\Column(type="decimal", name="amount", nullable=true)
      */
+    #[ORM\Column(type: 'decimal', name: 'amount', nullable: true)]
     protected $amount;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * ReversingFeeTransactions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Fee\FeeTransaction", mappedBy="reversedFeeTransaction")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction::class, mappedBy: 'reversedFeeTransaction')]
     protected $reversingFeeTransactions;
 
     /**
@@ -155,7 +142,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setId($id)
     {
@@ -179,7 +166,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Fee\Fee $fee new value being set
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setFee($fee)
     {
@@ -203,7 +190,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Fee\Transaction $transaction new value being set
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setTransaction($transaction)
     {
@@ -227,7 +214,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction $reversedFeeTransaction new value being set
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setReversedFeeTransaction($reversedFeeTransaction)
     {
@@ -251,7 +238,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -275,7 +262,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -299,7 +286,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param string $amount new value being set
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setAmount($amount)
     {
@@ -323,7 +310,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setVersion($version)
     {
@@ -347,7 +334,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $reversingFeeTransactions collection being set as the value
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function setReversingFeeTransactions($reversingFeeTransactions)
     {
@@ -371,7 +358,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $reversingFeeTransactions collection being added
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function addReversingFeeTransactions($reversingFeeTransactions)
     {
@@ -394,7 +381,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $reversingFeeTransactions collection being removed
      *
-     * @return FeeTransaction
+     * @return static
      */
     public function removeReversingFeeTransactions($reversingFeeTransactions)
     {

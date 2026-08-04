@@ -16,11 +16,12 @@ use Mockery as m;
 /**
  * Class DataRetentionTest
  */
-class DataRetentionTest extends RepositoryTestCase
+final class DataRetentionTest extends RepositoryTestCase
 {
     /** @var DataRetention */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(DataRetention::class, true);
@@ -131,7 +132,7 @@ class DataRetentionTest extends RepositoryTestCase
             ]
         );
 
-        $today = (new DateTime())->format('Y-m-d');
+        $today = new DateTime()->format('Y-m-d');
         $qb = $this->createMockQb('BLAH');
         $this->mockCreateQueryBuilder($qb);
 
@@ -157,7 +158,7 @@ class DataRetentionTest extends RepositoryTestCase
             ]
         );
 
-        $today = (new DateTime())->format('Y-m-d');
+        $today = new DateTime()->format('Y-m-d');
         $qb = $this->createMockQb('BLAH');
         $this->mockCreateQueryBuilder($qb);
 

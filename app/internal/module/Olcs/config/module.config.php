@@ -12,7 +12,6 @@ use Common\Data\Object\Search\Publication;
 use Common\Data\Object\Search\User;
 use Common\Data\Object\Search\Vehicle;
 use Common\Service\Data as CommonDataService;
-use Laminas\Cache\Service\StorageCacheAbstractServiceFactory;
 use Laminas\Http\Request;
 use Laminas\Router\RouteStackInterface;
 use Olcs\Auth;
@@ -712,9 +711,6 @@ return [
             \Olcs\Service\EditorJs\HtmlConverter::class => \Olcs\Service\EditorJs\HtmlConverter::class,
             'Router' => Laminas\Router\Http\TreeRouteStack::class,
         ],
-        'abstract_factories' => [
-            StorageCacheAbstractServiceFactory::class,
-        ],
         'factories' => [
             RouteParam\Licence::class => RouteParam\Licence::class,
             ProcessingService\CreateVariationProcessingService::class => ProcessingService\CreateVariationProcessingServiceFactory::class,
@@ -768,9 +764,17 @@ return [
             WebDavJsonWebTokenGenerationService::class =>
                 WebDavJsonWebTokenGenerationServiceFactory::class,
 
+            \Olcs\Service\WebDav\JwtVerificationService::class =>
+                \Olcs\Service\WebDav\JwtVerificationServiceFactory::class,
+
+            \Olcs\Service\WebDav\WebDavRedisFactory::SERVICE_NAME =>
+                \Olcs\Service\WebDav\WebDavRedisFactory::class,
+
             Auth\Adapter\InternalCommandAdapter::class => Auth\Adapter\InternalCommandAdapterFactory::class,
             'RoutePluginManager' => Laminas\Router\RoutePluginManagerFactory::class,
             \Olcs\Listener\RouteParams::class => \Olcs\Listener\RouteParamsFactory::class,
+            'cache.redis.connection' => \Olcs\Service\Cache\RedisConnectionFactory::class,
+            'default-cache' => \Olcs\Service\Cache\DefaultCacheFactory::class,
         ]
     ],
     'form_elements' => [
@@ -935,6 +939,7 @@ return [
             DataService\Letter\LetterAppendix::class => CommonDataService\AbstractListDataServiceFactory::class,
             DataService\Letter\LetterChoice::class => CommonDataService\AbstractListDataServiceFactory::class,
             DataService\Letter\LetterSection::class => CommonDataService\AbstractListDataServiceFactory::class,
+            DataService\Letter\LetterTodo::class => CommonDataService\AbstractListDataServiceFactory::class,
             DataService\LetterType::class => DataService\LetterTypeFactory::class,
             DataService\PublicInquiryDecision::class => DataService\AbstractPublicInquiryDataFactory::class,
             DataService\PublicInquiryDefinition::class => DataService\AbstractPublicInquiryDataFactory::class,

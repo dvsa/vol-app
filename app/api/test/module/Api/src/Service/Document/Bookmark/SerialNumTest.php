@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\SerialNum;
  *
  * @package Dvsa\OlcsTest\Api\Service\Document\Bookmark
  */
-class SerialNumTest extends \PHPUnit\Framework\TestCase
+final class SerialNumTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

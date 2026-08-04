@@ -22,7 +22,7 @@ class ChangeExpiredPasswordFactory implements FactoryInterface
      * @return ChangeExpiredPassword
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ChangeExpiredPassword
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ChangeExpiredPassword
     {
         $adapter = $container->get(ValidatableAdapterInterface::class);
         $userRepository = $container->get('RepositoryServiceManager')->get('User');

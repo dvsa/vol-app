@@ -18,7 +18,7 @@ use Dvsa\Olcs\Api\Entity\Fee\Fee;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateFeeTest extends \PHPUnit\Framework\TestCase
+final class CreateFeeTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

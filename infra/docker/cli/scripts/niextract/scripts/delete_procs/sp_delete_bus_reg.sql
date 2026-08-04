@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_delete_bus_reg;
 DELIMITER $$
 CREATE PROCEDURE sp_delete_bus_reg()
@@ -23,29 +22,29 @@ BEGIN
 
     SELECT COUNT(*)
     INTO @total
-    FROM bus_reg
-    WHERE licence_id
-    NOT IN (
-        SELECT id
-        FROM licence
-	);
+    FROM bus_reg br
+    LEFT JOIN licence l ON br.licence_id = l.id
+    WHERE l.id IS NULL;
 
     SELECT CONCAT(@total,' bus_reg rows to delete.') AS '' ;
     
     SET @total:=0;
     SET @rowcount:=10000;
     
+    START TRANSACTION;
+
     WHILE(@rowcount = 10000) DO
 
-
-    
         DELETE FROM bus_reg
-        WHERE licence_id
-        NOT IN (
-            SELECT id
-            FROM licence
-	    ) 
-        LIMIT 10000;
+        WHERE id IN (
+            SELECT id FROM (
+                SELECT br.id
+                FROM bus_reg br
+                LEFT JOIN licence l ON br.licence_id = l.id
+                WHERE l.id IS NULL
+                LIMIT 10000
+            ) AS batch
+        );
 
         SET @rowcount := row_count();
         SET @total := @total + @rowcount;
@@ -54,13 +53,15 @@ BEGIN
     
         SELECT CONCAT(@total,' bus_reg rows deleted.') AS '';
 
+        COMMIT;
+        START TRANSACTION;
+
     END WHILE;
+    
+    COMMIT;
     
     SELECT CONCAT('delete bus_reg finished at ',now()) AS '' ; 
     
 END
 $$
-
-
-  
-  
+DELIMITER ;

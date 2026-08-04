@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Service\Qa\AnswerSaver\ApplicationAnswersClearer;
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateCountries as UpdateCountriesCmd;
 use Mockery as m;
 
-class UpdateCountriesTest extends AbstractCommandHandlerTestCase
+final class UpdateCountriesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

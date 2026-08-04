@@ -9,7 +9,7 @@ use Dvsa\Olcs\Cpms\Client\HttpClientFactory;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 
-class HttpClientFactoryTest extends TestCase
+final class HttpClientFactoryTest extends TestCase
 {
     use ClientOptionsTestTrait;
 

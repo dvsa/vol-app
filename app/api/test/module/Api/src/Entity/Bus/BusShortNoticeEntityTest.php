@@ -15,8 +15,9 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class BusShortNoticeEntityTest extends EntityTester
+final class BusShortNoticeEntityTest extends EntityTester
 {
+    #[\Override]
     public function setUp(): void
     {
         /** @var Entity */
@@ -46,7 +47,7 @@ class BusShortNoticeEntityTest extends EntityTester
 
         $result = $sut->getCalculatedBundleValues();
 
-        $this->assertEquals($result['isLatestVariation'], true);
+        $this->assertEquals(true, $result['isLatestVariation']);
     }
 
     /**
@@ -231,8 +232,8 @@ class BusShortNoticeEntityTest extends EntityTester
     public function testFromData(): void
     {
         $this->entity->fromData(['connectionDetail' => 'foo', 'holidayDetail' => 'bar']);
-        $this->assertEquals($this->entity->getConnectionDetail(), 'foo');
-        $this->assertEquals($this->entity->getHolidayDetail(), 'bar');
+        $this->assertEquals('foo', $this->entity->getConnectionDetail());
+        $this->assertEquals('bar', $this->entity->getHolidayDetail());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('hasGrantableDetailsProvider')]
@@ -262,113 +263,111 @@ class BusShortNoticeEntityTest extends EntityTester
         $this->assertEquals($this->entity->hasGrantableDetails(), $expected);
     }
 
-    public static function hasGrantableDetailsProvider(): array
+    public static function hasGrantableDetailsProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'bankHolidayChange' => 'N',
-                    'connectionChange' => 'N',
-                    'holidayChange' => 'N',
-                    'notAvailableChange' => 'N',
-                    'policeChange' => 'N',
-                    'replacementChange' => 'N',
-                    'specialOccasionChange' => 'N',
-                    'timetableChange' => 'N',
-                    'trcChange' => 'N',
-                    'unforseenChange' => 'N'
-                ],
-                [
-                    'connectionDetail' => '',
-                    'holidayDetail' => '',
-                    'notAvailableDetail' => '',
-                    'policeDetail' => '',
-                    'replacementDetail' => '',
-                    'specialOccasionDetail' => '',
-                    'timetableDetail' => '',
-                    'trcDetail' => '',
-                    'unforseenDetail' => ''
-                ],
-                false
+                'bankHolidayChange' => 'N',
+                'connectionChange' => 'N',
+                'holidayChange' => 'N',
+                'notAvailableChange' => 'N',
+                'policeChange' => 'N',
+                'replacementChange' => 'N',
+                'specialOccasionChange' => 'N',
+                'timetableChange' => 'N',
+                'trcChange' => 'N',
+                'unforseenChange' => 'N'
             ],
             [
-                [
-                    'bankHolidayChange' => 'Y',
-                    'connectionChange' => 'N',
-                    'holidayChange' => 'N',
-                    'notAvailableChange' => 'N',
-                    'policeChange' => 'N',
-                    'replacementChange' => 'N',
-                    'specialOccasionChange' => 'N',
-                    'timetableChange' => 'N',
-                    'trcChange' => 'N',
-                    'unforseenChange' => 'N'
-                ],
-                [
-                    'connectionDetail' => '',
-                    'holidayDetail' => '',
-                    'notAvailableDetail' => '',
-                    'policeDetail' => '',
-                    'replacementDetail' => '',
-                    'specialOccasionDetail' => '',
-                    'timetableDetail' => '',
-                    'trcDetail' => '',
-                    'unforseenDetail' => ''
-                ],
-                true
+                'connectionDetail' => '',
+                'holidayDetail' => '',
+                'notAvailableDetail' => '',
+                'policeDetail' => '',
+                'replacementDetail' => '',
+                'specialOccasionDetail' => '',
+                'timetableDetail' => '',
+                'trcDetail' => '',
+                'unforseenDetail' => ''
+            ],
+            false
+        ];
+        yield [
+            [
+                'bankHolidayChange' => 'Y',
+                'connectionChange' => 'N',
+                'holidayChange' => 'N',
+                'notAvailableChange' => 'N',
+                'policeChange' => 'N',
+                'replacementChange' => 'N',
+                'specialOccasionChange' => 'N',
+                'timetableChange' => 'N',
+                'trcChange' => 'N',
+                'unforseenChange' => 'N'
             ],
             [
-                [
-                    'bankHolidayChange' => 'N',
-                    'connectionChange' => 'Y',
-                    'holidayChange' => 'N',
-                    'notAvailableChange' => 'N',
-                    'policeChange' => 'N',
-                    'replacementChange' => 'N',
-                    'specialOccasionChange' => 'N',
-                    'timetableChange' => 'N',
-                    'trcChange' => 'N',
-                    'unforseenChange' => 'N'
-                ],
-                [
-                    'connectionDetail' => 'foo',
-                    'holidayDetail' => '',
-                    'notAvailableDetail' => '',
-                    'policeDetail' => '',
-                    'replacementDetail' => '',
-                    'specialOccasionDetail' => '',
-                    'timetableDetail' => '',
-                    'trcDetail' => '',
-                    'unforseenDetail' => ''
-                ],
-                true
+                'connectionDetail' => '',
+                'holidayDetail' => '',
+                'notAvailableDetail' => '',
+                'policeDetail' => '',
+                'replacementDetail' => '',
+                'specialOccasionDetail' => '',
+                'timetableDetail' => '',
+                'trcDetail' => '',
+                'unforseenDetail' => ''
+            ],
+            true
+        ];
+        yield [
+            [
+                'bankHolidayChange' => 'N',
+                'connectionChange' => 'Y',
+                'holidayChange' => 'N',
+                'notAvailableChange' => 'N',
+                'policeChange' => 'N',
+                'replacementChange' => 'N',
+                'specialOccasionChange' => 'N',
+                'timetableChange' => 'N',
+                'trcChange' => 'N',
+                'unforseenChange' => 'N'
             ],
             [
-                [
-                    'bankHolidayChange' => 'N',
-                    'connectionChange' => 'Y',
-                    'holidayChange' => 'N',
-                    'notAvailableChange' => 'N',
-                    'policeChange' => 'N',
-                    'replacementChange' => 'N',
-                    'specialOccasionChange' => 'N',
-                    'timetableChange' => 'N',
-                    'trcChange' => 'N',
-                    'unforseenChange' => 'N'
-                ],
-                [
-                    'connectionDetail' => '',
-                    'holidayDetail' => '',
-                    'notAvailableDetail' => '',
-                    'policeDetail' => '',
-                    'replacementDetail' => '',
-                    'specialOccasionDetail' => '',
-                    'timetableDetail' => '',
-                    'trcDetail' => '',
-                    'unforseenDetail' => ''
-                ],
-                false
-            ]
+                'connectionDetail' => 'foo',
+                'holidayDetail' => '',
+                'notAvailableDetail' => '',
+                'policeDetail' => '',
+                'replacementDetail' => '',
+                'specialOccasionDetail' => '',
+                'timetableDetail' => '',
+                'trcDetail' => '',
+                'unforseenDetail' => ''
+            ],
+            true
+        ];
+        yield [
+            [
+                'bankHolidayChange' => 'N',
+                'connectionChange' => 'Y',
+                'holidayChange' => 'N',
+                'notAvailableChange' => 'N',
+                'policeChange' => 'N',
+                'replacementChange' => 'N',
+                'specialOccasionChange' => 'N',
+                'timetableChange' => 'N',
+                'trcChange' => 'N',
+                'unforseenChange' => 'N'
+            ],
+            [
+                'connectionDetail' => '',
+                'holidayDetail' => '',
+                'notAvailableDetail' => '',
+                'policeDetail' => '',
+                'replacementDetail' => '',
+                'specialOccasionDetail' => '',
+                'timetableDetail' => '',
+                'trcDetail' => '',
+                'unforseenDetail' => ''
+            ],
+            false
         ];
     }
 }

@@ -1,0 +1,132 @@
+<div class="article">
+    <div class="govuk-inset-text">
+        <p>To be granted a licence you need to prove you have enough money to keep your vehicles and run your business.</p>
+    </div>
+    <p class="govuk-body">If you submit bank statements they must:</p>
+    <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-5">
+        <li>be in the name of the person/organisation applying for this licence</li>
+        <li>cover the 28 day period immediately before the date you submit this application</li>
+        <li>show itemised transactions as well as the opening and closing balance</li>
+    </ul>
+    <p class="govuk-body">You must be able to explain any large or unusual deposits to the account during the 28 day period</p>
+    <p class="govuk-body">
+        <?php echo $this->linkNewWindow($this->url('guides/guide', ['guide' => 'financial-evidence']), 'other ways to provide financial evidence'); ?>.
+    </p>
+    <div class="info-box info-box--grey info-box--large-padding">
+        <span class="info-box--h3">How much will you need?</span>
+
+        <h2 style="margin-top: 0;">&pound; <?php echo number_format($requiredFinance); ?></h2>
+
+        <p>This figure is based on:</p>
+
+        <ul>
+            <li>this application for <?php echo $applicationVehicles; ?> vehicle<?php echo $applicationVehicles != 1 ? 's' : ''; ?></li>
+            <?php if ((int) $otherLicenceVehicles > 0): ?>
+            <li>maintenance of <?php echo $otherLicenceVehicles; ?> vehicle<?php echo $otherLicenceVehicles != 1 ? 's' : ''; ?> on your other licence(s)</li>
+            <?php endif; ?>
+            <?php if ((int) $otherApplicationVehicles > 0): ?>
+            <li>your other application(s) for <?php echo $otherApplicationVehicles; ?> vehicle<?php echo $otherApplicationVehicles != 1 ? 's' : ''; ?></li>
+            <?php endif; ?>
+        </ul>
+
+        <p>
+            <details class="govuk-details" data-module="govuk-details">
+                <summary class="govuk-details__summary" aria-controls="details-content-how-calculated">
+                    <span class="govuk-details__summary-text">
+                        How did we calculate this?
+                    </span>
+                </summary>
+              <div class="govuk-details__text" id="details-content-how-calculated">
+
+                <p>This amount is calculated using the following values:</p>
+
+                <table class="govuk-table">
+                  <caption class="govuk-table__caption govuk-table__caption--s">Restricted licence type</caption>
+                  <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                      <th scope="col" class="govuk-table__header app-custom-class">Vehicle Type</th>
+                      <th scope="col" class="govuk-table__header app-custom-class">First Vehicle</th>
+                      <th scope="col" class="govuk-table__header app-custom-class">Each Additional Vehicle</th>
+                    </tr>
+                  </thead>
+                  <tbody class="govuk-table__body">
+
+                    <tr class="govuk-table__row">
+                      <th scope="row" class="govuk-table__header">Heavy goods</th>
+                      <td class="govuk-table__cell">£<?php echo number_format($restrictedHeavyGoodsFirst); ?></td>
+                      <td class="govuk-table__cell">£<?php echo number_format($restrictedHeavyGoodsAdditional); ?></td>
+                    </tr>
+
+                    <tr class="govuk-table__row">
+                      <th scope="row" class="govuk-table__header">Passenger Service</th>
+                      <td class="govuk-table__cell">£<?php echo number_format($restrictedPassengerServiceFirst); ?></td>
+                      <td class="govuk-table__cell">£<?php echo number_format($restrictedPassengerServiceAdditional); ?></td>
+                    </tr>
+
+                  </tbody>
+                </table>
+
+                <table class="govuk-table">
+                  <caption class="govuk-table__caption govuk-table__caption--s">Standard National licence type</caption>
+                  <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                      <th scope="col" class="govuk-table__header app-custom-class">Vehicle Type</th>
+                      <th scope="col" class="govuk-table__header app-custom-class">First Vehicle</th>
+                      <th scope="col" class="govuk-table__header app-custom-class">Each Additional Vehicle</th>
+                    </tr>
+                  </thead>
+                  <tbody class="govuk-table__body">
+
+                    <tr class="govuk-table__row">
+                      <th scope="row" class="govuk-table__header">Heavy goods</th>
+                      <td class="govuk-table__cell">£<?php echo number_format($standardNationalHeavyGoodsFirst); ?></td>
+                      <td class="govuk-table__cell">£<?php echo number_format($standardNationalHeavyGoodsAdditional); ?></td>
+                    </tr>
+
+                    <tr class="govuk-table__row">
+                      <th scope="row" class="govuk-table__header">Passenger Service</th>
+                      <td class="govuk-table__cell">£<?php echo number_format($standardNationalPassengerServiceFirst); ?></td>
+                      <td class="govuk-table__cell">£<?php echo number_format($standardNationalPassengerServiceAdditional); ?></td>
+                    </tr>
+
+                  </tbody>
+                </table>
+
+                <table class="govuk-table">
+                  <caption class="govuk-table__caption govuk-table__caption--s">Standard International licence type</caption>
+                  <thead class="govuk-table__head">
+                    <tr class="govuk-table__row">
+                      <th scope="col" class="govuk-table__header app-custom-class">Vehicle Type</th>
+                      <th scope="col" class="govuk-table__header app-custom-class">First Vehicle</th>
+                      <th scope="col" class="govuk-table__header app-custom-class">Each Additional Vehicle</th>
+                    </tr>
+                  </thead>
+                  <tbody class="govuk-table__body">
+
+                    <tr class="govuk-table__row">
+                      <th scope="row" class="govuk-table__header">Heavy goods</th>
+                      <td class="govuk-table__cell">£<?php echo number_format($standardInternationalHeavyGoodsFirst); ?></td>
+                      <td class="govuk-table__cell">£<?php echo number_format($standardInternationalHeavyGoodsAdditional); ?></td>
+                    </tr>
+
+                    <tr class="govuk-table__row">
+                      <th scope="row" class="govuk-table__header">Light goods</th>
+                      <td class="govuk-table__cell">£<?php echo number_format($standardInternationalLightGoodsFirst); ?></td>
+                      <td class="govuk-table__cell">£<?php echo number_format($standardInternationalLightGoodsAdditional); ?></td>
+                    </tr>
+
+                    <tr class="govuk-table__row">
+                      <th scope="row" class="govuk-table__header">Passenger Service</th>
+                      <td class="govuk-table__cell">£<?php echo number_format($standardInternationalPassengerServiceFirst); ?></td>
+                      <td class="govuk-table__cell">£<?php echo number_format($standardInternationalPassengerServiceAdditional); ?></td>
+                    </tr>
+
+                  </tbody>
+                </table>
+
+              </div>
+            </details>
+        </p>
+
+    </div>
+</div>

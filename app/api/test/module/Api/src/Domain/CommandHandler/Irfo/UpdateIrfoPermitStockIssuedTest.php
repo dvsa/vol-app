@@ -17,7 +17,7 @@ use Mockery as m;
 /**
  * Update Irfo Permit Stock Issued Test
  */
-class UpdateIrfoPermitStockIssuedTest extends AbstractCommandHandlerTestCase
+final class UpdateIrfoPermitStockIssuedTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -96,7 +96,7 @@ class UpdateIrfoPermitStockIssuedTest extends AbstractCommandHandlerTestCase
 
         $this->assertEquals($expected, $result->toArray());
 
-        $this->assertEquals(2, sizeof($savedIrfoPermitStocks));
+        $this->assertCount(2, $savedIrfoPermitStocks);
 
         foreach ($savedIrfoPermitStocks as $savedIrfoPermitStock) {
             $this->assertSame(

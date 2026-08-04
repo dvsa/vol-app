@@ -2,7 +2,7 @@
 
 #####################################################################
 #                                                                   #
-# anonymise generic answers                         			    #
+# anonymise generic answers                                         #
 #                                                                   #
 #####################################################################
 
@@ -11,6 +11,8 @@ ANON_DB=$2
 ANON_DATA_DIR=$3
 ANSWERS_DATA_FILE=$4
 ANSWERS_ANON_DATA_FILE=$5
+
+# Removed global Bash associative array declarations
 
 log () {
 printf "\n%s %s\n" "$(date "+%Y-%m-%d %H:%M:%S")" "$1"
@@ -29,25 +31,22 @@ mysql --local-infile=1 -sNB $conn -e "SELECT * FROM $ANON_DB.answer ;" | tr '^' 
 
 anonymise_answer () {
 
-declare -A ans_string
-declare -A ans_text
-
 [ -e $ANON_DATA_DIR/$ANSWERS_ANON_DATA_FILE ] && rm $ANON_DATA_DIR/$ANSWERS_ANON_DATA_FILE
 
 OLDIFS=$IFS
 
-while IFS=$'^' read id question_text_id irhp_application_id irhp_permit_application_id ans_integer ans_string ans_decimal ans_date ans_datetime ans_boolean ans_text ans_array created_by last_modified_by created_on last_modified_on version ; do
+# Replaced slow Bash loop with high-speed awk.
+awk -F'^' '
+{
+    # Check if the ans_text column ($11) is not empty
+    if ($11 != "") {
+        $11 = "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo";
+    }
 
-Text=
-
-if [[ ! -z $ans_text ]]; then
-    Text="Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo"
-fi
-
-
-printf "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n" "$id" "$question_text_id" "$irhp_application_id" "$irhp_permit_application_id" "$ans_integer" "$ans_string" "$ans_decimal" "$ans_date" "$ans_datetime" "$ans_boolean" "$Text" "$ans_array" "$created_by" "$last_modified_by" "$created_on" "$last_modified_on" "$version"
-
-done < $ANON_DATA_DIR/$ANSWERS_DATA_FILE >> $ANON_DATA_DIR/$ANSWERS_ANON_DATA_FILE || log_error "anonymise_answers FAILED!"
+    # Stream out the modified line record using tab-separated fields
+    $1 = $1; # force $0 rebuild using OFS even when no fields are modified
+    print $0;
+}' OFS='\t' "$ANON_DATA_DIR/$ANSWERS_DATA_FILE" >> $ANON_DATA_DIR/$ANSWERS_ANON_DATA_FILE || log_error "anonymise_answers FAILED!"
 
 iconv -f utf-8 -t utf-8 -c  $ANON_DATA_DIR/$ANSWERS_ANON_DATA_FILE >  $ANON_DATA_DIR/tmp-$ANSWERS_ANON_DATA_FILE
 mv $ANON_DATA_DIR/tmp-$ANSWERS_ANON_DATA_FILE  $ANON_DATA_DIR/$ANSWERS_ANON_DATA_FILE
@@ -66,6 +65,9 @@ SET FOREIGN_KEY_CHECKS = 0;
 SET @DISABLE_TRIGGERS = 1;
 truncate table answer;
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- Added index disable command to maximize speed during execution of the data pipeline load.
+ALTER TABLE answer DISABLE KEYS;
 
 LOAD DATA LOCAL INFILE '$ANON_DATA_DIR/$ANSWERS_ANON_DATA_FILE' INTO table answer FIELDS TERMINATED BY '\t'
 ( id
@@ -103,6 +105,8 @@ SET question_text_id=nullif(@question_text_id,'')
 ,last_modified_on=nullif(@last_modified_on,'')
 ,version=nullif(@version,'');
 
+-- Re-enable indexes cleanly in a single fast block operation after the data finishes writing.
+ALTER TABLE answer ENABLE KEYS;
 
 SET @DISABLE_TRIGGERS = null;" || log_error "reload_answer FAILED!"
 

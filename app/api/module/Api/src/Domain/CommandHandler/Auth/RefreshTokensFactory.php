@@ -22,7 +22,7 @@ class RefreshTokensFactory implements FactoryInterface
      * @return RefreshTokens
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): RefreshTokens
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): RefreshTokens
     {
         $adapter = $container->get(ValidatableAdapterInterface::class);
         $instance = new RefreshTokens($adapter);

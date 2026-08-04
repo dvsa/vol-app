@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication as IrhpApplicationEntity;
 use Dvsa\Olcs\Api\Domain\Repository\IrhpApplication as IrhpApplicationRepo;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCancelApplicationHandlerTestCase;
 
-class CancelTest extends AbstractCancelApplicationHandlerTestCase
+final class CancelTest extends AbstractCancelApplicationHandlerTestCase
 {
     protected $repoServiceName = 'IrhpApplication';
     protected $entityClass = IrhpApplicationEntity::class;

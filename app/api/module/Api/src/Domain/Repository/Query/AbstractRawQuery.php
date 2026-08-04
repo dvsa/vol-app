@@ -246,7 +246,7 @@ abstract class AbstractRawQuery implements AuthAwareInterface, QueryInterface, F
         return $this->getColumnName($entity, $matches['field']);
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->em = $container->get('doctrine.entitymanager.orm_default');
         $this->connection = $this->em->getConnection();

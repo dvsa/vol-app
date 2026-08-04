@@ -13,10 +13,8 @@ use Dvsa\OlcsTest\Api\Service\Submission\Sections\Stub\AbstractSectionStub;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\Submission\Sections\AbstractSection
- */
-class AbstractSectionTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Submission\Sections\AbstractSection::class)]
+final class AbstractSectionTest extends MockeryTestCase
 {
     /** @var  AbstractSectionStub */
     private $sut;
@@ -26,6 +24,7 @@ class AbstractSectionTest extends MockeryTestCase
     /** @var  \Laminas\View\Renderer\PhpRenderer | m\MockInterface */
     private $mockViewRenderer;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockQueryHandler = m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class);
@@ -44,16 +43,16 @@ class AbstractSectionTest extends MockeryTestCase
             ->once()
             ->andReturn('EXPECT');
 
-        static::assertEquals('EXPECT', $this->sut->handleQuery($query));
+        $this->assertEquals('EXPECT', $this->sut->handleQuery($query));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestExtractPerson')]
     public function testExtractPerson(mixed $contactDetails, mixed $expect): void
     {
-        static::assertEquals($expect, $this->sut->extractPerson($contactDetails));
+        $this->assertEquals($expect, $this->sut->extractPerson($contactDetails));
     }
 
-    public static function dpTestExtractPerson(): array
+    public static function dpTestExtractPerson(): \Iterator
     {
         $personData = [
             'title' => '',
@@ -62,70 +61,64 @@ class AbstractSectionTest extends MockeryTestCase
             'birthDate' => '',
             'birthPlace' => ''
         ];
-
-        return [
-            [
-                'contactDetails' => null,
-                'expect' => $personData,
-            ],
-            [
-                'contactDetails' => (new ContactDetails(new RefData()))
-                    ->setPerson(
-                        (new Person())
-                            ->setTitle(
-                                (new RefData())->setDescription('unit_Title')
-                            )
-                    ),
-                'expect' => ['title' => 'unit_Title'] + $personData,
-            ],
-            [
-                'contactDetails' => (new ContactDetails(new RefData()))
-                    ->setPerson(
-                        (new Person())
-                            ->setForename('unit_ForeName')
-                            ->setFamilyName('unit_FamilyName')
-                            ->setBirthDate(new \DateTime('2010-09-08'))
-                            ->setBirthPlace('unit_BirthPlace')
-                    ),
-                'expect' =>
-                    [
-                        'forename' => 'unit_ForeName',
-                        'familyName' => 'unit_FamilyName',
-                        'birthDate' => '08/09/2010',
-                        'birthPlace' => 'unit_BirthPlace',
-                    ] + $personData,
-            ],
-
+        yield [
+            'contactDetails' => null,
+            'expect' => $personData,
+        ];
+        yield [
+            'contactDetails' => new ContactDetails(new RefData())
+                ->setPerson(
+                    new Person()
+                        ->setTitle(
+                            new RefData()->setDescription('unit_Title')
+                        )
+                ),
+            'expect' => ['title' => 'unit_Title'] + $personData,
+        ];
+        yield [
+            'contactDetails' => new ContactDetails(new RefData())
+                ->setPerson(
+                    new Person()
+                        ->setForename('unit_ForeName')
+                        ->setFamilyName('unit_FamilyName')
+                        ->setBirthDate(new \DateTime('2010-09-08'))
+                        ->setBirthPlace('unit_BirthPlace')
+                ),
+            'expect' =>
+                [
+                    'forename' => 'unit_ForeName',
+                    'familyName' => 'unit_FamilyName',
+                    'birthDate' => '08/09/2010',
+                    'birthPlace' => 'unit_BirthPlace',
+                ] + $personData,
         ];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFormatDate')]
     public function testFormatDate(mixed $dateTime, mixed $expect): void
     {
-        static::assertEquals($expect, $this->sut->formatDate($dateTime));
+        $this->assertEquals($expect, $this->sut->formatDate($dateTime));
     }
 
-    public static function dpTestFormatDate(): array
+    public static function dpTestFormatDate(): \Iterator
     {
-        return [
-            [
-                'dateTime' => '',
-                'expect' => '',
-            ],
-            [
-                'dateTime' => '01-02-2003',
-                'expect' => '01/02/2003',
-            ],
-            [
-                'dateTime' => new \DateTime('2013-12-11'),
-                'expect' => '11/12/2013',
-            ],
+        yield [
+            'dateTime' => '',
+            'expect' => '',
+        ];
+        yield [
+            'dateTime' => '01-02-2003',
+            'expect' => '01/02/2003',
+        ];
+        yield [
+            'dateTime' => new \DateTime('2013-12-11'),
+            'expect' => '11/12/2013',
         ];
     }
 
     public function testGetViewRenderer(): void
     {
-        static::assertSame($this->mockViewRenderer, $this->sut->getViewRenderer());
+        $this->assertSame($this->mockViewRenderer, $this->sut->getViewRenderer());
     }
 
     public function testGetRepos(): void

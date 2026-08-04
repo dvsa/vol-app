@@ -20,7 +20,7 @@ use Mockery as m;
 /**
  * Reset Irfo Psv Auth Test
  */
-class ResetIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
+final class ResetIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -104,16 +104,14 @@ class ResetIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
 
     /**
      * Data provider, current status and new status expected to be set by resetting
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function statusProvider(): array
+    public static function statusProvider(): \Iterator
     {
-        return [
-            [IrfoPsvAuthEntity::STATUS_REFUSED, IrfoPsvAuthEntity::STATUS_PENDING],
-            [IrfoPsvAuthEntity::STATUS_CNS, IrfoPsvAuthEntity::STATUS_RENEW],
-            [IrfoPsvAuthEntity::STATUS_WITHDRAWN, IrfoPsvAuthEntity::STATUS_PENDING],
-            [IrfoPsvAuthEntity::STATUS_RENEW, IrfoPsvAuthEntity::STATUS_PENDING],
-            [IrfoPsvAuthEntity::STATUS_APPROVED, IrfoPsvAuthEntity::STATUS_PENDING],
-        ];
+        yield [IrfoPsvAuthEntity::STATUS_REFUSED, IrfoPsvAuthEntity::STATUS_PENDING];
+        yield [IrfoPsvAuthEntity::STATUS_CNS, IrfoPsvAuthEntity::STATUS_RENEW];
+        yield [IrfoPsvAuthEntity::STATUS_WITHDRAWN, IrfoPsvAuthEntity::STATUS_PENDING];
+        yield [IrfoPsvAuthEntity::STATUS_RENEW, IrfoPsvAuthEntity::STATUS_PENDING];
+        yield [IrfoPsvAuthEntity::STATUS_APPROVED, IrfoPsvAuthEntity::STATUS_PENDING];
     }
 }

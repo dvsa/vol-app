@@ -17,7 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * Initially auto-generated but won't be overridden
  */
-class ImpoundingEntityTest extends EntityTester
+final class ImpoundingEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -71,11 +71,11 @@ class ImpoundingEntityTest extends EntityTester
 
         $this->assertSame($impoundingType, $entity->getImpoundingType());
         $this->assertSame($impoundingLegislationTypes, $entity->getImpoundingLegislationTypes());
-        $this->assertSame(null, $entity->getVenue());
-        $this->assertSame(null, $entity->getVenueOther());
+        $this->assertNull($entity->getVenue());
+        $this->assertNull($entity->getVenueOther());
         $this->assertSame($applicationReceiptDate, $entity->getApplicationReceiptDate()->format('Y-m-d'));
         $this->assertSame($vrm, $entity->getVrm());
-        $this->assertSame(null, $entity->getHearingDate());
+        $this->assertNull($entity->getHearingDate());
         $this->assertSame($presidingTc, $entity->getPresidingTc());
         $this->assertSame($outcome, $entity->getOutcome());
         $this->assertSame($outcomeSentDate, $entity->getOutcomeSentDate()->format('Y-m-d'));
@@ -131,14 +131,11 @@ class ImpoundingEntityTest extends EntityTester
         $this->assertSame($notes, $entity->getNotes());
     }
 
-    public static function updateHearingProvider(): array
+    public static function updateHearingProvider(): \Iterator
     {
         $mockVenue = m::mock(Venue::class);
-
-        return [
-            [$mockVenue, 'other venue', $mockVenue, null],
-            [Entity::VENUE_OTHER, 'other venue', null, 'other venue'],
-            [null, 'other venue', null, null],
-        ];
+        yield [$mockVenue, 'other venue', $mockVenue, null];
+        yield [Entity::VENUE_OTHER, 'other venue', null, 'other venue'];
+        yield [null, 'other venue', null, null];
     }
 }

@@ -1,0 +1,12 @@
+parameters:
+  level: 5
+  paths:
+    - src
+  excludePaths:
+    - vendor
+  ignoreErrors:
+    - message: '#^Return type \(Laminas\\Http\\Response\) of method Dvsa\\Olcs\\Auth\\Controller\\LogoutController\:\:indexAction\(\) should be compatible with return type \(Laminas\\View\\Model\\ViewModel\) of method Laminas\\Mvc\\Controller\\AbstractActionController\:\:indexAction\(\)$#'
+      path: %currentWorkingDirectory%/src/Controller/LogoutController.php
+includes:
+  - vendor/phpstan/phpstan-mockery/extension.neon
+  - vendor/phpstan/phpstan-phpunit/extension.neon

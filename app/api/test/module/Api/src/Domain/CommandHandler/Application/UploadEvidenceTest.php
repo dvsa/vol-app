@@ -27,7 +27,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * UploadEvidenceTest
  */
-class UploadEvidenceTest extends AbstractCommandHandlerTestCase
+final class UploadEvidenceTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -110,7 +110,7 @@ class UploadEvidenceTest extends AbstractCommandHandlerTestCase
             'category' => CategoryEntity::CATEGORY_APPLICATION,
             'subCategory' => SubCategoryEntity::DOC_SUB_CATEGORY_FINANCIAL_EVIDENCE_DIGITAL,
             'description' => TaskEntity::TASK_DESCRIPTION_FINANCIAL_EVIDENCE_UPLOADED,
-            'actionDate' => (new DateTime('now'))->format(TaskEntity::ACTION_DATE_FORMAT),
+            'actionDate' => new DateTime('now')->format(TaskEntity::ACTION_DATE_FORMAT),
             'application' => 10,
             'licence' => 20
         ];
@@ -302,7 +302,7 @@ class UploadEvidenceTest extends AbstractCommandHandlerTestCase
             'category' => CategoryEntity::CATEGORY_APPLICATION,
             'subCategory' => SubCategoryEntity::DOC_SUB_CATEGORY_ADVERT_DIGITAL,
             'description' => TaskEntity::TASK_DESCRIPTION_OC_EVIDENCE_UPLOADED,
-            'actionDate' => (new DateTime('now'))->format(TaskEntity::ACTION_DATE_FORMAT),
+            'actionDate' => new DateTime('now')->format(TaskEntity::ACTION_DATE_FORMAT),
             'application' => 10,
             'licence' => 20
         ];
@@ -493,7 +493,7 @@ class UploadEvidenceTest extends AbstractCommandHandlerTestCase
             'category' => CategoryEntity::CATEGORY_APPLICATION,
             'subCategory' => SubCategoryEntity::DOC_SUB_CATEGORY_SUPPORTING_EVIDENCE,
             'description' => TaskEntity::TASK_DESCRIPTION_SUPPORTING_EVIDENCE_UPLOADED,
-            'actionDate' => (new DateTime('now'))->format(TaskEntity::ACTION_DATE_FORMAT),
+            'actionDate' => new DateTime('now')->format(TaskEntity::ACTION_DATE_FORMAT),
             'application' => 10,
             'licence' => 20
             ];

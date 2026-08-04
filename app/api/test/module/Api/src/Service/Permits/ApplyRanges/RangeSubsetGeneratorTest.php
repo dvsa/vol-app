@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class RangeSubsetGeneratorTest extends MockeryTestCase
+final class RangeSubsetGeneratorTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
     public function testGenerate(mixed $emissionsCategoryId, mixed $ranges, mixed $expectedRanges): void
@@ -33,7 +33,7 @@ class RangeSubsetGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestGenerate(): array
+    public static function dpTestGenerate(): \Iterator
     {
         $range1 = [
             'entity' => m::mock(IrhpPermitRange::class),
@@ -57,18 +57,15 @@ class RangeSubsetGeneratorTest extends MockeryTestCase
         ];
 
         $ranges = [$range1, $range2, $range3];
-
-        return [
-            [
-                RefData::EMISSIONS_CATEGORY_EURO5_REF,
-                $ranges,
-                [$range2]
-            ],
-            [
-                RefData::EMISSIONS_CATEGORY_EURO6_REF,
-                $ranges,
-                [$range1, $range3]
-            ]
+        yield [
+            RefData::EMISSIONS_CATEGORY_EURO5_REF,
+            $ranges,
+            [$range2]
+        ];
+        yield [
+            RefData::EMISSIONS_CATEGORY_EURO6_REF,
+            $ranges,
+            [$range1, $range3]
         ];
     }
 }

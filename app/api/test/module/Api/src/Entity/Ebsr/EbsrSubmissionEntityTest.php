@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class EbsrSubmissionEntityTest extends EntityTester
+final class EbsrSubmissionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -111,17 +111,15 @@ class EbsrSubmissionEntityTest extends EntityTester
     /**
      * Date provider for testBeginValidatingThrowsException
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function beginValidatingProvider(): array
+    public static function beginValidatingProvider(): \Iterator
     {
-        return [
-            [Entity::UPLOADED_STATUS],
-            [Entity::VALIDATING_STATUS],
-            [Entity::PROCESSING_STATUS],
-            [Entity::PROCESSED_STATUS],
-            [Entity::FAILED_STATUS]
-        ];
+        yield [Entity::UPLOADED_STATUS];
+        yield [Entity::VALIDATING_STATUS];
+        yield [Entity::PROCESSING_STATUS];
+        yield [Entity::PROCESSED_STATUS];
+        yield [Entity::FAILED_STATUS];
     }
 
     /**
@@ -199,18 +197,16 @@ class EbsrSubmissionEntityTest extends EntityTester
     /**
      * Date provider for isFailure
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isFailureProvider(): array
+    public static function isFailureProvider(): \Iterator
     {
-        return [
-            [Entity::UPLOADED_STATUS, false],
-            [Entity::SUBMITTED_STATUS, false],
-            [Entity::VALIDATING_STATUS, false],
-            [Entity::PROCESSING_STATUS, false],
-            [Entity::PROCESSED_STATUS, false],
-            [Entity::FAILED_STATUS, true]
-        ];
+        yield [Entity::UPLOADED_STATUS, false];
+        yield [Entity::SUBMITTED_STATUS, false];
+        yield [Entity::VALIDATING_STATUS, false];
+        yield [Entity::PROCESSING_STATUS, false];
+        yield [Entity::PROCESSED_STATUS, false];
+        yield [Entity::FAILED_STATUS, true];
     }
 
     /**
@@ -233,18 +229,16 @@ class EbsrSubmissionEntityTest extends EntityTester
     /**
      * Date provider for isSubmitted
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isSubmittedProvider(): array
+    public static function isSubmittedProvider(): \Iterator
     {
-        return [
-            [Entity::UPLOADED_STATUS, false],
-            [Entity::SUBMITTED_STATUS, true],
-            [Entity::VALIDATING_STATUS, false],
-            [Entity::PROCESSING_STATUS, false],
-            [Entity::PROCESSED_STATUS, false],
-            [Entity::FAILED_STATUS, false]
-        ];
+        yield [Entity::UPLOADED_STATUS, false];
+        yield [Entity::SUBMITTED_STATUS, true];
+        yield [Entity::VALIDATING_STATUS, false];
+        yield [Entity::PROCESSING_STATUS, false];
+        yield [Entity::PROCESSED_STATUS, false];
+        yield [Entity::FAILED_STATUS, false];
     }
 
     /**
@@ -267,18 +261,16 @@ class EbsrSubmissionEntityTest extends EntityTester
     /**
      * Date provider for isSuccess
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isSuccessProvider(): array
+    public static function isSuccessProvider(): \Iterator
     {
-        return [
-            [Entity::UPLOADED_STATUS, false],
-            [Entity::SUBMITTED_STATUS, false],
-            [Entity::VALIDATING_STATUS, false],
-            [Entity::PROCESSING_STATUS, false],
-            [Entity::PROCESSED_STATUS, true],
-            [Entity::FAILED_STATUS, false]
-        ];
+        yield [Entity::UPLOADED_STATUS, false];
+        yield [Entity::SUBMITTED_STATUS, false];
+        yield [Entity::VALIDATING_STATUS, false];
+        yield [Entity::PROCESSING_STATUS, false];
+        yield [Entity::PROCESSED_STATUS, true];
+        yield [Entity::FAILED_STATUS, false];
     }
 
     /**
@@ -301,18 +293,16 @@ class EbsrSubmissionEntityTest extends EntityTester
     /**
      * Date provider for isBeingProcessed
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isBeingProcessedProvider(): array
+    public static function isBeingProcessedProvider(): \Iterator
     {
-        return [
-            [Entity::UPLOADED_STATUS, false],
-            [Entity::SUBMITTED_STATUS, true],
-            [Entity::VALIDATING_STATUS, true],
-            [Entity::PROCESSING_STATUS, true],
-            [Entity::PROCESSED_STATUS, false],
-            [Entity::FAILED_STATUS, false]
-        ];
+        yield [Entity::UPLOADED_STATUS, false];
+        yield [Entity::SUBMITTED_STATUS, true];
+        yield [Entity::VALIDATING_STATUS, true];
+        yield [Entity::PROCESSING_STATUS, true];
+        yield [Entity::PROCESSED_STATUS, false];
+        yield [Entity::FAILED_STATUS, false];
     }
 
     /**
@@ -336,17 +326,15 @@ class EbsrSubmissionEntityTest extends EntityTester
     /**
      * Date provider for isBeingProcessed
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function getErrorsWithNoFailureProvider(): array
+    public static function getErrorsWithNoFailureProvider(): \Iterator
     {
-        return [
-            [Entity::UPLOADED_STATUS],
-            [Entity::SUBMITTED_STATUS],
-            [Entity::VALIDATING_STATUS],
-            [Entity::PROCESSING_STATUS],
-            [Entity::PROCESSED_STATUS]
-        ];
+        yield [Entity::UPLOADED_STATUS];
+        yield [Entity::SUBMITTED_STATUS];
+        yield [Entity::VALIDATING_STATUS];
+        yield [Entity::PROCESSING_STATUS];
+        yield [Entity::PROCESSED_STATUS];
     }
 
     /**
@@ -424,14 +412,12 @@ class EbsrSubmissionEntityTest extends EntityTester
     /**
      * Data provider for testIsDataRefresh
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isDataRefreshProvider(): array
+    public static function isDataRefreshProvider(): \Iterator
     {
-        return [
-            [Entity::DATA_REFRESH_SUBMISSION_TYPE, true],
-            [Entity::NEW_SUBMISSION_TYPE, false]
-        ];
+        yield [Entity::DATA_REFRESH_SUBMISSION_TYPE, true];
+        yield [Entity::NEW_SUBMISSION_TYPE, false];
     }
 
     /**

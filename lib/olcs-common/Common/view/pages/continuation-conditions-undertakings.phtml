@@ -1,0 +1,124 @@
+<?php
+echo $this->partial(
+    'partials/page-header-continuation',
+    [
+        'pageTitle' => $this->pageTitle(),
+        'pageSubTitle' => $this->translate('continuation.sub-title.continue-licence') .' '. $this->licNo,
+        'stepHeader' => $this->stepHeader,
+        'backUrl' => ['url' => $this->url($this->backRoute, [], [], true)],
+    ]
+);
+?>
+<div class="dashboard">
+
+    <div class="field">
+        <?php echo $this->translate('continuations.conditions-undertakings.guidance'); ?>
+    </div>
+
+    <?php if (count($conditionsUndertakings['licence']) > 0) : ?>
+
+        <h2 class="heading-large"><?php echo $this->translate('continuations.conditions-undertakings.licence'); ?></h2>
+
+        <?php
+            if (isset($conditionsUndertakings['licence']['psv_restricted'])) :
+        ?>
+            <div class="field">
+                <p><?php echo $conditionsUndertakings['licence']['psv_restricted']['comment']; ?></p>
+            </div>
+        <?php endif; ?>
+
+        <?php
+            if (
+                isset($conditionsUndertakings['licence']['conditions'])
+                && count($conditionsUndertakings['licence']['conditions'])
+            ) :
+        ?>
+
+            <h3><?php echo $this->translate('continuations.conditions-undertakings.conditions'); ?></h3>
+
+            <div class="field">
+                <?php foreach($conditionsUndertakings['licence']['conditions'] as $cu) : ?>
+                    <p><?php echo $this->escapeHtml($cu['notes']); ?></p>
+                <?php endforeach; ?>
+            </div>
+
+        <?php endif; ?>
+
+        <?php
+            if (
+                (isset($conditionsUndertakings['licence']['undertakings'])
+                && count($conditionsUndertakings['licence']['undertakings'])
+                ) ||
+                isset($conditionsUndertakings['licence']['psv_restricted'])
+            ) :
+        ?>
+
+            <h3><?php echo $this->translate('continuations.conditions-undertakings.undertakings'); ?></h3>
+
+            <div class="field">
+                <?php foreach($conditionsUndertakings['licence']['undertakings'] as $cu) : ?>
+                    <p><?php echo $this->escapeHtml($cu['notes']); ?></p>
+                <?php endforeach; ?>
+                <?php if (isset($conditionsUndertakings['licence']['psv_restricted'])) : ?>
+                    <?php echo $conditionsUndertakings['licence']['psv_restricted']['undertakings']; ?>
+                <?php endif; ?>
+            </div>
+
+        <?php endif; ?>
+
+        <hr class="seperator"/>
+
+    <?php endif; ?>
+
+
+    <?php if (count($conditionsUndertakings['operatingCentres'])): ?>
+
+        <h2 class="heading-large"><?php echo $this->translate('Operating centres(s)'); ?></h2>
+
+        <?php foreach($conditionsUndertakings['operatingCentres'] as $oc) : ?>
+
+            <?php $index = (isset($oc['conditions']) ? 'conditions' : 'undertakings'); ?>
+            <h3>
+                <?php echo $this->address(
+                    $oc[$index][0]['address'], ['addressLine1', 'town', 'postcode']
+                ); ?>
+            </h3>
+
+            <?php if (isset($oc['conditions']) && count($oc['conditions']) > 0) : ?>
+
+                <h4><?php echo $this->translate('continuations.conditions-undertakings.conditions'); ?></h4>
+                <div class="field">
+                    <?php foreach($oc['conditions'] as $cu) : ?>
+                          <p><?php echo $this->escapeHtml($cu['notes']); ?></p>
+                    <?php endforeach; ?>
+                </div>
+
+            <?php endif; ?>
+
+            <?php if (isset($oc['undertakings']) && count($oc['undertakings']) > 0) : ?>
+
+                <h4><?php echo $this->translate('continuations.conditions-undertakings.undertakings'); ?></h4>
+                <div class="field">
+                    <?php foreach($oc['undertakings'] as $cu) : ?>
+                        <p><?php echo $this->escapeHtml($cu['notes']); ?></p>
+                    <?php endforeach; ?>
+                </div>
+
+            <?php endif; ?>
+
+        <?php endforeach; ?>
+
+        <hr class="seperator"/>
+
+    <?php endif; ?>
+
+    <?php
+    echo $this->flashMessengerAll();
+
+    if (isset($this->form)) {
+        echo $this->formErrors($this->form);
+        echo $this->form($this->form);
+    }
+    ?>
+
+</div>

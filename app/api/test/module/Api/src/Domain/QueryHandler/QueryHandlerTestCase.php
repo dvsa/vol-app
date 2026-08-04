@@ -80,6 +80,7 @@ class QueryHandlerTestCase extends MockeryTestCase
 
     protected array $sideEffectQueries = [];
 
+    #[\Override]
     public function setUp(): void
     {
         $this->repoManager = m::mock(RepositoryServiceManager::class);

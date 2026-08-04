@@ -202,7 +202,7 @@ class CommunityLic extends AbstractRepository
         $qb->andWhere(new Comparison($this->getColumnIdentifier('issueNo'), Comparison::NEQ, ':issueNo'));
         $qb->andWhere(new Comparison($this->getColumnIdentifier('licence'), Comparison::EQ, ':licence'));
         $qb->andWhere(new Comparison($this->getColumnIdentifier('status'), Comparison::EQ, ':status'));
-        $qb->setParameters(['licence' => $licenceId, 'issueNo' => 0, 'status' => CommunityLicEntity::STATUS_ACTIVE]);
+        $qb->setParameters(new \Doctrine\Common\Collections\ArrayCollection([new \Doctrine\ORM\Query\Parameter('licence', $licenceId), new \Doctrine\ORM\Query\Parameter('issueNo', 0), new \Doctrine\ORM\Query\Parameter('status', CommunityLicEntity::STATUS_ACTIVE)]));
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 }

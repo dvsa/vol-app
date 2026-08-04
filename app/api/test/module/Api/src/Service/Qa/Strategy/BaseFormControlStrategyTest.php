@@ -24,7 +24,7 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class BaseFormControlStrategyTest extends MockeryTestCase
+final class BaseFormControlStrategyTest extends MockeryTestCase
 {
     private $frontendType;
 
@@ -40,6 +40,7 @@ class BaseFormControlStrategyTest extends MockeryTestCase
 
     private $baseFormControlStrategy;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->frontendType = 'checkbox';
@@ -145,12 +146,10 @@ class BaseFormControlStrategyTest extends MockeryTestCase
         );
     }
 
-    public static function dpSaveFormData(): array
+    public static function dpSaveFormData(): \Iterator
     {
-        return [
-            [null, BaseFormControlStrategy::FRONTEND_DESTINATION_NEXT_STEP],
-            ['DESTINATION_NAME', 'DESTINATION_NAME']
-        ];
+        yield [null, BaseFormControlStrategy::FRONTEND_DESTINATION_NEXT_STEP];
+        yield ['DESTINATION_NAME', 'DESTINATION_NAME'];
     }
 
     public function testSaveFormDataNotSupported(): void

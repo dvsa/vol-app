@@ -11,14 +11,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\Addresses\LicenceAddresses;
 use Laminas\Form\Form;
 
-class LicenceAddressesTest extends MockeryTestCase
+final class LicenceAddressesTest extends MockeryTestCase
 {
     protected $sut;
 
-    protected $fsm;
-
     protected $formHelper;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class)->makePartial();

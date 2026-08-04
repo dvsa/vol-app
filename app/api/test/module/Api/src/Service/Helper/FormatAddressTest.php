@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * FormatAddressTest
  */
-class FormatAddressTest extends MockeryTestCase
+final class FormatAddressTest extends MockeryTestCase
 {
     public function testFormat(): void
     {

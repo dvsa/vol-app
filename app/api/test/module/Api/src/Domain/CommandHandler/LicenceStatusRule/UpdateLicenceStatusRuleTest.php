@@ -28,7 +28,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class UpdateLicenceStatusRuleTest extends AbstractCommandHandlerTestCase
+final class UpdateLicenceStatusRuleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

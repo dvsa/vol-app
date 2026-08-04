@@ -12,10 +12,10 @@ use Mockery as m;
 use org\bovigo\vfs\vfsStream;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Document\AbstractDownload::class)]
-class AbstractDownloadTest extends QueryHandlerTestCase
+final class AbstractDownloadTest extends QueryHandlerTestCase
 {
-    public const MIME_TYPE = 'unit_mime';
-    public const MIME_TYPE_EXCLUDE = 'unit_EXC_mime';
+    public const string MIME_TYPE = 'unit_mime';
+    public const string MIME_TYPE_EXCLUDE = 'unit_EXC_mime';
 
     /** @var  AbstractDownloadStub */
     protected $sut;
@@ -79,9 +79,9 @@ class AbstractDownloadTest extends QueryHandlerTestCase
         //  call & check
         $actual = $this->sut->download($identifier, $path, $chosenFileName);
 
-        static::assertInstanceOf(\Laminas\Http\Response\Stream::class, $actual);
-        static::assertEquals($tmpFilePath, $actual->getStreamName());
-        static::assertEquals($expectContent, $actual->getBody());
+        $this->assertInstanceOf(\Laminas\Http\Response\Stream::class, $actual);
+        $this->assertEquals($tmpFilePath, $actual->getStreamName());
+        $this->assertEquals($expectContent, $actual->getBody());
 
         $expectHeaders = [
             'Content-Type' => $expect['mime'] . '; charset=UTF-8',
@@ -89,131 +89,129 @@ class AbstractDownloadTest extends QueryHandlerTestCase
             'Content-Disposition' => ($expect['isDownload'] ? 'attachment' : 'inline') .
                 ';filename="' . $expect['filename'] . '"',
         ];
-        static::assertEquals($expectHeaders, $actual->getHeaders()->toArray());
+        $this->assertEquals($expectHeaders, $actual->getHeaders()->toArray());
     }
 
-    public static function dpTestDownload(): array
+    public static function dpTestDownload(): \Iterator
     {
-        return [
-            [
-                'identifier' => 'unit_file.ext',
+        yield [
+            'identifier' => 'unit_file.ext',
+            'path' => '/unit_dir/unit_file1.pdf',
+            'isInline' => false,
+            "chosenFileName" => null,
+            'expect' => [
+                'mime' => self::MIME_TYPE,
+                'isDownload' => true,
                 'path' => '/unit_dir/unit_file1.pdf',
-                'isInline' => false,
-                "chosenFileName" => null,
-                'expect' => [
-                    'mime' => self::MIME_TYPE,
-                    'isDownload' => true,
-                    'path' => '/unit_dir/unit_file1.pdf',
-                    'filename' => 'unit_file.ext',
-                ],
+                'filename' => 'unit_file.ext',
             ],
-            [
-                'identifier' => 'unit_file.html',
-                'path' => null,
-                'isInline' => false,
-                "chosenFileName" => null,
-                'expect' => [
-                    'mime' => self::MIME_TYPE,
-                    'isDownload' => false,
-                    'path' => 'unit_file.html',
-                    'filename' => 'unit_file.html',
-                ],
+        ];
+        yield [
+            'identifier' => 'unit_file.html',
+            'path' => null,
+            'isInline' => false,
+            "chosenFileName" => null,
+            'expect' => [
+                'mime' => self::MIME_TYPE,
+                'isDownload' => false,
+                'path' => 'unit_file.html',
+                'filename' => 'unit_file.html',
             ],
-            [
-                'identifier' => 'dir/dir/unit_file.unit_excl_ext',
-                'path' => null,
-                'isInline' => false,
-                "chosenFileName" => null,
-                'expect' => [
-                    'mime' => self::MIME_TYPE_EXCLUDE,
-                    'isDownload' => true,
-                    'path' => 'dir/dir/unit_file.unit_excl_ext',
-                    'filename' => 'unit_file.unit_excl_ext',
-                ],
+        ];
+        yield [
+            'identifier' => 'dir/dir/unit_file.unit_excl_ext',
+            'path' => null,
+            'isInline' => false,
+            "chosenFileName" => null,
+            'expect' => [
+                'mime' => self::MIME_TYPE_EXCLUDE,
+                'isDownload' => true,
+                'path' => 'dir/dir/unit_file.unit_excl_ext',
+                'filename' => 'unit_file.unit_excl_ext',
             ],
-            [
-                'identifier' => 'unit_file.ext',
+        ];
+        yield [
+            'identifier' => 'unit_file.ext',
+            'path' => 'unti_path',
+            'isInline' => true,
+            "chosenFileName" => null,
+            'expect' => [
+                'mime' => self::MIME_TYPE,
+                'isDownload' => false,
                 'path' => 'unti_path',
-                'isInline' => true,
-                "chosenFileName" => null,
-                'expect' => [
-                    'mime' => self::MIME_TYPE,
-                    'isDownload' => false,
-                    'path' => 'unti_path',
-                    'filename' => 'unit_file.ext',
-                ],
+                'filename' => 'unit_file.ext',
             ],
-            [
-                'identifier' => '/foo/bar',
-                'path' => null,
-                'isInline' => false,
-                "chosenFileName" => null,
-                'expect' => [
-                    'mime' => self::MIME_TYPE,
-                    'isDownload' => true,
-                    'path' => '/foo/bar',
-                    'filename' => 'bar.txt',
-                ],
+        ];
+        yield [
+            'identifier' => '/foo/bar',
+            'path' => null,
+            'isInline' => false,
+            "chosenFileName" => null,
+            'expect' => [
+                'mime' => self::MIME_TYPE,
+                'isDownload' => true,
+                'path' => '/foo/bar',
+                'filename' => 'bar.txt',
             ],
-            [
-                'identifier' => 'unit_file.ext',
+        ];
+        yield [
+            'identifier' => 'unit_file.ext',
+            'path' => '/unit_dir/unit_file1.pdf',
+            'isInline' => false,
+            "chosenFileName" => 'chosen_filename',
+            'expect' => [
+                'mime' => self::MIME_TYPE,
+                'isDownload' => true,
                 'path' => '/unit_dir/unit_file1.pdf',
-                'isInline' => false,
-                "chosenFileName" => 'chosen_filename',
-                'expect' => [
-                    'mime' => self::MIME_TYPE,
-                    'isDownload' => true,
-                    'path' => '/unit_dir/unit_file1.pdf',
-                    'filename' => 'chosen_filename.ext',
-                ],
+                'filename' => 'chosen_filename.ext',
             ],
-            [
-                'identifier' => 'unit_file.html',
-                'path' => null,
-                'isInline' => false,
-                "chosenFileName" => 'chosen_filename',
-                'expect' => [
-                    'mime' => self::MIME_TYPE,
-                    'isDownload' => false,
-                    'path' => 'unit_file.html',
-                    'filename' => 'chosen_filename.html',
-                ],
+        ];
+        yield [
+            'identifier' => 'unit_file.html',
+            'path' => null,
+            'isInline' => false,
+            "chosenFileName" => 'chosen_filename',
+            'expect' => [
+                'mime' => self::MIME_TYPE,
+                'isDownload' => false,
+                'path' => 'unit_file.html',
+                'filename' => 'chosen_filename.html',
             ],
-            [
-                'identifier' => 'dir/dir/unit_file.unit_excl_ext',
-                'path' => null,
-                'isInline' => false,
-                "chosenFileName" => 'chosen_filename',
-                'expect' => [
-                    'mime' => self::MIME_TYPE_EXCLUDE,
-                    'isDownload' => true,
-                    'path' => 'dir/dir/unit_file.unit_excl_ext',
-                    'filename' => 'chosen_filename.unit_excl_ext',
-                ],
+        ];
+        yield [
+            'identifier' => 'dir/dir/unit_file.unit_excl_ext',
+            'path' => null,
+            'isInline' => false,
+            "chosenFileName" => 'chosen_filename',
+            'expect' => [
+                'mime' => self::MIME_TYPE_EXCLUDE,
+                'isDownload' => true,
+                'path' => 'dir/dir/unit_file.unit_excl_ext',
+                'filename' => 'chosen_filename.unit_excl_ext',
             ],
-            [
-                'identifier' => 'unit_file.ext',
+        ];
+        yield [
+            'identifier' => 'unit_file.ext',
+            'path' => 'unti_path',
+            'isInline' => true,
+            "chosenFileName" => 'chosen_filename.txt',
+            'expect' => [
+                'mime' => self::MIME_TYPE,
+                'isDownload' => false,
                 'path' => 'unti_path',
-                'isInline' => true,
-                "chosenFileName" => 'chosen_filename.txt',
-                'expect' => [
-                    'mime' => self::MIME_TYPE,
-                    'isDownload' => false,
-                    'path' => 'unti_path',
-                    'filename' => 'chosen_filename.txt.ext',
-                ],
+                'filename' => 'chosen_filename.txt.ext',
             ],
-            [
-                'identifier' => '/foo/bar',
-                'path' => null,
-                'isInline' => false,
-                "chosenFileName" => 'chosen_filename',
-                'expect' => [
-                    'mime' => self::MIME_TYPE,
-                    'isDownload' => true,
-                    'path' => '/foo/bar',
-                    'filename' => 'chosen_filename.txt',
-                ],
+        ];
+        yield [
+            'identifier' => '/foo/bar',
+            'path' => null,
+            'isInline' => false,
+            "chosenFileName" => 'chosen_filename',
+            'expect' => [
+                'mime' => self::MIME_TYPE,
+                'isDownload' => true,
+                'path' => '/foo/bar',
+                'filename' => 'chosen_filename.txt',
             ],
         ];
     }

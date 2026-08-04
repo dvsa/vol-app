@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsSystemUser;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class IsSystemUserTest extends AbstractHandlerTestCase
+final class IsSystemUserTest extends AbstractHandlerTestCase
 {
     /**
      * @var IsSystemUser

@@ -14,7 +14,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class LetterTestDataControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LetterTestDataController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LetterTestDataController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         assert($translationHelper instanceof TranslationHelperService);

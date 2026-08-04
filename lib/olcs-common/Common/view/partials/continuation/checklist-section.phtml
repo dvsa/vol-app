@@ -1,0 +1,24 @@
+<table  class="checklist-table">
+    <tbody>
+        <?php
+            foreach ($this->data as $line) {
+                echo '<tr>';
+                foreach ($line as $key => $cell) {
+                    $class = '';
+                    if ($key === (count($line) - 1) && count($line) !== 1) {
+                        $class = 'class="td--right-aligned"';
+                    }
+                    if (isset($cell['header']) && $cell['header']) {
+                        $openTag = '<th ' . $class . '><h4>';
+                        $closeTag = '</h4></th>';
+                    } else {
+                        $openTag = '<td ' . $class . '>';
+                        $closeTag = '</td>';
+                    }
+                    echo $openTag . $cell['value'] . $closeTag;
+                }
+                echo '</tr>';
+            }
+        ?>
+    </tbody>
+</table>

@@ -32,7 +32,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class RefundFeeTest extends AbstractCommandHandlerTestCase
+final class RefundFeeTest extends AbstractCommandHandlerTestCase
 {
     protected $mockCpmsService;
 
@@ -164,7 +164,7 @@ class RefundFeeTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             CancelFeeCmd::class,
             ['id' => $feeId],
-            (new Result())->addMessage('fee cancelled')
+            new Result()->addMessage('fee cancelled')
         );
 
         // assertions

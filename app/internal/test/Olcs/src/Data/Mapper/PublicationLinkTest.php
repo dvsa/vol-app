@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * PublicationLink Test
  */
-class PublicationLinkTest extends MockeryTestCase
+final class PublicationLinkTest extends MockeryTestCase
 {
     /**
      * Tests mapFromForm
@@ -52,9 +52,9 @@ class PublicationLinkTest extends MockeryTestCase
     /**
      * Data provider for mapFromResult
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function mapFromResultProvider(): array
+    public static function mapFromResultProvider(): \Iterator
     {
         $pubType = 'pub type';
         $trafficArea = 'trafficArea';
@@ -123,10 +123,7 @@ class PublicationLinkTest extends MockeryTestCase
             ],
             'readOnly' => $readOnly
         ];
-
-        return [
-            [$inputDataNew, $expectedIsNewOutput],
-            [$inputDataNotNew, $expectedNotNewOutput]
-        ];
+        yield [$inputDataNew, $expectedIsNewOutput];
+        yield [$inputDataNotNew, $expectedNotNewOutput];
     }
 }

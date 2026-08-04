@@ -9,8 +9,9 @@ use Dvsa\Olcs\Api\Domain\Repository\DocTemplateSearchView as DocTemplateSearchVi
 use Dvsa\Olcs\Transfer\Query\DocTemplate\FullList as FullDocTemplateList;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\DocTemplateSearchView::class)]
-class DocTemplateSearchViewTest extends RepositoryTestCase
+final class DocTemplateSearchViewTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(DocTemplateSearchViewRepo::class, true);
@@ -38,11 +39,9 @@ class DocTemplateSearchViewTest extends RepositoryTestCase
         $this->assertEquals($expected, $this->query);
     }
 
-    public static function fetchListDataProvider(): array
+    public static function fetchListDataProvider(): \Iterator
     {
-        return [
-            [[], '{QUERY}'],
-            [['category' => 11], '{QUERY} AND m.category = 11']
-        ];
+        yield [[], '{QUERY}'];
+        yield [['category' => 11], '{QUERY} AND m.category = 11'];
     }
 }

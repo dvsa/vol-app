@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\RegisteredNumber;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class RegisteredNumberTest extends \PHPUnit\Framework\TestCase
+final class RegisteredNumberTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

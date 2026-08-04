@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd" backupGlobals="true" colors="true" executionOrder="random" failOnDeprecation="true" failOnNotice="true" failOnWarning="true" failOnRisky="true" failOnIncomplete="true" failOnSkipped="true" failOnPhpunitDeprecation="true" failOnPhpunitNotice="true" failOnPhpunitWarning="true" displayDetailsOnTestsThatTriggerDeprecations="true" displayDetailsOnTestsThatTriggerNotices="true" displayDetailsOnTestsThatTriggerWarnings="true" displayDetailsOnIncompleteTests="true" displayDetailsOnSkippedTests="true" displayDetailsOnPhpunitDeprecations="true" displayDetailsOnPhpunitNotices="true" cacheDirectory=".phpunit.cache">
+  <php>
+    <ini name="date.timezone" value="UTC"/>
+    <!-- laminas-session >=2.27 eagerly starts the session when a Container is
+             constructed; under PHPUnit's CLI output session_start() would write
+             cookie + cache-limiter headers and warn "headers already sent" (failOnWarning
+             turns that into an error). Disabling both in tests avoids the header writes. -->
+    <ini name="session.use_cookies" value="0"/>
+    <ini name="session.cache_limiter" value=""/>
+  </php>
+  <testsuites>
+    <testsuite name="Unit">
+      <directory>test</directory>
+    </testsuite>
+  </testsuites>
+  <logging/>
+</phpunit>

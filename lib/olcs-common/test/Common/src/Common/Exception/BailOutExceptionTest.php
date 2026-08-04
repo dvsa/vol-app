@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+namespace CommonTest\Exception;
+
+use Common\Exception\BailOutException;
+
+/**
+ * Bail Out Exception Test
+ *
+ * @author Rob Caiger <rob@clocal.co.uk>
+ */
+final class BailOutExceptionTest extends \PHPUnit\Framework\TestCase
+{
+    public function testException(): void
+    {
+        $exception = new BailOutException('foo', 'bar');
+
+        $this->assertSame('foo', $exception->getMessage());
+        $this->assertEquals('bar', $exception->getResponse());
+    }
+}

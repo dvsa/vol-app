@@ -14,11 +14,11 @@ use Mockery as m;
  * Class MostSeriousInfringementTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class MostSeriousInfringementTest extends AbstractSubmissionSectionTestCase
+final class MostSeriousInfringementTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\MostSeriousInfringement::class;
 
-    protected const EXPECTED_RESULT = [
+    protected const array EXPECTED_RESULT = [
         'id' => 66,
         'notificationNumber' => 'notificationNo',
         'siCategory' => 'si_cat-desc',
@@ -31,19 +31,18 @@ class MostSeriousInfringementTest extends AbstractSubmissionSectionTestCase
     /**
      * Filter provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
         $case = static::getCase();
 
         $expectedResult = ['data' => ['overview' => static::EXPECTED_RESULT]];
 
-        return [
-            [$case, $expectedResult],
-        ];
+        yield [$case, $expectedResult];
     }
 
+    #[\Override]
     public static function getCase(): mixed
     {
         $case = parent::getCase();

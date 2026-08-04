@@ -49,6 +49,7 @@ return [
         [
             'title' => 'Group',
             'name' => 'groupLabel',
+            'sort' => 'groupLabel',
             'formatter' => fn($row) => Escape::html($row['groupLabel'] ?? ''),
         ],
         [
