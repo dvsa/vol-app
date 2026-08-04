@@ -15,7 +15,8 @@ class CanAccessSiWithId extends AbstractHandler implements AuthAwareInterface
     #[\Override]
     public function isValid($dto)
     {
-        if ($dto->getCase() !== null && !$this->seriousInfringementBelongsToCase($dto->getId(), $dto->getCase())) {
+        $case = $dto->getCase();
+        if ($case !== null && !$this->seriousInfringementBelongsToCase($dto->getId(), $case)) {
             return false;
         }
 

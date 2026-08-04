@@ -59,7 +59,6 @@ class CanAccessSiWithIdTest extends AbstractHandlerTestCase
         $dto->shouldReceive('getId')->andReturn(1);
         $dto->shouldReceive('getCase')->once()->andReturn(2);
 
-        $this->setIsGranted(Permission::INTERNAL_USER, false);
         $this->setIsValid('seriousInfringementBelongsToCase', [1, 2], false);
 
         $this->assertFalse($this->sut->isValid($dto));
