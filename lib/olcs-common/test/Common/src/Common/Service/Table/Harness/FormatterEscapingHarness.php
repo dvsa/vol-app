@@ -6,6 +6,8 @@ namespace CommonTest\Common\Service\Table\Harness;
 
 use Common\Service\Table\Formatter\FormatterPluginManager;
 use Common\Service\Table\Formatter\FormatterPluginManagerInterface;
+use Common\Service\Table\TableBuilder;
+use Mockery as m;
 
 /**
  * Calls every formatter directly with a hostile row and reports which emit it raw.
@@ -59,6 +61,14 @@ final class FormatterEscapingHarness
         $unprobed = [];
 
         $container = HarnessContainer::create();
+
+        // Formatter\TaskCheckbox's factory asks the container for 'TableBuilder'. Registered here
+        // rather than in HarnessContainer because TableEscapingHarness registers the real one it
+        // builds, and ServiceManager will not replace a service that already has an instance.
+        $tableBuilder = m::mock(TableBuilder::class);
+        $tableBuilder->shouldIgnoreMissing('');
+        $container->setService('TableBuilder', $tableBuilder);
+
         /** @var FormatterPluginManager $plugins */
         $plugins = $container->get(FormatterPluginManager::class);
 
@@ -164,7 +174,10 @@ final class FormatterEscapingHarness
                     // assertion stays as strong, so nothing is lost by being imprecise. For numeric
                     // and date it would silently de-probe the whole row, so those give up instead
                     // and are reported as undrivable, which is the honest answer.
-                    if ($type !== self::TYPE_STRING && $type !== self::TYPE_ARRAY) {
+                    // Only strings widen. An array substituted into every remaining key reaches
+                    // places that wanted a scalar — Escape::html() rejects arrays outright — so a
+                    // failure that cannot name its key is reported rather than guessed at.
+                    if ($type !== self::TYPE_STRING) {
                         throw $e;
                     }
 

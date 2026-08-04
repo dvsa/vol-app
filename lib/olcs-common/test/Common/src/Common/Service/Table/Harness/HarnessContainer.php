@@ -82,9 +82,15 @@ final class HarnessContainer
         // match() has to return a RouteMatch, not the catch-all string. Several formatters branch
         // on $this->router->match($request)->getMatchedRouteName(), and answering with a string
         // makes them die on "getMatchedRouteName() on string" before they format anything.
-        $routeMatch = m::mock(\Laminas\Router\RouteMatch::class);
+        // Http\RouteMatch, not the base class: Formatter\InternalConversationLink type-hints the
+        // HTTP subclass, and a mock of the parent is rejected by the constructor.
+        $routeMatch = m::mock(\Laminas\Router\Http\RouteMatch::class);
         $routeMatch->shouldReceive('getMatchedRouteName')->withNoArgs()->andReturn('stub-route');
         $routeMatch->shouldReceive('getParams')->withNoArgs()->andReturn([]);
+        // "type" decides which route a conversation link builds and is validated against a known
+        // list, so the catch-all string makes InternalConversationLink throw before it formats.
+        // Declared first because Mockery matches the most recently declared expectation that fits.
+        $routeMatch->shouldReceive('getParam')->with('type')->andReturn('licence');
         $routeMatch->shouldReceive('getParam')->withAnyArgs()->andReturn('stub-param');
         $routeMatch->shouldIgnoreMissing('stub-route');
 
@@ -122,10 +128,37 @@ final class HarnessContainer
 
         $container = new ServiceManager(['services' => $services]);
 
-        $container->setService(
-            FormatterPluginManager::class,
-            new FormatterPluginManager($container, self::formatterConfig()),
-        );
+        $plugins = new FormatterPluginManager($container, self::formatterConfig());
+        $container->setService(FormatterPluginManager::class, $plugins);
+
+        // Three formatter factories reach for services the plugin manager does not provide,
+        // because they resolve out of the application container rather than out of the plugin
+        // manager they themselves live in. Registered afterwards, since two of them are formatters
+        // and need the plugin manager to exist first.
+        //
+        // 'TableBuilder' is deliberately not among them: TableEscapingHarness registers the real one
+        // it builds, and ServiceManager refuses to replace a service that already has an instance.
+        // FormatterEscapingHarness, which renders no tables, supplies its own mock instead.
+
+        // Formatter\TmApplicationManagerType walks application->getMvcEvent()->getRouteMatch(),
+        // so the event has to be an object rather than the catch-all string.
+        $mvcEvent = m::mock(\Laminas\Mvc\MvcEvent::class);
+        $mvcEvent->shouldReceive('getRouteMatch')->withNoArgs()->andReturn($routeMatch);
+        $mvcEvent->shouldIgnoreMissing('');
+
+        $application = m::mock(\Laminas\Mvc\Application::class);
+        $application->shouldReceive('getMvcEvent')->withNoArgs()->andReturn($mvcEvent);
+        $application->shouldIgnoreMissing('');
+        $container->setService('Application', $application);
+
+        foreach (
+            [
+            \Common\Service\Table\Formatter\Date::class,
+            \Common\Service\Table\Formatter\StackValue::class,
+            ] as $formatter
+        ) {
+            $container->setService($formatter, $plugins->get($formatter));
+        }
 
         return $container;
     }

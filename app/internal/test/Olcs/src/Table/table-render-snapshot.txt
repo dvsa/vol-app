@@ -4,7 +4,7 @@
 # something which was not a row value got escaped. Regenerate deliberately, never to
 # make a red build green.
 #
-# 133 rendered, 15 could not be rendered by the probe.
+# 134 rendered, 14 could not be rendered by the probe.
 #
 0289cd28f6c957c0b172f203ef47e64a5ef14e85a7b4a3086b2fadf30f8670a9  NonPi.table.php
 5a34874dd7f4c292a8ade5d5cd093da69fc0a8976de9c2f13fa37c641a13c0bb  admin-bus-notice-period.table.php
@@ -133,6 +133,7 @@ ba8eb5e9228ee1e320d9992ca43a2eab1ca03210bc03d10d8219a624e46e6321  tasks.table.ph
 d8a26b7f74e46562bb0cb991fff857e73217c43e9bdb0269a50ce47df048750f  tm-details.table.php
 20ba58dd4789d90b69f615576d35bdd40bade5441e0a122c41d022ad45ef09e4  tm-other-employment.table.php
 27bd75ce49c3c7830880ffd3df99445c7488b84b6bad17e94aa7aaa6f828bf12  tm-qualifications.table.php
+36da6c426e189e7eda5dc2f42df2c78b7241bc828e8e3116e33576a35b63c08b  tm.applications.table.php
 9847f3224e0cfeee25f188bbe3fef9ee79debf4a4f4ff0f3e6cd564c2c41e510  tm.licences.table.php
 bd680add7e93f28841f7b3f7c224eed7a9dc9c2d567c1134b6ad4fa159e31e18  tm.otherlicences-licences.table.php
 45b6c3f9027065d94a314933cdfde25d26923811bb56892b21298294fbd1bb8e  tm.qualifications.table.php
@@ -150,7 +151,6 @@ skipped                                                           fees.table.php
 skipped                                                           messages-list.table.php
 skipped                                                           oppositions.table.php
 skipped                                                           publication.table.php
-skipped                                                           tm.applications.table.php
 skipped                                                           tm.publication.table.php
 skipped                                                           transaction-fees.table.php
 skipped                                                           transport-managers.table.php
