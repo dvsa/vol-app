@@ -1,55 +1,165 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Document\AnalyseDocument;
 
+use Dvsa\Olcs\Api\Domain\Command\Document\AnalyseDocumentCommandInterface;
+use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\ConfigAwareInterface;
 use Dvsa\Olcs\Api\Domain\ConfigAwareTrait;
-use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
-use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
+use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
 use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Entity;
 use Dvsa\Olcs\Api\Service\EventBridge\EventBridge;
 use Dvsa\Olcs\Api\Service\EventBridge\Events\EventInterface;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisTokenGenerator;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
-use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
+use Olcs\Logging\Log\Logger;
 
-abstract class AnalyseDocument extends AbstractCommandHandler implements TransactionedInterface, ConfigAwareInterface
+/**
+ * Given an application id, resolves its evidence documents and requests analysis of each.
+ *
+ * Two things here are load-bearing:
+ *
+ * - The row is persisted before the event is emitted, so anything that loses the work - a
+ *   failed emit, lost delivery, a dead consumer - leaves a stale PENDING row for the sweeper.
+ * - This must not implement TransactionedInterface. Doctrine nests rather than isolates
+ *   transactions, so an inner rollback marks the connection rollback-only and fails the
+ *   caller's commit; a failure here has to stay containable by the caller.
+ */
+abstract class AnalyseDocument extends AbstractCommandHandler implements ConfigAwareInterface
 {
     use ConfigAwareTrait;
 
-    protected readonly EventBridge $eventBridgeService;
+    protected $repoServiceName = Repository\DocumentAnalysis::class;
 
-    protected $repoServiceName = Repository\Document::class;
+    protected $extraRepos = ['Application', Repository\Document::class];
 
-    public function __construct(EventBridge $eventBridgeService)
-    {
-        $this->eventBridgeService = $eventBridgeService;
+    public function __construct(
+        protected readonly EventBridge $eventBridgeService,
+        protected readonly AnalysisTokenGenerator $tokenGenerator
+    ) {
     }
 
+    /**
+     * @param AnalyseDocumentCommandInterface $command
+     */
     #[\Override]
     public function handleCommand(CommandInterface $command)
     {
+        if (!$command instanceof AnalyseDocumentCommandInterface) {
+            throw new RuntimeException(sprintf('%s cannot handle %s', static::class, $command::class));
+        }
+
         /** @var Entity\Application\Application $application */
-        $application = $command->getApplication();
+        $application = $this->getRepo('Application')->fetchById($command->getApplication());
 
-        /** @var Entity\Doc\Document|null $providedDocument */
-        $providedDocument = $command->getDocument();
-        $document = $providedDocument ?? $this->resolveDocumentForApplication($application);
+        $documents = $this->resolveDocuments($application, $command->getDocument());
 
-        $this->eventBridgeService->emit($this->createEvent($application, $document));
+        if ($documents === []) {
+            $this->result->addMessage($this->getNoDocumentsMessage($application));
+
+            return $this->result;
+        }
+
+        foreach ($this->filterAlreadyAnalysed($documents) as $document) {
+            $this->submitDocument($application, $document);
+        }
 
         return $this->result;
     }
 
-    protected function resolveDocumentForApplication(Entity\Application\Application $application): Entity\Doc\Document
-    {
-        $document = $this->findDocumentForApplication($application);
+    /** Row first, then event: if the emit throws, the sweeper owns the row from here. */
+    protected function submitDocument(
+        Entity\Application\Application $application,
+        Entity\Doc\Document $document
+    ): void {
+        [$binaryToken, $tokenString] = $this->tokenGenerator->generate();
 
-        if ($document === null) {
-            throw new NotFoundException($this->getMissingDocumentMessage($application));
+        /** @var Repository\DocumentAnalysis $analysisRepo */
+        $analysisRepo = $this->getRepo();
+        $analysis = $analysisRepo->createPending($binaryToken, $application, $document);
+
+        $this->result->addId('documentAnalysis', $analysis->getId(), true);
+
+        try {
+            $this->eventBridgeService->emit($this->createEvent($application, $document, $tokenString));
+            $this->result->addMessage(sprintf('Analysis requested for document %d', $document->getId()));
+        } catch (\Exception $e) {
+            // Deliberate: the row stays PENDING and the sweeper resolves it.
+            Logger::err(
+                'Failed to emit IDP analysis event; row left PENDING for the sweeper',
+                [
+                    'application_id' => $application->getId(),
+                    'document_id' => $document->getId(),
+                    'analysis_token' => $tokenString,
+                    'exception' => [
+                        'class' => $e::class,
+                        'message' => $e->getMessage(),
+                    ],
+                ]
+            );
+
+            $this->result->addMessage(
+                sprintf('Analysis event emit failed for document %d; left pending', $document->getId())
+            );
+        }
+    }
+
+    /**
+     * Skip documents that already have an in-flight or recently successful analysis.
+     *
+     * @param Entity\Doc\Document[] $documents
+     *
+     * @return Entity\Doc\Document[]
+     */
+    protected function filterAlreadyAnalysed(array $documents): array
+    {
+        $documentIds = array_map(static fn(Entity\Doc\Document $d): int => (int)$d->getId(), $documents);
+
+        /** @var Repository\DocumentAnalysis $analysisRepo */
+        $analysisRepo = $this->getRepo();
+        $skip = $analysisRepo->fetchDocumentIdsWithActiveAnalysis($documentIds, $this->getSuccessWindowStart());
+
+        if ($skip === []) {
+            return $documents;
         }
 
-        return $document;
+        $skipLookup = array_flip($skip);
+        $remaining = [];
+
+        foreach ($documents as $document) {
+            if (isset($skipLookup[(int)$document->getId()])) {
+                $this->result->addMessage(
+                    sprintf('Document %d already has an active analysis; skipped', $document->getId())
+                );
+                continue;
+            }
+
+            $remaining[] = $document;
+        }
+
+        return $remaining;
+    }
+
+    /**
+     * The explicit document if the command named one, else every evidence document.
+     *
+     * @return Entity\Doc\Document[]
+     */
+    protected function resolveDocuments(
+        Entity\Application\Application $application,
+        ?int $documentId
+    ): array {
+        if ($documentId !== null) {
+            /** @var Entity\Doc\Document $document */
+            $document = $this->getRepo(Repository\Document::class)->fetchById($documentId);
+
+            return [$document];
+        }
+
+        return $this->findDocumentsForApplication($application);
     }
 
     protected function getDocumentStoreBucket(): string
@@ -69,26 +179,24 @@ abstract class AnalyseDocument extends AbstractCommandHandler implements Transac
         return $key;
     }
 
-    protected function buildAnalysisToken(string $prefix, Entity\Application\Application $application, Entity\Doc\Document $document): string
+    /** Start of the window inside which an existing SUCCESS suppresses re-analysis. */
+    protected function getSuccessWindowStart(): \DateTimeInterface
     {
-        return sprintf('%s-%d-%d', $prefix, $application->getId(), $document->getId());
+        $hours = (int)($this->getConfig()['idp']['dedupe_success_window_hours'] ?? 24);
+
+        return new \DateTimeImmutable(sprintf('-%d hours', max(0, $hours)));
     }
 
-    protected function buildBaseApplicantProfile(Entity\Application\Application $application): array
-    {
-        return [
-            'applicationId' => $application->getId(),
-        ];
-    }
+    /**
+     * @return Entity\Doc\Document[]
+     */
+    abstract protected function findDocumentsForApplication(Entity\Application\Application $application): array;
 
-    abstract protected function findDocumentForApplication(Entity\Application\Application $application): ?Entity\Doc\Document;
-
-    abstract protected function buildApplicantProfile(Entity\Application\Application $application): array;
-
-    abstract protected function getMissingDocumentMessage(Entity\Application\Application $application): string;
+    abstract protected function getNoDocumentsMessage(Entity\Application\Application $application): string;
 
     abstract protected function createEvent(
         Entity\Application\Application $application,
-        Entity\Doc\Document $document
+        Entity\Doc\Document $document,
+        string $analysisToken
     ): EventInterface;
 }

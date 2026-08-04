@@ -5,27 +5,45 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Document\AnalyseDocument;
 
 use Aws\EventBridge\EventBridgeClient;
+use Doctrine\Common\Collections\ArrayCollection;
 use DateTimeImmutable;
+use Dvsa\Olcs\Api\Domain\Command\Document\AnalyseFinancialEvidence;
 use Dvsa\Olcs\Api\Domain\CommandHandler\Document\AnalyseDocument\FinancialEvidence;
-use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\RepositoryServiceManager;
 use Dvsa\Olcs\Api\Domain\Repository\TransactionManagerInterface;
+use Dvsa\Olcs\Api\Domain\Repository\Application as ApplicationRepo;
 use Dvsa\Olcs\Api\Domain\Repository\Document as DocumentRepo;
+use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\Doc\Document;
+use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis;
 use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 use Dvsa\Olcs\Api\Service\EventBridge\EventBridge;
+use Dvsa\Olcs\Api\Service\Idp\AnalysisTokenGenerator;
+use Dvsa\Olcs\Api\Service\Idp\ApplicantProfileBuilder;
 use Dvsa\Olcs\Api\Domain\CommandHandlerManager;
 use Dvsa\Olcs\Api\Domain\QueryHandlerManager;
-use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Mockery as m;
 
 final class FinancialEvidenceTest extends TestCase
 {
+    private const APPLICATION_ID = 1551058;
+
+    private const PROFILE = [
+        'organisation_name' => 'Test Haulage Ltd',
+        'trading_name' => 'Test Haulage',
+        'business_type' => 'Registered Company',
+        'licence_type' => 'Standard National',
+        'vehicles_requested' => 12,
+        'required_finance' => 94600.0,
+    ];
+
     private m\MockInterface $eventBridgeClient;
     private m\MockInterface $documentRepo;
+    private m\MockInterface $applicationRepo;
+    private m\MockInterface $analysisRepo;
     private FinancialEvidence $sut;
 
     protected function tearDown(): void
@@ -37,11 +55,25 @@ final class FinancialEvidenceTest extends TestCase
     {
         $this->eventBridgeClient = m::mock(EventBridgeClient::class);
         $this->documentRepo = m::mock(DocumentRepo::class);
+        $this->applicationRepo = m::mock(ApplicationRepo::class);
+        $this->analysisRepo = m::mock(DocumentAnalysisRepo::class);
 
-        $sut = new FinancialEvidence(new EventBridge($this->eventBridgeClient));
+        $this->applicationRepo->shouldReceive('getCategoryReference')->andReturn('cat-ref');
+        $this->applicationRepo->shouldReceive('getSubCategoryReference')->andReturn('subcat-ref');
+
+        $profileBuilder = m::mock(ApplicantProfileBuilder::class);
+        $profileBuilder->shouldReceive('build')->andReturn(self::PROFILE);
+
+        $sut = new FinancialEvidence(
+            new EventBridge($this->eventBridgeClient),
+            new AnalysisTokenGenerator(),
+            $profileBuilder
+        );
 
         $repoManager = m::mock(RepositoryServiceManager::class);
         $repoManager->shouldReceive('get')->with(DocumentRepo::class)->andReturn($this->documentRepo);
+        $repoManager->shouldReceive('get')->with(DocumentAnalysisRepo::class)->andReturn($this->analysisRepo);
+        $repoManager->shouldReceive('get')->with('Application')->andReturn($this->applicationRepo);
 
         $container = m::mock(ContainerInterface::class);
         $container->shouldReceive('get')->with('config')->andReturn([
@@ -51,6 +83,7 @@ final class FinancialEvidenceTest extends TestCase
                     'key_prefix' => 'prefixed',
                 ],
             ],
+            'idp' => ['dedupe_success_window_hours' => 24],
         ]);
         $container->shouldReceive('get')->with('RepositoryServiceManager')->andReturn($repoManager);
         $container->shouldReceive('get')->with('TransactionManager')->andReturn(m::mock(TransactionManagerInterface::class));
@@ -58,78 +91,217 @@ final class FinancialEvidenceTest extends TestCase
         $container->shouldReceive('get')->with('QueryHandlerManager')->andReturn(m::mock(QueryHandlerManager::class));
         $container->shouldReceive('get')->with(IdentityProviderInterface::class)->andReturn(m::mock(IdentityProviderInterface::class));
 
-        $this->sut = $sut->__invoke($container, null)->getWrapped();
+        // Not TransactionedInterface, so __invoke returns the handler itself rather than a
+        // TransactioningCommandHandler wrapper.
+        $this->sut = $sut->__invoke($container, null);
     }
 
-    public function testHandleCommandFetchesLatestFinancialEvidenceDocumentWhenMissingFromCommand(): void
+    public function testEmitsOneEventPerDocumentMatchingTheEventAContract(): void
     {
-        $application = m::mock(Application::class);
-        $application->shouldReceive('getId')->times(2)->andReturn(1551058);
+        $application = $this->givenApplicationWithDocuments([
+            [111, '/folder/statement-jan.pdf'],
+            [222, '/folder/statement-feb.pdf'],
+        ]);
 
-        $document = m::mock(Document::class);
-        $document->shouldReceive('getId')->once()->andReturn(4321);
-        $document->shouldReceive('getIdentifier')->once()->andReturn('/folder/financial-evidence.pdf');
-
-        $command = m::mock(CommandInterface::class);
-        $command->shouldReceive('getApplication')->once()->andReturn($application);
-        $command->shouldReceive('getDocument')->once()->andReturn(null);
-
-        $this->documentRepo
-            ->shouldReceive('fetchLatestFinancialEvidenceForApplication')
-            ->with($application)
+        $this->analysisRepo->shouldReceive('fetchDocumentIdsWithActiveAnalysis')
+            ->with([111, 222], m::type(\DateTimeInterface::class))
             ->once()
-            ->andReturn($document);
+            ->andReturn([]);
+
+        $this->expectPendingRowCreatedFor([111, 222]);
+
+        $captured = [];
+        $this->eventBridgeClient->shouldReceive('putEvents')
+            ->twice()
+            ->andReturnUsing(function (array $payload) use (&$captured) {
+                $captured[] = $payload['Entries'][0];
+                return null;
+            });
+
+        $this->sut->handleCommand(
+            AnalyseFinancialEvidence::create(['application' => self::APPLICATION_ID])
+        );
+
+        $this->assertCount(2, $captured, 'one event per document');
+
+        foreach ($captured as $i => $entry) {
+            $this->assertSame('vol.api', $entry['Source']);
+            $this->assertSame('FinancialEvidenceDocumentSubmitted', $entry['DetailType']);
+            $this->assertArrayNotHasKey(
+                'Version',
+                $entry,
+                'Version is not part of the PutEventsRequestEntry schema; it belongs in Detail'
+            );
+            $this->assertInstanceOf(DateTimeImmutable::class, $entry['Time']);
+
+            $detail = json_decode($entry['Detail'], true, 512, JSON_THROW_ON_ERROR);
+
+            $this->assertSame('1', $detail['version']);
+            $this->assertSame(self::APPLICATION_ID, $detail['application_id']);
+            // assertEquals, not assertSame: a whole-number float round-trips through JSON as
+            // an int (94600.0 -> 94600). Still a JSON number, so the contract holds.
+            $this->assertEquals(self::PROFILE, $detail['applicant_profile']);
+            $this->assertSame(
+                [
+                    'vol_document_id' => $i === 0 ? 111 : 222,
+                    'bucket' => 'test-bucket',
+                    'key' => $i === 0 ? 'prefixed/folder/statement-jan.pdf' : 'prefixed/folder/statement-feb.pdf',
+                ],
+                $detail['document']
+            );
+            $this->assertMatchesRegularExpression(
+                '/^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/',
+                $detail['analysis_token'],
+                'analysis_token must be a UUIDv7'
+            );
+        }
+
+        $this->assertNotSame(
+            $captured[0]['Detail'],
+            $captured[1]['Detail'],
+            'each document gets its own token'
+        );
+        unset($application);
+    }
+
+    public function testSkipsDocumentsThatAlreadyHaveAnActiveAnalysis(): void
+    {
+        $this->givenApplicationWithDocuments([
+            [111, '/folder/statement-jan.pdf'],
+            [222, '/folder/statement-feb.pdf'],
+        ]);
+
+        $this->analysisRepo->shouldReceive('fetchDocumentIdsWithActiveAnalysis')
+            ->with([111, 222], m::type(\DateTimeInterface::class))
+            ->once()
+            ->andReturn([111]);
+
+        $this->expectPendingRowCreatedFor([222]);
+
+        $this->eventBridgeClient->shouldReceive('putEvents')->once();
+
+        $result = $this->sut->handleCommand(
+            AnalyseFinancialEvidence::create(['application' => self::APPLICATION_ID])
+        );
+
+        $this->assertContains('Document 111 already has an active analysis; skipped', $result->getMessages());
+    }
+
+    /** A failed emit must leave a PENDING row for the sweeper, not lose the work. */
+    public function testLeavesRowPendingAndDoesNotThrowWhenTheEmitFails(): void
+    {
+        $this->givenApplicationWithDocuments([[111, '/folder/statement-jan.pdf']]);
+
+        $this->analysisRepo->shouldReceive('fetchDocumentIdsWithActiveAnalysis')->once()->andReturn([]);
+        $this->expectPendingRowCreatedFor([111]);
 
         $this->eventBridgeClient->shouldReceive('putEvents')
             ->once()
-            ->with(m::on(function (array $payload): bool {
-                $entry = $payload['Entries'][0] ?? null;
-                if ($entry === null) {
-                    return false;
-                }
+            ->andThrow(new \RuntimeException('EventBridge unavailable'));
 
-                $detail = json_decode($entry['Detail'] ?? '', true, 512, JSON_THROW_ON_ERROR);
+        $result = $this->sut->handleCommand(
+            AnalyseFinancialEvidence::create(['application' => self::APPLICATION_ID])
+        );
 
-                return $entry['Source'] === 'olcs.api'
-                    && $entry['Version'] === 1
-                    && $entry['DetailType'] === \Dvsa\Olcs\Api\Service\EventBridge\Events\AnalyseFinancialEvidenceDocument::class
-                    && $entry['Time'] instanceof DateTimeImmutable
-                    && $detail === [
-                        'document_analysis_token' => 'financial-evidence-1551058-4321',
-                        'document' => [
-                            'bucket' => 'test-bucket',
-                            'key' => 'prefixed/folder/financial-evidence.pdf',
-                        ],
-                        'applicantProfile' => [
-                            'applicationId' => 1551058,
-                        ],
-                    ];
-            }));
-
-        $this->assertNotNull($this->sut->handleCommand($command));
+        $this->assertContains(
+            'Analysis event emit failed for document 111; left pending',
+            $result->getMessages()
+        );
     }
 
-    public function testHandleCommandThrowsWhenNoFinancialEvidenceDocumentExists(): void
+    public function testDoesNothingWhenTheApplicationHasNoFinancialEvidence(): void
     {
-        $application = m::mock(Application::class);
-        $application->shouldReceive('getId')->once()->andReturn(1551058);
+        $this->givenApplicationWithDocuments([]);
 
-        $command = m::mock(CommandInterface::class);
-        $command->shouldReceive('getApplication')->once()->andReturn($application);
-        $command->shouldReceive('getDocument')->once()->andReturn(null);
-
-        $this->documentRepo
-            ->shouldReceive('fetchLatestFinancialEvidenceForApplication')
-            ->with($application)
-            ->once()
-            ->andReturn(null);
-
+        $this->analysisRepo->shouldNotReceive('createPending');
         $this->eventBridgeClient->shouldNotReceive('putEvents');
 
-        $this->expectException(NotFoundException::class);
-        $this->expectExceptionMessage('No financial evidence document found for application 1551058');
+        $result = $this->sut->handleCommand(
+            AnalyseFinancialEvidence::create(['application' => self::APPLICATION_ID])
+        );
 
-        $this->sut->handleCommand($command);
+        $this->assertContains(
+            'No financial evidence documents found for application 1551058',
+            $result->getMessages()
+        );
+    }
+
+    public function testUsesTheDocumentNamedByTheCommandWhenSupplied(): void
+    {
+        $application = m::mock(Application::class);
+        $application->shouldReceive('getId')->andReturn(self::APPLICATION_ID);
+        $application->shouldNotReceive('getApplicationDocuments');
+
+        $this->applicationRepo->shouldReceive('fetchById')
+            ->with(self::APPLICATION_ID)->once()->andReturn($application);
+
+        $document = $this->mockDocument(999, '/folder/named.pdf');
+        $this->documentRepo->shouldReceive('fetchById')->with(999)->once()->andReturn($document);
+
+        $this->analysisRepo->shouldReceive('fetchDocumentIdsWithActiveAnalysis')
+            ->with([999], m::type(\DateTimeInterface::class))->once()->andReturn([]);
+        $this->expectPendingRowCreatedFor([999]);
+
+        $this->eventBridgeClient->shouldReceive('putEvents')->once();
+
+        $result = $this->sut->handleCommand(AnalyseFinancialEvidence::create([
+            'application' => self::APPLICATION_ID,
+            'document' => 999,
+        ]));
+
+        $this->assertContains('Analysis requested for document 999', $result->getMessages());
+    }
+
+    /**
+     * @param array<int, array{0: int, 1: string}> $documents
+     */
+    private function givenApplicationWithDocuments(array $documents): m\MockInterface
+    {
+        $collection = new ArrayCollection(
+            array_map(fn(array $d): m\MockInterface => $this->mockDocument($d[0], $d[1]), $documents)
+        );
+
+        $application = m::mock(Application::class);
+        $application->shouldReceive('getId')->andReturn(self::APPLICATION_ID);
+        $application->shouldReceive('getApplicationDocuments')
+            ->with('cat-ref', 'subcat-ref')
+            ->once()
+            ->andReturn($collection);
+
+        $this->applicationRepo->shouldReceive('fetchById')
+            ->with(self::APPLICATION_ID)
+            ->once()
+            ->andReturn($application);
+
+        return $application;
+    }
+
+    private function mockDocument(int $id, string $identifier): m\MockInterface
+    {
+        $document = m::mock(Document::class);
+        $document->shouldReceive('getId')->andReturn($id);
+        $document->shouldReceive('getIdentifier')->andReturn($identifier);
+
+        return $document;
+    }
+
+    /**
+     * @param int[] $documentIds
+     */
+    private function expectPendingRowCreatedFor(array $documentIds): void
+    {
+        foreach ($documentIds as $documentId) {
+            $analysis = m::mock(DocumentAnalysis::class);
+            $analysis->shouldReceive('getId')->andReturn($documentId * 10);
+
+            $this->analysisRepo->shouldReceive('createPending')
+                ->once()
+                ->with(
+                    m::on(static fn(string $token): bool => strlen($token) === 16),
+                    m::type(Application::class),
+                    m::on(static fn($document): bool => (int)$document->getId() === $documentId)
+                )
+                ->andReturn($analysis);
+        }
     }
 }
-

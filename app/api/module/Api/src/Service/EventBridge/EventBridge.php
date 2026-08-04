@@ -22,11 +22,12 @@ readonly class EventBridge
         $this->eventBridgeClient->putEvents([
             'Entries' => [
                 [
+                    // No 'Version' key: it is not part of the PutEventsRequestEntry schema.
+                    // Event versioning belongs inside Detail.
                     'Source' => $event->getSource(),
-                    'Version' => $event->getVersion(),
                     'DetailType' => $event->getName(),
                     'Time' => new \DateTimeImmutable(),
-                    'Detail' => json_encode($event->getDetail(), JSON_THROW_ON_ERROR ),
+                    'Detail' => json_encode($event->getDetail(), JSON_THROW_ON_ERROR),
                 ],
             ],
         ]);
