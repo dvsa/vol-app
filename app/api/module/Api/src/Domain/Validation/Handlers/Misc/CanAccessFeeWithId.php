@@ -15,22 +15,19 @@ class CanAccessFeeWithId extends AbstractHandler implements AuthAwareInterface
 {
     use AuthAwareTrait;
 
-    /**
-     * @inheritdoc
-     */
     #[\Override]
     public function isValid($dto)
     {
-        if (!$this->isInternalUser() && !$this->canAccessFee($this->getId($dto))) {
+        if ($dto->getLicence() !== null && !$this->feeBelongsToLicence($this->getId($dto), $dto->getLicence())) {
             return false;
         }
 
-        if ($dto->getLicenceId() !== null) {
-            return $this->feeBelongsToLicence($this->getId($dto), $dto->getLicenceId());
+        if ($dto->getApplication() !== null && !$this->feeBelongsToApplication($this->getId($dto), $dto->getApplication())) {
+            return false;
         }
 
-        if ($dto->getApplicationId() !== null) {
-            return $this->feeBelongsToApplication($this->getId($dto), $dto->getApplicationId());
+        if (!$this->isInternalUser() && !$this->canAccessFee($this->getId($dto))) {
+            return false;
         }
 
         return true;

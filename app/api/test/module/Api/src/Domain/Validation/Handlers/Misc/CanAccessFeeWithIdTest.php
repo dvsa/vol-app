@@ -36,7 +36,7 @@ class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
 
         $this->setIsGranted(Permission::INTERNAL_USER, true);
 
-        $fee = m::mock();
+        $fee = m::mock(Fee::class);
         $this->mockRepo('Fee')->shouldReceive('fetchById')->with($id)->andReturn($fee);
 
         $this->assertTrue($this->sut->isValid($dto));
@@ -53,7 +53,7 @@ class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
 
         $this->setIsGranted(Permission::INTERNAL_USER, false);
 
-        $fee = m::mock();
+        $fee = m::mock(Fee::class);
         $this->mockRepo('Fee')->shouldReceive('fetchById')->with($id)->andReturn($fee);
 
         $this->assertTrue($this->sut->isValid($dto));
@@ -76,7 +76,8 @@ class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
         $id = 1;
         $dto = m::mock(CommandInterface::class);
         $dto->shouldReceive('getId')->andReturn($id);
-        $dto->shouldReceive('getLicenceId')->andReturn(212);
+        $dto->shouldReceive('getLicenceId')->once()->andReturn(212);
+        $dto->shouldReceive('getApplicationId')->never(); // proves licence check caught it
 
         $this->setIsGranted(Permission::INTERNAL_USER, true);
         $this->setIsValid('feeBelongsToLicence', [$id, 212], true);
@@ -89,7 +90,8 @@ class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
         $id = 1;
         $dto = m::mock(CommandInterface::class);
         $dto->shouldReceive('getId')->andReturn($id);
-        $dto->shouldReceive('getLicenceId')->andReturn(212);
+        $dto->shouldReceive('getLicenceId')->once()->andReturn(212);
+        $dto->shouldReceive('getApplicationId')->never(); // proves licence check caught it
 
         $this->setIsGranted(Permission::INTERNAL_USER, true);
         $this->setIsValid('feeBelongsToLicence', [$id, 212], false);
