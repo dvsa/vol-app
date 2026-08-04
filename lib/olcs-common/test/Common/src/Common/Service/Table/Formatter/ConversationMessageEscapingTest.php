@@ -28,6 +28,7 @@ final class ConversationMessageEscapingTest extends TestCase
         date_default_timezone_set('Europe/London');
     }
 
+    #[\Override]
     protected function tearDown(): void
     {
         // Restored to the timezone phpunit.xml.dist declares. Leaving a foreign one behind
