@@ -136,7 +136,8 @@ jobs:
       branch-build: true
     permissions:
       contents: read
-
+      id-token: write
+      packages: write
   # `branch` is deliberately not passed: assets.yaml derives its S3 path as
   # `inputs.branch && format('branch-{0}', inputs.branch) || inputs.version`, so passing `ref` +
   # `version` checks out the branch while writing to our single version prefix. With `branch` unset
