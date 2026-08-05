@@ -43,6 +43,10 @@ class CaseEntityNrStatus implements FormatterPluginManagerInterface
             );
         }
 
+        if (!isset($data['licence'])) {
+            return '';
+        }
+
         //  licence
         $lic = $data['licence'];
 
