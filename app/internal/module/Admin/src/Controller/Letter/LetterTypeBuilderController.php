@@ -53,6 +53,7 @@ class LetterTypeBuilderController extends AbstractInternalController implements 
      * The builder itself. Everything the composition list offers is loaded up front so reordering
      * and adding are local operations -- the preview is the only thing that needs the server.
      */
+    #[\Override]
     public function indexAction(): ViewModel
     {
         $letterTypeId = (int) $this->params()->fromRoute('id', 0);
