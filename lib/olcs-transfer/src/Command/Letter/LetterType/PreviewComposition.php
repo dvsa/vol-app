@@ -177,5 +177,4 @@ final class PreviewComposition extends AbstractCommand
     {
         return $this->selectedChoiceIds;
     }
-
 }

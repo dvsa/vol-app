@@ -6,6 +6,7 @@ use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
 
+// phpcs:disable Generic.Commenting.Todo.TaskFound
 /**
  * Override a to-do's wording for one letter.
  *
@@ -16,6 +17,7 @@ use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
  * @Transfer\RouteName("backend/letter/letter-instance-todo/single")
  * @Transfer\Method("PUT")
  */
+// phpcs:enable Generic.Commenting.Todo.TaskFound
 final class UpdateContent extends AbstractCommand
 {
     use Identity;
