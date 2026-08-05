@@ -4,7 +4,7 @@ set -euo pipefail
 
 # ===== CONFIG =====
 : "${PROXY:?PROXY not set}"
-: "${DOMAIN:?DOMAIN not set}"
+: "${FULL_DOMAIN:?FULL_DOMAIN not set}"
 : "${PRODTODEV_ASSUME_ROLE_ID:?PRODTODEV_ASSUME_ROLE_ID not set}"
 : "${M_DB_PASSWORD:?M_DB_PASSWORD not set}"
 
@@ -12,7 +12,7 @@ S3_BUCKET="devapp-olcs-pri-olcs-deploy-s3"
 S3_PREFIX="anondata"
 DUMP_DIR="/mnt/data/anondump"
 DUMP_FILE="olcs-db-anon-latest-import.sql.gz"
-RDS_HOST="olcsanondb-rds.${DOMAIN}"
+RDS_HOST="olcsanondb-rds.${FULL_DOMAIN}"
 DB_USER="master"
 PASS=${M_DB_PASSWORD}
 

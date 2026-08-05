@@ -42,14 +42,32 @@ module "ecr" {
           type = "expire"
         }
       },
+      # Branch builds (Deploy Env From Branch) get their own budget so their churn can never evict a
+      # CD image that a deployed environment is still pinned to. Without this they share the `*`
+      # bucket below, and since expiry is oldest-first, an environment parked on a branch image for a
+      # week can have that image deleted out from under it -> CannotPullContainerError on the next
+      # task placement. Must stay a lower rulePriority than the catch-all to take precedence.
+      {
+        rulePriority = 15,
+        description  = "Keep last 10 branch images",
+        selection = {
+          tagStatus      = "tagged",
+          tagPatternList = ["branch-*"],
+          countType      = "imageCountMoreThan",
+          countNumber    = 10
+        },
+        action = {
+          type = "expire"
+        }
+      },
       {
         rulePriority = 20,
-        description  = "Keep last 20 non-release images",
+        description  = "Keep last 30 non-release images",
         selection = {
           tagStatus      = "tagged",
           tagPatternList = ["*"],
           countType      = "imageCountMoreThan",
-          countNumber    = 20
+          countNumber    = 30
         },
         action = {
           type = "expire"
