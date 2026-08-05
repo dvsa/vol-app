@@ -22,25 +22,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="conviction",
- *    indexes={
- *        @ORM\Index(name="ix_conviction_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_conviction_conviction_category", columns={"conviction_category"}),
- *        @ORM\Index(name="ix_conviction_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_conviction_defendant_type", columns={"defendant_type"}),
- *        @ORM\Index(name="ix_conviction_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_conviction_transport_manager_id", columns={"transport_manager_id"}),
- *        @ORM\Index(name="uk_conviction_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_conviction_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'conviction')]
+#[ORM\Index(name: 'ix_conviction_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_conviction_conviction_category', columns: ['conviction_category'])]
+#[ORM\Index(name: 'ix_conviction_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_conviction_defendant_type', columns: ['defendant_type'])]
+#[ORM\Index(name: 'ix_conviction_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_conviction_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\UniqueConstraint(name: 'uk_conviction_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractConviction implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -54,227 +47,203 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * DefendantType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="defendant_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'defendant_type', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $defendantType;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'convictions', fetch: 'LAZY')]
     protected $case;
 
     /**
      * ConvictionCategory
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="conviction_category", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'conviction_category', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $convictionCategory;
 
     /**
      * Foreign Key to transport_manager
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
     protected $transportManager;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Offence date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="offence_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'offence_date', nullable: true)]
     protected $offenceDate;
 
     /**
      * Conviction date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="conviction_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'conviction_date', nullable: true)]
     protected $convictionDate;
 
     /**
      * Court
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="court", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'court', length: 70, nullable: true)]
     protected $court;
 
     /**
      * Penalty
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="penalty", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'penalty', length: 255, nullable: true)]
     protected $penalty;
 
     /**
      * New olcs field?
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="costs", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'costs', length: 255, nullable: true)]
     protected $costs;
 
     /**
      * msi
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="msi", nullable=true)
      */
+    #[ORM\Column(type: 'yesnonull', name: 'msi', nullable: true)]
     protected $msi;
 
     /**
      * isDealtWith
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_dealt_with", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_dealt_with', nullable: false, options: ['default' => 0])]
     protected $isDealtWith = 0;
 
     /**
      * Declared to TC
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_declared", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_declared', nullable: false, options: ['default' => 0])]
     protected $isDeclared = 0;
 
     /**
      * Birth date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="birth_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'birth_date', nullable: true)]
     protected $birthDate;
 
     /**
      * Person firstname
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="person_firstname", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'person_firstname', length: 70, nullable: true)]
     protected $personFirstname;
 
     /**
      * Length 70 because of ETL. Will hold some org names from legacy data.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="person_lastname", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'person_lastname', length: 70, nullable: true)]
     protected $personLastname;
 
     /**
      * Notes
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="notes", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'notes', length: 4000, nullable: true)]
     protected $notes;
 
     /**
      * Taken into consideration
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="taken_into_consideration", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'taken_into_consideration', length: 4000, nullable: true)]
     protected $takenIntoConsideration;
 
     /**
      * user entered category for non act
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="category_text", length=1024, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'category_text', length: 1024, nullable: true)]
     protected $categoryText;
 
     /**
      * Set if defendant type is operator. Copy of op name at time of conviction.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="operator_name", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'operator_name', length: 70, nullable: true)]
     protected $operatorName;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
@@ -298,7 +267,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param int $id new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setId($id)
     {
@@ -322,7 +291,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $defendantType new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setDefendantType($defendantType)
     {
@@ -346,7 +315,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setCase($case)
     {
@@ -370,7 +339,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $convictionCategory new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setConvictionCategory($convictionCategory)
     {
@@ -394,7 +363,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -418,7 +387,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -442,7 +411,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -466,7 +435,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $offenceDate new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setOffenceDate($offenceDate)
     {
@@ -496,7 +465,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $convictionDate new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setConvictionDate($convictionDate)
     {
@@ -526,7 +495,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $court new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setCourt($court)
     {
@@ -550,7 +519,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $penalty new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setPenalty($penalty)
     {
@@ -574,7 +543,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $costs new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setCosts($costs)
     {
@@ -598,7 +567,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $msi new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setMsi($msi)
     {
@@ -622,7 +591,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $isDealtWith new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setIsDealtWith($isDealtWith)
     {
@@ -646,7 +615,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $isDeclared new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setIsDeclared($isDeclared)
     {
@@ -670,7 +639,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $birthDate new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setBirthDate($birthDate)
     {
@@ -700,7 +669,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $personFirstname new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setPersonFirstname($personFirstname)
     {
@@ -724,7 +693,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $personLastname new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setPersonLastname($personLastname)
     {
@@ -748,7 +717,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $notes new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setNotes($notes)
     {
@@ -772,7 +741,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $takenIntoConsideration new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setTakenIntoConsideration($takenIntoConsideration)
     {
@@ -796,7 +765,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $categoryText new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setCategoryText($categoryText)
     {
@@ -820,7 +789,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param string $operatorName new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setOperatorName($operatorName)
     {
@@ -844,7 +813,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param int $version new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setVersion($version)
     {
@@ -868,7 +837,7 @@ abstract class AbstractConviction implements BundleSerializableInterface, JsonSe
      *
      * @param int $olbsKey new value being set
      *
-     * @return Conviction
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

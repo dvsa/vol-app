@@ -10,7 +10,7 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class OlcsBlameableListenerFactoryTest extends MockeryTestCase
+final class OlcsBlameableListenerFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

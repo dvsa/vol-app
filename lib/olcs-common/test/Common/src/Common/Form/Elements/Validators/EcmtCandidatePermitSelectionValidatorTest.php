@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Validators;
 
 use Common\Form\Elements\Validators\EcmtCandidatePermitSelectionValidator;
@@ -10,11 +12,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EcmtCandidatePermitSelectionValidatorTest extends MockeryTestCase
+final class EcmtCandidatePermitSelectionValidatorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpValidate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpValidate')]
     public function testValidate($firstValue, $secondValue, $thirdValue, $expected): void
     {
         $context = [
@@ -32,16 +32,14 @@ class EcmtCandidatePermitSelectionValidatorTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string)>>
      *
      * @psalm-return list{list{'0', '0', '0', false}, list{'1', '0', '1', true}, list{'1', '1', '1', true}}
      */
-    public function dpValidate(): array
+    public static function dpValidate(): \Iterator
     {
-        return [
-            ['0', '0', '0', false],
-            ['1', '0', '1', true],
-            ['1', '1', '1', true],
-        ];
+        yield ['0', '0', '0', false];
+        yield ['1', '0', '1', true];
+        yield ['1', '1', '1', true];
     }
 }

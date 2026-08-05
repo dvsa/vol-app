@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea as TrafficAreaEntity;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class GetTest extends QueryHandlerTestCase
+final class GetTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

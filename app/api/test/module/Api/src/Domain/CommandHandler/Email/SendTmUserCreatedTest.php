@@ -25,7 +25,7 @@ use Mockery as m;
 /**
  * Send TM User Created Email Test
  */
-class SendTmUserCreatedTest extends AbstractCommandHandlerTestCase
+final class SendTmUserCreatedTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -40,12 +40,10 @@ class SendTmUserCreatedTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public static function dataProviderTestHandleCommand(): array
+    public static function dataProviderTestHandleCommand(): \Iterator
     {
-        return [
-            [0, 'application'],
-            [1, 'variation']
-        ];
+        yield [0, 'application'];
+        yield [1, 'variation'];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHandleCommand')]

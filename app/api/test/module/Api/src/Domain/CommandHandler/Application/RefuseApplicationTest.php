@@ -34,7 +34,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class RefuseApplicationTest extends AbstractCommandHandlerTestCase
+final class RefuseApplicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -232,12 +232,12 @@ class RefuseApplicationTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\Application\CloseTexTask::class,
             ['id' => 1],
-            (new Result())->addMessage('CLOSE_TEX_TASK')
+            new Result()->addMessage('CLOSE_TEX_TASK')
         );
         $this->expectedSideEffect(
             \Dvsa\Olcs\Api\Domain\Command\Application\CloseFeeDueTask::class,
             ['id' => 1],
-            (new Result())->addMessage('CLOSE_FEEDUE_TASK')
+            new Result()->addMessage('CLOSE_FEEDUE_TASK')
         );
 
         $this->expectedSideEffect(
@@ -291,7 +291,7 @@ class RefuseApplicationTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             CreateSnapshot::class,
             ['id' => 532, 'event' => CreateSnapshot::ON_REFUSE],
-            (new Result())->addMessage('Snapshot created')
+            new Result()->addMessage('Snapshot created')
         );
 
         $this->expectedSideEffect(
@@ -346,7 +346,7 @@ class RefuseApplicationTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             CreateSnapshot::class,
             ['id' => 532, 'event' => CreateSnapshot::ON_REFUSE],
-            (new Result())->addMessage('Snapshot created')
+            new Result()->addMessage('Snapshot created')
         );
         $this->expectedSideEffect(
             \Dvsa\Olcs\Transfer\Command\Publication\Application::class,

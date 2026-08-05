@@ -1,4 +1,3 @@
-
 DROP PROCEDURE IF EXISTS sp_add_original_constraints;
 
 DELIMITER $$
@@ -765,3 +764,5 @@ SET FOREIGN_KEY_CHECKS=1;
 END
 
 $$
+
+DELIMITER ;

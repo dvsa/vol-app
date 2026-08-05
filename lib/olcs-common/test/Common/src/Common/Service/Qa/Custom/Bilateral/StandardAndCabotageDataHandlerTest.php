@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Bilateral;
 
 use Common\Form\QaForm;
@@ -17,7 +19,7 @@ use Laminas\Form\Fieldset;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StandardAndCabotageDataHandlerTest extends MockeryTestCase
+final class StandardAndCabotageDataHandlerTest extends MockeryTestCase
 {
     private $qaForm;
 

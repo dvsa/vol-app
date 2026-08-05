@@ -17,7 +17,7 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class GoodsOperatingCentreReviewServiceTest extends MockeryTestCase
+final class GoodsOperatingCentreReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -27,6 +27,7 @@ class GoodsOperatingCentreReviewServiceTest extends MockeryTestCase
     /** @var PsvOperatingCentreReviewService */
     protected $mockPsvService;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);
@@ -141,121 +142,119 @@ class GoodsOperatingCentreReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public static function providerGetConfigFromData(): array
+    public static function providerGetConfigFromData(): \Iterator
     {
-        return [
-            [
-                "withAd" => ApplicationOperatingCentre::AD_POST,
-                "adDocuments" => [],
-                "expectedAdvertisements" => [
-                    [
-                        'label' => 'review-operating-centre-advertisement-ad-placed',
-                        'value' => 'review-operating-centre-advertisement-post'
-                    ]
-                ],
-                "needToMockTranslator" => true,
-                'totAuthLgvVehicles' => null,
-                'expectedTotalVehiclesLabel' => 'review-operating-centre-total-vehicles',
+        yield [
+            "withAd" => ApplicationOperatingCentre::AD_POST,
+            "adDocuments" => [],
+            "expectedAdvertisements" => [
+                [
+                    'label' => 'review-operating-centre-advertisement-ad-placed',
+                    'value' => 'review-operating-centre-advertisement-post'
+                ]
             ],
-            [
-                "withAd" => ApplicationOperatingCentre::AD_POST,
-                "adDocuments" => [],
-                "expectedAdvertisements" => [
-                    [
-                        'label' => 'review-operating-centre-advertisement-ad-placed',
-                        'value' => 'review-operating-centre-advertisement-post'
-                    ]
-                ],
-                "needToMockTranslator" => true,
-                'totAuthLgvVehicles' => 5,
-                'expectedTotalVehiclesLabel' => 'review-operating-centre-total-vehicles-hgv',
+            "needToMockTranslator" => true,
+            'totAuthLgvVehicles' => null,
+            'expectedTotalVehiclesLabel' => 'review-operating-centre-total-vehicles',
+        ];
+        yield [
+            "withAd" => ApplicationOperatingCentre::AD_POST,
+            "adDocuments" => [],
+            "expectedAdvertisements" => [
+                [
+                    'label' => 'review-operating-centre-advertisement-ad-placed',
+                    'value' => 'review-operating-centre-advertisement-post'
+                ]
             ],
-            [
-                "withAd" => ApplicationOperatingCentre::AD_UPLOAD_LATER,
-                "adDocuments" => [],
-                "expectedAdvertisements" => [
-                    [
-                        'label' => 'review-operating-centre-advertisement-ad-placed',
-                        'value' => 'review-operating-centre-advertisement-upload-later'
-                    ]
-                ],
-                "needToMockTranslator" => true,
-                'totAuthLgvVehicles' => null,
-                'expectedTotalVehiclesLabel' => 'review-operating-centre-total-vehicles',
+            "needToMockTranslator" => true,
+            'totAuthLgvVehicles' => 5,
+            'expectedTotalVehiclesLabel' => 'review-operating-centre-total-vehicles-hgv',
+        ];
+        yield [
+            "withAd" => ApplicationOperatingCentre::AD_UPLOAD_LATER,
+            "adDocuments" => [],
+            "expectedAdvertisements" => [
+                [
+                    'label' => 'review-operating-centre-advertisement-ad-placed',
+                    'value' => 'review-operating-centre-advertisement-upload-later'
+                ]
             ],
-            [
-                "withAd" => ApplicationOperatingCentre::AD_UPLOAD_NOW,
-                "adDocuments" => [
-                    // This file should be ignored, as the app id doesn't match
-                    [
-                        'description' => 'somefile.pdf',
-                        'application' => [
-                            'id' => 321
-                        ]
-                    ],
-                    // These 2 should be included
-                    [
-                        'description' => 'file1.pdf',
-                        'application' => [
-                            'id' => 123
-                        ]
-                    ],
-                    [
-                        'description' => 'file2.pdf',
-                        'application' => [
-                            'id' => 123
-                        ]
+            "needToMockTranslator" => true,
+            'totAuthLgvVehicles' => null,
+            'expectedTotalVehiclesLabel' => 'review-operating-centre-total-vehicles',
+        ];
+        yield [
+            "withAd" => ApplicationOperatingCentre::AD_UPLOAD_NOW,
+            "adDocuments" => [
+                // This file should be ignored, as the app id doesn't match
+                [
+                    'description' => 'somefile.pdf',
+                    'application' => [
+                        'id' => 321
                     ]
                 ],
-                "expectedAdvertisements" => [
-                    [
-                        'label' => 'review-operating-centre-advertisement-ad-placed',
-                        'value' => 'review-operating-centre-advertisement-upload-now'
-                    ],
-                    [
-                        'label' => 'review-operating-centre-advertisement-newspaper',
-                        'value' => 'Some paper'
-                    ],
-                    [
-                        'label' => 'review-operating-centre-advertisement-date',
-                        'value' => '02 Mar 2014'
-                    ],
-                    [
-                        'label' => 'review-operating-centre-advertisement-file',
-                        'noEscape' => true,
-                        'value' => 'file1.pdf<br>file2.pdf'
+                // These 2 should be included
+                [
+                    'description' => 'file1.pdf',
+                    'application' => [
+                        'id' => 123
                     ]
                 ],
-                "needToMockTranslator" => true,
-                'totAuthLgvVehicles' => null,
-                'expectedTotalVehiclesLabel' => 'review-operating-centre-total-vehicles',
+                [
+                    'description' => 'file2.pdf',
+                    'application' => [
+                        'id' => 123
+                    ]
+                ]
             ],
-            [
-                "withAd" => ApplicationOperatingCentre::AD_UPLOAD_NOW,
-                "adDocuments" => [],
-                "expectedAdvertisements" => [
-                    [
-                        'label' => 'review-operating-centre-advertisement-ad-placed',
-                        'value' => 'review-operating-centre-advertisement-upload-now'
-                    ],
-                    [
-                        'label' => 'review-operating-centre-advertisement-newspaper',
-                        'value' => 'Some paper'
-                    ],
-                    [
-                        'label' => 'review-operating-centre-advertisement-date',
-                        'value' => '02 Mar 2014'
-                    ],
-                    [
-                        'label' => 'review-operating-centre-advertisement-file',
-                        'noEscape' => true,
-                        'value' => 'no-files-uploaded-translated'
-                    ]
+            "expectedAdvertisements" => [
+                [
+                    'label' => 'review-operating-centre-advertisement-ad-placed',
+                    'value' => 'review-operating-centre-advertisement-upload-now'
                 ],
-                "needToMockTranslator" => true,
-                'totAuthLgvVehicles' => null,
-                'expectedTotalVehiclesLabel' => 'review-operating-centre-total-vehicles',
-            ]
+                [
+                    'label' => 'review-operating-centre-advertisement-newspaper',
+                    'value' => 'Some paper'
+                ],
+                [
+                    'label' => 'review-operating-centre-advertisement-date',
+                    'value' => '02 Mar 2014'
+                ],
+                [
+                    'label' => 'review-operating-centre-advertisement-file',
+                    'noEscape' => true,
+                    'value' => 'file1.pdf<br>file2.pdf'
+                ]
+            ],
+            "needToMockTranslator" => true,
+            'totAuthLgvVehicles' => null,
+            'expectedTotalVehiclesLabel' => 'review-operating-centre-total-vehicles',
+        ];
+        yield [
+            "withAd" => ApplicationOperatingCentre::AD_UPLOAD_NOW,
+            "adDocuments" => [],
+            "expectedAdvertisements" => [
+                [
+                    'label' => 'review-operating-centre-advertisement-ad-placed',
+                    'value' => 'review-operating-centre-advertisement-upload-now'
+                ],
+                [
+                    'label' => 'review-operating-centre-advertisement-newspaper',
+                    'value' => 'Some paper'
+                ],
+                [
+                    'label' => 'review-operating-centre-advertisement-date',
+                    'value' => '02 Mar 2014'
+                ],
+                [
+                    'label' => 'review-operating-centre-advertisement-file',
+                    'noEscape' => true,
+                    'value' => 'no-files-uploaded-translated'
+                ]
+            ],
+            "needToMockTranslator" => true,
+            'totAuthLgvVehicles' => null,
+            'expectedTotalVehiclesLabel' => 'review-operating-centre-total-vehicles',
         ];
     }
 }

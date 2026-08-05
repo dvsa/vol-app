@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\System\TranslationKey as TranslationKeyEntity;
  *
  * @author Andy Newtom <andy@vitri.ltd>
  */
-class ByIdTest extends AbstractQueryByIdHandlerTestCase
+final class ByIdTest extends AbstractQueryByIdHandlerTestCase
 {
     protected $sutClass = TranslationKeyByIdHandler::class;
     protected $sutRepo = 'TranslationKey';

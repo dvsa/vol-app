@@ -31,7 +31,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class RemoveLicenceStatusRulesForLicenceTest extends AbstractCommandHandlerTestCase
+final class RemoveLicenceStatusRulesForLicenceTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

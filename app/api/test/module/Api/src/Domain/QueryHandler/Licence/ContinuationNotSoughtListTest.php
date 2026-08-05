@@ -15,7 +15,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ContinuationNotSoughtListTest extends QueryHandlerTestCase
+final class ContinuationNotSoughtListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

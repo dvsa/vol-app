@@ -13,7 +13,7 @@ use Mockery as m;
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class ReplacementEntityTest extends EntityTester
+final class ReplacementEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

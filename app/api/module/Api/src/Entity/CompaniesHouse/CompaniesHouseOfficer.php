@@ -6,15 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CompaniesHouseOfficer Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="companies_house_officer",
- *    indexes={
- *        @ORM\Index(name="ix_companies_house_officer_companies_house_company_id",
-     *     columns={"companies_house_company_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'companies_house_officer')]
+#[ORM\Index(name: 'ix_companies_house_officer_companies_house_company_id', columns: ['companies_house_company_id'])]
+#[ORM\Entity]
 class CompaniesHouseOfficer extends AbstractCompaniesHouseOfficer
 {
     public function __construct(array $data)

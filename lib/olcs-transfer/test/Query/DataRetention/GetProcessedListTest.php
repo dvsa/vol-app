@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Fee;
 
 use Dvsa\Olcs\Transfer\Query\DataRetention\GetProcessedList;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Transfer\Query\Fee\FeeList;
  * Class GetProcessedListTest
  * @package Dvsa\OlcsTest\Transfer\Query\Fee
  */
-class GetProcessedListTest extends \PHPUnit\Framework\TestCase
+final class GetProcessedListTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

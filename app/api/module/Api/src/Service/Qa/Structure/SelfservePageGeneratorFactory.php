@@ -18,7 +18,7 @@ class SelfservePageGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SelfservePageGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SelfservePageGenerator
     {
         return new SelfservePageGenerator(
             $container->get('QaSelfservePageFactory'),

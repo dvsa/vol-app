@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  * Class User
  * @package CommonTest\Rbac
  */
-class UserTest extends TestCase
+final class UserTest extends TestCase
 {
     private $sut;
 
@@ -23,9 +23,7 @@ class UserTest extends TestCase
         $this->sut = new User();
     }
 
-    /**
-     * @dataProvider dpIsLocalAuthority
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsLocalAuthority')]
     public function testIsLocalAuthority($userType, $isLocalAuthority): void
     {
         $this->sut->setUserType($userType);
@@ -33,26 +31,22 @@ class UserTest extends TestCase
     }
 
     /**
-     * @return (bool|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string)>>
      *
      * @psalm-return list{list{'local-authority', true}, list{'anon', false}, list{'operator', false}, list{'partner', false}, list{'transport-manager', false}, list{'internal', false}, list{'not-identified', false}}
      */
-    public function dpIsLocalAuthority(): array
+    public static function dpIsLocalAuthority(): \Iterator
     {
-        return [
-            [User::USER_TYPE_LOCAL_AUTHORITY, true],
-            [User::USER_TYPE_ANON, false],
-            [User::USER_TYPE_OPERATOR, false],
-            [User::USER_TYPE_PARTNER, false],
-            [User::USER_TYPE_TRANSPORT_MANAGER, false],
-            [User::USER_TYPE_INTERNAL, false],
-            [User::USER_TYPE_NOT_IDENTIFIED, false],
-        ];
+        yield [User::USER_TYPE_LOCAL_AUTHORITY, true];
+        yield [User::USER_TYPE_ANON, false];
+        yield [User::USER_TYPE_OPERATOR, false];
+        yield [User::USER_TYPE_PARTNER, false];
+        yield [User::USER_TYPE_TRANSPORT_MANAGER, false];
+        yield [User::USER_TYPE_INTERNAL, false];
+        yield [User::USER_TYPE_NOT_IDENTIFIED, false];
     }
 
-    /**
-     * @dataProvider dpIsNotIdentified
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsNotIdentified')]
     public function testIsNotIdentified($userType, $isNotIdentified): void
     {
         $this->sut->setUserType($userType);
@@ -60,21 +54,19 @@ class UserTest extends TestCase
     }
 
     /**
-     * @return (bool|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string)>>
      *
      * @psalm-return list{list{'local-authority', false}, list{'anon', false}, list{'operator', false}, list{'partner', false}, list{'transport-manager', false}, list{'internal', false}, list{'not-identified', true}}
      */
-    public function dpIsNotIdentified(): array
+    public static function dpIsNotIdentified(): \Iterator
     {
-        return [
-            [User::USER_TYPE_LOCAL_AUTHORITY, false],
-            [User::USER_TYPE_ANON, false],
-            [User::USER_TYPE_OPERATOR, false],
-            [User::USER_TYPE_PARTNER, false],
-            [User::USER_TYPE_TRANSPORT_MANAGER, false],
-            [User::USER_TYPE_INTERNAL, false],
-            [User::USER_TYPE_NOT_IDENTIFIED, true],
-        ];
+        yield [User::USER_TYPE_LOCAL_AUTHORITY, false];
+        yield [User::USER_TYPE_ANON, false];
+        yield [User::USER_TYPE_OPERATOR, false];
+        yield [User::USER_TYPE_PARTNER, false];
+        yield [User::USER_TYPE_TRANSPORT_MANAGER, false];
+        yield [User::USER_TYPE_INTERNAL, false];
+        yield [User::USER_TYPE_NOT_IDENTIFIED, true];
     }
 
     public function testIsNotIdentifiedFalse(): void

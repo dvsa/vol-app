@@ -19,23 +19,19 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
  *
  * @author Scott Callaway <scott.callaway@capgemini.com>
  */
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     public $today;
     public $tomorrow;
-    /**
-     * @var string
-     */
-    public $yesterday;
     public function setUp(): void
     {
         $this->sut = m::mock(CreateHandler::class)->makePartial();
         $this->mockRepo('IrhpPermitWindow', PermitWindowRepo::class);
         $this->mockRepo('IrhpPermitStock', PermitStockRepo::class);
 
-        $this->today = (new DateTime())->format('Y-m-d');
-        $this->tomorrow = (new DateTime())->modify('+1 day')->format('Y-m-d');
-        $this->yesterday = (new DateTime())->modify('-1 day')->format('Y-m-d');
+        $this->today = new DateTime()->format('Y-m-d');
+        $this->tomorrow = new DateTime()->modify('+1 day')->format('Y-m-d');
+        $yesterday = new DateTime()->modify('-1 day')->format('Y-m-d');
 
         parent::setUp();
     }

@@ -19,7 +19,7 @@ use Mockery as m;
 /**
  * ShortNoticeByBusReg Test
  */
-class ShortNoticeByBusRegTest extends QueryHandlerTestCase
+final class ShortNoticeByBusRegTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

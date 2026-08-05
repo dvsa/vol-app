@@ -18,7 +18,7 @@ use Laminas\I18n\Translator\TranslatorInterface;
 /**
  * FinanceReviewServiceTest
  */
-class FinanceReviewServiceTest extends MockeryTestCase
+final class FinanceReviewServiceTest extends MockeryTestCase
 {
     /** @var DeclarationReviewService */
     protected $sut;
@@ -29,6 +29,7 @@ class FinanceReviewServiceTest extends MockeryTestCase
     /** @var DocumentRepository */
     private $mockDocumentRepo;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockLicence = m::mock();

@@ -22,7 +22,7 @@ use Doctrine\ORM\Query as DoctrineQuery;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class PrinterListTest extends QueryHandlerTestCase
+final class PrinterListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

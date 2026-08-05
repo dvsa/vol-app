@@ -13,7 +13,7 @@ class SearchLicenceCaseCountFactory implements FactoryInterface
      * @param  array|null         $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchLicenceCaseCount
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SearchLicenceCaseCount
     {
         $authService = $container->get(AuthorizationService::class);
         return new SearchLicenceCaseCount($authService);

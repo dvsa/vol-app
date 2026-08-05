@@ -27,19 +27,15 @@ use HTMLPurifier;
 /**
  * @see FormErrors
  */
-class FormErrorsTest extends MockeryTestCase
+final class FormErrorsTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
-    protected const VALIDATOR_MANAGER = 'ValidatorManager';
+    protected const string VALIDATOR_MANAGER = 'ValidatorManager';
 
     protected $sut;
 
-    protected $view;
-
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -50,10 +46,8 @@ class FormErrorsTest extends MockeryTestCase
         $this->assertIsCallable(static fn(?\Laminas\Form\FormInterface $form = null, bool $ignoreValidation = false): string => $sut->__invoke($form, $ignoreValidation));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeEscapesHtmlInMessage(): void
     {
         // Setup
@@ -66,13 +60,11 @@ class FormErrorsTest extends MockeryTestCase
         $result = $sut->__invoke($form);
 
         // Assert
-        $this->assertStringNotContainsString('<a>', $result);
+        $this->assertStringNotContainsString('<a>', (string) $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeWithoutForm(): void
     {
         $form = null;
@@ -82,10 +74,8 @@ class FormErrorsTest extends MockeryTestCase
         $this->assertSame($this->sut, $sut($form));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRenderWithoutMessages(): void
     {
         $form = m::mock(\Laminas\Form\Form::class);
@@ -105,10 +95,8 @@ class FormErrorsTest extends MockeryTestCase
         $this->assertEquals($expected, $sut($form));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRenderWithMessagesWithoutLabelOrAnchor(): void
     {
         $messages = [
@@ -160,10 +148,8 @@ class FormErrorsTest extends MockeryTestCase
         $this->assertMatchesRegularExpression($expected, $sut($form));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRenderWithMessagesWithAnchor(): void
     {
         $messages = [
@@ -217,10 +203,8 @@ class FormErrorsTest extends MockeryTestCase
         $this->assertMatchesRegularExpression($expected, $sut($form));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRenderWithMessagesWithAnchor2(): void
     {
         $messages = [
@@ -273,10 +257,8 @@ class FormErrorsTest extends MockeryTestCase
         $this->assertMatchesRegularExpression($expected, $sut($form));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRenderWithMessagesWithAnchor3(): void
     {
         $messages = [
@@ -329,10 +311,8 @@ class FormErrorsTest extends MockeryTestCase
         $this->assertMatchesRegularExpression($expected, $sut($form));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRenderWithMessagesWithAnchorPostcodeSearch(): void
     {
         $messages = [
@@ -371,10 +351,8 @@ class FormErrorsTest extends MockeryTestCase
         $this->assertMatchesRegularExpression($expected, $sut($form));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRenderWithMessagesWithAnchorDateSelect(): void
     {
         $messages = [
@@ -394,7 +372,7 @@ class FormErrorsTest extends MockeryTestCase
 
         // Mocks
         $form = m::mock(\Laminas\Form\Form::class)->makePartial();
-        $element = (new DateSelect())->setAttribute('id', 'DS_ID');
+        $element = new DateSelect()->setAttribute('id', 'DS_ID');
         $element->setLabel('Default Label');
 
         // Expectations
@@ -405,10 +383,8 @@ class FormErrorsTest extends MockeryTestCase
         $this->assertMatchesRegularExpression($expected, $sut($form));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRenderWithMessagesWithAnchorUsingName(): void
     {
         $messages = [
@@ -438,11 +414,9 @@ class FormErrorsTest extends MockeryTestCase
         $this->assertMatchesRegularExpression($expected, $sut($form));
     }
 
-    /**
-     * @test
-     * @testdox Test when a form element has been setup with a custom error message
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\TestDox('Test when a form element has been setup with a custom error message')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRenderWithCustomErrorMessage(): void
     {
         $messages = [
@@ -496,10 +470,8 @@ class FormErrorsTest extends MockeryTestCase
         $this->assertMatchesRegularExpression($expected, $sut($form));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRenderWithShortLabelAndAnchor(): void
     {
         $messages = [
@@ -557,10 +529,8 @@ class FormErrorsTest extends MockeryTestCase
         $this->assertMatchesRegularExpression($expected, $sut($form));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRenderWithShortLabelWithoutAnchor(): void
     {
         $messages = [
@@ -614,11 +584,9 @@ class FormErrorsTest extends MockeryTestCase
         $this->assertMatchesRegularExpression($expected, $sut($form));
     }
 
-    /**
-     * @test
-     * @testdox Test when a form element has been setup as a fieldset
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\TestDox('Test when a form element has been setup as a fieldset')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRenderWithMessageObjectElementAsFieldset(): void
     {
         $messages = [
@@ -669,10 +637,8 @@ class FormErrorsTest extends MockeryTestCase
         $this->assertMatchesRegularExpression($expected, $sut($form));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRenderWithMessagesWithAnchorAndCustomTitle(): void
     {
         $messages = [
@@ -726,10 +692,8 @@ class FormErrorsTest extends MockeryTestCase
         $this->assertMatchesRegularExpression($expected, $sut($form));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRenderWithMessagesWithAnchorAndCustomTitleAndParagraph(): void
     {
         $messages = [
@@ -784,10 +748,8 @@ class FormErrorsTest extends MockeryTestCase
         $this->assertMatchesRegularExpression($expected, $sut($form));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRenderWithMessagesWithAnchorAndCustomParagraph(): void
     {
         $messages = [
@@ -847,16 +809,16 @@ class FormErrorsTest extends MockeryTestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->view = m::mock(\Laminas\View\Renderer\RendererInterface::class);
+        $view = m::mock(\Laminas\View\Renderer\RendererInterface::class);
         $serviceLocator = $this->setUpServiceLocator();
         $this->sut = $this->setUpSut($serviceLocator);
-        $this->sut->setView($this->view);
+        $this->sut->setView($view);
     }
 
     protected function setUpSut(ContainerInterface $serviceLocator): FormErrors
     {
         //$pluginManager = $this->setUpAbstractPluginManager($serviceLocator);
-        return (new FormErrorsFactory())->__invoke($serviceLocator, FormErrors::class);
+        return new FormErrorsFactory()->__invoke($serviceLocator, FormErrors::class);
     }
 
     /**
@@ -881,7 +843,7 @@ class FormErrorsTest extends MockeryTestCase
     /**
      * @param string|null $name
      */
-    protected function setUpElement(string $name = null): Element
+    protected function setUpElement(?string $name = null): Element
     {
         $element = new Element($name);
         $element->setLabel('Default Label');

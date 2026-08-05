@@ -59,7 +59,7 @@ class RestClient
      * @param array $auth authentication username/password
      * @internal param \Common\Util\The $HttpUri URL of the resource that this client is meant to act on
      */
-    public function __construct(HttpUri $url, $options = [], $auth = [], Cookie $cookie = null)
+    public function __construct(HttpUri $url, $options = [], $auth = [], ?Cookie $cookie = null)
     {
         $defaultOptions = [
             'keepalive' => true,
@@ -331,7 +331,7 @@ class RestClient
      * @param  array        $params The parameters of the request body
      * @return array                First key is the path parameter, second is the params parameter
      */
-    protected function pathOrParams($path, array $params = null)
+    protected function pathOrParams($path, ?array $params = null)
     {
         $args = func_get_args();
 

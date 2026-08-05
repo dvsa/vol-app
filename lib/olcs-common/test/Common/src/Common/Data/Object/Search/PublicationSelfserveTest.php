@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Data\Object\Search;
 
 use Common\Data\Object\Search\Aggregations\DateRange\PublishedDateFrom;
@@ -10,10 +12,8 @@ use Common\Data\Object\Search\Aggregations\Terms\GoodsOrPsv;
 use Common\Data\Object\Search\Aggregations\Terms\PublicationType;
 use Common\Data\Object\Search\Aggregations\Terms\PublicationSection;
 
-/**
- * @covers \Common\Data\Object\Search\PublicationSelfserve
- */
-class PublicationSelfserveTest extends SearchAbstractTest
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Data\Object\Search\PublicationSelfserve::class)]
+final class PublicationSelfserveTest extends SearchAbstractTest
 {
     protected $class = \Common\Data\Object\Search\PublicationSelfserve::class;
 
@@ -24,7 +24,6 @@ class PublicationSelfserveTest extends SearchAbstractTest
     protected function setUp(): void
     {
         $this->sut = new $this->class();
-
         parent::setUp();
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Report;
 
 use Dvsa\Olcs\Transfer\Command\Report\Upload;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Report\Upload;
 /**
  * Upload test
  */
-class UploadTest extends \PHPUnit\Framework\TestCase
+final class UploadTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

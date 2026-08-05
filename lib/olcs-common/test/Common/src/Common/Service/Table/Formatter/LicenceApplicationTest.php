@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService as UrlHelper;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class LicenceApplicationTest extends MockeryTestCase
+final class LicenceApplicationTest extends MockeryTestCase
 {
     protected $urlHelper;
 
@@ -37,12 +39,12 @@ class LicenceApplicationTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider dpTestFormat
      *
      * @param $expected
      * @param $appTimes
      * @param $extraRowData
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFormat')]
     public function testFormat($expected, $extraRowData, $appTimes): void
     {
         $licStatus = 'lic status';
@@ -103,16 +105,13 @@ class LicenceApplicationTest extends MockeryTestCase
     /**
      * data provider for testLicenceApplicationFormatter
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function dpTestFormat()
+    public static function dpTestFormat(): \Iterator
     {
         $licenceLink = '<a class="govuk-link" href="http://licURL">OB1234567</a>formatted lic status';
         $appLink = '<a class="govuk-link" href="http://appURL">5678</a>formatted app status';
-
-        return [
-            [$licenceLink . '<br />' . $appLink, ['appId' => 5678], 1],
-            [$licenceLink, [], 0],
-        ];
+        yield [$licenceLink . '<br />' . $appLink, ['appId' => 5678], 1];
+        yield [$licenceLink, [], 0];
     }
 }

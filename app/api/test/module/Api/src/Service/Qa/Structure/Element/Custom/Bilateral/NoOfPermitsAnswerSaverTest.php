@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsAnswerSaverTest extends MockeryTestCase
+final class NoOfPermitsAnswerSaverTest extends MockeryTestCase
 {
     private $postData = [
         'key1' => 'value1',
@@ -38,6 +38,7 @@ class NoOfPermitsAnswerSaverTest extends MockeryTestCase
 
     private $noOfPermitsAnswerSaver;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpPermitApplication = m::mock(IrhpPermitApplication::class);

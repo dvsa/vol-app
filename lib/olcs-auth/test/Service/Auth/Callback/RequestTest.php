@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Request Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
+declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Auth\Service\Auth\Callback;
 
@@ -18,7 +14,7 @@ use Dvsa\Olcs\Auth\Service\Auth\Callback\Request;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class RequestTest extends MockeryTestCase
+final class RequestTest extends MockeryTestCase
 {
     public function testRequest(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Lva\TransportManager\Sections;
 
 use Common\Data\Mapper\Lva\TransportManager\Sections\HoursOfWork;
@@ -7,17 +9,15 @@ use Common\Service\Helper\TranslationHelperService;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-class HoursOfWorkTest extends MockeryTestCase
+final class HoursOfWorkTest extends MockeryTestCase
 {
     private $sut;
-
-    private $mockTranslator;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->mockTranslator = m::mock(TranslationHelperService::class);
-        $this->sut = new HoursOfWork($this->mockTranslator);
+        $mockTranslator = m::mock(TranslationHelperService::class);
+        $this->sut = new HoursOfWork($mockTranslator);
     }
 
     public function testPopulateObject(): void

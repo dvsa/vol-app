@@ -6,10 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CompaniesHouseInsolvencyPractitioner Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="companies_house_insolvency_practitioner")
  */
+#[ORM\Table(name: 'companies_house_insolvency_practitioner')]
+#[ORM\Entity]
 class CompaniesHouseInsolvencyPractitioner extends AbstractCompaniesHouseInsolvencyPractitioner
 {
     public function __construct(array $data)

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Cqrs\Query;
 
 use Common\Auth\Adapter\CommandAdapterFactory;
@@ -18,7 +20,7 @@ use RuntimeException;
 /**
  * @see QueryServiceFactory
  */
-class QueryServiceFactoryTest extends MockeryTestCase
+final class QueryServiceFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
@@ -33,9 +35,7 @@ class QueryServiceFactoryTest extends MockeryTestCase
         $this->setUpServiceManager();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -45,10 +45,8 @@ class QueryServiceFactoryTest extends MockeryTestCase
         $this->assertIsCallable(fn(\Psr\Container\ContainerInterface $container, string $requestedName, ?array $options = null): \Common\Service\Cqrs\Query\QueryService => $this->sut->__invoke($container, $requestedName, $options));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeReturnsAnInstanceOfQueryService(): void
     {
         // Setup
@@ -72,10 +70,8 @@ class QueryServiceFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(QueryService::class, $commandService);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenConfigMissing(): void
     {
         // Setup

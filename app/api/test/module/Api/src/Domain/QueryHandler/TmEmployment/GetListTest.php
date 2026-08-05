@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class GetListTest extends QueryHandlerTestCase
+final class GetListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

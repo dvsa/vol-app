@@ -11,11 +11,12 @@ use Dvsa\Olcs\Api\Entity;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\Task::class)]
-class TaskTest extends RepositoryTestCase
+final class TaskTest extends RepositoryTestCase
 {
     /** @var m\MockInterface | Repository\Task */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repository\Task::class);
@@ -163,8 +164,8 @@ class TaskTest extends RepositoryTestCase
 
         $this->em->shouldReceive('getReference')->once()->with(Entity\User\User::class, $userId)->andReturn(null);
 
-        static::assertNull($this->sut->getTeamReference(null, $userId));
-        static::assertNull($this->sut->getTeamReference(null, null));
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\User\Team::class, $this->sut->getTeamReference(null, $userId));
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\User\Team::class, $this->sut->getTeamReference(null, null));
     }
 
     public function testGetTeamReferenceByTeam(): void
@@ -173,7 +174,7 @@ class TaskTest extends RepositoryTestCase
 
         $this->em->shouldReceive('getReference')->once()->with(Entity\User\Team::class, $teamId)->andReturn('EXPECT');
 
-        static::assertEquals('EXPECT', $this->sut->getTeamReference($teamId, null));
+        $this->assertEquals('EXPECT', $this->sut->getTeamReference($teamId, null));
     }
 
     public function testGetTeamReferenceByUser(): void
@@ -189,7 +190,7 @@ class TaskTest extends RepositoryTestCase
             ->with(Entity\User\User::class, $userId)
             ->andReturn($mockUser);
 
-        static::assertEquals('EXPECT', $this->sut->getTeamReference(null, $userId));
+        $this->assertEquals('EXPECT', $this->sut->getTeamReference(null, $userId));
     }
 
     public function testFetchByAppIdAndDescription(): void

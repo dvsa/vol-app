@@ -18,7 +18,7 @@ class ClientFactory implements FactoryInterface
     protected $options;
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Client
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Client
     {
         $client = new Client();
 

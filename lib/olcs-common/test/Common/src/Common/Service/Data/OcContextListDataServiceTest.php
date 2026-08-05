@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Service\Data;
 
 use Common\Service\Data\ApplicationOperatingCentre;
@@ -12,7 +14,7 @@ use Mockery as m;
  * Class OcContextListDataService Test
  * @package CommonTest\Service
  */
-class OcContextListDataServiceTest extends MockeryTestCase
+final class OcContextListDataServiceTest extends MockeryTestCase
 {
     /**
      * Holds the SUT

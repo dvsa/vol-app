@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class EmailAwareTraitTest extends m\Adapter\Phpunit\MockeryTestCase
+final class EmailAwareTraitTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * Test organisation recipients when user and contact details present
@@ -44,7 +44,7 @@ class EmailAwareTraitTest extends m\Adapter\Phpunit\MockeryTestCase
         ];
 
         $sut = new EmailAwareTraitTestStub();
-        $this->assertEquals($expected, $sut->organisationRecipients($organisation, $user));
+        $this->assertSame($expected, $sut->organisationRecipients($organisation, $user));
     }
 
     /**
@@ -71,7 +71,7 @@ class EmailAwareTraitTest extends m\Adapter\Phpunit\MockeryTestCase
         ];
 
         $sut = new EmailAwareTraitTestStub();
-        $this->assertEquals($expected, $sut->organisationRecipients($organisation, $user));
+        $this->assertSame($expected, $sut->organisationRecipients($organisation, $user));
     }
 
     public static function emptyUserProvider(): array
@@ -121,6 +121,6 @@ class EmailAwareTraitTest extends m\Adapter\Phpunit\MockeryTestCase
         ];
 
         $sut = new EmailAwareTraitTestStub();
-        $this->assertEquals($expected, $sut->organisationRecipients($organisation, $user));
+        $this->assertSame($expected, $sut->organisationRecipients($organisation, $user));
     }
 }

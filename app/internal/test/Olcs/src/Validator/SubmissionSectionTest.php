@@ -10,7 +10,7 @@ use Olcs\Validator\SubmissionSection;
  * Class SubmissionSection Test
  * @package OlcsTest\Validator
  */
-class SubmissionSectionTest extends \PHPUnit\Framework\TestCase
+final class SubmissionSectionTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param $expected
@@ -24,15 +24,13 @@ class SubmissionSectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $sut->isValid($value));
     }
 
-    public static function provideIsValid(): array
+    public static function provideIsValid(): \Iterator
     {
-        return [
-            [[], false],
-            ['', false],
-            [false, false],
-            [['submissionType' => ''], false],
-            [['submissionType' => 'test'], true],
-            [['submissionType' => 'hey-im-set'], true],
-        ];
+        yield [[], false];
+        yield ['', false];
+        yield [false, false];
+        yield [['submissionType' => ''], false];
+        yield [['submissionType' => 'test'], true];
+        yield [['submissionType' => 'hey-im-set'], true];
     }
 }

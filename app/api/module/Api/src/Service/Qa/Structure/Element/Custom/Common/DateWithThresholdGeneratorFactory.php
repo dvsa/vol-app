@@ -18,7 +18,7 @@ class DateWithThresholdGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DateWithThresholdGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DateWithThresholdGenerator
     {
         return new DateWithThresholdGenerator(
             $container->get('QaCommonDateWithThresholdElementFactory'),

@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class RestrictedCountryIdsProviderTest extends MockeryTestCase
+final class RestrictedCountryIdsProviderTest extends MockeryTestCase
 {
     public function testGetIds(): void
     {

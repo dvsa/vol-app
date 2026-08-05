@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Mockery as m;
@@ -11,7 +13,7 @@ use Common\Service\Helper\FormHelperService;
 /**
  * Licence checklist form service test
  */
-class ConditionsUndertakingsTest extends MockeryTestCase
+final class ConditionsUndertakingsTest extends MockeryTestCase
 {
     /** @var ConditionsUndertakingsForm */
     protected $sut;

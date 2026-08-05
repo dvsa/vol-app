@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\CommunityLicenceIssueNo;
@@ -16,11 +18,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CommunityLicenceIssueNoTest extends MockeryTestCase
+final class CommunityLicenceIssueNoTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider formatProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('formatProvider')]
     public function testFormat($data, $column, $expected): void
     {
         $sut = new CommunityLicenceIssueNo();
@@ -28,40 +28,38 @@ class CommunityLicenceIssueNoTest extends MockeryTestCase
     }
 
     /**
-     * @return ((int|string)[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(int | string)> | string)>>
      *
      * @psalm-return list{list{array{issueNo: 0}, array{name: 'issueNo'}, '00000 (Office copy)'}, list{array{issueNo: 1}, array{name: 'issueNo'}, '00001'}, list{array{foo: 0}, array{name: 'foo'}, '00000 (Office copy)'}}
      */
-    public function formatProvider(): array
+    public static function formatProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'issueNo' => 0
-                ],
-                [
-                    'name' => 'issueNo'
-                ],
-                '00000 (Office copy)'
+                'issueNo' => 0
             ],
             [
-                [
-                    'issueNo' => 1
-                ],
-                [
-                    'name' => 'issueNo'
-                ],
-                '00001'
+                'name' => 'issueNo'
+            ],
+            '00000 (Office copy)'
+        ];
+        yield [
+            [
+                'issueNo' => 1
             ],
             [
-                [
-                    'foo' => 0
-                ],
-                [
-                    'name' => 'foo'
-                ],
-                '00000 (Office copy)'
-            ]
+                'name' => 'issueNo'
+            ],
+            '00001'
+        ];
+        yield [
+            [
+                'foo' => 0
+            ],
+            [
+                'name' => 'foo'
+            ],
+            '00000 (Office copy)'
         ];
     }
 }

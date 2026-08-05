@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Types;
 
 use Common\View\Helper\UniqidGenerator;
@@ -10,7 +12,7 @@ use Mockery as m;
 /**
  * RadioTest
  */
-class RadioTest extends MockeryTestCase
+final class RadioTest extends MockeryTestCase
 {
     public function testSetName(): void
     {

@@ -13,7 +13,7 @@ class OrganisationLinkFactory implements FactoryInterface
      * @return OrganisationLink
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $urlHelper = $container->get('Helper\Url');
         return new OrganisationLink($urlHelper);

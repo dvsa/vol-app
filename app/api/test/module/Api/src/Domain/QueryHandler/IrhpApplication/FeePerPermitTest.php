@@ -16,7 +16,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpApplication\FeePerPermit as FeePerPermitQry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class FeePerPermitTest extends QueryHandlerTestCase
+final class FeePerPermitTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -101,12 +101,10 @@ class FeePerPermitTest extends QueryHandlerTestCase
         $this->assertEquals($expectedResult, $result);
     }
 
-    public static function dpTestHandleQuerySupportedPermitType(): array
+    public static function dpTestHandleQuerySupportedPermitType(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL],
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHandleQueryUnsupportedPermitType')]
@@ -128,11 +126,9 @@ class FeePerPermitTest extends QueryHandlerTestCase
         $this->sut->handleQuery($query);
     }
 
-    public static function dpTestHandleQueryUnsupportedPermitType(): array
+    public static function dpTestHandleQueryUnsupportedPermitType(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM],
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM];
     }
 }

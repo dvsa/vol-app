@@ -27,7 +27,7 @@ use Laminas\ServiceManager\ServiceManager;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class LicencePeopleAdapterTest extends MockeryTestCase
+final class LicencePeopleAdapterTest extends MockeryTestCase
 {
     /** @var  LicencePeopleAdapter|m\Mock */
     protected $sut;
@@ -35,11 +35,10 @@ class LicencePeopleAdapterTest extends MockeryTestCase
     protected $mockForm;
     /** @var  TableBuilder|m\Mock */
     protected $mockTbl;
-    /** @var  ServiceManager|m\Mock */
-    protected $mockContainer;
     /** @var  ContainerInterface|m\Mock */
     protected $mockPplSrv;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockForm = m::mock(Form::class);
@@ -47,10 +46,10 @@ class LicencePeopleAdapterTest extends MockeryTestCase
 
         $this->mockPplSrv = m::mock(PeopleLvaService::class);
 
-        $this->mockContainer = m::mock(ContainerInterface::class);
-        $this->mockContainer->allows('get')->with('Table')->andReturn($this->mockTbl);
+        $mockContainer = m::mock(ContainerInterface::class);
+        $mockContainer->allows('get')->with('Table')->andReturn($this->mockTbl);
 
-        $this->sut = m::mock(LicencePeopleAdapter::class, [$this->mockContainer, $this->mockPplSrv])
+        $this->sut = m::mock(LicencePeopleAdapter::class, [$mockContainer, $this->mockPplSrv])
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
     }
@@ -90,25 +89,23 @@ class LicencePeopleAdapterTest extends MockeryTestCase
     {
         $this->sut->shouldReceive('isExceptionalOrganisation')->andReturn($isExceptionalOrg);
 
-        static::assertEquals($expect, $this->sut->canModify());
+        $this->assertEquals($expect, $this->sut->canModify());
     }
 
     /**
-     * @return bool[][]
+     * @return \Iterator<(int | string), array<bool>>
      *
      * @psalm-return list{array{isExceptionalOrg: true, expect: false}, array{isExceptionalOrg: false, expect: true}}
      */
-    public static function dpTestCanModify(): array
+    public static function dpTestCanModify(): \Iterator
     {
-        return [
-            [
-                'isExceptionalOrg' => true,
-                'expect' => false,
-            ],
-            [
-                'isExceptionalOrg' => false,
-                'expect' => true,
-            ],
+        yield [
+            'isExceptionalOrg' => true,
+            'expect' => false,
+        ];
+        yield [
+            'isExceptionalOrg' => false,
+            'expect' => true,
         ];
     }
 

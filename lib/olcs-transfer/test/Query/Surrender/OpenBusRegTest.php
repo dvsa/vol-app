@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Surrender;
 
 use Dvsa\Olcs\Transfer\Query\Surrender\OpenBusReg;
 use Dvsa\OlcsTest\Transfer\DtoWithoutOptionalFieldsTest;
 use Dvsa\OlcsTest\Transfer\Query\QueryTest;
 
-class OpenBusRegTest extends \PHPUnit\Framework\TestCase
+final class OpenBusRegTest extends \PHPUnit\Framework\TestCase
 {
     use QueryTest, DtoWithoutOptionalFieldsTest {
         DtoWithoutOptionalFieldsTest::testDefaultValues insteadof QueryTest;

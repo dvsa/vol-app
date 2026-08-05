@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Ecmt;
 
 use Common\Service\Helper\TranslationHelperService;
@@ -13,9 +15,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsBaseInsetTextGeneratorTest extends MockeryTestCase
+final class NoOfPermitsBaseInsetTextGeneratorTest extends MockeryTestCase
 {
-    public const FORMAT = '<div class="container">%s</div>';
+    public const string FORMAT = '<div class="container">%s</div>';
 
     private $translator;
 

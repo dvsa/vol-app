@@ -18,7 +18,7 @@ use Olcs\FormService\Form\Lva\ApplicationGoodsVehiclesFilters;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationGoodsVehiclesFiltersTest extends \PHPUnit\Framework\TestCase
+final class ApplicationGoodsVehiclesFiltersTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 

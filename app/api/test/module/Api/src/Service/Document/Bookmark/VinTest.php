@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Vin;
 /**
  * Class VinTest
  */
-class VinTest extends AbstractQuestionAnswerData
+final class VinTest extends AbstractQuestionAnswerData
 {
     public const SUT_CLASS_NAME = Vin::class;
 }

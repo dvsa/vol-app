@@ -13,7 +13,7 @@ class IrhpPermitStockValidityFactory implements FactoryInterface
      * @return IrhpPermitStockValidity
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $formatterPluginManager = $container->get(FormatterPluginManager::class);
         $dateFormatter = $formatterPluginManager->get(Date::class);

@@ -18,7 +18,7 @@ class HeaderAnswersSummaryRowsAdderFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): HeaderAnswersSummaryRowsAdder
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): HeaderAnswersSummaryRowsAdder
     {
         return new HeaderAnswersSummaryRowsAdder(
             $container->get('PermitsAnswersSummaryRowFactory'),

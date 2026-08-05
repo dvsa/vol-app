@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Service\Letter;
 
+use Dvsa\Olcs\Api\Service\EditorJs\ConverterService;
 use Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererPluginManager;
 use Dvsa\Olcs\Api\Service\Letter\VolGrabReplacementService;
 use Laminas\ServiceManager\Factory\FactoryInterface;
@@ -23,7 +24,7 @@ class LetterPreviewServiceFactory implements FactoryInterface
      * @return LetterPreviewService
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LetterPreviewService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LetterPreviewService
     {
         $repoManager = $container->get('RepositoryServiceManager');
 
@@ -31,7 +32,8 @@ class LetterPreviewServiceFactory implements FactoryInterface
             $container->get(SectionRendererPluginManager::class),
             $container->get('ContentStore'),
             $repoManager->get('DocTemplate'),
-            $container->get(VolGrabReplacementService::class)
+            $container->get(VolGrabReplacementService::class),
+            $container->get(ConverterService::class)
         );
     }
 }

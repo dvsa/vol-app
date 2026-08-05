@@ -20,7 +20,7 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ApplicationAnswersClearerTest extends MockeryTestCase
+final class ApplicationAnswersClearerTest extends MockeryTestCase
 {
     private $supplementedApplicationStepsProvider;
 
@@ -28,6 +28,7 @@ class ApplicationAnswersClearerTest extends MockeryTestCase
 
     private $applicationAnswersClearer;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->supplementedApplicationStepsProvider = m::mock(SupplementedApplicationStepsProvider::class);

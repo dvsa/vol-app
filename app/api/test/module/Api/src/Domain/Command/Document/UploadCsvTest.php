@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Command\Document\UploadCsv as UploadCsvCmd;
 /**
  * @see UploadCsvCmd
  */
-class UploadCsvTest extends \PHPUnit\Framework\TestCase
+final class UploadCsvTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {
@@ -29,10 +29,10 @@ class UploadCsvTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals($csvContent, $command->getCsvContent());
-        static::assertEquals($fileDescription, $command->getFileDescription());
-        static::assertEquals($category, $command->getCategory());
-        static::assertEquals($subCategory, $command->getSubCategory());
-        static::assertEquals($user, $command->getUser());
+        $this->assertEquals($csvContent, $command->getCsvContent());
+        $this->assertEquals($fileDescription, $command->getFileDescription());
+        $this->assertEquals($category, $command->getCategory());
+        $this->assertEquals($subCategory, $command->getSubCategory());
+        $this->assertEquals($user, $command->getUser());
     }
 }

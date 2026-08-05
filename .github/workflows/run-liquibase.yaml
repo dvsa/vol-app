@@ -16,6 +16,7 @@ on:
         description: "Environment to target"
         type: choice
         options:
+          - reg
           - dev
           - int
           - prep
@@ -78,6 +79,7 @@ env:
   AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
   AWS_OIDC_ROLE: ${{ inputs.account == 'prod' && vars.ACCOUNT_PROD_TF_OIDC_ROLE || vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
   BATCH_QUEUE: ${{
+    inputs.environment == 'reg'  && 'LQBASE_QUEUE_REG'  ||
     inputs.environment == 'dev'  && 'LQBASE_QUEUE_DEV'  ||
     inputs.environment == 'int'  && 'LQBASE_QUEUE_INT'  ||
     inputs.environment == 'prep' && 'LQBASE_QUEUE_PREP' ||
@@ -131,7 +133,7 @@ jobs:
           git tag "${{ inputs.etl_ref }}"
           GIT_CONFIG_COUNT=1 \
           GIT_CONFIG_KEY_0="http.extraHeader" \
-          GIT_CONFIG_VALUE_0="Authorization: Bearer ${GH_TOKEN}" \
+          GIT_CONFIG_VALUE_0="Authorization: Basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)" \
           git push origin "${{ inputs.etl_ref }}"
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}

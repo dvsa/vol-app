@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Factory\Helper;
 
 use Common\Service\Cqrs\Query\CachingQueryService;
@@ -10,10 +12,8 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-/**
- * @covers Common\View\Factory\Helper\SystemInfoMessagesFactory
- */
-class SystemInfoMessagesFactoryTest extends TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\View\Factory\Helper\SystemInfoMessagesFactory::class)]
+final class SystemInfoMessagesFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {
@@ -24,9 +24,6 @@ class SystemInfoMessagesFactoryTest extends TestCase
         $container->expects('get')->with('QueryService')->andReturn($queryService);
         $container->expects('get')->with('TransferAnnotationBuilder')->andReturn($transferAnnotationBuilder);
 
-        static::assertInstanceOf(
-            SystemInfoMessages::class,
-            (new SystemInfoMessagesFactory())->__invoke($container, SystemInfoMessages::class)
-        );
+        $this->assertInstanceOf(SystemInfoMessages::class, new SystemInfoMessagesFactory()->__invoke($container, SystemInfoMessages::class));
     }
 }

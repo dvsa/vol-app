@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Logging\Log\Processor;
 
 use DateTimeImmutable;
@@ -8,7 +10,7 @@ use Monolog\LogRecord;
 use Olcs\Logging\Log\Processor\Microtime;
 use PHPUnit\Framework\TestCase;
 
-class MicrotimeTest extends TestCase
+final class MicrotimeTest extends TestCase
 {
     public function testProcess(): void
     {
@@ -18,7 +20,7 @@ class MicrotimeTest extends TestCase
         $result = $sut($record);
 
         $this->assertArrayHasKey('microsecs', $result->extra);
-        $this->assertSame(6, strlen($result->extra['microsecs']));
+        $this->assertSame(6, strlen((string) $result->extra['microsecs']));
         $this->assertTrue(is_numeric($result->extra['microsecs']), 'Microsecs was not a number');
     }
 }

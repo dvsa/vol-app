@@ -35,7 +35,7 @@ class WebDavJsonWebTokenGenerationService
         $this->privateKey = $this->parsePrivateKey($privateKey);
     }
 
-    public function generateToken(string $subject, string $document, int $lifetimeSeconds = null, ?string $jti = null, ?int $documentId = null, ?int $documentSize = null): string
+    public function generateToken(string $subject, string $document, ?int $lifetimeSeconds = null, ?string $jti = null, ?int $documentId = null, ?int $documentSize = null): string
     {
         $payload = [
             static::TOKEN_PAYLOAD_KEY_SUBJECT => $subject,

@@ -12,7 +12,7 @@ use Olcs\FormService\Form\Lva\LicenceBusinessDetails;
 use Common\Service\Helper\FormHelperService;
 use Common\FormService\FormServiceManager;
 
-class LicenceBusinessDetailsTest extends MockeryTestCase
+final class LicenceBusinessDetailsTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -20,6 +20,7 @@ class LicenceBusinessDetailsTest extends MockeryTestCase
 
     private $formHelper;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->fsm = m::mock(FormServiceManager::class)->makePartial();

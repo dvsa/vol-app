@@ -30,7 +30,7 @@ use Mockery as m;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class Schedule41RefuseTest extends AbstractCommandHandlerTestCase
+final class Schedule41RefuseTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

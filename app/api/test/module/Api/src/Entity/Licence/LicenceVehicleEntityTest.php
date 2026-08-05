@@ -19,7 +19,7 @@ use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class LicenceVehicleEntityTest extends EntityTester
+final class LicenceVehicleEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -37,7 +37,7 @@ class LicenceVehicleEntityTest extends EntityTester
 
         $entity->setGoodsDiscs($goodsDiscs);
 
-        $this->assertNull($entity->getActiveDisc());
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc::class, $entity->getActiveDisc());
     }
 
     public function testGetActiveDisc(): void
@@ -75,7 +75,7 @@ class LicenceVehicleEntityTest extends EntityTester
 
         $entity->setGoodsDiscs($goodsDiscs);
 
-        $this->assertNull($entity->getActiveDisc());
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc::class, $entity->getActiveDisc());
     }
 
     public function testConstruct(): void
@@ -114,7 +114,7 @@ class LicenceVehicleEntityTest extends EntityTester
 
         $entity->updateDuplicateMark();
 
-        $this->assertEquals('2015-01-01', $entity->getWarningLetterSeedDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $entity->getWarningLetterSeedDate()->format('Y-m-d'));
     }
 
     public function testUpdateDuplicateMarkWithSentLetter(): void

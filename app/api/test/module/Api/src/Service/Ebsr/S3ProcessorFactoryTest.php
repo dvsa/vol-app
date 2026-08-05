@@ -14,7 +14,7 @@ use Psr\Container\NotFoundExceptionInterface;
 /**
  * @property S3ProcessorFactory $sut
  */
-class S3ProcessorFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
+final class S3ProcessorFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     private S3ProcessorFactory $sut;
 

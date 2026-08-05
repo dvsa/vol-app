@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\InputFilter;
 
 use Common\InputFilter\Input;
@@ -9,26 +11,24 @@ use Common\Test\MockeryTestCase;
 /**
  * @see Input
  */
-class InputTest extends MockeryTestCase
+final class InputTest extends MockeryTestCase
 {
-    protected const AN_INPUT_NAME = 'AN INPUT NAME';
+    protected const string AN_INPUT_NAME = 'AN INPUT NAME';
 
-    protected const A_RAW_INPUT_VALUE = 'A RAW INPUT VALUE';
+    protected const string A_RAW_INPUT_VALUE = 'A RAW INPUT VALUE';
 
-    protected const A_SECOND_RAW_INPUT_VALUE = 'A SECOND RAW INPUT VALUE';
+    protected const string A_SECOND_RAW_INPUT_VALUE = 'A SECOND RAW INPUT VALUE';
 
-    protected const A_FILTERED_INPUT_VALUE = 'A FILTERED INPUT VALUE';
+    protected const string A_FILTERED_INPUT_VALUE = 'A FILTERED INPUT VALUE';
 
-    protected const A_SECOND_FILTERED_INPUT_VALUE = 'A SECOND FILTERED INPUT VALUE';
+    protected const string A_SECOND_FILTERED_INPUT_VALUE = 'A SECOND FILTERED INPUT VALUE';
 
     /**
      * @var Input
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setValueIsCallable(): void
     {
         // Setup
@@ -40,9 +40,7 @@ class InputTest extends MockeryTestCase
         });
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getValueIsCallable(): void
     {
         // Setup
@@ -52,10 +50,8 @@ class InputTest extends MockeryTestCase
         $this->assertIsCallable(fn() => $this->sut->getValue());
     }
 
-    /**
-     * @test
-     * @depends getValueIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getValueIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getValueFiltersValue(): void
     {
         // Setup
@@ -70,10 +66,8 @@ class InputTest extends MockeryTestCase
         $this->assertSame(self::A_FILTERED_INPUT_VALUE, $result);
     }
 
-    /**
-     * @test
-     * @depends getValueFiltersValue
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getValueFiltersValue')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getValueFiltersValueOnceWhenTheValueHasNotBeenSetAgain(): void
     {
         // Setup
@@ -90,11 +84,9 @@ class InputTest extends MockeryTestCase
         $this->assertSame(static::A_RAW_INPUT_VALUE, $result);
     }
 
-    /**
-     * @test
-     * @depends getValueIsCallable
-     * @depends setValueIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getValueIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('setValueIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getValueFiltersValueTwiceWhenTheValueHasBeenSetSinceFirstBeingGotten(): void
     {
         // Setup

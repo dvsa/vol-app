@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\InputFilters;
 
 use Common\Form\Elements\InputFilters\VehicleSafetyTachographAnalyserContractor;
@@ -16,7 +18,7 @@ use Common\Form\Elements\Validators\VehicleSafetyTachographAnalyserContractorVal
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VehicleSafetyTachographAnalyserContractorTest extends \PHPUnit\Framework\TestCase
+final class VehicleSafetyTachographAnalyserContractorTest extends \PHPUnit\Framework\TestCase
 {
     /**+
      * Holds the element
@@ -39,6 +41,6 @@ class VehicleSafetyTachographAnalyserContractorTest extends \PHPUnit\Framework\T
     {
         $spec = $this->element->getInputSpecification();
 
-        $this->assertTrue($spec['validators'][1] instanceof VehicleSafetyTachographAnalyserContractorValidator);
+        $this->assertInstanceOf(\Common\Form\Elements\Validators\VehicleSafetyTachographAnalyserContractorValidator::class, $spec['validators'][1]);
     }
 }

@@ -20,24 +20,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="ebsr_submission",
- *    indexes={
- *        @ORM\Index(name="ix_ebsr_submission_bus_reg_id", columns={"bus_reg_id"}),
- *        @ORM\Index(name="ix_ebsr_submission_ebsr_submission_status_id", columns={"ebsr_submission_status_id"}),
- *        @ORM\Index(name="ix_ebsr_submission_ebsr_submission_type_id", columns={"ebsr_submission_type_id"}),
- *        @ORM\Index(name="ix_ebsr_submission_organisation_id", columns={"organisation_id"}),
- *        @ORM\Index(name="uk_ebsr_submission_document_id", columns={"document_id"}),
- *        @ORM\Index(name="uk_ebsr_submission_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_ebsr_submission_document_id", columns={"document_id"}),
- *        @ORM\UniqueConstraint(name="uk_ebsr_submission_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'ebsr_submission')]
+#[ORM\Index(name: 'ix_ebsr_submission_bus_reg_id', columns: ['bus_reg_id'])]
+#[ORM\Index(name: 'ix_ebsr_submission_ebsr_submission_status_id', columns: ['ebsr_submission_status_id'])]
+#[ORM\Index(name: 'ix_ebsr_submission_ebsr_submission_type_id', columns: ['ebsr_submission_type_id'])]
+#[ORM\Index(name: 'ix_ebsr_submission_organisation_id', columns: ['organisation_id'])]
+#[ORM\UniqueConstraint(name: 'uk_ebsr_submission_document_id', columns: ['document_id'])]
+#[ORM\UniqueConstraint(name: 'uk_ebsr_submission_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractEbsrSubmission implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,242 +41,216 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * EbsrSubmissionStatus
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="ebsr_submission_status_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'ebsr_submission_status_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $ebsrSubmissionStatus;
 
     /**
      * EbsrSubmissionType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="ebsr_submission_type_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'ebsr_submission_type_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $ebsrSubmissionType;
 
     /**
      * Foreign Key to document
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="document_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'ebsrSubmission', fetch: 'LAZY')]
     protected $document;
 
     /**
      * Foreign Key to bus_reg
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
-     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'ebsrSubmissions', fetch: 'LAZY')]
     protected $busReg;
 
     /**
      * Foreign Key to organisation
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 
     /**
      * Submitted date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="submitted_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'submitted_date', nullable: true)]
     protected $submittedDate;
 
     /**
      * Licence no
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="licence_no", length=9, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'licence_no', length: 9, nullable: true)]
     protected $licenceNo;
 
     /**
      * Organisation email address
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="organisation_email_address", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'organisation_email_address', length: 255, nullable: true)]
     protected $organisationEmailAddress;
 
     /**
      * Application classification
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="application_classification", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'application_classification', length: 32, nullable: true)]
     protected $applicationClassification;
 
     /**
      * Variation no
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="variation_no", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'variation_no', nullable: true, options: ['unsigned' => true])]
     protected $variationNo;
 
     /**
      * Registration no
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="registration_no", length=4, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'registration_no', length: 4, nullable: true)]
     protected $registrationNo;
 
     /**
      * Validation start
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="validation_start", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'validation_start', nullable: true)]
     protected $validationStart;
 
     /**
      * Validation end
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="validation_end", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'validation_end', nullable: true)]
     protected $validationEnd;
 
     /**
      * Publish start
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="publish_start", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'publish_start', nullable: true)]
     protected $publishStart;
 
     /**
      * Publish end
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="publish_end", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'publish_end', nullable: true)]
     protected $publishEnd;
 
     /**
      * Process start
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="process_start", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'process_start', nullable: true)]
     protected $processStart;
 
     /**
      * Process end
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="process_end", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'process_end', nullable: true)]
     protected $processEnd;
 
     /**
      * Ebsr submission result
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="ebsr_submission_result", length=10000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'ebsr_submission_result', length: 10000, nullable: true)]
     protected $ebsrSubmissionResult;
 
     /**
      * Distribute start
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="distribute_start", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'distribute_start', nullable: true)]
     protected $distributeStart;
 
     /**
      * Distribute end
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="distribute_end", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'distribute_end', nullable: true)]
     protected $distributeEnd;
 
     /**
      * Distribute expire
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="distribute_expire", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'distribute_expire', nullable: true)]
     protected $distributeExpire;
 
     /**
      * isFromFtp
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_from_ftp", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_from_ftp', nullable: false, options: ['default' => 0])]
     protected $isFromFtp = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'integer', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Txc version
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="txc_version", length=10, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'txc_version', length: 10, nullable: true)]
     protected $txcVersion;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
@@ -308,7 +274,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setId($id)
     {
@@ -332,7 +298,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $ebsrSubmissionStatus new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setEbsrSubmissionStatus($ebsrSubmissionStatus)
     {
@@ -356,7 +322,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $ebsrSubmissionType new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setEbsrSubmissionType($ebsrSubmissionType)
     {
@@ -380,7 +346,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $document new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setDocument($document)
     {
@@ -404,7 +370,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -428,7 +394,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -452,7 +418,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param \DateTime $submittedDate new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setSubmittedDate($submittedDate)
     {
@@ -482,7 +448,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param string $licenceNo new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setLicenceNo($licenceNo)
     {
@@ -506,7 +472,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param string $organisationEmailAddress new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setOrganisationEmailAddress($organisationEmailAddress)
     {
@@ -530,7 +496,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param string $applicationClassification new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setApplicationClassification($applicationClassification)
     {
@@ -554,7 +520,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param int $variationNo new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setVariationNo($variationNo)
     {
@@ -578,7 +544,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param string $registrationNo new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setRegistrationNo($registrationNo)
     {
@@ -602,7 +568,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param \DateTime $validationStart new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setValidationStart($validationStart)
     {
@@ -632,7 +598,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param \DateTime $validationEnd new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setValidationEnd($validationEnd)
     {
@@ -662,7 +628,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param \DateTime $publishStart new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setPublishStart($publishStart)
     {
@@ -692,7 +658,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param \DateTime $publishEnd new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setPublishEnd($publishEnd)
     {
@@ -722,7 +688,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param \DateTime $processStart new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setProcessStart($processStart)
     {
@@ -752,7 +718,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param \DateTime $processEnd new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setProcessEnd($processEnd)
     {
@@ -782,7 +748,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param string $ebsrSubmissionResult new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setEbsrSubmissionResult($ebsrSubmissionResult)
     {
@@ -806,7 +772,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param \DateTime $distributeStart new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setDistributeStart($distributeStart)
     {
@@ -836,7 +802,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param \DateTime $distributeEnd new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setDistributeEnd($distributeEnd)
     {
@@ -866,7 +832,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param \DateTime $distributeExpire new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setDistributeExpire($distributeExpire)
     {
@@ -896,7 +862,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param string $isFromFtp new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setIsFromFtp($isFromFtp)
     {
@@ -920,7 +886,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setVersion($version)
     {
@@ -944,7 +910,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param string $txcVersion new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setTxcVersion($txcVersion)
     {
@@ -968,7 +934,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      *
      * @param int $olbsKey new value being set
      *
-     * @return EbsrSubmission
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

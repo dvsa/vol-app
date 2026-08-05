@@ -9,10 +9,8 @@ use Laminas\I18n\Translator\TranslatorInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Snapshot\Service\Snapshots\TransportManagerApplication\Section\AbstractReviewServiceServices
- */
-class AbstractReviewServiceServicesTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Snapshot\Service\Snapshots\TransportManagerApplication\Section\AbstractReviewServiceServices::class)]
+final class AbstractReviewServiceServicesTest extends MockeryTestCase
 {
     public function testGetTranslator(): void
     {

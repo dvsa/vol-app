@@ -143,7 +143,6 @@ return [
     ],
     'caches' => [
         'default-cache' => [
-            'adapter' => Laminas\Cache\Storage\Adapter\Redis::class,
             'options' => [
                 'server' => [
                     'host' => 'redis',

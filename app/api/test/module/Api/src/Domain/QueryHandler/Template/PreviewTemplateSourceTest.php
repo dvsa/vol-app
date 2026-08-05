@@ -13,7 +13,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 use RuntimeException;
 
-class PreviewTemplateSourceTest extends QueryHandlerTestCase
+final class PreviewTemplateSourceTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

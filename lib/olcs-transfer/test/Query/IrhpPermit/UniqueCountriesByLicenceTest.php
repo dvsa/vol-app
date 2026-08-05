@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\IrhpPermit;
 
 use Dvsa\Olcs\Transfer\Query\IrhpPermit\UniqueCountriesByLicence;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Query\IrhpPermit\UniqueCountriesByLicence
- */
-class UniqueCountriesByLicenceTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\IrhpPermit\UniqueCountriesByLicence::class)]
+final class UniqueCountriesByLicenceTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -17,17 +17,14 @@ class UniqueCountriesByLicenceTest extends \PHPUnit\Framework\TestCase
                 'irhpPermitType' => 2,
             ]
         );
-        static::assertEquals(7, $sut->getLicence());
-        static::assertEquals(2, $sut->getIrhpPermitType());
-        static::assertNull($sut->getValidOnly());
-        static::assertEquals(
-            [
-                'licence' => 7,
-                'irhpPermitType' => 2,
-                'validOnly' => null,
-            ],
-            $sut->getArrayCopy()
-        );
+        $this->assertEquals(7, $sut->getLicence());
+        $this->assertEquals(2, $sut->getIrhpPermitType());
+        $this->assertNull($sut->getValidOnly());
+        $this->assertEquals([
+            'licence' => 7,
+            'irhpPermitType' => 2,
+            'validOnly' => null,
+        ], $sut->getArrayCopy());
     }
 
     public function testStructureOptional()
@@ -39,16 +36,13 @@ class UniqueCountriesByLicenceTest extends \PHPUnit\Framework\TestCase
                 'validOnly' => true,
             ]
         );
-        static::assertEquals(7, $sut->getLicence());
-        static::assertEquals(2, $sut->getIrhpPermitType());
-        static::assertEquals(true, $sut->getValidOnly());
-        static::assertEquals(
-            [
-                'licence' => 7,
-                'irhpPermitType' => 2,
-                'validOnly' => true,
-            ],
-            $sut->getArrayCopy()
-        );
+        $this->assertEquals(7, $sut->getLicence());
+        $this->assertEquals(2, $sut->getIrhpPermitType());
+        $this->assertEquals(true, $sut->getValidOnly());
+        $this->assertEquals([
+            'licence' => 7,
+            'irhpPermitType' => 2,
+            'validOnly' => true,
+        ], $sut->getArrayCopy());
     }
 }

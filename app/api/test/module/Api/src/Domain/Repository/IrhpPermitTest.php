@@ -26,8 +26,9 @@ use PDO;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class IrhpPermitTest extends RepositoryTestCase
+final class IrhpPermitTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(IrhpPermit::class);
@@ -134,12 +135,10 @@ class IrhpPermitTest extends RepositoryTestCase
         );
     }
 
-    public static function dpTestGetPermitCountWithEmissionsCategoryId(): array
+    public static function dpTestGetPermitCountWithEmissionsCategoryId(): \Iterator
     {
-        return [
-            [RefData::EMISSIONS_CATEGORY_EURO5_REF],
-            [RefData::EMISSIONS_CATEGORY_EURO6_REF],
-        ];
+        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF];
+        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF];
     }
 
     public function testGetPermitCountByRange(): void
@@ -383,29 +382,27 @@ class IrhpPermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public static function dpFetchListForReadyToPrintWithStockAndRangeType(): array
+    public static function dpFetchListForReadyToPrintWithStockAndRangeType(): \Iterator
     {
-        return [
-            [
-                IrhpPermitRangeEntity::BILATERAL_TYPE_STANDARD_SINGLE,
-                RefData::JOURNEY_SINGLE,
-                'false',
-            ],
-            [
-                IrhpPermitRangeEntity::BILATERAL_TYPE_STANDARD_MULTIPLE,
-                RefData::JOURNEY_MULTIPLE,
-                'false',
-            ],
-            [
-                IrhpPermitRangeEntity::BILATERAL_TYPE_CABOTAGE_SINGLE,
-                RefData::JOURNEY_SINGLE,
-                'true',
-            ],
-            [
-                IrhpPermitRangeEntity::BILATERAL_TYPE_CABOTAGE_MULTIPLE,
-                RefData::JOURNEY_MULTIPLE,
-                'true',
-            ],
+        yield [
+            IrhpPermitRangeEntity::BILATERAL_TYPE_STANDARD_SINGLE,
+            RefData::JOURNEY_SINGLE,
+            'false',
+        ];
+        yield [
+            IrhpPermitRangeEntity::BILATERAL_TYPE_STANDARD_MULTIPLE,
+            RefData::JOURNEY_MULTIPLE,
+            'false',
+        ];
+        yield [
+            IrhpPermitRangeEntity::BILATERAL_TYPE_CABOTAGE_SINGLE,
+            RefData::JOURNEY_SINGLE,
+            'true',
+        ];
+        yield [
+            IrhpPermitRangeEntity::BILATERAL_TYPE_CABOTAGE_MULTIPLE,
+            RefData::JOURNEY_MULTIPLE,
+            'true',
         ];
     }
 
@@ -516,13 +513,11 @@ class IrhpPermitTest extends RepositoryTestCase
         $this->assertEquals($expectedQuery, $this->query);
     }
 
-    public static function dpFetchListByLicence(): array
+    public static function dpFetchListByLicence(): \Iterator
     {
-        return [
-            'valid only' => [null, true, IrhpPermitEntity::$validStatuses],
-            'all' => [null, false, IrhpPermitEntity::ALL_STATUSES],
-            'specific' => [IrhpPermitEntity::STATUS_PRINTING, null, [IrhpPermitEntity::STATUS_PRINTING]],
-        ];
+        yield 'valid only' => [null, true, IrhpPermitEntity::$validStatuses];
+        yield 'all' => [null, false, IrhpPermitEntity::ALL_STATUSES];
+        yield 'specific' => [IrhpPermitEntity::STATUS_PRINTING, null, [IrhpPermitEntity::STATUS_PRINTING]];
     }
 
     public function testGetLivePermitCountsGroupedByStock(): void

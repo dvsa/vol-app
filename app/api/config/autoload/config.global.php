@@ -46,30 +46,38 @@ return [
 
     // Doctrine
     'doctrine' => [
+        'entity_manager' => [
+            'orm_default' => [
+                'connection' => 'orm_default',
+                'configuration' => 'orm_default',
+            ],
+        ],
+        'cache' => [
+            'redis' => [
+                // Resolved from the container by Roave's CacheFactory, so this is a service name
+                'class' => 'doctrine-cache',
+            ],
+        ],
         'connection' => [
             'orm_default' => [
-                'driverClass' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
+                // Used by Roave
+                'driver_class' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
                 // Database connection details
                 'params' => $doctrine_connection_params,
             ],
             'export' => [
-                'driverClass' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
+                // Used by Roave
+                'driver_class' => \Doctrine\DBAL\Driver\PDO\MySQL\Driver::class,
+                'configuration' => 'orm_default',
+                'event_manager' => 'orm_default',
                 // Database connection details
                 'params' => $doctrine_connection_params,
             ],
         ],
-        'driver' => [
-            'EntityDriver' => [
-                'cache' => 'redis'
-            ],
-            'translatable_metadata_driver' => [
-                'cache' => 'redis',
-            ]
-        ],
         'configuration' => [
             'orm_default' => [
                 'metadata_cache' => 'redis',
-                'generate_proxies' => true,
+                'auto_generate_proxy_classes' => true,
                 'query_cache'       => 'redis',
                 'result_cache'      => 'redis',
                 'hydration_cache'   => 'redis',
@@ -276,9 +284,11 @@ return [
 
     // Email config
     'email' => [
-        // Debugging option forces all email to be sent to an address
-        // Selfserve/external URI e.g. http://demo_dvsa-selfserve.web03.olcs.mgt.mtpdvsa *Environment specific*
-        'send_all_mail_to' => ($isProductionAccount && !$isProduction) ? '%olcs_send_all_mail_to%' : null,
+        // Debugging option: redirect ALL outbound email to a single address. Driven by the env's
+        // `olcs_send_all_mail_to` param — a real address enables it, a blank/"null" sentinel disables
+        // it (SSM String params cannot be empty, so envs opt out with " " or "null"). NEVER in
+        // production (APP): prod always sends to the real recipients regardless of the param.
+        'send_all_mail_to' => $isProduction ? null : '%olcs_send_all_mail_to%',
         'from_name' => 'OLCS do not reply',
         'from_email' => '%olcs_from_email%',
         'selfserve_uri' => '%olcs_ss_uri%',
@@ -545,48 +555,22 @@ return [
 
     'caches' => [
         'default-cache' => [
-            'adapter' => Laminas\Cache\Storage\Adapter\Redis::class,
             'options' => [
                 'server' => [
                     'host' => '%redis_cache_fqdn%',
                     'port' => 6379,
-                ],
-                'lib_options' => [
-                    \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
                 ],
                 'ttl' => 3600, //one hour, likely to be overridden based on use case
                 'namespace' => 'zfcache',
-            ],
-            'plugins' => [
-                [
-                    'name' => 'exception_handler',
-                    'options' => [
-                        'throw_exceptions' => false,
-                    ],
-                ],
-            ],
+            ]
         ],
-        'doctrinemodule.cache.redis' => [
-            'adapter' => Laminas\Cache\Storage\Adapter\Redis::class,
+        // Keeps Doctrine ORM cache keys isolated from the general app cache (shares the
+        // same Redis connection, separate key namespace) so each can be cleared independently
+        'doctrine-cache' => [
             'options' => [
-                'server' => [
-                    'host' => '%redis_cache_fqdn%',
-                    'port' => 6379,
-                ],
-                'lib_options' => [
-                    \Redis::OPT_SERIALIZER => \Redis::SERIALIZER_IGBINARY
-                ],
-                'ttl' => 3600, //one hour, likely to be overridden based on use case
+                'ttl' => 3600,
                 'namespace' => 'doctrine',
-            ],
-            'plugins' => [
-                [
-                    'name' => 'exception_handler',
-                    'options' => [
-                        'throw_exceptions' => false,
-                    ],
-                ],
-            ],
+            ]
         ],
     ],
 

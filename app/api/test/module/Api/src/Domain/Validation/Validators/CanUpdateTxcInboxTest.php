@@ -22,7 +22,7 @@ use Mockery as m;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class CanUpdateTxcInboxTest extends AbstractValidatorsTestCase
+final class CanUpdateTxcInboxTest extends AbstractValidatorsTestCase
 {
     /**
      * @var CanUpdateTxcInbox
@@ -86,11 +86,9 @@ class CanUpdateTxcInboxTest extends AbstractValidatorsTestCase
         $this->assertFalse($this->sut->isValid(null));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false]
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

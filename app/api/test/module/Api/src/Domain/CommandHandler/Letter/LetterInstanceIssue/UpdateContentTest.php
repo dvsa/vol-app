@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * UpdateContent LetterInstanceIssue Test
  */
-class UpdateContentTest extends AbstractCommandHandlerTestCase
+final class UpdateContentTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -56,6 +56,6 @@ class UpdateContentTest extends AbstractCommandHandlerTestCase
         $result = $this->sut->handleCommand($command);
 
         $this->assertSame($issueId, $result->getId('letterInstanceIssue'));
-        $this->assertStringContainsString('updated successfully', $result->getMessages()[0]);
+        $this->assertStringContainsString('updated successfully', (string) $result->getMessages()[0]);
     }
 }

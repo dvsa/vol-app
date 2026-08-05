@@ -266,6 +266,10 @@ class LetterGenerationController extends AbstractInternalController implements L
                 'id' => $issue['id'],
                 'name' => $issue['letterIssueVersion']['heading'] ?? 'Issue',
                 'type' => 'issue',
+                // VOL-7402: flagged content must be edited before the letter can be
+                // sent (enforced server-side in PrepareToSend) — highlight it here.
+                'inputPending' => !empty($issue['letterIssueVersion']['requiresInput'])
+                    && empty($issue['editedContent']),
             ];
         }
 
@@ -311,6 +315,8 @@ class LetterGenerationController extends AbstractInternalController implements L
                 'name' => $name,
                 'position' => $instanceSection['positionInAssembly'] ?? 0,
                 'type' => 'section',
+                'inputPending' => !empty($sectionVersion['requiresInput'])
+                    && empty($instanceSection['editedContent']),
             ];
         }
 
@@ -727,9 +733,17 @@ class LetterGenerationController extends AbstractInternalController implements L
         $response = $this->handleCommand($command);
 
         if (!$response->isOk()) {
-            $messages = $response->getResult()['messages'] ?? [];
-            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
-            return $this->jsonError('Failed to prepare letter: ' . $errorMessage);
+            // Validation failures arrive keyed and nested (field => [message, ...]),
+            // so flatten before joining or the user sees the literal string "Array".
+            $messages = (array) ($response->getResult()['messages'] ?? []);
+            $flatMessages = [];
+            array_walk_recursive(
+                $messages,
+                static function ($message) use (&$flatMessages): void {
+                    $flatMessages[] = (string) $message;
+                }
+            );
+            return $this->jsonError('Failed to prepare letter: ' . implode(', ', $flatMessages));
         }
 
         $result = $response->getResult();
@@ -1005,9 +1019,16 @@ class LetterGenerationController extends AbstractInternalController implements L
                     'label' => $letterChoice['label'] ?? '',
                     'groupLabel' => $letterChoice['groupLabel'] ?? 'Other letter choices',
                     'inputType' => $letterChoice['inputType'] ?? 'checkbox',
+                    'displayOrder' => (int) ($letterChoice['displayOrder'] ?? 0),
                 ];
             }
         }
+
+        // VOL-7282: honour the admin-configured ordering (label as tiebreak)
+        usort(
+            $choices,
+            fn(array $a, array $b) => [$a['displayOrder'], $a['label']] <=> [$b['displayOrder'], $b['label']]
+        );
 
         return $choices;
     }

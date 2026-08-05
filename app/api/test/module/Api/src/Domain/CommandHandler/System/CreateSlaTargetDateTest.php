@@ -22,7 +22,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class CreateSlaTargetDateTest extends AbstractCommandHandlerTestCase
+final class CreateSlaTargetDateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

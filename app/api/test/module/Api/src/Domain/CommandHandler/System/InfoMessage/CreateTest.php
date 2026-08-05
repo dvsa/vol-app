@@ -10,10 +10,8 @@ use Dvsa\Olcs\Api\Entity;
 use Dvsa\Olcs\Transfer\Command\System\InfoMessage\Create as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\System\InfoMessage\Create
- */
-class CreateTest extends AbstractCommandHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\System\InfoMessage\Create::class)]
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -26,8 +24,8 @@ class CreateTest extends AbstractCommandHandlerTestCase
     public function test(): void
     {
         $id = 99999;
-        $startDate = (new \DateTime())->setTime(0, 0, 0);
-        $endDate = (new \DateTime())->setTime(23, 59, 59);
+        $startDate = new \DateTime()->setTime(0, 0, 0);
+        $endDate = new \DateTime()->setTime(23, 59, 59);
 
         $data = [
             'description' => 'unit_Desc',
@@ -42,10 +40,10 @@ class CreateTest extends AbstractCommandHandlerTestCase
             ->once()
             ->andReturnUsing(
                 function (Entity\System\SystemInfoMessage $entity) use ($startDate, $endDate, $id) {
-                    static::assertEquals($entity->getDescription(), 'unit_Desc');
-                    static::assertEquals($entity->getStartDate(), $startDate);
-                    static::assertEquals($entity->getEndDate(), $endDate);
-                    static::assertEquals($entity->getIsInternal(), 'Y');
+                    $this->assertEquals('unit_Desc', $entity->getDescription());
+                    $this->assertEquals($entity->getStartDate(), $startDate);
+                    $this->assertEquals($entity->getEndDate(), $endDate);
+                    $this->assertEquals('Y', $entity->getIsInternal());
 
                     $entity->setId($id);
                 }
@@ -58,6 +56,6 @@ class CreateTest extends AbstractCommandHandlerTestCase
             'id' => ['systemInfoMessage' => $id],
             'messages' => ['System Info Message \'' . $id . '\' created'],
         ];
-        static::assertEquals($expected, $actual->toArray());
+        $this->assertEquals($expected, $actual->toArray());
     }
 }

@@ -15,7 +15,7 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class TranslateableTextTest extends MockeryTestCase
+final class TranslateableTextTest extends MockeryTestCase
 {
     private $key;
 
@@ -29,6 +29,7 @@ class TranslateableTextTest extends MockeryTestCase
 
     private $translateableText;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->key = 'translateableTextKey';

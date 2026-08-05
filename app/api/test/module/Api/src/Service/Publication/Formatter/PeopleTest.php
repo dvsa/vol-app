@@ -15,10 +15,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class PeopleTest extends MockeryTestCase
+final class PeopleTest extends MockeryTestCase
 {
-    protected $sut;
-
+    #[\Override]
     public function setUp(): void
     {
     }
@@ -44,8 +43,8 @@ class PeopleTest extends MockeryTestCase
         $organisation = new Organisation();
         $organisation->setType(new RefData(Organisation::ORG_TYPE_REGISTERED_COMPANY));
 
-        $person1 = (new Person())->setForename('Reggie')->setFamilyName('Kray');
-        $person2 = (new Person())->setForename('Ronnie')->setFamilyName('May');
+        $person1 = new Person()->setForename('Reggie')->setFamilyName('Kray');
+        $person2 = new Person()->setForename('Ronnie')->setFamilyName('May');
 
         $this->assertSame(
             'Director(s): Reggie Kray, Ronnie May',
@@ -58,8 +57,8 @@ class PeopleTest extends MockeryTestCase
         $organisation = new Organisation();
         $organisation->setType(new RefData(Organisation::ORG_TYPE_LLP));
 
-        $person1 = (new Person())->setForename('Reggie')->setFamilyName('Kray');
-        $person2 = (new Person())->setForename('Ronnie')->setFamilyName('May');
+        $person1 = new Person()->setForename('Reggie')->setFamilyName('Kray');
+        $person2 = new Person()->setForename('Ronnie')->setFamilyName('May');
 
         $this->assertSame(
             'Partner(s): Reggie Kray, Ronnie May',
@@ -72,8 +71,8 @@ class PeopleTest extends MockeryTestCase
         $organisation = new Organisation();
         $organisation->setType(new RefData(Organisation::ORG_TYPE_PARTNERSHIP));
 
-        $person1 = (new Person())->setForename('Reggie')->setFamilyName('Kray');
-        $person2 = (new Person())->setForename('Ronnie')->setFamilyName('May');
+        $person1 = new Person()->setForename('Reggie')->setFamilyName('Kray');
+        $person2 = new Person()->setForename('Ronnie')->setFamilyName('May');
 
         $this->assertSame(
             'Partner(s): Reggie Kray, Ronnie May',
@@ -86,8 +85,8 @@ class PeopleTest extends MockeryTestCase
         $organisation = new Organisation();
         $organisation->setType(new RefData(Organisation::ORG_TYPE_OTHER));
 
-        $person1 = (new Person())->setForename('Reggie')->setFamilyName('Kray');
-        $person2 = (new Person())->setForename('Ronnie')->setFamilyName('May');
+        $person1 = new Person()->setForename('Reggie')->setFamilyName('Kray');
+        $person2 = new Person()->setForename('Ronnie')->setFamilyName('May');
 
         $this->assertSame(
             'Reggie Kray, Ronnie May',

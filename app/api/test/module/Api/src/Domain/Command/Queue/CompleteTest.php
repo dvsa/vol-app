@@ -18,7 +18,7 @@ use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class CompleteTest extends \PHPUnit\Framework\TestCase
+final class CompleteTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

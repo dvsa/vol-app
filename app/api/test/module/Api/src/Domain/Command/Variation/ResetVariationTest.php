@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * ResetVariation test
  */
-class ResetVariationTest extends TestCase
+final class ResetVariationTest extends TestCase
 {
     public function testStructure(): void
     {

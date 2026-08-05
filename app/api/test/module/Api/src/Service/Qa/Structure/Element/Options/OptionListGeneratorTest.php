@@ -18,7 +18,7 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class OptionListGeneratorTest extends MockeryTestCase
+final class OptionListGeneratorTest extends MockeryTestCase
 {
     private $directSource;
 
@@ -28,6 +28,7 @@ class OptionListGeneratorTest extends MockeryTestCase
 
     private $optionListGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->directSource = m::mock(SourceInterface::class);

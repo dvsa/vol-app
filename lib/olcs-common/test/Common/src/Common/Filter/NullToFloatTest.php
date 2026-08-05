@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Filter;
 
 use Common\Filter\NullToFloat;
@@ -7,16 +9,16 @@ use Common\Filter\NullToFloat;
 /**
  * Class NullToFloatTest
  * @package CommonTest\Filter
- * @covers \Common\Filter\NullToFloat
  */
-class NullToFloatTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Filter\NullToFloat::class)]
+final class NullToFloatTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider getValueDataProvider
      *
      * @param $input
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getValueDataProvider')]
     public function testFilter($input, $expected): void
     {
         $filter = new NullToFloat();
@@ -24,15 +26,13 @@ class NullToFloatTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function getValueDataProvider()
+    public static function getValueDataProvider(): \Iterator
     {
-        return [
-            'Bool value should return int of 0' => [false, 0],
-            'Null value should return int of 0' => [null, 0],
-            'Integer value should return same number' => [1, 1],
-            'String should return a string' => ['string','string'],
-        ];
+        yield 'Bool value should return int of 0' => [false, 0];
+        yield 'Null value should return int of 0' => [null, 0];
+        yield 'Integer value should return same number' => [1, 1];
+        yield 'String should return a string' => ['string','string'];
     }
 }

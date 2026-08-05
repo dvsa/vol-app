@@ -1,6 +1,6 @@
-DELIMITER $$
-
 DROP PROCEDURE IF EXISTS sp_add_indices;
+
+DELIMITER $$
 
 CREATE PROCEDURE sp_add_indices()
 

@@ -19,7 +19,7 @@ use Dvsa\Olcs\Transfer\Query\Publication\RecipientList as Qry;
 /**
  * RecipientList Test
  */
-class RecipientListTest extends QueryHandlerTestCase
+final class RecipientListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

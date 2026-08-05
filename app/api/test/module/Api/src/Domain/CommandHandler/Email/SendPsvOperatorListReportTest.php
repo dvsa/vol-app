@@ -19,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Repository\SystemParameter as SystemParameterRepo;
 /**
  * Send Psv Operator List Report Test
  */
-class SendPsvOperatorListReportTest extends AbstractCommandHandlerTestCase
+final class SendPsvOperatorListReportTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var CommandInterface|SendPsvOperatorListReport

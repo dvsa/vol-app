@@ -26,7 +26,7 @@ use Mockery as m;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class LicenceDecisionsTest extends QueryHandlerTestCase
+final class LicenceDecisionsTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

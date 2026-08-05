@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Auth\ForgotPassword;
 /**
  * @see ForgotPassword
  */
-class ForgotPasswordTest extends \PHPUnit\Framework\TestCase
+final class ForgotPasswordTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

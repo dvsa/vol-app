@@ -14,8 +14,9 @@ use Mockery as m;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class SectorsTest extends RepositoryTestCase
+final class SectorsTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Sectors::class);

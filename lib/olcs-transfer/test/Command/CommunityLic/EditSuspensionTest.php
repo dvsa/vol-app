@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\CommunityLic;
 
 use Dvsa\Olcs\Transfer\Command\CommunityLic\EditSuspension;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\CommunityLic\EditSuspension;
 /**
  * Edit suspension test
  */
-class EditSuspensionTest extends \PHPUnit\Framework\TestCase
+final class EditSuspensionTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

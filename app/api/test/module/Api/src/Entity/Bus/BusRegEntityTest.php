@@ -28,11 +28,12 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class BusRegEntityTest extends EntityTester
+final class BusRegEntityTest extends EntityTester
 {
     /** @var Entity */
     protected $entity;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->entity = $this->instantiate($this->entityClass);
@@ -160,30 +161,28 @@ class BusRegEntityTest extends EntityTester
     /**
      * Data provider for isFromEbsr
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isReadOnlyProvider(): array
+    public static function isReadOnlyProvider(): \Iterator
     {
-        return [
-            [false, Entity::STATUS_NEW, true],
-            [false, Entity::STATUS_VAR, true],
-            [false, Entity::STATUS_CANCEL, true],
-            [false, Entity::STATUS_ADMIN, true],
-            [false, Entity::STATUS_REGISTERED, true],
-            [false, Entity::STATUS_REFUSED, true],
-            [false, Entity::STATUS_WITHDRAWN, true],
-            [false, Entity::STATUS_CNS, true],
-            [false, Entity::STATUS_CANCELLED, true],
-            [true, Entity::STATUS_NEW, false],
-            [true, Entity::STATUS_VAR, false],
-            [true, Entity::STATUS_CANCEL, false],
-            [true, Entity::STATUS_ADMIN, false],
-            [true, Entity::STATUS_REGISTERED, false],
-            [true, Entity::STATUS_REFUSED, false],
-            [true, Entity::STATUS_WITHDRAWN, false],
-            [true, Entity::STATUS_CNS, false],
-            [true, Entity::STATUS_CANCELLED, true]
-        ];
+        yield [false, Entity::STATUS_NEW, true];
+        yield [false, Entity::STATUS_VAR, true];
+        yield [false, Entity::STATUS_CANCEL, true];
+        yield [false, Entity::STATUS_ADMIN, true];
+        yield [false, Entity::STATUS_REGISTERED, true];
+        yield [false, Entity::STATUS_REFUSED, true];
+        yield [false, Entity::STATUS_WITHDRAWN, true];
+        yield [false, Entity::STATUS_CNS, true];
+        yield [false, Entity::STATUS_CANCELLED, true];
+        yield [true, Entity::STATUS_NEW, false];
+        yield [true, Entity::STATUS_VAR, false];
+        yield [true, Entity::STATUS_CANCEL, false];
+        yield [true, Entity::STATUS_ADMIN, false];
+        yield [true, Entity::STATUS_REGISTERED, false];
+        yield [true, Entity::STATUS_REFUSED, false];
+        yield [true, Entity::STATUS_WITHDRAWN, false];
+        yield [true, Entity::STATUS_CNS, false];
+        yield [true, Entity::STATUS_CANCELLED, true];
     }
 
     /**
@@ -205,21 +204,19 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isCancellationProvider(): array
+    public static function isCancellationProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_NEW, false],
-            [Entity::STATUS_VAR, false],
-            [Entity::STATUS_CANCEL, true],
-            [Entity::STATUS_ADMIN, false],
-            [Entity::STATUS_REGISTERED, false],
-            [Entity::STATUS_REFUSED, false],
-            [Entity::STATUS_WITHDRAWN, false],
-            [Entity::STATUS_CNS, false],
-            [Entity::STATUS_CANCELLED, false]
-        ];
+        yield [Entity::STATUS_NEW, false];
+        yield [Entity::STATUS_VAR, false];
+        yield [Entity::STATUS_CANCEL, true];
+        yield [Entity::STATUS_ADMIN, false];
+        yield [Entity::STATUS_REGISTERED, false];
+        yield [Entity::STATUS_REFUSED, false];
+        yield [Entity::STATUS_WITHDRAWN, false];
+        yield [Entity::STATUS_CNS, false];
+        yield [Entity::STATUS_CANCELLED, false];
     }
 
     /**
@@ -241,21 +238,19 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function dpIsCancelled(): array
+    public static function dpIsCancelled(): \Iterator
     {
-        return [
-            [Entity::STATUS_NEW, false],
-            [Entity::STATUS_VAR, false],
-            [Entity::STATUS_CANCEL, false],
-            [Entity::STATUS_ADMIN, false],
-            [Entity::STATUS_REGISTERED, false],
-            [Entity::STATUS_REFUSED, false],
-            [Entity::STATUS_WITHDRAWN, false],
-            [Entity::STATUS_CNS, false],
-            [Entity::STATUS_CANCELLED, true]
-        ];
+        yield [Entity::STATUS_NEW, false];
+        yield [Entity::STATUS_VAR, false];
+        yield [Entity::STATUS_CANCEL, false];
+        yield [Entity::STATUS_ADMIN, false];
+        yield [Entity::STATUS_REGISTERED, false];
+        yield [Entity::STATUS_REFUSED, false];
+        yield [Entity::STATUS_WITHDRAWN, false];
+        yield [Entity::STATUS_CNS, false];
+        yield [Entity::STATUS_CANCELLED, true];
     }
 
     /**
@@ -276,14 +271,12 @@ class BusRegEntityTest extends EntityTester
     /**
      * Data provider for isFromEbsr
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isFromEbsrProvider(): array
+    public static function isFromEbsrProvider(): \Iterator
     {
-        return [
-            ['Y', true],
-            ['N', false]
-        ];
+        yield ['Y', true];
+        yield ['N', false];
     }
 
     /**
@@ -306,14 +299,12 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isEbsrRefreshProvider(): array
+    public static function isEbsrRefreshProvider(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 
     /**
@@ -336,14 +327,12 @@ class BusRegEntityTest extends EntityTester
     /**
      * Data provider for isScottishRules
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isScottishRulesProvider(): array
+    public static function isScottishRulesProvider(): \Iterator
     {
-        return [
-            [BusNoticePeriodEntity::NOTICE_PERIOD_SCOTLAND, true],
-            [BusNoticePeriodEntity::NOTICE_PERIOD_OTHER, false]
-        ];
+        yield [BusNoticePeriodEntity::NOTICE_PERIOD_SCOTLAND, true];
+        yield [BusNoticePeriodEntity::NOTICE_PERIOD_OTHER, false];
     }
 
     public function testIsVariation(): void
@@ -352,15 +341,15 @@ class BusRegEntityTest extends EntityTester
 
         //  not variation
         $busReg->setVariationNo(null);
-        static::assertFalse($busReg->isVariation());
+        $this->assertFalse($busReg->isVariation());
 
         //  not variation
         $busReg->setVariationNo(0);
-        static::assertFalse($busReg->isVariation());
+        $this->assertFalse($busReg->isVariation());
 
         //  is variation
         $busReg->setVariationNo(1);
-        static::assertTrue($busReg->isVariation());
+        $this->assertTrue($busReg->isVariation());
     }
 
     /**
@@ -392,11 +381,11 @@ class BusRegEntityTest extends EntityTester
 
         $result = $sut->getCalculatedValues();
 
-        $this->assertEquals($result['licence'], null);
-        $this->assertEquals($result['isLatestVariation'], true);
-        $this->assertEquals($result['isScottishRules'], true);
-        $this->assertEquals($result['isFromEbsr'], true);
-        $this->assertEquals($result['isReadOnly'], true);
+        $this->assertEquals(null, $result['licence']);
+        $this->assertEquals(true, $result['isLatestVariation']);
+        $this->assertEquals(true, $result['isScottishRules']);
+        $this->assertEquals(true, $result['isFromEbsr']);
+        $this->assertEquals(true, $result['isReadOnly']);
     }
 
     /**
@@ -768,7 +757,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($busReg, $busRegSN->getBusReg());
 
         // test other services
-        $this->assertEquals(2, $busReg->getOtherServices()->count());
+        $this->assertCount(2, $busReg->getOtherServices());
         $this->assertNull($busReg->getOtherServices()->first()->getId());
         $this->assertNull($busReg->getOtherServices()->first()->getVersion());
         $this->assertNull($busReg->getOtherServices()->first()->getOlbsKey());
@@ -780,14 +769,12 @@ class BusRegEntityTest extends EntityTester
     /**
      * Data provider for testCreateVariation
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function createVariationProvider(): array
+    public static function createVariationProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_VAR],
-            [Entity::STATUS_CANCEL],
-        ];
+        yield [Entity::STATUS_VAR];
+        yield [Entity::STATUS_CANCEL];
     }
 
     /**
@@ -1105,7 +1092,7 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($expectedEffectiveDate, $this->entity->getEffectiveDate());
     }
 
-    public static function provideCalculateNoticeDate(): array
+    public static function provideCalculateNoticeDate(): \Iterator
     {
         $scotRules = [
             'standardPeriod' => 42,
@@ -1118,142 +1105,139 @@ class BusRegEntityTest extends EntityTester
             'cancellationPeriod' => 0,
             'id' => 2
         ];
-
-        return [
+        yield [
+            $scotRules,
             [
-                $scotRules,
-                [
-                    'variationNo' => 0,
-                    'receivedDate' => null
-                ],
-                null //no received date
+                'variationNo' => 0,
+                'receivedDate' => null
             ],
+            null //no received date
+        ];
+        yield [
+            $scotRules,
             [
-                $scotRules,
-                [
-                    'variationNo' => 1,
-                    'receivedDate' => null
-                ],
-                null //no received date
+                'variationNo' => 1,
+                'receivedDate' => null
             ],
+            null //no received date
+        ];
+        yield [
+            $otherRules,
             [
-                $otherRules,
-                [
-                    'variationNo' => 0,
-                    'receivedDate' => null
-                ],
-                null //no received date
+                'variationNo' => 0,
+                'receivedDate' => null
             ],
+            null //no received date
+        ];
+        yield [
+            $otherRules,
             [
-                $otherRules,
-                [
-                    'variationNo' => 1,
-                    'receivedDate' => null
-                ],
-                null //no received date
+                'variationNo' => 1,
+                'receivedDate' => null
             ],
+            null //no received date
+        ];
+        yield [
+            $otherRules,
             [
-                $otherRules,
-                [
-                    'variationNo' => 0,
-                    'receivedDate' => '2015-02-09'
-                ],
-                new \DateTime('2015-04-06') //received + 56 days
+                'variationNo' => 0,
+                'receivedDate' => '2015-02-09'
             ],
+            new \DateTime('2015-04-06') //received + 56 days
+        ];
+        yield [
+            $otherRules,
             [
-                $otherRules,
-                [
-                    'variationNo' => 1,
-                    'receivedDate' => '2015-02-09'
-                ],
-                new \DateTime('2015-04-06') //received + 56 days
+                'variationNo' => 1,
+                'receivedDate' => '2015-02-09'
             ],
+            new \DateTime('2015-04-06') //received + 56 days
+        ];
+        yield [
+            $otherRules,
             [
-                $otherRules,
-                [
-                    'variationNo' => 0,
-                    'receivedDate' => '2017-02-14'
-                ],
-                new \DateTime('2017-04-11') //received + 56 days (example from OLCS-15276)
+                'variationNo' => 0,
+                'receivedDate' => '2017-02-14'
             ],
+            new \DateTime('2017-04-11') //received + 56 days (example from OLCS-15276)
+        ];
+        yield [
+            $otherRules,
             [
-                $otherRules,
-                [
-                    'variationNo' => 1,
-                    'receivedDate' => '2017-02-14'
-                ],
-                new \DateTime('2017-04-11') //received + 56 days (example from OLCS-15276)
+                'variationNo' => 1,
+                'receivedDate' => '2017-02-14'
             ],
+            new \DateTime('2017-04-11') //received + 56 days (example from OLCS-15276)
+        ];
+        yield [
+            $scotRules,
             [
-                $scotRules,
-                [
-                    'variationNo' => 0,
-                    'receivedDate' => '2015-02-09'
-                ],
-                new \DateTime('2015-03-23') //received + 42 days
+                'variationNo' => 0,
+                'receivedDate' => '2015-02-09'
             ],
+            new \DateTime('2015-03-23') //received + 42 days
+        ];
+        yield [
+            $scotRules,
             [
-                $scotRules,
-                [
-                    'variationNo' => 1,
-                    'receivedDate' => '2015-02-09'
-                ],
-                new \DateTime('2015-03-23') //received + 42 days (no parent)
+                'variationNo' => 1,
+                'receivedDate' => '2015-02-09'
             ],
+            new \DateTime('2015-03-23') //received + 42 days (no parent)
+        ];
+        yield [
+            $scotRules,
             [
-                $scotRules,
-                [
-                    'variationNo' => 1,
-                    'receivedDate' => '2015-02-09',
-                    'parent' => ['effectiveDate' => null]
-                ],
-                new \DateTime('2015-03-23') //received + 42 days (no parent effective date)
+                'variationNo' => 1,
+                'receivedDate' => '2015-02-09',
+                'parent' => ['effectiveDate' => null]
             ],
+            new \DateTime('2015-03-23') //received + 42 days (no parent effective date)
+        ];
+        yield [
+            $scotRules,
             [
-                $scotRules,
-                [
-                    'variationNo' => 1,
-                    'receivedDate' => '2014-07-15',
-                    'parent' => ['effectiveDate' => '2014-06-11']
-                ],
-                new \DateTime('2014-09-10') //parent + 91 days
+                'variationNo' => 1,
+                'receivedDate' => '2014-07-15',
+                'parent' => ['effectiveDate' => '2014-06-11']
             ],
+            new \DateTime('2014-09-10') //parent + 91 days
+        ];
+        yield [
+            $scotRules,
             [
-                $scotRules,
-                [
-                    'variationNo' => 1,
-                    'receivedDate' => '2014-07-27',
-                    'parent' => ['effectiveDate' => '2014-06-11']
-                ],
-                new \DateTime('2014-09-10') //parent + 91 days
+                'variationNo' => 1,
+                'receivedDate' => '2014-07-27',
+                'parent' => ['effectiveDate' => '2014-06-11']
             ],
+            new \DateTime('2014-09-10') //parent + 91 days
+        ];
+        yield [
+            $scotRules,
             [
-                $scotRules,
-                [
-                    'variationNo' => 1,
-                    'receivedDate' => '2014-07-30',
-                    'parent' => ['effectiveDate' => '2014-06-11']
-                ],
-                new \DateTime('2014-09-10') //received + 42 days
+                'variationNo' => 1,
+                'receivedDate' => '2014-07-30',
+                'parent' => ['effectiveDate' => '2014-06-11']
             ],
+            new \DateTime('2014-09-10') //received + 42 days
+        ];
+        yield [
+            $scotRules,
             [
-                $scotRules,
-                [
-                    'variationNo' => 1,
-                    'receivedDate' => '2014-07-31',
-                    'parent' => ['effectiveDate' => '2014-06-11']
-                ],
-                new \DateTime('2014-09-11') //received + 42 days
+                'variationNo' => 1,
+                'receivedDate' => '2014-07-31',
+                'parent' => ['effectiveDate' => '2014-06-11']
             ],
+            new \DateTime('2014-09-11') //received + 42 days
+        ];
+        yield [
+            $scotRules,
             [
-                $scotRules,
-                [
-                    'variationNo' => 1,
-                    'receivedDate' => '2014-10-10',
-                    'parent' => ['effectiveDate' => '2014-06-11']
-                ],
-                new \DateTime('2014-11-21') //received + 42 days
+                'variationNo' => 1,
+                'receivedDate' => '2014-10-10',
+                'parent' => ['effectiveDate' => '2014-06-11']
             ],
+            new \DateTime('2014-11-21') //received + 42 days
         ];
     }
 
@@ -1361,13 +1345,11 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->getStatusForGrant());
     }
 
-    public static function getStatusForGrantDataProvider(): array
+    public static function getStatusForGrantDataProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_NEW, Entity::STATUS_REGISTERED],
-            [Entity::STATUS_VAR, Entity::STATUS_REGISTERED],
-            [Entity::STATUS_CANCEL, Entity::STATUS_CANCELLED],
-        ];
+        yield [Entity::STATUS_NEW, Entity::STATUS_REGISTERED];
+        yield [Entity::STATUS_VAR, Entity::STATUS_REGISTERED];
+        yield [Entity::STATUS_CANCEL, Entity::STATUS_CANCELLED];
     }
 
     /**
@@ -1383,13 +1365,11 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->isShortNoticeRefused());
     }
 
-    public static function isShortNoticeRefusedDataProvider(): array
+    public static function isShortNoticeRefusedDataProvider(): \Iterator
     {
-        return [
-            [null, false],
-            ['N', false],
-            ['Y', true],
-        ];
+        yield [null, false];
+        yield ['N', false];
+        yield ['Y', true];
     }
 
     /**
@@ -1422,58 +1402,56 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->getDecision());
     }
 
-    public static function getDecisionDataProvider(): array
+    public static function getDecisionDataProvider(): \Iterator
     {
-        return [
-            // registered
-            [
-                Entity::STATUS_REGISTERED,
-                'N',
-                false,
-                null
-            ],
-            // refused - nonShortNoticeRefused
-            [
-                Entity::STATUS_REFUSED,
-                'N',
-                false,
-                ['decision' => 'Decision', 'reason' => 'Reason Refused']
-            ],
-            // refused - ShortNoticeRefused
-            [
-                Entity::STATUS_REFUSED,
-                'Y',
-                false,
-                ['decision' => 'Decision', 'reason' => 'Reason SN Refused']
-            ],
-            // cancelled
-            [
-                Entity::STATUS_CANCELLED,
-                'N',
-                false,
-                ['decision' => 'Decision', 'reason' => 'Reason Cancelled']
-            ],
-            // admin cancelled
-            [
-                Entity::STATUS_ADMIN,
-                'N',
-                false,
-                ['decision' => 'Decision', 'reason' => 'Reason Cancelled']
-            ],
-            // admin withdrawn with a reason
-            [
-                Entity::STATUS_WITHDRAWN,
-                'N',
-                true,
-                ['decision' => 'Decision', 'reason' => 'Withdrawn Reason']
-            ],
-            // admin withdrawn without a reason
-            [
-                Entity::STATUS_WITHDRAWN,
-                'N',
-                false,
-                ['decision' => 'Decision', 'reason' => null]
-            ],
+        // registered
+        yield [
+            Entity::STATUS_REGISTERED,
+            'N',
+            false,
+            null
+        ];
+        // refused - nonShortNoticeRefused
+        yield [
+            Entity::STATUS_REFUSED,
+            'N',
+            false,
+            ['decision' => 'Decision', 'reason' => 'Reason Refused']
+        ];
+        // refused - ShortNoticeRefused
+        yield [
+            Entity::STATUS_REFUSED,
+            'Y',
+            false,
+            ['decision' => 'Decision', 'reason' => 'Reason SN Refused']
+        ];
+        // cancelled
+        yield [
+            Entity::STATUS_CANCELLED,
+            'N',
+            false,
+            ['decision' => 'Decision', 'reason' => 'Reason Cancelled']
+        ];
+        // admin cancelled
+        yield [
+            Entity::STATUS_ADMIN,
+            'N',
+            false,
+            ['decision' => 'Decision', 'reason' => 'Reason Cancelled']
+        ];
+        // admin withdrawn with a reason
+        yield [
+            Entity::STATUS_WITHDRAWN,
+            'N',
+            true,
+            ['decision' => 'Decision', 'reason' => 'Withdrawn Reason']
+        ];
+        // admin withdrawn without a reason
+        yield [
+            Entity::STATUS_WITHDRAWN,
+            'N',
+            false,
+            ['decision' => 'Decision', 'reason' => null]
         ];
     }
 
@@ -1555,15 +1533,13 @@ class BusRegEntityTest extends EntityTester
     /**
      * data provider for testIsGrantableForCancellation
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function dpIsGrantableForCancellation(): array
+    public static function dpIsGrantableForCancellation(): \Iterator
     {
-        return [
-            [Entity::STATUS_NEW, false],
-            [Entity::STATUS_VAR, false],
-            [Entity::STATUS_CANCEL, true]
-        ];
+        yield [Entity::STATUS_NEW, false];
+        yield [Entity::STATUS_VAR, false];
+        yield [Entity::STATUS_CANCEL, true];
     }
 
     public function testIsGrantable(): void
@@ -1679,14 +1655,12 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($expectedResult, $this->entity->isGrantable());
     }
 
-    public static function dpTestIsGrantableServiceNo(): array
+    public static function dpTestIsGrantableServiceNo(): \Iterator
     {
-        return [
-            ['serviceNo' => null, 'expectedResult' => false],
-            ['serviceNo' => '', 'expectedResult' => false],
-            ['serviceNo' => '0', 'expectedResult' => true],
-            ['serviceNo' => '1239a', 'expectedResult' => true],
-        ];
+        yield ['serviceNo' => null, 'expectedResult' => false];
+        yield ['serviceNo' => '', 'expectedResult' => false];
+        yield ['serviceNo' => '0', 'expectedResult' => true];
+        yield ['serviceNo' => '1239a', 'expectedResult' => true];
     }
 
     public function testIsGrantableWithoutStartPoint(): void
@@ -2128,16 +2102,14 @@ class BusRegEntityTest extends EntityTester
         $this->assertEquals($section, $entity->getPublicationSectionForGrantEmail());
     }
 
-    public static function dpGetPublicationSectionForGrantEmailProvider(): array
+    public static function dpGetPublicationSectionForGrantEmailProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_REGISTERED, Entity::STATUS_NEW, 'Y', PublicationSection::BUS_NEW_SHORT_SECTION],
-            [Entity::STATUS_REGISTERED, Entity::STATUS_NEW, 'N', PublicationSection::BUS_NEW_SECTION],
-            [Entity::STATUS_REGISTERED, Entity::STATUS_VAR, 'Y', PublicationSection::BUS_VAR_SHORT_SECTION],
-            [Entity::STATUS_REGISTERED, Entity::STATUS_VAR, 'N', PublicationSection::BUS_VAR_SECTION],
-            [Entity::STATUS_CANCELLED, Entity::STATUS_CANCEL, 'Y', PublicationSection::BUS_CANCEL_SHORT_SECTION],
-            [Entity::STATUS_CANCELLED, Entity::STATUS_CANCEL, 'N', PublicationSection::BUS_CANCEL_SECTION],
-        ];
+        yield [Entity::STATUS_REGISTERED, Entity::STATUS_NEW, 'Y', PublicationSection::BUS_NEW_SHORT_SECTION];
+        yield [Entity::STATUS_REGISTERED, Entity::STATUS_NEW, 'N', PublicationSection::BUS_NEW_SECTION];
+        yield [Entity::STATUS_REGISTERED, Entity::STATUS_VAR, 'Y', PublicationSection::BUS_VAR_SHORT_SECTION];
+        yield [Entity::STATUS_REGISTERED, Entity::STATUS_VAR, 'N', PublicationSection::BUS_VAR_SECTION];
+        yield [Entity::STATUS_CANCELLED, Entity::STATUS_CANCEL, 'Y', PublicationSection::BUS_CANCEL_SHORT_SECTION];
+        yield [Entity::STATUS_CANCELLED, Entity::STATUS_CANCEL, 'N', PublicationSection::BUS_CANCEL_SECTION];
     }
 
     /**
@@ -2161,19 +2133,17 @@ class BusRegEntityTest extends EntityTester
     /**
      * Data provider for isFromEbsr
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function publicationSectionForGrantEmailInvalidStatusProvider(): array
+    public static function publicationSectionForGrantEmailInvalidStatusProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_NEW],
-            [Entity::STATUS_VAR],
-            [Entity::STATUS_CANCEL],
-            [Entity::STATUS_ADMIN],
-            [Entity::STATUS_REFUSED],
-            [Entity::STATUS_WITHDRAWN],
-            [Entity::STATUS_CNS],
-        ];
+        yield [Entity::STATUS_NEW];
+        yield [Entity::STATUS_VAR];
+        yield [Entity::STATUS_CANCEL];
+        yield [Entity::STATUS_ADMIN];
+        yield [Entity::STATUS_REFUSED];
+        yield [Entity::STATUS_WITHDRAWN];
+        yield [Entity::STATUS_CNS];
     }
 
     /**
@@ -2200,25 +2170,23 @@ class BusRegEntityTest extends EntityTester
     /**
      * Data provider for testPublicationSectionForGrantEmailRevertStatusException
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function publicationSectionForGrantEmailInvalidRevertStatusProvider(): array
+    public static function publicationSectionForGrantEmailInvalidRevertStatusProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_REGISTERED, Entity::STATUS_CANCEL],
-            [Entity::STATUS_REGISTERED, Entity::STATUS_CANCELLED],
-            [Entity::STATUS_REGISTERED, Entity::STATUS_ADMIN],
-            [Entity::STATUS_REGISTERED, Entity::STATUS_REFUSED],
-            [Entity::STATUS_REGISTERED, Entity::STATUS_WITHDRAWN],
-            [Entity::STATUS_REGISTERED, Entity::STATUS_CNS],
-            [Entity::STATUS_CANCELLED, Entity::STATUS_NEW],
-            [Entity::STATUS_CANCELLED, Entity::STATUS_VAR],
-            [Entity::STATUS_CANCELLED, Entity::STATUS_CANCELLED],
-            [Entity::STATUS_CANCELLED, Entity::STATUS_ADMIN],
-            [Entity::STATUS_CANCELLED, Entity::STATUS_REFUSED],
-            [Entity::STATUS_CANCELLED, Entity::STATUS_WITHDRAWN],
-            [Entity::STATUS_CANCELLED, Entity::STATUS_CNS],
-        ];
+        yield [Entity::STATUS_REGISTERED, Entity::STATUS_CANCEL];
+        yield [Entity::STATUS_REGISTERED, Entity::STATUS_CANCELLED];
+        yield [Entity::STATUS_REGISTERED, Entity::STATUS_ADMIN];
+        yield [Entity::STATUS_REGISTERED, Entity::STATUS_REFUSED];
+        yield [Entity::STATUS_REGISTERED, Entity::STATUS_WITHDRAWN];
+        yield [Entity::STATUS_REGISTERED, Entity::STATUS_CNS];
+        yield [Entity::STATUS_CANCELLED, Entity::STATUS_NEW];
+        yield [Entity::STATUS_CANCELLED, Entity::STATUS_VAR];
+        yield [Entity::STATUS_CANCELLED, Entity::STATUS_CANCELLED];
+        yield [Entity::STATUS_CANCELLED, Entity::STATUS_ADMIN];
+        yield [Entity::STATUS_CANCELLED, Entity::STATUS_REFUSED];
+        yield [Entity::STATUS_CANCELLED, Entity::STATUS_WITHDRAWN];
+        yield [Entity::STATUS_CANCELLED, Entity::STATUS_CNS];
     }
 
     public function testPublicationLinksForGrantEmail(): void
@@ -2298,9 +2266,9 @@ class BusRegEntityTest extends EntityTester
     /**
      * data provider for testGetFormattedServiceNumbers
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function getFormattedServiceNumbersProvider(): array
+    public static function getFormattedServiceNumbersProvider(): \Iterator
     {
         $serviceNo1 = '4567';
         $serviceNo2 = '8910';
@@ -2319,11 +2287,8 @@ class BusRegEntityTest extends EntityTester
             $otherServiceNo4
         ]);
         $expectedFormatted = $serviceNo . '(' . $serviceNo1 . ',' . $serviceNo2 . ',' . $serviceNo3 . ')';
-
-        return [
-            [$serviceNo, new ArrayCollection(), $serviceNo],
-            [$serviceNo, $otherServiceNumbers, $expectedFormatted]
-        ];
+        yield [$serviceNo, new ArrayCollection(), $serviceNo];
+        yield [$serviceNo, $otherServiceNumbers, $expectedFormatted];
     }
 
     /**
@@ -2354,26 +2319,37 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isShortNoticeStandardProvider(): array
+    public static function isShortNoticeStandardProvider(): \Iterator
     {
-        return [
-            [0, '2014-05-31', '2014-07-01', 'Y'], //31 days
-            [0, '2014-05-31', '2014-07-11', 'Y'], //41 days
-            [0, '2014-05-31', '2014-07-12', 'N'], //42 days
-            [0, '2014-05-31', '2014-07-25', 'N'], //55 days
-            [0, '2014-05-31', '2014-07-26', 'N'], //56 days
-            [0, '2017-02-14', '2017-04-10', 'N'], //55 days (example from OLCS-15276)
-            [0, '2017-02-14', '2017-04-11', 'N'], //56 days (example from OLCS-15276)
-            [0, '2014-05-31', '2014-08-28', 'N'], //89 days
-            [1, '2014-05-31', '2014-07-01', 'Y'], //31 days
-            [1, '2014-05-31', '2014-07-25', 'N'], //55 days
-            [1, '2014-05-31', '2014-07-26', 'N'], //56 days
-            [1, '2014-05-31', '2015-08-27', 'N'], //57 days
-            [1, '2017-02-14', '2017-04-10', 'N'], //55 days (example from OLCS-15276)
-            [1, '2017-02-14', '2017-04-11', 'N'], //56 days (example from OLCS-15276)
-        ];
+        yield [0, '2014-05-31', '2014-07-01', 'Y'];
+        //31 days
+        yield [0, '2014-05-31', '2014-07-11', 'Y'];
+        //41 days
+        yield [0, '2014-05-31', '2014-07-12', 'N'];
+        //42 days
+        yield [0, '2014-05-31', '2014-07-25', 'N'];
+        //55 days
+        yield [0, '2014-05-31', '2014-07-26', 'N'];
+        //56 days
+        yield [0, '2017-02-14', '2017-04-10', 'N'];
+        //55 days (example from OLCS-15276)
+        yield [0, '2017-02-14', '2017-04-11', 'N'];
+        //56 days (example from OLCS-15276)
+        yield [0, '2014-05-31', '2014-08-28', 'N'];
+        //89 days
+        yield [1, '2014-05-31', '2014-07-01', 'Y'];
+        //31 days
+        yield [1, '2014-05-31', '2014-07-25', 'N'];
+        //55 days
+        yield [1, '2014-05-31', '2014-07-26', 'N'];
+        //56 days
+        yield [1, '2014-05-31', '2015-08-27', 'N'];
+        //57 days
+        yield [1, '2017-02-14', '2017-04-10', 'N'];
+        //55 days (example from OLCS-15276)
+        yield [1, '2017-02-14', '2017-04-11', 'N'];
     }
 
     /**
@@ -2404,16 +2380,17 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isShortNoticeNewScottishProvider(): array
+    public static function isShortNoticeNewScottishProvider(): \Iterator
     {
-        return [
-            [0, '2014-05-31', '2014-07-01', 'Y'], //31 days
-            [0, '2014-05-31', '2014-07-11', 'Y'], //41 days
-            [0, '2014-05-31', '2014-07-12', 'N'], //42 days
-            [0, '2014-05-31', '2014-08-28', 'N'], //89 days
-        ];
+        yield [0, '2014-05-31', '2014-07-01', 'Y'];
+        //31 days
+        yield [0, '2014-05-31', '2014-07-11', 'Y'];
+        //41 days
+        yield [0, '2014-05-31', '2014-07-12', 'N'];
+        //42 days
+        yield [0, '2014-05-31', '2014-08-28', 'N'];
     }
 
     /**
@@ -2444,18 +2421,21 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isShortNoticeWalesProvider(): array
+    public static function isShortNoticeWalesProvider(): \Iterator
     {
-        return [
-            [0, '2014-05-31', '2014-07-01', 'Y'], //31 days
-            [0, '2014-05-31', '2014-07-11', 'Y'], //41 days
-            [0, '2014-05-31', '2014-07-12', 'Y'], //42 days
-            [0, '2014-05-31', '2014-08-28', 'N'], //89 days
-            [0, '2014-05-31', '2014-07-26', 'N'], //56 days
-            [0, '2014-05-31', '2014-07-25', 'Y'], //55 days
-        ];
+        yield [0, '2014-05-31', '2014-07-01', 'Y'];
+        //31 days
+        yield [0, '2014-05-31', '2014-07-11', 'Y'];
+        //41 days
+        yield [0, '2014-05-31', '2014-07-12', 'Y'];
+        //42 days
+        yield [0, '2014-05-31', '2014-08-28', 'N'];
+        //89 days
+        yield [0, '2014-05-31', '2014-07-26', 'N'];
+        //56 days
+        yield [0, '2014-05-31', '2014-07-25', 'Y'];
     }
 
     /**
@@ -2496,17 +2476,19 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isShortNoticeVariationScottishProvider(): array
+    public static function isShortNoticeVariationScottishProvider(): \Iterator
     {
-        return [
-            ['2014-07-15', '2014-07-21', '2014-06-11', 0, 'Y'], //parent less than 90 days
-            ['2014-07-27', '2014-09-08', '2014-06-11', 0, 'Y'], //parent less than 90 days
-            ['2014-07-30', '2014-09-09', '2014-06-11', 0, 'Y'], //parent is 90 days
-            ['2014-07-31', '2014-09-10', '2014-06-11', 1, 'Y'], //41 days standard period
-            ['2014-07-30', '2014-09-11', '2014-06-11', 1, 'N']  //43 days standard period, 92 days parent
-        ];
+        yield ['2014-07-15', '2014-07-21', '2014-06-11', 0, 'Y'];
+        //parent less than 90 days
+        yield ['2014-07-27', '2014-09-08', '2014-06-11', 0, 'Y'];
+        //parent less than 90 days
+        yield ['2014-07-30', '2014-09-09', '2014-06-11', 0, 'Y'];
+        //parent is 90 days
+        yield ['2014-07-31', '2014-09-10', '2014-06-11', 1, 'Y'];
+        //41 days standard period
+        yield ['2014-07-30', '2014-09-11', '2014-06-11', 1, 'N'];
     }
 
     /**
@@ -2535,14 +2517,12 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function shortNoticeScottishRulesWithMissingParentProvider(): array
+    public static function shortNoticeScottishRulesWithMissingParentProvider(): \Iterator
     {
-        return [
-            ['2016-12-25', '2016-12-26', null],
-            ['2016-12-25', '2016-12-26', new Entity()],
-        ];
+        yield ['2016-12-25', '2016-12-26', null];
+        yield ['2016-12-25', '2016-12-26', new Entity()];
     }
 
     /**
@@ -2567,15 +2547,13 @@ class BusRegEntityTest extends EntityTester
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function shortNoticeMissingDatesProvider(): array
+    public static function shortNoticeMissingDatesProvider(): \Iterator
     {
-        return [
-            ['2016-12-25', null],
-            [null, '2016-12-25'],
-            [null, null]
-        ];
+        yield ['2016-12-25', null];
+        yield [null, '2016-12-25'];
+        yield [null, null];
     }
 
     /**
@@ -2685,7 +2663,7 @@ class BusRegEntityTest extends EntityTester
 
     public function testGetRelatedOrganisationNoLicence(): void
     {
-        $this->assertNull((new Entity())->getRelatedOrganisation());
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, new Entity()->getRelatedOrganisation());
     }
 
     public function testCreateVariationFailsWhenCannotCreateVariation(): void
@@ -2857,12 +2835,10 @@ class BusRegEntityTest extends EntityTester
         $this->assertSame($expected, $busReg->canRequestNewRouteMap());
     }
 
-    public static function provideCanRequestNewRouteMapCases(): array
+    public static function provideCanRequestNewRouteMapCases(): \Iterator
     {
-        return [
-            ['isFromEbsr' => true, 'expected' => true],
-            ['isFromEbsr' => false, 'expected' => false],
-        ];
+        yield ['isFromEbsr' => true, 'expected' => true];
+        yield ['isFromEbsr' => false, 'expected' => false];
     }
 
     /**

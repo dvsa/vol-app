@@ -12,7 +12,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 /**
  * ByPermitNumber Test
  */
-class ByPermitNumberTest extends QueryHandlerTestCase
+final class ByPermitNumberTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -47,6 +47,6 @@ class ByPermitNumberTest extends QueryHandlerTestCase
 
         $result = $this->sut->handleQuery($query);
 
-        self::assertEquals($permitRanges, $result);
+        $this->assertEquals($permitRanges, $result);
     }
 }

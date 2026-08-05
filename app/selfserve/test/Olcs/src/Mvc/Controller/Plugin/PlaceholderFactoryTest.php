@@ -18,7 +18,7 @@ use Laminas\View\Helper\Placeholder as ViewPlaceholder;
 /**
  * PlaceholderFactory Test
  */
-class PlaceholderFactoryTest extends MockeryTestCase
+final class PlaceholderFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

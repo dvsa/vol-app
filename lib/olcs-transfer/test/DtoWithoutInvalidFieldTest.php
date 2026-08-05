@@ -9,9 +9,7 @@ use PHPUnit\Framework\Assert as Assert;
  */
 trait DtoWithoutInvalidFieldTest
 {
-    /**
-     * @doesNotPerformAssertions
-     */
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testInvalidField()
     {
         // the test as defined by DtoTest is only relevant to Dto with fields validation

@@ -12,7 +12,7 @@ use Psr\Container\ContainerInterface;
 class UpdateFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransactioningCommandHandler
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TransactioningCommandHandler
     {
         $instance = new Update(
             $container->get(AddressHelperService::class)

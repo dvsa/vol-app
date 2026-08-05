@@ -20,7 +20,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class DeleteTeamPrinterTest extends AbstractCommandHandlerTestCase
+final class DeleteTeamPrinterTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

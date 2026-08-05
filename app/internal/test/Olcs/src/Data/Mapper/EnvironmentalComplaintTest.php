@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * EnvironmentalComplaint Mapper Test
  */
-class EnvironmentalComplaintTest extends MockeryTestCase
+final class EnvironmentalComplaintTest extends MockeryTestCase
 {
     /**
      *
@@ -25,22 +25,45 @@ class EnvironmentalComplaintTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
+            [],
+            ['fields' => []]
+        ];
+        // edit
+        yield [
             [
-                [],
-                ['fields' => []]
+                'id' => 99,
+                'version' => 3,
+                'case' => [
+                    'id' => 24
+                ],
+                'complainantContactDetails' => [
+                    'person' => [
+                        'forename' => 'Joe',
+                        'familyName' => 'Smith'
+                    ],
+                    'address' => [
+                        'addressLine1' => 'a1',
+                        'town' => 'town',
+                        'postcode' => 'ls9 1aa',
+                        'countryCode' => 'GB',
+                    ]
+                ],
+                'operatingCentres' => [
+                    ['id' => 101],
+                    ['id' => 102],
+                ]
             ],
-            // edit
             [
-                [
+                'fields' => [
                     'id' => 99,
                     'version' => 3,
-                    'case' => [
-                        'id' => 24
-                    ],
+                    'case' => 24,
+                    'complainantForename' => 'Joe',
+                    'complainantFamilyName' => 'Smith',
                     'complainantContactDetails' => [
                         'person' => [
                             'forename' => 'Joe',
@@ -53,40 +76,15 @@ class EnvironmentalComplaintTest extends MockeryTestCase
                             'countryCode' => 'GB',
                         ]
                     ],
-                    'operatingCentres' => [
-                        ['id' => 101],
-                        ['id' => 102],
-                    ]
+                    'operatingCentres' => [101, 102]
                 ],
-                [
-                    'fields' => [
-                        'id' => 99,
-                        'version' => 3,
-                        'case' => 24,
-                        'complainantForename' => 'Joe',
-                        'complainantFamilyName' => 'Smith',
-                        'complainantContactDetails' => [
-                            'person' => [
-                                'forename' => 'Joe',
-                                'familyName' => 'Smith'
-                            ],
-                            'address' => [
-                                'addressLine1' => 'a1',
-                                'town' => 'town',
-                                'postcode' => 'ls9 1aa',
-                                'countryCode' => 'GB',
-                            ]
-                        ],
-                        'operatingCentres' => [101, 102]
-                    ],
-                    'address' => [
-                        'addressLine1' => 'a1',
-                        'town' => 'town',
-                        'postcode' => 'ls9 1aa',
-                        'countryCode' => 'GB',
-                    ]
+                'address' => [
+                    'addressLine1' => 'a1',
+                    'town' => 'town',
+                    'postcode' => 'ls9 1aa',
+                    'countryCode' => 'GB',
                 ]
-            ],
+            ]
         ];
     }
 

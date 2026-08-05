@@ -14,10 +14,11 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class PermitUsageSelectionGeneratorTest extends MockeryTestCase
+final class PermitUsageSelectionGeneratorTest extends MockeryTestCase
 {
     private $permitUsageSelectionGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->permitUsageSelectionGenerator = new PermitUsageSelectionGenerator();
@@ -32,47 +33,45 @@ class PermitUsageSelectionGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpGenerate(): array
+    public static function dpGenerate(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'standard-journey_single' => 5,
-                    'cabotage-journey_single' => 5
-                ],
-                RefData::JOURNEY_SINGLE
+                'standard-journey_single' => 5,
+                'cabotage-journey_single' => 5
             ],
+            RefData::JOURNEY_SINGLE
+        ];
+        yield [
             [
-                [
-                    'standard-journey_single' => 5
-                ],
-                RefData::JOURNEY_SINGLE
+                'standard-journey_single' => 5
             ],
+            RefData::JOURNEY_SINGLE
+        ];
+        yield [
             [
-                [
-                    'cabotage-journey_single' => 5
-                ],
-                RefData::JOURNEY_SINGLE
+                'cabotage-journey_single' => 5
             ],
+            RefData::JOURNEY_SINGLE
+        ];
+        yield [
             [
-                [
-                    'standard-journey_multiple' => 5,
-                    'cabotage-journey_multiple' => 5
-                ],
-                RefData::JOURNEY_MULTIPLE
+                'standard-journey_multiple' => 5,
+                'cabotage-journey_multiple' => 5
             ],
+            RefData::JOURNEY_MULTIPLE
+        ];
+        yield [
             [
-                [
-                    'standard-journey_multiple' => 5
-                ],
-                RefData::JOURNEY_MULTIPLE
+                'standard-journey_multiple' => 5
             ],
+            RefData::JOURNEY_MULTIPLE
+        ];
+        yield [
             [
-                [
-                    'cabotage-journey_multiple' => 5
-                ],
-                RefData::JOURNEY_MULTIPLE
+                'cabotage-journey_multiple' => 5
             ],
+            RefData::JOURNEY_MULTIPLE
         ];
     }
 

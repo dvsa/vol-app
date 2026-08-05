@@ -56,7 +56,7 @@ final class Delete extends AbstractDeleteCommandHandler
     }
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->eventHistoryCreator = $container->get('EventHistoryCreator');
         return parent::__invoke($container, $requestedName, $options);

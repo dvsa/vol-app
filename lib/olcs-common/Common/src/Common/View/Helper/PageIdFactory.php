@@ -14,7 +14,7 @@ class PageIdFactory implements FactoryInterface
      *
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PageId
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): PageId
     {
         /** @var RouteMatch $routeMatch */
         $routeMatch = $container->get('Application')->getMvcEvent()->getRouteMatch();

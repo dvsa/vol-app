@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Logging\Log\Processor;
 
 use DateTimeImmutable;
@@ -10,7 +12,7 @@ use Monolog\Level;
 use Monolog\LogRecord;
 use Olcs\Logging\Log\Processor\RemoteIp;
 
-class RemoteIpTest extends TestCase
+final class RemoteIpTest extends TestCase
 {
     public function testGetRemoteAddress(): void
     {

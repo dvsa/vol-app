@@ -7,11 +7,12 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Domain\Repository\GetDbValue as GetDbValueRepo;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 
-class GetDbValueTest extends RepositoryTestCase
+final class GetDbValueTest extends RepositoryTestCase
 {
     /** @var GetDbValueRepo */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(GetDbValueRepo::class, true);

@@ -21,22 +21,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="txc_inbox",
- *    indexes={
- *        @ORM\Index(name="ix_txc_inbox_bus_reg_id", columns={"bus_reg_id"}),
- *        @ORM\Index(name="ix_txc_inbox_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_txc_inbox_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_txc_inbox_local_authority_id", columns={"local_authority_id"}),
- *        @ORM\Index(name="ix_txc_inbox_organisation_id", columns={"organisation_id"}),
- *        @ORM\Index(name="ix_txc_inbox_pdf_document_id", columns={"pdf_document_id"}),
- *        @ORM\Index(name="ix_txc_inbox_route_document_id", columns={"route_document_id"}),
- *        @ORM\Index(name="ix_txc_inbox_zip_document_id", columns={"zip_document_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'txc_inbox')]
+#[ORM\Index(name: 'ix_txc_inbox_bus_reg_id', columns: ['bus_reg_id'])]
+#[ORM\Index(name: 'ix_txc_inbox_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_txc_inbox_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_txc_inbox_local_authority_id', columns: ['local_authority_id'])]
+#[ORM\Index(name: 'ix_txc_inbox_organisation_id', columns: ['organisation_id'])]
+#[ORM\Index(name: 'ix_txc_inbox_pdf_document_id', columns: ['pdf_document_id'])]
+#[ORM\Index(name: 'ix_txc_inbox_route_document_id', columns: ['route_document_id'])]
+#[ORM\Index(name: 'ix_txc_inbox_zip_document_id', columns: ['zip_document_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,121 +45,109 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to bus_reg
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
-     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'txcInboxs', fetch: 'LAZY')]
     protected $busReg;
 
     /**
      * Foreign Key to local_authority
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\LocalAuthority", fetch="LAZY")
-     * @ORM\JoinColumn(name="local_authority_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'local_authority_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority::class, fetch: 'LAZY')]
     protected $localAuthority;
 
     /**
      * Foreign Key to organisation
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="organisation_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $organisation;
 
     /**
      * ZipDocument
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="zip_document_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'zip_document_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
     protected $zipDocument;
 
     /**
      * RouteDocument
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="route_document_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'route_document_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
     protected $routeDocument;
 
     /**
      * PdfDocument
      *
      * @var \Dvsa\Olcs\Api\Entity\Doc\Document
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", fetch="LAZY")
-     * @ORM\JoinColumn(name="pdf_document_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'pdf_document_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
     protected $pdfDocument;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * fileRead
      *
      * @var string
-     *
-     * @ORM\Column(type="yesnonull", name="file_read", nullable=true, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesnonull', name: 'file_read', nullable: true, options: ['default' => 0])]
     protected $fileRead = 0;
 
     /**
      * Variation no
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="variation_no", nullable=false)
      */
+    #[ORM\Column(type: 'smallint', name: 'variation_no', nullable: false, options: ['unsigned' => true])]
     protected $variationNo = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -187,7 +171,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param int $id new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setId($id)
     {
@@ -211,7 +195,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -235,7 +219,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority $localAuthority new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setLocalAuthority($localAuthority)
     {
@@ -259,7 +243,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $organisation new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setOrganisation($organisation)
     {
@@ -283,7 +267,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $zipDocument new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setZipDocument($zipDocument)
     {
@@ -307,7 +291,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $routeDocument new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setRouteDocument($routeDocument)
     {
@@ -331,7 +315,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Doc\Document $pdfDocument new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setPdfDocument($pdfDocument)
     {
@@ -355,7 +339,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -379,7 +363,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -403,7 +387,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param string $fileRead new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setFileRead($fileRead)
     {
@@ -427,7 +411,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param int $variationNo new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setVariationNo($variationNo)
     {
@@ -451,7 +435,7 @@ abstract class AbstractTxcInbox implements BundleSerializableInterface, JsonSeri
      *
      * @param int $version new value being set
      *
-     * @return TxcInbox
+     * @return static
      */
     public function setVersion($version)
     {

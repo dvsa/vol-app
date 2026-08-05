@@ -15,7 +15,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class LicenceReadAuditEntityTest extends EntityTester
+final class LicenceReadAuditEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

@@ -19,7 +19,7 @@ use Mockery as m;
  *
  * @see Entity
  */
-class TeamEntityTest extends EntityTester
+final class TeamEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -96,12 +96,10 @@ class TeamEntityTest extends EntityTester
         $this->assertEquals($expectedAllowedAreas, $entity->getAllowedTrafficAreas());
     }
 
-    public static function dpTestDataAccess(): array
+    public static function dpTestDataAccess(): \Iterator
     {
-        return [
-            'GB User' => [false, TrafficArea::GB_TA_IDS],
-            'NI User' => [true, TrafficArea::NI_TA_IDS],
-        ];
+        yield 'GB User' => [false, TrafficArea::GB_TA_IDS];
+        yield 'NI User' => [true, TrafficArea::NI_TA_IDS];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsIrfo')]
@@ -115,13 +113,11 @@ class TeamEntityTest extends EntityTester
         $this->assertEquals($isIrfo, $entity->getIsIrfo($excludedTeams));
     }
 
-    public static function dpTestIsIrfo(): array
+    public static function dpTestIsIrfo(): \Iterator
     {
-        return [
-            'Not IRFO' => [false, 100],
-            'IRFO' => [true, 1004],
-            'Not Irfo, but in excluded' => [true, 112]
-        ];
+        yield 'Not IRFO' => [false, 100];
+        yield 'IRFO' => [true, 1004];
+        yield 'Not Irfo, but in excluded' => [true, 112];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetAllowedSearchIndexes')]
@@ -139,13 +135,11 @@ class TeamEntityTest extends EntityTester
         $this->assertEquals($expectedIndexes, $entity->getAllowedSearchIndexes($excludedTeams));
     }
 
-    public static function dpTestGetAllowedSearchIndexes(): array
+    public static function dpTestGetAllowedSearchIndexes(): \Iterator
     {
-        return [
-            'IRFO' => [Entity::ALL_ELASTICSEARCH_INDEXES, 1004, 2, false],
-            'Not IRFO' => [array_diff_key(Entity::ALL_ELASTICSEARCH_INDEXES, ['irfo' => 1]), 100, 3, false],
-            'Not Irfo, but in excluded' => [Entity::ALL_ELASTICSEARCH_INDEXES, 112, 0, false],
-            'NI' => [Entity::NI_SEARCH_INDEXES, 450, 2, true]
-        ];
+        yield 'IRFO' => [Entity::ALL_ELASTICSEARCH_INDEXES, 1004, 2, false];
+        yield 'Not IRFO' => [array_diff_key(Entity::ALL_ELASTICSEARCH_INDEXES, ['irfo' => 1]), 100, 3, false];
+        yield 'Not Irfo, but in excluded' => [Entity::ALL_ELASTICSEARCH_INDEXES, 112, 0, false];
+        yield 'NI' => [Entity::NI_SEARCH_INDEXES, 450, 2, true];
     }
 }

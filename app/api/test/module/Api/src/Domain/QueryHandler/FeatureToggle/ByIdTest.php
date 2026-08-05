@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\System\FeatureToggle as FeatureToggleEntity;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ByIdTest extends AbstractQueryByIdHandlerTestCase
+final class ByIdTest extends AbstractQueryByIdHandlerTestCase
 {
     protected $sutClass = ToggleByIdHandler::class;
     protected $sutRepo = 'FeatureToggle';

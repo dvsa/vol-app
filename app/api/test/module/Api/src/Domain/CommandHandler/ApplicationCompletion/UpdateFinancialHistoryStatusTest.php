@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion as ApplicationComplet
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class UpdateFinancialHistoryStatusTest extends AbstractUpdateStatusTestCase
+final class UpdateFinancialHistoryStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'FinancialHistory';
 

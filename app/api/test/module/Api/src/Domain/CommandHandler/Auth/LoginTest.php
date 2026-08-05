@@ -20,22 +20,9 @@ use Dvsa\OlcsTest\MocksServicesTrait;
  * @see Login
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class LoginTest extends AbstractCommandHandlerTestCase
+final class LoginTest extends AbstractCommandHandlerTestCase
 {
     use MocksServicesTrait;
-
-    /** @var Login  */
-    private $command;
-
-    /**
-     * @var AuthenticationServiceInterface|m\LegacyMockInterface|m\MockInterface
-     */
-    private $mockAuthenticationService;
-
-    /**
-     * @var ValidatableAdapterInterface|m\LegacyMockInterface|m\MockInterface
-     */
-    private $mockAdapter;
 
     #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandIsCallable(): void
@@ -198,12 +185,10 @@ class LoginTest extends AbstractCommandHandlerTestCase
         $this->assertEquals([$expectedMessage], $result->getFlag('messages'));
     }
 
-    public static function returnsExpectedResultWhenUserCannotAccessRealmProvider(): array
+    public static function returnsExpectedResultWhenUserCannotAccessRealmProvider(): \Iterator
     {
-        return [
-            'Internal user accessing selfserve' => [true, 'selfserve'],
-            'Selfserve user accessing internal' => [false, 'internal'],
-        ];
+        yield 'Internal user accessing selfserve' => [true, 'selfserve'];
+        yield 'Selfserve user accessing internal' => [false, 'internal'];
     }
 
     #[\PHPUnit\Framework\Attributes\Depends('handleCommandAdapterSetsUsernameAndPasswordFromCommand')]

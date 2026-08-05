@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\DashboardTmApplicationStatus;
@@ -7,7 +9,7 @@ use Laminas\View\HelperPluginManager;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class DashboardTmApplicationStatusTest extends MockeryTestCase
+final class DashboardTmApplicationStatusTest extends MockeryTestCase
 {
     protected $sut;
 

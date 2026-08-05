@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service;
 
 use Common\Service\BusRegistration;
@@ -8,7 +10,7 @@ use Common\Service\BusRegistration;
  * Class BusRegistrationTest
  * @package CommonTest\Service
  */
-class BusRegistrationTest extends \PHPUnit\Framework\TestCase
+final class BusRegistrationTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @psalm-return array{shortNotice: mixed,...}
@@ -33,10 +35,10 @@ class BusRegistrationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @depends testCreateNew
      * @param $new
      * @return array
      */
+    #[\PHPUnit\Framework\Attributes\Depends('testCreateNew')]
     public function testCreateVariation($new)
     {
         $new['otherServices'][] = ['id' => 45, 'busRegId' => 17, 'serviceNo' => '4a'];
@@ -64,9 +66,9 @@ class BusRegistrationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @depends testCreateVariation
      * @param $variation
      */
+    #[\PHPUnit\Framework\Attributes\Depends('testCreateVariation')]
     public function testCreateCancellation($variation): void
     {
         $mostRecent = ['variationNo' => $variation['variationNo']];

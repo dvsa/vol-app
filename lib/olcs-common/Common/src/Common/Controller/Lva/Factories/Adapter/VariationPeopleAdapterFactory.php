@@ -11,7 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class VariationPeopleAdapterFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): VariationPeopleAdapter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): VariationPeopleAdapter
     {
         return new VariationPeopleAdapter($container);
     }

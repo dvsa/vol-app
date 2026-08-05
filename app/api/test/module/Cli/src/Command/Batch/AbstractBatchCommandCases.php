@@ -76,14 +76,7 @@ abstract class AbstractBatchCommandCases extends TestCase
 
         $this->mockCommandHandlerManager->expects($this->exactly($dtoCount))
             ->method('handleCommand')
-            ->with($this->callback(function ($commandInstance) use ($dtos) {
-                foreach ($dtos as $dto) {
-                    if ($commandInstance == $dto) {
-                        return true;
-                    }
-                }
-                return false;
-            }))
+            ->with($this->callback(fn($commandInstance) => array_any($dtos, fn($dto) => $commandInstance == $dto)))
             ->willReturnCallback(fn($command) => new Result());
 
         $this->executeCommand();
@@ -93,7 +86,7 @@ abstract class AbstractBatchCommandCases extends TestCase
     public function testExecuteHandlesGenericException(): void
     {
         $this->mockCommandHandlerManager->method('handleCommand')
-            ->will($this->throwException(new \Exception('Test exception')));
+            ->willThrowException(new \Exception('Test exception'));
 
         $this->executeCommand();
 
@@ -103,7 +96,7 @@ abstract class AbstractBatchCommandCases extends TestCase
     public function testExecuteHandlesNotFoundException(): void
     {
         $this->mockCommandHandlerManager->method('handleCommand')
-            ->will($this->throwException(new \Dvsa\Olcs\Api\Domain\Exception\NotFoundException('Test not found exception')));
+            ->willThrowException(new \Dvsa\Olcs\Api\Domain\Exception\NotFoundException('Test not found exception'));
 
         $this->executeCommand();
 

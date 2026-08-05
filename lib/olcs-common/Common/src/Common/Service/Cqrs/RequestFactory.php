@@ -13,7 +13,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class RequestFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Request
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Request
     {
         $accept = new Accept();
         $accept->addMediaType('application/json');

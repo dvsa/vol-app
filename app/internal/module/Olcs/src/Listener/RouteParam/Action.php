@@ -47,7 +47,7 @@ class Action implements ListenerAggregateInterface, FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Action
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Action
     {
         $this->setViewHelperManager($container->get('ViewHelperManager'));
         return $this;

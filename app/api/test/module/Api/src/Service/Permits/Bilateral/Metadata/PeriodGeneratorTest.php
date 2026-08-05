@@ -18,11 +18,11 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class PeriodGeneratorTest extends MockeryTestCase
+final class PeriodGeneratorTest extends MockeryTestCase
 {
-    public const BEHAVIOUR_NAME = 'behaviourName';
+    public const string BEHAVIOUR_NAME = 'behaviourName';
 
-    public const STOCK_ID = 99;
+    public const int STOCK_ID = 99;
 
     private $irhpPermitStockRepo;
 
@@ -30,6 +30,7 @@ class PeriodGeneratorTest extends MockeryTestCase
 
     private $fieldsGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpPermitStockRepo = m::mock(IrhpPermitStockRepository::class);
@@ -87,12 +88,10 @@ class PeriodGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpGenerate(): array
+    public static function dpGenerate(): \Iterator
     {
-        return [
-            [m::mock(IrhpPermitApplication::class)],
-            [null]
-        ];
+        yield [m::mock(IrhpPermitApplication::class)];
+        yield [null];
     }
 
     public function testGenerateException(): void

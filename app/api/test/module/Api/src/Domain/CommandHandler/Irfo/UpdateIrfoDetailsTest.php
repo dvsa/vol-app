@@ -27,7 +27,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 /**
  * Update IrfoDetails Test
  */
-class UpdateIrfoDetailsTest extends AbstractCommandHandlerTestCase
+final class UpdateIrfoDetailsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -325,9 +325,9 @@ class UpdateIrfoDetailsTest extends AbstractCommandHandlerTestCase
             $savedOrganisation->getIrfoContactDetails()->getAddress()->getPostcode()
         );
 
-        $this->assertEquals(
+        $this->assertCount(
             2,
-            count($savedOrganisation->getIrfoContactDetails()->getPhoneContacts())
+            $savedOrganisation->getIrfoContactDetails()->getPhoneContacts()
         );
     }
 

@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Conditions;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class ConditionsTest extends \PHPUnit\Framework\TestCase
+final class ConditionsTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

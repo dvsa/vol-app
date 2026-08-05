@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Ecmt;
 
 use Common\Form\Elements\Custom\EcmtNoOfPermitsEmissionsCategoryHiddenElement;
@@ -18,11 +20,9 @@ use Laminas\Form\Form;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsSingleFieldsetPopulatorTest extends MockeryTestCase
+final class NoOfPermitsSingleFieldsetPopulatorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpPopulate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpPopulate')]
     public function testPopulate($emissionsCategoryType, $expectedTextboxLabelKey, $expectedInsetSupplementKey): void
     {
         $maxCanApplyFor = 21;
@@ -124,23 +124,21 @@ class NoOfPermitsSingleFieldsetPopulatorTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return list{list{'euro5', 'qanda.ecmt.number-of-permits.textbox.label.euro5', 'qanda.ecmt.number-of-permits.single.inset.supplement.euro5'}, list{'euro6', 'qanda.ecmt.number-of-permits.textbox.label.euro6', 'qanda.ecmt.number-of-permits.single.inset.supplement.euro6'}}
      */
-    public function dpPopulate(): array
+    public static function dpPopulate(): \Iterator
     {
-        return [
-            [
-                'euro5',
-                'qanda.ecmt.number-of-permits.textbox.label.euro5',
-                'qanda.ecmt.number-of-permits.single.inset.supplement.euro5'
-            ],
-            [
-                'euro6',
-                'qanda.ecmt.number-of-permits.textbox.label.euro6',
-                'qanda.ecmt.number-of-permits.single.inset.supplement.euro6'
-            ]
+        yield [
+            'euro5',
+            'qanda.ecmt.number-of-permits.textbox.label.euro5',
+            'qanda.ecmt.number-of-permits.single.inset.supplement.euro5'
+        ];
+        yield [
+            'euro6',
+            'qanda.ecmt.number-of-permits.textbox.label.euro6',
+            'qanda.ecmt.number-of-permits.single.inset.supplement.euro6'
         ];
     }
 }

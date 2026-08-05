@@ -13,7 +13,7 @@ class SeriousInfringementLinkFactory implements FactoryInterface
      * @return SeriousInfringementLink
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $urlHelper = $container->get('Helper\Url');
         return new SeriousInfringementLink($urlHelper);

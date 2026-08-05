@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Organisation as OrganisationRepo;
 /**
  * Class FixIsUnlicencedTest
  */
-class FixIsUnlicencedTest extends AbstractCommandHandlerTestCase
+final class FixIsUnlicencedTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

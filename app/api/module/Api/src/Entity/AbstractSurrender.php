@@ -22,27 +22,20 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="surrender",
- *    indexes={
- *        @ORM\Index(name="fk_signature_type_ref_data_id", columns={"signature_type"}),
- *        @ORM\Index(name="surrender__index_licence", columns={"licence_id"}),
- *        @ORM\Index(name="surrender_created_by_index", columns={"created_by"}),
- *        @ORM\Index(name="surrender_fk_community_licence_document_status_ref_data_id", columns={"community_licence_document_status"}),
- *        @ORM\Index(name="surrender_fk_digital_signature_id_ref_data_id", columns={"digital_signature_id"}),
- *        @ORM\Index(name="surrender_fk_last_modified", columns={"last_modified_by"}),
- *        @ORM\Index(name="surrender_id_uindex", columns={"id"}),
- *        @ORM\Index(name="surrender_licence_document_ref_data_id_fk", columns={"licence_document_status"}),
- *        @ORM\Index(name="surrender_status_index", columns={"status"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="surrender_id_uindex", columns={"id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'surrender')]
+#[ORM\Index(name: 'fk_signature_type_ref_data_id', columns: ['signature_type'])]
+#[ORM\Index(name: 'surrender__index_licence', columns: ['licence_id'])]
+#[ORM\Index(name: 'surrender_created_by_index', columns: ['created_by'])]
+#[ORM\Index(name: 'surrender_fk_community_licence_document_status_ref_data_id', columns: ['community_licence_document_status'])]
+#[ORM\Index(name: 'surrender_fk_digital_signature_id_ref_data_id', columns: ['digital_signature_id'])]
+#[ORM\Index(name: 'surrender_fk_last_modified', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'surrender_licence_document_ref_data_id_fk', columns: ['licence_document_status'])]
+#[ORM\Index(name: 'surrender_status_index', columns: ['status'])]
+#[ORM\UniqueConstraint(name: 'surrender_id_uindex', columns: ['id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractSurrender implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -56,184 +49,165 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * FK TO Licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
     protected $licence;
 
     /**
      * STATUS of surrender
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * STATUS of licence document
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_document_status", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'licence_document_status', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $licenceDocumentStatus;
 
     /**
      * information relating TO community licence document
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="community_licence_document_status", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'community_licence_document_status', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $communityLicenceDocumentStatus;
 
     /**
      * DigitalSignature
      *
      * @var \Dvsa\Olcs\Api\Entity\DigitalSignature
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\DigitalSignature", fetch="LAZY")
-     * @ORM\JoinColumn(name="digital_signature_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'digital_signature_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\DigitalSignature::class, fetch: 'LAZY')]
     protected $digitalSignature;
 
     /**
      * SignatureType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="signature_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'signature_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $signatureType;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * NUMBER of discs that have been declared destroyed
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="disc_destroyed", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'disc_destroyed', nullable: true)]
     protected $discDestroyed;
 
     /**
      * NUMBER of discs that have been declared lost
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="disc_lost", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'disc_lost', nullable: true)]
     protected $discLost;
 
     /**
      * NUMBER of discs that have been declared stolen
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="disc_stolen", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'disc_stolen', nullable: true)]
     protected $discStolen;
 
     /**
      * information relating TO discs lost
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="disc_lost_info", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'disc_lost_info', nullable: true)]
     protected $discLostInfo;
 
     /**
      * information relating TO stolen discs
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="disc_stolen_info", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'disc_stolen_info', nullable: true)]
     protected $discStolenInfo;
 
     /**
      * information relating to status of the operator licence document
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="licence_document_info", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'licence_document_info', nullable: true)]
     protected $licenceDocumentInfo;
 
     /**
      * information relating to the status of the operator licence document
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="community_licence_document_info", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'community_licence_document_info', nullable: true)]
     protected $communityLicenceDocumentInfo;
 
     /**
      * Has the signature been checked?
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="signature_checked", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'signature_checked', nullable: true)]
     protected $signatureChecked;
 
     /**
      * Has ecms been checked?
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="ecms_checked", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'ecms_checked', nullable: true)]
     protected $ecmsChecked;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=true, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: true, options: ['default' => 1])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -257,7 +231,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param int $id new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setId($id)
     {
@@ -281,7 +255,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -305,7 +279,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setStatus($status)
     {
@@ -329,7 +303,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $licenceDocumentStatus new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setLicenceDocumentStatus($licenceDocumentStatus)
     {
@@ -353,7 +327,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $communityLicenceDocumentStatus new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setCommunityLicenceDocumentStatus($communityLicenceDocumentStatus)
     {
@@ -377,7 +351,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\DigitalSignature $digitalSignature new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setDigitalSignature($digitalSignature)
     {
@@ -401,7 +375,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $signatureType new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setSignatureType($signatureType)
     {
@@ -425,7 +399,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -449,7 +423,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -473,7 +447,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param int $discDestroyed new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setDiscDestroyed($discDestroyed)
     {
@@ -497,7 +471,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param int $discLost new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setDiscLost($discLost)
     {
@@ -521,7 +495,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param int $discStolen new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setDiscStolen($discStolen)
     {
@@ -545,7 +519,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param string $discLostInfo new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setDiscLostInfo($discLostInfo)
     {
@@ -569,7 +543,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param string $discStolenInfo new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setDiscStolenInfo($discStolenInfo)
     {
@@ -593,7 +567,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param string $licenceDocumentInfo new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setLicenceDocumentInfo($licenceDocumentInfo)
     {
@@ -617,7 +591,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param string $communityLicenceDocumentInfo new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setCommunityLicenceDocumentInfo($communityLicenceDocumentInfo)
     {
@@ -641,7 +615,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param bool $signatureChecked new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setSignatureChecked($signatureChecked)
     {
@@ -665,7 +639,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param bool $ecmsChecked new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setEcmsChecked($ecmsChecked)
     {
@@ -689,7 +663,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @param int $version new value being set
      *
-     * @return Surrender
+     * @return static
      */
     public function setVersion($version)
     {

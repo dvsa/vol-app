@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -7,24 +9,14 @@ use Common\Service\Table\Formatter\SystemInfoMessageLink;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-/**
- * @covers Common\Service\Table\Formatter\SystemInfoMessageLink
- */
-class SystemInfoMessageLinkTest extends TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Table\Formatter\SystemInfoMessageLink::class)]
+final class SystemInfoMessageLinkTest extends TestCase
 {
-    private const EXPECT_URL = 'unit_Url';
+    private const string EXPECT_URL = 'unit_Url';
 
-    private const ID = 9999;
+    private const int ID = 9999;
 
     protected $urlHelper;
-
-    protected $translator;
-
-    protected $viewHelperManager;
-
-    protected $router;
-
-    protected $request;
 
     protected $sut;
 
@@ -42,9 +34,7 @@ class SystemInfoMessageLinkTest extends TestCase
     }
 
 
-    /**
-     * @dataProvider dpTestFormat
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestFormat')]
     public function testFormat($data, $expect): void
     {
         $data['id'] = self::ID;
@@ -60,39 +50,34 @@ class SystemInfoMessageLinkTest extends TestCase
             )
             ->andReturn(self::EXPECT_URL);
 
-        static::assertEquals(
-            $expect,
-            $this->sut->format($data, [])
-        );
+        $this->assertEquals($expect, $this->sut->format($data, []));
     }
 
     /**
-     * @return ((bool|string)[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(bool | string)> | string)>>
      *
      * @psalm-return list{array{data: array{description: 'unit_Desc', isActive: true}, expect: '<a href="unit_Url" class="govuk-link js-modal-ajax">unit_Desc</a> <span class="status green">ACTIVE</span>'}, array{data: array{description: string, isActive: false}, expect: string}}
      */
-    public function dpTestFormat(): array
+    public static function dpTestFormat(): \Iterator
     {
-        return [
-            [
-                'data' => [
-                    'description' => 'unit_Desc',
-                    'isActive' => true,
-                ],
-                'expect' => '<a href="' . self::EXPECT_URL . '" class="govuk-link js-modal-ajax">unit_Desc</a>' .
-                    ' <span class="status green">ACTIVE</span>',
+        yield [
+            'data' => [
+                'description' => 'unit_Desc',
+                'isActive' => true,
             ],
-            [
-                'data' => [
-                    'description' => str_repeat('X', SystemInfoMessageLink::MAX_DESC_LEN + 1),
-                    'isActive' => false,
-                ],
-                'expect' =>
-                    '<a href="' . self::EXPECT_URL . '" class="govuk-link js-modal-ajax">' .
-                    str_repeat('X', SystemInfoMessageLink::MAX_DESC_LEN) . '...' .
-                    '</a>' .
-                    ' <span class="status grey">INACTIVE</span>',
+            'expect' => '<a href="' . self::EXPECT_URL . '" class="govuk-link js-modal-ajax">unit_Desc</a>' .
+                ' <span class="status green">ACTIVE</span>',
+        ];
+        yield [
+            'data' => [
+                'description' => str_repeat('X', SystemInfoMessageLink::MAX_DESC_LEN + 1),
+                'isActive' => false,
             ],
+            'expect' =>
+                '<a href="' . self::EXPECT_URL . '" class="govuk-link js-modal-ajax">' .
+                str_repeat('X', SystemInfoMessageLink::MAX_DESC_LEN) . '...' .
+                '</a>' .
+                ' <span class="status grey">INACTIVE</span>',
         ];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Validation\Result;
 
 use Common\Service\Validation\Result\ValidationFailed;
@@ -11,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  * Class ValidationFailedTest
  * @package CommonTest\Validation\Result
  */
-class ValidationFailedTest extends TestCase
+final class ValidationFailedTest extends TestCase
 {
     public function testObject(): void
     {

@@ -12,7 +12,7 @@ use Dvsa\Olcs\Transfer\Query\IrhpApplication\BilateralCountryAccessible as Bilat
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class BilateralCountryAccessibleTest extends QueryHandlerTestCase
+final class BilateralCountryAccessibleTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -57,17 +57,15 @@ class BilateralCountryAccessibleTest extends QueryHandlerTestCase
         $this->assertEquals($expected, $result);
     }
 
-    public static function dpHandleQuery(): array
+    public static function dpHandleQuery(): \Iterator
     {
-        return [
-            'country accessible' => [
-                'DE',
-                true,
-            ],
-            'country not accessible' => [
-                'FR',
-                false,
-            ],
+        yield 'country accessible' => [
+            'DE',
+            true,
+        ];
+        yield 'country not accessible' => [
+            'FR',
+            false,
         ];
     }
 

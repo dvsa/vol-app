@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\IrfoSignature as Sut;
 /**
  * IrfoSignature Test
  */
-class IrfoSignatureTest extends \PHPUnit\Framework\TestCase
+final class IrfoSignatureTest extends \PHPUnit\Framework\TestCase
 {
     public function testRender(): void
     {

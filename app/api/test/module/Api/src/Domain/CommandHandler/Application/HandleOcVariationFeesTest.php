@@ -27,7 +27,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
+final class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -208,24 +208,22 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dpHandleCommandForGoodsWithIncreasedAuthWithoutFees(): array
+    public static function dpHandleCommandForGoodsWithIncreasedAuthWithoutFees(): \Iterator
     {
-        return [
-            'HGV auth increased' => [
-                'hasHgvAuthorisationIncreased' => true,
-                'hasLgvAuthorisationIncreased' => false,
-                'hasAuthTrailersIncrease' => false,
-            ],
-            'LGV auth increased' => [
-                'hasHgvAuthorisationIncreased' => false,
-                'hasLgvAuthorisationIncreased' => true,
-                'hasAuthTrailersIncrease' => false,
-            ],
-            'Trailers auth increased' => [
-                'hasHgvAuthorisationIncreased' => false,
-                'hasLgvAuthorisationIncreased' => false,
-                'hasAuthTrailersIncrease' => true,
-            ],
+        yield 'HGV auth increased' => [
+            'hasHgvAuthorisationIncreased' => true,
+            'hasLgvAuthorisationIncreased' => false,
+            'hasAuthTrailersIncrease' => false,
+        ];
+        yield 'LGV auth increased' => [
+            'hasHgvAuthorisationIncreased' => false,
+            'hasLgvAuthorisationIncreased' => true,
+            'hasAuthTrailersIncrease' => false,
+        ];
+        yield 'Trailers auth increased' => [
+            'hasHgvAuthorisationIncreased' => false,
+            'hasLgvAuthorisationIncreased' => false,
+            'hasAuthTrailersIncrease' => true,
         ];
     }
 
@@ -270,7 +268,7 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
                 'feeTypeFeeType' => FeeType::FEE_TYPE_VAR,
                 'description' => null
             ],
-            (new Result())->addMessage('CreateApplicationFee')
+            new Result()->addMessage('CreateApplicationFee')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -285,15 +283,13 @@ class HandleOcVariationFeesTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dpHandleCommandForPsvWithUpdatedAuthWithoutFees(): array
+    public static function dpHandleCommandForPsvWithUpdatedAuthWithoutFees(): \Iterator
     {
-        return [
-            'HGV auth increased' => [
-                'hasHgvAuthorisationIncreased' => true,
-            ],
-            'HGV auth not increased' => [
-                'hasHgvAuthorisationIncreased' => false,
-            ],
+        yield 'HGV auth increased' => [
+            'hasHgvAuthorisationIncreased' => true,
+        ];
+        yield 'HGV auth not increased' => [
+            'hasHgvAuthorisationIncreased' => false,
         ];
     }
 

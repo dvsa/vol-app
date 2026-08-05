@@ -25,7 +25,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CasesTest extends QueryHandlerTestCase
+final class CasesTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -234,7 +234,7 @@ class CasesTest extends QueryHandlerTestCase
         $serialized = $result->serialize();
 
         $this->assertSame($latestNote, $serialized['latestNote']);
-        $this->assertSame(2, count($serialized['application']['publicationLinks']));
+        $this->assertCount(2, $serialized['application']['publicationLinks']);
         $this->assertSame($publicationLink1Id, $serialized['application']['publicationLinks'][0]['id']);
         $this->assertSame($publicationLink2Id, $serialized['application']['publicationLinks'][1]['id']);
     }

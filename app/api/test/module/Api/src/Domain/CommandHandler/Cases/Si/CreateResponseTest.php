@@ -23,7 +23,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 use LmcRbacMvc\Identity\IdentityInterface;
 use Dvsa\Olcs\Transfer\Command\Document\Upload as UploadCmd;
 
-class CreateResponseTest extends AbstractCommandHandlerTestCase
+final class CreateResponseTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

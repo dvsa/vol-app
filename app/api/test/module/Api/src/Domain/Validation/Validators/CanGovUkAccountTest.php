@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * Can Sign With GovUk Account Test
  */
-class CanGovUkAccountTest extends AbstractHandlerTestCase
+final class CanGovUkAccountTest extends AbstractHandlerTestCase
 {
     /**
      * @var Sut

@@ -20,7 +20,7 @@ use Olcs\Session\LicenceVehicleManagement;
 /**
  * @see SwitchBoardControllerFactory
  */
-class SwitchBoardControllerFactoryTest extends MockeryTestCase
+final class SwitchBoardControllerFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\UploadEvidence;
@@ -11,18 +13,17 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class UploadEvidenceTest extends MockeryTestCase
+final class UploadEvidenceTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(UploadEvidence::class)->makePartial()->shouldAllowMockingProtectedMethods();
     }
 
-    /**
-     * @dataProvider isNotValidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isNotValidProvider')]
     public function testIsNotValid($value, $expected, $context)
     {
         $this->sut->shouldReceive('getTranslator')
@@ -44,80 +45,74 @@ class UploadEvidenceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->isValid($value, $context));
     }
 
-    public function isNotValidProvider()
+    public static function isNotValidProvider(): \Iterator
     {
-        return [
+        yield [
+            '',
+            false,
             [
-                '',
-                false,
-                [
-                    'adPlacedIn' => 'foo'
-                ]
-            ],
+                'adPlacedIn' => 'foo'
+            ]
+        ];
+        yield [
+            '',
+            false,
             [
-                '',
-                false,
-                [
-                    'adPlacedIn' => 'foo',
-                    'file'
-                ]
-            ],
+                'adPlacedIn' => 'foo',
+                'file'
+            ]
+        ];
+        yield [
+            '',
+            false,
             [
-                '',
-                false,
-                [
-                    'adPlacedIn' => 'foo',
-                    'file' => ['list']
-                ]
-            ],
+                'adPlacedIn' => 'foo',
+                'file' => ['list']
+            ]
+        ];
+        yield [
+            '',
+            false,
             [
-                '',
-                false,
-                [
-                    'adPlacedDate' => ['day' => '1']
-                ]
-            ],
+                'adPlacedDate' => ['day' => '1']
+            ]
+        ];
+        yield [
+            '',
+            false,
             [
-                '',
-                false,
-                [
-                    'adPlacedDate' => ['month' => '1']
-                ]
-            ],
+                'adPlacedDate' => ['month' => '1']
+            ]
+        ];
+        yield [
+            '',
+            false,
             [
-                '',
-                false,
-                [
-                    'adPlacedDate' => ['year' => '2000']
-                ]
-            ],
+                'adPlacedDate' => ['year' => '2000']
+            ]
         ];
     }
 
-    /**
-     * @dataProvider isValidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($value, $expected, $context)
     {
         $this->assertEquals($expected, $this->sut->isValid($value, $context));
     }
 
-    public function isValidProvider()
+    public static function isValidProvider(): \Iterator
     {
-        return [
+        yield [
+            '',
+            true,
             [
-                '',
-                true,
-                [
-                    'adPlacedIn' => 'foo',
-                    'file' => ['list' => ['bar']]
-                ]
-            ],
-            [
-                '',
-                true,
-                []
-            ],
+                'adPlacedIn' => 'foo',
+                'file' => ['list' => ['bar']]
+            ]
+        ];
+        yield [
+            '',
+            true,
+            []
         ];
     }
 }

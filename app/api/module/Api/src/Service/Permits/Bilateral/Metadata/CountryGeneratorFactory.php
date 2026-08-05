@@ -18,7 +18,7 @@ class CountryGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CountryGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CountryGenerator
     {
         return new CountryGenerator(
             $container->get('PermitsBilateralMetadataPeriodArrayGenerator')

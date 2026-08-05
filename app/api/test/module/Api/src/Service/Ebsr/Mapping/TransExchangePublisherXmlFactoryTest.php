@@ -14,7 +14,7 @@ use Psr\Container\ContainerInterface;
  * Class TransExchangePublisherXmlFactoryTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\Mapping
  */
-class TransExchangePublisherXmlFactoryTest extends TestCase
+final class TransExchangePublisherXmlFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Cases\ProposeToRevoke;
 
 use Dvsa\Olcs\Transfer\Command\Cases\ProposeToRevoke\CreateProposeToRevoke;
 use Dvsa\OlcsTest\Transfer\Command\CommandTest;
 
-class CreateProposeToRevokeTest extends \PHPUnit\Framework\TestCase
+final class CreateProposeToRevokeTest extends \PHPUnit\Framework\TestCase
 {
     use CommandTest;
 

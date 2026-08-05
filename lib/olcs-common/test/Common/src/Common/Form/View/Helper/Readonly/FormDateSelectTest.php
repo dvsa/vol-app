@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper\Readonly;
 
 use Common\Form\View\Helper\Readonly\FormDateSelect;
@@ -10,13 +12,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  * Class FormdateSelectTest
  * @package CommonTest\Form\View\Helper\Readonly
  */
-class FormDateSelectTest extends TestCase
+final class FormDateSelectTest extends TestCase
 {
     /**
      * @param $element
      * @param $expected
-     * @dataProvider provideTestInvoke
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideTestInvoke')]
     public function testInvoke($element, $expected): void
     {
         $sut = new FormDateSelect();
@@ -27,7 +29,7 @@ class FormDateSelectTest extends TestCase
     /**
      * @return array
      */
-    public function provideTestInvoke()
+    public static function provideTestInvoke()
     {
         $mockDs = m::mock(\Laminas\Form\Element\DateSelect::class);
         $mockDs->shouldReceive('getYearElement->getValue')->andReturn('2014');

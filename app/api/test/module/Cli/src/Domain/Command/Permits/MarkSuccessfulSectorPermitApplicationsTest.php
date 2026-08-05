@@ -11,7 +11,7 @@ use Dvsa\Olcs\Cli\Domain\Command\Permits\MarkSuccessfulSectorPermitApplications;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class MarkSuccessfulSectorPermitApplicationsTest extends \PHPUnit\Framework\TestCase
+final class MarkSuccessfulSectorPermitApplicationsTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {
@@ -21,6 +21,6 @@ class MarkSuccessfulSectorPermitApplicationsTest extends \PHPUnit\Framework\Test
             ]
         );
 
-        static::assertEquals(7, $sut->getStockId());
+        $this->assertEquals(7, $sut->getStockId());
     }
 }

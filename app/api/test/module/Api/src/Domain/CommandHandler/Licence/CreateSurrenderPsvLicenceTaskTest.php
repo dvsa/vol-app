@@ -20,7 +20,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateSurrenderPsvLicenceTaskTest extends AbstractCommandHandlerTestCase
+final class CreateSurrenderPsvLicenceTaskTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -37,7 +37,7 @@ class CreateSurrenderPsvLicenceTaskTest extends AbstractCommandHandlerTestCase
             'category' => Category::CATEGORY_LICENSING,
             'subCategory' => SubCategory::DOC_SUB_CATEGORY_CONTINUATIONS_AND_RENEWALS_LICENCE,
             'description' => Task::TASK_DESCRIPTION_LICENCE_EXPIRED,
-            'actionDate' => (new DateTime('now'))->format('Y-m-d'),
+            'actionDate' => new DateTime('now')->format('Y-m-d'),
             'licence' => 111
         ];
         $this->expectedSideEffect(CreateTask::class, $data, new Result());
@@ -46,7 +46,7 @@ class CreateSurrenderPsvLicenceTaskTest extends AbstractCommandHandlerTestCase
             'category' => Category::CATEGORY_LICENSING,
             'subCategory' => SubCategory::DOC_SUB_CATEGORY_CONTINUATIONS_AND_RENEWALS_LICENCE,
             'description' => Task::TASK_DESCRIPTION_LICENCE_EXPIRED,
-            'actionDate' => (new DateTime('now'))->format('Y-m-d'),
+            'actionDate' => new DateTime('now')->format('Y-m-d'),
             'licence' => 222
         ];
         $this->expectedSideEffect(CreateTask::class, $data, new Result());

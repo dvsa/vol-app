@@ -21,7 +21,7 @@ class DeclarationsInternalControllerFactory implements FactoryInterface
      * @return DeclarationsInternalController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DeclarationsInternalController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DeclarationsInternalController
     {
 
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

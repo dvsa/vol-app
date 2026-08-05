@@ -15,7 +15,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Mockery as m;
 
-class PsvLicenceSurrenderListTest extends QueryHandlerTestCase
+final class PsvLicenceSurrenderListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

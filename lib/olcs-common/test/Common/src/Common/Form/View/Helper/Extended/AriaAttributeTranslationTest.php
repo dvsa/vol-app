@@ -48,11 +48,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * when building the HTML attribute string, using the TranslatableAttributePrefixInitializer
  * approach (addTranslatableAttributePrefix) rather than the removed PrepareAttributesTrait.
  */
-class AriaAttributeTranslationTest extends MockeryTestCase
+final class AriaAttributeTranslationTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider helperProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('helperProvider')]
     public function testAriaAttributeValueIsTranslated(string $helperClass): void
     {
         /** @var AbstractHelper $sut */
@@ -62,12 +60,10 @@ class AriaAttributeTranslationTest extends MockeryTestCase
 
         $output = $sut->createAttributesString(['aria-label' => 'aria.test.key']);
 
-        self::assertStringContainsString('aria-label="TRANSLATED"', $output);
+        $this->assertStringContainsString('aria-label="TRANSLATED"', $output);
     }
 
-    /**
-     * @dataProvider helperProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('helperProvider')]
     public function testXPrefixedAttributeValueIsTranslated(string $helperClass): void
     {
         /** @var AbstractHelper $sut */
@@ -77,47 +73,45 @@ class AriaAttributeTranslationTest extends MockeryTestCase
 
         $output = $sut->createAttributesString(['x-custom-attr' => 'x.test.key']);
 
-        self::assertStringContainsString('x-custom-attr="TRANSLATED"', $output);
+        $this->assertStringContainsString('x-custom-attr="TRANSLATED"', $output);
     }
 
-    public static function helperProvider(): array
+    public static function helperProvider(): \Iterator
     {
-        return [
-            'FormButton'        => [FormButton::class],
-            'FormCaptcha'       => [FormCaptcha::class],
-            'FormCheckbox'      => [FormCheckbox::class],
-            'FormCollection'    => [FormCollection::class],
-            'FormColor'         => [FormColor::class],
-            'FormDate'          => [FormDate::class],
-            'FormDateSelect'    => [FormDateSelect::class],
-            'FormDateTime'      => [FormDateTime::class],
-            'FormDateTimeLocal' => [FormDateTimeLocal::class],
-            'FormDateTimeSelect' => [FormDateTimeSelect::class],
-            'FormEmail'         => [FormEmail::class],
-            'FormFile'          => [FormFile::class],
-            'FormHidden'        => [FormHidden::class],
-            'FormImage'         => [FormImage::class],
-            'FormInput'         => [FormInput::class],
-            'FormLabel'         => [FormLabel::class],
-            'FormMonth'         => [FormMonth::class],
-            'FormMonthSelect'   => [FormMonthSelect::class],
-            'FormMultiCheckbox' => [FormMultiCheckbox::class],
-            'FormNumber'        => [FormNumber::class],
-            'FormPassword'      => [FormPassword::class],
-            'FormRadio'         => [FormRadio::class],
-            'FormRange'         => [FormRange::class],
-            'FormReset'         => [FormReset::class],
-            'FormRow'           => [FormRow::class],
-            'FormSearch'        => [FormSearch::class],
-            'FormSelect'        => [FormSelect::class],
-            'FormSubmit'        => [FormSubmit::class],
-            'FormTel'           => [FormTel::class],
-            'FormText'          => [FormText::class],
-            'FormTextarea'      => [FormTextarea::class],
-            'FormTime'          => [FormTime::class],
-            'FormUrl'           => [FormUrl::class],
-            'FormWeek'          => [FormWeek::class],
-        ];
+        yield 'FormButton' => [FormButton::class];
+        yield 'FormCaptcha' => [FormCaptcha::class];
+        yield 'FormCheckbox' => [FormCheckbox::class];
+        yield 'FormCollection' => [FormCollection::class];
+        yield 'FormColor' => [FormColor::class];
+        yield 'FormDate' => [FormDate::class];
+        yield 'FormDateSelect' => [FormDateSelect::class];
+        yield 'FormDateTime' => [FormDateTime::class];
+        yield 'FormDateTimeLocal' => [FormDateTimeLocal::class];
+        yield 'FormDateTimeSelect' => [FormDateTimeSelect::class];
+        yield 'FormEmail' => [FormEmail::class];
+        yield 'FormFile' => [FormFile::class];
+        yield 'FormHidden' => [FormHidden::class];
+        yield 'FormImage' => [FormImage::class];
+        yield 'FormInput' => [FormInput::class];
+        yield 'FormLabel' => [FormLabel::class];
+        yield 'FormMonth' => [FormMonth::class];
+        yield 'FormMonthSelect' => [FormMonthSelect::class];
+        yield 'FormMultiCheckbox' => [FormMultiCheckbox::class];
+        yield 'FormNumber' => [FormNumber::class];
+        yield 'FormPassword' => [FormPassword::class];
+        yield 'FormRadio' => [FormRadio::class];
+        yield 'FormRange' => [FormRange::class];
+        yield 'FormReset' => [FormReset::class];
+        yield 'FormRow' => [FormRow::class];
+        yield 'FormSearch' => [FormSearch::class];
+        yield 'FormSelect' => [FormSelect::class];
+        yield 'FormSubmit' => [FormSubmit::class];
+        yield 'FormTel' => [FormTel::class];
+        yield 'FormText' => [FormText::class];
+        yield 'FormTextarea' => [FormTextarea::class];
+        yield 'FormTime' => [FormTime::class];
+        yield 'FormUrl' => [FormUrl::class];
+        yield 'FormWeek' => [FormWeek::class];
     }
 
     private function makeTranslator(): TranslatorInterface

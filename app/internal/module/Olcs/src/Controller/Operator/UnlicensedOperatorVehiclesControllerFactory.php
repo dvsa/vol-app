@@ -12,7 +12,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class UnlicensedOperatorVehiclesControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): UnlicensedOperatorVehiclesController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): UnlicensedOperatorVehiclesController
     {
         $translationHelperService = $container->get(TranslationHelperService::class);
         assert($translationHelperService instanceof TranslationHelperService);

@@ -14,10 +14,11 @@ use Laminas\Mvc\Controller\Plugin\Redirect;
 use Laminas\Mvc\MvcEvent;
 use Laminas\Router\Http\RouteMatch;
 
-class IrhpPermitApplicationViewGeneratorTest extends MockeryTestCase
+final class IrhpPermitApplicationViewGeneratorTest extends MockeryTestCase
 {
     private $irhpPermitApplicationViewGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpPermitApplicationViewGenerator = new IrhpPermitApplicationViewGenerator();

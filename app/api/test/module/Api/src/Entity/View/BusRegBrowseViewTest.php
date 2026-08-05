@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Entity\View\BusRegBrowseView;
 /**
  * BusRegBrowseView
  */
-class BusRegBrowseViewTest extends \PHPUnit\Framework\TestCase
+final class BusRegBrowseViewTest extends \PHPUnit\Framework\TestCase
 {
     protected $entity;
 

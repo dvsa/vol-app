@@ -13,7 +13,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\Query\BaseAbstractDbQueryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateContinuationDetailsTest extends BaseAbstractDbQueryTestCase
+final class CreateContinuationDetailsTest extends BaseAbstractDbQueryTestCase
 {
     protected $tableNameMap = [
         ContinuationDetail::class => 'continuation_detail'

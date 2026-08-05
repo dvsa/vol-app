@@ -12,7 +12,7 @@ use Olcs\Data\Mapper\TaskAlphaSplit as Sut;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class TaskAlphaSplitTest extends MockeryTestCase
+final class TaskAlphaSplitTest extends MockeryTestCase
 {
     public function testMapFromResult(): void
     {

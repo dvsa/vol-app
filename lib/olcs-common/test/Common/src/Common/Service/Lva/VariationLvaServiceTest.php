@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Printing;
 
 use Mockery as m;
@@ -20,7 +22,7 @@ use Common\Service\Lva\VariationLvaService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationLvaServiceTest extends MockeryTestCase
+final class VariationLvaServiceTest extends MockeryTestCase
 {
     private $sut;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper;
 
 use Mockery as m;
@@ -9,7 +11,7 @@ use Common\View\Helper\FlashMessenger;
 /**
  * Date Test
  */
-class DateTimeTest extends MockeryTestCase
+final class DateTimeTest extends MockeryTestCase
 {
     /**
      * @var \Common\View\Helper\DateTime
@@ -27,9 +29,7 @@ class DateTimeTest extends MockeryTestCase
         date_default_timezone_set('UTC');
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testInvoke(\DateTime $dateTime, string $format, string $expected): void
     {
         $sut = $this->sut;
@@ -39,28 +39,26 @@ class DateTimeTest extends MockeryTestCase
     /**
      * Data provider
      *
-     * @return (\DateTime|string)[][]
+     * @return \Iterator<(int | string), array<(\DateTime | string)>>
      *
      * @psalm-return list{list{\DateTime, 'd/m/Y H:i', '10/06/2016 12:00'}, list{\DateTime, 'd/m/Y H:i', '10/12/2016 12:00'}, list{\DateTime, 'd/m/Y H:i', '10/06/2016 11:00'}}
      */
-    public function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [
-                new \DateTime('2016-06-11 12:00', new \DateTimeZone('UTC')),
-                'd/m/Y H:i',
-                '11/06/2016 12:00'
-            ],
-            [
-                new \DateTime('2016-12-12 12:00', new \DateTimeZone('UTC')),
-                'd/m/Y H:i',
-                '12/12/2016 12:00'
-            ],
-            [
-                new \DateTime('2016-06-13 12:00', new \DateTimeZone('Europe/London')),
-                'd/m/Y H:i',
-                '13/06/2016 11:00'
-            ],
+        yield [
+            new \DateTime('2016-06-11 12:00', new \DateTimeZone('UTC')),
+            'd/m/Y H:i',
+            '11/06/2016 12:00'
+        ];
+        yield [
+            new \DateTime('2016-12-12 12:00', new \DateTimeZone('UTC')),
+            'd/m/Y H:i',
+            '12/12/2016 12:00'
+        ];
+        yield [
+            new \DateTime('2016-06-13 12:00', new \DateTimeZone('Europe/London')),
+            'd/m/Y H:i',
+            '13/06/2016 11:00'
         ];
     }
 }

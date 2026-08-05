@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class GrantVarText3
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class GrantVarText3Test extends MockeryTestCase
+final class GrantVarText3Test extends MockeryTestCase
 {
     /**
      * @param string $variationReasons
@@ -65,13 +65,11 @@ class GrantVarText3Test extends MockeryTestCase
     /**
      * Data provider for processTest
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function processTestProvider(): array
+    public static function processTestProvider(): \Iterator
     {
-        return [
-            ['var reasons', 'Operating between %s and %s given service number %s effective from %s. To amend %s.'],
-            [null, 'Operating between %s and %s given service number %s effective from %s.']
-        ];
+        yield ['var reasons', 'Operating between %s and %s given service number %s effective from %s. To amend %s.'];
+        yield [null, 'Operating between %s and %s given service number %s effective from %s.'];
     }
 }

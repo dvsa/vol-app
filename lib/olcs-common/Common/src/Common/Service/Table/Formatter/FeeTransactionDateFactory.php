@@ -13,7 +13,7 @@ class FeeTransactionDateFactory implements FactoryInterface
      * @return FeeTransactionDate
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $dateFormatter = $container->get(Date::class);
         $stackValueFormatter = $container->get(StackValue::class);

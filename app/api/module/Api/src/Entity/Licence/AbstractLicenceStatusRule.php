@@ -22,19 +22,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="licence_status_rule",
- *    indexes={
- *        @ORM\Index(name="ix_licence_status_rule_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_licence_status_rule_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_licence_status_rule_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_licence_status_rule_licence_status", columns={"licence_status"})
- *    }
- * )
  */
+#[ORM\Table(name: 'licence_status_rule')]
+#[ORM\Index(name: 'ix_licence_status_rule_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_licence_status_rule_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_licence_status_rule_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_licence_status_rule_licence_status', columns: ['licence_status'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractLicenceStatusRule implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -48,108 +44,97 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'licenceStatusRules', fetch: 'LAZY')]
     protected $licence;
 
     /**
      * The status the licence will inherit on the start date
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_status', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $licenceStatus;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Start date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="start_date", nullable=false)
      */
+    #[ORM\Column(type: 'datetime', name: 'start_date', nullable: false)]
     protected $startDate;
 
     /**
      * End date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="end_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'end_date', nullable: true)]
     protected $endDate;
 
     /**
      * Date processed by batch job
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="start_processed_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'start_processed_date', nullable: true)]
     protected $startProcessedDate;
 
     /**
      * End processed date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="end_processed_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'end_processed_date', nullable: true)]
     protected $endProcessedDate;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
@@ -173,7 +158,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param int $id new value being set
      *
-     * @return LicenceStatusRule
+     * @return static
      */
     public function setId($id)
     {
@@ -197,7 +182,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return LicenceStatusRule
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -221,7 +206,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $licenceStatus new value being set
      *
-     * @return LicenceStatusRule
+     * @return static
      */
     public function setLicenceStatus($licenceStatus)
     {
@@ -245,7 +230,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LicenceStatusRule
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -269,7 +254,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LicenceStatusRule
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -293,7 +278,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param \DateTime $startDate new value being set
      *
-     * @return LicenceStatusRule
+     * @return static
      */
     public function setStartDate($startDate)
     {
@@ -323,7 +308,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param \DateTime $endDate new value being set
      *
-     * @return LicenceStatusRule
+     * @return static
      */
     public function setEndDate($endDate)
     {
@@ -353,7 +338,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param \DateTime $startProcessedDate new value being set
      *
-     * @return LicenceStatusRule
+     * @return static
      */
     public function setStartProcessedDate($startProcessedDate)
     {
@@ -383,7 +368,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param \DateTime $endProcessedDate new value being set
      *
-     * @return LicenceStatusRule
+     * @return static
      */
     public function setEndProcessedDate($endProcessedDate)
     {
@@ -413,7 +398,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param int $version new value being set
      *
-     * @return LicenceStatusRule
+     * @return static
      */
     public function setVersion($version)
     {
@@ -437,7 +422,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
      *
      * @param int $olbsKey new value being set
      *
-     * @return LicenceStatusRule
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

@@ -19,7 +19,7 @@ use Mockery as m;
 /**
  * Create NonPi Test
  */
-class DeleteTest extends AbstractCommandHandlerTestCase
+final class DeleteTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var DeleteCommandHandler

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Validators;
 
 use Common\Form\Elements\Validators\TableRequiredValidator;
@@ -11,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TableRequiredValidatorTest extends MockeryTestCase
+final class TableRequiredValidatorTest extends MockeryTestCase
 {
     public $validator;
     /**
@@ -25,9 +27,8 @@ class TableRequiredValidatorTest extends MockeryTestCase
 
     /**
      * Test isValid
-     *
-     * @dataProvider providerIsValid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerIsValid')]
     public function testIsValid($value, $context, $expected): void
     {
         $this->assertEquals($expected, $this->validator->isValid($value, $context));
@@ -36,20 +37,18 @@ class TableRequiredValidatorTest extends MockeryTestCase
     /**
      * Provider for isValid
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function providerIsValid()
+    public static function providerIsValid(): \Iterator
     {
-        return [
-            // With action
-            [null, ['action' => 'foo', 'rows' => 0], true],
-            [null, ['action' => 'foo', 'rows' => 1], true],
-            [null, ['action' => 'foo', 'rows' => 10], true],
-            // Without action
-            [null, ['rows' => 0], false],
-            [null, ['rows' => 1], true],
-            [null, ['rows' => 10], true]
-        ];
+        // With action
+        yield [null, ['action' => 'foo', 'rows' => 0], true];
+        yield [null, ['action' => 'foo', 'rows' => 1], true];
+        yield [null, ['action' => 'foo', 'rows' => 10], true];
+        // Without action
+        yield [null, ['rows' => 0], false];
+        yield [null, ['rows' => 1], true];
+        yield [null, ['rows' => 10], true];
     }
 
     public function testGetSetRowsRequired(): void

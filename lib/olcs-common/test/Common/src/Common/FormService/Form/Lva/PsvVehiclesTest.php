@@ -1,17 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Mockery as m;
 use Common\FormService\Form\Lva\PsvVehicles;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class PsvVehiclesTest extends AbstractLvaFormServiceTestCase
+final class PsvVehiclesTest extends AbstractLvaFormServiceTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $authService;
     protected $classToTest = PsvVehicles::class;
 
     protected $formName = 'Lva\PsvVehicles';
@@ -19,8 +17,8 @@ class PsvVehiclesTest extends AbstractLvaFormServiceTestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->authService = m::mock(AuthorizationService::class);
-        $this->classArgs = [$this->authService];
+        $authService = m::mock(AuthorizationService::class);
+        $this->classArgs = [$authService];
         parent::setUp();
     }
 

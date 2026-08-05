@@ -11,7 +11,7 @@ use Mockery as m;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use PDOStatement;
 
-class PrecheckTest extends AbstractCommandHandlerTestCase
+final class PrecheckTest extends AbstractCommandHandlerTestCase
 {
     private $mockedConnection;
 

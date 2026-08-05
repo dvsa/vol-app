@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\TmQualification;
 
 use Dvsa\Olcs\Transfer\Command\TmQualification\Update;
 use Dvsa\OlcsTest\Transfer\Command\CommandTest;
 use PHPUnit\Framework\TestCase;
 
-class UpdateTest extends TestCase
+final class UpdateTest extends TestCase
 {
     use CommandTest;
 

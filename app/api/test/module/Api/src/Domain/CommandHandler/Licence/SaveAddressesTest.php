@@ -35,7 +35,7 @@ use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class SaveAddressesTest extends AbstractCommandHandlerTestCase
+final class SaveAddressesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Utils\Client;
 
 use Dvsa\Olcs\Utils\Client\ClientAdapterLoggingWrapper;
@@ -10,7 +12,7 @@ use Laminas\Http\Client;
 use Laminas\Http\Client\Adapter\Curl;
 use Laminas\Http\Client\Adapter\Socket;
 
-class HttpExternalClientFactoryTest extends TestCase
+final class HttpExternalClientFactoryTest extends TestCase
 {
     public function testFactoryNoConfig()
     {

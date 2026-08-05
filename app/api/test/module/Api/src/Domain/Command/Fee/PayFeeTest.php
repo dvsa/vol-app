@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Fee\PayFee;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class PayFeeTest extends \PHPUnit\Framework\TestCase
+final class PayFeeTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

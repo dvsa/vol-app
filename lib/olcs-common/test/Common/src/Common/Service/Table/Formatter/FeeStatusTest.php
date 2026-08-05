@@ -6,6 +6,8 @@
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 /**
@@ -13,65 +15,63 @@ namespace CommonTest\Service\Table\Formatter;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class FeeStatusTest extends \PHPUnit\Framework\TestCase
+final class FeeStatusTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group FeeStatusFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('FeeStatusFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $expected): void
     {
-        $this->assertEquals($expected, (new \Common\Service\Table\Formatter\FeeStatus())->format($data));
+        $this->assertEquals($expected, new \Common\Service\Table\Formatter\FeeStatus()->format($data));
     }
 
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'outstanding' => [
-                [
-                    'feeStatus' => [
-                        'id' => 'lfs_ot',
-                        'description' => 'outstanding'
-                    ],
+        yield 'outstanding' => [
+            [
+                'feeStatus' => [
+                    'id' => 'lfs_ot',
+                    'description' => 'outstanding'
                 ],
-                '<strong class="govuk-tag govuk-tag--orange">outstanding</strong>',
             ],
-            'paid' => [
-                [
-                    'feeStatus' => [
-                        'id' => 'lfs_pd',
-                        'description' => 'paid'
-                    ],
+            '<strong class="govuk-tag govuk-tag--orange">outstanding</strong>',
+        ];
+        yield 'paid' => [
+            [
+                'feeStatus' => [
+                    'id' => 'lfs_pd',
+                    'description' => 'paid'
                 ],
-                '<strong class="govuk-tag govuk-tag--green">paid</strong>',
             ],
-            'cancelled' => [
-                [
-                    'feeStatus' => [
-                        'id' => 'lfs_cn',
-                        'description' => 'cancelled'
-                    ],
+            '<strong class="govuk-tag govuk-tag--green">paid</strong>',
+        ];
+        yield 'cancelled' => [
+            [
+                'feeStatus' => [
+                    'id' => 'lfs_cn',
+                    'description' => 'cancelled'
                 ],
-                '<strong class="govuk-tag govuk-tag--red">cancelled</strong>',
             ],
-            'other' => [
-                [
-                    'feeStatus' => [
-                        'id' => 'foo',
-                        'description' => 'foo'
-                    ],
+            '<strong class="govuk-tag govuk-tag--red">cancelled</strong>',
+        ];
+        yield 'other' => [
+            [
+                'feeStatus' => [
+                    'id' => 'foo',
+                    'description' => 'foo'
                 ],
-                '<strong class="govuk-tag govuk-tag--grey">foo</strong>',
             ],
+            '<strong class="govuk-tag govuk-tag--grey">foo</strong>',
         ];
     }
 }

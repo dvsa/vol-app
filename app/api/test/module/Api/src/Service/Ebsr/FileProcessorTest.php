@@ -18,7 +18,7 @@ use org\bovigo\vfs\vfsStream;
  * Class FileProcessorTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr
  */
-class FileProcessorTest extends TestCase
+final class FileProcessorTest extends TestCase
 {
     public function testFetchXmlFileNameFromDocumentStore(): void
     {

@@ -27,7 +27,7 @@ class CanCreateDocument extends AbstractHandler implements AuthAwareInterface
     private $allowedExtensions = [];
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $config = $container->get('config');
         if (isset($config['allow_file_upload']['extensions'])) {

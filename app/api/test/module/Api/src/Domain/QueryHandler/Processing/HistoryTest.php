@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class HistoryTest extends QueryHandlerTestCase
+final class HistoryTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -221,7 +221,7 @@ class HistoryTest extends QueryHandlerTestCase
 
         $this->sut->handleQuery($query);
 
-        $this->assertSame(null, $query->getOrganisation());
+        $this->assertNull($query->getOrganisation());
         $this->assertSame(46, $query->getTransportManager());
     }
 }

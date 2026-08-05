@@ -6,11 +6,11 @@ namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 use Dvsa\Olcs\Api\Service\Submission\Sections\EnvironmentalComplaints;
 
-class EnvironmentalComplaintsTest extends AbstractSubmissionSectionTestCase
+final class EnvironmentalComplaintsTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = EnvironmentalComplaints::class;
 
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
         $expectedResult = [
             'data' => [
@@ -92,8 +92,6 @@ class EnvironmentalComplaintsTest extends AbstractSubmissionSectionTestCase
 
         $case = static::getCase();
 
-        return [
-            [$case, $expectedResult],
-        ];
+        yield [$case, $expectedResult];
     }
 }

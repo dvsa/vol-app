@@ -57,7 +57,7 @@ class SessionTimeoutWarning extends AbstractHelper implements HelperInterface
      * @param int|null $indent
      * @return string
      */
-    public function generateHeadMetaTags(int $indent = null): string
+    public function generateHeadMetaTags(?int $indent = null): string
     {
         if (!$this->enabled) {
             return '';

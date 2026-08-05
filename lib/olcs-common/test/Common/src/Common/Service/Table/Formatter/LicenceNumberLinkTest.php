@@ -4,6 +4,8 @@
  * LicenceNumberLinkTest.php
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -16,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @package CommonTest\Service\Table\Formatter
  */
-class LicenceNumberLinkTest extends TestCase
+final class LicenceNumberLinkTest extends TestCase
 {
     protected $urlHelper;
 
@@ -35,9 +37,7 @@ class LicenceNumberLinkTest extends TestCase
         m::close();
     }
 
-    /**
-     * @dataProvider formatProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('formatProvider')]
     public function testFormat($data, $expected): void
     {
         $this->urlHelper
@@ -54,33 +54,31 @@ class LicenceNumberLinkTest extends TestCase
     }
 
     /**
-     * @return ((int|string)[][]|string)[][]
+     * @return \Iterator<(int | string), array<(array<array<(int | string)>> | string)>>
      *
      * @psalm-return list{list{array{licence: array{id: 1, licNo: 1, status: 'lsts_valid'}}, '<a class="govuk-link" href="LICENCE_URL">1</a>'}, list{array{licence: array{id: 1, licNo: 1, status: 'not-valid'}}, '1'}}
      */
-    public function formatProvider(): array
+    public static function formatProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'licence' => [
-                        'id' => 1,
-                        'licNo' => 0001,
-                        'status' => 'lsts_valid'
-                    ]
-                ],
-                '<a class="govuk-link" href="LICENCE_URL">1</a>'
+                'licence' => [
+                    'id' => 1,
+                    'licNo' => 0001,
+                    'status' => 'lsts_valid'
+                ]
             ],
+            '<a class="govuk-link" href="LICENCE_URL">1</a>'
+        ];
+        yield [
             [
-                [
-                    'licence' => [
-                        'id' => 1,
-                        'licNo' => 0001,
-                        'status' => 'not-valid'
-                    ]
-                ],
-                '1'
-            ]
+                'licence' => [
+                    'id' => 1,
+                    'licNo' => 0001,
+                    'status' => 'not-valid'
+                ]
+            ],
+            '1'
         ];
     }
 }

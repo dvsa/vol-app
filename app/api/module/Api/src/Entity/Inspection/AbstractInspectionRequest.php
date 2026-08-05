@@ -21,29 +21,22 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="inspection_request",
- *    indexes={
- *        @ORM\Index(name="ix_inspection_request_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_inspection_request_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_inspection_request_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_inspection_request_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_inspection_request_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_inspection_request_operating_centre_id", columns={"operating_centre_id"}),
- *        @ORM\Index(name="ix_inspection_request_report_type", columns={"report_type"}),
- *        @ORM\Index(name="ix_inspection_request_request_type", columns={"request_type"}),
- *        @ORM\Index(name="ix_inspection_request_requestor_user_id", columns={"requestor_user_id"}),
- *        @ORM\Index(name="ix_inspection_request_result_type", columns={"result_type"}),
- *        @ORM\Index(name="ix_inspection_request_task_id", columns={"task_id"}),
- *        @ORM\Index(name="uk_inspection_request_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_inspection_request_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'inspection_request')]
+#[ORM\Index(name: 'ix_inspection_request_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_inspection_request_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_inspection_request_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_inspection_request_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_inspection_request_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_inspection_request_operating_centre_id', columns: ['operating_centre_id'])]
+#[ORM\Index(name: 'ix_inspection_request_report_type', columns: ['report_type'])]
+#[ORM\Index(name: 'ix_inspection_request_request_type', columns: ['request_type'])]
+#[ORM\Index(name: 'ix_inspection_request_requestor_user_id', columns: ['requestor_user_id'])]
+#[ORM\Index(name: 'ix_inspection_request_result_type', columns: ['result_type'])]
+#[ORM\Index(name: 'ix_inspection_request_task_id', columns: ['task_id'])]
+#[ORM\UniqueConstraint(name: 'uk_inspection_request_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractInspectionRequest implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -56,241 +49,216 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
     protected $application;
 
     /**
      * Foreign Key to operating_centre
      *
      * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre", fetch="LAZY")
-     * @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'operating_centre_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre::class, fetch: 'LAZY')]
     protected $operatingCentre;
 
     /**
      * RequestorUser
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="requestor_user_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'requestor_user_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
     protected $requestorUser;
 
     /**
      * Foreign Key to task
      *
      * @var \Dvsa\Olcs\Api\Entity\Task\Task
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Task\Task", fetch="LAZY")
-     * @ORM\JoinColumn(name="task_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, fetch: 'LAZY')]
     protected $task;
 
     /**
      * Case
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
     protected $case;
 
     /**
      * RequestType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="request_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'request_type', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $requestType;
 
     /**
      * ResultType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="result_type", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'result_type', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $resultType;
 
     /**
      * ReportType
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="report_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'report_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $reportType;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Requestor notes
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="requestor_notes", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'requestor_notes', nullable: true)]
     protected $requestorNotes;
 
     /**
      * Inspector notes
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="inspector_notes", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'inspector_notes', nullable: true)]
     protected $inspectorNotes;
 
     /**
      * Due date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="due_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'due_date', nullable: true)]
     protected $dueDate;
 
     /**
      * From date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="from_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'from_date', nullable: true)]
     protected $fromDate;
 
     /**
      * To date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="to_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'to_date', nullable: true)]
     protected $toDate;
 
     /**
      * Request date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="request_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'request_date', nullable: true)]
     protected $requestDate;
 
     /**
      * Return date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="return_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'return_date', nullable: true)]
     protected $returnDate;
 
     /**
      * Deferred date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="deferred_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'deferred_date', nullable: true)]
     protected $deferredDate;
 
     /**
      * Inspector name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="inspector_name", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'inspector_name', length: 70, nullable: true)]
     protected $inspectorName;
 
     /**
      * Trailers examined no
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="trailers_examined_no", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'trailers_examined_no', nullable: true, options: ['unsigned' => true])]
     protected $trailersExaminedNo;
 
     /**
      * Vehicles examined no
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="vehicles_examined_no", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'vehicles_examined_no', nullable: true, options: ['unsigned' => true])]
     protected $vehiclesExaminedNo;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
@@ -314,7 +282,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param int $id new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setId($id)
     {
@@ -338,7 +306,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -362,7 +330,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setApplication($application)
     {
@@ -386,7 +354,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre $operatingCentre new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setOperatingCentre($operatingCentre)
     {
@@ -410,7 +378,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $requestorUser new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setRequestorUser($requestorUser)
     {
@@ -434,7 +402,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Task\Task $task new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setTask($task)
     {
@@ -458,7 +426,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setCase($case)
     {
@@ -482,7 +450,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $requestType new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setRequestType($requestType)
     {
@@ -506,7 +474,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $resultType new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setResultType($resultType)
     {
@@ -530,7 +498,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $reportType new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setReportType($reportType)
     {
@@ -554,7 +522,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -578,7 +546,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -602,7 +570,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param string $requestorNotes new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setRequestorNotes($requestorNotes)
     {
@@ -626,7 +594,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param string $inspectorNotes new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setInspectorNotes($inspectorNotes)
     {
@@ -650,7 +618,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \DateTime $dueDate new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setDueDate($dueDate)
     {
@@ -680,7 +648,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \DateTime $fromDate new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setFromDate($fromDate)
     {
@@ -710,7 +678,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \DateTime $toDate new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setToDate($toDate)
     {
@@ -740,7 +708,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \DateTime $requestDate new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setRequestDate($requestDate)
     {
@@ -770,7 +738,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \DateTime $returnDate new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setReturnDate($returnDate)
     {
@@ -800,7 +768,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param \DateTime $deferredDate new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setDeferredDate($deferredDate)
     {
@@ -830,7 +798,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param string $inspectorName new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setInspectorName($inspectorName)
     {
@@ -854,7 +822,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param int $trailersExaminedNo new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setTrailersExaminedNo($trailersExaminedNo)
     {
@@ -878,7 +846,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param int $vehiclesExaminedNo new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setVehiclesExaminedNo($vehiclesExaminedNo)
     {
@@ -902,7 +870,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param int $version new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setVersion($version)
     {
@@ -926,7 +894,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @param int $olbsKey new value being set
      *
-     * @return InspectionRequest
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

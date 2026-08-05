@@ -16,12 +16,13 @@ use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 
-class TrafficAreaValidatorTest extends MockeryTestCase
+final class TrafficAreaValidatorTest extends MockeryTestCase
 {
     protected TrafficAreaValidator $sut;
 
     protected m\MockInterface|AddressHelperService $addressService;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->addressService = m::mock(AddressHelperService::class);
@@ -269,7 +270,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
 
         $result = $this->sut->validateForSameTrafficAreas($application, 'TA');
 
-        $this->assertSame(true, $result);
+        $this->assertTrue($result);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderActiveLicenceStatusTypes')]
@@ -300,7 +301,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         if ($expectValidationMessage) {
             $this->assertSame(['ERR_TA_GOODS' => 'TA_NAME'], $result);
         } else {
-            $this->assertSame(true, $result);
+            $this->assertTrue($result);
         }
     }
 
@@ -326,7 +327,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
 
         $result = $this->sut->validateForSameTrafficAreas($application, 'TA');
 
-        $this->assertSame(true, $result);
+        $this->assertTrue($result);
     }
 
     public function testValidateErrorWithGoodsLicenceDifferentTrafficArea(): void
@@ -351,7 +352,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
 
         $result = $this->sut->validateForSameTrafficAreas($application, 'TA2');
 
-        $this->assertSame(true, $result);
+        $this->assertTrue($result);
     }
 
     public function testValidateErrorWithGoodsApplication(): void
@@ -418,7 +419,7 @@ class TrafficAreaValidatorTest extends MockeryTestCase
 
         $result = $this->sut->validateForSameTrafficAreas($app1, 'TA');
 
-        $this->assertSame(true, $result);
+        $this->assertTrue($result);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderActiveApplicationStatusTypes')]
@@ -453,43 +454,39 @@ class TrafficAreaValidatorTest extends MockeryTestCase
         if ($expectValidationMessage) {
             $this->assertSame(['ERR_TA_GOODS' => 'TA_NAME'], $result);
         } else {
-            $this->assertSame(true, $result);
+            $this->assertTrue($result);
         }
     }
 
-    public static function dataProviderActiveLicenceStatusTypes(): array
+    public static function dataProviderActiveLicenceStatusTypes(): \Iterator
     {
-        return [
-            [Licence::LICENCE_STATUS_VALID, true],
-            [Licence::LICENCE_STATUS_SUSPENDED, true],
-            [Licence::LICENCE_STATUS_CURTAILED, true],
-            [Licence::LICENCE_STATUS_CANCELLED, false],
-            [Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT, false],
-            [Licence::LICENCE_STATUS_GRANTED, false],
-            [Licence::LICENCE_STATUS_NOT_SUBMITTED, false],
-            [Licence::LICENCE_STATUS_REFUSED, false],
-            [Licence::LICENCE_STATUS_REVOKED, false],
-            [Licence::LICENCE_STATUS_SURRENDERED, false],
-            [Licence::LICENCE_STATUS_TERMINATED, false],
-            [Licence::LICENCE_STATUS_UNDER_CONSIDERATION, false],
-            [Licence::LICENCE_STATUS_UNLICENSED, false],
-            [Licence::LICENCE_STATUS_WITHDRAWN, false],
-        ];
+        yield [Licence::LICENCE_STATUS_VALID, true];
+        yield [Licence::LICENCE_STATUS_SUSPENDED, true];
+        yield [Licence::LICENCE_STATUS_CURTAILED, true];
+        yield [Licence::LICENCE_STATUS_CANCELLED, false];
+        yield [Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT, false];
+        yield [Licence::LICENCE_STATUS_GRANTED, false];
+        yield [Licence::LICENCE_STATUS_NOT_SUBMITTED, false];
+        yield [Licence::LICENCE_STATUS_REFUSED, false];
+        yield [Licence::LICENCE_STATUS_REVOKED, false];
+        yield [Licence::LICENCE_STATUS_SURRENDERED, false];
+        yield [Licence::LICENCE_STATUS_TERMINATED, false];
+        yield [Licence::LICENCE_STATUS_UNDER_CONSIDERATION, false];
+        yield [Licence::LICENCE_STATUS_UNLICENSED, false];
+        yield [Licence::LICENCE_STATUS_WITHDRAWN, false];
     }
 
-    public static function dataProviderActiveApplicationStatusTypes(): array
+    public static function dataProviderActiveApplicationStatusTypes(): \Iterator
     {
-        return [
-            [Application::APPLICATION_STATUS_NOT_SUBMITTED, true],
-            [Application::APPLICATION_STATUS_UNDER_CONSIDERATION, true],
-            [Application::APPLICATION_STATUS_GRANTED, true],
-            [Application::APPLICATION_STATUS_CANCELLED, false],
-            [Application::APPLICATION_STATUS_CURTAILED, false],
-            [Application::APPLICATION_STATUS_NOT_TAKEN_UP, false],
-            [Application::APPLICATION_STATUS_REFUSED, false],
-            [Application::APPLICATION_STATUS_VALID, false],
-            [Application::APPLICATION_STATUS_WITHDRAWN, false],
-        ];
+        yield [Application::APPLICATION_STATUS_NOT_SUBMITTED, true];
+        yield [Application::APPLICATION_STATUS_UNDER_CONSIDERATION, true];
+        yield [Application::APPLICATION_STATUS_GRANTED, true];
+        yield [Application::APPLICATION_STATUS_CANCELLED, false];
+        yield [Application::APPLICATION_STATUS_CURTAILED, false];
+        yield [Application::APPLICATION_STATUS_NOT_TAKEN_UP, false];
+        yield [Application::APPLICATION_STATUS_REFUSED, false];
+        yield [Application::APPLICATION_STATUS_VALID, false];
+        yield [Application::APPLICATION_STATUS_WITHDRAWN, false];
     }
 
     public function testValidateTrafficAreaWithPostcodeWithEmptyPostcode(): void

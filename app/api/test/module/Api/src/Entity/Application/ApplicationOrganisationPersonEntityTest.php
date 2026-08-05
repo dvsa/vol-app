@@ -9,11 +9,9 @@ use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson
- * @covers Dvsa\Olcs\Api\Entity\Application\AbstractApplicationOrganisationPerson
- */
-class ApplicationOrganisationPersonEntityTest extends EntityTester
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\AbstractApplicationOrganisationPerson::class)]
+final class ApplicationOrganisationPersonEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -33,8 +31,8 @@ class ApplicationOrganisationPersonEntityTest extends EntityTester
 
         $sut = new Entity\Application\ApplicationOrganisationPerson($mockApp, $mockOrg, $mockPerson);
 
-        static::assertSame($mockApp, $sut->getApplication());
-        static::assertSame($mockOrg, $sut->getOrganisation());
-        static::assertSame($mockPerson, $sut->getPerson());
+        $this->assertSame($mockApp, $sut->getApplication());
+        $this->assertSame($mockOrg, $sut->getOrganisation());
+        $this->assertSame($mockPerson, $sut->getPerson());
     }
 }

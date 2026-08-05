@@ -29,7 +29,7 @@ class OperatorBusinessDetailsControllerFactory implements FactoryInterface
      * @return OperatorController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OperatorBusinessDetailsController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): OperatorBusinessDetailsController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);

@@ -18,7 +18,7 @@ class SuccessfulCandidatePermitsGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SuccessfulCandidatePermitsGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SuccessfulCandidatePermitsGenerator
     {
         return new SuccessfulCandidatePermitsGenerator(
             $container->get('PermitsScoringEmissionsCategoryAvailabilityCounter')

@@ -12,7 +12,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Lva\AbstractGoodsVehiclesExport::class)]
-class AbstractGoodsVehiclesExportTest extends QueryHandlerTestCase
+final class AbstractGoodsVehiclesExportTest extends QueryHandlerTestCase
 {
     /** @var  DummyAbstractGoodsVehiclesExport */
     protected $sut;
@@ -57,11 +57,11 @@ class AbstractGoodsVehiclesExportTest extends QueryHandlerTestCase
             'ceasedDate' => 'unit_CeasedDate',
         ];
 
-        $mockDbIterator = m::mock(\Doctrine\ORM\Internal\Hydration\IterableResult::class)
-            ->shouldReceive('next')->once()->andReturn([$dbRow1])
-            ->shouldReceive('next')->once()->andReturn([$dbRow2])
-            ->shouldReceive('next')->once()->andReturn(false)
-            ->getMock();
+        // Query::toIterable() yields each hydrated row directly (no [0 => ...] wrapper)
+        $mockDbIterator = (static function () use ($dbRow1, $dbRow2): \Generator {
+            yield $dbRow1;
+            yield $dbRow2;
+        })();
 
         $this->repoMap['LicenceVehicle']
             ->shouldReceive('fetchForExport')->once()->with($qb)->andReturn($mockDbIterator);
@@ -69,35 +69,32 @@ class AbstractGoodsVehiclesExportTest extends QueryHandlerTestCase
         //  call & check
         $actual = $this->sut->getData($qb);
 
-        static::assertEquals(
-            [
-                'results' => [
-                    [
-                        'vehicle' => [
-                            'vrm' => 'unit_Vrm_1',
-                            'platedWeight' => 'unit_platedWeight_1',
-                        ],
-                        'specifiedDate' => 'unit_specifiedDate_1',
-                        'removalDate' => 'unit_removalDate_1',
+        $this->assertEquals([
+            'results' => [
+                [
+                    'vehicle' => [
+                        'vrm' => 'unit_Vrm_1',
+                        'platedWeight' => 'unit_platedWeight_1',
                     ],
-                    [
-                        'vehicle' => [
-                            'vrm' => 'unit_Vrm_2',
-                            'platedWeight' => 'unit_platedWeight_2',
-                        ],
-                        'specifiedDate' => 'unit_specifiedDate_2',
-                        'removalDate' => 'unit_removalDate_2',
-                        'goodsDiscs' => [
-                            [
-                                'discNo' => 'unit_DiscNo',
-                                'ceasedDate' => 'unit_CeasedDate',
-                            ],
+                    'specifiedDate' => 'unit_specifiedDate_1',
+                    'removalDate' => 'unit_removalDate_1',
+                ],
+                [
+                    'vehicle' => [
+                        'vrm' => 'unit_Vrm_2',
+                        'platedWeight' => 'unit_platedWeight_2',
+                    ],
+                    'specifiedDate' => 'unit_specifiedDate_2',
+                    'removalDate' => 'unit_removalDate_2',
+                    'goodsDiscs' => [
+                        [
+                            'discNo' => 'unit_DiscNo',
+                            'ceasedDate' => 'unit_CeasedDate',
                         ],
                     ],
                 ],
-                'count' => 2,
             ],
-            $actual
-        );
+            'count' => 2,
+        ], $actual);
     }
 }

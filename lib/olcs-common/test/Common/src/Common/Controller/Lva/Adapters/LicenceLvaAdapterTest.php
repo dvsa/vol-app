@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Controller\Lva\Adapters;
 
 use Common\Form\Form;
@@ -10,23 +12,19 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Controller\Lva\Adapters\LicenceLvaAdapter;
 
-class LicenceLvaAdapterTest extends MockeryTestCase
+final class LicenceLvaAdapterTest extends MockeryTestCase
 {
     protected $sut;
-
-    protected $container;
-
-    protected $controller;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->container = m::mock(ContainerInterface::class);
+        $container = m::mock(ContainerInterface::class);
 
-        $this->controller = m::mock(AbstractController::class);
+        $controller = m::mock(AbstractController::class);
 
-        $this->sut = new LicenceLvaAdapter($this->container);
-        $this->sut->setController($this->controller);
+        $this->sut = new LicenceLvaAdapter($container);
+        $this->sut->setController($controller);
     }
 
     public function testAlterForm(): void

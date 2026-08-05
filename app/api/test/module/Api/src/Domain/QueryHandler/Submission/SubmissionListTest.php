@@ -18,7 +18,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 /**
  * SubmissionList Test
  */
-class SubmissionListTest extends QueryHandlerTestCase
+final class SubmissionListTest extends QueryHandlerTestCase
 {
     /**
      * Set up test
@@ -50,7 +50,7 @@ class SubmissionListTest extends QueryHandlerTestCase
             ->andReturn(2);
 
         $result = $this->sut->handleQuery($query);
-        $this->assertEquals($result['count'], 2);
+        $this->assertEquals(2, $result['count']);
         $this->assertEquals($result['result'], ['foo']);
     }
 }

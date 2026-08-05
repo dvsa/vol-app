@@ -7,18 +7,14 @@ use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
 
 /**
  * PreviousConviction Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="previous_conviction",
- *    indexes={
- *        @ORM\Index(name="ix_previous_conviction_application_id", columns={"application_id"}),
- *        @ORM\Index(name="ix_previous_conviction_transport_manager_id", columns={"transport_manager_id"}),
- *        @ORM\Index(name="ix_previous_conviction_title", columns={"title"}),
- *        @ORM\Index(name="ix_previous_conviction_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_previous_conviction_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'previous_conviction')]
+#[ORM\Index(name: 'ix_previous_conviction_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'ix_previous_conviction_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\Index(name: 'ix_previous_conviction_title', columns: ['title'])]
+#[ORM\Index(name: 'ix_previous_conviction_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_previous_conviction_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Entity]
 class PreviousConviction extends AbstractPreviousConviction implements OrganisationProviderInterface
 {
     /**

@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BrNPNo;
 /**
  * Br N P No test
  */
-class BrNPNoTest extends \PHPUnit\Framework\TestCase
+final class BrNPNoTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -19,7 +19,7 @@ class BrNPNoTest extends \PHPUnit\Framework\TestCase
             \Dvsa\Olcs\Transfer\Query\QueryInterface::class,
             $bookmark->getQuery(['busRegId' => 123])
         );
-        $this->assertTrue(is_null($bookmark->getQuery([])));
+        $this->assertNull($bookmark->getQuery([]));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
@@ -31,34 +31,32 @@ class BrNPNoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
-            // no results
+        // no results
+        yield [
+            [],
+            ''
+        ];
+        // results without publication
+        yield [
             [
-                [],
-                ''
+                'Results' => [
+                    ['id' => 1]
+                ]
             ],
-            // results without publication
+            ''
+        ];
+        // results with publication
+        yield [
             [
-                [
-                    'Results' => [
-                        ['id' => 1]
-                    ]
-                ],
-                ''
+                'Results' => [
+                    ['id' => 1, 'publication' => ['publicationNo' => 10]],
+                    ['id' => 1, 'publication' => ['publicationNo' => 11]],
+                    ['id' => 1, 'publication' => ['publicationNo' => 12]],
+                ]
             ],
-            // results with publication
-            [
-                [
-                    'Results' => [
-                        ['id' => 1, 'publication' => ['publicationNo' => 10]],
-                        ['id' => 1, 'publication' => ['publicationNo' => 11]],
-                        ['id' => 1, 'publication' => ['publicationNo' => 12]],
-                    ]
-                ],
-                12
-            ],
+            12
         ];
     }
 }

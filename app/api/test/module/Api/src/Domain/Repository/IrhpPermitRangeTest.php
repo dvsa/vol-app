@@ -20,8 +20,9 @@ use Mockery as m;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class IrhpPermitRangeTest extends RepositoryTestCase
+final class IrhpPermitRangeTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(IrhpPermitRange::class);
@@ -120,12 +121,10 @@ class IrhpPermitRangeTest extends RepositoryTestCase
         );
     }
 
-    public static function dpTestGetCombinedRangeSizeWithEmissionsCategoryId(): array
+    public static function dpTestGetCombinedRangeSizeWithEmissionsCategoryId(): \Iterator
     {
-        return [
-            [RefData::EMISSIONS_CATEGORY_EURO5_REF],
-            [RefData::EMISSIONS_CATEGORY_EURO6_REF],
-        ];
+        yield [RefData::EMISSIONS_CATEGORY_EURO5_REF];
+        yield [RefData::EMISSIONS_CATEGORY_EURO6_REF];
     }
 
     public function testGetByStockId(): void

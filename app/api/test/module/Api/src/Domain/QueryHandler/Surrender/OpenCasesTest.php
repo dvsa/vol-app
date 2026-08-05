@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Query\Surrender\OpenCases;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class OpenCasesTest extends QueryHandlerTestCase
+final class OpenCasesTest extends QueryHandlerTestCase
 {
     protected $sut;
     public function setUp(): void

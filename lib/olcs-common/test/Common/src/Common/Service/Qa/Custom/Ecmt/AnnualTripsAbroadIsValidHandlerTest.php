@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Ecmt;
 
 use Common\Form\QaForm;
@@ -12,11 +14,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class AnnualTripsAbroadIsValidHandlerTest extends MockeryTestCase
+final class AnnualTripsAbroadIsValidHandlerTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValid')]
     public function testIsValid($permitsRequired, $intensityWarningThreshold, $warningVisibleValue, $expectedIsValid): void
     {
         $applicationStep = [
@@ -47,19 +47,17 @@ class AnnualTripsAbroadIsValidHandlerTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|int)[][]
+     * @return \Iterator<(int | string), array<(bool | int)>>
      *
      * @psalm-return list{list{4, 5, 1, true}, list{5, 5, 1, true}, list{6, 5, 1, true}, list{4, 5, 0, true}, list{5, 5, 0, true}, list{6, 5, 0, false}}
      */
-    public function dpIsValid(): array
+    public static function dpIsValid(): \Iterator
     {
-        return [
-            [4, 5, 1, true],
-            [5, 5, 1, true],
-            [6, 5, 1, true],
-            [4, 5, 0, true],
-            [5, 5, 0, true],
-            [6, 5, 0, false],
-        ];
+        yield [4, 5, 1, true];
+        yield [5, 5, 1, true];
+        yield [6, 5, 1, true];
+        yield [4, 5, 0, true];
+        yield [5, 5, 0, true];
+        yield [6, 5, 0, false];
     }
 }

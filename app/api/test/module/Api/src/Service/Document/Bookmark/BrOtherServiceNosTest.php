@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BrOtherServiceNos;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BrOtherServiceNosTest extends SingleValueTestAbstract
+final class BrOtherServiceNosTest extends SingleValueTestAbstract
 {
     public const SUT_CLASS_NAME = BrOtherServiceNos::class;
 }

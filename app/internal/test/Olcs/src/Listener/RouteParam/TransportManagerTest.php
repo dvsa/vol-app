@@ -24,7 +24,7 @@ use Laminas\Navigation\Page\Mvc as PageMvc;
 use Dvsa\Olcs\Transfer\Query\Tm\TransportManager as TmQry;
 use Common\RefData;
 
-class TransportManagerTest extends MockeryTestCase
+final class TransportManagerTest extends MockeryTestCase
 {
     private TransportManager $sut;
 
@@ -366,12 +366,10 @@ class TransportManagerTest extends MockeryTestCase
         $sut->setAuthService($mockAuthService);
     }
 
-    public static function dpInternalEditProvider(): array
+    public static function dpInternalEditProvider(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
     public function testInvoke(): void

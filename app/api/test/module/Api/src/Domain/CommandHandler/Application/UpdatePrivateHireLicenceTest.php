@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class UpdatePrivateHireLicenceTest extends AbstractCommandHandlerTestCase
+final class UpdatePrivateHireLicenceTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -74,7 +74,7 @@ class UpdatePrivateHireLicenceTest extends AbstractCommandHandlerTestCase
                 'licence' => 1,
                 'lva' => 'application'
             ],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('UPDATE')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('UPDATE')
         );
 
         $this->expectedSideEffect(
@@ -83,7 +83,7 @@ class UpdatePrivateHireLicenceTest extends AbstractCommandHandlerTestCase
                 'id' => 323,
                 'section' => 'taxiPhv',
             ],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('UPDATE_COMPLETION')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('UPDATE_COMPLETION')
         );
 
         $response = $this->sut->handleCommand($command);

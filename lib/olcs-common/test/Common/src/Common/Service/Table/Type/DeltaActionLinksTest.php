@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Type;
 
 use Common\Service\Table\TableBuilder;
@@ -15,11 +17,9 @@ use Common\Service\Table\Type\DeltaActionLinks;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class DeltaActionLinksTest extends MockeryTestCase
+final class DeltaActionLinksTest extends MockeryTestCase
 {
     protected $sut;
-
-    protected $table;
 
     protected $sm;
 
@@ -28,16 +28,14 @@ class DeltaActionLinksTest extends MockeryTestCase
     {
         $this->sm = new ServiceManager();
 
-        $this->table = m::mock(TableBuilder::class);
-        $this->table->expects('getServiceLocator')
+        $table = m::mock(TableBuilder::class);
+        $table->expects('getServiceLocator')
             ->andReturn($this->sm);
 
-        $this->sut = new DeltaActionLinks($this->table);
+        $this->sut = new DeltaActionLinks($table);
     }
 
-    /**
-     * @dataProvider tableDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('tableDataProvider')]
     public function testRender($data, $expected): void
     {
         $mockTranslate = $this->getTranslator($data['action'] ?? null);
@@ -48,38 +46,35 @@ class DeltaActionLinksTest extends MockeryTestCase
     }
 
     /**
-     * @return ((int|string)[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(int | string)> | string)>>
      *
      * @psalm-return list{list{array{id: 123, action: 'A'}, string}, list{array{id: 456, action: 'D'}, string}, list{array{id: 789}, ''}}
      */
-    public function tableDataProvider(): array
+    public static function tableDataProvider(): \Iterator
     {
         $escapedAriaRemove = Escape::htmlAttr('Remove Aria (id 123)');
         $escapedAriaRestore = Escape::htmlAttr('Restore Aria (id 456)');
-
-        return [
+        yield [
             [
-                [
-                    'id' => 123,
-                    'action' => 'A'
-                ],
-                '<button data-prevent-double-click="true" data-module="govuk-button" type="submit" class="right-aligned govuk-button govuk-button--secondary trigger-modal" ' .
-                    'name="table[action][delete][123]" aria-label="' . $escapedAriaRemove . '">Remove</button>'
+                'id' => 123,
+                'action' => 'A'
             ],
+            '<button data-prevent-double-click="true" data-module="govuk-button" type="submit" class="right-aligned govuk-button govuk-button--secondary trigger-modal" ' .
+                'name="table[action][delete][123]" aria-label="' . $escapedAriaRemove . '">Remove</button>'
+        ];
+        yield [
             [
-                [
-                    'id' => 456,
-                    'action' => 'D'
-                ],
-                '<button data-prevent-double-click="true" data-module="govuk-button" type="submit" class="right-aligned govuk-button govuk-button--secondary" ' .
-                    'name="table[action][restore][456]" aria-label="' . $escapedAriaRestore . '">Restore</button>'
+                'id' => 456,
+                'action' => 'D'
             ],
+            '<button data-prevent-double-click="true" data-module="govuk-button" type="submit" class="right-aligned govuk-button govuk-button--secondary" ' .
+                'name="table[action][restore][456]" aria-label="' . $escapedAriaRestore . '">Restore</button>'
+        ];
+        yield [
             [
-                [
-                    'id' => 789
-                ],
-                ''
-            ]
+                'id' => 789
+            ],
+            ''
         ];
     }
 

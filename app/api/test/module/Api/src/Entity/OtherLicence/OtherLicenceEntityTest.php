@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class OtherLicenceEntityTest extends EntityTester
+final class OtherLicenceEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -113,52 +113,48 @@ class OtherLicenceEntityTest extends EntityTester
         );
     }
 
-    public static function validDataProvider(): array
+    public static function validDataProvider(): \Iterator
     {
-        return [
-            [Entity::TYPE_CURRENT, 'licNo', 'holderName', 'Y'],
-            [Entity::TYPE_APPLIED, 'licNo', 'holderName'],
-            [Entity::TYPE_REFUSED, 'licNo', 'holderName'],
-            [Entity::TYPE_REVOKED, 'licNo', 'holderName'],
-            [Entity::TYPE_PUBLIC_INQUIRY, 'licNo', 'holderName'],
-            [Entity::TYPE_DISQUALIFIED, 'licNo', 'holderName', null, '2015-01-01', '2'],
-            [Entity::TYPE_HELD, 'licNo', 'holderName', null, null, null, '2014-01-01'],
-        ];
+        yield [Entity::TYPE_CURRENT, 'licNo', 'holderName', 'Y'];
+        yield [Entity::TYPE_APPLIED, 'licNo', 'holderName'];
+        yield [Entity::TYPE_REFUSED, 'licNo', 'holderName'];
+        yield [Entity::TYPE_REVOKED, 'licNo', 'holderName'];
+        yield [Entity::TYPE_PUBLIC_INQUIRY, 'licNo', 'holderName'];
+        yield [Entity::TYPE_DISQUALIFIED, 'licNo', 'holderName', null, '2015-01-01', '2'];
+        yield [Entity::TYPE_HELD, 'licNo', 'holderName', null, null, null, '2014-01-01'];
     }
 
-    public static function invalidDataProvider(): array
+    public static function invalidDataProvider(): \Iterator
     {
-        return [
-            // field is required
-            [Entity::TYPE_CURRENT, null, 'holderName', 'Y', '2015-01-01', 2, '2014-01-01'],
-            // field is required
-            [Entity::TYPE_DISQUALIFIED, '123', 'holderName', 'Y', '', 2, '2014-01-01'],
-            // date is in future
-            [Entity::TYPE_DISQUALIFIED, '123', 'holderName', 'Y', (new DateTime('now'))->modify('+1 day')->format('y-m-d') , 2, '2014-01-01'],
-            // empty previous licence type
-            [null, '123', 'holderName', 'Y', '2019-12-31', 2, '2014-01-01'],
-            // wrong previous licence type
-            ['foo', '123', 'holderName', 'Y', '2019-12-31', 2, '2014-01-01'],
-        ];
+        // field is required
+        yield [Entity::TYPE_CURRENT, null, 'holderName', 'Y', '2015-01-01', 2, '2014-01-01'];
+        // field is required
+        yield [Entity::TYPE_DISQUALIFIED, '123', 'holderName', 'Y', '', 2, '2014-01-01'];
+        // date is in future
+        yield [Entity::TYPE_DISQUALIFIED, '123', 'holderName', 'Y', new DateTime('now')->modify('+1 day')->format('y-m-d') , 2, '2014-01-01'];
+        // empty previous licence type
+        yield [null, '123', 'holderName', 'Y', '2019-12-31', 2, '2014-01-01'];
+        // wrong previous licence type
+        yield ['foo', '123', 'holderName', 'Y', '2019-12-31', 2, '2014-01-01'];
     }
 
     public function testUpdateOtherLicenceForTml(): void
     {
         $sut = m::mock(Entity::class)->makePartial();
         $sut->updateOtherLicenceForTml('role', 'tml', 'hpw', 'ln', 'oc', 'tav');
-        $this->assertEquals($sut->getRole(), 'role');
-        $this->assertEquals($sut->getTransportManagerLicence(), 'tml');
-        $this->assertEquals($sut->getHoursPerWeek(), 'hpw');
-        $this->assertEquals($sut->getLicNo(), 'ln');
-        $this->assertEquals($sut->getOperatingCentres(), 'oc');
-        $this->assertEquals($sut->getTotalAuthVehicles(), 'tav');
+        $this->assertEquals('role', $sut->getRole());
+        $this->assertEquals('tml', $sut->getTransportManagerLicence());
+        $this->assertEquals('hpw', $sut->getHoursPerWeek());
+        $this->assertEquals('ln', $sut->getLicNo());
+        $this->assertEquals('oc', $sut->getOperatingCentres());
+        $this->assertEquals('tav', $sut->getTotalAuthVehicles());
     }
 
     public function testGetRelatedOrganisationWithNoApplication(): void
     {
         $sut = new Entity();
 
-        $this->assertSame(null, $sut->getRelatedOrganisation());
+        $this->assertNull($sut->getRelatedOrganisation());
     }
 
     public function testGetRelatedOrganisationWithApplication(): void

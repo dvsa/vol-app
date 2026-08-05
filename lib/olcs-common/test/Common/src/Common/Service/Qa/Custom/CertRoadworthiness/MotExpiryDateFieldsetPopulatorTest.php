@@ -14,11 +14,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Form\Fieldset;
 use Laminas\Form\Form;
 
-class MotExpiryDateFieldsetPopulatorTest extends MockeryTestCase
+final class MotExpiryDateFieldsetPopulatorTest extends MockeryTestCase
 {
-    public const REQUESTED_DATE = '2020-03-15';
+    public const string REQUESTED_DATE = '2020-03-15';
 
-    public const DATE_MUST_BE_BEFORE = '2020-05-01';
+    public const string DATE_MUST_BE_BEFORE = '2020-05-01';
 
     private $translator;
 

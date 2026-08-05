@@ -12,7 +12,7 @@ use Dvsa\Olcs\DocumentShare\Service\DocumentStoreInterface;
 /**
  * Br Logo test
  */
-class BrLogoTest extends \PHPUnit\Framework\TestCase
+final class BrLogoTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -22,7 +22,7 @@ class BrLogoTest extends \PHPUnit\Framework\TestCase
             \Dvsa\Olcs\Transfer\Query\QueryInterface::class,
             $bookmark->getQuery(['busRegId' => 123])
         );
-        $this->assertTrue(is_null($bookmark->getQuery([])));
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Service\Document\Bookmark\BrLogo::class, $bookmark->getQuery([]));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
@@ -63,36 +63,34 @@ class BrLogoTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
+        yield [
+            // Scotland
             [
-                // Scotland
-                [
-                    'licence' => [
-                        'trafficArea' => [
-                            'isScotland' => true
-                        ]
+                'licence' => [
+                    'trafficArea' => [
+                        'isScotland' => true
                     ]
-                ],
-                'TC_LOGO_SCOTTISH'
+                ]
             ],
+            'TC_LOGO_SCOTTISH'
+        ];
+        yield [
+            // Other
             [
-                // Other
-                [
-                    'licence' => [
-                        'trafficArea' => [
-                            'isScotland' => false
-                        ]
+                'licence' => [
+                    'trafficArea' => [
+                        'isScotland' => false
                     ]
-                ],
-                'TC_LOGO_OTHER'
+                ]
             ],
-            [
-                // no data
-                [],
-                null
-            ],
+            'TC_LOGO_OTHER'
+        ];
+        yield [
+            // no data
+            [],
+            null
         ];
     }
 }

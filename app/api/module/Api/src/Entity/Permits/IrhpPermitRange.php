@@ -8,18 +8,12 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 
 /**
  * IrhpPermitRange Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="irhp_permit_range",
- *    indexes={
- *        @ORM\Index(name="fk_irhp_permit_stock_ranges_irhp_permit_stocks1_idx",
-     *     columns={"irhp_permit_stock_id"}),
- *        @ORM\Index(name="fk_irhp_permit_range_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_irhp_permit_range_last_modified_by_user_id",
-     *     columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_permit_range')]
+#[ORM\Index(name: 'fk_irhp_permit_stock_ranges_irhp_permit_stocks1_idx', columns: ['irhp_permit_stock_id'])]
+#[ORM\Index(name: 'fk_irhp_permit_range_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_irhp_permit_range_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Entity]
 class IrhpPermitRange extends AbstractIrhpPermitRange implements DeletableInterface
 {
     public const BILATERAL_TYPE_STANDARD_SINGLE = 'standard.single';

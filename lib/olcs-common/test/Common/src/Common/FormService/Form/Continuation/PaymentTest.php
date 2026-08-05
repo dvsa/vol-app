@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Common\Service\Helper\GuidanceHelperService;
@@ -13,7 +15,7 @@ use Common\FormService\FormServiceManager;
 /**
  * Licence payment form service test
  */
-class PaymentTest extends MockeryTestCase
+final class PaymentTest extends MockeryTestCase
 {
     /** @var PaymentForm */
     protected $sut;

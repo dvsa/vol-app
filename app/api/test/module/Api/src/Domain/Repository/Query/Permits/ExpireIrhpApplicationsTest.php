@@ -16,7 +16,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
 /**
  * ExpireIrhpApplications test
  */
-class ExpireIrhpApplicationsTest extends AbstractDbQueryTestCase
+final class ExpireIrhpApplicationsTest extends AbstractDbQueryTestCase
 {
     protected $tableNameMap = [
         IrhpApplication::class => 'ia_table',
@@ -69,23 +69,21 @@ class ExpireIrhpApplicationsTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public static function paramProvider(): array
+    public static function paramProvider(): \Iterator
     {
-        return [
+        yield [
+            [],
+            [],
             [
-                [],
-                [],
-                [
-                    'expiredStatus' => IrhpInterface::STATUS_EXPIRED,
-                    'validStatus' => IrhpInterface::STATUS_VALID,
-                    'permitValidStatuses' => IrhpPermit::$validStatuses,
-                    'certificatePermitTypes' => IrhpPermitType::CERTIFICATE_TYPES,
-                    'currentUserId' => 1,
-                ],
-                [
-                    'permitValidStatuses' => Connection::PARAM_STR_ARRAY,
-                    'certificatePermitTypes' => Connection::PARAM_INT_ARRAY,
-                ]
+                'expiredStatus' => IrhpInterface::STATUS_EXPIRED,
+                'validStatus' => IrhpInterface::STATUS_VALID,
+                'permitValidStatuses' => IrhpPermit::$validStatuses,
+                'certificatePermitTypes' => IrhpPermitType::CERTIFICATE_TYPES,
+                'currentUserId' => 1,
+            ],
+            [
+                'permitValidStatuses' => Connection::PARAM_STR_ARRAY,
+                'certificatePermitTypes' => Connection::PARAM_INT_ARRAY,
             ]
         ];
     }

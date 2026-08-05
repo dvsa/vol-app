@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Controller\Lva;
 
 use Common\Controller\Lva\AbstractVariationController;
@@ -18,46 +20,32 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class AbstractVariationControllerTest extends MockeryTestCase
+final class AbstractVariationControllerTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $mockNiTextTranslationUtil;
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $mockAuthService;
     public $mockTranslationHelper;
     public $mockProcessingCreateVariation;
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $mockFlashMessengerHelper;
     protected $sut;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->mockNiTextTranslationUtil = m::mock(NiTextTranslation::class);
-        $this->mockAuthService = m::mock(AuthorizationService::class);
+        $mockNiTextTranslationUtil = m::mock(NiTextTranslation::class);
+        $mockAuthService = m::mock(AuthorizationService::class);
         $this->mockTranslationHelper = m::mock(TranslationHelperService::class);
         $this->mockProcessingCreateVariation = m::mock();
-        $this->mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
+        $mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
         $this->sut = m::mock(AbstractVariationController::class, [
-            $this->mockNiTextTranslationUtil,
-            $this->mockAuthService,
+            $mockNiTextTranslationUtil,
+            $mockAuthService,
             $this->mockTranslationHelper,
             $this->mockProcessingCreateVariation,
-            $this->mockFlashMessengerHelper
+            $mockFlashMessengerHelper
             ])
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
     }
 
-    /**
-     * @dataProvider indexActionConditionalProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('indexActionConditionalProvider')]
     public function testIndexAction($conditional): void
     {
         // Mocks
@@ -135,27 +123,25 @@ class AbstractVariationControllerTest extends MockeryTestCase
     }
 
     /**
-     * @return (\Closure)[][]
+     * @return \Iterator<(int | string), array<\Closure>>
      *
      * @psalm-return list{list{\Closure(mixed):void}, list{\Closure(mixed, mixed):void}}
      */
-    public function indexActionConditionalProvider(): array
+    public static function indexActionConditionalProvider(): \Iterator
     {
-        return [
-            [
-                static function ($mockRequest) {
-                    $mockRequest->shouldReceive('isPost')
-                        ->andReturn(false);
-                }
-            ],
-            [
-                static function ($mockRequest, $mockForm) {
-                    $mockRequest->shouldReceive('isPost')
-                        ->andReturn(true);
-                    $mockForm->shouldReceive('isValid')
-                        ->andReturn(false);
-                }
-            ]
+        yield [
+            static function ($mockRequest) {
+                $mockRequest->shouldReceive('isPost')
+                    ->andReturn(false);
+            }
+        ];
+        yield [
+            static function ($mockRequest, $mockForm) {
+                $mockRequest->shouldReceive('isPost')
+                    ->andReturn(true);
+                $mockForm->shouldReceive('isValid')
+                    ->andReturn(false);
+            }
         ];
     }
 }

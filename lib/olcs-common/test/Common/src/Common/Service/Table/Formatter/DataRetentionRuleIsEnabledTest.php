@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 /**
  * DataRetentionRule Link test
  */
-class DataRetentionRuleIsEnabledTest extends \PHPUnit\Framework\TestCase
+final class DataRetentionRuleIsEnabledTest extends \PHPUnit\Framework\TestCase
 {
     public function testIsEnabledFalse(): void
     {
@@ -34,7 +36,7 @@ class DataRetentionRuleIsEnabledTest extends \PHPUnit\Framework\TestCase
             "retentionPeriod" => "60"
         ];
 
-        $this->assertEquals('No', (new \Common\Service\Table\Formatter\DataRetentionRuleIsEnabled())->format($data));
+        $this->assertEquals('No', new \Common\Service\Table\Formatter\DataRetentionRuleIsEnabled()->format($data));
     }
 
     public function testIsEnabledtrue(): void
@@ -64,6 +66,6 @@ class DataRetentionRuleIsEnabledTest extends \PHPUnit\Framework\TestCase
             "retentionPeriod" => "60"
         ];
 
-        $this->assertEquals('Yes', (new \Common\Service\Table\Formatter\DataRetentionRuleIsEnabled())->format($data));
+        $this->assertEquals('Yes', new \Common\Service\Table\Formatter\DataRetentionRuleIsEnabled()->format($data));
     }
 }

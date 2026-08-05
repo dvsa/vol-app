@@ -22,7 +22,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class RemoveLicenceVehicleTest extends AbstractCommandHandlerTestCase
+final class RemoveLicenceVehicleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

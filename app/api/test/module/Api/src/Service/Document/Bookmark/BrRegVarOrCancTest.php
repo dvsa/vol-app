@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BrRegVarOrCanc as BookmarkClass;
 /**
  * AbstractBrRegVarOrCanc test
  */
-class BrRegVarOrCancTest extends AbstractBrRegVarOrCanc
+final class BrRegVarOrCancTest extends AbstractBrRegVarOrCanc
 {
     protected const NEW_TEXT = 'commence';
     protected const VARY_TEXT = 'vary';

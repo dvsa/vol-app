@@ -16,14 +16,12 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use LmcRbacMvc\Service\AuthorizationService;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\Licence\DeleteCompanySubsidiary
- */
-class DeleteCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Licence\DeleteCompanySubsidiary::class)]
+final class DeleteCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
 {
-    public const LICENCE_ID = 1111;
-    public const TASK_ID = 877;
-    public const VERSION = 99;
+    public const int LICENCE_ID = 1111;
+    public const int TASK_ID = 877;
+    public const int VERSION = 99;
 
     /** @var  DeleteCompanySubsidiary|m\MockInterface */
     protected $sut;
@@ -63,7 +61,7 @@ class DeleteCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
             ->once()
             ->with($command)
             ->andReturn(
-                (new Result())
+                new Result()
                     ->addMessage('Unit delete result')
             );
 
@@ -84,7 +82,7 @@ class DeleteCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
                 ->times(3)
                 ->with(self::LICENCE_ID, 'Subsidiary company removed - Unit_EntityName')
                 ->andReturn(
-                    (new Result())
+                    new Result()
                         ->addId('task', self::TASK_ID)
                         ->addMessage('Unit Task created')
                 );
@@ -96,7 +94,7 @@ class DeleteCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
         //  call
         $actual = $this->sut->handleCommand($command);
 
-        static::assertInstanceOf(Result::class, $actual);
+        $this->assertInstanceOf(Result::class, $actual);
 
         if ($expectTask === true) {
             $expected = [
@@ -110,21 +108,19 @@ class DeleteCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
                     'Unit delete result',
                 ],
             ];
-            static::assertEquals($expected, $actual->toArray());
+            $this->assertEquals($expected, $actual->toArray());
         }
     }
 
-    public static function dpTestHandleCommand(): array
+    public static function dpTestHandleCommand(): \Iterator
     {
-        return [
-            [
-                'isGranted' => true,
-                'expectTask' => true,
-            ],
-            [
-                'isGranted' => false,
-                'expectTask' => false,
-            ],
+        yield [
+            'isGranted' => true,
+            'expectTask' => true,
+        ];
+        yield [
+            'isGranted' => false,
+            'expectTask' => false,
         ];
     }
 

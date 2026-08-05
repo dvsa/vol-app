@@ -15,7 +15,7 @@ use Olcs\View\Helper\RenderMarkers;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class MarkersFactoryTest extends TestCase
+final class MarkersFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {

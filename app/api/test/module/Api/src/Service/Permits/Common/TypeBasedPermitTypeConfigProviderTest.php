@@ -14,15 +14,15 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class TypeBasedPermitTypeConfigProviderTest extends MockeryTestCase
+final class TypeBasedPermitTypeConfigProviderTest extends MockeryTestCase
 {
-    private const ECMT_ANNUAL_RESTRICTED_COUNTRY_IDS = ['FR', 'DE'];
+    private const array ECMT_ANNUAL_RESTRICTED_COUNTRY_IDS = ['FR', 'DE'];
 
-    private const ECMT_ANNUAL_RESTRICTED_COUNTRIES_QUESTION_KEY = 'ecmt.annual.key';
+    private const string ECMT_ANNUAL_RESTRICTED_COUNTRIES_QUESTION_KEY = 'ecmt.annual.key';
 
-    private const ECMT_SHORT_TERM_RESTRICTED_COUNTRY_IDS = ['HU' ,'RU', 'IT'];
+    private const array ECMT_SHORT_TERM_RESTRICTED_COUNTRY_IDS = ['HU' ,'RU', 'IT'];
 
-    private const ECMT_SHORT_TERM_RESTRICTED_COUNTRIES_QUESTION_KEY = 'ecmt.short.term.key';
+    private const string ECMT_SHORT_TERM_RESTRICTED_COUNTRIES_QUESTION_KEY = 'ecmt.short.term.key';
 
     private $typeBasedPermitTypeConfigProvider;
 
@@ -68,33 +68,31 @@ class TypeBasedPermitTypeConfigProviderTest extends MockeryTestCase
         );
     }
 
-    public static function dpTestGetPermitTypeConfig(): array
+    public static function dpTestGetPermitTypeConfig(): \Iterator
     {
-        return [
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
-                [],
-                self::ECMT_ANNUAL_RESTRICTED_COUNTRY_IDS,
-                self::ECMT_ANNUAL_RESTRICTED_COUNTRIES_QUESTION_KEY,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
-                ['DE'],
-                ['FR'],
-                self::ECMT_ANNUAL_RESTRICTED_COUNTRIES_QUESTION_KEY,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                [],
-                self::ECMT_SHORT_TERM_RESTRICTED_COUNTRY_IDS,
-                self::ECMT_SHORT_TERM_RESTRICTED_COUNTRIES_QUESTION_KEY,
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
-                ['RU', 'IT'],
-                ['HU'],
-                self::ECMT_SHORT_TERM_RESTRICTED_COUNTRIES_QUESTION_KEY,
-            ],
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
+            [],
+            self::ECMT_ANNUAL_RESTRICTED_COUNTRY_IDS,
+            self::ECMT_ANNUAL_RESTRICTED_COUNTRIES_QUESTION_KEY,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT,
+            ['DE'],
+            ['FR'],
+            self::ECMT_ANNUAL_RESTRICTED_COUNTRIES_QUESTION_KEY,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            [],
+            self::ECMT_SHORT_TERM_RESTRICTED_COUNTRY_IDS,
+            self::ECMT_SHORT_TERM_RESTRICTED_COUNTRIES_QUESTION_KEY,
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM,
+            ['RU', 'IT'],
+            ['HU'],
+            self::ECMT_SHORT_TERM_RESTRICTED_COUNTRIES_QUESTION_KEY,
         ];
     }
 

@@ -22,30 +22,22 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="bus_reg",
- *    indexes={
- *        @ORM\Index(name="ix_bus_reg_bus_notice_period_id", columns={"bus_notice_period_id"}),
- *        @ORM\Index(name="ix_bus_reg_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_bus_reg_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_bus_reg_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_bus_reg_parent_id", columns={"parent_id"}),
- *        @ORM\Index(name="ix_bus_reg_revert_status", columns={"revert_status"}),
- *        @ORM\Index(name="ix_bus_reg_status", columns={"status"}),
- *        @ORM\Index(name="ix_bus_reg_subsidised", columns={"subsidised"}),
- *        @ORM\Index(name="ix_bus_reg_withdrawn_reason", columns={"withdrawn_reason"}),
- *        @ORM\Index(name="uk_bus_reg_olbs_key", columns={"olbs_key"}),
- *        @ORM\Index(name="uk_bus_reg_reg_no_variation_no_deleted_date", columns={"reg_no", "variation_no", "deleted_date"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_bus_reg_olbs_key", columns={"olbs_key"}),
- *        @ORM\UniqueConstraint(name="uk_bus_reg_reg_no_variation_no_deleted_date", columns={"reg_no", "variation_no", "deleted_date"})
- *    }
- * )
  */
+#[ORM\Table(name: 'bus_reg')]
+#[ORM\Index(name: 'ix_bus_reg_bus_notice_period_id', columns: ['bus_notice_period_id'])]
+#[ORM\Index(name: 'ix_bus_reg_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_bus_reg_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_bus_reg_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_bus_reg_parent_id', columns: ['parent_id'])]
+#[ORM\Index(name: 'ix_bus_reg_revert_status', columns: ['revert_status'])]
+#[ORM\Index(name: 'ix_bus_reg_status', columns: ['status'])]
+#[ORM\Index(name: 'ix_bus_reg_subsidised', columns: ['subsidised'])]
+#[ORM\Index(name: 'ix_bus_reg_withdrawn_reason', columns: ['withdrawn_reason'])]
+#[ORM\UniqueConstraint(name: 'uk_bus_reg_olbs_key', columns: ['olbs_key'])]
+#[ORM\UniqueConstraint(name: 'uk_bus_reg_reg_no_variation_no_deleted_date', columns: ['reg_no', 'variation_no', 'deleted_date'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -59,676 +51,586 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Parent
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
     protected $parent;
 
     /**
      * Status
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * RevertStatus
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="revert_status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'revert_status', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $revertStatus;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'busRegs', fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Scottish or other
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusNoticePeriod
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusNoticePeriod", fetch="LAZY")
-     * @ORM\JoinColumn(name="bus_notice_period_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'bus_notice_period_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusNoticePeriod::class, fetch: 'LAZY')]
     protected $busNoticePeriod;
 
     /**
      * Yes, No, In-Part
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="subsidised", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'subsidised', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $subsidised;
 
     /**
      * WithdrawnReason
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="withdrawn_reason", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'withdrawn_reason', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $withdrawnReason;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Used for reporting on SLAs. Updated whenever state changes.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="status_change_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'status_change_date', nullable: true)]
     protected $statusChangeDate;
 
     /**
      * Increases by one for each registration added to licence
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="route_no", nullable=false)
      */
+    #[ORM\Column(type: 'smallint', name: 'route_no', nullable: false, options: ['unsigned' => true])]
     protected $routeNo = 0;
 
     /**
      * lic_no plus slash plus route_no
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="reg_no", length=70, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'reg_no', length: 70, nullable: false)]
     protected $regNo = '';
 
     /**
      * Number on front of bus
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="service_no", length=70, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'service_no', length: 70, nullable: true)]
     protected $serviceNo;
 
     /**
      * Start point
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="start_point", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'start_point', length: 100, nullable: true)]
     protected $startPoint;
 
     /**
      * Finish point
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="finish_point", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'finish_point', length: 100, nullable: true)]
     protected $finishPoint;
 
     /**
      * Via
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="via", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'via', length: 255, nullable: true)]
     protected $via;
 
     /**
      * Other details
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="other_details", length=800, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'other_details', length: 800, nullable: true)]
     protected $otherDetails;
 
     /**
      * Received date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="received_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'received_date', nullable: true)]
     protected $receivedDate;
 
     /**
      * Effective date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="effective_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'effective_date', nullable: true)]
     protected $effectiveDate;
 
     /**
      * End date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="end_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'end_date', nullable: true)]
     protected $endDate;
 
     /**
      * Application complete date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="application_complete_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'application_complete_date', nullable: true)]
     protected $applicationCompleteDate;
 
     /**
      * Application late.  Enables short notice detail entry
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_short_notice", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_short_notice', nullable: false, options: ['default' => 0])]
     protected $isShortNotice = 0;
 
     /**
      * useAllStops
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="use_all_stops", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'use_all_stops', nullable: false, options: ['default' => 0])]
     protected $useAllStops = 0;
 
     /**
      * Service reverses, turns around etc.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="has_manoeuvre", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'has_manoeuvre', nullable: false, options: ['default' => 0])]
     protected $hasManoeuvre = 0;
 
     /**
      * Manoeuvre detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="manoeuvre_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'manoeuvre_detail', length: 255, nullable: true)]
     protected $manoeuvreDetail;
 
     /**
      * Needs a new bus stop
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="need_new_stop", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'need_new_stop', nullable: false, options: ['default' => 0])]
     protected $needNewStop = 0;
 
     /**
      * New stop detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="new_stop_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'new_stop_detail', length: 255, nullable: true)]
     protected $newStopDetail;
 
     /**
      * Stops at not predefined stop.  i.e. waved down by user
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="has_not_fixed_stop", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'has_not_fixed_stop', nullable: false, options: ['default' => 0])]
     protected $hasNotFixedStop = 0;
 
     /**
      * Not fixed stop detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="not_fixed_stop_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'not_fixed_stop_detail', length: 255, nullable: true)]
     protected $notFixedStopDetail;
 
     /**
      * Subsidy detail
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="subsidy_detail", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'subsidy_detail', length: 255, nullable: true)]
     protected $subsidyDetail;
 
     /**
      * timetableAcceptable
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="timetable_acceptable", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'timetable_acceptable', nullable: false, options: ['default' => 0])]
     protected $timetableAcceptable = 0;
 
     /**
      * mapSupplied
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="map_supplied", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'map_supplied', nullable: false, options: ['default' => 0])]
     protected $mapSupplied = 0;
 
     /**
      * Route description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="route_description", length=1000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'route_description', length: 1000, nullable: true)]
     protected $routeDescription;
 
     /**
      * copiedToLaPte
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="copied_to_la_pte", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'copied_to_la_pte', nullable: false, options: ['default' => 0])]
     protected $copiedToLaPte = 0;
 
     /**
      * laShortNote
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="la_short_note", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'la_short_note', nullable: false, options: ['default' => 0])]
     protected $laShortNote = 0;
 
     /**
      * applicationSigned
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="application_signed", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'application_signed', nullable: false, options: ['default' => 0])]
     protected $applicationSigned = 0;
 
     /**
      * Increments for each variation
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="variation_no", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'smallint', name: 'variation_no', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $variationNo = 0;
 
     /**
      * opNotifiedLaPte
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="op_notified_la_pte", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'op_notified_la_pte', nullable: false, options: ['default' => 0])]
     protected $opNotifiedLaPte = 0;
 
     /**
      * Stopping arrangements
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="stopping_arrangements", length=800, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'stopping_arrangements', length: 800, nullable: true)]
     protected $stoppingArrangements;
 
     /**
      * trcConditionChecked
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="trc_condition_checked", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'trc_condition_checked', nullable: false, options: ['default' => 0])]
     protected $trcConditionChecked = 0;
 
     /**
      * Trc notes
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="trc_notes", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'trc_notes', length: 255, nullable: true)]
     protected $trcNotes;
 
     /**
      * Organisation email
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="organisation_email", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'organisation_email', length: 255, nullable: true)]
     protected $organisationEmail;
 
     /**
      * Was created through transxchange
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_txc_app", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_txc_app', nullable: false, options: ['default' => 0])]
     protected $isTxcApp = 0;
 
     /**
      * ebsrRefresh
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="ebsr_refresh", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'ebsr_refresh', nullable: false, options: ['default' => 0])]
     protected $ebsrRefresh = 0;
 
     /**
      * Txc app type
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="txc_app_type", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'txc_app_type', length: 20, nullable: true)]
     protected $txcAppType;
 
     /**
      * Reason cancelled
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="reason_cancelled", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'reason_cancelled', length: 255, nullable: true)]
     protected $reasonCancelled;
 
     /**
      * Reason refused
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="reason_refused", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'reason_refused', length: 255, nullable: true)]
     protected $reasonRefused;
 
     /**
      * Reason sn refused
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="reason_sn_refused", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'reason_sn_refused', length: 255, nullable: true)]
     protected $reasonSnRefused;
 
     /**
      * shortNoticeRefused
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="short_notice_refused", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'short_notice_refused', nullable: false, options: ['default' => 0])]
     protected $shortNoticeRefused = 0;
 
     /**
      * isQualityPartnership
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_quality_partnership", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_quality_partnership', nullable: false, options: ['default' => 0])]
     protected $isQualityPartnership = 0;
 
     /**
      * Quality partnership details
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="quality_partnership_details", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'quality_partnership_details', length: 4000, nullable: true)]
     protected $qualityPartnershipDetails;
 
     /**
      * qualityPartnershipFacilitiesUsed
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="quality_partnership_facilities_used", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'quality_partnership_facilities_used', nullable: false, options: ['default' => 0])]
     protected $qualityPartnershipFacilitiesUsed = 0;
 
     /**
      * isQualityContract
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_quality_contract", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_quality_contract', nullable: false, options: ['default' => 0])]
     protected $isQualityContract = 0;
 
     /**
      * Quality contract details
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="quality_contract_details", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'quality_contract_details', length: 4000, nullable: true)]
     protected $qualityContractDetails;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
      * BusServiceTypes
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusServiceType", inversedBy="busRegs", fetch="LAZY")
-     * @ORM\JoinTable(name="bus_reg_bus_service_type",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="bus_service_type_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'bus_reg_bus_service_type')]
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'bus_service_type_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusServiceType::class, inversedBy: 'busRegs', fetch: 'LAZY')]
     protected $busServiceTypes;
 
     /**
      * LocalAuthoritys
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Bus\LocalAuthority", inversedBy="busRegs", fetch="LAZY")
-     * @ORM\JoinTable(name="bus_reg_local_auth",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="local_authority_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'bus_reg_local_auth')]
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'local_authority_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority::class, inversedBy: 'busRegs', fetch: 'LAZY')]
     protected $localAuthoritys;
 
     /**
      * TrafficAreas
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", inversedBy="busRegs", fetch="LAZY")
-     * @ORM\JoinTable(name="bus_reg_traffic_area",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'bus_reg_traffic_area')]
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'traffic_area_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, inversedBy: 'busRegs', fetch: 'LAZY')]
     protected $trafficAreas;
 
     /**
      * VariationReasons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="busRegs", fetch="LAZY")
-     * @ORM\JoinTable(name="bus_reg_variation_reason",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="variation_reason_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'bus_reg_variation_reason')]
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'variation_reason_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $variationReasons;
 
     /**
      * OtherServices
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusRegOtherService", mappedBy="busReg", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusRegOtherService::class, mappedBy: 'busReg', cascade: ['persist'])]
     protected $otherServices;
 
     /**
      * ReadAudits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusRegReadAudit", mappedBy="busReg")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusRegReadAudit::class, mappedBy: 'busReg')]
     protected $readAudits;
 
     /**
      * ShortNotice
      *
      * @var \Dvsa\Olcs\Api\Entity\BusShortNotice
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusShortNotice", mappedBy="busReg", cascade={"persist"})
      */
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusShortNotice::class, mappedBy: 'busReg', cascade: ['persist'])]
     protected $shortNotice;
 
     /**
      * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", mappedBy="busReg")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'busReg')]
     protected $documents;
 
     /**
      * EbsrSubmissions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission", mappedBy="busReg")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission::class, mappedBy: 'busReg')]
     protected $ebsrSubmissions;
 
     /**
      * Fees
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Fee\Fee", mappedBy="busReg")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, mappedBy: 'busReg')]
     protected $fees;
 
     /**
      * PublicationLinks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Publication\PublicationLink", mappedBy="busReg")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationLink::class, mappedBy: 'busReg')]
     protected $publicationLinks;
 
     /**
      * Tasks
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Task\Task", mappedBy="busReg")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, mappedBy: 'busReg')]
     protected $tasks;
 
     /**
      * TxcInboxs
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Ebsr\TxcInbox", mappedBy="busReg", cascade={"persist"})
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Ebsr\TxcInbox::class, mappedBy: 'busReg', cascade: ['persist'])]
     protected $txcInboxs;
 
     /**
@@ -764,7 +666,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param int $id new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setId($id)
     {
@@ -788,7 +690,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $parent new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setParent($parent)
     {
@@ -812,7 +714,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setStatus($status)
     {
@@ -836,7 +738,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $revertStatus new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setRevertStatus($revertStatus)
     {
@@ -860,7 +762,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -884,7 +786,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusNoticePeriod $busNoticePeriod new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setBusNoticePeriod($busNoticePeriod)
     {
@@ -908,7 +810,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $subsidised new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setSubsidised($subsidised)
     {
@@ -932,7 +834,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $withdrawnReason new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setWithdrawnReason($withdrawnReason)
     {
@@ -956,7 +858,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -980,7 +882,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -1004,7 +906,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $statusChangeDate new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setStatusChangeDate($statusChangeDate)
     {
@@ -1034,7 +936,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param int $routeNo new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setRouteNo($routeNo)
     {
@@ -1058,7 +960,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $regNo new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setRegNo($regNo)
     {
@@ -1082,7 +984,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $serviceNo new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setServiceNo($serviceNo)
     {
@@ -1106,7 +1008,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $startPoint new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setStartPoint($startPoint)
     {
@@ -1130,7 +1032,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $finishPoint new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setFinishPoint($finishPoint)
     {
@@ -1154,7 +1056,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $via new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setVia($via)
     {
@@ -1178,7 +1080,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $otherDetails new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setOtherDetails($otherDetails)
     {
@@ -1202,7 +1104,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $receivedDate new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setReceivedDate($receivedDate)
     {
@@ -1232,7 +1134,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $effectiveDate new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setEffectiveDate($effectiveDate)
     {
@@ -1262,7 +1164,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $endDate new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setEndDate($endDate)
     {
@@ -1292,7 +1194,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \DateTime $applicationCompleteDate new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setApplicationCompleteDate($applicationCompleteDate)
     {
@@ -1322,7 +1224,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $isShortNotice new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setIsShortNotice($isShortNotice)
     {
@@ -1346,7 +1248,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $useAllStops new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setUseAllStops($useAllStops)
     {
@@ -1370,7 +1272,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $hasManoeuvre new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setHasManoeuvre($hasManoeuvre)
     {
@@ -1394,7 +1296,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $manoeuvreDetail new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setManoeuvreDetail($manoeuvreDetail)
     {
@@ -1418,7 +1320,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $needNewStop new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setNeedNewStop($needNewStop)
     {
@@ -1442,7 +1344,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $newStopDetail new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setNewStopDetail($newStopDetail)
     {
@@ -1466,7 +1368,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $hasNotFixedStop new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setHasNotFixedStop($hasNotFixedStop)
     {
@@ -1490,7 +1392,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $notFixedStopDetail new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setNotFixedStopDetail($notFixedStopDetail)
     {
@@ -1514,7 +1416,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $subsidyDetail new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setSubsidyDetail($subsidyDetail)
     {
@@ -1538,7 +1440,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $timetableAcceptable new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setTimetableAcceptable($timetableAcceptable)
     {
@@ -1562,7 +1464,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $mapSupplied new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setMapSupplied($mapSupplied)
     {
@@ -1586,7 +1488,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $routeDescription new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setRouteDescription($routeDescription)
     {
@@ -1610,7 +1512,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $copiedToLaPte new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setCopiedToLaPte($copiedToLaPte)
     {
@@ -1634,7 +1536,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $laShortNote new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setLaShortNote($laShortNote)
     {
@@ -1658,7 +1560,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $applicationSigned new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setApplicationSigned($applicationSigned)
     {
@@ -1682,7 +1584,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param int $variationNo new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setVariationNo($variationNo)
     {
@@ -1706,7 +1608,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $opNotifiedLaPte new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setOpNotifiedLaPte($opNotifiedLaPte)
     {
@@ -1730,7 +1632,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $stoppingArrangements new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setStoppingArrangements($stoppingArrangements)
     {
@@ -1754,7 +1656,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $trcConditionChecked new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setTrcConditionChecked($trcConditionChecked)
     {
@@ -1778,7 +1680,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $trcNotes new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setTrcNotes($trcNotes)
     {
@@ -1802,7 +1704,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $organisationEmail new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setOrganisationEmail($organisationEmail)
     {
@@ -1826,7 +1728,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $isTxcApp new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setIsTxcApp($isTxcApp)
     {
@@ -1850,7 +1752,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $ebsrRefresh new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setEbsrRefresh($ebsrRefresh)
     {
@@ -1874,7 +1776,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $txcAppType new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setTxcAppType($txcAppType)
     {
@@ -1898,7 +1800,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $reasonCancelled new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setReasonCancelled($reasonCancelled)
     {
@@ -1922,7 +1824,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $reasonRefused new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setReasonRefused($reasonRefused)
     {
@@ -1946,7 +1848,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $reasonSnRefused new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setReasonSnRefused($reasonSnRefused)
     {
@@ -1970,7 +1872,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $shortNoticeRefused new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setShortNoticeRefused($shortNoticeRefused)
     {
@@ -1994,7 +1896,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $isQualityPartnership new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setIsQualityPartnership($isQualityPartnership)
     {
@@ -2018,7 +1920,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $qualityPartnershipDetails new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setQualityPartnershipDetails($qualityPartnershipDetails)
     {
@@ -2042,7 +1944,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $qualityPartnershipFacilitiesUsed new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setQualityPartnershipFacilitiesUsed($qualityPartnershipFacilitiesUsed)
     {
@@ -2066,7 +1968,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $isQualityContract new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setIsQualityContract($isQualityContract)
     {
@@ -2090,7 +1992,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param string $qualityContractDetails new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setQualityContractDetails($qualityContractDetails)
     {
@@ -2114,7 +2016,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param int $version new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setVersion($version)
     {
@@ -2138,7 +2040,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param int $olbsKey new value being set
      *
-     * @return BusReg
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -2162,7 +2064,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $busServiceTypes collection being set as the value
      *
-     * @return BusReg
+     * @return static
      */
     public function setBusServiceTypes($busServiceTypes)
     {
@@ -2186,7 +2088,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $busServiceTypes collection being added
      *
-     * @return BusReg
+     * @return static
      */
     public function addBusServiceTypes($busServiceTypes)
     {
@@ -2209,7 +2111,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $busServiceTypes collection being removed
      *
-     * @return BusReg
+     * @return static
      */
     public function removeBusServiceTypes($busServiceTypes)
     {
@@ -2225,7 +2127,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $localAuthoritys collection being set as the value
      *
-     * @return BusReg
+     * @return static
      */
     public function setLocalAuthoritys($localAuthoritys)
     {
@@ -2249,7 +2151,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $localAuthoritys collection being added
      *
-     * @return BusReg
+     * @return static
      */
     public function addLocalAuthoritys($localAuthoritys)
     {
@@ -2272,7 +2174,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $localAuthoritys collection being removed
      *
-     * @return BusReg
+     * @return static
      */
     public function removeLocalAuthoritys($localAuthoritys)
     {
@@ -2288,7 +2190,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $trafficAreas collection being set as the value
      *
-     * @return BusReg
+     * @return static
      */
     public function setTrafficAreas($trafficAreas)
     {
@@ -2312,7 +2214,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $trafficAreas collection being added
      *
-     * @return BusReg
+     * @return static
      */
     public function addTrafficAreas($trafficAreas)
     {
@@ -2335,7 +2237,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $trafficAreas collection being removed
      *
-     * @return BusReg
+     * @return static
      */
     public function removeTrafficAreas($trafficAreas)
     {
@@ -2351,7 +2253,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $variationReasons collection being set as the value
      *
-     * @return BusReg
+     * @return static
      */
     public function setVariationReasons($variationReasons)
     {
@@ -2375,7 +2277,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $variationReasons collection being added
      *
-     * @return BusReg
+     * @return static
      */
     public function addVariationReasons($variationReasons)
     {
@@ -2398,7 +2300,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $variationReasons collection being removed
      *
-     * @return BusReg
+     * @return static
      */
     public function removeVariationReasons($variationReasons)
     {
@@ -2414,7 +2316,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $otherServices collection being set as the value
      *
-     * @return BusReg
+     * @return static
      */
     public function setOtherServices($otherServices)
     {
@@ -2438,7 +2340,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $otherServices collection being added
      *
-     * @return BusReg
+     * @return static
      */
     public function addOtherServices($otherServices)
     {
@@ -2461,7 +2363,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $otherServices collection being removed
      *
-     * @return BusReg
+     * @return static
      */
     public function removeOtherServices($otherServices)
     {
@@ -2477,7 +2379,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $readAudits collection being set as the value
      *
-     * @return BusReg
+     * @return static
      */
     public function setReadAudits($readAudits)
     {
@@ -2501,7 +2403,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $readAudits collection being added
      *
-     * @return BusReg
+     * @return static
      */
     public function addReadAudits($readAudits)
     {
@@ -2524,7 +2426,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $readAudits collection being removed
      *
-     * @return BusReg
+     * @return static
      */
     public function removeReadAudits($readAudits)
     {
@@ -2540,7 +2442,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusShortNotice $shortNotice entity being set as the value
      *
-     * @return BusReg
+     * @return static
      */
     public function setShortNotice($shortNotice)
     {
@@ -2564,7 +2466,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being set as the value
      *
-     * @return BusReg
+     * @return static
      */
     public function setDocuments($documents)
     {
@@ -2588,7 +2490,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documents collection being added
      *
-     * @return BusReg
+     * @return static
      */
     public function addDocuments($documents)
     {
@@ -2611,7 +2513,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being removed
      *
-     * @return BusReg
+     * @return static
      */
     public function removeDocuments($documents)
     {
@@ -2627,7 +2529,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $ebsrSubmissions collection being set as the value
      *
-     * @return BusReg
+     * @return static
      */
     public function setEbsrSubmissions($ebsrSubmissions)
     {
@@ -2651,7 +2553,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $ebsrSubmissions collection being added
      *
-     * @return BusReg
+     * @return static
      */
     public function addEbsrSubmissions($ebsrSubmissions)
     {
@@ -2674,7 +2576,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $ebsrSubmissions collection being removed
      *
-     * @return BusReg
+     * @return static
      */
     public function removeEbsrSubmissions($ebsrSubmissions)
     {
@@ -2690,7 +2592,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $fees collection being set as the value
      *
-     * @return BusReg
+     * @return static
      */
     public function setFees($fees)
     {
@@ -2714,7 +2616,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $fees collection being added
      *
-     * @return BusReg
+     * @return static
      */
     public function addFees($fees)
     {
@@ -2737,7 +2639,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $fees collection being removed
      *
-     * @return BusReg
+     * @return static
      */
     public function removeFees($fees)
     {
@@ -2753,7 +2655,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $publicationLinks collection being set as the value
      *
-     * @return BusReg
+     * @return static
      */
     public function setPublicationLinks($publicationLinks)
     {
@@ -2777,7 +2679,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $publicationLinks collection being added
      *
-     * @return BusReg
+     * @return static
      */
     public function addPublicationLinks($publicationLinks)
     {
@@ -2800,7 +2702,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $publicationLinks collection being removed
      *
-     * @return BusReg
+     * @return static
      */
     public function removePublicationLinks($publicationLinks)
     {
@@ -2816,7 +2718,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tasks collection being set as the value
      *
-     * @return BusReg
+     * @return static
      */
     public function setTasks($tasks)
     {
@@ -2840,7 +2742,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tasks collection being added
      *
-     * @return BusReg
+     * @return static
      */
     public function addTasks($tasks)
     {
@@ -2863,7 +2765,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tasks collection being removed
      *
-     * @return BusReg
+     * @return static
      */
     public function removeTasks($tasks)
     {
@@ -2879,7 +2781,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $txcInboxs collection being set as the value
      *
-     * @return BusReg
+     * @return static
      */
     public function setTxcInboxs($txcInboxs)
     {
@@ -2903,7 +2805,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $txcInboxs collection being added
      *
-     * @return BusReg
+     * @return static
      */
     public function addTxcInboxs($txcInboxs)
     {
@@ -2926,7 +2828,7 @@ abstract class AbstractBusReg implements BundleSerializableInterface, JsonSerial
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $txcInboxs collection being removed
      *
-     * @return BusReg
+     * @return static
      */
     public function removeTxcInboxs($txcInboxs)
     {

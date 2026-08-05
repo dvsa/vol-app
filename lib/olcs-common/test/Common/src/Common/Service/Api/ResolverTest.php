@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Api;
 
 use Common\Service\Api\Resolver;
@@ -7,7 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Psr\Container\ContainerInterface;
 
-class ResolverTest extends MockeryTestCase
+final class ResolverTest extends MockeryTestCase
 {
     public function testGetClient(): void
     {

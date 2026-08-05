@@ -18,10 +18,10 @@ use Dvsa\Olcs\Api\Domain\Repository\ConditionUndertaking;
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\ConditionUndertaking\DeleteList::class)]
-class DeleteListTest extends AbstractCommandHandlerTestCase
+final class DeleteListTest extends AbstractCommandHandlerTestCase
 {
-    public const CU_ID = 8001;
-    public const CU2_ID = 8002;
+    public const int CU_ID = 8001;
+    public const int CU2_ID = 8002;
 
     /** @var  CommandHandler\ConditionUndertaking\DeleteList */
     protected $sut;

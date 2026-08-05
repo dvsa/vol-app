@@ -6,58 +6,58 @@
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\IrhpPermitStockCountry;
 
-class IrhpPermitStockCountryTest extends \PHPUnit\Framework\TestCase
+final class IrhpPermitStockCountryTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the format method
      *
-     * @group Formatters
      *
-     * @dataProvider dpFormat
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpFormat')]
     public function testFormat($data, $expected): void
     {
         $this->assertEquals(
             $expected,
-            (new IrhpPermitStockCountry())->format($data)
+            new IrhpPermitStockCountry()->format($data)
         );
     }
 
     /**
-     * @return (string|string[][])[][]
+     * @return \Iterator<(int | string), array<(array<array<string>> | string)>>
      *
      * @psalm-return array{'No country': list{array<never, never>, 'N/A'}, 'Country only': list{array{country: array{countryDesc: 'Bosnia & Herzegovina'}}, 'Bosnia &amp; Herzegovina'}, 'Country and permit category': list{array{country: array{countryDesc: 'Bosnia & Herzegovina'}, permitCategory: array{description: 'Hors contingent'}}, 'Bosnia &amp; Herzegovina Hors contingent'}}
      */
-    public function dpFormat(): array
+    public static function dpFormat(): \Iterator
     {
-        return [
-            'No country' => [
-                [],
-                'N/A',
+        yield 'No country' => [
+            [],
+            'N/A',
+        ];
+        yield 'Country only' => [
+            [
+                'country' => [
+                    'countryDesc' => 'Bosnia & Herzegovina'
+                ]
             ],
-            'Country only' => [
-                [
-                    'country' => [
-                        'countryDesc' => 'Bosnia & Herzegovina'
-                    ]
+            'Bosnia &amp; Herzegovina',
+        ];
+        yield 'Country and permit category' => [
+            [
+                'country' => [
+                    'countryDesc' => 'Bosnia & Herzegovina'
                 ],
-                'Bosnia &amp; Herzegovina',
+                'permitCategory' => [
+                    'description' => 'Hors contingent'
+                ]
             ],
-            'Country and permit category' => [
-                [
-                    'country' => [
-                        'countryDesc' => 'Bosnia & Herzegovina'
-                    ],
-                    'permitCategory' => [
-                        'description' => 'Hors contingent'
-                    ]
-                ],
-                'Bosnia &amp; Herzegovina Hors contingent',
-            ],
+            'Bosnia &amp; Herzegovina Hors contingent',
         ];
     }
 }

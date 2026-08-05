@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Common;
 
 use Common\Service\Qa\Custom\Common\HtmlAdder;
@@ -14,13 +16,13 @@ use Laminas\View\Helper\Partial;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class WarningAdderTest extends MockeryTestCase
+final class WarningAdderTest extends MockeryTestCase
 {
-    public const WARNING_KEY = 'warning.key';
+    public const string WARNING_KEY = 'warning.key';
 
-    public const PRIORITY = 25;
+    public const int PRIORITY = 25;
 
-    public const ELEMENT_NAME = 'xyzWarning';
+    public const string ELEMENT_NAME = 'xyzWarning';
 
     public function testAdd(): void
     {

@@ -24,7 +24,7 @@ class ExpiredPasswordControllerFactory implements FactoryInterface
      * @throws NotFoundExceptionInterfaceAlias
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ExpiredPasswordController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ExpiredPasswordController
     {
         return new ExpiredPasswordController(
             new AuthChallengeContainer(),

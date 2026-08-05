@@ -24,7 +24,7 @@ class GovUkAccountService
         JWT::$leeway = static::JWT_TIMESTAMP_LEEWAY_SECONDS;
     }
 
-    public function getAuthorisationUrl(string $state, bool $identityAssurance = false, array $scopes = [], string $nonce = null): GetAuthorisationUrlResponse
+    public function getAuthorisationUrl(string $state, bool $identityAssurance = false, array $scopes = [], ?string $nonce = null): GetAuthorisationUrlResponse
     {
         if (empty($scopes)) {
             $scopes = $this->provider::DEFAULT_SCOPES;
@@ -116,7 +116,7 @@ class GovUkAccountService
     /**
      * @throws InvalidTokenException
      */
-    public function verifyIdToken(AccessToken $token, string $nonce = null)
+    public function verifyIdToken(AccessToken $token, ?string $nonce = null)
     {
         $this->provider->validateIdToken($token->getIdToken(), $nonce);
     }

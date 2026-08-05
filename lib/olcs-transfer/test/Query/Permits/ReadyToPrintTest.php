@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Permits;
 
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrint;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrint;
 /**
  * ReadyToPrint Test
  */
-class ReadyToPrintTest extends \PHPUnit\Framework\TestCase
+final class ReadyToPrintTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -23,19 +25,16 @@ class ReadyToPrintTest extends \PHPUnit\Framework\TestCase
                 'order' => 'ASC',
             ]
         );
-        static::assertEquals($irhpPermitRangeType, $sut->getIrhpPermitRangeType());
-        static::assertEquals(
-            [
-                'irhpPermitStock' => 100,
-                'irhpPermitRangeType' => $irhpPermitRangeType,
-                'page' => 1,
-                'limit' => 10,
-                'sort' => 'id',
-                'order' => 'ASC',
-                'sortWhitelist' => []
-            ],
-            $sut->getArrayCopy()
-        );
+        $this->assertEquals($irhpPermitRangeType, $sut->getIrhpPermitRangeType());
+        $this->assertEquals([
+            'irhpPermitStock' => 100,
+            'irhpPermitRangeType' => $irhpPermitRangeType,
+            'page' => 1,
+            'limit' => 10,
+            'sort' => 'id',
+            'order' => 'ASC',
+            'sortWhitelist' => []
+        ], $sut->getArrayCopy());
     }
 
     public function testStructureWithoutOptionals()
@@ -48,18 +47,15 @@ class ReadyToPrintTest extends \PHPUnit\Framework\TestCase
                 'order' => 'ASC',
             ]
         );
-        static::assertNull($sut->getIrhpPermitRangeType());
-        static::assertEquals(
-            [
-                'irhpPermitStock' => null,
-                'irhpPermitRangeType' => null,
-                'page' => 1,
-                'limit' => 10,
-                'sort' => 'id',
-                'order' => 'ASC',
-                'sortWhitelist' => []
-            ],
-            $sut->getArrayCopy()
-        );
+        $this->assertNull($sut->getIrhpPermitRangeType());
+        $this->assertEquals([
+            'irhpPermitStock' => null,
+            'irhpPermitRangeType' => null,
+            'page' => 1,
+            'limit' => 10,
+            'sort' => 'id',
+            'order' => 'ASC',
+            'sortWhitelist' => []
+        ], $sut->getArrayCopy());
     }
 }

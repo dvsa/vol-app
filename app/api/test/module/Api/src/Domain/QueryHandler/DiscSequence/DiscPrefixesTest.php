@@ -22,7 +22,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class DiscPrefixesTest extends QueryHandlerTestCase
+final class DiscPrefixesTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -39,12 +39,10 @@ class DiscPrefixesTest extends QueryHandlerTestCase
         $this->assertEquals(['result' => [], 'count' => 0], $this->sut->handleQuery($query));
     }
 
-    public static function emptyParamsProvider(): array
+    public static function emptyParamsProvider(): \Iterator
     {
-        return [
-            [['niFlag' => 'N', 'licenceType' => 'ltyp_r']],
-            [['niFlag' => 'Y', 'operatorType' => 'lcat_gv']]
-        ];
+        yield [['niFlag' => 'N', 'licenceType' => 'ltyp_r']];
+        yield [['niFlag' => 'Y', 'operatorType' => 'lcat_gv']];
     }
 
     public function testHandleQuery(): void

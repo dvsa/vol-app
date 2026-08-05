@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Application;
 
 use Dvsa\Olcs\Transfer\Query\Application\Application;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Application\Application;
 /**
  * Application test
  */
-class ApplicationTest extends \PHPUnit\Framework\TestCase
+final class ApplicationTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

@@ -20,7 +20,7 @@ use Mockery as m;
 /**
  * ProposeToRevokeByCase Test
  */
-class ProposeToRevokeByCaseTest extends QueryHandlerTestCase
+final class ProposeToRevokeByCaseTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

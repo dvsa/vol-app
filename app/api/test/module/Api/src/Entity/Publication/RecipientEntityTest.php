@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Domain\Exception;
  *
  * Initially auto-generated but won't be overridden
  */
-class RecipientEntityTest extends EntityTester
+final class RecipientEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -22,6 +22,7 @@ class RecipientEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->entity = $this->instantiate($this->entityClass);

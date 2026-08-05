@@ -11,9 +11,9 @@ use Olcs\Service\Data\SubCategory;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\SubCategory::class)]
-class SubCategoryTest extends AbstractListDataServiceTestCase
+final class SubCategoryTest extends AbstractListDataServiceTestCase
 {
-    public const CAT_ID = 8001;
+    public const int CAT_ID = 8001;
 
     /** @var SubCategory */
     private $sut;
@@ -74,7 +74,7 @@ class SubCategoryTest extends AbstractListDataServiceTestCase
         $this->sut->setCategory(self::CAT_ID);
         $this->sut->setData(self::CAT_ID, $data);
 
-        static::assertEquals([9999 => 'EXPECTED'], $this->sut->fetchListOptions());
+        $this->assertEquals([9999 => 'EXPECTED'], $this->sut->fetchListOptions());
     }
 
     public function testFetchListDataWithException(): void

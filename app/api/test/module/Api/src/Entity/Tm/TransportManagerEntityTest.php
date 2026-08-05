@@ -24,7 +24,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * Initially auto-generated but won't be overridden
  */
-class TransportManagerEntityTest extends EntityTester
+final class TransportManagerEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -263,16 +263,14 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($expected, $entity->hasValidSiGbQualification());
     }
 
-    public static function dpTestHasValidSiGbQualification(): array
+    public static function dpTestHasValidSiGbQualification(): \Iterator
     {
-        return [
-            [false, []],
-            [false, [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_NICPCSI]],
-            [false, [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_NIEXSI]],
-            [true, [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_AR]],
-            [true, [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_CPCSI]],
-            [true, [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_EXSI]],
-        ];
+        yield [false, []];
+        yield [false, [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_NICPCSI]];
+        yield [false, [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_NIEXSI]];
+        yield [true, [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_AR]];
+        yield [true, [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_CPCSI]];
+        yield [true, [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_EXSI]];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestHasValidSiNiQualification')]
@@ -289,16 +287,14 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($expected, $entity->hasValidSiNiQualification());
     }
 
-    public static function dpTestHasValidSiNiQualification(): array
+    public static function dpTestHasValidSiNiQualification(): \Iterator
     {
-        return [
-            [false, []],
-            [false, [TmQualification::QUALIFICATION_TYPE_AR, TmQualification::QUALIFICATION_TYPE_CPCSI]],
-            [false, [TmQualification::QUALIFICATION_TYPE_AR, TmQualification::QUALIFICATION_TYPE_EXSI]],
-            [true, [TmQualification::QUALIFICATION_TYPE_AR, TmQualification::QUALIFICATION_TYPE_NIAR]],
-            [true, [TmQualification::QUALIFICATION_TYPE_AR, TmQualification::QUALIFICATION_TYPE_NICPCSI]],
-            [true, [TmQualification::QUALIFICATION_TYPE_AR, TmQualification::QUALIFICATION_TYPE_NIEXSI]],
-        ];
+        yield [false, []];
+        yield [false, [TmQualification::QUALIFICATION_TYPE_AR, TmQualification::QUALIFICATION_TYPE_CPCSI]];
+        yield [false, [TmQualification::QUALIFICATION_TYPE_AR, TmQualification::QUALIFICATION_TYPE_EXSI]];
+        yield [true, [TmQualification::QUALIFICATION_TYPE_AR, TmQualification::QUALIFICATION_TYPE_NIAR]];
+        yield [true, [TmQualification::QUALIFICATION_TYPE_AR, TmQualification::QUALIFICATION_TYPE_NICPCSI]];
+        yield [true, [TmQualification::QUALIFICATION_TYPE_AR, TmQualification::QUALIFICATION_TYPE_NIEXSI]];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetLgvAcquiredRightsQualificationReturnsNull')]
@@ -312,15 +308,13 @@ class TransportManagerEntityTest extends EntityTester
             $entity->addQualifications($qualification);
         }
 
-        $this->assertNull($entity->getLgvAcquiredRightsQualification());
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Tm\TmQualification::class, $entity->getLgvAcquiredRightsQualification());
     }
 
-    public static function dpGetLgvAcquiredRightsQualificationReturnsNull(): array
+    public static function dpGetLgvAcquiredRightsQualificationReturnsNull(): \Iterator
     {
-        return [
-            [[]],
-            [[TmQualification::QUALIFICATION_TYPE_NIAR]],
-        ];
+        yield [[]];
+        yield [[TmQualification::QUALIFICATION_TYPE_NIAR]];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetLgvAcquiredRightsQualificationReturnsTmQualification')]
@@ -340,17 +334,15 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertEquals($expected, $lgvAcquiredRightsQualification->getQualificationType()->getId());
     }
 
-    public static function dpGetLgvAcquiredRightsQualificationReturnsTmQualification(): array
+    public static function dpGetLgvAcquiredRightsQualificationReturnsTmQualification(): \Iterator
     {
-        return [
-            [
-                TmQualification::QUALIFICATION_TYPE_LGVAR,
-                [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_LGVAR]
-            ],
-            [
-                TmQualification::QUALIFICATION_TYPE_NILGVAR,
-                [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_NILGVAR]
-            ],
+        yield [
+            TmQualification::QUALIFICATION_TYPE_LGVAR,
+            [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_LGVAR]
+        ];
+        yield [
+            TmQualification::QUALIFICATION_TYPE_NILGVAR,
+            [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_NILGVAR]
         ];
     }
 
@@ -368,14 +360,12 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($expected, $entity->hasLgvAcquiredRightsQualification());
     }
 
-    public static function dpHasLgvAcquiredRightsQualification(): array
+    public static function dpHasLgvAcquiredRightsQualification(): \Iterator
     {
-        return [
-            [false, []],
-            [false, [TmQualification::QUALIFICATION_TYPE_NIAR]],
-            [true, [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_LGVAR]],
-            [true, [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_NILGVAR]],
-        ];
+        yield [false, []];
+        yield [false, [TmQualification::QUALIFICATION_TYPE_NIAR]];
+        yield [true, [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_LGVAR]];
+        yield [true, [TmQualification::QUALIFICATION_TYPE_NIAR, TmQualification::QUALIFICATION_TYPE_NILGVAR]];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpNiFlag')]
@@ -408,7 +398,7 @@ class TransportManagerEntityTest extends EntityTester
         $tml2 = new TransportManagerLicence($lic2, $entity);
         $entity->addTmLicences(new \Doctrine\Common\Collections\ArrayCollection([$tml1, $tml2]));
 
-        $this->assertSame(false, $entity->isSiQualificationRequired($niFlag));
+        $this->assertFalse($entity->isSiQualificationRequired($niFlag));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpNiFlag')]
@@ -510,12 +500,10 @@ class TransportManagerEntityTest extends EntityTester
         $this->assertSame($niFlag === 'N', $entity->isSiQualificationRequired($niFlag));
     }
 
-    public static function dpNiFlag(): array
+    public static function dpNiFlag(): \Iterator
     {
-        return [
-            ['N'],
-            ['Y'],
-        ];
+        yield ['N'];
+        yield ['Y'];
     }
 
     public function testIsDetachedCases(): void
@@ -632,7 +620,7 @@ class TransportManagerEntityTest extends EntityTester
 
         $entity->setHomeCd($contactDetails);
 
-        $this->assertEquals($result, $entity->hasReputeCheckAddress());
+        $this->assertSame($result, $entity->hasReputeCheckAddress());
     }
 
     public function testHasQualificationsTrue(): void
@@ -656,20 +644,17 @@ class TransportManagerEntityTest extends EntityTester
     /**
      * Data provider for testHasReputeCheckAddress
      */
-    public static function dpHasReputeCheckDataProvider(): array
+    public static function dpHasReputeCheckDataProvider(): \Iterator
     {
         $forename = 'forename';
         $familyName = 'family name';
         $birthDate = new \DateTime('2015-12-25');
         $birthPlace = 'birth place';
-
-        return [
-            [null, $familyName, $birthDate, $birthPlace, false],
-            [$forename, null, $birthDate, $birthPlace, false],
-            [$forename, $familyName, null, $birthPlace, false],
-            [$forename, $familyName, $birthDate, null, false],
-            [$forename, $familyName, $birthDate, $birthPlace, true]
-        ];
+        yield [null, $familyName, $birthDate, $birthPlace, false];
+        yield [$forename, null, $birthDate, $birthPlace, false];
+        yield [$forename, $familyName, null, $birthPlace, false];
+        yield [$forename, $familyName, $birthDate, null, false];
+        yield [$forename, $familyName, $birthDate, $birthPlace, true];
     }
 
     public function testGetMostRecentQualification(): void

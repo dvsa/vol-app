@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 
-class CanVerifyTest extends AbstractHandlerTestCase
+final class CanVerifyTest extends AbstractHandlerTestCase
 {
     /**
      * @var Sut

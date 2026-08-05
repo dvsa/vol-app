@@ -18,7 +18,7 @@ class LicenceTransportManagerAdapterFactory implements FactoryInterface
      * @throws ContainerExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceTransportManagerAdapter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LicenceTransportManagerAdapter
     {
         $transferAnnotationBuilder = $container->get(AnnotationBuilder::class);
         assert($transferAnnotationBuilder instanceof AnnotationBuilder);

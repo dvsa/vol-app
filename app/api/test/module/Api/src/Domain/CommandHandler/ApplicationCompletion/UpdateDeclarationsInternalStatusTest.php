@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion as ApplicationComplet
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class UpdateDeclarationsInternalStatusTest extends AbstractUpdateStatusTestCase
+final class UpdateDeclarationsInternalStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'DeclarationsInternal';
 

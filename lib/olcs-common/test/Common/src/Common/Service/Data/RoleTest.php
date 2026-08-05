@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -13,7 +15,7 @@ use Mockery as m;
  *
  * @package Olcs\Service
  */
-class RoleTest extends AbstractDataServiceTestCase
+final class RoleTest extends AbstractDataServiceTestCase
 {
     /** @var Role */
     private $sut;
@@ -22,15 +24,14 @@ class RoleTest extends AbstractDataServiceTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->sut = new Role($this->abstractDataServiceServices);
     }
 
     /**
-     * @dataProvider provideFetchListOptions
      * @param $input
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFetchListOptions')]
     public function testFetchListOptions($input, $expected): void
     {
         $this->sut->setData('Role', $input);
@@ -39,22 +40,20 @@ class RoleTest extends AbstractDataServiceTestCase
     }
 
     /**
-     * @return array[][]
+     * @return \Iterator<(int | string), array<array<mixed>>>
      *
      * @psalm-return list{list{array, array}, list{array<never, never>, array<never, never>}}
      */
-    public function provideFetchListOptions(): array
+    public static function provideFetchListOptions(): \Iterator
     {
-        return [
-            [$this->getSingleSource(), $this->getSingleExpected()],
-            [[], []]
-        ];
+        yield [self::getSingleSource(), self::getSingleExpected()];
+        yield [[], []];
     }
 
     /**
      * @return array
      */
-    protected function getSingleExpected()
+    protected static function getSingleExpected()
     {
         return [
             'role1' => 'role1desc',
@@ -65,7 +64,7 @@ class RoleTest extends AbstractDataServiceTestCase
     /**
      * @return array
      */
-    protected function getSingleSource()
+    protected static function getSingleSource()
     {
         return [
             ['id' => 1, 'role' => 'role1', 'description' => 'role1desc'],

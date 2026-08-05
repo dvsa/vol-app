@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class LicenceOperatingCentresTest extends MockeryTestCase
+final class LicenceOperatingCentresTest extends MockeryTestCase
 {
     public function testGetQuery(): void
     {

@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class CabotageOnlyGeneratorTest extends MockeryTestCase
+final class CabotageOnlyGeneratorTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
     public function testGenerate(mixed $answerValue, mixed $expectedYesNo): void
@@ -52,11 +52,9 @@ class CabotageOnlyGeneratorTest extends MockeryTestCase
         );
     }
 
-    public static function dpGenerate(): array
+    public static function dpGenerate(): \Iterator
     {
-        return [
-            ['string_value', 'Y'],
-            [null, null],
-        ];
+        yield ['string_value', 'Y'];
+        yield [null, null];
     }
 }

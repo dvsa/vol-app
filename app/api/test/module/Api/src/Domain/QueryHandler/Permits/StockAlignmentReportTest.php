@@ -22,7 +22,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\StockAlignmentReport as StockAlignmentRepor
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class StockAlignmentReportTest extends QueryHandlerTestCase
+final class StockAlignmentReportTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

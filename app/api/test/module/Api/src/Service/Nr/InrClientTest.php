@@ -16,8 +16,9 @@ use Olcs\Logging\Log\Logger;
  * Class InrClientTest
  * @package Dvsa\OlcsTest\Api\Service\Nr
  */
-class InrClientTest extends MockeryTestCase
+final class InrClientTest extends MockeryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         Logger::setLogger(new \Psr\Log\NullLogger());
@@ -47,7 +48,7 @@ class InrClientTest extends MockeryTestCase
 
         $sut = new InrClient($mockClient);
 
-        $this->assertEquals($statusCode, $sut->makeRequestReturnStatusCode($requestBody));
+        $this->assertSame($statusCode, $sut->makeRequestReturnStatusCode($requestBody));
     }
 
     public function testClose(): void

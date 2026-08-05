@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessVariationWithVariatio
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CanAccessVariationWithVariationTest extends AbstractHandlerTestCase
+final class CanAccessVariationWithVariationTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessVariationWithVariation
@@ -46,11 +46,9 @@ class CanAccessVariationWithVariationTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

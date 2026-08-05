@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Controller\Plugin;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -16,12 +18,8 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class RedirectTest extends MockeryTestCase
+final class RedirectTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $mockResponse;
     protected $sut;
 
     /**
@@ -33,12 +31,10 @@ class RedirectTest extends MockeryTestCase
     {
         $this->sut = m::mock(\Common\Controller\Plugin\Redirect::class)->makePartial();
 
-        $this->mockResponse = m::mock();
+        $mockResponse = m::mock();
     }
 
-    /**
-     * @group controller_plugin
-     */
+    #[\PHPUnit\Framework\Attributes\Group('controller_plugin')]
     public function testToRouteAjaxWithoutAjax(): void
     {
         $route = 'foo';
@@ -58,9 +54,7 @@ class RedirectTest extends MockeryTestCase
         $this->assertEquals('REDIRECT', $this->sut->toRouteAjax($route, $params, $options));
     }
 
-    /**
-     * @group controller_plugin
-     */
+    #[\PHPUnit\Framework\Attributes\Group('controller_plugin')]
     public function testToRouteAjaxWithAjax(): void
     {
         $route = 'foo';
@@ -102,9 +96,7 @@ class RedirectTest extends MockeryTestCase
         $this->assertEquals($mockResponse, $this->sut->toRouteAjax($route, $params, $options));
     }
 
-    /**
-     * @group controller_plugin
-     */
+    #[\PHPUnit\Framework\Attributes\Group('controller_plugin')]
     public function testRefreshAjax(): void
     {
         $this->sut->shouldReceive('toRouteAjax')

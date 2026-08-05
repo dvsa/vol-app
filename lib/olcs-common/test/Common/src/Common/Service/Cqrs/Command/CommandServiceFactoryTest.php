@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Cqrs\Command;
 
 use Common\Service\Cqrs\Command\CommandService;
@@ -14,7 +16,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use RuntimeException;
 
-class CommandServiceFactoryTest extends MockeryTestCase
+final class CommandServiceFactoryTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
@@ -29,9 +31,7 @@ class CommandServiceFactoryTest extends MockeryTestCase
         $this->setUpServiceManager();
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -41,10 +41,8 @@ class CommandServiceFactoryTest extends MockeryTestCase
         $this->assertIsCallable(fn(\Psr\Container\ContainerInterface $container, string $requestedName, ?array $options = null): \Common\Service\Cqrs\Command\CommandService => $this->sut->__invoke($container, $requestedName, $options));
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeReturnsAnInstanceOfCommandService(): void
     {
         // Setup
@@ -68,10 +66,8 @@ class CommandServiceFactoryTest extends MockeryTestCase
         $this->assertInstanceOf(CommandService::class, $commandService);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeThrowsExceptionWhenConfigMissing(): void
     {
         // Setup

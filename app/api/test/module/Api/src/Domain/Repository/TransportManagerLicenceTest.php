@@ -11,11 +11,12 @@ use Mockery as m;
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\TransportManagerLicence::class)]
-class TransportManagerLicenceTest extends RepositoryTestCase
+final class TransportManagerLicenceTest extends RepositoryTestCase
 {
     /** @var  Repository\TransportManagerLicence */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repository\TransportManagerLicence::class, true);
@@ -74,12 +75,12 @@ class TransportManagerLicenceTest extends RepositoryTestCase
         $licenceId = 1;
         $this->sut->fetchRemovedTmForLicence($licenceId, true);
 
-        $this->assertStringContainsString('[QUERY] AND tml.licence = [[' . $licenceId . ']]', $this->query);
-        $this->assertStringContainsString('AND tml.deletedDate IS NOT NULL', $this->query);
-        $this->assertStringContainsString('AND tml.lastTmLetterDate IS NULL', $this->query);
-        $this->assertStringContainsString('AND tml.lastTmFirstEmailDate IS NOT NULL', $this->query);
-        $this->assertStringContainsString('AND tml.deletedDate <=', $this->query);
-        $this->assertStringContainsString('ORDER BY tml.deletedDate DESC', $this->query);
+        $this->assertStringContainsString('[QUERY] AND tml.licence = [[' . $licenceId . ']]', (string) $this->query);
+        $this->assertStringContainsString('AND tml.deletedDate IS NOT NULL', (string) $this->query);
+        $this->assertStringContainsString('AND tml.lastTmLetterDate IS NULL', (string) $this->query);
+        $this->assertStringContainsString('AND tml.lastTmFirstEmailDate IS NOT NULL', (string) $this->query);
+        $this->assertStringContainsString('AND tml.deletedDate <=', (string) $this->query);
+        $this->assertStringContainsString('ORDER BY tml.deletedDate DESC', (string) $this->query);
     }
 
     public function testFetchForTransportManager()

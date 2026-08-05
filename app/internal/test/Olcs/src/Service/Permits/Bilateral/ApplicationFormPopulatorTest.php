@@ -24,7 +24,7 @@ use Laminas\Form\Form;
  *
  * @author Jonathan Thomas <jonthan@opalise.co.uk>
  */
-class ApplicationFormPopulatorTest extends TestCase
+final class ApplicationFormPopulatorTest extends TestCase
 {
     public function testPopulate(): void
     {

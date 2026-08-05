@@ -22,36 +22,20 @@ use Laminas\Navigation\Page\Mvc as NavigationPage;
 use CommonTest\Common\Controller\Plugin\ControllerStub;
 use Psr\Container\ContainerInterface;
 
-class ElasticSearchTest extends MockeryTestCase
+final class ElasticSearchTest extends MockeryTestCase
 {
-    public $request;
-    public $routeMatch;
-    public $event;
-    public $sm;
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $container;
-    public $pm;
     public $mockPlaceholder;
     protected $sut;
-
-    protected $controller;
-
-    protected $mockServiceLocator;
-
-
-    protected $pluginManagerHelper;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->request = m::mock(Request::class);
+        $request = m::mock(Request::class);
 
-        $this->routeMatch = new RouteMatch(['controller' => 'index', 'action' => 'index', 'index' => 'SEARCHINDEX']);
-        $this->routeMatch->setMatchedRouteName('testindex');
+        $routeMatch = new RouteMatch(['controller' => 'index', 'action' => 'index', 'index' => 'SEARCHINDEX']);
+        $routeMatch->setMatchedRouteName('testindex');
 
-        $this->event = new MvcEvent();
+        $event = new MvcEvent();
 
         $routeStack = new SimpleRouteStack();
         $route = new Segment('/testindex/[:controller/[:action/]]');
@@ -59,23 +43,23 @@ class ElasticSearchTest extends MockeryTestCase
         $route = new Segment('/dashboard/[:controller/[:action/]]');
         $routeStack->addRoute('dashboard', $route);
 
-        $this->event->setRouter($routeStack);
+        $event->setRouter($routeStack);
 
-        $this->event->setRouteMatch($this->routeMatch);
-        $this->event->setRequest($this->request);
+        $event->setRouteMatch($routeMatch);
+        $event->setRequest($request);
 
-        $this->sm = m::mock(\Laminas\ServiceManager\ServiceManager::class)
+        $sm = m::mock(\Laminas\ServiceManager\ServiceManager::class)
             ->makePartial()
             ->setAllowOverride(true);
 
-        $this->container = m::mock(ContainerInterface::class);
-        $this->pm = new PluginManager($this->container);
-        $this->pm->setInvokableClass('ElasticSearch', ElasticSearch::class);
+        $container = m::mock(ContainerInterface::class);
+        $pm = new PluginManager($container);
+        $pm->setInvokableClass('ElasticSearch', ElasticSearch::class);
 
         $this->mockPlaceholder = m::mock(Placeholder::class);
         $this->sut = new ControllerStub($this->mockPlaceholder);
-        $this->sut->setEvent($this->event);
-        $this->sut->setPluginManager($this->pm);
+        $this->sut->setEvent($event);
+        $this->sut->setPluginManager($pm);
     }
 
     public function testInvokeOptionsSet(): void
@@ -95,8 +79,8 @@ class ElasticSearchTest extends MockeryTestCase
     {
         $result = $this->sut->pluginInvoke([]);
 
-        $this->assertEquals($result->getContainerName(), 'global_search');
-        $this->assertEquals($result->getPageRoute(), 'testindex');
+        $this->assertEquals('global_search', $result->getContainerName());
+        $this->assertEquals('testindex', $result->getPageRoute());
     }
 
     public function testProcessSearchData(): void
@@ -235,7 +219,7 @@ class ElasticSearchTest extends MockeryTestCase
         $result = $plugin->extractSearchData();
 
         $this->assertArrayHasKey('index', $result);
-        $this->assertEquals($result['index'], 'SEARCHINDEX');
+        $this->assertEquals('SEARCHINDEX', $result['index']);
     }
 
     public function testConfigureNavigation(): void
@@ -312,7 +296,7 @@ class ElasticSearchTest extends MockeryTestCase
         $view = new ViewModel();
         $result = $plugin->generateResults($view);
 
-        $this->assertEquals($result->results, 'RESULTS');
+        $this->assertEquals('RESULTS', $result->results);
     }
 
     public function testGetSetContainerName(): void

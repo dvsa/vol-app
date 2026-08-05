@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Fee;
 
 use Dvsa\Olcs\Transfer\Command\Fee\CreateFee;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Fee\CreateFee;
 /**
  * Create Fee test
  */
-class CreateFeeTest extends \PHPUnit\Framework\TestCase
+final class CreateFeeTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

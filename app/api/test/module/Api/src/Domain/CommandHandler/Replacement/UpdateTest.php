@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Entity\System\Replacement as ReplacementEntity;
  *
  * @author Andy Newton <andy@vitri.ltd
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -6,6 +6,8 @@
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Validators;
 
 use Common\Form\Elements\Validators\NoOfPermitsNotEmpty;
@@ -16,7 +18,7 @@ use Laminas\Validator\NotEmpty;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsNotEmptyTest extends \PHPUnit\Framework\TestCase
+final class NoOfPermitsNotEmptyTest extends \PHPUnit\Framework\TestCase
 {
     public $validator;
     /**
@@ -30,9 +32,8 @@ class NoOfPermitsNotEmptyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test isValid
-     *
-     * @dataProvider providerIsValid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerIsValid')]
     public function testIsValid($value, $expected): void
     {
         $this->assertEquals($expected, $this->validator->isValid($value, null));
@@ -54,15 +55,13 @@ class NoOfPermitsNotEmptyTest extends \PHPUnit\Framework\TestCase
     /**
      * Provider for isValid
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function providerIsValid()
+    public static function providerIsValid(): \Iterator
     {
-        return [
-            [' ', false],
-            ['ZYZ', true],
-            ['40', true],
-            ['', false]
-        ];
+        yield [' ', false];
+        yield ['ZYZ', true];
+        yield ['40', true];
+        yield ['', false];
     }
 }

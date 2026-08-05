@@ -9,7 +9,7 @@ use Olcs\Data\Mapper\RevocationsSla as Sut;
 use Laminas\Form\FormInterface;
 use Mockery as m;
 
-class RevocationsSlaTest extends MockeryTestCase
+final class RevocationsSlaTest extends MockeryTestCase
 {
     /**
      * testMapFromResult
@@ -22,37 +22,11 @@ class RevocationsSlaTest extends MockeryTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public static function mapFromFormDataProvider(): array
+    public static function mapFromFormDataProvider(): \Iterator
     {
-        return [
-            "valid form submission" => [
-                [
-                    'fields' => [
-                        'isSubmissionRequiredForApproval' => '0',
-                        'approvalSubmissionIssuedDate' => null,
-                        'approvalSubmissionReturnedDate' => null,
-                        'approvalSubmissionPresidingTc' => '',
-                        'iorLetterIssuedDate' => '2017-11-11',
-                        'operatorResponseDueDate' => '2017-11-11',
-                        'operatorResponseReceivedDate' => '2017-11-11',
-                        'isSubmissionRequiredForAction' => '0',
-                        'finalSubmissionIssuedDate' => null,
-                        'finalSubmissionReturnedDate' => null,
-                        'finalSubmissionPresidingTc' => '',
-                        'actionToBeTaken' => 'ptr_action_to_be_taken_revoke',
-                        'revocationLetterIssuedDate' => '2017-11-11',
-                        'nfaLetterIssuedDate' => null,
-                        'warningLetterIssuedDate' => null,
-                        'piAgreedDate' => null,
-                        'otherActionAgreedDate' => null
-                    ],
-                    'id' => 1,
-                    'version' => 1,
-                    'security' => '',
-                    'form-actions[continue]' => '',
-                    'form-actions' => ['submit' => '', 'cancel' => null]
-                ],
-                [
+        yield "valid form submission" => [
+            [
+                'fields' => [
                     'isSubmissionRequiredForApproval' => '0',
                     'approvalSubmissionIssuedDate' => null,
                     'approvalSubmissionReturnedDate' => null,
@@ -69,12 +43,35 @@ class RevocationsSlaTest extends MockeryTestCase
                     'nfaLetterIssuedDate' => null,
                     'warningLetterIssuedDate' => null,
                     'piAgreedDate' => null,
-                    'otherActionAgreedDate' => null,
-                    'id' => 1,
-                    'version' => 1,
-                ]
+                    'otherActionAgreedDate' => null
+                ],
+                'id' => 1,
+                'version' => 1,
+                'security' => '',
+                'form-actions[continue]' => '',
+                'form-actions' => ['submit' => '', 'cancel' => null]
+            ],
+            [
+                'isSubmissionRequiredForApproval' => '0',
+                'approvalSubmissionIssuedDate' => null,
+                'approvalSubmissionReturnedDate' => null,
+                'approvalSubmissionPresidingTc' => '',
+                'iorLetterIssuedDate' => '2017-11-11',
+                'operatorResponseDueDate' => '2017-11-11',
+                'operatorResponseReceivedDate' => '2017-11-11',
+                'isSubmissionRequiredForAction' => '0',
+                'finalSubmissionIssuedDate' => null,
+                'finalSubmissionReturnedDate' => null,
+                'finalSubmissionPresidingTc' => '',
+                'actionToBeTaken' => 'ptr_action_to_be_taken_revoke',
+                'revocationLetterIssuedDate' => '2017-11-11',
+                'nfaLetterIssuedDate' => null,
+                'warningLetterIssuedDate' => null,
+                'piAgreedDate' => null,
+                'otherActionAgreedDate' => null,
+                'id' => 1,
+                'version' => 1,
             ]
-
         ];
     }
 
@@ -91,12 +88,33 @@ class RevocationsSlaTest extends MockeryTestCase
         $this->assertEquals($expected, $actual);
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            "valid return from backend" => [
+        yield "valid return from backend" => [
 
-                [
+            [
+                'isSubmissionRequiredForApproval' => '0',
+                'approvalSubmissionIssuedDate' => null,
+                'approvalSubmissionReturnedDate' => null,
+                'approvalSubmissionPresidingTc' => '',
+                'iorLetterIssuedDate' => '2017-11-11',
+                'operatorResponseDueDate' => '2017-11-11',
+                'operatorResponseReceivedDate' => '2017-11-11',
+                'isSubmissionRequiredForAction' => '0',
+                'finalSubmissionIssuedDate' => null,
+                'finalSubmissionReturnedDate' => null,
+                'finalSubmissionPresidingTc' => '',
+                'actionToBeTaken' => 'ptr_action_to_be_taken_revoke',
+                'revocationLetterIssuedDate' => '2017-11-11',
+                'nfaLetterIssuedDate' => null,
+                'warningLetterIssuedDate' => null,
+                'piAgreedDate' => null,
+                'otherActionAgreedDate' => null,
+                'id' => 1,
+                'version' => 1,
+            ],
+            [
+                'fields' => [
                     'isSubmissionRequiredForApproval' => '0',
                     'approvalSubmissionIssuedDate' => null,
                     'approvalSubmissionReturnedDate' => null,
@@ -113,33 +131,10 @@ class RevocationsSlaTest extends MockeryTestCase
                     'nfaLetterIssuedDate' => null,
                     'warningLetterIssuedDate' => null,
                     'piAgreedDate' => null,
-                    'otherActionAgreedDate' => null,
-                    'id' => 1,
-                    'version' => 1,
+                    'otherActionAgreedDate' => null
                 ],
-                [
-                    'fields' => [
-                        'isSubmissionRequiredForApproval' => '0',
-                        'approvalSubmissionIssuedDate' => null,
-                        'approvalSubmissionReturnedDate' => null,
-                        'approvalSubmissionPresidingTc' => '',
-                        'iorLetterIssuedDate' => '2017-11-11',
-                        'operatorResponseDueDate' => '2017-11-11',
-                        'operatorResponseReceivedDate' => '2017-11-11',
-                        'isSubmissionRequiredForAction' => '0',
-                        'finalSubmissionIssuedDate' => null,
-                        'finalSubmissionReturnedDate' => null,
-                        'finalSubmissionPresidingTc' => '',
-                        'actionToBeTaken' => 'ptr_action_to_be_taken_revoke',
-                        'revocationLetterIssuedDate' => '2017-11-11',
-                        'nfaLetterIssuedDate' => null,
-                        'warningLetterIssuedDate' => null,
-                        'piAgreedDate' => null,
-                        'otherActionAgreedDate' => null
-                    ],
-                    'id' => 1,
-                    'version' => 1
-                ]
+                'id' => 1,
+                'version' => 1
             ]
         ];
     }

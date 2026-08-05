@@ -18,7 +18,7 @@ use Mockery as m;
  * Class CommandAdapterTest
  * @see CommandAdapter
  */
-class CommandAdapterTest extends MockeryTestCase
+final class CommandAdapterTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
@@ -27,9 +27,7 @@ class CommandAdapterTest extends MockeryTestCase
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authenticateReturnsFailureWhenCommandReturnsNotOk(): void
     {
         // Setup
@@ -50,14 +48,12 @@ class CommandAdapterTest extends MockeryTestCase
         $result = $sut->authenticate();
 
         //Assert
-        static::assertEquals(Result::FAILURE, $result->getCode());
-        static::assertEquals($cmdResult['messages'], $result->getMessages());
+        $this->assertEquals(Result::FAILURE, $result->getCode());
+        $this->assertEquals($cmdResult['messages'], $result->getMessages());
     }
 
-    /**
-     * @test
-     * @dataProvider commandResultDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('commandResultDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function authenticateReturnsResultObjectFromCommandResult(int $code, ?array $identity, ?array $messages): void
     {
         // Setup
@@ -80,42 +76,40 @@ class CommandAdapterTest extends MockeryTestCase
         $result = $sut->authenticate();
 
         //Assert
-        static::assertEquals($code, $result->getCode());
-        static::assertEquals($identity, $result->getIdentity());
-        static::assertEquals($messages, $result->getMessages());
+        $this->assertEquals($code, $result->getCode());
+        $this->assertEquals($identity, $result->getIdentity());
+        $this->assertEquals($messages, $result->getMessages());
     }
 
     /**
-     * @return ((int|string)[]|int)[][]
+     * @return \Iterator<(int | string), array<(array<(int | string)> | int)>>
      *
      * @psalm-return array{'with id and messages': array{code: 1, identity: array{id: 1}, messages: list{'message'}}, 'with id and mo messages': array{code: 1, identity: array{id: 1}, messages: array<never, never>}, 'with messages and no id': array{code: 1, identity: array<never, never>, messages: list{'message'}}}
      */
-    public function commandResultDataProvider(): array
+    public static function commandResultDataProvider(): \Iterator
     {
-        return [
-            'with id and messages' => [
-                'code' => 1,
-                'identity' => [
-                    'id' => 1
-                ],
-                'messages' => [
-                    'message'
-                ]
+        yield 'with id and messages' => [
+            'code' => 1,
+            'identity' => [
+                'id' => 1
             ],
-            'with id and mo messages' => [
-                'code' => 1,
-                'identity' => [
-                    'id' => 1
-                ],
-                'messages' => []
+            'messages' => [
+                'message'
+            ]
+        ];
+        yield 'with id and mo messages' => [
+            'code' => 1,
+            'identity' => [
+                'id' => 1
             ],
-            'with messages and no id' => [
-                'code' => 1,
-                'identity' => [],
-                'messages' => [
-                    'message'
-                ]
-            ],
+            'messages' => []
+        ];
+        yield 'with messages and no id' => [
+            'code' => 1,
+            'identity' => [],
+            'messages' => [
+                'message'
+            ]
         ];
     }
 

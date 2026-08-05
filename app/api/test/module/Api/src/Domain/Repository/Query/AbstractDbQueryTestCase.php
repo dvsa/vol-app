@@ -17,7 +17,7 @@ use Mockery as m;
  */
 abstract class AbstractDbQueryTestCase extends BaseAbstractDbQueryTestCase
 {
-    abstract public static function paramProvider(): array;
+    abstract public static function paramProvider(): iterable;
 
     #[\PHPUnit\Framework\Attributes\DataProvider('paramProvider')]
     public function testExecuteWithException(mixed $inputParams, mixed $inputTypes, mixed $expectedParams, mixed $expectedTypes): void

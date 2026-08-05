@@ -19,7 +19,7 @@ class OtherFinancesControllerFactory implements FactoryInterface
      * @param array|null $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): OtherFinancesController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): OtherFinancesController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

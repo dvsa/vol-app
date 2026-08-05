@@ -33,7 +33,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\UnpublishedPi as UnpublishedPiQry;
 /**
  * PiHearingTest
  */
-class PiHearingTest extends AbstractCommandHandlerTestCase
+final class PiHearingTest extends AbstractCommandHandlerTestCase
 {
     //variables to hold traffic area entity references
     protected $ta1;
@@ -353,24 +353,20 @@ class PiHearingTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function commandProvider(): array
+    public static function commandProvider(): \Iterator
     {
-        return [
-            [PiHearingCmd::class],
-            [PiDecisionCmd::class]
-        ];
+        yield [PiHearingCmd::class];
+        yield [PiDecisionCmd::class];
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function handleTmHearingProvider(): array
+    public static function handleTmHearingProvider(): \Iterator
     {
-        return [
-            [PiHearingCmd::class, CasesEntity::APP_CASE_TYPE],
-            [PiDecisionCmd::class, CasesEntity::LICENCE_CASE_TYPE]
-        ];
+        yield [PiHearingCmd::class, CasesEntity::APP_CASE_TYPE];
+        yield [PiDecisionCmd::class, CasesEntity::LICENCE_CASE_TYPE];
     }
 }

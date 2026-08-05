@@ -13,7 +13,7 @@ class NoteUrlFactory implements FactoryInterface
      * @return NoteUrl
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $request = $container->get('request');
         $urlHelper = $container->get('Helper\Url');

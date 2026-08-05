@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 /**
  * LicenceTest
  */
-class LicenceTest extends AbstractCommandHandlerTestCase
+final class LicenceTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

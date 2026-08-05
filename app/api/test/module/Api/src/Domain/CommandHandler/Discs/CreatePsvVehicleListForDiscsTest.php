@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreatePsvVehicleListForDiscsTest extends AbstractCommandHandlerTestCase
+final class CreatePsvVehicleListForDiscsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

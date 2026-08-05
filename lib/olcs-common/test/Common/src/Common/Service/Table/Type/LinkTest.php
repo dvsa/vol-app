@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Type;
 
 use Common\Service\Helper\UrlHelperService;
@@ -10,11 +12,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Table\Type\Link;
 use Common\Service\Helper\StackHelperService;
 
-class LinkTest extends MockeryTestCase
+final class LinkTest extends MockeryTestCase
 {
     protected $sut;
-
-    protected $table;
 
     protected $sm;
 
@@ -23,11 +23,11 @@ class LinkTest extends MockeryTestCase
     {
         $this->sm = new ServiceManager();
 
-        $this->table = m::mock(TableBuilder::class);
-        $this->table->expects('getServiceLocator')
+        $table = m::mock(TableBuilder::class);
+        $table->expects('getServiceLocator')
             ->andReturn($this->sm);
 
-        $this->sut = new Link($this->table);
+        $this->sut = new Link($table);
     }
 
     public function testRender(): void

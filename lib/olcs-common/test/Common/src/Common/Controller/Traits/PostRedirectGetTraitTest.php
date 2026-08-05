@@ -16,7 +16,7 @@ use Laminas\Stdlib\Parameters;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class PostRedirectGetTraitTest extends MockeryTestCase
+final class PostRedirectGetTraitTest extends MockeryTestCase
 {
     private Container $container;
 

@@ -22,7 +22,7 @@ class WebDavJsonWebTokenGenerationServiceFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): WebDavJsonWebTokenGenerationService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): WebDavJsonWebTokenGenerationService
     {
         $config = $container->get('Config');
         if (array_key_exists(static::CONFIG_KEY_NAMESPACE, $config)) {

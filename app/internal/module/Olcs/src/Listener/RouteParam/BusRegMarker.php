@@ -109,7 +109,7 @@ class BusRegMarker implements ListenerAggregateInterface, FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusRegMarker
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): BusRegMarker
     {
         $this->setMarkerService($container->get(\Olcs\Service\Marker\MarkerService::class));
         $this->setAnnotationBuilderService($container->get('TransferAnnotationBuilder'));

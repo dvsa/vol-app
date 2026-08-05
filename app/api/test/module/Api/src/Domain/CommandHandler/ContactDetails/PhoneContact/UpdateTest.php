@@ -12,10 +12,8 @@ use Dvsa\Olcs\Transfer\Command\ContactDetail\PhoneContact\Update as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\ContactDetails\PhoneContact\Update
- */
-class UpdateTest extends AbstractCommandHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\ContactDetails\PhoneContact\Update::class)]
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -70,6 +68,6 @@ class UpdateTest extends AbstractCommandHandlerTestCase
 
         $actual = $this->sut->handleCommand($command);
 
-        static::assertEquals(['Phone contact \'' . $id . '\' updated'], $actual->getMessages());
+        $this->assertEquals(['Phone contact \'' . $id . '\' updated'], $actual->getMessages());
     }
 }

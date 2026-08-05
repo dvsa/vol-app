@@ -74,7 +74,7 @@ class UpdateTemplateSource extends AbstractCommandHandler
         return $this->result;
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $fullContainer = $container;
 

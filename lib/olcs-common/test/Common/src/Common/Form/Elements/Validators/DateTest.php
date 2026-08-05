@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Validators;
 
 use Common\Form\Elements\Validators\Date;
@@ -9,14 +11,14 @@ use Common\Form\Elements\Validators\Date;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class DateTest extends \PHPUnit\Framework\TestCase
+final class DateTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @dataProvider providerIsValid
      * @param $expected
      * @param $value
      * @param array $errorMessages
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerIsValid')]
     public function testIsValid($expected, $value, $errorMessages = []): void
     {
         $errorMessages = empty($errorMessages) ? ['error' => 'message'] : $errorMessages;
@@ -30,45 +32,43 @@ class DateTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function providerIsValid()
+    public static function providerIsValid(): \Iterator
     {
-        return [
-            // valid date
-            'valid date' => [
-                true,
-                '2014-11-10',
-                [Date::INVALID => 'Please select a date']
-            ],
-            // empty dates should be valid
-            'null date' => [
-                true,
-                null,
-                [Date::INVALID => 'Please select a date']
-            ],
-            'empty string date' => [
-                false,
-                '',
-                [Date::INVALID => 'Please select a date']
-            ],
-            // other invalid dates
-            'impossible date' => [
-                false,
-                '2014-02-30',
-                [Date::INVALID_DATE => 'The input does not appear to be a valid value']
-            ],
-            'invalid string date' => [
-                false,
-                'invalidinputstring',
-                [Date::INVALID_DATE => 'The input does not appear to be a valid value']
-            ],
-            // the existing behaviour from LaminasDate is 'invalid date' for other data types
-            'invalid object' => [
-                false,
-                new \StdClass(),
-                [Date::INVALID_DATE => 'The input does not appear to be a valid value']
-            ],
+        // valid date
+        yield 'valid date' => [
+            true,
+            '2014-11-10',
+            [Date::INVALID => 'Please select a date']
+        ];
+        // empty dates should be valid
+        yield 'null date' => [
+            true,
+            null,
+            [Date::INVALID => 'Please select a date']
+        ];
+        yield 'empty string date' => [
+            false,
+            '',
+            [Date::INVALID => 'Please select a date']
+        ];
+        // other invalid dates
+        yield 'impossible date' => [
+            false,
+            '2014-02-30',
+            [Date::INVALID_DATE => 'The input does not appear to be a valid value']
+        ];
+        yield 'invalid string date' => [
+            false,
+            'invalidinputstring',
+            [Date::INVALID_DATE => 'The input does not appear to be a valid value']
+        ];
+        // the existing behaviour from LaminasDate is 'invalid date' for other data types
+        yield 'invalid object' => [
+            false,
+            new \StdClass(),
+            [Date::INVALID_DATE => 'The input does not appear to be a valid value']
         ];
     }
 }

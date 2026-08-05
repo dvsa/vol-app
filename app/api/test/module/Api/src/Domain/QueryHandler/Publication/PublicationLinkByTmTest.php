@@ -21,7 +21,7 @@ use Mockery as m;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PublicationLinkByTmTest extends QueryHandlerTestCase
+final class PublicationLinkByTmTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

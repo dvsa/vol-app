@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class FilteredTranslateableTextTest extends MockeryTestCase
+final class FilteredTranslateableTextTest extends MockeryTestCase
 {
     private $filter;
 
@@ -22,6 +22,7 @@ class FilteredTranslateableTextTest extends MockeryTestCase
 
     private $filteredTranslateableText;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->filter = 'htmlEscape';

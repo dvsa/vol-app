@@ -9,7 +9,7 @@ use Olcs\Controller\StaticAssetsController;
 class StaticAssetsControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): StaticAssetsController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): StaticAssetsController
     {
         $config = $container->get('Config');
         return new StaticAssetsController($config);

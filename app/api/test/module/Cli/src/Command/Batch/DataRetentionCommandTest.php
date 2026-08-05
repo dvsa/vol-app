@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class DataRetentionCommandTest extends TestCase
+final class DataRetentionCommandTest extends TestCase
 {
     public $mockQueryHandlerManager;
     private $command;
@@ -43,7 +43,7 @@ class DataRetentionCommandTest extends TestCase
     {
         $this->mockCommandHandlerManager->expects($this->once())
             ->method('handleCommand')
-            ->with($this->equalTo(Populate::create([])))
+            ->with(Populate::create([]))
             ->willReturn(new Result());
 
         $input = new ArrayInput(['--populate' => true], $this->command->getDefinition());
@@ -56,7 +56,7 @@ class DataRetentionCommandTest extends TestCase
         $limit = 10;
         $this->mockCommandHandlerManager->expects($this->once())
             ->method('handleCommand')
-            ->with($this->equalTo(DeleteEntities::create(['limit' => $limit])))
+            ->with(DeleteEntities::create(['limit' => $limit]))
             ->willReturn(new Result());
 
         $input = new ArrayInput(['--delete' => true, '--limit' => $limit], $this->command->getDefinition());
@@ -69,7 +69,7 @@ class DataRetentionCommandTest extends TestCase
         $limit = 10;
         $this->mockCommandHandlerManager->expects($this->once())
             ->method('handleCommand')
-            ->with($this->equalTo(Precheck::create(['limit' => $limit])))
+            ->with(Precheck::create(['limit' => $limit]))
             ->willReturn(new Result());
 
         $input = new ArrayInput(['--precheck' => true, '--limit' => $limit], $this->command->getDefinition());
@@ -81,7 +81,7 @@ class DataRetentionCommandTest extends TestCase
     {
         $this->mockQueryHandlerManager->expects($this->once())
             ->method('handleQuery')
-            ->with($this->equalTo(Postcheck::create([])))
+            ->with(Postcheck::create([]))
             ->willReturn(['count' => 0, 'result' => []]);
 
         $input = new ArrayInput(['--postcheck' => true], $this->command->getDefinition());

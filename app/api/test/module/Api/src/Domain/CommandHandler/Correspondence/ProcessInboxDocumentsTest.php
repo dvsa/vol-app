@@ -21,10 +21,10 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Correspondence\ProcessInboxDocuments::class)]
-class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
+final class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
 {
-    public const LIC_ID = 999;
-    public const ORG_ID = 7777;
+    public const int LIC_ID = 999;
+    public const int ORG_ID = 7777;
 
     /** @var  m\MockInterface */
     private $mockTempRenderer;
@@ -151,11 +151,11 @@ class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
         $user->setContactDetails($cd);
         $user->setTranslateToWelsh('Y');
 
-        $orgUser = (new OrganisationUser())
+        $orgUser = new OrganisationUser()
             ->setUser($user)
             ->setIsAdministrator('Y');
 
-        $organisation = (new Organisation())
+        $organisation = new Organisation()
             ->setId(self::ORG_ID)
             ->addOrganisationUsers(new ArrayCollection([$orgUser]));
 
@@ -195,14 +195,11 @@ class ProcessInboxDocumentsTest extends AbstractCommandHandlerTestCase
 
         $actual = $this->sut->handleCommand($command);
 
-        static::assertInstanceOf(Result::class, $actual);
-        static::assertEquals(
-            [
-                'Found 1 records to email',
-                sprintf(ProcessInboxDocuments::ERR_SEND_REMINDER, self::LIC_ID, self::ORG_ID),
-            ],
-            $actual->getMessages()
-        );
+        $this->assertInstanceOf(Result::class, $actual);
+        $this->assertEquals([
+            'Found 1 records to email',
+            sprintf(ProcessInboxDocuments::ERR_SEND_REMINDER, self::LIC_ID, self::ORG_ID),
+        ], $actual->getMessages());
     }
 
     public function testHandleCommandNoUsers(): void

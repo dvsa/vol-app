@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\User\AgreeTerms;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
-class AgreeTermsTest extends AbstractCommandHandlerTestCase
+final class AgreeTermsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

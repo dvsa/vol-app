@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\TaAddressPhone;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class TaAddressPhoneTest extends \PHPUnit\Framework\TestCase
+final class TaAddressPhoneTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -88,19 +88,17 @@ class TaAddressPhoneTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function dpAllTrafficAreas(): array
+    public static function dpAllTrafficAreas(): \Iterator
     {
-        return [
-            [TrafficArea::NORTH_EASTERN_TRAFFIC_AREA_CODE],
-            [TrafficArea::NORTH_WESTERN_TRAFFIC_AREA_CODE],
-            [TrafficArea::WEST_MIDLANDS_TRAFFIC_AREA_CODE],
-            [TrafficArea::EASTERN_TRAFFIC_AREA_CODE],
-            [TrafficArea::WELSH_TRAFFIC_AREA_CODE],
-            [TrafficArea::WESTERN_TRAFFIC_AREA_CODE],
-            [TrafficArea::SE_MET_TRAFFIC_AREA_CODE],
-            [TrafficArea::SCOTTISH_TRAFFIC_AREA_CODE],
-            [TrafficArea::NORTHERN_IRELAND_TRAFFIC_AREA_CODE],
-        ];
+        yield [TrafficArea::NORTH_EASTERN_TRAFFIC_AREA_CODE];
+        yield [TrafficArea::NORTH_WESTERN_TRAFFIC_AREA_CODE];
+        yield [TrafficArea::WEST_MIDLANDS_TRAFFIC_AREA_CODE];
+        yield [TrafficArea::EASTERN_TRAFFIC_AREA_CODE];
+        yield [TrafficArea::WELSH_TRAFFIC_AREA_CODE];
+        yield [TrafficArea::WESTERN_TRAFFIC_AREA_CODE];
+        yield [TrafficArea::SE_MET_TRAFFIC_AREA_CODE];
+        yield [TrafficArea::SCOTTISH_TRAFFIC_AREA_CODE];
+        yield [TrafficArea::NORTHERN_IRELAND_TRAFFIC_AREA_CODE];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderWithMatchingPhone')]
@@ -139,21 +137,18 @@ class TaAddressPhoneTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function dpRenderWithMatchingPhone(): array
+    public static function dpRenderWithMatchingPhone(): \Iterator
     {
         $withPhoneNumber = "TA Address 1\nLine 1\nLine 2\nLine 3\nLine 4\nLS2 4DD\n1234";
         $withoutPhoneNumber = "TA Address 1\nLine 1\nLine 2\nLine 3\nLine 4\nLS2 4DD";
-
-        return [
-            [TrafficArea::NORTH_EASTERN_TRAFFIC_AREA_CODE, $withPhoneNumber],
-            [TrafficArea::NORTH_WESTERN_TRAFFIC_AREA_CODE, $withPhoneNumber],
-            [TrafficArea::WEST_MIDLANDS_TRAFFIC_AREA_CODE, $withPhoneNumber],
-            [TrafficArea::EASTERN_TRAFFIC_AREA_CODE, $withPhoneNumber],
-            [TrafficArea::WELSH_TRAFFIC_AREA_CODE, $withPhoneNumber],
-            [TrafficArea::WESTERN_TRAFFIC_AREA_CODE, $withPhoneNumber],
-            [TrafficArea::SE_MET_TRAFFIC_AREA_CODE, $withPhoneNumber],
-            [TrafficArea::SCOTTISH_TRAFFIC_AREA_CODE, $withPhoneNumber],
-            [TrafficArea::NORTHERN_IRELAND_TRAFFIC_AREA_CODE, $withoutPhoneNumber],
-        ];
+        yield [TrafficArea::NORTH_EASTERN_TRAFFIC_AREA_CODE, $withPhoneNumber];
+        yield [TrafficArea::NORTH_WESTERN_TRAFFIC_AREA_CODE, $withPhoneNumber];
+        yield [TrafficArea::WEST_MIDLANDS_TRAFFIC_AREA_CODE, $withPhoneNumber];
+        yield [TrafficArea::EASTERN_TRAFFIC_AREA_CODE, $withPhoneNumber];
+        yield [TrafficArea::WELSH_TRAFFIC_AREA_CODE, $withPhoneNumber];
+        yield [TrafficArea::WESTERN_TRAFFIC_AREA_CODE, $withPhoneNumber];
+        yield [TrafficArea::SE_MET_TRAFFIC_AREA_CODE, $withPhoneNumber];
+        yield [TrafficArea::SCOTTISH_TRAFFIC_AREA_CODE, $withPhoneNumber];
+        yield [TrafficArea::NORTHERN_IRELAND_TRAFFIC_AREA_CODE, $withoutPhoneNumber];
     }
 }

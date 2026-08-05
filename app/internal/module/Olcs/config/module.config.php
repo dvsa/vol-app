@@ -12,7 +12,6 @@ use Common\Data\Object\Search\Publication;
 use Common\Data\Object\Search\User;
 use Common\Data\Object\Search\Vehicle;
 use Common\Service\Data as CommonDataService;
-use Laminas\Cache\Service\StorageCacheAbstractServiceFactory;
 use Laminas\Http\Request;
 use Laminas\Router\RouteStackInterface;
 use Olcs\Auth;
@@ -712,9 +711,6 @@ return [
             \Olcs\Service\EditorJs\HtmlConverter::class => \Olcs\Service\EditorJs\HtmlConverter::class,
             'Router' => Laminas\Router\Http\TreeRouteStack::class,
         ],
-        'abstract_factories' => [
-            StorageCacheAbstractServiceFactory::class,
-        ],
         'factories' => [
             RouteParam\Licence::class => RouteParam\Licence::class,
             ProcessingService\CreateVariationProcessingService::class => ProcessingService\CreateVariationProcessingServiceFactory::class,
@@ -777,6 +773,8 @@ return [
             Auth\Adapter\InternalCommandAdapter::class => Auth\Adapter\InternalCommandAdapterFactory::class,
             'RoutePluginManager' => Laminas\Router\RoutePluginManagerFactory::class,
             \Olcs\Listener\RouteParams::class => \Olcs\Listener\RouteParamsFactory::class,
+            'cache.redis.connection' => \Olcs\Service\Cache\RedisConnectionFactory::class,
+            'default-cache' => \Olcs\Service\Cache\DefaultCacheFactory::class,
         ]
     ],
     'form_elements' => [

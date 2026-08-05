@@ -17,7 +17,7 @@ use Olcs\FormService\Form\Lva\Safety;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class SafetyTest extends AbstractLvaFormServiceTestCase
+final class SafetyTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = Safety::class;
 }

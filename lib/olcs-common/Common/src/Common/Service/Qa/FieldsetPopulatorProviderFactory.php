@@ -8,7 +8,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class FieldsetPopulatorProviderFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FieldsetPopulatorProvider
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): FieldsetPopulatorProvider
     {
         $fieldsetPopulatorProvider = new FieldsetPopulatorProvider();
 

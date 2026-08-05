@@ -30,7 +30,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateOperatingCentreTest extends AbstractCommandHandlerTestCase
+final class CreateOperatingCentreTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -114,7 +114,7 @@ class CreateOperatingCentreTest extends AbstractCommandHandlerTestCase
         $this->expectedLicenceCacheClear($licence);
         $this->sut->handleCommand($command);
 
-        $this->assertEquals(1, $licence->getOperatingCentres()->count());
+        $this->assertCount(1, $licence->getOperatingCentres());
 
         /** @var LicenceOperatingCentre $savedLoc */
         $savedLoc = $licence->getOperatingCentres()->first();

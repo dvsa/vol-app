@@ -10,7 +10,7 @@ use Dvsa\OlcsTest\Transfer\Query\QueryTest;
 use PHPUnit\Framework\TestCase;
 use Laminas\Stdlib\ArraySerializableInterface;
 
-class VehicleTest extends TestCase
+final class VehicleTest extends TestCase
 {
     use QueryTest, DtoWithoutOptionalFieldsTest {
         DtoWithoutOptionalFieldsTest::testDefaultValues insteadof QueryTest;
