@@ -21,6 +21,13 @@ class LetterInstance extends AbstractLetterInstance
     public const STATUS_CANCELLED = 'ltr_sts_cancelled';
 
     /**
+     * Memoised result of getTodoRequiringIssueCounts(). Not mapped -- derived from the issues.
+     *
+     * @var array<int, int>|null
+     */
+    private ?array $todoRequiringIssueCounts = null;
+
+    /**
      * Letter instance sections
      *
      * @var \Doctrine\Common\Collections\Collection<int, LetterInstanceSection>
@@ -149,6 +156,51 @@ class LetterInstance extends AbstractLetterInstance
             $this->letterInstanceTodos->add($todo);
         }
         return $this;
+    }
+
+    /**
+     * How many of this letter's issues require each to-do, keyed by letter_todo_version id.
+     *
+     * A to-do is deduplicated when it is composed, so it appears once no matter how many of the
+     * selected issues call for it -- and it is attached to whichever issue happened to come first.
+     * A caseworker editing it therefore has no way to see that it is standing in for several
+     * issues. This supplies that count.
+     *
+     * Built in ONE pass over the issues and memoised, deliberately. Asking each to-do to work its
+     * own count out would walk every issue again per to-do, and letterIssueTodos is a LAZY
+     * association, so that shape is an N+1. This way the lazy load happens once per issue for the
+     * whole letter.
+     *
+     * @return array<int, int>
+     */
+    public function getTodoRequiringIssueCounts(): array
+    {
+        if ($this->todoRequiringIssueCounts !== null) {
+            return $this->todoRequiringIssueCounts;
+        }
+
+        $counts = [];
+
+        foreach ($this->getLetterInstanceIssues() as $instanceIssue) {
+            $issueVersion = $instanceIssue->getLetterIssueVersion();
+            if ($issueVersion === null) {
+                continue;
+            }
+
+            foreach ($issueVersion->getLetterIssueTodos() ?? [] as $issueTodo) {
+                $todoVersion = $issueTodo->getLetterTodoVersion();
+                if ($todoVersion === null) {
+                    continue;
+                }
+
+                $id = $todoVersion->getId();
+                $counts[$id] = ($counts[$id] ?? 0) + 1;
+            }
+        }
+
+        $this->todoRequiringIssueCounts = $counts;
+
+        return $counts;
     }
 
     /**

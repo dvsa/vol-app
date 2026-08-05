@@ -110,22 +110,40 @@ class LetterSectionVariant extends AbstractLetterSectionVariant
      */
     public function matchesContext(array $context): bool
     {
+        return $this->explainMatch($context) === [];
+    }
+
+    /**
+     * Which conditions stopped this variant matching.
+     *
+     * Same rules as matchesContext(), which defers to this so the two cannot drift. Reporting the
+     * failing dimensions rather than a bare false is what lets an admin be told "rejected on
+     * isVariation" instead of being left to work out why their wording never appears.
+     *
+     * @param array $context
+     * @return string[] Failing dimension names, empty when the variant matches
+     */
+    public function explainMatch(array $context): array
+    {
+        $failed = [];
+
         if ($this->goodsOrPsv !== null && $this->goodsOrPsv->getId() !== ($context['goodsOrPsv'] ?? null)) {
-            return false;
+            $failed[] = 'goodsOrPsv';
         }
         if ($this->isVariation !== null && $this->isVariation !== ($context['isVariation'] ?? null)) {
-            return false;
+            $failed[] = 'isVariation';
         }
         if ($this->isNi !== null && $this->isNi !== ($context['isNi'] ?? null)) {
-            return false;
+            $failed[] = 'isNi';
         }
         if ($this->organisationType !== null && $this->organisationType->getId() !== ($context['organisationType'] ?? null)) {
-            return false;
+            $failed[] = 'organisationType';
         }
         if ($this->letterChoice !== null && !in_array($this->letterChoice->getId(), $context['selectedChoiceIds'] ?? [])) {
-            return false;
+            $failed[] = 'letterChoice';
         }
-        return true;
+
+        return $failed;
     }
 
     /**
@@ -140,6 +158,22 @@ class LetterSectionVariant extends AbstractLetterSectionVariant
             && $this->isNi === null
             && $this->organisationType === null
             && $this->letterChoice === null;
+    }
+
+    /**
+     * How many conditions this variant pins down.
+     *
+     * Used to pick the narrowest matching variant when several match the same context.
+     *
+     * @return int 0 for the default variant, up to 5 for a fully conditioned one
+     */
+    public function getSpecificity(): int
+    {
+        return (int) ($this->goodsOrPsv !== null)
+            + (int) ($this->isVariation !== null)
+            + (int) ($this->isNi !== null)
+            + (int) ($this->organisationType !== null)
+            + (int) ($this->letterChoice !== null);
     }
 
     /**
