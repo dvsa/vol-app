@@ -20,7 +20,7 @@ use Mockery as m;
  * @package Dvsa\OlcsTest\Cli\Domain\QueryHandler\
  * use Dvsa\Olcs\Cli\Domain\QueryHandler\Util\GetDbValue
  */
-class GetDbValueTest extends QueryHandlerTestCase
+final class GetDbValueTest extends QueryHandlerTestCase
 {
     /** @var GetDbValue */
     protected $sut;

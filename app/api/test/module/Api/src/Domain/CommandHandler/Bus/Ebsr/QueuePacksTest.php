@@ -19,7 +19,7 @@ use Mockery as m;
 /**
  * QueuePacksTest
  */
-class QueuePacksTest extends AbstractCommandHandlerTestCase
+final class QueuePacksTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -112,7 +112,7 @@ class QueuePacksTest extends AbstractCommandHandlerTestCase
         $result = $this->sut->handleCommand($cmd);
 
         $this->assertInstanceOf(Result::class, $result);
-        $this->assertEquals($result->getMessages()[0], '2 packs were queued for upload');
+        $this->assertEquals('2 packs were queued for upload', $result->getMessages()[0]);
     }
 
     /**

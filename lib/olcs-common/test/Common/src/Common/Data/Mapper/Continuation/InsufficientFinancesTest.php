@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Continuation;
 
 use Common\Data\Mapper\Continuation\InsufficientFinances;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Common\Data\Mapper\Continuation\InsufficientFinances
- */
-class InsufficientFinancesTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Data\Mapper\Continuation\InsufficientFinances::class)]
+final class InsufficientFinancesTest extends MockeryTestCase
 {
     /**
      * @var InsufficientFinances
@@ -21,9 +21,7 @@ class InsufficientFinancesTest extends MockeryTestCase
         $this->sut = new InsufficientFinances();
     }
 
-    /**
-     * @dataProvider dataProviderTestMapFromResult
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestMapFromResult')]
     public function testMapFromResult($financialEvidenceUploaded, $expectedYesNo, $expectedRadio): void
     {
         $data = [
@@ -45,22 +43,18 @@ class InsufficientFinancesTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|null|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string | null)>>
      *
      * @psalm-return array{'financialEvidenceUploaded = null': list{null, null, null}, 'financialEvidenceUploaded = true': list{true, 'Y', 'upload'}, 'financialEvidenceUploaded = false': list{false, 'Y', 'send'}}
      */
-    public function dataProviderTestMapFromResult(): array
+    public static function dataProviderTestMapFromResult(): \Iterator
     {
-        return [
-            'financialEvidenceUploaded = null' => [null, null, null],
-            'financialEvidenceUploaded = true' => [true, 'Y', 'upload'],
-            'financialEvidenceUploaded = false' => [false, 'Y', 'send'],
-        ];
+        yield 'financialEvidenceUploaded = null' => [null, null, null];
+        yield 'financialEvidenceUploaded = true' => [true, 'Y', 'upload'];
+        yield 'financialEvidenceUploaded = false' => [false, 'Y', 'send'];
     }
 
-    /**
-     * @dataProvider dataProviderTestMapFromForm
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestMapFromForm')]
     public function testMapFromForm($radio, $expectedFinancialEvidenceUploaded): void
     {
         $formData = [
@@ -82,15 +76,13 @@ class InsufficientFinancesTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string)>>
      *
      * @psalm-return array{'radio = upload': list{'upload', true}, 'radio = send': list{'send', false}}
      */
-    public function dataProviderTestMapFromForm(): array
+    public static function dataProviderTestMapFromForm(): \Iterator
     {
-        return [
-            'radio = upload' => ['upload', true],
-            'radio = send' => ['send', false],
-        ];
+        yield 'radio = upload' => ['upload', true];
+        yield 'radio = send' => ['send', false];
     }
 }

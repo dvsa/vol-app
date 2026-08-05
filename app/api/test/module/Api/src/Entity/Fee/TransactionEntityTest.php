@@ -15,19 +15,17 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Entity\Fee\Transaction
- * @covers Dvsa\Olcs\Api\Entity\Fee\AbstractTransaction
- */
-class TransactionEntityTest extends EntityTester
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Fee\Transaction::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Fee\AbstractTransaction::class)]
+final class TransactionEntityTest extends EntityTester
 {
-    public const FEE_1_ID = 9001;
-    public const FEE_2_ID = 9002;
-    public const FEE_3_ID = 9003;
+    public const int FEE_1_ID = 9001;
+    public const int FEE_2_ID = 9002;
+    public const int FEE_3_ID = 9003;
 
-    public const ORG_1_ID = 8001;
-    public const TRANSACTION_1_ID = 70001;
-    public const TRANSACTION_2_ID = 70002;
+    public const int ORG_1_ID = 8001;
+    public const int TRANSACTION_1_ID = 70001;
+    public const int TRANSACTION_2_ID = 70002;
 
     /**
      * Define the entity to test
@@ -39,6 +37,7 @@ class TransactionEntityTest extends EntityTester
     /** @var  Entity */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new Entity();
@@ -69,17 +68,15 @@ class TransactionEntityTest extends EntityTester
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isOutstandingProvider(): array
+    public static function isOutstandingProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_OUTSTANDING, true],
-            [Entity::STATUS_CANCELLED, false],
-            [Entity::STATUS_FAILED, false],
-            [Entity::STATUS_PAID, false],
-            ['invalid', false],
-        ];
+        yield [Entity::STATUS_OUTSTANDING, true];
+        yield [Entity::STATUS_CANCELLED, false];
+        yield [Entity::STATUS_FAILED, false];
+        yield [Entity::STATUS_PAID, false];
+        yield ['invalid', false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('isPaidProvider')]
@@ -113,18 +110,16 @@ class TransactionEntityTest extends EntityTester
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isPaidProvider(): array
+    public static function isPaidProvider(): \Iterator
     {
-        return [
-            [Entity::STATUS_OUTSTANDING, false],
-            [Entity::STATUS_CANCELLED, false],
-            [Entity::STATUS_FAILED, false],
-            [Entity::STATUS_PAID, true],
-            [Entity::STATUS_COMPLETE, true],
-            ['invalid', false],
-        ];
+        yield [Entity::STATUS_OUTSTANDING, false];
+        yield [Entity::STATUS_CANCELLED, false];
+        yield [Entity::STATUS_FAILED, false];
+        yield [Entity::STATUS_PAID, true];
+        yield [Entity::STATUS_COMPLETE, true];
+        yield ['invalid', false];
     }
 
     /**
@@ -176,22 +171,20 @@ class TransactionEntityTest extends EntityTester
             ->andReturn($isCompletePaymentOrAdjustment)
             ->getMock();
 
-        static::assertSame($expect, $sut->displayReversalOption());
+        $this->assertSame($expect, $sut->displayReversalOption());
     }
 
-    public static function dpTestDisplayReversalOption(): array
+    public static function dpTestDisplayReversalOption(): \Iterator
     {
-        return [
-            [
-                'isMigrated' => true,
-                'isCompletePaymentOrAdjustment' => false,
-                'expect' => false,
-            ],
-            [
-                'isMigrated' => false,
-                'isCompletePaymentOrAdjustment' => true,
-                'expect' => true,
-            ],
+        yield [
+            'isMigrated' => true,
+            'isCompletePaymentOrAdjustment' => false,
+            'expect' => false,
+        ];
+        yield [
+            'isMigrated' => false,
+            'isCompletePaymentOrAdjustment' => true,
+            'expect' => true,
         ];
     }
 
@@ -201,27 +194,25 @@ class TransactionEntityTest extends EntityTester
         $this->sut->setPaymentMethod($paymentMethod);
         $this->sut->setLegacyStatus($legacyStatus);
 
-        static::assertSame($expect, $this->sut->isMigrated());
+        $this->assertSame($expect, $this->sut->isMigrated());
     }
 
-    public static function dpTestIsMirgated(): array
+    public static function dpTestIsMirgated(): \Iterator
     {
-        return [
-            [
-                'paymentMethod' => new RefData(Fee::METHOD_MIGRATED),
-                'legacyStatus' => null,
-                'expect' => true,
-            ],
-            [
-                new RefData(Fee::METHOD_CHEQUE),
-                1,
-                true,
-            ],
-            [
-                new RefData(Fee::METHOD_CHEQUE),
-                null,
-                false,
-            ],
+        yield [
+            'paymentMethod' => new RefData(Fee::METHOD_MIGRATED),
+            'legacyStatus' => null,
+            'expect' => true,
+        ];
+        yield [
+            new RefData(Fee::METHOD_CHEQUE),
+            1,
+            true,
+        ];
+        yield [
+            new RefData(Fee::METHOD_CHEQUE),
+            null,
+            false,
         ];
     }
 
@@ -235,30 +226,28 @@ class TransactionEntityTest extends EntityTester
             ->shouldReceive('isComplete')->once()->andReturn($isComplete)
             ->getMock();
 
-        static::assertSame($expect, $sut->isCompletePaymentOrAdjustment());
+        $this->assertSame($expect, $sut->isCompletePaymentOrAdjustment());
     }
 
-    public static function dpTestIsCompletePaymentOrAdjustment(): array
+    public static function dpTestIsCompletePaymentOrAdjustment(): \Iterator
     {
-        return [
-            [
-                'isPayment' => true,
-                'isAdjustment' => false,
-                'isComplete' => true,
-                'expect' => true,
-            ],
-            [
-                'isPayment' => false,
-                'isAdjustment' => true,
-                'isComplete' => true,
-                'expect' => true,
-            ],
-            [
-                'isPayment' => true,
-                'isAdjustment' => true,
-                'isComplete' => false,
-                'expect' => false,
-            ],
+        yield [
+            'isPayment' => true,
+            'isAdjustment' => false,
+            'isComplete' => true,
+            'expect' => true,
+        ];
+        yield [
+            'isPayment' => false,
+            'isAdjustment' => true,
+            'isComplete' => true,
+            'expect' => true,
+        ];
+        yield [
+            'isPayment' => true,
+            'isAdjustment' => true,
+            'isComplete' => false,
+            'expect' => false,
         ];
     }
 
@@ -271,27 +260,25 @@ class TransactionEntityTest extends EntityTester
             ->shouldReceive('isReversed')->times($isReversed === null ? 0 : 1)->andReturn($isReversed)
             ->getMock();
 
-        static::assertSame($expect, $sut->canReverse());
+        $this->assertSame($expect, $sut->canReverse());
     }
 
-    public static function dpTestCanReverse(): array
+    public static function dpTestCanReverse(): \Iterator
     {
-        return [
-            [
-                'displayReversalOption' => false,
-                'isReversed' => null,
-                'expect' => false,
-            ],
-            [
-                'displayReversalOption' => true,
-                'isReversed' => true,
-                'expect' => false,
-            ],
-            [
-                'displayReversalOption' => true,
-                'isReversed' => false,
-                'expect' => true,
-            ],
+        yield [
+            'displayReversalOption' => false,
+            'isReversed' => null,
+            'expect' => false,
+        ];
+        yield [
+            'displayReversalOption' => true,
+            'isReversed' => true,
+            'expect' => false,
+        ];
+        yield [
+            'displayReversalOption' => true,
+            'isReversed' => false,
+            'expect' => true,
         ];
     }
 
@@ -300,47 +287,45 @@ class TransactionEntityTest extends EntityTester
     {
         $this->sut->setFeeTransactions(new ArrayCollection($transactions));
 
-        static::assertSame($expect, $this->sut->isReversed());
+        $this->assertSame($expect, $this->sut->isReversed());
     }
 
-    public static function dpTestIsReserved(): array
+    public static function dpTestIsReserved(): \Iterator
     {
-        return [
-            'no fee transactions' => [
-                [],
-                false,
+        yield 'no fee transactions' => [
+            [],
+            false,
+        ];
+        yield 'one refunded fee transaction' => [
+            [
+                m::mock(FeeTransaction::class)
+                    ->shouldReceive('isRefundedOrReversed')
+                    ->andReturn(true)
+                    ->getMock(),
             ],
-            'one refunded fee transaction' => [
-                [
-                    m::mock(FeeTransaction::class)
-                        ->shouldReceive('isRefundedOrReversed')
-                        ->andReturn(true)
-                        ->getMock(),
-                ],
-                true,
+            true,
+        ];
+        yield 'one other fee transaction' => [
+            [
+                m::mock(FeeTransaction::class)
+                    ->shouldReceive('isRefundedOrReversed')
+                    ->andReturn(false)
+                    ->getMock(),
             ],
-            'one other fee transaction' => [
-                [
-                    m::mock(FeeTransaction::class)
-                        ->shouldReceive('isRefundedOrReversed')
-                        ->andReturn(false)
-                        ->getMock(),
-                ],
-                false,
+            false,
+        ];
+        yield 'mix of fee transactions' => [
+            [
+                m::mock(FeeTransaction::class)
+                    ->shouldReceive('isRefundedOrReversed')
+                    ->andReturn(false)
+                    ->getMock(),
+                m::mock(FeeTransaction::class)
+                    ->shouldReceive('isRefundedOrReversed')
+                    ->andReturn(true)
+                    ->getMock(),
             ],
-            'mix of fee transactions' => [
-                [
-                    m::mock(FeeTransaction::class)
-                        ->shouldReceive('isRefundedOrReversed')
-                        ->andReturn(false)
-                        ->getMock(),
-                    m::mock(FeeTransaction::class)
-                        ->shouldReceive('isRefundedOrReversed')
-                        ->andReturn(true)
-                        ->getMock(),
-                ],
-                true,
-            ],
+            true,
         ];
     }
 
@@ -380,62 +365,59 @@ class TransactionEntityTest extends EntityTester
         $this->sut->setFeeTransactions(
             new ArrayCollection(
                 [
-                    (new FeeTransaction())
+                    new FeeTransaction()
                         ->setId(self::TRANSACTION_1_ID),
-                    (new FeeTransaction())
+                    new FeeTransaction()
                         ->setId(self::TRANSACTION_2_ID),
                 ]
             )
         );
 
-        static::assertEquals(
-            [self::TRANSACTION_1_ID, self::TRANSACTION_2_ID],
-            $this->sut->getFeeTransactionIds()
-        );
+        $this->assertEquals([self::TRANSACTION_1_ID, self::TRANSACTION_2_ID], $this->sut->getFeeTransactionIds());
     }
 
     public function testIsWaive(): void
     {
         $this->sut->setType(new RefData('NOT_WAIVE'));
-        static::assertFalse($this->sut->isWaive());
+        $this->assertFalse($this->sut->isWaive());
 
         $this->sut->setType(new RefData(Transaction::TYPE_WAIVE));
-        static::assertTrue($this->sut->isWaive());
+        $this->assertTrue($this->sut->isWaive());
     }
 
     public function testisPayment(): void
     {
         $this->sut->setType(new RefData('NOT_PAYMENT'));
-        static::assertFalse($this->sut->isPayment());
+        $this->assertFalse($this->sut->isPayment());
 
         $this->sut->setType(new RefData(Transaction::TYPE_PAYMENT));
-        static::assertTrue($this->sut->isPayment());
+        $this->assertTrue($this->sut->isPayment());
     }
 
     public function testIsAdjustment(): void
     {
         $this->sut->setType(new RefData('NOT_ADJUSTMENT'));
-        static::assertFalse($this->sut->isAdjustment());
+        $this->assertFalse($this->sut->isAdjustment());
 
         $this->sut->setType(new RefData(Transaction::TYPE_ADJUSTMENT));
-        static::assertTrue($this->sut->isAdjustment());
+        $this->assertTrue($this->sut->isAdjustment());
     }
 
     public function testIsReversal(): void
     {
         $this->sut->setType(new RefData('NOT_REVERSAL'));
-        static::assertFalse($this->sut->isReversal());
+        $this->assertFalse($this->sut->isReversal());
 
         $this->sut->setType(new RefData(Transaction::TYPE_REVERSAL));
-        static::assertTrue($this->sut->isReversal());
+        $this->assertTrue($this->sut->isReversal());
     }
 
     public function testGetFeeTransactionsForReversal(): void
     {
-        $ft1 = (new FeeTransaction())
+        $ft1 = new FeeTransaction()
             ->setReversedFeeTransaction(new FeeTransaction());
 
-        $ft2 = (new FeeTransaction())
+        $ft2 = new FeeTransaction()
             ->setReversingFeeTransactions(new ArrayCollection([new FeeTransaction()]));
 
         $ft3 = (new FeeTransaction());
@@ -444,15 +426,12 @@ class TransactionEntityTest extends EntityTester
             new ArrayCollection([$ft1, $ft2, $ft3])
         );
 
-        static::assertEquals(
-            [$ft3],
-            $this->sut->getFeeTransactionsForReversal()
-        );
+        $this->assertEquals([$ft3], $this->sut->getFeeTransactionsForReversal());
     }
 
     public function testGetFeeTransactionsForAdjustment(): void
     {
-        $ft1 = (new FeeTransaction())
+        $ft1 = new FeeTransaction()
             ->setReversedFeeTransaction(new FeeTransaction());
 
         $ft2 = new FeeTransaction();
@@ -461,39 +440,36 @@ class TransactionEntityTest extends EntityTester
             new ArrayCollection([$ft1, $ft2])
         );
 
-        static::assertEquals(
-            [$ft2],
-            $this->sut->getFeeTransactionsForAdjustment()
-        );
+        $this->assertEquals([$ft2], $this->sut->getFeeTransactionsForAdjustment());
     }
 
     public function testGetProcessedByFullName(): void
     {
         //  check is person
-        $person = (new Entities\Person\Person())
+        $person = new Entities\Person\Person()
             ->setForename('unit_ForeName')
             ->setFamilyName('unit_FamilyName');
 
-        $contactDetails = (new Entities\ContactDetails\ContactDetails(new RefData(null)))
+        $contactDetails = new Entities\ContactDetails\ContactDetails(new RefData(null))
             ->setPerson($person);
 
-        $user = (new Entities\User\User(999, null))
+        $user = new Entities\User\User(999, null)
             ->setContactDetails($contactDetails);
 
         $this->sut->setProcessedByUser($user);
 
-        static::assertEquals('unit_ForeName unit_FamilyName', $this->sut->getProcessedByFullName());
+        $this->assertEquals('unit_ForeName unit_FamilyName', $this->sut->getProcessedByFullName());
 
         //  check on null
         $this->sut->setProcessedByUser(null);
 
-        static::assertNull($this->sut->getProcessedByFullName());
+        $this->assertNull($this->sut->getProcessedByFullName());
     }
 
     public function testGetProcessedByFullNameNoPerson(): void
     {
-        $contactDetails = (new Entities\ContactDetails\ContactDetails(new RefData(null)))->setPerson(null);
-        $user = (new Entities\User\User(999, null))->setContactDetails($contactDetails);
+        $contactDetails = new Entities\ContactDetails\ContactDetails(new RefData(null))->setPerson(null);
+        $user = new Entities\User\User(999, null)->setContactDetails($contactDetails);
         $user->setLoginId('foo');
 
         $this->sut->setProcessedByUser($user);
@@ -503,22 +479,19 @@ class TransactionEntityTest extends EntityTester
 
     public function testGetFees(): void
     {
-        $fee = (new Fee(new FeeType(), null, new RefData()))
+        $fee = new Fee(new FeeType(), null, new RefData())
             ->setId(self::FEE_1_ID);
 
-        $ft = (new FeeTransaction())
+        $ft = new FeeTransaction()
             ->setFee($fee);
 
         $this->sut->setFeeTransactions(
             new ArrayCollection([$ft])
         );
 
-        static::assertEquals(
-            [
-                self::FEE_1_ID => $fee,
-            ],
-            $this->sut->getFees()
-        );
+        $this->assertEquals([
+            self::FEE_1_ID => $fee,
+        ], $this->sut->getFees());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetPreviousTransaction')]
@@ -526,15 +499,15 @@ class TransactionEntityTest extends EntityTester
     {
         $transaction = new Transaction();
 
-        $ftPrev = (new FeeTransaction())
+        $ftPrev = new FeeTransaction()
             ->setTransaction($transaction);
 
         $this->sut->setFeeTransactions(
             new ArrayCollection(
                 [
-                    (new FeeTransaction())
+                    new FeeTransaction()
                         ->setReversedFeeTransaction(null),
-                    (new FeeTransaction())
+                    new FeeTransaction()
                         ->setReversedFeeTransaction($ftPrev),
                 ]
             )
@@ -546,54 +519,52 @@ class TransactionEntityTest extends EntityTester
             ->getPreviousTransaction();
 
         if ($expect === true) {
-            static::assertSame($transaction, $actual);
+            $this->assertSame($transaction, $actual);
         } else {
-            static::assertNull($actual);
+            $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Fee\Transaction::class, $actual);
         }
     }
 
-    public static function dpTestGetPreviousTransaction(): array
+    public static function dpTestGetPreviousTransaction(): \Iterator
     {
-        return [
-            [
-                'transType' => new RefData(Transaction::TYPE_REVERSAL),
-                'expect' => true,
-            ],
-            [
-                'transType' => new RefData(Transaction::TYPE_ADJUSTMENT),
-                'expect' => true,
-            ],
-            [
-                'transType' => new RefData('TYPE_INVALID'),
-                'expect' => null,
-            ],
+        yield [
+            'transType' => new RefData(Transaction::TYPE_REVERSAL),
+            'expect' => true,
+        ];
+        yield [
+            'transType' => new RefData(Transaction::TYPE_ADJUSTMENT),
+            'expect' => true,
+        ];
+        yield [
+            'transType' => new RefData('TYPE_INVALID'),
+            'expect' => null,
         ];
     }
 
     public function testGetAmountAllocatedToFeeId(): void
     {
         //  check condition - Fee Id match but has Reversed transaction
-        $ft1 = (new FeeTransaction())
+        $ft1 = new FeeTransaction()
             ->setFee(
-                (new Fee(new FeeType(), null, new RefData()))
+                new Fee(new FeeType(), null, new RefData())
                     ->setId(self::FEE_1_ID)
             )
             ->setReversedFeeTransaction(new FeeTransaction())
             ->setAmount(7);
 
         //  check condition - Fee Id Not match and not has Reversed transaction
-        $ft2 = (new FeeTransaction())
+        $ft2 = new FeeTransaction()
             ->setFee(
-                (new Fee(new FeeType(), null, new RefData()))
+                new Fee(new FeeType(), null, new RefData())
                     ->setId(self::FEE_2_ID)
             )
             ->setReversedFeeTransaction(null)
             ->setAmount(11);
 
         //  check condition - Fee Id is match and not has Reversed transation
-        $ft3 = (new FeeTransaction())
+        $ft3 = new FeeTransaction()
             ->setFee(
-                (new Fee(new FeeType(), null, new RefData()))
+                new Fee(new FeeType(), null, new RefData())
                     ->setId(self::FEE_1_ID)
             )
             ->setReversedFeeTransaction(null)
@@ -604,12 +575,12 @@ class TransactionEntityTest extends EntityTester
         );
 
         //  check is Reversal
-        static::assertEquals(13, $this->sut->getAmountAllocatedToFeeId(self::FEE_1_ID));
+        $this->assertEquals(13, $this->sut->getAmountAllocatedToFeeId(self::FEE_1_ID));
     }
 
     public function testGetRelatedOrganisation(): void
     {
-        $org = (new Entities\Organisation\Organisation())
+        $org = new Entities\Organisation\Organisation()
             ->setId(self::ORG_1_ID);
 
         /** @var Fee $fee */
@@ -618,7 +589,7 @@ class TransactionEntityTest extends EntityTester
             ->shouldReceive('getRelatedOrganisation')->times(2)->andReturn($org)
             ->getMock();
 
-        $ft = (new FeeTransaction())
+        $ft = new FeeTransaction()
             ->setFee($fee);
 
         $this->sut->setFeeTransactions(
@@ -626,11 +597,8 @@ class TransactionEntityTest extends EntityTester
         );
 
         //  check is Reversal
-        static::assertEquals(
-            [
-                self::ORG_1_ID => $org,
-            ],
-            $this->sut->getRelatedOrganisation()
-        );
+        $this->assertEquals([
+            self::ORG_1_ID => $org,
+        ], $this->sut->getRelatedOrganisation());
     }
 }

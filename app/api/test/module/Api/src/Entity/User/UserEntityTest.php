@@ -27,18 +27,12 @@ use ReflectionClass;
  *
  * Initially auto-generated but won't be overridden
  */
-class UserEntityTest extends EntityTester
+final class UserEntityTest extends EntityTester
 {
-    /**
-     * Define the entity to test
-     *
-     * @var Entity
-     */
-    protected $sut;
-
     protected $entityClass = Entity::class;
 
 
+    #[\Override]
     public function setUp(): void
     {
         $this->entity = $this->instantiate($this->entityClass);
@@ -66,20 +60,17 @@ class UserEntityTest extends EntityTester
         $this->assertEquals($expectedIsInternal, $this->entity->isInternal());
     }
 
-    public static function getUserTypeDataProvider(): array
+    public static function getUserTypeDataProvider(): \Iterator
     {
         $team = m::mock(TeamEntity::class);
         $localAuthority = m::mock(LocalAuthorityEntity::class);
         $transportManager = m::mock(TransportManagerEntity::class);
         $partnerContactDetails = m::mock(ContactDetailsEntity::class);
-
-        return [
-            [$team, null, null, null, Entity::USER_TYPE_INTERNAL, true],
-            [null, $localAuthority, null, null, Entity::USER_TYPE_LOCAL_AUTHORITY, false],
-            [null, null, $transportManager, null, Entity::USER_TYPE_TRANSPORT_MANAGER, false],
-            [null, null, null, $partnerContactDetails, Entity::USER_TYPE_PARTNER, false],
-            [null, null, null, null, Entity::USER_TYPE_OPERATOR, false],
-        ];
+        yield [$team, null, null, null, Entity::USER_TYPE_INTERNAL, true];
+        yield [null, $localAuthority, null, null, Entity::USER_TYPE_LOCAL_AUTHORITY, false];
+        yield [null, null, $transportManager, null, Entity::USER_TYPE_TRANSPORT_MANAGER, false];
+        yield [null, null, null, $partnerContactDetails, Entity::USER_TYPE_PARTNER, false];
+        yield [null, null, null, null, Entity::USER_TYPE_OPERATOR, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpCreateInternal')]
@@ -115,21 +106,19 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(null, $entity->getTransportManager());
         $this->assertEquals(null, $entity->getPartnerContactDetails());
         $this->assertEquals(null, $entity->getLocalAuthority());
-        $this->assertEquals(0, $entity->getOrganisationUsers()->count());
+        $this->assertCount(0, $entity->getOrganisationUsers());
         $this->assertEquals('DVSA', $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
         $this->assertFalse($entity->isAdministrator());
     }
 
-    public static function dpCreateInternal(): array
+    public static function dpCreateInternal(): \Iterator
     {
-        return [
-            [RoleEntity::ROLE_SYSTEM_ADMIN],
-            [RoleEntity::ROLE_INTERNAL_ADMIN],
-            [RoleEntity::ROLE_INTERNAL_CASE_WORKER],
-            [RoleEntity::ROLE_INTERNAL_READ_ONLY],
-            [RoleEntity::ROLE_INTERNAL_LIMITED_READ_ONLY],
-        ];
+        yield [RoleEntity::ROLE_SYSTEM_ADMIN];
+        yield [RoleEntity::ROLE_INTERNAL_ADMIN];
+        yield [RoleEntity::ROLE_INTERNAL_CASE_WORKER];
+        yield [RoleEntity::ROLE_INTERNAL_READ_ONLY];
+        yield [RoleEntity::ROLE_INTERNAL_LIMITED_READ_ONLY];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpUpdateInternal')]
@@ -185,21 +174,19 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(null, $entity->getTransportManager());
         $this->assertEquals(null, $entity->getPartnerContactDetails());
         $this->assertEquals(null, $entity->getLocalAuthority());
-        $this->assertEquals(0, $entity->getOrganisationUsers()->count());
+        $this->assertCount(0, $entity->getOrganisationUsers());
         $this->assertEquals('DVSA', $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
         $this->assertFalse($entity->isAdministrator());
     }
 
-    public static function dpUpdateInternal(): array
+    public static function dpUpdateInternal(): \Iterator
     {
-        return [
-            [RoleEntity::ROLE_SYSTEM_ADMIN],
-            [RoleEntity::ROLE_INTERNAL_ADMIN],
-            [RoleEntity::ROLE_INTERNAL_CASE_WORKER],
-            [RoleEntity::ROLE_INTERNAL_READ_ONLY],
-            [RoleEntity::ROLE_INTERNAL_LIMITED_READ_ONLY],
-        ];
+        yield [RoleEntity::ROLE_SYSTEM_ADMIN];
+        yield [RoleEntity::ROLE_INTERNAL_ADMIN];
+        yield [RoleEntity::ROLE_INTERNAL_CASE_WORKER];
+        yield [RoleEntity::ROLE_INTERNAL_READ_ONLY];
+        yield [RoleEntity::ROLE_INTERNAL_LIMITED_READ_ONLY];
     }
 
     public function testCreateTransportManager(): void
@@ -236,7 +223,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals($data['transportManager'], $entity->getTransportManager());
         $this->assertEquals(null, $entity->getPartnerContactDetails());
         $this->assertEquals(null, $entity->getLocalAuthority());
-        $this->assertEquals(1, $entity->getOrganisationUsers()->count());
+        $this->assertCount(1, $entity->getOrganisationUsers());
         $this->assertEquals('Y', $entity->getOrganisationUsers()->first()->getIsAdministrator());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
@@ -299,7 +286,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals($data['transportManager'], $entity->getTransportManager());
         $this->assertEquals(null, $entity->getPartnerContactDetails());
         $this->assertEquals(null, $entity->getLocalAuthority());
-        $this->assertEquals(1, $entity->getOrganisationUsers()->count());
+        $this->assertCount(1, $entity->getOrganisationUsers());
         $this->assertEquals('N', $entity->getOrganisationUsers()->first()->getIsAdministrator());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
@@ -342,7 +329,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(null, $entity->getTransportManager());
         $this->assertEquals($data['partnerContactDetails'], $entity->getPartnerContactDetails());
         $this->assertEquals(null, $entity->getLocalAuthority());
-        $this->assertEquals(0, $entity->getOrganisationUsers()->count());
+        $this->assertCount(0, $entity->getOrganisationUsers());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
         $this->assertFalse($entity->isAdministrator());
@@ -404,7 +391,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(null, $entity->getTransportManager());
         $this->assertEquals($data['partnerContactDetails'], $entity->getPartnerContactDetails());
         $this->assertEquals(null, $entity->getLocalAuthority());
-        $this->assertEquals(0, $entity->getOrganisationUsers()->count());
+        $this->assertCount(0, $entity->getOrganisationUsers());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
         $this->assertFalse($entity->isAdministrator());
@@ -446,7 +433,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(null, $entity->getTransportManager());
         $this->assertEquals(null, $entity->getPartnerContactDetails());
         $this->assertEquals($data['localAuthority'], $entity->getLocalAuthority());
-        $this->assertEquals(0, $entity->getOrganisationUsers()->count());
+        $this->assertCount(0, $entity->getOrganisationUsers());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
         $this->assertFalse($entity->isAdministrator());
@@ -508,7 +495,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(null, $entity->getTransportManager());
         $this->assertEquals(null, $entity->getPartnerContactDetails());
         $this->assertEquals($data['localAuthority'], $entity->getLocalAuthority());
-        $this->assertEquals(0, $entity->getOrganisationUsers()->count());
+        $this->assertCount(0, $entity->getOrganisationUsers());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
         $this->assertFalse($entity->isAdministrator());
@@ -548,7 +535,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(null, $entity->getTransportManager());
         $this->assertEquals(null, $entity->getPartnerContactDetails());
         $this->assertEquals(null, $entity->getLocalAuthority());
-        $this->assertEquals(1, $entity->getOrganisationUsers()->count());
+        $this->assertCount(1, $entity->getOrganisationUsers());
         $this->assertEquals('Y', $entity->getOrganisationUsers()->first()->getIsAdministrator());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
@@ -591,7 +578,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(null, $entity->getTransportManager());
         $this->assertEquals(null, $entity->getPartnerContactDetails());
         $this->assertEquals(null, $entity->getLocalAuthority());
-        $this->assertEquals(1, $entity->getOrganisationUsers()->count());
+        $this->assertCount(1, $entity->getOrganisationUsers());
         $this->assertEquals('Y', $entity->getOrganisationUsers()->first()->getIsAdministrator());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
@@ -654,7 +641,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals(null, $entity->getTransportManager());
         $this->assertEquals(null, $entity->getPartnerContactDetails());
         $this->assertEquals(null, $entity->getLocalAuthority());
-        $this->assertEquals(1, $entity->getOrganisationUsers()->count());
+        $this->assertCount(1, $entity->getOrganisationUsers());
         $this->assertEquals('N', $entity->getOrganisationUsers()->first()->getIsAdministrator());
         $this->assertEquals($orgName, $entity->getRelatedOrganisationName());
         $this->assertEquals(false, $entity->isAnonymous());
@@ -695,7 +682,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals($data['roles'], $entity->getRoles()->toArray());
 
         $this->assertEquals(Entity::USER_TYPE_OPERATOR, $entity->getUserType());
-        $this->assertEquals(1, $entity->getOrganisationUsers()->count());
+        $this->assertCount(1, $entity->getOrganisationUsers());
         $this->assertEquals('Y', $entity->getOrganisationUsers()->first()->getIsAdministrator());
     }
 
@@ -820,75 +807,73 @@ class UserEntityTest extends EntityTester
         $this->assertEquals($expected, $entity->getPermission());
     }
 
-    public static function getPermissionProvider(): array
+    public static function getPermissionProvider(): \Iterator
     {
-        return [
-            // local authority - admin
-            [
-                Entity::USER_TYPE_LOCAL_AUTHORITY,
-                Entity::getRolesByUserType(Entity::USER_TYPE_LOCAL_AUTHORITY, Entity::PERMISSION_ADMIN),
-                Entity::PERMISSION_ADMIN
-            ],
-            // local authority - user
-            [
-                Entity::USER_TYPE_LOCAL_AUTHORITY,
-                Entity::getRolesByUserType(Entity::USER_TYPE_LOCAL_AUTHORITY, Entity::PERMISSION_USER),
-                Entity::PERMISSION_USER
-            ],
-            // operator - admin
-            [
-                Entity::USER_TYPE_OPERATOR,
+        // local authority - admin
+        yield [
+            Entity::USER_TYPE_LOCAL_AUTHORITY,
+            Entity::getRolesByUserType(Entity::USER_TYPE_LOCAL_AUTHORITY, Entity::PERMISSION_ADMIN),
+            Entity::PERMISSION_ADMIN
+        ];
+        // local authority - user
+        yield [
+            Entity::USER_TYPE_LOCAL_AUTHORITY,
+            Entity::getRolesByUserType(Entity::USER_TYPE_LOCAL_AUTHORITY, Entity::PERMISSION_USER),
+            Entity::PERMISSION_USER
+        ];
+        // operator - admin
+        yield [
+            Entity::USER_TYPE_OPERATOR,
+            Entity::getRolesByUserType(Entity::USER_TYPE_OPERATOR, Entity::PERMISSION_ADMIN),
+            Entity::PERMISSION_ADMIN
+        ];
+        // operator - user
+        yield [
+            Entity::USER_TYPE_OPERATOR,
+            Entity::getRolesByUserType(Entity::USER_TYPE_OPERATOR, Entity::PERMISSION_USER),
+            Entity::PERMISSION_USER
+        ];
+        // operator - tm
+        yield [
+            Entity::USER_TYPE_OPERATOR,
+            Entity::getRolesByUserType(Entity::USER_TYPE_OPERATOR, Entity::PERMISSION_TM),
+            Entity::PERMISSION_TM
+        ];
+        // operator - admin with tm role
+        yield [
+            Entity::USER_TYPE_OPERATOR,
+            array_merge(
                 Entity::getRolesByUserType(Entity::USER_TYPE_OPERATOR, Entity::PERMISSION_ADMIN),
-                Entity::PERMISSION_ADMIN
-            ],
-            // operator - user
-            [
-                Entity::USER_TYPE_OPERATOR,
+                Entity::getRolesByUserType(Entity::USER_TYPE_OPERATOR, Entity::PERMISSION_TM)
+            ),
+            Entity::PERMISSION_ADMIN
+        ];
+        // operator - user with tm role
+        yield [
+            Entity::USER_TYPE_OPERATOR,
+            array_merge(
                 Entity::getRolesByUserType(Entity::USER_TYPE_OPERATOR, Entity::PERMISSION_USER),
-                Entity::PERMISSION_USER
-            ],
-            // operator - tm
-            [
-                Entity::USER_TYPE_OPERATOR,
-                Entity::getRolesByUserType(Entity::USER_TYPE_OPERATOR, Entity::PERMISSION_TM),
-                Entity::PERMISSION_TM
-            ],
-            // operator - admin with tm role
-            [
-                Entity::USER_TYPE_OPERATOR,
-                array_merge(
-                    Entity::getRolesByUserType(Entity::USER_TYPE_OPERATOR, Entity::PERMISSION_ADMIN),
-                    Entity::getRolesByUserType(Entity::USER_TYPE_OPERATOR, Entity::PERMISSION_TM)
-                ),
-                Entity::PERMISSION_ADMIN
-            ],
-            // operator - user with tm role
-            [
-                Entity::USER_TYPE_OPERATOR,
-                array_merge(
-                    Entity::getRolesByUserType(Entity::USER_TYPE_OPERATOR, Entity::PERMISSION_USER),
-                    Entity::getRolesByUserType(Entity::USER_TYPE_OPERATOR, Entity::PERMISSION_TM)
-                ),
-                Entity::PERMISSION_USER
-            ],
-            // partner - admin
-            [
-                Entity::USER_TYPE_PARTNER,
-                Entity::getRolesByUserType(Entity::USER_TYPE_PARTNER, Entity::PERMISSION_ADMIN),
-                Entity::PERMISSION_ADMIN
-            ],
-            // partner - user
-            [
-                Entity::USER_TYPE_PARTNER,
-                Entity::getRolesByUserType(Entity::USER_TYPE_PARTNER, Entity::PERMISSION_USER),
-                Entity::PERMISSION_USER
-            ],
-            // internal - user
-            [
-                Entity::USER_TYPE_INTERNAL,
-                Entity::getRolesByUserType(Entity::USER_TYPE_INTERNAL, Entity::PERMISSION_USER),
-                null
-            ],
+                Entity::getRolesByUserType(Entity::USER_TYPE_OPERATOR, Entity::PERMISSION_TM)
+            ),
+            Entity::PERMISSION_USER
+        ];
+        // partner - admin
+        yield [
+            Entity::USER_TYPE_PARTNER,
+            Entity::getRolesByUserType(Entity::USER_TYPE_PARTNER, Entity::PERMISSION_ADMIN),
+            Entity::PERMISSION_ADMIN
+        ];
+        // partner - user
+        yield [
+            Entity::USER_TYPE_PARTNER,
+            Entity::getRolesByUserType(Entity::USER_TYPE_PARTNER, Entity::PERMISSION_USER),
+            Entity::PERMISSION_USER
+        ];
+        // internal - user
+        yield [
+            Entity::USER_TYPE_INTERNAL,
+            Entity::getRolesByUserType(Entity::USER_TYPE_INTERNAL, Entity::PERMISSION_USER),
+            null
         ];
     }
 
@@ -898,7 +883,7 @@ class UserEntityTest extends EntityTester
 
         $role = $user->getRoles()->current();
 
-        $this->assertEquals(1, $user->getRoles()->count());
+        $this->assertCount(1, $user->getRoles());
         $this->assertInstanceOf(RoleEntity::class, $role);
         $this->assertEquals(RoleEntity::ROLE_ANON, $role->getId());
         $this->assertEquals('anon', $user->getLoginId());
@@ -1012,25 +997,23 @@ class UserEntityTest extends EntityTester
         $this->assertEquals($expectedResult, $result);
     }
 
-    public static function dataProviderHasRoles(): array
+    public static function dataProviderHasRoles(): \Iterator
     {
-        return [
-            'User has no roles' => [
-                [],
-                false
-            ],
-            'User has role' => [
-                [RoleEntity::ROLE_OPERATOR_ADMIN],
-                true
-            ],
-            'User does not have role' => [
-                [RoleEntity::ROLE_OPERATOR_TM],
-                false
-            ],
-            'User has two of roles' => [
-                [RoleEntity::ROLE_OPERATOR_ADMIN, RoleEntity::ROLE_OPERATOR_USER],
-                true
-            ]
+        yield 'User has no roles' => [
+            [],
+            false
+        ];
+        yield 'User has role' => [
+            [RoleEntity::ROLE_OPERATOR_ADMIN],
+            true
+        ];
+        yield 'User does not have role' => [
+            [RoleEntity::ROLE_OPERATOR_TM],
+            false
+        ];
+        yield 'User has two of roles' => [
+            [RoleEntity::ROLE_OPERATOR_ADMIN, RoleEntity::ROLE_OPERATOR_USER],
+            true
         ];
     }
 
@@ -1075,7 +1058,7 @@ class UserEntityTest extends EntityTester
         $this->assertEquals($data['roles'], $entity->getRoles()->toArray());
 
         $this->assertEquals(Entity::USER_TYPE_OPERATOR, $entity->getUserType());
-        $this->assertEquals(1, $entity->getOrganisationUsers()->count());
+        $this->assertCount(1, $entity->getOrganisationUsers());
         $this->assertEquals('Y', $entity->getOrganisationUsers()->first()->getIsAdministrator());
     }
 
@@ -1095,24 +1078,22 @@ class UserEntityTest extends EntityTester
     /**
      * data provider for testCanBeAssignedDataRetention
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function dpAssignedDataRetention(): array
+    public static function dpAssignedDataRetention(): \Iterator
     {
-        return [
-            [Entity::USER_TYPE_INTERNAL, 'N', true],
-            [Entity::USER_TYPE_INTERNAL, 'Y', false],
-            [Entity::USER_TYPE_ANON, 'N', false],
-            [Entity::USER_TYPE_ANON, 'Y', false],
-            [Entity::USER_TYPE_LOCAL_AUTHORITY, 'N', false],
-            [Entity::USER_TYPE_LOCAL_AUTHORITY, 'Y', false],
-            [Entity::USER_TYPE_OPERATOR, 'N', false],
-            [Entity::USER_TYPE_OPERATOR, 'Y', false],
-            [Entity::USER_TYPE_PARTNER, 'N', false],
-            [Entity::USER_TYPE_PARTNER, 'Y', false],
-            [Entity::USER_TYPE_TRANSPORT_MANAGER, 'N', false],
-            [Entity::USER_TYPE_TRANSPORT_MANAGER, 'Y', false],
-        ];
+        yield [Entity::USER_TYPE_INTERNAL, 'N', true];
+        yield [Entity::USER_TYPE_INTERNAL, 'Y', false];
+        yield [Entity::USER_TYPE_ANON, 'N', false];
+        yield [Entity::USER_TYPE_ANON, 'Y', false];
+        yield [Entity::USER_TYPE_LOCAL_AUTHORITY, 'N', false];
+        yield [Entity::USER_TYPE_LOCAL_AUTHORITY, 'Y', false];
+        yield [Entity::USER_TYPE_OPERATOR, 'N', false];
+        yield [Entity::USER_TYPE_OPERATOR, 'Y', false];
+        yield [Entity::USER_TYPE_PARTNER, 'N', false];
+        yield [Entity::USER_TYPE_PARTNER, 'Y', false];
+        yield [Entity::USER_TYPE_TRANSPORT_MANAGER, 'N', false];
+        yield [Entity::USER_TYPE_TRANSPORT_MANAGER, 'Y', false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsEligibleForPermits')]
@@ -1134,13 +1115,11 @@ class UserEntityTest extends EntityTester
         $this->assertSame($expected, $user->isEligibleForPermits());
     }
 
-    public static function dpIsEligibleForPermits(): array
+    public static function dpIsEligibleForPermits(): \Iterator
     {
-        return [
-            [null, false],
-            [true, true],
-            [false, false],
-        ];
+        yield [null, false];
+        yield [true, true];
+        yield [false, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsAllowedToPerformActionOnRoles')]
@@ -1419,23 +1398,19 @@ class UserEntityTest extends EntityTester
     {
         $user = new Entity('pid', Entity::USER_TYPE_INTERNAL);
         $user->setAccountDisabled($accountDisabled);
-        $this->assertEquals($resetAllowed, $user->canResetPassword());
+        $this->assertSame($resetAllowed, $user->canResetPassword());
     }
 
-    public static function dpCanResetPassword(): array
+    public static function dpCanResetPassword(): \Iterator
     {
-        return [
-            'account disabled, reset not allowed' => ['Y', false],
-            'account active, reset allowed' => ['N', true],
-        ];
+        yield 'account disabled, reset not allowed' => ['Y', false];
+        yield 'account active, reset allowed' => ['N', true];
     }
 
-    public static function dpOperatorAdminRoles(): array
+    public static function dpOperatorAdminRoles(): \Iterator
     {
-        return [
-            [RoleEntity::ROLE_OPERATOR_ADMIN],
-            [RoleEntity::ROLE_OPERATOR_TC],
-        ];
+        yield [RoleEntity::ROLE_OPERATOR_ADMIN];
+        yield [RoleEntity::ROLE_OPERATOR_TC];
     }
 
     public function testAgreeTermsAndConditions(): void

@@ -12,7 +12,7 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class QuerySenderTest extends MockeryTestCase
+final class QuerySenderTest extends MockeryTestCase
 {
     protected $sut;
 

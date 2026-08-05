@@ -11,7 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class LicencePeopleAdapterFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicencePeopleAdapter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LicencePeopleAdapter
     {
         return new LicencePeopleAdapter($container);
     }

@@ -8,7 +8,7 @@ use Dvsa\Olcs\DocumentShare\Data\Object\File;
 use org\bovigo\vfs\vfsStream;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\DocumentShare\Data\Object\File::class)]
-class FileTest extends \PHPUnit\Framework\TestCase
+final class FileTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  \org\bovigo\vfs\vfsStreamDirectory */
     private $vfs;
@@ -25,14 +25,14 @@ class FileTest extends \PHPUnit\Framework\TestCase
         //  check set/get content
         $content = '<html></html>';
 
-        static::assertEquals($sut, $sut->setContent($content));
-        static::assertEquals($content, $sut->getContent());
+        $this->assertEquals($sut, $sut->setContent($content));
+        $this->assertEquals($content, $sut->getContent());
 
         //  check mime
-        static::assertEquals('text/html', $sut->getMimeType());
+        $this->assertEquals('text/html', $sut->getMimeType());
 
         //  check size
-        static::assertEquals(strlen($content), $sut->getSize());
+        $this->assertEquals(strlen($content), $sut->getSize());
     }
 
     public function testSetResource(): void
@@ -43,20 +43,20 @@ class FileTest extends \PHPUnit\Framework\TestCase
         $sut = new File();
 
         //  assing resource
-        static::assertEquals($sut, $sut->setResource($fsFilePath1));
-        static::assertEquals($fsFilePath1, $sut->getResource());
+        $this->assertEquals($sut, $sut->setResource($fsFilePath1));
+        $this->assertEquals($fsFilePath1, $sut->getResource());
 
-        static::assertTrue(is_file($fsFilePath1));
-        static::assertTrue(is_file($fsFilePath2));
+        $this->assertTrue(is_file($fsFilePath1));
+        $this->assertTrue(is_file($fsFilePath2));
 
         //  set other resource, previous one should be removed
         $sut->setResource($fsFilePath2);
-        static::assertEquals($fsFilePath2, $sut->getResource());
-        static::assertFalse(is_file($fsFilePath1));
-        static::assertTrue(is_file($fsFilePath2));
+        $this->assertEquals($fsFilePath2, $sut->getResource());
+        $this->assertFalse(is_file($fsFilePath1));
+        $this->assertTrue(is_file($fsFilePath2));
 
         //  check file removed when destroy object
         unset($sut);
-        static::assertFalse(is_file($fsFilePath2));
+        $this->assertFalse(is_file($fsFilePath2));
     }
 }

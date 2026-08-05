@@ -18,7 +18,7 @@ use Laminas\I18n\Translator\TranslatorInterface;
 /**
  * DeclarationReviewServiceTest
  */
-class DeclarationReviewServiceTest extends MockeryTestCase
+final class DeclarationReviewServiceTest extends MockeryTestCase
 {
     /** @var DeclarationReviewService */
     protected $sut;
@@ -26,6 +26,7 @@ class DeclarationReviewServiceTest extends MockeryTestCase
     /** @var ContinuationDetail */
     private $continuationDetail;
 
+    #[\Override]
     public function setUp(): void
     {
         /** @var var Organisation $organisation */
@@ -96,7 +97,7 @@ class DeclarationReviewServiceTest extends MockeryTestCase
         $this->continuationDetail->getLicence()->setGoodsOrPsv(new RefData($goodsOrPsv));
         $this->continuationDetail->getLicence()->setLicenceType(new RefData($licenceType));
         if ($isNi) {
-            $this->continuationDetail->getLicence()->setTrafficArea((new TrafficArea())->setIsNi(true));
+            $this->continuationDetail->getLicence()->setTrafficArea(new TrafficArea()->setIsNi(true));
         }
         $this->continuationDetail->getLicence()->shouldReceive('isLgv')
             ->withNoArgs()
@@ -121,148 +122,146 @@ class DeclarationReviewServiceTest extends MockeryTestCase
         );
     }
 
-    public static function getConfigFromDataDeclarationMarkupDataProvider(): array
+    public static function getConfigFromDataDeclarationMarkupDataProvider(): \Iterator
     {
-        return [
-            [
-                'markup-continuation-declaration-goods-gb_translated'
-                    . '(markup-continuation-declaration-goods-gb-operating-centres-not-lgv_translated(%s),)',
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_RESTRICTED,
-                false,
-                false,
-            ],
-            [
-                'markup-continuation-declaration-goods-ni_translated'
-                    . '(markup-continuation-declaration-goods-ni-operating-centres-not-lgv_translated(%s),)',
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_RESTRICTED,
-                true,
-                false,
-            ],
-            [
-                'markup-continuation-declaration-goods-gb_translated'
-                    . '(markup-continuation-declaration-goods-gb-operating-centres-not-lgv_translated(%s),)',
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                false,
-                false,
-            ],
-            [
-                'markup-continuation-declaration-goods-ni_translated'
-                    . '(markup-continuation-declaration-goods-ni-operating-centres-not-lgv_translated(%s),)',
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                true,
-                false,
-            ],
-            [
-                'markup-continuation-declaration-goods-gb-sn_translated'
-                    . '(markup-continuation-declaration-goods-gb-sn-standard_translated(%s))',
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                false,
-                false,
-            ],
-            [
-                'markup-continuation-declaration-goods-ni_translated'
-                    . '(markup-continuation-declaration-goods-ni-operating-centres-not-lgv_translated(%s),'
-                    . 'markup-continuation-declaration-goods-ni-standard_translated(%s))',
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                true,
-                false,
-            ],
-            [
-                'markup-continuation-declaration-goods-gb-sn_translated'
-                    . '(markup-continuation-declaration-goods-gb-sn-standard_translated(%s))',
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                false,
-                false,
-            ],
-            [
-                'markup-continuation-declaration-goods-ni_translated'
-                    . '(markup-continuation-declaration-goods-ni-operating-centres-not-lgv_translated(%s),'
-                    . 'markup-continuation-declaration-goods-ni-standard_translated(%s))',
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                true,
-                false,
-            ],
-            [
-                'markup-continuation-declaration-goods-gb-sn_translated'
-                    . '(markup-continuation-declaration-goods-gb-sn-standard_translated(%s))',
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                false,
-                true,
-            ],
-            [
-                'markup-continuation-declaration-goods-ni_translated'
-                    . '(markup-continuation-declaration-goods-operating-centres-lgv_translated(%s),'
-                    . 'markup-continuation-declaration-goods-ni-standard_translated(%s))',
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                true,
-                true,
-            ],
-            [
-                'markup-continuation-declaration-psv-restricted_translated()',
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_RESTRICTED,
-                false,
-                false,
-            ],
-            [
-                'markup-continuation-declaration-psv-restricted_translated()',
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_RESTRICTED,
-                true,
-                false,
-            ],
-            [
-                'markup-continuation-declaration-psv-sr_translated()',
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                false,
-                false,
-            ],
-            [
-                'markup-continuation-declaration-psv-sr_translated()',
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                true,
-                false,
-            ],
-            [
-                'markup-continuation-declaration-psv_translated()',
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                false,
-                false,
-            ],
-            [
-                'markup-continuation-declaration-psv_translated()',
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                true,
-                false,
-            ],
-            [
-                'markup-continuation-declaration-psv_translated()',
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                false,
-                false,
-            ],
-            [
-                'markup-continuation-declaration-psv_translated()',
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                true,
-                false,
-            ],
+        yield [
+            'markup-continuation-declaration-goods-gb_translated'
+                . '(markup-continuation-declaration-goods-gb-operating-centres-not-lgv_translated(%s),)',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            false,
+            false,
+        ];
+        yield [
+            'markup-continuation-declaration-goods-ni_translated'
+                . '(markup-continuation-declaration-goods-ni-operating-centres-not-lgv_translated(%s),)',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            true,
+            false,
+        ];
+        yield [
+            'markup-continuation-declaration-goods-gb_translated'
+                . '(markup-continuation-declaration-goods-gb-operating-centres-not-lgv_translated(%s),)',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            false,
+            false,
+        ];
+        yield [
+            'markup-continuation-declaration-goods-ni_translated'
+                . '(markup-continuation-declaration-goods-ni-operating-centres-not-lgv_translated(%s),)',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            true,
+            false,
+        ];
+        yield [
+            'markup-continuation-declaration-goods-gb-sn_translated'
+                . '(markup-continuation-declaration-goods-gb-sn-standard_translated(%s))',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            false,
+            false,
+        ];
+        yield [
+            'markup-continuation-declaration-goods-ni_translated'
+                . '(markup-continuation-declaration-goods-ni-operating-centres-not-lgv_translated(%s),'
+                . 'markup-continuation-declaration-goods-ni-standard_translated(%s))',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            true,
+            false,
+        ];
+        yield [
+            'markup-continuation-declaration-goods-gb-sn_translated'
+                . '(markup-continuation-declaration-goods-gb-sn-standard_translated(%s))',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            false,
+            false,
+        ];
+        yield [
+            'markup-continuation-declaration-goods-ni_translated'
+                . '(markup-continuation-declaration-goods-ni-operating-centres-not-lgv_translated(%s),'
+                . 'markup-continuation-declaration-goods-ni-standard_translated(%s))',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            true,
+            false,
+        ];
+        yield [
+            'markup-continuation-declaration-goods-gb-sn_translated'
+                . '(markup-continuation-declaration-goods-gb-sn-standard_translated(%s))',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            false,
+            true,
+        ];
+        yield [
+            'markup-continuation-declaration-goods-ni_translated'
+                . '(markup-continuation-declaration-goods-operating-centres-lgv_translated(%s),'
+                . 'markup-continuation-declaration-goods-ni-standard_translated(%s))',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            true,
+            true,
+        ];
+        yield [
+            'markup-continuation-declaration-psv-restricted_translated()',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            false,
+            false,
+        ];
+        yield [
+            'markup-continuation-declaration-psv-restricted_translated()',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            true,
+            false,
+        ];
+        yield [
+            'markup-continuation-declaration-psv-sr_translated()',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            false,
+            false,
+        ];
+        yield [
+            'markup-continuation-declaration-psv-sr_translated()',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            true,
+            false,
+        ];
+        yield [
+            'markup-continuation-declaration-psv_translated()',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            false,
+            false,
+        ];
+        yield [
+            'markup-continuation-declaration-psv_translated()',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            true,
+            false,
+        ];
+        yield [
+            'markup-continuation-declaration-psv_translated()',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            false,
+            false,
+        ];
+        yield [
+            'markup-continuation-declaration-psv_translated()',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            true,
+            false,
         ];
     }
 
@@ -292,7 +291,7 @@ class DeclarationReviewServiceTest extends MockeryTestCase
     public function testGetConfigFromDataPhysicalSignature(): void
     {
         $this->continuationDetail->setSignatureType(new RefData(RefData::SIG_PHYSICAL_SIGNATURE));
-        $this->continuationDetail->getLicence()->setTrafficArea((new TrafficArea())->setIsNi(false));
+        $this->continuationDetail->getLicence()->setTrafficArea(new TrafficArea()->setIsNi(false));
 
         $this->assertEquals(
             [

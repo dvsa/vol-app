@@ -21,22 +21,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="community_lic",
- *    indexes={
- *        @ORM\Index(name="ix_community_lic_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_community_lic_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_community_lic_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_community_lic_status", columns={"status"}),
- *        @ORM\Index(name="uk_community_lic_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_community_lic_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'community_lic')]
+#[ORM\Index(name: 'ix_community_lic_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_community_lic_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_community_lic_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_community_lic_status', columns: ['status'])]
+#[ORM\UniqueConstraint(name: 'uk_community_lic_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractCommunityLic implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,144 +42,129 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'communityLics', fetch: 'LAZY')]
     protected $licence;
 
     /**
      * annulled, cns, expired, pending, returned, revoked, surrender, suspended, valid, void, withdrawn
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * The date the licence expired.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="expired_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'expired_date', nullable: true)]
     protected $expiredDate;
 
     /**
      * Activation date of com licence.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="specified_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'specified_date', nullable: true)]
     protected $specifiedDate;
 
     /**
      * The date the community licence will expire. Typically 5 years after specified date.  Generally less for an interim licence.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="licence_expired_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'licence_expired_date', nullable: true)]
     protected $licenceExpiredDate;
 
     /**
      * Issue 0 is the office copy. 0 is the licence, all others are refered to as certified copies.
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="issue_no", nullable=true)
      */
+    #[ORM\Column(type: 'smallint', name: 'issue_no', nullable: true, options: ['unsigned' => true])]
     protected $issueNo;
 
     /**
      * Business ID
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="serial_no", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'serial_no', nullable: true, options: ['unsigned' => true])]
     protected $serialNo;
 
     /**
      * UKGB or UKNI
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="serial_no_prefix", length=4, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'serial_no_prefix', length: 4, nullable: true)]
     protected $serialNoPrefix;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
      * CommunityLicSuspensions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicSuspension", mappedBy="communityLic")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicSuspension::class, mappedBy: 'communityLic')]
     protected $communityLicSuspensions;
 
     /**
      * CommunityLicWithdrawals
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal", mappedBy="communityLic")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLicWithdrawal::class, mappedBy: 'communityLic')]
     protected $communityLicWithdrawals;
 
     /**
@@ -212,7 +190,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setId($id)
     {
@@ -236,7 +214,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -260,7 +238,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setStatus($status)
     {
@@ -284,7 +262,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -308,7 +286,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -332,7 +310,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \DateTime $expiredDate new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setExpiredDate($expiredDate)
     {
@@ -362,7 +340,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \DateTime $specifiedDate new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setSpecifiedDate($specifiedDate)
     {
@@ -392,7 +370,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \DateTime $licenceExpiredDate new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setLicenceExpiredDate($licenceExpiredDate)
     {
@@ -422,7 +400,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param int $issueNo new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setIssueNo($issueNo)
     {
@@ -446,7 +424,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param int $serialNo new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setSerialNo($serialNo)
     {
@@ -470,7 +448,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param string $serialNoPrefix new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setSerialNoPrefix($serialNoPrefix)
     {
@@ -494,7 +472,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param int $version new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setVersion($version)
     {
@@ -518,7 +496,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param int $olbsKey new value being set
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -542,7 +520,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $communityLicSuspensions collection being set as the value
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setCommunityLicSuspensions($communityLicSuspensions)
     {
@@ -566,7 +544,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $communityLicSuspensions collection being added
      *
-     * @return CommunityLic
+     * @return static
      */
     public function addCommunityLicSuspensions($communityLicSuspensions)
     {
@@ -589,7 +567,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $communityLicSuspensions collection being removed
      *
-     * @return CommunityLic
+     * @return static
      */
     public function removeCommunityLicSuspensions($communityLicSuspensions)
     {
@@ -605,7 +583,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $communityLicWithdrawals collection being set as the value
      *
-     * @return CommunityLic
+     * @return static
      */
     public function setCommunityLicWithdrawals($communityLicWithdrawals)
     {
@@ -629,7 +607,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $communityLicWithdrawals collection being added
      *
-     * @return CommunityLic
+     * @return static
      */
     public function addCommunityLicWithdrawals($communityLicWithdrawals)
     {
@@ -652,7 +630,7 @@ abstract class AbstractCommunityLic implements BundleSerializableInterface, Json
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $communityLicWithdrawals collection being removed
      *
-     * @return CommunityLic
+     * @return static
      */
     public function removeCommunityLicWithdrawals($communityLicWithdrawals)
     {

@@ -24,7 +24,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class OppositionControllerTest extends MockeryTestCase
+final class OppositionControllerTest extends MockeryTestCase
 {
     /**
      * @var ControllerPluginManagerHelper
@@ -33,28 +33,18 @@ class OppositionControllerTest extends MockeryTestCase
 
     protected $sut;
 
-    protected $translationHelper;
-
-    protected $formHelper;
-
-    protected $flashMessengerHelper;
-
-    protected $navigation;
-
-    protected $routeMatchHelper;
-
     public function setUp(): void
     {
 
-        $this->translationHelper = m::mock(TranslationHelperService::class);
-        $this->formHelper = m::mock(FormHelperService::class);
-        $this->flashMessengerHelper =  m::mock(FlashMessengerHelperService::class);
-        $this->navigation = m::mock(Navigation::class);
+        $translationHelper = m::mock(TranslationHelperService::class);
+        $formHelper = m::mock(FormHelperService::class);
+        $flashMessengerHelper =  m::mock(FlashMessengerHelperService::class);
+        $navigation = m::mock(Navigation::class);
 
-        $this->sut = new \Olcs\Controller\Cases\Opposition\OppositionController($this->translationHelper, $this->formHelper, $this->flashMessengerHelper, $this->navigation);
+        $this->sut = new \Olcs\Controller\Cases\Opposition\OppositionController($translationHelper, $formHelper, $flashMessengerHelper, $navigation);
 
         $this->pluginManagerHelper = new ControllerPluginManagerHelper();
-        $this->routeMatchHelper = new ControllerRouteMatchHelper();
+        $routeMatchHelper = new ControllerRouteMatchHelper();
         parent::setUp();
     }
 

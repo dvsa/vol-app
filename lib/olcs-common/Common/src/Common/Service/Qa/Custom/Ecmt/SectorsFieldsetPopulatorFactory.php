@@ -14,7 +14,7 @@ class SectorsFieldsetPopulatorFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SectorsFieldsetPopulator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SectorsFieldsetPopulator
     {
         return new SectorsFieldsetPopulator(
             $container->get('Helper\Translation'),

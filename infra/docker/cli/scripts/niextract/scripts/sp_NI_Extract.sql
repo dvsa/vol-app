@@ -1,6 +1,6 @@
-DELIMITER $$
-
 DROP PROCEDURE IF EXISTS sp_NI_Extract;
+
+DELIMITER $$
 
 CREATE PROCEDURE sp_NI_Extract(continue_extract INT)
 BEGIN

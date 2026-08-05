@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\TrafficArea;
 
 /**
  * @author Mat Evans <mat.evans@valtech.co.uk>
- * @covers \Dvsa\Olcs\Transfer\Validators\TrafficArea
  */
-class TrafficAreaTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Validators\TrafficArea::class)]
+final class TrafficAreaTest extends \PHPUnit\Framework\TestCase
 {
     /** @var TrafficArea */
     protected $sut;
@@ -20,41 +22,37 @@ class TrafficAreaTest extends \PHPUnit\Framework\TestCase
         $this->sut->setExtraHaystack(['extra_1']);
     }
 
-    /**
-     * @dataProvider isValidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($value, $expected)
     {
         $this->assertEquals($expected, $this->sut->isValid($value));
     }
 
-    public function isValidProvider()
+    public static function isValidProvider(): \Iterator
     {
-        return [
-            ['B', true],
-            ['C', true],
-            ['D', true],
-            ['F', true],
-            ['G', true],
-            ['H', true],
-            ['K', true],
-            ['M', true],
-            ['N', true],
-            ['a', false],
-            ['A', false],
-            ['E', false],
-            ['I', false],
-            ['J', false],
-            ['L', false],
-            ['O', false],
-            ['b', false],
-            ['c', false],
-            [1, false],
-            [' ', false],
-            [null, false],
-            //  extra haystack
-            ['extra_1', true],
-            ['extra_3', false],
-        ];
+        yield ['B', true];
+        yield ['C', true];
+        yield ['D', true];
+        yield ['F', true];
+        yield ['G', true];
+        yield ['H', true];
+        yield ['K', true];
+        yield ['M', true];
+        yield ['N', true];
+        yield ['a', false];
+        yield ['A', false];
+        yield ['E', false];
+        yield ['I', false];
+        yield ['J', false];
+        yield ['L', false];
+        yield ['O', false];
+        yield ['b', false];
+        yield ['c', false];
+        yield [1, false];
+        yield [' ', false];
+        yield [null, false];
+        //  extra haystack
+        yield ['extra_1', true];
+        yield ['extra_3', false];
     }
 }

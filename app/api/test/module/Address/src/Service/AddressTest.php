@@ -14,10 +14,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Http\Response;
 
-/**
- * @covers Dvsa\Olcs\Address\Service\Address
- */
-class AddressTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Address\Service\Address::class)]
+final class AddressTest extends MockeryTestCase
 {
     /**  @var Client */
     protected $client;
@@ -25,6 +23,7 @@ class AddressTest extends MockeryTestCase
     /**  @var Address */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->client = m::mock(Client::class);

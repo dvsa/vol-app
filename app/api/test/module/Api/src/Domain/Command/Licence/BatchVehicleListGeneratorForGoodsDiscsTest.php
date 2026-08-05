@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Licence\BatchVehicleListGeneratorForGoodsDiscs;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class BatchVehicleListGeneratorForGoodsDiscsTest extends \PHPUnit\Framework\TestCase
+final class BatchVehicleListGeneratorForGoodsDiscsTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

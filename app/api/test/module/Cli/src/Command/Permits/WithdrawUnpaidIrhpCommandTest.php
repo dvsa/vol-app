@@ -9,7 +9,7 @@ use Dvsa\Olcs\Cli\Domain\Command\Permits\WithdrawUnpaidIrhp;
 use Dvsa\OlcsTest\Cli\Command\Batch\AbstractBatchCommandCases;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class WithdrawUnpaidIrhpCommandTest extends AbstractBatchCommandCases
+final class WithdrawUnpaidIrhpCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

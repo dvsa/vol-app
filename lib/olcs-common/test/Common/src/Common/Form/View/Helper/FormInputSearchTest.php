@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper;
 
 use Common\Form\View\Helper\FormInputSearch;
@@ -8,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Laminas\Form\ElementInterface;
 use Laminas\View\Renderer\RendererInterface;
 
-class FormInputSearchTest extends TestCase
+final class FormInputSearchTest extends TestCase
 {
     /**
      * @var FormInputSearch

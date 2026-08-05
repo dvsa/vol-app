@@ -31,20 +31,20 @@ use Mockery as m;
 /**
  * @see \Dvsa\Olcs\Api\Domain\CommandHandler\Licence\UpdateOperatingCentres
  */
-class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
+final class UpdateOperatingCentresTest extends AbstractCommandHandlerTestCase
 {
     use MocksServicesTrait;
     use MocksAbstractCommandHandlerServicesTrait;
     use ProvidesOperatingCentreVehicleAuthorizationConstraintsTrait;
     use MocksLicenceRepositoryTrait;
 
-    protected const TOT_AUTH_HGV_VEHICLES_COMMAND_PROPERTY = 'totAuthHgvVehicles';
-    protected const TOT_AUTH_LGV_VEHICLES_COMMAND_PROPERTY = 'totAuthLgvVehicles';
-    protected const ID_COMMAND_PROPERTY = 'id';
-    protected const AN_ID = 1;
-    protected const VALIDATION_MESSAGES = ['A VALIDATION MESSAGE KEY' => 'A VALIDATION MESSAGE VALUE'];
-    protected const ONE_HGV = 1;
-    protected const ONE_LGV = 1;
+    protected const string TOT_AUTH_HGV_VEHICLES_COMMAND_PROPERTY = 'totAuthHgvVehicles';
+    protected const string TOT_AUTH_LGV_VEHICLES_COMMAND_PROPERTY = 'totAuthLgvVehicles';
+    protected const string ID_COMMAND_PROPERTY = 'id';
+    protected const int AN_ID = 1;
+    protected const array VALIDATION_MESSAGES = ['A VALIDATION MESSAGE KEY' => 'A VALIDATION MESSAGE VALUE'];
+    protected const int ONE_HGV = 1;
+    protected const int ONE_LGV = 1;
 
     #[\PHPUnit\Framework\Attributes\Test]
     public function handleCommandIsCallable(): void

@@ -11,12 +11,10 @@ use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\CommandHandler\Application\DeleteCompanySubsidiary
- */
-class DeleteCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Application\DeleteCompanySubsidiary::class)]
+final class DeleteCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
 {
-    public const APP_ID = 9999;
+    public const int APP_ID = 9999;
 
     /** @var DeleteCompanySubsidiary|m\MockInterface */
     protected $sut;
@@ -45,7 +43,7 @@ class DeleteCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
             ->once()
             ->with($command)
             ->andReturn(
-                (new Result())
+                new Result()
                     ->addMessage('Company Subsidiary Removed')
             )
             //
@@ -53,7 +51,7 @@ class DeleteCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
             ->once()
             ->with(self::APP_ID, true)
             ->andReturn(
-                (new Result())
+                new Result()
                     ->addMessage('Section updated')
             );
 
@@ -67,7 +65,7 @@ class DeleteCompanySubsidiaryTest extends AbstractCommandHandlerTestCase
                 'Section updated',
             ]
         ];
-        static::assertEquals($expected, $actual->toArray());
-        static::assertInstanceOf(Result::class, $actual);
+        $this->assertEquals($expected, $actual->toArray());
+        $this->assertInstanceOf(Result::class, $actual);
     }
 }

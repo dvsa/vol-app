@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\User;
 
 use Dvsa\Olcs\Transfer\Query\User\UserListInternal;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Query\User\UserListInternal
- */
-class UserListInternalTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\User\UserListInternal::class)]
+final class UserListInternalTest extends MockeryTestCase
 {
     public function testGetSet()
     {
@@ -21,9 +21,9 @@ class UserListInternalTest extends MockeryTestCase
 
         $sut = UserListInternal::create($data);
 
-        static::assertEquals('p.forename', $sut->getSort());
-        static::assertEquals('ASC', $sut->getOrder());
-        static::assertEquals(12, $sut->getTeam());
-        static::assertEquals(true, $sut->getExcludeLimitedReadOnly());
+        $this->assertEquals('p.forename', $sut->getSort());
+        $this->assertEquals('ASC', $sut->getOrder());
+        $this->assertEquals(12, $sut->getTeam());
+        $this->assertEquals(true, $sut->getExcludeLimitedReadOnly());
     }
 }

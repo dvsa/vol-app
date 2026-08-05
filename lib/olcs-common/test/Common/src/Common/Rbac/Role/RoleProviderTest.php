@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Rbac\Role;
 
 use Common\Rbac\Role\RoleProvider;
@@ -12,7 +14,7 @@ use Rbac\Role\Role;
  * Class RoleProviderTest
  * @package CommonTest\Rbac\Role
  */
-class RoleProviderTest extends TestCase
+final class RoleProviderTest extends TestCase
 {
     public function testGetUserData(): void
     {
@@ -58,14 +60,14 @@ class RoleProviderTest extends TestCase
         $sut = new RoleProvider($mockQueryService);
         $result = $sut->getRoles(['role1', 'role3']);
 
-        $this->assertEquals(2, count($result));
+        $this->assertCount(2, $result);
 
         $this->assertInstanceOf(Role::class, $result['role1']);
         $this->assertTrue($result['role1']->hasPermission('perm1'));
         $this->assertTrue($result['role1']->hasPermission('perm2'));
         $this->assertFalse($result['role1']->hasPermission('perm3'));
 
-        $this->assertFalse(isset($result['role2']));
+        $this->assertArrayNotHasKey('role2', $result);
 
         $this->assertInstanceOf(Role::class, $result['role3']);
         $this->assertFalse($result['role3']->hasPermission('perm1'));

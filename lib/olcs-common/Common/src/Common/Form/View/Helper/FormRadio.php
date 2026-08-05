@@ -12,7 +12,7 @@ class FormRadio extends \Laminas\Form\View\Helper\FormRadio
 {
     protected $idGenerator;
 
-    public function __construct(UniqidGenerator $idGenerator = null)
+    public function __construct(?UniqidGenerator $idGenerator = null)
     {
         $this->idGenerator = $idGenerator ?? new UniqidGenerator();
     }

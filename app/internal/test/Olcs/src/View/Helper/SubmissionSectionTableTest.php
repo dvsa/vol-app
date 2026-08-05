@@ -10,7 +10,7 @@ use Olcs\View\Helper\SubmissionSectionTableFactory;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-class SubmissionSectionTableTest extends TestCase
+final class SubmissionSectionTableTest extends TestCase
 {
     /**
      * @param $input
@@ -57,15 +57,13 @@ class SubmissionSectionTableTest extends TestCase
         );
     }
 
-    public static function provideInvoke(): array
+    public static function provideInvoke(): \Iterator
     {
-        return [
-            [
-                ['submissionSection' => 'introduction', 'data' => ['data' => []]], '<table></table>', true
-            ],
-            [
-                ['submissionSection' => '', 'data' => ['data' => []]], '', false
-            ],
+        yield [
+            ['submissionSection' => 'introduction', 'data' => ['data' => []]], '<table></table>', true
+        ];
+        yield [
+            ['submissionSection' => '', 'data' => ['data' => []]], '', false
         ];
     }
 }

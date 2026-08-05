@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\UndoCancelAllInterimFees as UndoCan
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class UndoCancelAllInterimFeesTest extends AbstractCommandHandlerTestCase
+final class UndoCancelAllInterimFeesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

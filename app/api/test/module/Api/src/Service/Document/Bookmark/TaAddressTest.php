@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\TaAddress;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TaAddressTest extends \PHPUnit\Framework\TestCase
+final class TaAddressTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test getQuery
@@ -43,36 +43,34 @@ class TaAddressTest extends \PHPUnit\Framework\TestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
-            'licence' => [
-                [
-                    'trafficArea' => [
-                        'name' => 'TA Address 1',
-                        'contactDetails' => [
-                            'address' => [
-                                'addressLine1' => 'Line 1',
-                                'addressLine2' => 'Line 2',
-                                'addressLine3' => 'Line 3',
-                                'addressLine4' => 'Line 4',
-                                'postcode' => 'LS2 4DD'
-                            ]
+        yield 'licence' => [
+            [
+                'trafficArea' => [
+                    'name' => 'TA Address 1',
+                    'contactDetails' => [
+                        'address' => [
+                            'addressLine1' => 'Line 1',
+                            'addressLine2' => 'Line 2',
+                            'addressLine3' => 'Line 3',
+                            'addressLine4' => 'Line 4',
+                            'postcode' => 'LS2 4DD'
                         ]
                     ]
-                ],
-                "TA Address 1\nLine 1\nLine 2\nLine 3\nLine 4\nLS2 4DD"
+                ]
             ],
-            'empty' => [
-                [
-                    'trafficArea' => [
-                        'name' => 'TA Adress 3'
-                    ]
-                ],
-                "TA Adress 3"
-            ]
+            "TA Address 1\nLine 1\nLine 2\nLine 3\nLine 4\nLS2 4DD"
+        ];
+        yield 'empty' => [
+            [
+                'trafficArea' => [
+                    'name' => 'TA Adress 3'
+                ]
+            ],
+            "TA Adress 3"
         ];
     }
 }

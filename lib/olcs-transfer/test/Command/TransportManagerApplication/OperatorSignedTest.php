@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\TransportManagerApplication;
 
 use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\OperatorSigned;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Command\TransportManagerApplication\OperatorSigned
- */
-class OperatorSignedTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\TransportManagerApplication\OperatorSigned::class)]
+final class OperatorSignedTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -18,7 +18,7 @@ class OperatorSignedTest extends \PHPUnit\Framework\TestCase
 
         $command = OperatorSigned::create($data);
 
-        static::assertEquals(999, $command->getId());
-        static::assertEquals(888, $command->getVersion());
+        $this->assertEquals(999, $command->getId());
+        $this->assertEquals(888, $command->getVersion());
     }
 }

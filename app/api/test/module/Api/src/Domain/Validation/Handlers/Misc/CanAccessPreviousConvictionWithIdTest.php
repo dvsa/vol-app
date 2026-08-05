@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessPreviousConvictionWit
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CanAccessPreviousConvictionWithIdTest extends AbstractHandlerTestCase
+final class CanAccessPreviousConvictionWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessPreviousConvictionWithId
@@ -40,11 +40,9 @@ class CanAccessPreviousConvictionWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

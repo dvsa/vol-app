@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\TransportManagerApplication;
 
 use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\UpdateForResponsibilities;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Command\TransportManagerApplication\UpdateForResponsibilities
- */
-class UpdateForResponsibilitiesTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\TransportManagerApplication\UpdateForResponsibilities::class)]
+final class UpdateForResponsibilitiesTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -30,20 +30,20 @@ class UpdateForResponsibilitiesTest extends \PHPUnit\Framework\TestCase
 
         $command = UpdateForResponsibilities::create($data);
 
-        static::assertEquals(999, $command->getId());
-        static::assertEquals(888, $command->getVersion());
+        $this->assertEquals(999, $command->getId());
+        $this->assertEquals(888, $command->getVersion());
 
-        static::assertEquals('unit_tmType', $command->getTmType());
-        static::assertEquals('unit_isOwner', $command->getIsOwner());
-        static::assertEquals('Y', $command->getHasUndertakenTraining());
-        static::assertEquals('unit_hoursMon', $command->getHoursMon());
-        static::assertEquals('unit_hoursTue', $command->getHoursTue());
-        static::assertEquals('unit_hoursWed', $command->getHoursWed());
-        static::assertEquals('unit_hoursThu', $command->getHoursThu());
-        static::assertEquals('unit_hoursFri', $command->getHoursFri());
-        static::assertEquals('unit_hoursSat', $command->getHoursSat());
-        static::assertEquals('unit_hoursSun', $command->getHoursSun());
-        static::assertEquals('unit_additionalInfo', $command->getAdditionalInformation());
-        static::assertEquals('unit_tmApplicationStatus', $command->getTmApplicationStatus());
+        $this->assertEquals('unit_tmType', $command->getTmType());
+        $this->assertEquals('unit_isOwner', $command->getIsOwner());
+        $this->assertEquals('Y', $command->getHasUndertakenTraining());
+        $this->assertEquals('unit_hoursMon', $command->getHoursMon());
+        $this->assertEquals('unit_hoursTue', $command->getHoursTue());
+        $this->assertEquals('unit_hoursWed', $command->getHoursWed());
+        $this->assertEquals('unit_hoursThu', $command->getHoursThu());
+        $this->assertEquals('unit_hoursFri', $command->getHoursFri());
+        $this->assertEquals('unit_hoursSat', $command->getHoursSat());
+        $this->assertEquals('unit_hoursSun', $command->getHoursSun());
+        $this->assertEquals('unit_additionalInfo', $command->getAdditionalInformation());
+        $this->assertEquals('unit_tmApplicationStatus', $command->getTmApplicationStatus());
     }
 }

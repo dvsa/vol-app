@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class DeleteFinancialStandingRateListTest extends AbstractCommandHandlerTestCase
+final class DeleteFinancialStandingRateListTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

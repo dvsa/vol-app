@@ -13,12 +13,10 @@ class GenericMethodsStub
 {
     use Traits\GenericMethods;
 
-    public FormHelperService $formHelperService;
     private ScriptFactory $scriptFactory;
     private TableFactory $tableFactory;
 
-    public function __construct(FormHelperService $formHelperService)
+    public function __construct(public FormHelperService $formHelperService)
     {
-        $this->formHelperService = $formHelperService;
     }
 }

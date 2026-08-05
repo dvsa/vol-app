@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Service\Api\Resolver;
@@ -12,7 +14,7 @@ use Mockery as m;
 use Dvsa\Olcs\Utils\Translation\TranslatorDelegator as Translator;
 use stdClass;
 
-class RestClientAwareInitializerTest extends MockeryTestCase
+final class RestClientAwareInitializerTest extends MockeryTestCase
 {
     private $sut;
 

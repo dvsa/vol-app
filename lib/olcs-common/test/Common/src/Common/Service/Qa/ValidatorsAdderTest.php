@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa;
 
 use Common\Service\Qa\ValidatorsAdder;
@@ -16,7 +18,7 @@ use Laminas\Validator\ValidatorChain;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ValidatorsAdderTest extends MockeryTestCase
+final class ValidatorsAdderTest extends MockeryTestCase
 {
     private $form;
 

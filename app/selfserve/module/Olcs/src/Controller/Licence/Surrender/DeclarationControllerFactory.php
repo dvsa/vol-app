@@ -22,7 +22,7 @@ class DeclarationControllerFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DeclarationController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DeclarationController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         $formHelper = $container->get(FormHelperService::class);

@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
-class FeeBreakdownTest extends QueryHandlerTestCase
+final class FeeBreakdownTest extends QueryHandlerTestCase
 {
     private $irhpApplication;
 
@@ -71,17 +71,15 @@ class FeeBreakdownTest extends QueryHandlerTestCase
         );
     }
 
-    public static function dpGenerateFeeBreakdownAvailable(): array
+    public static function dpGenerateFeeBreakdownAvailable(): \Iterator
     {
-        return [
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
-                'PermitsBilateralFeeBreakdownGenerator',
-            ],
-            [
-                IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL,
-                'PermitsMultilateralFeeBreakdownGenerator',
-            ]
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL,
+            'PermitsBilateralFeeBreakdownGenerator',
+        ];
+        yield [
+            IrhpPermitType::IRHP_PERMIT_TYPE_ID_MULTILATERAL,
+            'PermitsMultilateralFeeBreakdownGenerator',
         ];
     }
 
@@ -98,12 +96,10 @@ class FeeBreakdownTest extends QueryHandlerTestCase
         );
     }
 
-    public static function dpGenerateFeeBreakdownNotAvailable(): array
+    public static function dpGenerateFeeBreakdownNotAvailable(): \Iterator
     {
-        return [
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM],
-            [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL],
-        ];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM];
+        yield [IrhpPermitType::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL];
     }
 }

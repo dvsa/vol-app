@@ -18,7 +18,7 @@ class PeriodArrayGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PeriodArrayGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): PeriodArrayGenerator
     {
         return new PeriodArrayGenerator(
             $container->get('RepositoryServiceManager')->get('IrhpPermitStock'),

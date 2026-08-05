@@ -10,7 +10,7 @@ use Olcs\View\Helper\PiListData;
  * Class PiListDataTest
  * @package OlcsTest\View\Helper
  */
-class PiListDataTest extends \PHPUnit\Framework\TestCase
+final class PiListDataTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @param $input
@@ -24,19 +24,17 @@ class PiListDataTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $sut($input));
     }
 
-    public static function provideInvoke(): array
+    public static function provideInvoke(): \Iterator
     {
-        return [
-            [null, 'None selected'],
-            [[], 'None selected'],
-            [[['sectionCode' => 'a)', 'description' => 'desc']], 'a) desc'],
+        yield [null, 'None selected'];
+        yield [[], 'None selected'];
+        yield [[['sectionCode' => 'a)', 'description' => 'desc']], 'a) desc'];
+        yield [
             [
-                [
-                    ['sectionCode' => 'a)', 'description' => 'desc'],
-                    ['sectionCode' => 'b)', 'description' => 'desc']
-                ],
-                'a) desc, b) desc'
-            ]
+                ['sectionCode' => 'a)', 'description' => 'desc'],
+                ['sectionCode' => 'b)', 'description' => 'desc']
+            ],
+            'a) desc, b) desc'
         ];
     }
 }

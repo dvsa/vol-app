@@ -10,13 +10,14 @@ use Dvsa\Olcs\Transfer\Query as TransferQry;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\DataService::class)]
-class DataServiceTest extends RepositoryTestCase
+final class DataServiceTest extends RepositoryTestCase
 {
-    public const ORG_ID = 9001;
+    public const int ORG_ID = 9001;
 
     /** @var Repository\DataService | m\MockInterface  */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repository\DataService::class);
@@ -38,13 +39,10 @@ class DataServiceTest extends RepositoryTestCase
 
         $actual = $this->sut->fetchApplicationStatus($query);
 
-        static::assertEquals('EXPECT', $actual);
+        $this->assertEquals('EXPECT', $actual);
 
-        static::assertEquals(
-            '{{QUERY}}' .
-            ' INNER JOIN ' . Entity\Application\Application::class . ' a WITH a.status = m.id' .
-            ' INNER JOIN a.licence l WITH l.organisation = [[' . self::ORG_ID . ']]',
-            $this->query
-        );
+        $this->assertEquals('{{QUERY}}' .
+        ' INNER JOIN ' . Entity\Application\Application::class . ' a WITH a.status = m.id' .
+        ' INNER JOIN a.licence l WITH l.organisation = [[' . self::ORG_ID . ']]', $this->query);
     }
 }

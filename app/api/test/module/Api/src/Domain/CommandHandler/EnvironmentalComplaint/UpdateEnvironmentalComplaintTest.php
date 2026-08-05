@@ -28,7 +28,7 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\Country;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class UpdateEnvironmentalComplaintTest extends AbstractCommandHandlerTestCase
+final class UpdateEnvironmentalComplaintTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

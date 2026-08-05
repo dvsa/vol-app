@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\SubCategory;
 
 use Dvsa\Olcs\Transfer\Query\SubCategory\GetList;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Query\SubCategory\GetList
- */
-class GetListTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\SubCategory\GetList::class)]
+final class GetListTest extends MockeryTestCase
 {
     public function testGetSet()
     {
@@ -23,10 +23,10 @@ class GetListTest extends MockeryTestCase
             ]
         );
 
-        static::assertEquals('unit_Task', $sut->getIsTaskCategory());
-        static::assertEquals('unit_Doc', $sut->getIsDocCategory());
-        static::assertEquals('unit_Scan', $sut->getIsScanCategory());
-        static::assertEquals('unit_Cat', $sut->getCategory());
-        static::assertEquals('unit_isOnlyWithItems', $sut->getIsOnlyWithItems());
+        $this->assertEquals('unit_Task', $sut->getIsTaskCategory());
+        $this->assertEquals('unit_Doc', $sut->getIsDocCategory());
+        $this->assertEquals('unit_Scan', $sut->getIsScanCategory());
+        $this->assertEquals('unit_Cat', $sut->getCategory());
+        $this->assertEquals('unit_isOnlyWithItems', $sut->getIsOnlyWithItems());
     }
 }

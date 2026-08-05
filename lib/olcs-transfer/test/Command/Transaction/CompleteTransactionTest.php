@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Transaction;
 
 use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Transaction\CompleteTransaction;
 /**
  * Complete Transaction test
  */
-class CompleteTransactionTest extends \PHPUnit\Framework\TestCase
+final class CompleteTransactionTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

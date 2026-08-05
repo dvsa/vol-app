@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\InputFilters;
 
 use Common\Form\Elements\InputFilters\QaRadio;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Validator\InArray;
 
-/**
- * @covers \Common\Form\Elements\InputFilters\QaRadio
- */
-class QaRadioTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\Elements\InputFilters\QaRadio::class)]
+final class QaRadioTest extends MockeryTestCase
 {
     public function testGetInputSpecification(): void
     {

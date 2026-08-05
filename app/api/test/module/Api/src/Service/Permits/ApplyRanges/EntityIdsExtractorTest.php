@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EntityIdsExtractorTest extends MockeryTestCase
+final class EntityIdsExtractorTest extends MockeryTestCase
 {
     public function testGetExtracted(): void
     {

@@ -29,63 +29,49 @@ use Laminas\View\Model\JsonModel;
 /**
  * Index Controller Test
  */
-class IndexControllerTest extends MockeryTestCase
+final class IndexControllerTest extends MockeryTestCase
 {
     protected $sut;
 
-    protected $sm;
-
-    protected $mockScriptFactory;
-    protected $mockFormHelper;
-    protected $mockTableFactory;
-    protected $mockViewHelperManager;
-    protected $mockFlashMessengerHelper;
-    protected $mockUserListInternalDataService;
-    protected $mockUserListInternalExcludingDataService;
-    protected $mockSubCategoryDataService;
-    protected $mockTaskSubCategoryDataService;
-    protected $mockDocumentSubCategoryDataService;
-    protected $mockDocumentSubCategoryWithDocsDataService;
-    protected $mockScannerSubCategoryDataService;
-    protected $mockSubCategoryDescriptionDataService;
     protected $mockIrhpPermitPrintCountryDataService;
     protected $mockIrhpPermitPrintStockDataService;
     protected $mockIrhpPermitPrintRangeTypeDataService;
 
 
+    #[\Override]
     public function setUp(): void
     {
-        $this->mockScriptFactory = m::mock(ScriptFactory::class);
-        $this->mockFormHelper = m::mock(FormHelperService::class);
-        $this->mockTableFactory = m::mock(TableFactory::class);
-        $this->mockViewHelperManager = m::mock(HelperPluginManager::class);
-        $this->mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
-        $this->mockUserListInternalDataService = m::mock(UserListInternal::class);
-        $this->mockUserListInternalExcludingDataService = m::mock(UserListInternalExcludingLimitedReadOnlyUsers::class);
-        $this->mockSubCategoryDataService = m::mock(SubCategory::class);
-        $this->mockTaskSubCategoryDataService = m::mock(TaskSubCategory::class);
-        $this->mockDocumentSubCategoryDataService = m::mock(DocumentSubCategory::class);
-        $this->mockDocumentSubCategoryWithDocsDataService = m::mock(DocumentSubCategoryWithDocs::class);
-        $this->mockScannerSubCategoryDataService = m::mock(ScannerSubCategory::class);
-        $this->mockSubCategoryDescriptionDataService = m::mock(SubCategoryDescription::class);
+        $mockScriptFactory = m::mock(ScriptFactory::class);
+        $mockFormHelper = m::mock(FormHelperService::class);
+        $mockTableFactory = m::mock(TableFactory::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
+        $mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
+        $mockUserListInternalDataService = m::mock(UserListInternal::class);
+        $mockUserListInternalExcludingDataService = m::mock(UserListInternalExcludingLimitedReadOnlyUsers::class);
+        $mockSubCategoryDataService = m::mock(SubCategory::class);
+        $mockTaskSubCategoryDataService = m::mock(TaskSubCategory::class);
+        $mockDocumentSubCategoryDataService = m::mock(DocumentSubCategory::class);
+        $mockDocumentSubCategoryWithDocsDataService = m::mock(DocumentSubCategoryWithDocs::class);
+        $mockScannerSubCategoryDataService = m::mock(ScannerSubCategory::class);
+        $mockSubCategoryDescriptionDataService = m::mock(SubCategoryDescription::class);
         $this->mockIrhpPermitPrintCountryDataService = m::mock(IrhpPermitPrintCountry::class);
         $this->mockIrhpPermitPrintStockDataService = m::mock(IrhpPermitPrintStock::class);
         $this->mockIrhpPermitPrintRangeTypeDataService = m::mock(IrhpPermitPrintRangeType::class);
 
         $this->sut = m::mock(IndexController::class, [
-            $this->mockScriptFactory,
-            $this->mockFormHelper,
-            $this->mockTableFactory,
-            $this->mockViewHelperManager,
-            $this->mockFlashMessengerHelper,
-            $this->mockUserListInternalDataService,
-            $this->mockUserListInternalExcludingDataService,
-            $this->mockSubCategoryDataService,
-            $this->mockTaskSubCategoryDataService,
-            $this->mockDocumentSubCategoryDataService,
-            $this->mockDocumentSubCategoryWithDocsDataService,
-            $this->mockScannerSubCategoryDataService,
-            $this->mockSubCategoryDescriptionDataService,
+            $mockScriptFactory,
+            $mockFormHelper,
+            $mockTableFactory,
+            $mockViewHelperManager,
+            $mockFlashMessengerHelper,
+            $mockUserListInternalDataService,
+            $mockUserListInternalExcludingDataService,
+            $mockSubCategoryDataService,
+            $mockTaskSubCategoryDataService,
+            $mockDocumentSubCategoryDataService,
+            $mockDocumentSubCategoryWithDocsDataService,
+            $mockScannerSubCategoryDataService,
+            $mockSubCategoryDescriptionDataService,
             $this->mockIrhpPermitPrintCountryDataService,
             $this->mockIrhpPermitPrintStockDataService,
             $this->mockIrhpPermitPrintRangeTypeDataService
@@ -117,44 +103,40 @@ class IndexControllerTest extends MockeryTestCase
         $this->assertEquals($expected, $view->serialize());
     }
 
-    public static function dpTestEntityListAction(): array
+    public static function dpTestEntityListAction(): \Iterator
     {
         $value = 100;
-
-        return [
-            'irhp-permit-print-country' => [
-                'type' => 'irhp-permit-print-country',
-                'value' => $value,
-                'dataService' => IrhpPermitPrintCountry::class,
-                'mockDataService' => 'mockIrhpPermitPrintCountryDataService',
-                'expected'
-                    => '[{"value":"","label":"Please select"},{"value":11,"label":"ABC"},{"value":12,"label":"DEF"}]',
-            ],
-            'irhp-permit-print-stock-by-country' => [
-                'type' => 'irhp-permit-print-stock-by-country',
-                'value' => $value,
-                'dataService' => IrhpPermitPrintStock::class,
-                'mockDataService' => 'mockIrhpPermitPrintStockDataService',
-                'expected'
-                    => '[{"value":"","label":"Please select"},{"value":11,"label":"ABC"},{"value":12,"label":"DEF"}]',
-            ],
-            'irhp-permit-print-stock-by-type' => [
-                'type' => 'irhp-permit-print-stock-by-type',
-                'value' => $value,
-                'dataService' => IrhpPermitPrintStock::class,
-                'mockDataService' => 'mockIrhpPermitPrintStockDataService',
-                'expected'
-                    => '[{"value":"","label":"Please select"},{"value":11,"label":"ABC"},{"value":12,"label":"DEF"}]',
-            ],
-            'irhp-permit-print-range-type-by-stock' => [
-                'type' => 'irhp-permit-print-range-type-by-stock',
-                'value' => $value,
-                'dataService' => IrhpPermitPrintRangeType::class,
-                'mockDataService' => 'mockIrhpPermitPrintRangeTypeDataService',
-                'expected'
-                    => '[{"value":"","label":"Please select"},{"value":11,"label":"ABC"},{"value":12,"label":"DEF"}]',
-            ],
-
+        yield 'irhp-permit-print-country' => [
+            'type' => 'irhp-permit-print-country',
+            'value' => $value,
+            'dataService' => IrhpPermitPrintCountry::class,
+            'mockDataService' => 'mockIrhpPermitPrintCountryDataService',
+            'expected'
+                => '[{"value":"","label":"Please select"},{"value":11,"label":"ABC"},{"value":12,"label":"DEF"}]',
+        ];
+        yield 'irhp-permit-print-stock-by-country' => [
+            'type' => 'irhp-permit-print-stock-by-country',
+            'value' => $value,
+            'dataService' => IrhpPermitPrintStock::class,
+            'mockDataService' => 'mockIrhpPermitPrintStockDataService',
+            'expected'
+                => '[{"value":"","label":"Please select"},{"value":11,"label":"ABC"},{"value":12,"label":"DEF"}]',
+        ];
+        yield 'irhp-permit-print-stock-by-type' => [
+            'type' => 'irhp-permit-print-stock-by-type',
+            'value' => $value,
+            'dataService' => IrhpPermitPrintStock::class,
+            'mockDataService' => 'mockIrhpPermitPrintStockDataService',
+            'expected'
+                => '[{"value":"","label":"Please select"},{"value":11,"label":"ABC"},{"value":12,"label":"DEF"}]',
+        ];
+        yield 'irhp-permit-print-range-type-by-stock' => [
+            'type' => 'irhp-permit-print-range-type-by-stock',
+            'value' => $value,
+            'dataService' => IrhpPermitPrintRangeType::class,
+            'mockDataService' => 'mockIrhpPermitPrintRangeTypeDataService',
+            'expected'
+                => '[{"value":"","label":"Please select"},{"value":11,"label":"ABC"},{"value":12,"label":"DEF"}]',
         ];
     }
 }

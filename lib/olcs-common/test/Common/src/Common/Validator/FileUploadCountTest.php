@@ -7,7 +7,7 @@ namespace CommonTest\Validator;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Validator\FileUploadCount;
 
-class FileUploadCountTest extends MockeryTestCase
+final class FileUploadCountTest extends MockeryTestCase
 {
     public function testSetOptions(): void
     {
@@ -15,9 +15,7 @@ class FileUploadCountTest extends MockeryTestCase
         $this->assertEquals(23, $sut->getMin());
     }
 
-    /**
-     * @dataProvider dataProviderTestIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestIsValid')]
     public function testIsValid($expected, $min, $context): void
     {
         $sut = new FileUploadCount(['min' => $min]);
@@ -28,20 +26,18 @@ class FileUploadCountTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|int|int[])[][]
+     * @return \Iterator<(int | string), array<(array<int> | bool | int)>>
      *
      * @psalm-return list{list{false, 2, array<never, never>}, list{false, 2, array{uploadedFileCount: 1}}, list{true, 2, array{uploadedFileCount: 2}}, list{true, 1, array{uploadedFileCount: 1}}, list{true, 2, array{uploadedFileCount: 2}}}
      */
-    public function dataProviderTestIsValid(): array
+    public static function dataProviderTestIsValid(): \Iterator
     {
-        return [
-            // isValid, min, context
-            [false, 2, []],
-            [false, 2, ['uploadedFileCount' => 1]],
-            [true, 2, ['uploadedFileCount' => 2]],
-            [true, 1, ['uploadedFileCount' => 1]],
-            [true, 2, ['uploadedFileCount' => 2]],
-        ];
+        // isValid, min, context
+        yield [false, 2, []];
+        yield [false, 2, ['uploadedFileCount' => 1]];
+        yield [true, 2, ['uploadedFileCount' => 2]];
+        yield [true, 1, ['uploadedFileCount' => 1]];
+        yield [true, 2, ['uploadedFileCount' => 2]];
     }
 
     public function testSetMin(): void

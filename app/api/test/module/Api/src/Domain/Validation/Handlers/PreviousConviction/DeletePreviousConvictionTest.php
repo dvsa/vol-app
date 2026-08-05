@@ -11,7 +11,7 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\PreviousConviction\DeletePreviousConviction;
 
-class DeletePreviousConvictionTest extends AbstractHandlerTestCase
+final class DeletePreviousConvictionTest extends AbstractHandlerTestCase
 {
     /**
      * @var DeletePreviousConviction
@@ -35,7 +35,7 @@ class DeletePreviousConvictionTest extends AbstractHandlerTestCase
             ->with(Permission::INTERNAL_USER, null)->once()
             ->andReturn(true);
 
-        $this->assertSame(true, $this->sut->isValid($dto));
+        $this->assertTrue($this->sut->isValid($dto));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
@@ -59,11 +59,9 @@ class DeletePreviousConvictionTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

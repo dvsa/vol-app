@@ -18,7 +18,7 @@ class PasswordServiceFactory implements FactoryInterface
      * @return PasswordService
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PasswordService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): PasswordService
     {
         return new PasswordService();
     }

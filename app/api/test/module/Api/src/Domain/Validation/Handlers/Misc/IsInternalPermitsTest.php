@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * IsInternalPermits Test
  */
-class IsInternalPermitsTest extends AbstractHandlerTestCase
+final class IsInternalPermitsTest extends AbstractHandlerTestCase
 {
     /**
      * @var IsInternalPermits

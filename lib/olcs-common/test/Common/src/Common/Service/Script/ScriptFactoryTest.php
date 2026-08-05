@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Script;
 
 use Common\Service\Script\ScriptFactory;
 use Psr\Container\ContainerInterface;
 
-class ScriptFactoryTest extends \PHPUnit\Framework\TestCase
+final class ScriptFactoryTest extends \PHPUnit\Framework\TestCase
 {
     public $inlineScript;
     public $service;
@@ -23,21 +25,22 @@ class ScriptFactoryTest extends \PHPUnit\Framework\TestCase
 
         $this->inlineScript = new \Laminas\View\Helper\InlineScript();
 
-        $vhm = $this->createMock(\Laminas\View\HelperPluginManager::class);
-        $vhm->expects($this->any())
+        $vhm = $this->createStub(\Laminas\View\HelperPluginManager::class);
+        $vhm
             ->method('get')
-            ->with('inlineScript')
-            ->will($this->returnValue($this->inlineScript));
+            ->willReturnMap([
+                ['inlineScript', $this->inlineScript],
+            ]);
 
         $valueMap = [
             ['ViewHelperManager', $vhm],
             ['Config', $this->config],
         ];
 
-        $sl = $this->createMock(ContainerInterface::class);
-        $sl->expects($this->any())
+        $sl = $this->createStub(ContainerInterface::class);
+        $sl
            ->method('get')
-           ->will($this->returnValueMap($valueMap));
+           ->willReturnMap($valueMap);
 
         $this->service = new ScriptFactory();
         $this->service->__invoke($sl, ScriptFactory::class);
@@ -48,7 +51,7 @@ class ScriptFactoryTest extends \PHPUnit\Framework\TestCase
         try {
             $this->service->loadFile('/foo/bar');
         } catch (\Exception $exception) {
-            $this->assertEquals('Attempted to load invalid script file "/foo/bar"', $exception->getMessage());
+            $this->assertSame('Attempted to load invalid script file "/foo/bar"', $exception->getMessage());
             return;
         }
 
@@ -77,7 +80,7 @@ class ScriptFactoryTest extends \PHPUnit\Framework\TestCase
         try {
             $this->service->loadFiles(['stub', 'foo']);
         } catch (\Exception $exception) {
-            $this->assertEquals('Attempted to load invalid script file "foo"', $exception->getMessage());
+            $this->assertSame('Attempted to load invalid script file "foo"', $exception->getMessage());
             return;
         }
 

@@ -13,7 +13,7 @@ class DataRetentionRuleAdminLinkFactory implements FactoryInterface
      * @return DataRetentionRuleAdminLink
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $urlHelper = $container->get('Helper\Url');
         return new DataRetentionRuleAdminLink($urlHelper);

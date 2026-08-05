@@ -12,7 +12,7 @@ use Laminas\Form\Form;
 /**
  * DocumentRelink Mapper Test
  */
-class DocumentRelinkTest extends MockeryTestCase
+final class DocumentRelinkTest extends MockeryTestCase
 {
     public function testMapFromForm(): void
     {

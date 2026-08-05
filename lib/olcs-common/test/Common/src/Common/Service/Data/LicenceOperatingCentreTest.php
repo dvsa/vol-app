@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Service\Data\LicenceOperatingCentre;
@@ -10,7 +12,7 @@ use Mockery as m;
  * Class LicenceTest
  * @package OlcsTest\Service\Data
  */
-class LicenceOperatingCentreTest extends AbstractDataServiceTestCase
+final class LicenceOperatingCentreTest extends AbstractDataServiceTestCase
 {
     /** @var LicenceOperatingCentre */
     private $sut;
@@ -22,18 +24,14 @@ class LicenceOperatingCentreTest extends AbstractDataServiceTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->licenceDataService = m::mock(LicenceDataService::class);
-
         $this->sut = new LicenceOperatingCentre(
             $this->abstractDataServiceServices,
             $this->licenceDataService
         );
     }
 
-    /**
-     * @group licenceOperatingCentreTest
-     */
+    #[\PHPUnit\Framework\Attributes\Group('licenceOperatingCentreTest')]
     public function testGetId(): void
     {
         $licenceId = 110;
@@ -46,10 +44,8 @@ class LicenceOperatingCentreTest extends AbstractDataServiceTestCase
         $this->assertEquals($licenceId, $this->sut->getId());
     }
 
-    /**
-     * @group licenceOperatingCentreTest
-     * @dataProvider providerOutputType
-     */
+    #[\PHPUnit\Framework\Attributes\Group('licenceOperatingCentreTest')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerOutputType')]
     public function testFetchListOptions($outputType): void
     {
         $this->sut->setOutputType($outputType);
@@ -85,47 +81,43 @@ class LicenceOperatingCentreTest extends AbstractDataServiceTestCase
         $result = $this->sut->fetchListOptions($licenceId);
 
         $this->assertCount(1, $result);
-        $this->assertStringContainsString('a1', $result[1]);
+        $this->assertStringContainsString('a1', (string) $result[1]);
 
         if ($outputType == LicenceOperatingCentre::OUTPUT_TYPE_FULL) {
-            $this->assertStringContainsString('a2', $result[1]);
-            $this->assertStringContainsString('a3', $result[1]);
-            $this->assertStringContainsString('pc', $result[1]);
+            $this->assertStringContainsString('a2', (string) $result[1]);
+            $this->assertStringContainsString('a3', (string) $result[1]);
+            $this->assertStringContainsString('pc', (string) $result[1]);
         } else {
-            $this->assertStringContainsString('town', $result[1]);
+            $this->assertStringContainsString('town', (string) $result[1]);
         }
 
         //test data is cached
         $result = $this->sut->fetchListOptions($licenceId);
 
         $this->assertCount(1, $result);
-        $this->assertStringContainsString('a1', $result[1]);
+        $this->assertStringContainsString('a1', (string) $result[1]);
 
         if ($outputType == LicenceOperatingCentre::OUTPUT_TYPE_FULL) {
-            $this->assertStringContainsString('a2', $result[1]);
-            $this->assertStringContainsString('a3', $result[1]);
-            $this->assertStringContainsString('pc', $result[1]);
+            $this->assertStringContainsString('a2', (string) $result[1]);
+            $this->assertStringContainsString('a3', (string) $result[1]);
+            $this->assertStringContainsString('pc', (string) $result[1]);
         } else {
-            $this->assertStringContainsString('town', $result[1]);
+            $this->assertStringContainsString('town', (string) $result[1]);
         }
     }
 
     /**
-     * @return int[][]
+     * @return \Iterator<(int | string), array<int>>
      *
      * @psalm-return list{list{1}, list{2}}
      */
-    public function providerOutputType(): array
+    public static function providerOutputType(): \Iterator
     {
-        return [
-            [LicenceOperatingCentre::OUTPUT_TYPE_FULL],
-            [LicenceOperatingCentre::OUTPUT_TYPE_PARTIAL]
-        ];
+        yield [LicenceOperatingCentre::OUTPUT_TYPE_FULL];
+        yield [LicenceOperatingCentre::OUTPUT_TYPE_PARTIAL];
     }
 
-    /**
-     * @group licenceOperatingCentreTest
-     */
+    #[\PHPUnit\Framework\Attributes\Group('licenceOperatingCentreTest')]
     public function testSetOutputType(): void
     {
         $this->sut->setOutputType(LicenceOperatingCentre::OUTPUT_TYPE_FULL);

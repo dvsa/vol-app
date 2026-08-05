@@ -13,7 +13,7 @@ use Common\RefData;
 /**
  * BusRegShortNotice Mapper Test
  */
-class BusRegShortNoticeTest extends MockeryTestCase
+final class BusRegShortNoticeTest extends MockeryTestCase
 {
     /**
      *
@@ -26,28 +26,26 @@ class BusRegShortNoticeTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
+            [],
+            []
+        ];
+        // edit
+        yield [
             [
-                [],
-                []
-            ],
-            // edit
-            [
-                [
-                    'result' => [
-                        [
-                            'id' => 987
-                        ]
-                    ]
-                ],
-                [
-                    'fields' => [
+                'result' => [
+                    [
                         'id' => 987
-                    ],
+                    ]
                 ]
+            ],
+            [
+                'fields' => [
+                    'id' => 987
+                ],
             ]
         ];
     }

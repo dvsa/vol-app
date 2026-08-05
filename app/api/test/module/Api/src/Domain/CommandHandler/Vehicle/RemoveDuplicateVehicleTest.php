@@ -19,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class RemoveDuplicateVehicleTest extends AbstractCommandHandlerTestCase
+final class RemoveDuplicateVehicleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -18,7 +18,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 /**
  * Generate Permits Test
  */
-class GeneratePermitsTest extends AbstractCommandHandlerTestCase
+final class GeneratePermitsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -84,7 +84,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'ids' => $ids,
                 'status' => IrhpPermit::STATUS_PRINTING,
             ],
-            (new Result())->addMessage('Permits proceeded to Printing')
+            new Result()->addMessage('Permits proceeded to Printing')
         );
 
         $docsResult = new Result();
@@ -110,7 +110,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'ids' => $ids,
                 'status' => IrhpPermit::STATUS_ERROR,
             ],
-            (new Result())->addMessage('Permits proceeded to Error')
+            new Result()->addMessage('Permits proceeded to Error')
         );
 
         $this->expectException(RuntimeException::class);
@@ -119,19 +119,17 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dpHandleButIssueWithDocs(): array
+    public static function dpHandleButIssueWithDocs(): \Iterator
     {
-        return [
-            'no docs generated' => [
-                null,
-                null,
-                'Permits generation failed with error: No documents generated.'
-            ],
-            'no permit docs generated' => [
-                [],
-                [201, 202, 203],
-                'Permits generation failed with error: No permits generated.'
-            ],
+        yield 'no docs generated' => [
+            null,
+            null,
+            'Permits generation failed with error: No documents generated.'
+        ];
+        yield 'no permit docs generated' => [
+            [],
+            [201, 202, 203],
+            'Permits generation failed with error: No permits generated.'
         ];
     }
 
@@ -166,7 +164,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'ids' => $ids,
                 'status' => IrhpPermit::STATUS_PRINTING,
             ],
-            (new Result())->addMessage('Permits proceeded to Printing')
+            new Result()->addMessage('Permits proceeded to Printing')
         );
 
         $this->expectedSideEffect(
@@ -174,7 +172,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
             [
                 'ids' => $ids,
             ],
-            (new Result())
+            new Result()
                 ->addId('permit', $permitDocs)
                 ->addId('coveringLetter', $letterDocs)
                 ->addMessage('Docs generated')
@@ -197,7 +195,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'ids' => $ids,
                 'status' => IrhpPermit::STATUS_ERROR,
             ],
-            (new Result())->addMessage('Permits proceeded to Error')
+            new Result()->addMessage('Permits proceeded to Error')
         );
 
         $this->sut->handleCommand($command);
@@ -234,7 +232,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'ids' => $ids,
                 'status' => IrhpPermit::STATUS_PRINTING,
             ],
-            (new Result())->addMessage('Permits proceeded to Printing')
+            new Result()->addMessage('Permits proceeded to Printing')
         );
 
         $this->expectedSideEffect(
@@ -242,7 +240,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
             [
                 'ids' => $ids,
             ],
-            (new Result())
+            new Result()
                 ->addId('permit', $permitDocs)
                 ->addId('coveringLetter', $letterDocs)
                 ->addMessage('Docs generated')
@@ -256,7 +254,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'jobName' => 'Permits',
                 'user' => $userId,
             ],
-            (new Result())->addMessage('Permits scheduled for printing')
+            new Result()->addMessage('Permits scheduled for printing')
         );
 
         $this->expectedSideEffectThrowsException(
@@ -275,7 +273,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'ids' => $ids,
                 'status' => IrhpPermit::STATUS_ERROR,
             ],
-            (new Result())->addMessage('Permits proceeded to Error')
+            new Result()->addMessage('Permits proceeded to Error')
         );
 
         $this->sut->handleCommand($command);
@@ -309,7 +307,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'ids' => $ids,
                 'status' => IrhpPermit::STATUS_PRINTING,
             ],
-            (new Result())->addMessage('Permits proceeded to Printing')
+            new Result()->addMessage('Permits proceeded to Printing')
         );
 
         $this->expectedSideEffect(
@@ -317,7 +315,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
             [
                 'ids' => $ids,
             ],
-            (new Result())
+            new Result()
                 ->addId('permit', $permitDocs)
                 ->addId('coveringLetter', $letterDocs)
                 ->addMessage('Docs generated')
@@ -331,7 +329,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'jobName' => 'Permits',
                 'user' => $userId,
             ],
-            (new Result())->addMessage('Permits scheduled for printing')
+            new Result()->addMessage('Permits scheduled for printing')
         );
 
         $this->expectedSideEffect(
@@ -341,7 +339,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'jobName' => 'Permit covering letter',
                 'user' => $userId,
             ],
-            (new Result())->addMessage(sprintf('Letter %d scheduled for printing', $letterDocs[0]))
+            new Result()->addMessage(sprintf('Letter %d scheduled for printing', $letterDocs[0]))
         );
         $this->expectedSideEffect(
             Enqueue::class,
@@ -350,7 +348,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'jobName' => 'Permit covering letter',
                 'user' => $userId,
             ],
-            (new Result())->addMessage(sprintf('Letter %d scheduled for printing', $letterDocs[1]))
+            new Result()->addMessage(sprintf('Letter %d scheduled for printing', $letterDocs[1]))
         );
         $this->expectedSideEffect(
             Enqueue::class,
@@ -359,7 +357,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'jobName' => 'Permit covering letter',
                 'user' => $userId,
             ],
-            (new Result())->addMessage(sprintf('Letter %d scheduled for printing', $letterDocs[2]))
+            new Result()->addMessage(sprintf('Letter %d scheduled for printing', $letterDocs[2]))
         );
 
         $this->expectedSideEffect(
@@ -368,7 +366,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'ids' => $ids,
                 'status' => IrhpPermit::STATUS_PRINTED,
             ],
-            (new Result())->addMessage('Permits proceeded to Printed')
+            new Result()->addMessage('Permits proceeded to Printed')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -420,7 +418,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'ids' => $ids,
                 'status' => IrhpPermit::STATUS_PRINTING,
             ],
-            (new Result())->addMessage('Permits proceeded to Printing')
+            new Result()->addMessage('Permits proceeded to Printing')
         );
 
         $this->expectedSideEffect(
@@ -428,7 +426,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
             [
                 'ids' => $ids,
             ],
-            (new Result())
+            new Result()
                 ->addId('permit', $permitDocs)
                 ->addMessage('Docs generated')
         );
@@ -441,7 +439,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'jobName' => 'Permits',
                 'user' => $userId,
             ],
-            (new Result())->addMessage('Permits scheduled for printing')
+            new Result()->addMessage('Permits scheduled for printing')
         );
 
         $this->expectedSideEffect(
@@ -450,7 +448,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'ids' => $ids,
                 'status' => IrhpPermit::STATUS_PRINTED,
             ],
-            (new Result())->addMessage('Permits proceeded to Printed')
+            new Result()->addMessage('Permits proceeded to Printed')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -499,7 +497,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'ids' => $ids,
                 'status' => IrhpPermit::STATUS_PRINTING,
             ],
-            (new Result())->addMessage('Permits proceeded to Printing')
+            new Result()->addMessage('Permits proceeded to Printing')
         );
 
         $this->expectedSideEffect(
@@ -507,7 +505,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
             [
                 'ids' => $ids,
             ],
-            (new Result())
+            new Result()
                 ->addId('permit', $permitDocs)
                 ->addId('coveringLetter', $letterDocs)
                 ->addMessage('Docs generated')
@@ -521,7 +519,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'jobName' => 'Permits',
                 'user' => $userId,
             ],
-            (new Result())->addMessage('Permits scheduled for printing')
+            new Result()->addMessage('Permits scheduled for printing')
         );
 
         $this->expectedSideEffect(
@@ -531,7 +529,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'jobName' => 'Permit covering letter',
                 'user' => $userId,
             ],
-            (new Result())->addMessage(sprintf('Letter %d scheduled for printing', $letterDocs))
+            new Result()->addMessage(sprintf('Letter %d scheduled for printing', $letterDocs))
         );
 
         $this->expectedSideEffect(
@@ -540,7 +538,7 @@ class GeneratePermitsTest extends AbstractCommandHandlerTestCase
                 'ids' => $ids,
                 'status' => IrhpPermit::STATUS_PRINTED,
             ],
-            (new Result())->addMessage('Permits proceeded to Printed')
+            new Result()->addMessage('Permits proceeded to Printed')
         );
 
         $result = $this->sut->handleCommand($command);

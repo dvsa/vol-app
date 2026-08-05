@@ -18,7 +18,7 @@ use Doctrine\ORM\Query;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class PsvVehiclesExportTest extends QueryHandlerTestCase
+final class PsvVehiclesExportTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

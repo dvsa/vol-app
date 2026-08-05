@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * Revoke Mapper Test
  */
-class RevokeTest extends MockeryTestCase
+final class RevokeTest extends MockeryTestCase
 {
     /**
      *
@@ -25,26 +25,24 @@ class RevokeTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
+            [],
+            ['fields' => []]
+        ];
+        // edit
+        yield [
             [
-                [],
-                ['fields' => []]
+                'id' => 987,
+                'case' => ['id' => 100],
             ],
-            // edit
             [
-                [
+                'fields' => [
                     'id' => 987,
-                    'case' => ['id' => 100],
+                    'case' => 100,
                 ],
-                [
-                    'fields' => [
-                        'id' => 987,
-                        'case' => 100,
-                    ],
-                ]
             ]
         ];
     }

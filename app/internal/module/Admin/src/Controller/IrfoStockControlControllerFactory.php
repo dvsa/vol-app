@@ -15,7 +15,7 @@ use Psr\Container\ContainerInterface;
 class IrfoStockControlControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrfoStockControlController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IrfoStockControlController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         assert($translationHelper instanceof TranslationHelperService);

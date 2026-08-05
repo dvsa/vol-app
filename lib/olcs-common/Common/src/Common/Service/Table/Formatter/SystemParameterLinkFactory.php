@@ -13,7 +13,7 @@ class SystemParameterLinkFactory implements FactoryInterface
      * @return SystemParameterLink
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $urlHelper = $container->get('Helper\Url');
         return new SystemParameterLink($urlHelper);

@@ -32,6 +32,8 @@ final readonly class PropertyNameResolver
         'address' => 'addresses',
         'bus' => 'buses',
         'status' => 'statuses',
+        'letterInstanceAppendix' => 'letterInstanceAppendices',
+        'letterTypeAppendix' => 'letterTypeAppendices',
     ];
 
     /**

@@ -11,6 +11,7 @@ on:
         description: "Environment to deploy"
         type: choice
         options:
+          - reg
           - dev
           - int
           - prep

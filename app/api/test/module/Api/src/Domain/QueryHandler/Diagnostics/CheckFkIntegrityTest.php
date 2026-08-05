@@ -14,7 +14,7 @@ use Mockery as m;
 use PDO;
 use PDOStatement;
 
-class CheckFkIntegrityTest extends QueryHandlerTestCase
+final class CheckFkIntegrityTest extends QueryHandlerTestCase
 {
     /** @var m\MockInterface|PDO */
     private $mockPdo;

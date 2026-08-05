@@ -15,7 +15,7 @@ use Olcs\Service\WebDav\WebDavRedisFactory;
 class PublicationControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PublicationController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): PublicationController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         assert($translationHelper instanceof TranslationHelperService);

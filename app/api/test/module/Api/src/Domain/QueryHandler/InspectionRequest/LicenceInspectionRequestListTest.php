@@ -23,7 +23,7 @@ use Doctrine\ORM\Query as OrmQuery;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class LicenceInspectionRequestListTest extends QueryHandlerTestCase
+final class LicenceInspectionRequestListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

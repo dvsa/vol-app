@@ -16,29 +16,28 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\OperatingCentre\LvaOperatingCentre;
 
-class LvaOperatingCentreTest extends MockeryTestCase
+final class LvaOperatingCentreTest extends MockeryTestCase
 {
-    protected const TEMPLATE_FILE_NI_VAR = 'advertising-your-operating-centre-ni-var';
-    protected const TEMPLATE_FILE_NI_NEW = 'advertising-your-operating-centre-ni-new';
-    protected const TEMPLATE_FILE_GB_NEW = 'default-guide-oc-advert-gb-new';
-    protected const TEMPLATE_FILE_GB_VAR = 'advertising-your-operating-centre-gb-var';
+    protected const string TEMPLATE_FILE_NI_VAR = 'advertising-your-operating-centre-ni-var';
+    protected const string TEMPLATE_FILE_NI_NEW = 'advertising-your-operating-centre-ni-new';
+    protected const string TEMPLATE_FILE_GB_NEW = 'default-guide-oc-advert-gb-new';
+    protected const string TEMPLATE_FILE_GB_VAR = 'advertising-your-operating-centre-gb-var';
 
-    protected const GUIDE_NI_VAR = 'advertising-your-operating-centre-ni-var';
-    protected const GUIDE_NI_NEW = 'advertising-your-operating-centre-ni-new';
-    protected const GUIDE_GB_NEW = 'advertising-your-operating-centre-gb-new';
-    protected const GUIDE_GB_VAR = 'advertising-your-operating-centre-gb-var';
+    protected const string GUIDE_NI_VAR = 'advertising-your-operating-centre-ni-var';
+    protected const string GUIDE_NI_NEW = 'advertising-your-operating-centre-ni-new';
+    protected const string GUIDE_GB_NEW = 'advertising-your-operating-centre-gb-new';
+    protected const string GUIDE_GB_VAR = 'advertising-your-operating-centre-gb-var';
     protected $sut;
-
-    protected $formHelper;
 
     protected $valueOptions = [
         'adPlaced' => 'lva-oc-adplaced-y-selfserve',
         'adPlacedLater' => 'lva-oc-adplaced-l-selfserve',
     ];
 
+    #[\Override]
     public function setUp(): void
     {
-        $this->formHelper = m::mock(FormHelperService::class);
+        $formHelper = m::mock(FormHelperService::class);
 
         $mockTranslator = m::mock(TranslationHelperService::class);
         $mockTranslator->shouldReceive('translate')
@@ -56,7 +55,7 @@ class LvaOperatingCentreTest extends MockeryTestCase
                 fn($route, $params) => $route . '-' . implode('-', $params)
             );
 
-        $this->sut = new LvaOperatingCentre($this->formHelper, $mockTranslator, $mockUrl);
+        $this->sut = new LvaOperatingCentre($formHelper, $mockTranslator, $mockUrl);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('paramsProvider')]
@@ -272,172 +271,168 @@ class LvaOperatingCentreTest extends MockeryTestCase
     }
 
     /**
-     * @return ((int|int[])[]|bool|int|mixed|string)[][][]
+     * @return \Iterator<(int | string), array<array<mixed>>>
      *
      * @psalm-return list{list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, niFlag: 'Y', licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, trafficArea: array{isNi: 1}, licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, licence: array{trafficArea: array{isNi: 1}}, licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, licence: array{trafficArea: array{isNi: 1}}, licNo: 'AB12345', applicationId: 111, isVariation: true, templateFile: string, guide: mixed}}}
      */
-    public static function paramsProvider(): array
+    public static function paramsProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'id' => 124,
-                    'isPsv' => false,
-                    'canAddAnother' => true,
-                    'canUpdateAddress' => true,
-                    'wouldIncreaseRequireAdditionalAdvertisement' => false,
-                    'niFlag' => 'Y',
-                    'licNo' => 'AB12345',
-                    'applicationId' => 111,
-                    'isVariation' => false,
-                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_NI_NEW),
-                    'guide' => static::GUIDE_NI_NEW
-                ]
-            ],
+                'id' => 124,
+                'isPsv' => false,
+                'canAddAnother' => true,
+                'canUpdateAddress' => true,
+                'wouldIncreaseRequireAdditionalAdvertisement' => false,
+                'niFlag' => 'Y',
+                'licNo' => 'AB12345',
+                'applicationId' => 111,
+                'isVariation' => false,
+                'templateFile' => base64_encode((string) static::TEMPLATE_FILE_NI_NEW),
+                'guide' => static::GUIDE_NI_NEW
+            ]
+        ];
+        yield [
             [
-                [
-                    'id' => 124,
-                    'isPsv' => false,
-                    'canAddAnother' => true,
-                    'canUpdateAddress' => true,
-                    'wouldIncreaseRequireAdditionalAdvertisement' => false,
+                'id' => 124,
+                'isPsv' => false,
+                'canAddAnother' => true,
+                'canUpdateAddress' => true,
+                'wouldIncreaseRequireAdditionalAdvertisement' => false,
+                'trafficArea' => [
+                    'isNi' => 1
+                ],
+                'licNo' => 'AB12345',
+                'applicationId' => 111,
+                'isVariation' => false,
+                'templateFile' => base64_encode((string) static::TEMPLATE_FILE_NI_NEW),
+                'guide' => static::GUIDE_NI_NEW
+            ]
+        ];
+        yield [
+            [
+                'id' => 124,
+                'isPsv' => false,
+                'canAddAnother' => true,
+                'canUpdateAddress' => true,
+                'wouldIncreaseRequireAdditionalAdvertisement' => false,
+                'licence' => [
                     'trafficArea' => [
                         'isNi' => 1
                     ],
-                    'licNo' => 'AB12345',
-                    'applicationId' => 111,
-                    'isVariation' => false,
-                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_NI_NEW),
-                    'guide' => static::GUIDE_NI_NEW
-                ]
-            ],
+                ],
+                'licNo' => 'AB12345',
+                'applicationId' => 111,
+                'isVariation' => false,
+                'templateFile' => base64_encode((string) static::TEMPLATE_FILE_NI_NEW),
+                'guide' => static::GUIDE_NI_NEW
+            ]
+        ];
+        yield [
             [
-                [
-                    'id' => 124,
-                    'isPsv' => false,
-                    'canAddAnother' => true,
-                    'canUpdateAddress' => true,
-                    'wouldIncreaseRequireAdditionalAdvertisement' => false,
-                    'licence' => [
-                        'trafficArea' => [
-                            'isNi' => 1
-                        ],
+                'id' => 124,
+                'isPsv' => false,
+                'canAddAnother' => true,
+                'canUpdateAddress' => true,
+                'wouldIncreaseRequireAdditionalAdvertisement' => false,
+                'licence' => [
+                    'trafficArea' => [
+                        'isNi' => 1
                     ],
-                    'licNo' => 'AB12345',
-                    'applicationId' => 111,
-                    'isVariation' => false,
-                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_NI_NEW),
-                    'guide' => static::GUIDE_NI_NEW
-                ]
-            ],
-            [
-                [
-                    'id' => 124,
-                    'isPsv' => false,
-                    'canAddAnother' => true,
-                    'canUpdateAddress' => true,
-                    'wouldIncreaseRequireAdditionalAdvertisement' => false,
-                    'licence' => [
-                        'trafficArea' => [
-                            'isNi' => 1
-                        ],
-                    ],
-                    'licNo' => 'AB12345',
-                    'applicationId' => 111,
-                    'isVariation' => true,
-                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_NI_VAR),
-                    'guide' => static::GUIDE_NI_VAR
-                ]
+                ],
+                'licNo' => 'AB12345',
+                'applicationId' => 111,
+                'isVariation' => true,
+                'templateFile' => base64_encode((string) static::TEMPLATE_FILE_NI_VAR),
+                'guide' => static::GUIDE_NI_VAR
             ]
         ];
     }
 
     /**
-     * @return ((int|int[])[]|bool|int|mixed|string)[][][]
+     * @return \Iterator<(int | string), array<array<mixed>>>
      *
      * @psalm-return list{list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, niFlag: 'N', licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, trafficArea: array{isNi: 0}, licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, licence: array{trafficArea: array{isNi: 0}}, licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, licNo: 'AB12345', applicationId: 111, isVariation: false, templateFile: string, guide: mixed}}, list{array{id: 124, isPsv: false, canAddAnother: true, canUpdateAddress: true, wouldIncreaseRequireAdditionalAdvertisement: false, licNo: 'AB12345', applicationId: 111, isVariation: true, templateFile: string, guide: mixed}}}
      */
-    public static function gbParamsProvider(): array
+    public static function gbParamsProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'id' => 124,
-                    'isPsv' => false,
-                    'canAddAnother' => true,
-                    'canUpdateAddress' => true,
-                    'wouldIncreaseRequireAdditionalAdvertisement' => false,
-                    'niFlag' => 'N',
-                    'licNo' => 'AB12345',
-                    'applicationId' => 111,
-                    'isVariation' => false,
-                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_GB_NEW),
-                    'guide' => static::GUIDE_GB_NEW
-                ]
-            ],
+                'id' => 124,
+                'isPsv' => false,
+                'canAddAnother' => true,
+                'canUpdateAddress' => true,
+                'wouldIncreaseRequireAdditionalAdvertisement' => false,
+                'niFlag' => 'N',
+                'licNo' => 'AB12345',
+                'applicationId' => 111,
+                'isVariation' => false,
+                'templateFile' => base64_encode((string) static::TEMPLATE_FILE_GB_NEW),
+                'guide' => static::GUIDE_GB_NEW
+            ]
+        ];
+        yield [
             [
-                [
-                    'id' => 124,
-                    'isPsv' => false,
-                    'canAddAnother' => true,
-                    'canUpdateAddress' => true,
-                    'wouldIncreaseRequireAdditionalAdvertisement' => false,
+                'id' => 124,
+                'isPsv' => false,
+                'canAddAnother' => true,
+                'canUpdateAddress' => true,
+                'wouldIncreaseRequireAdditionalAdvertisement' => false,
+                'trafficArea' => [
+                    'isNi' => 0
+                ],
+                'licNo' => 'AB12345',
+                'applicationId' => 111,
+                'isVariation' => false,
+                'templateFile' => base64_encode((string) static::TEMPLATE_FILE_GB_NEW),
+                'guide' => static::GUIDE_GB_NEW
+            ]
+        ];
+        yield [
+            [
+                'id' => 124,
+                'isPsv' => false,
+                'canAddAnother' => true,
+                'canUpdateAddress' => true,
+                'wouldIncreaseRequireAdditionalAdvertisement' => false,
+                'licence' => [
                     'trafficArea' => [
                         'isNi' => 0
-                    ],
-                    'licNo' => 'AB12345',
-                    'applicationId' => 111,
-                    'isVariation' => false,
-                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_GB_NEW),
-                    'guide' => static::GUIDE_GB_NEW
-                ]
-            ],
+                    ]
+                ],
+                'licNo' => 'AB12345',
+                'applicationId' => 111,
+                'isVariation' => false,
+                'templateFile' => base64_encode((string) static::TEMPLATE_FILE_GB_NEW),
+                'guide' => static::GUIDE_GB_NEW
+            ]
+        ];
+        yield [
             [
-                [
-                    'id' => 124,
-                    'isPsv' => false,
-                    'canAddAnother' => true,
-                    'canUpdateAddress' => true,
-                    'wouldIncreaseRequireAdditionalAdvertisement' => false,
-                    'licence' => [
-                        'trafficArea' => [
-                            'isNi' => 0
-                        ]
-                    ],
-                    'licNo' => 'AB12345',
-                    'applicationId' => 111,
-                    'isVariation' => false,
-                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_GB_NEW),
-                    'guide' => static::GUIDE_GB_NEW
-                ]
-            ],
+                'id' => 124,
+                'isPsv' => false,
+                'canAddAnother' => true,
+                'canUpdateAddress' => true,
+                'wouldIncreaseRequireAdditionalAdvertisement' => false,
+                'licNo' => 'AB12345',
+                'applicationId' => 111,
+                'isVariation' => false,
+                'templateFile' => base64_encode((string) static::TEMPLATE_FILE_GB_NEW),
+                'guide' => static::GUIDE_GB_NEW
+            ]
+        ];
+        yield [
             [
-                [
-                    'id' => 124,
-                    'isPsv' => false,
-                    'canAddAnother' => true,
-                    'canUpdateAddress' => true,
-                    'wouldIncreaseRequireAdditionalAdvertisement' => false,
-                    'licNo' => 'AB12345',
-                    'applicationId' => 111,
-                    'isVariation' => false,
-                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_GB_NEW),
-                    'guide' => static::GUIDE_GB_NEW
-                ]
-            ],
-            [
-                [
-                    'id' => 124,
-                    'isPsv' => false,
-                    'canAddAnother' => true,
-                    'canUpdateAddress' => true,
-                    'wouldIncreaseRequireAdditionalAdvertisement' => false,
-                    'licNo' => 'AB12345',
-                    'applicationId' => 111,
-                    'isVariation' => true,
-                    'templateFile' => base64_encode((string) static::TEMPLATE_FILE_GB_VAR),
-                    'guide' => static::GUIDE_GB_VAR
-                ]
+                'id' => 124,
+                'isPsv' => false,
+                'canAddAnother' => true,
+                'canUpdateAddress' => true,
+                'wouldIncreaseRequireAdditionalAdvertisement' => false,
+                'licNo' => 'AB12345',
+                'applicationId' => 111,
+                'isVariation' => true,
+                'templateFile' => base64_encode((string) static::TEMPLATE_FILE_GB_VAR),
+                'guide' => static::GUIDE_GB_VAR
             ]
         ];
     }

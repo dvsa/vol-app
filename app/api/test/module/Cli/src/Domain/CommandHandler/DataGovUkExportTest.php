@@ -26,7 +26,7 @@ use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Domain\CommandHandler\DataGovUkExport::class)]
-class DataGovUkExportTest extends AbstractCommandHandlerTestCase
+final class DataGovUkExportTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var DataGovUkExport
@@ -162,7 +162,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             UploadCmd::class,
             $documentData,
-            (new Result())->addMessage('CreateDocument')->addId('document', 666)
+            new Result()->addMessage('CreateDocument')->addId('document', 666)
         );
 
         // Send email
@@ -184,6 +184,13 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         $this->mockS3client->shouldAllowMockingMethod('putObject');
         $this->mockS3client->shouldReceive('putObject')
             ->once()
+            ->with(m::on(
+                // the SDK must be given the file path, never an open resource:
+                // since guzzlehttp/psr7 2.12 the SDK closes a Body resource
+                // itself and a caller-side fclose() fatals
+                static fn (array $args): bool => isset($args['SourceFile'])
+                    && !isset($args['Body'])
+            ))
             ->andReturn([]);
 
         $actual = $this->sut->handleCommand($cmd);
@@ -198,7 +205,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
             'Fetching data for international goods list' .
             'Creating CSV file: ' . $expectedFilePath . 'Uploaded file to S3: ' . $expectedFileName;
 
-        $this->assertEquals(
+        $this->assertSame(
             $expectMsg,
             implode('', $actual->toArray()['messages'])
         );
@@ -282,7 +289,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             UploadCmd::class,
             $documentData,
-            (new Result())->addMessage('CreateDocument')->addId('document', 1)
+            new Result()->addMessage('CreateDocument')->addId('document', 1)
         );
 
         // Send email
@@ -314,7 +321,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
 
         $actualMsg = implode('', $actual->toArray()['messages']);
 
-        static::assertStringStartsWith($expectMsg, $actualMsg);
+        $this->assertStringStartsWith($expectMsg, $actualMsg);
     }
 
     public function testOperatorLicenceOk(): void
@@ -372,10 +379,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
             'Creating CSV file: ' . $expectFile2 .
             'Uploaded file to S3: OLBSLicenceReport_areaName1.csvUploaded file to S3: OLBSLicenceReport_areaName2.csv';
 
-        static::assertEquals(
-            $expectMsg,
-            implode('', $actual->toArray()['messages'])
-        );
+        $this->assertSame($expectMsg, implode('', $actual->toArray()['messages']));
     }
 
     public function testBugRegOnlyOk(): void
@@ -423,10 +427,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
             'Fetching data from DB for Bus Registered Only' .
             'Creating CSV file: ' . $expectFile1 . 'Uploaded file to S3: Bus_RegisteredOnly_areaId1.csv';
 
-        static::assertEquals(
-            $expectMsg,
-            implode('', $actual->toArray()['messages'])
-        );
+        $this->assertSame($expectMsg, implode('', $actual->toArray()['messages']));
     }
 
     public function testBugVariationOk(): void
@@ -468,10 +469,7 @@ class DataGovUkExportTest extends AbstractCommandHandlerTestCase
             'Fetching data from DB for Bus Variation' .
             'Creating CSV file: ' . $expectFile1 . 'Uploaded file to S3: Bus_Variation_areaId1.csv';
 
-        static::assertEquals(
-            $expectMsg,
-            implode('', $actual->toArray()['messages'])
-        );
+        $this->assertSame($expectMsg, implode('', $actual->toArray()['messages']));
     }
 
     public function testTrafficAreaNotFound(): void

@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Fee\CancelFee;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CancelFeeTest extends \PHPUnit\Framework\TestCase
+final class CancelFeeTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

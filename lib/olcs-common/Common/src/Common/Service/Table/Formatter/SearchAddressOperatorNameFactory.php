@@ -12,7 +12,7 @@ class SearchAddressOperatorNameFactory implements FactoryInterface
      * @param  array|null         $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchAddressOperatorName
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SearchAddressOperatorName
     {
         $urlHelper = $container->get('Helper\Url');
         return new SearchAddressOperatorName($urlHelper);

@@ -20,7 +20,7 @@ use RuntimeException;
 /**
  * Update Template Source Test
  */
-class UpdateTemplateSourceTest extends AbstractCommandHandlerTestCase
+final class UpdateTemplateSourceTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

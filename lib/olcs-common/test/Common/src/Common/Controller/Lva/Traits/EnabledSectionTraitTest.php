@@ -6,6 +6,8 @@
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Controller\Lva\Traits;
 
 use Common\RefData;
@@ -23,13 +25,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class EnabledSectionTraitTest extends MockeryTestCase
+final class EnabledSectionTraitTest extends MockeryTestCase
 {
     public $mockRestrictionHelper;
     public $mockStringHelper;
     protected $sut;
-
-    protected $sm;
 
     #[\Override]
     protected function setUp(): void
@@ -42,12 +42,12 @@ class EnabledSectionTraitTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider setEnabledAndCompleteProvider
      *
      * @param array $sections section config
      * @param array $completions application completions
      * @param array $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('setEnabledAndCompleteProvider')]
     public function testSetEnabledAndCompleteFlagOnSections($sections, $completions, $expected): void
     {
         $this->mockRestrictionHelper
@@ -68,88 +68,86 @@ class EnabledSectionTraitTest extends MockeryTestCase
     }
 
     /**
-     * @return (((string|string[])[]|bool|string)[]|int)[][][]
+     * @return \Iterator<(int | string), array<array<(array<(array<(array<string> | string)> | bool | string)> | int)>>>
      *
      * @psalm-return array{'single prerequisite, 1 complete': list{array{type_of_licence: array<never, never>, business_type: array{prerequisite: 'type_of_licence'}}, array{typeOfLicenceStatus: 2, businessTypeStatus: 0}, array{type_of_licence: array{enabled: true, complete: true}, business_type: array{enabled: true, complete: false}}}, 'multiple prerequisites': list{array{type_of_licence: array<never, never>, business_type: array<never, never>, business_details: array{prerequisite: list{'type_of_licence', 'business_type'}}}, array{typeOfLicenceStatus: 2, businessTypeStatus: 2, businessDetails: 1}, array{type_of_licence: array{enabled: true, complete: true}, business_type: array{enabled: true, complete: true}, business_details: array{enabled: true, complete: false}}}, 'inaccessible prerequisite': list{array{type_of_licence: array<never, never>, business_type: array<never, never>, business_details: array{prerequisite: 'foo'}}, array{typeOfLicenceStatus: 2, businessTypeStatus: 2, businessDetails: 1}, array{type_of_licence: array{enabled: true, complete: true}, business_type: array{enabled: true, complete: true}, business_details: array{enabled: true, complete: false}}}, 'multiple inaccessible prerequisites': list{array{type_of_licence: array<never, never>, business_type: array<never, never>, business_details: array{prerequisite: list{list{'foo', 'bar'}}}}, array{typeOfLicenceStatus: 2, businessTypeStatus: 2, businessDetails: 1}, array{type_of_licence: array{enabled: true, complete: true}, business_type: array{enabled: true, complete: true}, business_details: array{enabled: true, complete: false}}}}
      */
-    public function setEnabledAndCompleteProvider(): array
+    public static function setEnabledAndCompleteProvider(): \Iterator
     {
-        return [
-            'single prerequisite, 1 complete' => [
-                [
-                    'type_of_licence' => [],
-                    'business_type' => [
-                        'prerequisite' => 'type_of_licence'
+        yield 'single prerequisite, 1 complete' => [
+            [
+                'type_of_licence' => [],
+                'business_type' => [
+                    'prerequisite' => 'type_of_licence'
+                ],
+            ],
+            [
+                'typeOfLicenceStatus' => RefData::APPLICATION_COMPLETION_STATUS_COMPLETE,
+                'businessTypeStatus'  => RefData::APPLICATION_COMPLETION_STATUS_NOT_STARTED,
+            ],
+            [
+                'type_of_licence' => ['enabled' => true, 'complete' => true],
+                'business_type'   => ['enabled' => true, 'complete' => false],
+            ]
+        ];
+        yield 'multiple prerequisites' => [
+            [
+                'type_of_licence' => [],
+                'business_type' => [],
+                'business_details' => [
+                    'prerequisite' => ['type_of_licence', 'business_type']
+                ],
+            ],
+            [
+                'typeOfLicenceStatus' => 2,
+                'businessTypeStatus'  => 2,
+                'businessDetails'     => RefData::APPLICATION_COMPLETION_STATUS_INCOMPLETE,
+            ],
+            [
+                'type_of_licence'  => ['enabled' => true, 'complete' => true],
+                'business_type'    => ['enabled' => true, 'complete' => true],
+                'business_details' => ['enabled' => true, 'complete' => false],
+            ]
+        ];
+        yield 'inaccessible prerequisite' => [
+            [
+                'type_of_licence' => [],
+                'business_type' => [],
+                'business_details' => [
+                    'prerequisite' => 'foo'
+                ],
+            ],
+            [
+                'typeOfLicenceStatus' => 2,
+                'businessTypeStatus'  => 2,
+                'businessDetails'     => 1,
+            ],
+            [
+                'type_of_licence'  => ['enabled' => true, 'complete' => true],
+                'business_type'    => ['enabled' => true, 'complete' => true],
+                'business_details' => ['enabled' => true, 'complete' => false],
+            ]
+        ];
+        yield 'multiple inaccessible prerequisites' => [
+            [
+                'type_of_licence' => [],
+                'business_type' => [],
+                'business_details' => [
+                    'prerequisite' => [
+                        ['foo', 'bar']
                     ],
                 ],
-                [
-                    'typeOfLicenceStatus' => RefData::APPLICATION_COMPLETION_STATUS_COMPLETE,
-                    'businessTypeStatus'  => RefData::APPLICATION_COMPLETION_STATUS_NOT_STARTED,
-                ],
-                [
-                    'type_of_licence' => ['enabled' => true, 'complete' => true],
-                    'business_type'   => ['enabled' => true, 'complete' => false],
-                ]
             ],
-            'multiple prerequisites' => [
-                [
-                    'type_of_licence' => [],
-                    'business_type' => [],
-                    'business_details' => [
-                        'prerequisite' => ['type_of_licence', 'business_type']
-                    ],
-                ],
-                [
-                    'typeOfLicenceStatus' => 2,
-                    'businessTypeStatus'  => 2,
-                    'businessDetails'     => RefData::APPLICATION_COMPLETION_STATUS_INCOMPLETE,
-                ],
-                [
-                    'type_of_licence'  => ['enabled' => true, 'complete' => true],
-                    'business_type'    => ['enabled' => true, 'complete' => true],
-                    'business_details' => ['enabled' => true, 'complete' => false],
-                ]
+            [
+                'typeOfLicenceStatus' => 2,
+                'businessTypeStatus'  => 2,
+                'businessDetails'     => 1,
             ],
-            'inaccessible prerequisite' => [
-                [
-                    'type_of_licence' => [],
-                    'business_type' => [],
-                    'business_details' => [
-                        'prerequisite' => 'foo'
-                    ],
-                ],
-                [
-                    'typeOfLicenceStatus' => 2,
-                    'businessTypeStatus'  => 2,
-                    'businessDetails'     => 1,
-                ],
-                [
-                    'type_of_licence'  => ['enabled' => true, 'complete' => true],
-                    'business_type'    => ['enabled' => true, 'complete' => true],
-                    'business_details' => ['enabled' => true, 'complete' => false],
-                ]
-            ],
-            'multiple inaccessible prerequisites' => [
-                [
-                    'type_of_licence' => [],
-                    'business_type' => [],
-                    'business_details' => [
-                        'prerequisite' => [
-                            ['foo', 'bar']
-                        ],
-                    ],
-                ],
-                [
-                    'typeOfLicenceStatus' => 2,
-                    'businessTypeStatus'  => 2,
-                    'businessDetails'     => 1,
-                ],
-                [
-                    'type_of_licence'  => ['enabled' => true, 'complete' => true],
-                    'business_type'    => ['enabled' => true, 'complete' => true],
-                    'business_details' => ['enabled' => true, 'complete' => false],
-                ]
-            ],
+            [
+                'type_of_licence'  => ['enabled' => true, 'complete' => true],
+                'business_type'    => ['enabled' => true, 'complete' => true],
+                'business_details' => ['enabled' => true, 'complete' => false],
+            ]
         ];
     }
 }

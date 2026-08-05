@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Surrender;
 
 use Dvsa\Olcs\Transfer\Command\Surrender\Update;
 use Dvsa\OlcsTest\Transfer\Command\CommandTest;
 
-class UpdateTest extends \PHPUnit\Framework\TestCase
+final class UpdateTest extends \PHPUnit\Framework\TestCase
 {
     use CommandTest;
 

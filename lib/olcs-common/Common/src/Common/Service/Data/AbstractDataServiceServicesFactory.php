@@ -13,7 +13,7 @@ class AbstractDataServiceServicesFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AbstractDataServiceServices
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): AbstractDataServiceServices
     {
         return new AbstractDataServiceServices(
             $container->get('TransferAnnotationBuilder'),

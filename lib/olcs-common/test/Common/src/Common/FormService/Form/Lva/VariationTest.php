@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Laminas\Form\ElementInterface;
@@ -8,24 +10,16 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\FormService\Form\Lva\Variation;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class VariationTest extends MockeryTestCase
+final class VariationTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $authService;
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $formHelper;
     protected $sut;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->authService = m::mock(AuthorizationService::class);
-        $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
-        $this->sut = new Variation($this->formHelper, $this->authService);
+        $authService = m::mock(AuthorizationService::class);
+        $formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
+        $this->sut = new Variation($formHelper, $authService);
     }
 
     public function testAlterForm(): void

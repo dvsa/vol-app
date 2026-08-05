@@ -1,15 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\TranslationKey;
 
 use Dvsa\Olcs\Transfer\Query\TranslationKey\ById;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Query\TranslationKey\ById
- */
-
-
-class ByIdTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\TranslationKey\ById::class)]
+final class ByIdTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -18,11 +16,8 @@ class ByIdTest extends \PHPUnit\Framework\TestCase
               'id' => 2
             ]
         );
-        static::assertEquals(
-            [
-            'id' => 2
-            ],
-            $sut->getArrayCopy()
-        );
+        $this->assertEquals([
+        'id' => 2
+        ], $sut->getArrayCopy());
     }
 }

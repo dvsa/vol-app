@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\FormService\Form\Lva\CommonPsvVehiclesFilters;
 
-/**
- * @covers \Common\FormService\Form\Lva\CommonPsvVehiclesFilters
- */
-class CommonPsvVehiclesFiltersTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\FormService\Form\Lva\CommonPsvVehiclesFilters::class)]
+final class CommonPsvVehiclesFiltersTest extends MockeryTestCase
 {
     /** @var CommonPsvVehiclesFilters  */
     protected $sut;
@@ -38,6 +38,6 @@ class CommonPsvVehiclesFiltersTest extends MockeryTestCase
 
         $form = $this->sut->getForm();
 
-        static::assertSame($mockForm, $form);
+        $this->assertSame($mockForm, $form);
     }
 }

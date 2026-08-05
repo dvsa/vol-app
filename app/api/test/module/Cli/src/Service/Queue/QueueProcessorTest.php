@@ -28,7 +28,7 @@ use Olcs\Logging\Log\Logger;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class QueueProcessorTest extends MockeryTestCase
+final class QueueProcessorTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -36,6 +36,7 @@ class QueueProcessorTest extends MockeryTestCase
 
     private $mockMsm;
 
+    #[\Override]
     public function setUp(): void
     {
         Logger::setLogger(new \Psr\Log\NullLogger());

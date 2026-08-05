@@ -15,7 +15,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class AcceptIrhpPermitsTest extends AbstractCommandHandlerTestCase
+final class AcceptIrhpPermitsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

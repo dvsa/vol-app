@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Transfer\Query\LocalAuthority\LocalAuthorityList as Qry;
  * Class LocalAuthority Test
  * @package CommonTest\Service
  */
-class LocalAuthorityTest extends AbstractDataServiceTestCase
+final class LocalAuthorityTest extends AbstractDataServiceTestCase
 {
     /** @var LocalAuthority */
     private $sut;
@@ -20,32 +22,31 @@ class LocalAuthorityTest extends AbstractDataServiceTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->sut = new LocalAuthority($this->abstractDataServiceServices);
     }
 
     public function testFormatData(): void
     {
-        $source = $this->getSingleSource();
-        $expected = $this->getSingleExpected();
+        $source = self::getSingleSource();
+        $expected = self::getSingleExpected();
 
         $this->assertEquals($expected, $this->sut->formatData($source));
     }
 
     public function testFormatDataForGroups(): void
     {
-        $source = $this->getSingleSource();
-        $expected = $this->getGroupsExpected();
+        $source = self::getSingleSource();
+        $expected = self::getGroupsExpected();
 
         $this->assertEquals($expected, $this->sut->formatDataForGroups($source));
     }
 
     /**
-     * @dataProvider provideFetchListOptions
      * @param $input
      * @param $expected
      * @param $useGroups
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFetchListOptions')]
     public function testFetchListOptions($input, $expected, $useGroups): void
     {
         $this->sut->setData('LocalAuthority', $input);
@@ -54,17 +55,15 @@ class LocalAuthorityTest extends AbstractDataServiceTestCase
     }
 
     /**
-     * @return (array|bool)[][]
+     * @return \Iterator<(int | string), array<(array<mixed> | bool)>>
      *
      * @psalm-return list{list{array, array, false}, list{false, array<never, never>, false}, list{array, array, true}}
      */
-    public function provideFetchListOptions(): array
+    public static function provideFetchListOptions(): \Iterator
     {
-        return [
-            [$this->getSingleSource(), $this->getSingleExpected(), false],
-            [false, [], false],
-            [$this->getSingleSource(), $this->getGroupsExpected(), true],
-        ];
+        yield [self::getSingleSource(), self::getSingleExpected(), false];
+        yield [false, [], false];
+        yield [self::getSingleSource(), self::getGroupsExpected(), true];
     }
 
     public function testFetchListData(): void
@@ -120,7 +119,7 @@ class LocalAuthorityTest extends AbstractDataServiceTestCase
     {
         return [
             [false, false],
-            [['Results' => $this->getSingleSource()], $this->getSingleSource()],
+            [['Results' => self::getSingleSource()], self::getSingleSource()],
             [['some' => 'data'],  false]
         ];
     }
@@ -128,7 +127,7 @@ class LocalAuthorityTest extends AbstractDataServiceTestCase
     /**
      * @return array
      */
-    protected function getSingleExpected()
+    protected static function getSingleExpected()
     {
         return [
             '1' => 'A1 Council',
@@ -141,7 +140,7 @@ class LocalAuthorityTest extends AbstractDataServiceTestCase
     /**
      * @return array
      */
-    protected function getGroupsExpected()
+    protected static function getGroupsExpected()
     {
         return [
             'A' => [
@@ -169,7 +168,7 @@ class LocalAuthorityTest extends AbstractDataServiceTestCase
     /**
      * @return array
      */
-    protected function getSingleSource()
+    protected static function getSingleSource()
     {
         return [
             ['id' => '1', 'description' => 'A1 Council', 'trafficArea' => ['name' => 'AAA', 'id' => 'A']],

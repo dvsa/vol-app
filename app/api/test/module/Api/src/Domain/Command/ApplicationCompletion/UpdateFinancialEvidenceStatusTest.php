@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateFinancialEvidenceSt
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateFinancialEvidenceStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateFinancialEvidenceStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

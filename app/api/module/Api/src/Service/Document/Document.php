@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Domain\TranslatorAwareInterface;
 use Dvsa\Olcs\Api\Service\Date as DateService;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Interfaces\DateHelperAwareInterface;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Interfaces\FileStoreAwareInterface;
+use Dvsa\Olcs\Api\Service\Document\Rtf\RtfEncoder;
 use Dvsa\Olcs\DocumentShare\Data\Object\File as ContentStoreFile;
 use Dvsa\Olcs\DocumentShare\Service\DocumentStoreInterface;
 use Laminas\I18n\Translator\TranslatorInterface;
@@ -118,7 +119,7 @@ class Document
             // it's a fallback TextBlock. Could modify the below to check the bookmark type...
             if ($result !== null) {
                 // convert any extended chars to RTF versions
-                $result = \PHPRtfLite_Utf8::getUnicodeEntities((string)$result, 'UTF-8');
+                $result = RtfEncoder::getUnicodeEntities((string)$result);
 
                 $populatedData[$token] = [
                     'content' => $result,

@@ -20,7 +20,7 @@ use Dvsa\Olcs\Transfer\Command\Surrender\Approve as ApproveCommand;
 use Dvsa\Olcs\Transfer\Command\Surrender\Update as UpdateCommand;
 use Mockery as m;
 
-class ApproveTest extends AbstractCommandHandlerTestCase
+final class ApproveTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var ApproveHandler
@@ -117,108 +117,106 @@ class ApproveTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dpTestHandleCommand(): array
+    public static function dpTestHandleCommand(): \Iterator
     {
-        return [
-            'psv_sn_notNi' => [
-                'data' => [
-                    'goodsOrPsv' => Licence::LICENCE_CATEGORY_PSV,
-                    'licType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    'isNi' => false,
-                ],
-                'expected' => [
-                    'template' => 'GB/SURRENDER_LETTER_TO_OPERATOR_PSV',
-                    'description' => 'PSV - Surrender actioned letter',
-                ]
+        yield 'psv_sn_notNi' => [
+            'data' => [
+                'goodsOrPsv' => Licence::LICENCE_CATEGORY_PSV,
+                'licType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                'isNi' => false,
             ],
-            'psv_si_notNi' => [
-                'data' => [
-                    'goodsOrPsv' => Licence::LICENCE_CATEGORY_PSV,
-                    'licType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'isNi' => false,
-                ],
-                'expected' => [
-                    'template' => 'GB/SURRENDER_LETTER_TO_OPERATOR_PSV',
-                    'description' => 'PSV - Surrender actioned letter',
-                ]
+            'expected' => [
+                'template' => 'GB/SURRENDER_LETTER_TO_OPERATOR_PSV',
+                'description' => 'PSV - Surrender actioned letter',
+            ]
+        ];
+        yield 'psv_si_notNi' => [
+            'data' => [
+                'goodsOrPsv' => Licence::LICENCE_CATEGORY_PSV,
+                'licType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                'isNi' => false,
             ],
-            'psv_restricted_notNi' => [
-                'data' => [
-                    'goodsOrPsv' => Licence::LICENCE_CATEGORY_PSV,
-                    'licType' => Licence::LICENCE_TYPE_RESTRICTED,
-                    'isNi' => false,
-                ],
-                'expected' => [
-                    'template' => 'GB/SURRENDER_LETTER_TO_OPERATOR_PSV',
-                    'description' => 'PSV - Surrender actioned letter',
-                ]
+            'expected' => [
+                'template' => 'GB/SURRENDER_LETTER_TO_OPERATOR_PSV',
+                'description' => 'PSV - Surrender actioned letter',
+            ]
+        ];
+        yield 'psv_restricted_notNi' => [
+            'data' => [
+                'goodsOrPsv' => Licence::LICENCE_CATEGORY_PSV,
+                'licType' => Licence::LICENCE_TYPE_RESTRICTED,
+                'isNi' => false,
             ],
-            'gv_sn_notNi' => [
-                'data' => [
-                    'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    'licType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    'isNi' => false,
-                ],
-                'expected' => [
-                    'template' => 'GB/SURRENDER_LETTER_TO_OPERATOR_GV_GB',
-                    'description' => 'GV - Surrender actioned letter',
-                ]
+            'expected' => [
+                'template' => 'GB/SURRENDER_LETTER_TO_OPERATOR_PSV',
+                'description' => 'PSV - Surrender actioned letter',
+            ]
+        ];
+        yield 'gv_sn_notNi' => [
+            'data' => [
+                'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'licType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                'isNi' => false,
             ],
-            'gv_si_notNi' => [
-                'data' => [
-                    'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    'licType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'isNi' => false,
-                ],
-                'expected' => [
-                    'template' => 'GB/SURRENDER_LETTER_TO_OPERATOR_GV_GB',
-                    'description' => 'GV - Surrender actioned letter',
-                ]
+            'expected' => [
+                'template' => 'GB/SURRENDER_LETTER_TO_OPERATOR_GV_GB',
+                'description' => 'GV - Surrender actioned letter',
+            ]
+        ];
+        yield 'gv_si_notNi' => [
+            'data' => [
+                'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'licType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                'isNi' => false,
             ],
-            'gv_restricted_notNi' => [
-                'data' => [
-                    'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    'licType' => Licence::LICENCE_TYPE_RESTRICTED,
-                    'isNi' => false,
-                ],
-                'expected' => [
-                    'template' => 'GB/SURRENDER_LETTER_TO_OPERATOR_GV_GB',
-                    'description' => 'GV - Surrender actioned letter',
-                ]
+            'expected' => [
+                'template' => 'GB/SURRENDER_LETTER_TO_OPERATOR_GV_GB',
+                'description' => 'GV - Surrender actioned letter',
+            ]
+        ];
+        yield 'gv_restricted_notNi' => [
+            'data' => [
+                'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'licType' => Licence::LICENCE_TYPE_RESTRICTED,
+                'isNi' => false,
             ],
-            'gv_sn_isNi' => [
-                'data' => [
-                    'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    'licType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    'isNi' => true,
-                ],
-                'expected' => [
-                    'template' => 'NI/SURRENDER_LETTER_TO_OPERATOR_GV_NI',
-                    'description' => 'GV - Surrender actioned letter (NI)',
-                ]
+            'expected' => [
+                'template' => 'GB/SURRENDER_LETTER_TO_OPERATOR_GV_GB',
+                'description' => 'GV - Surrender actioned letter',
+            ]
+        ];
+        yield 'gv_sn_isNi' => [
+            'data' => [
+                'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'licType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                'isNi' => true,
             ],
-            'gv_si_isNi' => [
-                'data' => [
-                    'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    'licType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'isNi' => true,
-                ],
-                'expected' => [
-                    'template' => 'NI/SURRENDER_LETTER_TO_OPERATOR_GV_NI',
-                    'description' => 'GV - Surrender actioned letter (NI)',
-                ]
+            'expected' => [
+                'template' => 'NI/SURRENDER_LETTER_TO_OPERATOR_GV_NI',
+                'description' => 'GV - Surrender actioned letter (NI)',
+            ]
+        ];
+        yield 'gv_si_isNi' => [
+            'data' => [
+                'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'licType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                'isNi' => true,
             ],
-            'gv_restricted_isNi' => [
-                'data' => [
-                    'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    'licType' => Licence::LICENCE_TYPE_RESTRICTED,
-                    'isNi' => true,
-                ],
-                'expected' => [
-                    'template' => 'NI/SURRENDER_LETTER_TO_OPERATOR_GV_NI',
-                    'description' => 'GV - Surrender actioned letter (NI)',
-                ]
+            'expected' => [
+                'template' => 'NI/SURRENDER_LETTER_TO_OPERATOR_GV_NI',
+                'description' => 'GV - Surrender actioned letter (NI)',
+            ]
+        ];
+        yield 'gv_restricted_isNi' => [
+            'data' => [
+                'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'licType' => Licence::LICENCE_TYPE_RESTRICTED,
+                'isNi' => true,
             ],
+            'expected' => [
+                'template' => 'NI/SURRENDER_LETTER_TO_OPERATOR_GV_NI',
+                'description' => 'GV - Surrender actioned letter (NI)',
+            ]
         ];
     }
 
@@ -348,48 +346,46 @@ class ApproveTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dpTesthasEcmsAndSignatureBeenChecked(): array
+    public static function dpTesthasEcmsAndSignatureBeenChecked(): \Iterator
     {
-        return [
-            'ecms_checked' => [
-                'data' => [
-                    'ecmsChecked' => true,
-                    'signatureChecked' => false,
-                ],
-                'expected' => [
-                    'throwException' => true,
-                    'numberOfSideEffectCalls' => 0
-                ]
+        yield 'ecms_checked' => [
+            'data' => [
+                'ecmsChecked' => true,
+                'signatureChecked' => false,
             ],
-            'signature_checked' => [
-                'data' => [
-                    'ecmsChecked' => false,
-                    'signatureChecked' => true
-                ],
-                'expected' => [
-                    'throwException' => true,
-                    'numberOfSideEffectCalls' => 0
-                ]
+            'expected' => [
+                'throwException' => true,
+                'numberOfSideEffectCalls' => 0
+            ]
+        ];
+        yield 'signature_checked' => [
+            'data' => [
+                'ecmsChecked' => false,
+                'signatureChecked' => true
             ],
-            'both_checked' => [
-                'data' => [
-                    'ecmsChecked' => true,
-                    'signatureChecked' => true
-                ],
-                'expected' => [
-                    'throwException' => false,
-                    'numberOfSideEffectCalls' => 1
-                ]
+            'expected' => [
+                'throwException' => true,
+                'numberOfSideEffectCalls' => 0
+            ]
+        ];
+        yield 'both_checked' => [
+            'data' => [
+                'ecmsChecked' => true,
+                'signatureChecked' => true
             ],
-            'none_checked' => [
-                'data' => [
-                    'ecmsChecked' => false,
-                    'signatureChecked' => false
-                ],
-                'expected' => [
-                    'throwException' => true,
-                    'numberOfSideEffectCalls' => 0
-                ]
+            'expected' => [
+                'throwException' => false,
+                'numberOfSideEffectCalls' => 1
+            ]
+        ];
+        yield 'none_checked' => [
+            'data' => [
+                'ecmsChecked' => false,
+                'signatureChecked' => false
+            ],
+            'expected' => [
+                'throwException' => true,
+                'numberOfSideEffectCalls' => 0
             ]
         ];
     }

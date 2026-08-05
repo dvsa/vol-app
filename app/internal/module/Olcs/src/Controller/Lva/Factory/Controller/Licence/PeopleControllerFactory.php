@@ -24,7 +24,7 @@ class PeopleControllerFactory implements FactoryInterface
      * @return PeopleController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PeopleController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): PeopleController
     {
 
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

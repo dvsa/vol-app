@@ -6,19 +6,22 @@ set -euo pipefail
 : "${PROXY:?PROXY not set}"
 : "${DOMAIN:?DOMAIN not set}"
 : "${PRODTODEV_ASSUME_ROLE_ID:?PRODTODEV_ASSUME_ROLE_ID not set}"
-: "${DB_PASSWORD:?DB_PASSWORD not set}"
+: "${M_DB_PASSWORD:?M_DB_PASSWORD not set}"
 
 S3_BUCKET="devapp-olcs-pri-olcs-deploy-s3"
-S3_PREFIX="anondata/olcs-db-anon-prod"
+S3_PREFIX="anondata"
 DUMP_DIR="/mnt/data/anondump"
 DUMP_FILE="olcs-db-anon-latest-import.sql.gz"
 RDS_HOST="olcsanondb-rds.${DOMAIN}"
 DB_USER="master"
+PASS=${M_DB_PASSWORD}
 
 # ===== PROXY =====
-export http_proxy="http://${PROXY}:3128"
-export https_proxy="http://${PROXY}:3128"
-export NO_PROXY="169.254.169.254"
+export http_proxy="http://${PROXY}"
+export https_proxy="http://${PROXY}"
+export AWS_STS_REGIONAL_ENDPOINTS=regional
+export AWS_DEFAULT_REGION="eu-west-1"
+export NO_PROXY="169.254.169.254,169.254.170.2,localhost,127.0.0.1,.s3.eu-west-1.amazonaws.com,.s3.amazonaws.com,sts.eu-west-1.amazonaws.com,sts.amazonaws.com"
 
 # ===== LOGGING =====
 log_msg() {
@@ -32,25 +35,6 @@ log_err() {
 # ===== DYNAMIC PATH DETECTION =====
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# ===== AWS REGION DETECTION =====
-# Check if running in ECS/Batch container with AWS_REGION already set; fallback to metadata
-if [[ -n "${AWS_REGION:-}" ]]; then
-  REGION="${AWS_REGION}"
-else
-  TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
-    -H "X-aws-ec2-metadata-token-ttl-seconds: 21600" || echo "")
-
-  if [[ -n "${TOKEN}" ]]; then
-    AZ=$(curl -s -H "X-aws-ec2-metadata-token: ${TOKEN}" \
-      http://169.254.169.254/latest/meta-data/placement/availability-zone || echo "")
-    REGION="${AZ%[a-z]}"
-  else
-    REGION="eu-west-1"
-  fi
-fi
-
-export AWS_DEFAULT_REGION="${REGION}"
-
 # ===== ASSUME ROLE =====
 log_msg "Assuming cross-account role"
 source "${SCRIPT_DIR}/s3assume.sh" \
@@ -62,15 +46,20 @@ log_msg "Fetching latest anonymised DB dump from S3"
 
 mkdir -p "${DUMP_DIR}"
 
-LATEST_KEY=$(
-  aws s3 ls "s3://${S3_BUCKET}/${S3_PREFIX}/" --recursive \
-    | sort \
-    | tail -n 1 \
-    | awk '{print $4}'
-)
+S3_LIST_OUTPUT="$(aws s3 ls "s3://${S3_BUCKET}/${S3_PREFIX}/" --recursive 2>&1)" || {
+  log_err "Failed to list dumps in s3://${S3_BUCKET}/${S3_PREFIX}/"
+  log_err "aws s3 ls output: ${S3_LIST_OUTPUT}"
+  exit 1
+}
+
+LATEST_KEY="$(printf '%s\n' "${S3_LIST_OUTPUT}" \
+  | awk '/olcs-db-anon-prod-[0-9]{4}-[0-9]{2}-[0-9]{2}\.sql\.gz$/ {print $1" "$2" "$4}' \
+  | sort \
+  | tail -n 1 \
+  | awk '{print $3}')"
 
 if [[ -z "${LATEST_KEY}" ]]; then
-  log_err "No dump file found in S3"
+  log_err "No anonymised prod dump found in s3://${S3_BUCKET}/${S3_PREFIX}/"
   exit 1
 fi
 
@@ -86,7 +75,7 @@ log_msg "Downloaded: ${LATEST_KEY}"
 # ===== IMPORT DATABASE =====
 log_msg "Importing dump into ${RDS_HOST}"
 
-export MYSQL_PWD="${DB_PASSWORD}"
+export MYSQL_PWD="${PASS}"
 
 zcat "${DEST_FILE}" \
   | sed 's/`OLCS_RDS_OLCSDB`/`OLCS_RDS_OLCSANONDB`/g' \

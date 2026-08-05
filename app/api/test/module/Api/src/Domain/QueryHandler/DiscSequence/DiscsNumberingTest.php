@@ -23,7 +23,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class DiscsNumberingTest extends QueryHandlerTestCase
+final class DiscsNumberingTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -42,14 +42,12 @@ class DiscsNumberingTest extends QueryHandlerTestCase
         $this->assertEquals(['result' => [], 'count' => 0], $this->sut->handleQuery($query));
     }
 
-    public static function emptyParamsProvider(): array
+    public static function emptyParamsProvider(): \Iterator
     {
-        return [
-            [['operatorType' => 'lcat_gv', 'licenceType' => 'ltyp_r', 'discSequence' => 1]],
-            [['niFlag' => 'N', 'licenceType' => 'ltyp_r', 'discSequence' => 1]],
-            [['niFlag' => 'N', 'operatorType' => 'lcat_gv', 'discSequence' => 1]],
-            [['niFlag' => 'N', 'operatorType' => 'lcat_gv', 'licenceType' => 'ltyp_r']]
-        ];
+        yield [['operatorType' => 'lcat_gv', 'licenceType' => 'ltyp_r', 'discSequence' => 1]];
+        yield [['niFlag' => 'N', 'licenceType' => 'ltyp_r', 'discSequence' => 1]];
+        yield [['niFlag' => 'N', 'operatorType' => 'lcat_gv', 'discSequence' => 1]];
+        yield [['niFlag' => 'N', 'operatorType' => 'lcat_gv', 'licenceType' => 'ltyp_r']];
     }
 
     public function testHandleQueryIncreaseStartNumber(): void

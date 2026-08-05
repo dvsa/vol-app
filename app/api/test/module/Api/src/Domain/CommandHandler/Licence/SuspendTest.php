@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class SuspendTest extends AbstractCommandHandlerTestCase
+final class SuspendTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -60,7 +60,7 @@ class SuspendTest extends AbstractCommandHandlerTestCase
                 $this->assertSame($this->refData['lsts_suspended'], $saveLicence->getStatus());
                 $this->assertInstanceOf(\DateTime::class, $saveLicence->getSuspendedDate());
                 $this->assertSame(
-                    (new \DateTime())->format('Y-m-d'),
+                    new \DateTime()->format('Y-m-d'),
                     $saveLicence->getSuspendedDate()->format('Y-m-d')
                 );
             }

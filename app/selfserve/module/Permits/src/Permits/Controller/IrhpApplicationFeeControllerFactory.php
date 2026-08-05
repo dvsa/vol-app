@@ -22,7 +22,7 @@ class IrhpApplicationFeeControllerFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IrhpApplicationFeeController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IrhpApplicationFeeController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         $formHelper = $container->get(FormHelperService::class);

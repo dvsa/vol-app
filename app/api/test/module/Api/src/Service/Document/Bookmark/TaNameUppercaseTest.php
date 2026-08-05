@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\TaNameUppercase;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class TaNameUppercaseTest extends \PHPUnit\Framework\TestCase
+final class TaNameUppercaseTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

@@ -13,7 +13,7 @@ class DataRetentionAssignedToFactory implements FactoryInterface
      * @return DataRetentionAssignedTo
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $viewHelperManager = $container->get('ViewHelperManager');
         return new DataRetentionAssignedTo($viewHelperManager);

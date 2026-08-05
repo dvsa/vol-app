@@ -11,7 +11,7 @@ use Common\Service\Helper\UrlHelperService;
 class ExternalConversationLinkFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $urlHelper = $container->get(UrlHelperService::class);
 

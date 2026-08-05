@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EcmtRemovalNoOfPermitsGeneratorTest extends MockeryTestCase
+final class EcmtRemovalNoOfPermitsGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

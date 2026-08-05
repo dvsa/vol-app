@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Cqrs\Query;
 
 use Common\Service\Cqrs\Query\CachingQueryService;
@@ -11,7 +13,7 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class CachingQueryServiceFactoryTest extends MockeryTestCase
+final class CachingQueryServiceFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

@@ -102,7 +102,9 @@ locals {
       ]
       resources = [
         "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3",
-        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*"
+        "arn:aws:s3:::devapp-shd-pri-olcsci-build-s3/*",
+        "arn:aws:s3:::devapp-olcs-pri-integration-dva-s3",
+        "arn:aws:s3:::devapp-olcs-pri-integration-dva-s3/*"
       ]
     },
     {
@@ -269,6 +271,8 @@ module "service" {
 
   legacy_environment = "QA"
 
+  dva_ni_export_s3uri = module.parameters.dva_ni_export_s3uri
+
   domain_env = "qa"
 
   domain_name    = "dev-dvsacloud.uk"
@@ -429,6 +433,12 @@ module "service" {
     ]
 
     jobs = [
+      {
+        name     = "retrieval-link-purge",
+        commands = ["batch:retrieval-link-purge"],
+        timeout  = 3600,
+        schedule = ["cron(30 03 * * ? *)"],
+      },
       {
         name     = "cache-clear",
         commands = ["batch:cache-clear", "--flush-all", "--force"],
@@ -716,7 +726,7 @@ module "service" {
       },
       {
         name     = "ni-compliance",
-        commands = ["/mnt/data/scripts/ni_dvacompliance.sh"],
+        commands = ["/mnt/data/scripts/niextract/ni_dvacompliance.sh"],
         type     = "scripts"
       },
       {

@@ -9,7 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\User as Sut;
 use Laminas\Form\Form;
 
-class UserTest extends MockeryTestCase
+final class UserTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('mapFromResultDataProvider')]
     public function testMapFromResult(array $inData, array $expected): void
@@ -17,337 +17,335 @@ class UserTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
-            [
-                [],
-                []
+        // add
+        yield [
+            [],
+            []
+        ];
+        // edit - internal
+        yield [
+            "inData" => [
+                'id' => 987,
+                'version' => 1,
+                'loginId' => 'testuser',
+                'createdOn' => '2012-06-01 17:11:12',
+                'lastLoggedInOn' => '2016-12-06T16:12:46+0000',
+                'lockedOn' => '2016-10-01T10:11:46+0000',
+                'latestPasswordResetEvent' => [
+                    'eventData' => 'By email',
+                    'eventDatetime' => '2016-12-09 14:13:36',
+                ],
+                'accountDisabled' => 'Y',
+                'disabledDate' => '2015-06-07 17:11:12',
+                'userType' => 'internal',
+                'roles' => [
+                    [
+                        'id' => 99,
+                        'role' => 'role',
+                    ]
+                ],
+                'team' => [
+                    'id' => 3
+                ],
+                'contactDetails' => [
+                    'person' => [
+                        'forename' => 'fn1',
+                        'familyName' => 'ln1',
+                        'birthDate' => '2012-03-01',
+                    ],
+                    'emailAddress' => 'test@test.me',
+                    'address' => [
+                        'id' => 200,
+                        'version' => 1,
+                        'addressLine1' => 'a1'
+                    ],
+                    'phoneContacts' => [
+                        [
+                            'id' => 301,
+                            'version' => 1,
+                            'phoneContactType' => ['id' => 'phone_t_primary'],
+                            'phoneNumber' => 'pn1',
+                        ],
+                        [
+                            'id' => 304,
+                            'version' => 4,
+                            'phoneContactType' => ['id' => 'phone_t_secondary'],
+                            'phoneNumber' => 'pn2',
+                        ],
+                    ],
+                ],
+                'translateToWelsh' => 'Y',
+                'isLastOperatorAdmin' => false,
             ],
-            // edit - internal
-            [
-                "inData" => [
-                    'id' => 987,
-                    'version' => 1,
+            "expected" => [
+                'id' => 987,
+                'version' => 1,
+                'userLoginSecurity' => [
                     'loginId' => 'testuser',
                     'createdOn' => '2012-06-01 17:11:12',
                     'lastLoggedInOn' => '2016-12-06T16:12:46+0000',
-                    'lockedOn' => '2016-10-01T10:11:46+0000',
-                    'latestPasswordResetEvent' => [
-                        'eventData' => 'By email',
-                        'eventDatetime' => '2016-12-09 14:13:36',
-                    ],
+                    'passwordLastReset' => 'By email on 09/12/2016 14:13:36',
                     'accountDisabled' => 'Y',
                     'disabledDate' => '2015-06-07 17:11:12',
+                    'locked' => 'Yes on 01/10/2016 10:11:46',
+                ],
+                'userType' => [
+                    'id' => 987,
                     'userType' => 'internal',
-                    'roles' => [
-                        [
-                            'id' => 99,
-                            'role' => 'role',
-                        ]
-                    ],
-                    'team' => [
-                        'id' => 3
-                    ],
-                    'contactDetails' => [
-                        'person' => [
-                            'forename' => 'fn1',
-                            'familyName' => 'ln1',
-                            'birthDate' => '2012-03-01',
-                        ],
-                        'emailAddress' => 'test@test.me',
-                        'address' => [
-                            'id' => 200,
-                            'version' => 1,
-                            'addressLine1' => 'a1'
-                        ],
-                        'phoneContacts' => [
-                            [
-                                'id' => 301,
-                                'version' => 1,
-                                'phoneContactType' => ['id' => 'phone_t_primary'],
-                                'phoneNumber' => 'pn1',
-                            ],
-                            [
-                                'id' => 304,
-                                'version' => 4,
-                                'phoneContactType' => ['id' => 'phone_t_secondary'],
-                                'phoneNumber' => 'pn2',
-                            ],
-                        ],
-                    ],
+                    'role' => 'role',
+                    'team' => 3,
+                    'isLastOperatorAdmin' => false,
+                    'lastOperatorAdminText' => Sut::IS_NOT_LAST_OP_ADMIN,
+                ],
+                'userPersonal' => [
+                    'forename' => 'fn1',
+                    'familyName' => 'ln1',
+                    'birthDate' => '2012-03-01',
+                ],
+                'userContactDetails' => [
+                    'emailAddress' => 'test@test.me',
+                    'emailConfirm' => 'test@test.me',
+                    'phone_primary' => 'pn1',
+                    'phone_primary_id' => 301,
+                    'phone_primary_version' => 1,
+                    'phone_secondary' => 'pn2',
+                    'phone_secondary_id' => 304,
+                    'phone_secondary_version' => 4,
+                ],
+                'address' => [
+                    'id' => 200,
+                    'version' => 1,
+                    'addressLine1' => 'a1'
+                ],
+                'userSettings' => [
                     'translateToWelsh' => 'Y',
-                    'isLastOperatorAdmin' => false,
                 ],
-                "expected" => [
-                    'id' => 987,
-                    'version' => 1,
-                    'userLoginSecurity' => [
-                        'loginId' => 'testuser',
-                        'createdOn' => '2012-06-01 17:11:12',
-                        'lastLoggedInOn' => '2016-12-06T16:12:46+0000',
-                        'passwordLastReset' => 'By email on 09/12/2016 14:13:36',
-                        'accountDisabled' => 'Y',
-                        'disabledDate' => '2015-06-07 17:11:12',
-                        'locked' => 'Yes on 01/10/2016 10:11:46',
-                    ],
-                    'userType' => [
-                        'id' => 987,
-                        'userType' => 'internal',
+            ]
+        ];
+        // edit - transport-manager
+        yield [
+            "inData" => [
+                'id' => 987,
+                'version' => 1,
+                'loginId' => 'testuser',
+                'createdOn' => '2012-06-01 17:11:12',
+                'lastLoggedInOn' => null,
+                'accountDisabled' => 'Y',
+                'userType' => 'transport-manager',
+                'roles' => [
+                    [
+                        'id' => 99,
                         'role' => 'role',
-                        'team' => 3,
-                        'isLastOperatorAdmin' => false,
-                        'lastOperatorAdminText' => Sut::IS_NOT_LAST_OP_ADMIN,
-                    ],
-                    'userPersonal' => [
+                    ]
+                ],
+                'transportManager' => [
+                    'id' => 3,
+                    'homeCd' => [
+                        'person' => [
+                            'forename' => 'test',
+                            'familyName' => 'me'
+                        ]
+                    ]
+                ],
+                'contactDetails' => [
+                    'person' => [
                         'forename' => 'fn1',
                         'familyName' => 'ln1',
                         'birthDate' => '2012-03-01',
                     ],
-                    'userContactDetails' => [
-                        'emailAddress' => 'test@test.me',
-                        'emailConfirm' => 'test@test.me',
-                        'phone_primary' => 'pn1',
-                        'phone_primary_id' => 301,
-                        'phone_primary_version' => 1,
-                        'phone_secondary' => 'pn2',
-                        'phone_secondary_id' => 304,
-                        'phone_secondary_version' => 4,
-                    ],
+                    'emailAddress' => 'test@test.me',
                     'address' => [
                         'id' => 200,
                         'version' => 1,
                         'addressLine1' => 'a1'
                     ],
-                    'userSettings' => [
-                        'translateToWelsh' => 'Y',
-                    ],
-                ]
+                ],
+                'translateToWelsh' => 'N',
+                'isLastOperatorAdmin' => true,
             ],
-            // edit - transport-manager
-            [
-                "inData" => [
-                    'id' => 987,
-                    'version' => 1,
-                    'loginId' => 'testuser',
+            "expected" => [
+                'id' => 987,
+                'version' => 1,
+                'userLoginSecurity' => [
                     'createdOn' => '2012-06-01 17:11:12',
                     'lastLoggedInOn' => null,
+                    'loginId' => 'testuser',
                     'accountDisabled' => 'Y',
+                    'locked' => 'No',
+                ],
+                'userType' => [
+                    'id' => 987,
                     'userType' => 'transport-manager',
-                    'roles' => [
-                        [
-                            'id' => 99,
-                            'role' => 'role',
-                        ]
-                    ],
-                    'transportManager' => [
-                        'id' => 3,
-                        'homeCd' => [
-                            'person' => [
-                                'forename' => 'test',
-                                'familyName' => 'me'
-                            ]
-                        ]
-                    ],
-                    'contactDetails' => [
-                        'person' => [
-                            'forename' => 'fn1',
-                            'familyName' => 'ln1',
-                            'birthDate' => '2012-03-01',
-                        ],
-                        'emailAddress' => 'test@test.me',
-                        'address' => [
-                            'id' => 200,
-                            'version' => 1,
-                            'addressLine1' => 'a1'
-                        ],
-                    ],
-                    'translateToWelsh' => 'N',
+                    'role' => 'role',
+                    'currentTransportManager' => 3,
+                    'currentTransportManagerName' => 'test me',
                     'isLastOperatorAdmin' => true,
+                    'lastOperatorAdminText' => Sut::IS_LAST_OP_ADMIN,
                 ],
-                "expected" => [
-                    'id' => 987,
+                'userPersonal' => [
+                    'forename' => 'fn1',
+                    'familyName' => 'ln1',
+                    'birthDate' => '2012-03-01',
+                ],
+                'userContactDetails' => [
+                    'emailAddress' => 'test@test.me',
+                    'emailConfirm' => 'test@test.me',
+                ],
+                'address' => [
+                    'id' => 200,
                     'version' => 1,
-                    'userLoginSecurity' => [
-                        'createdOn' => '2012-06-01 17:11:12',
-                        'lastLoggedInOn' => null,
-                        'loginId' => 'testuser',
-                        'accountDisabled' => 'Y',
-                        'locked' => 'No',
-                    ],
-                    'userType' => [
-                        'id' => 987,
-                        'userType' => 'transport-manager',
+                    'addressLine1' => 'a1'
+                ],
+                'userSettings' => [
+                    'translateToWelsh' => 'N',
+                ],
+            ]
+        ];
+        // edit - partner
+        yield [
+            "inData" => [
+                'id' => 987,
+                'version' => 1,
+                'loginId' => 'testuser',
+                'createdOn' => '2012-06-01 17:11:12',
+                'lastLoggedInOn' => null,
+                'accountDisabled' => 'Y',
+                'userType' => 'partner',
+                'roles' => [
+                    [
+                        'id' => 99,
                         'role' => 'role',
-                        'currentTransportManager' => 3,
-                        'currentTransportManagerName' => 'test me',
-                        'isLastOperatorAdmin' => true,
-                        'lastOperatorAdminText' => Sut::IS_LAST_OP_ADMIN,
-                    ],
-                    'userPersonal' => [
+                    ]
+                ],
+                'partnerContactDetails' => [
+                    'id' => 3
+                ],
+                'contactDetails' => [
+                    'person' => [
                         'forename' => 'fn1',
                         'familyName' => 'ln1',
                         'birthDate' => '2012-03-01',
                     ],
-                    'userContactDetails' => [
-                        'emailAddress' => 'test@test.me',
-                        'emailConfirm' => 'test@test.me',
-                    ],
+                    'emailAddress' => 'test@test.me',
                     'address' => [
                         'id' => 200,
                         'version' => 1,
                         'addressLine1' => 'a1'
                     ],
-                    'userSettings' => [
-                        'translateToWelsh' => 'N',
-                    ],
-                ]
+                ],
+                'translateToWelsh' => 'N',
+                'isLastOperatorAdmin' => false,
             ],
-            // edit - partner
-            [
-                "inData" => [
-                    'id' => 987,
-                    'version' => 1,
+            "expected" => [
+                'id' => 987,
+                'version' => 1,
+                'userLoginSecurity' => [
                     'loginId' => 'testuser',
                     'createdOn' => '2012-06-01 17:11:12',
                     'lastLoggedInOn' => null,
                     'accountDisabled' => 'Y',
+                    'locked' => 'No',
+                ],
+                'userType' => [
+                    'id' => 987,
                     'userType' => 'partner',
-                    'roles' => [
-                        [
-                            'id' => 99,
-                            'role' => 'role',
-                        ]
-                    ],
-                    'partnerContactDetails' => [
-                        'id' => 3
-                    ],
-                    'contactDetails' => [
-                        'person' => [
-                            'forename' => 'fn1',
-                            'familyName' => 'ln1',
-                            'birthDate' => '2012-03-01',
-                        ],
-                        'emailAddress' => 'test@test.me',
-                        'address' => [
-                            'id' => 200,
-                            'version' => 1,
-                            'addressLine1' => 'a1'
-                        ],
-                    ],
-                    'translateToWelsh' => 'N',
+                    'role' => 'role',
+                    'partnerContactDetails' => 3,
                     'isLastOperatorAdmin' => false,
+                    'lastOperatorAdminText' => Sut::IS_NOT_LAST_OP_ADMIN,
                 ],
-                "expected" => [
-                    'id' => 987,
+                'userPersonal' => [
+                    'forename' => 'fn1',
+                    'familyName' => 'ln1',
+                    'birthDate' => '2012-03-01',
+                ],
+                'userContactDetails' => [
+                    'emailAddress' => 'test@test.me',
+                    'emailConfirm' => 'test@test.me',
+                ],
+                'address' => [
+                    'id' => 200,
                     'version' => 1,
-                    'userLoginSecurity' => [
-                        'loginId' => 'testuser',
-                        'createdOn' => '2012-06-01 17:11:12',
-                        'lastLoggedInOn' => null,
-                        'accountDisabled' => 'Y',
-                        'locked' => 'No',
-                    ],
-                    'userType' => [
-                        'id' => 987,
-                        'userType' => 'partner',
+                    'addressLine1' => 'a1'
+                ],
+                'userSettings' => [
+                    'translateToWelsh' => 'N',
+                ],
+            ]
+        ];
+        // edit - local-authority
+        yield [
+            "inData" => [
+                'id' => 987,
+                'version' => 1,
+                'loginId' => 'testuser',
+                'createdOn' => '2012-06-01 17:11:12',
+                'lastLoggedInOn' => null,
+                'accountDisabled' => 'Y',
+                'userType' => 'local-authority',
+                'roles' => [
+                    [
+                        'id' => 99,
                         'role' => 'role',
-                        'partnerContactDetails' => 3,
-                        'isLastOperatorAdmin' => false,
-                        'lastOperatorAdminText' => Sut::IS_NOT_LAST_OP_ADMIN,
-                    ],
-                    'userPersonal' => [
+                    ]
+                ],
+                'localAuthority' => [
+                    'id' => 3
+                ],
+                'contactDetails' => [
+                    'person' => [
                         'forename' => 'fn1',
                         'familyName' => 'ln1',
                         'birthDate' => '2012-03-01',
                     ],
-                    'userContactDetails' => [
-                        'emailAddress' => 'test@test.me',
-                        'emailConfirm' => 'test@test.me',
-                    ],
+                    'emailAddress' => 'test@test.me',
                     'address' => [
                         'id' => 200,
                         'version' => 1,
                         'addressLine1' => 'a1'
                     ],
-                    'userSettings' => [
-                        'translateToWelsh' => 'N',
-                    ],
-                ]
+                ],
+                'translateToWelsh' => 'N',
+                'isLastOperatorAdmin' => false,
             ],
-            // edit - local-authority
-            [
-                "inData" => [
-                    'id' => 987,
-                    'version' => 1,
+            "expected" => [
+                'id' => 987,
+                'version' => 1,
+                'userLoginSecurity' => [
                     'loginId' => 'testuser',
                     'createdOn' => '2012-06-01 17:11:12',
                     'lastLoggedInOn' => null,
                     'accountDisabled' => 'Y',
-                    'userType' => 'local-authority',
-                    'roles' => [
-                        [
-                            'id' => 99,
-                            'role' => 'role',
-                        ]
-                    ],
-                    'localAuthority' => [
-                        'id' => 3
-                    ],
-                    'contactDetails' => [
-                        'person' => [
-                            'forename' => 'fn1',
-                            'familyName' => 'ln1',
-                            'birthDate' => '2012-03-01',
-                        ],
-                        'emailAddress' => 'test@test.me',
-                        'address' => [
-                            'id' => 200,
-                            'version' => 1,
-                            'addressLine1' => 'a1'
-                        ],
-                    ],
-                    'translateToWelsh' => 'N',
-                    'isLastOperatorAdmin' => false,
+                    'locked' => 'No',
                 ],
-                "expected" => [
+                'userType' => [
                     'id' => 987,
+                    'userType' => 'local-authority',
+                    'role' => 'role',
+                    'localAuthority' => 3,
+                    'isLastOperatorAdmin' => false,
+                    'lastOperatorAdminText' => Sut::IS_NOT_LAST_OP_ADMIN,
+                ],
+                'userPersonal' => [
+                    'forename' => 'fn1',
+                    'familyName' => 'ln1',
+                    'birthDate' => '2012-03-01',
+                ],
+                'userContactDetails' => [
+                    'emailAddress' => 'test@test.me',
+                    'emailConfirm' => 'test@test.me',
+                ],
+                'address' => [
+                    'id' => 200,
                     'version' => 1,
-                    'userLoginSecurity' => [
-                        'loginId' => 'testuser',
-                        'createdOn' => '2012-06-01 17:11:12',
-                        'lastLoggedInOn' => null,
-                        'accountDisabled' => 'Y',
-                        'locked' => 'No',
-                    ],
-                    'userType' => [
-                        'id' => 987,
-                        'userType' => 'local-authority',
-                        'role' => 'role',
-                        'localAuthority' => 3,
-                        'isLastOperatorAdmin' => false,
-                        'lastOperatorAdminText' => Sut::IS_NOT_LAST_OP_ADMIN,
-                    ],
-                    'userPersonal' => [
-                        'forename' => 'fn1',
-                        'familyName' => 'ln1',
-                        'birthDate' => '2012-03-01',
-                    ],
-                    'userContactDetails' => [
-                        'emailAddress' => 'test@test.me',
-                        'emailConfirm' => 'test@test.me',
-                    ],
-                    'address' => [
-                        'id' => 200,
-                        'version' => 1,
-                        'addressLine1' => 'a1'
-                    ],
-                    'userSettings' => [
-                        'translateToWelsh' => 'N',
-                    ],
-                ]
-            ],
+                    'addressLine1' => 'a1'
+                ],
+                'userSettings' => [
+                    'translateToWelsh' => 'N',
+                ],
+            ]
         ];
     }
 
@@ -357,380 +355,378 @@ class UserTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
 
-    public static function mapFromFormDataProvider(): array
+    public static function mapFromFormDataProvider(): \Iterator
     {
-        return [
-            // edit - internal
-            [
-                "inData" => [
-                    'id' => 987,
-                    'version' => 1,
-                    'userLoginSecurity' => [
-                        'loginId' => 'testuser',
-                        'accountDisabled' => 'Y',
-                        'resetPassword' => 'Y',
-                    ],
-                    'userType' => [
-                        'userType' => 'internal',
-                        'role' => 'role',
-                        'team' => 3,
-                    ],
-                    'userPersonal' => [
-                        'forename' => 'fn1',
-                        'familyName' => 'ln1',
-                        'birthDate' => '2012-03-01',
-                    ],
-                    'userContactDetails' => [
-                        'emailAddress' => 'test@test.me',
-                        'emailConfirm' => 'test@test.me',
-                        'phone_primary' => 'pn1',
-                        'phone_primary_id' => 301,
-                        'phone_primary_version' => 1,
-                        'phone_secondary' => 'pn2',
-                        'phone_secondary_id' => 304,
-                        'phone_secondary_version' => 4,
-                    ],
-                    'address' => [
-                        'addressLine1' => 'a1'
-                    ],
-                    'userSettings' => [
-                        'translateToWelsh' => 'Y',
-                    ],
-                ],
-                "expected" => [
-                    'id' => 987,
-                    'version' => 1,
+        // edit - internal
+        yield [
+            "inData" => [
+                'id' => 987,
+                'version' => 1,
+                'userLoginSecurity' => [
                     'loginId' => 'testuser',
                     'accountDisabled' => 'Y',
                     'resetPassword' => 'Y',
+                ],
+                'userType' => [
                     'userType' => 'internal',
-                    'roles' => ['role'],
+                    'role' => 'role',
                     'team' => 3,
-                    'contactDetails' => [
-                        'person' => [
-                            'forename' => 'fn1',
-                            'familyName' => 'ln1',
-                            'birthDate' => '2012-03-01',
-                        ],
-                        'emailAddress' => 'test@test.me',
-                        'address' => [
-                            'addressLine1' => 'a1'
-                        ],
-                        'phoneContacts' => [
-                            [
-                                'id' => 301,
-                                'version' => 1,
-                                'phoneContactType' => 'phone_t_primary',
-                                'phoneNumber' => 'pn1',
-                            ],
-                            [
-                                'id' => 304,
-                                'version' => 4,
-                                'phoneContactType' => 'phone_t_secondary',
-                                'phoneNumber' => 'pn2',
-                            ],
-                        ],
-                    ],
+                ],
+                'userPersonal' => [
+                    'forename' => 'fn1',
+                    'familyName' => 'ln1',
+                    'birthDate' => '2012-03-01',
+                ],
+                'userContactDetails' => [
+                    'emailAddress' => 'test@test.me',
+                    'emailConfirm' => 'test@test.me',
+                    'phone_primary' => 'pn1',
+                    'phone_primary_id' => 301,
+                    'phone_primary_version' => 1,
+                    'phone_secondary' => 'pn2',
+                    'phone_secondary_id' => 304,
+                    'phone_secondary_version' => 4,
+                ],
+                'address' => [
+                    'addressLine1' => 'a1'
+                ],
+                'userSettings' => [
                     'translateToWelsh' => 'Y',
                 ],
             ],
-            // edit - transport-manager
-            [
-                "inData" => [
-                    'id' => 987,
-                    'version' => 1,
-                    'userLoginSecurity' => [
-                        'loginId' => 'testuser',
-                        'accountDisabled' => 'Y',
-                        'resetPassword' => 'N',
-                    ],
-                    'userType' => [
-                        'userType' => 'transport-manager',
-                        'role' => 'role',
-                        'applicationTransportManagers' => ['application' => 97],
-                        'transportManager' => 3,
-                    ],
-                    'userPersonal' => [
+            "expected" => [
+                'id' => 987,
+                'version' => 1,
+                'loginId' => 'testuser',
+                'accountDisabled' => 'Y',
+                'resetPassword' => 'Y',
+                'userType' => 'internal',
+                'roles' => ['role'],
+                'team' => 3,
+                'contactDetails' => [
+                    'person' => [
                         'forename' => 'fn1',
                         'familyName' => 'ln1',
                         'birthDate' => '2012-03-01',
                     ],
-                    'userContactDetails' => [
-                        'emailAddress' => 'test@test.me',
-                        'emailConfirm' => 'test@test.me',
-                        'phone_primary' => 'pn1',
-                        'phone_primary_id' => 301,
-                        'phone_primary_version' => 1,
-                        'phone_secondary' => 'pn2',
-                        'phone_secondary_id' => 304,
-                        'phone_secondary_version' => 4,
-                    ],
+                    'emailAddress' => 'test@test.me',
                     'address' => [
                         'addressLine1' => 'a1'
                     ],
-                    'userSettings' => [
-                        'translateToWelsh' => 'N',
+                    'phoneContacts' => [
+                        [
+                            'id' => 301,
+                            'version' => 1,
+                            'phoneContactType' => 'phone_t_primary',
+                            'phoneNumber' => 'pn1',
+                        ],
+                        [
+                            'id' => 304,
+                            'version' => 4,
+                            'phoneContactType' => 'phone_t_secondary',
+                            'phoneNumber' => 'pn2',
+                        ],
                     ],
                 ],
-                "expected" => [
-                    'id' => 987,
-                    'version' => 1,
+                'translateToWelsh' => 'Y',
+            ],
+        ];
+        // edit - transport-manager
+        yield [
+            "inData" => [
+                'id' => 987,
+                'version' => 1,
+                'userLoginSecurity' => [
                     'loginId' => 'testuser',
                     'accountDisabled' => 'Y',
                     'resetPassword' => 'N',
+                ],
+                'userType' => [
                     'userType' => 'transport-manager',
-                    'roles' => ['role'],
-                    'application' => 97,
+                    'role' => 'role',
+                    'applicationTransportManagers' => ['application' => 97],
                     'transportManager' => 3,
-                    'contactDetails' => [
-                        'person' => [
-                            'forename' => 'fn1',
-                            'familyName' => 'ln1',
-                            'birthDate' => '2012-03-01',
-                        ],
-                        'emailAddress' => 'test@test.me',
-                        'address' => [
-                            'addressLine1' => 'a1'
-                        ],
-                        'phoneContacts' => [
-                            [
-                                'id' => 301,
-                                'version' => 1,
-                                'phoneContactType' => 'phone_t_primary',
-                                'phoneNumber' => 'pn1',
-                            ],
-                            [
-                                'id' => 304,
-                                'version' => 4,
-                                'phoneContactType' => 'phone_t_secondary',
-                                'phoneNumber' => 'pn2',
-                            ],
-                        ],
-                    ],
+                ],
+                'userPersonal' => [
+                    'forename' => 'fn1',
+                    'familyName' => 'ln1',
+                    'birthDate' => '2012-03-01',
+                ],
+                'userContactDetails' => [
+                    'emailAddress' => 'test@test.me',
+                    'emailConfirm' => 'test@test.me',
+                    'phone_primary' => 'pn1',
+                    'phone_primary_id' => 301,
+                    'phone_primary_version' => 1,
+                    'phone_secondary' => 'pn2',
+                    'phone_secondary_id' => 304,
+                    'phone_secondary_version' => 4,
+                ],
+                'address' => [
+                    'addressLine1' => 'a1'
+                ],
+                'userSettings' => [
                     'translateToWelsh' => 'N',
                 ],
             ],
-            // edit - partner
-            [
-                "inData" => [
-                    'id' => 987,
-                    'version' => 1,
-                    'userLoginSecurity' => [
-                        'loginId' => 'testuser',
-                        'accountDisabled' => 'Y',
-                        'resetPassword' => 'N',
-                    ],
-                    'userType' => [
-                        'userType' => 'partner',
-                        'role' => 'role',
-                        'partnerContactDetails' => 3,
-                    ],
-                    'userPersonal' => [
+            "expected" => [
+                'id' => 987,
+                'version' => 1,
+                'loginId' => 'testuser',
+                'accountDisabled' => 'Y',
+                'resetPassword' => 'N',
+                'userType' => 'transport-manager',
+                'roles' => ['role'],
+                'application' => 97,
+                'transportManager' => 3,
+                'contactDetails' => [
+                    'person' => [
                         'forename' => 'fn1',
                         'familyName' => 'ln1',
                         'birthDate' => '2012-03-01',
                     ],
-                    'userContactDetails' => [
-                        'emailAddress' => 'test@test.me',
-                        'emailConfirm' => 'test@test.me',
-                        'phone_primary' => 'pn1',
-                        'phone_primary_id' => 301,
-                        'phone_primary_version' => 1,
-                        'phone_secondary' => 'pn2',
-                        'phone_secondary_id' => 304,
-                        'phone_secondary_version' => 4,
-                    ],
+                    'emailAddress' => 'test@test.me',
                     'address' => [
                         'addressLine1' => 'a1'
                     ],
-                    'userSettings' => [
-                        'translateToWelsh' => 'N',
+                    'phoneContacts' => [
+                        [
+                            'id' => 301,
+                            'version' => 1,
+                            'phoneContactType' => 'phone_t_primary',
+                            'phoneNumber' => 'pn1',
+                        ],
+                        [
+                            'id' => 304,
+                            'version' => 4,
+                            'phoneContactType' => 'phone_t_secondary',
+                            'phoneNumber' => 'pn2',
+                        ],
                     ],
                 ],
-                "expected" => [
-                    'id' => 987,
-                    'version' => 1,
+                'translateToWelsh' => 'N',
+            ],
+        ];
+        // edit - partner
+        yield [
+            "inData" => [
+                'id' => 987,
+                'version' => 1,
+                'userLoginSecurity' => [
                     'loginId' => 'testuser',
                     'accountDisabled' => 'Y',
                     'resetPassword' => 'N',
+                ],
+                'userType' => [
                     'userType' => 'partner',
-                    'roles' => ['role'],
+                    'role' => 'role',
                     'partnerContactDetails' => 3,
-                    'contactDetails' => [
-                        'person' => [
-                            'forename' => 'fn1',
-                            'familyName' => 'ln1',
-                            'birthDate' => '2012-03-01',
-                        ],
-                        'emailAddress' => 'test@test.me',
-                        'address' => [
-                            'addressLine1' => 'a1'
-                        ],
-                        'phoneContacts' => [
-                            [
-                                'id' => 301,
-                                'version' => 1,
-                                'phoneContactType' => 'phone_t_primary',
-                                'phoneNumber' => 'pn1',
-                            ],
-                            [
-                                'id' => 304,
-                                'version' => 4,
-                                'phoneContactType' => 'phone_t_secondary',
-                                'phoneNumber' => 'pn2',
-                            ],
-                        ],
-                    ],
+                ],
+                'userPersonal' => [
+                    'forename' => 'fn1',
+                    'familyName' => 'ln1',
+                    'birthDate' => '2012-03-01',
+                ],
+                'userContactDetails' => [
+                    'emailAddress' => 'test@test.me',
+                    'emailConfirm' => 'test@test.me',
+                    'phone_primary' => 'pn1',
+                    'phone_primary_id' => 301,
+                    'phone_primary_version' => 1,
+                    'phone_secondary' => 'pn2',
+                    'phone_secondary_id' => 304,
+                    'phone_secondary_version' => 4,
+                ],
+                'address' => [
+                    'addressLine1' => 'a1'
+                ],
+                'userSettings' => [
                     'translateToWelsh' => 'N',
                 ],
             ],
-            // edit - local-authority
-            [
-                "inData" => [
-                    'id' => 987,
-                    'version' => 1,
-                    'userLoginSecurity' => [
-                        'loginId' => 'testuser',
-                        'accountDisabled' => 'Y',
-                        'resetPassword' => 'N',
-                    ],
-                    'userType' => [
-                        'userType' => 'local-authority',
-                        'role' => 'role',
-                        'localAuthority' => 3,
-                    ],
-                    'userPersonal' => [
+            "expected" => [
+                'id' => 987,
+                'version' => 1,
+                'loginId' => 'testuser',
+                'accountDisabled' => 'Y',
+                'resetPassword' => 'N',
+                'userType' => 'partner',
+                'roles' => ['role'],
+                'partnerContactDetails' => 3,
+                'contactDetails' => [
+                    'person' => [
                         'forename' => 'fn1',
                         'familyName' => 'ln1',
                         'birthDate' => '2012-03-01',
                     ],
-                    'userContactDetails' => [
-                        'emailAddress' => 'test@test.me',
-                        'emailConfirm' => 'test@test.me',
-                        'phone_primary' => 'pn1',
-                        'phone_primary_id' => 301,
-                        'phone_primary_version' => 1,
-                        'phone_secondary' => 'pn2',
-                        'phone_secondary_id' => 304,
-                        'phone_secondary_version' => 4,
-                    ],
+                    'emailAddress' => 'test@test.me',
                     'address' => [
                         'addressLine1' => 'a1'
                     ],
-                    'userSettings' => [
-                        'translateToWelsh' => 'N',
+                    'phoneContacts' => [
+                        [
+                            'id' => 301,
+                            'version' => 1,
+                            'phoneContactType' => 'phone_t_primary',
+                            'phoneNumber' => 'pn1',
+                        ],
+                        [
+                            'id' => 304,
+                            'version' => 4,
+                            'phoneContactType' => 'phone_t_secondary',
+                            'phoneNumber' => 'pn2',
+                        ],
                     ],
                 ],
-                "expected" => [
-                    'id' => 987,
-                    'version' => 1,
+                'translateToWelsh' => 'N',
+            ],
+        ];
+        // edit - local-authority
+        yield [
+            "inData" => [
+                'id' => 987,
+                'version' => 1,
+                'userLoginSecurity' => [
                     'loginId' => 'testuser',
                     'accountDisabled' => 'Y',
                     'resetPassword' => 'N',
+                ],
+                'userType' => [
                     'userType' => 'local-authority',
-                    'roles' => ['role'],
+                    'role' => 'role',
                     'localAuthority' => 3,
-                    'contactDetails' => [
-                        'person' => [
-                            'forename' => 'fn1',
-                            'familyName' => 'ln1',
-                            'birthDate' => '2012-03-01',
-                        ],
-                        'emailAddress' => 'test@test.me',
-                        'address' => [
-                            'addressLine1' => 'a1'
-                        ],
-                        'phoneContacts' => [
-                            [
-                                'id' => 301,
-                                'version' => 1,
-                                'phoneContactType' => 'phone_t_primary',
-                                'phoneNumber' => 'pn1',
-                            ],
-                            [
-                                'id' => 304,
-                                'version' => 4,
-                                'phoneContactType' => 'phone_t_secondary',
-                                'phoneNumber' => 'pn2',
-                            ],
-                        ],
-                    ],
+                ],
+                'userPersonal' => [
+                    'forename' => 'fn1',
+                    'familyName' => 'ln1',
+                    'birthDate' => '2012-03-01',
+                ],
+                'userContactDetails' => [
+                    'emailAddress' => 'test@test.me',
+                    'emailConfirm' => 'test@test.me',
+                    'phone_primary' => 'pn1',
+                    'phone_primary_id' => 301,
+                    'phone_primary_version' => 1,
+                    'phone_secondary' => 'pn2',
+                    'phone_secondary_id' => 304,
+                    'phone_secondary_version' => 4,
+                ],
+                'address' => [
+                    'addressLine1' => 'a1'
+                ],
+                'userSettings' => [
                     'translateToWelsh' => 'N',
                 ],
             ],
-            // edit - operator
-            [
-                "inData" => [
-                    'id' => 987,
-                    'version' => 1,
-                    'userLoginSecurity' => [
-                        'loginId' => 'testuser',
-                        'accountDisabled' => 'Y',
-                        'resetPassword' => 'N',
-                    ],
-                    'userType' => [
-                        'userType' => 'operator',
-                        'role' => 'role',
-                        'licenceNumber' => 'licNo',
-                    ],
-                    'userPersonal' => [
+            "expected" => [
+                'id' => 987,
+                'version' => 1,
+                'loginId' => 'testuser',
+                'accountDisabled' => 'Y',
+                'resetPassword' => 'N',
+                'userType' => 'local-authority',
+                'roles' => ['role'],
+                'localAuthority' => 3,
+                'contactDetails' => [
+                    'person' => [
                         'forename' => 'fn1',
                         'familyName' => 'ln1',
                         'birthDate' => '2012-03-01',
                     ],
-                    'userContactDetails' => [
-                        'emailAddress' => 'test@test.me',
-                        'emailConfirm' => 'test@test.me',
-                        'phone_primary' => 'pn1',
-                        'phone_primary_id' => 301,
-                        'phone_primary_version' => 1,
-                        'phone_secondary' => 'pn2',
-                        'phone_secondary_id' => 304,
-                        'phone_secondary_version' => 4,
-                    ],
+                    'emailAddress' => 'test@test.me',
                     'address' => [
                         'addressLine1' => 'a1'
                     ],
-                    'userSettings' => [
-                        'translateToWelsh' => 'N',
+                    'phoneContacts' => [
+                        [
+                            'id' => 301,
+                            'version' => 1,
+                            'phoneContactType' => 'phone_t_primary',
+                            'phoneNumber' => 'pn1',
+                        ],
+                        [
+                            'id' => 304,
+                            'version' => 4,
+                            'phoneContactType' => 'phone_t_secondary',
+                            'phoneNumber' => 'pn2',
+                        ],
                     ],
                 ],
-                "expected" => [
-                    'id' => 987,
-                    'version' => 1,
+                'translateToWelsh' => 'N',
+            ],
+        ];
+        // edit - operator
+        yield [
+            "inData" => [
+                'id' => 987,
+                'version' => 1,
+                'userLoginSecurity' => [
                     'loginId' => 'testuser',
                     'accountDisabled' => 'Y',
                     'resetPassword' => 'N',
+                ],
+                'userType' => [
                     'userType' => 'operator',
-                    'roles' => ['role'],
+                    'role' => 'role',
                     'licenceNumber' => 'licNo',
-                    'contactDetails' => [
-                        'person' => [
-                            'forename' => 'fn1',
-                            'familyName' => 'ln1',
-                            'birthDate' => '2012-03-01',
-                        ],
-                        'emailAddress' => 'test@test.me',
-                        'address' => [
-                            'addressLine1' => 'a1'
-                        ],
-                        'phoneContacts' => [
-                            [
-                                'id' => 301,
-                                'version' => 1,
-                                'phoneContactType' => 'phone_t_primary',
-                                'phoneNumber' => 'pn1',
-                            ],
-                            [
-                                'id' => 304,
-                                'version' => 4,
-                                'phoneContactType' => 'phone_t_secondary',
-                                'phoneNumber' => 'pn2',
-                            ],
-                        ],
-                    ],
+                ],
+                'userPersonal' => [
+                    'forename' => 'fn1',
+                    'familyName' => 'ln1',
+                    'birthDate' => '2012-03-01',
+                ],
+                'userContactDetails' => [
+                    'emailAddress' => 'test@test.me',
+                    'emailConfirm' => 'test@test.me',
+                    'phone_primary' => 'pn1',
+                    'phone_primary_id' => 301,
+                    'phone_primary_version' => 1,
+                    'phone_secondary' => 'pn2',
+                    'phone_secondary_id' => 304,
+                    'phone_secondary_version' => 4,
+                ],
+                'address' => [
+                    'addressLine1' => 'a1'
+                ],
+                'userSettings' => [
                     'translateToWelsh' => 'N',
                 ],
+            ],
+            "expected" => [
+                'id' => 987,
+                'version' => 1,
+                'loginId' => 'testuser',
+                'accountDisabled' => 'Y',
+                'resetPassword' => 'N',
+                'userType' => 'operator',
+                'roles' => ['role'],
+                'licenceNumber' => 'licNo',
+                'contactDetails' => [
+                    'person' => [
+                        'forename' => 'fn1',
+                        'familyName' => 'ln1',
+                        'birthDate' => '2012-03-01',
+                    ],
+                    'emailAddress' => 'test@test.me',
+                    'address' => [
+                        'addressLine1' => 'a1'
+                    ],
+                    'phoneContacts' => [
+                        [
+                            'id' => 301,
+                            'version' => 1,
+                            'phoneContactType' => 'phone_t_primary',
+                            'phoneNumber' => 'pn1',
+                        ],
+                        [
+                            'id' => 304,
+                            'version' => 4,
+                            'phoneContactType' => 'phone_t_secondary',
+                            'phoneNumber' => 'pn2',
+                        ],
+                    ],
+                ],
+                'translateToWelsh' => 'N',
             ],
         ];
     }
@@ -747,53 +743,51 @@ class UserTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromErrors($mockForm, $errors));
     }
 
-    public static function dpMapFromErrors(): array
+    public static function dpMapFromErrors(): \Iterator
     {
-        return [
-            'username error' => [
-                'errors' => [
-                    'messages' => [
-                        'loginId' => ['err'],
-                        'general' => 'error'
-                    ]
-                ],
-                'expectedFormErrors' => [
-                    'userLoginSecurity' => ['loginId' => ['err']]
-                ],
-                'expected' => [
-                    'messages' => [
-                        'general' => 'error'
-                    ]
-                ],
+        yield 'username error' => [
+            'errors' => [
+                'messages' => [
+                    'loginId' => ['err'],
+                    'general' => 'error'
+                ]
             ],
-            'role error' => [
-                'errors' => [
-                    'messages' => [
-                        'role' => ['err'],
-                        'general' => 'error'
-                    ]
-                ],
-                'expectedFormErrors' => [
-                    'userType' => ['role' => ['err']]
-                ],
-                'expected' => [
-                    'messages' => [
-                        'general' => 'error'
-                    ]
-                ],
+            'expectedFormErrors' => [
+                'userLoginSecurity' => ['loginId' => ['err']]
             ],
-            'general error' => [
-                'errors' => [
-                    'messages' => [
-                        'general' => 'error'
-                    ]
-                ],
-                'expectedFormErrors' => null,
-                'expected' => [
-                    'messages' => [
-                        'general' => 'error'
-                    ]
-                ],
+            'expected' => [
+                'messages' => [
+                    'general' => 'error'
+                ]
+            ],
+        ];
+        yield 'role error' => [
+            'errors' => [
+                'messages' => [
+                    'role' => ['err'],
+                    'general' => 'error'
+                ]
+            ],
+            'expectedFormErrors' => [
+                'userType' => ['role' => ['err']]
+            ],
+            'expected' => [
+                'messages' => [
+                    'general' => 'error'
+                ]
+            ],
+        ];
+        yield 'general error' => [
+            'errors' => [
+                'messages' => [
+                    'general' => 'error'
+                ]
+            ],
+            'expectedFormErrors' => null,
+            'expected' => [
+                'messages' => [
+                    'general' => 'error'
+                ]
             ],
         ];
     }

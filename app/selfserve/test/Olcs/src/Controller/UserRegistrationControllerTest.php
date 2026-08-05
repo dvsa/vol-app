@@ -20,16 +20,11 @@ use Olcs\Session\ConsultantRegistration;
 use ReflectionClass;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class UserRegistrationControllerTest extends TestCase
+final class UserRegistrationControllerTest extends TestCase
 {
     protected $sut;
-    protected $sm;
 
     private $mockTranslationHelper;
-
-    private $mockniTextTranslationUtil;
-
-    private $mockauthService;
 
     private $mockFlashMessengerHelper;
 
@@ -41,37 +36,36 @@ class UserRegistrationControllerTest extends TestCase
 
     private $mockFormatSaveDataMapper;
 
-    private $mockConsultantRegistrationSession;
 
-
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(Sut::class)
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
-        $this->mockniTextTranslationUtil = m::mock(NiTextTranslation::class)->makePartial();
-        $this->mockauthService = m::mock(AuthorizationService::class)->makePartial();
+        $mockniTextTranslationUtil = m::mock(NiTextTranslation::class)->makePartial();
+        $mockauthService = m::mock(AuthorizationService::class)->makePartial();
         $this->mockFormHelper = m::mock(FormHelperService::class)->makePartial();
         $this->mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class)->makePartial();
         $this->mockScriptFactory = m::mock(ScriptFactory::class)->makePartial();
         $this->mockUrlHelper = m::mock(UrlHelperService::class)->makePartial();
         $this->mockTranslationHelper = m::mock(TranslationHelperService::class)->makePartial();
         $this->mockFormatSaveDataMapper = m::mock(CreateAccountMapper::class)->makePartial();
-        $this->mockConsultantRegistrationSession = m::mock(ConsultantRegistration::class)->makePartial();
+        $mockConsultantRegistrationSession = m::mock(ConsultantRegistration::class)->makePartial();
 
-        $this->mockConsultantRegistrationSession->shouldReceive('getOperatorAdmin')->andReturn(true);
+        $mockConsultantRegistrationSession->shouldReceive('getOperatorAdmin')->andReturn(true);
 
         $reflectionClass = new ReflectionClass(Sut::class);
-        $this->setMockedProperties($reflectionClass, 'niTextTranslationUtil', $this->mockniTextTranslationUtil);
-        $this->setMockedProperties($reflectionClass, 'authService', $this->mockauthService);
+        $this->setMockedProperties($reflectionClass, 'niTextTranslationUtil', $mockniTextTranslationUtil);
+        $this->setMockedProperties($reflectionClass, 'authService', $mockauthService);
         $this->setMockedProperties($reflectionClass, 'flashMessengerHelper', $this->mockFlashMessengerHelper);
         $this->setMockedProperties($reflectionClass, 'formHelper', $this->mockFormHelper);
         $this->setMockedProperties($reflectionClass, 'scriptFactory', $this->mockScriptFactory);
         $this->setMockedProperties($reflectionClass, 'urlHelper', $this->mockUrlHelper);
         $this->setMockedProperties($reflectionClass, 'translationHelper', $this->mockTranslationHelper);
         $this->setMockedProperties($reflectionClass, 'formatDataMapper', $this->mockFormatSaveDataMapper);
-        $this->setMockedProperties($reflectionClass, 'consultantRegistrationSession', $this->mockConsultantRegistrationSession);
+        $this->setMockedProperties($reflectionClass, 'consultantRegistrationSession', $mockConsultantRegistrationSession);
     }
 
     /**

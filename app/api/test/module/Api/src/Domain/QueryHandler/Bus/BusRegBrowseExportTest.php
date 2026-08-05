@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * BusRegBrowseExport test
  */
-class BusRegBrowseExportTest extends QueryHandlerTestCase
+final class BusRegBrowseExportTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -46,14 +46,11 @@ class BusRegBrowseExportTest extends QueryHandlerTestCase
                 $status
             )
             ->andReturn(
-                m::mock()
-                    ->shouldReceive('next')
-                    ->andReturn(
-                        [['VAL11', 'VAL12']],
-                        [['VAL21', 'VAL22']],
-                        false
-                    )
-                    ->getMock()
+                // Query::toIterable() yields each row directly (no [0 => ...] wrapper)
+                (static function (): \Generator {
+                    yield ['VAL11', 'VAL12'];
+                    yield ['VAL21', 'VAL22'];
+                })()
             );
 
         $result = $this->sut->handleQuery($query);
@@ -96,12 +93,9 @@ class BusRegBrowseExportTest extends QueryHandlerTestCase
                 $status
             )
             ->andReturn(
-                m::mock()
-                    ->shouldReceive('next')
-                    ->andReturn(
-                        false
-                    )
-                    ->getMock()
+                (static function (): \Generator {
+                    yield from [];
+                })()
             );
 
         $this->sut->handleQuery($query);

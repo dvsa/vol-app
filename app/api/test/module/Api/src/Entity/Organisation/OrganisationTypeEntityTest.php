@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Organisation\OrganisationType as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class OrganisationTypeEntityTest extends EntityTester
+final class OrganisationTypeEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

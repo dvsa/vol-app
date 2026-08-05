@@ -13,7 +13,7 @@ use Olcs\Controller\Lva\Adapters\LicenceTransportManagerAdapter;
 class LicenceTransportManagerAdapterFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceTransportManagerAdapter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LicenceTransportManagerAdapter
     {
         $transferAnnotationBuilder = $container->get(AnnotationBuilder::class);
         assert($transferAnnotationBuilder instanceof AnnotationBuilder);

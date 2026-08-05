@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\InputFilters;
 
 use Common\Form\Elements\InputFilters;
 
-/**
- * @covers \Common\Form\Elements\InputFilters\Text
- */
-class TextTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\Elements\InputFilters\Text::class)]
+final class TextTest extends \PHPUnit\Framework\TestCase
 {
     /** @var  InputFilters\Text */
     private $filter;
@@ -72,8 +72,8 @@ class TextTest extends \PHPUnit\Framework\TestCase
         $validators = $this->getSpecificationElement('validators');
         $options = current($validators)['options'];
 
-        static::assertEquals(99, $options['min']);
-        static::assertEquals(888, $options['max']);
+        $this->assertEquals(99, $options['min']);
+        $this->assertEquals(888, $options['max']);
     }
 
     /**
@@ -88,14 +88,11 @@ class TextTest extends \PHPUnit\Framework\TestCase
 
         $validators = $this->getSpecificationElement('validators');
 
-        static::assertEquals(
-            [
-                'name' => \Laminas\Validator\NotEmpty::class,
-                'options' => [
-                    'type' => \Laminas\Validator\NotEmpty::PHP,
-                ],
+        $this->assertEquals([
+            'name' => \Laminas\Validator\NotEmpty::class,
+            'options' => [
+                'type' => \Laminas\Validator\NotEmpty::PHP,
             ],
-            current($validators)
-        );
+        ], current($validators));
     }
 }

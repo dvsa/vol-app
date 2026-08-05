@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Domain\Repository\InspectionRequest as InspectionRequestRepo;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class InspectionRequestTest extends QueryHandlerTestCase
+final class InspectionRequestTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

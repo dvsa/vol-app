@@ -93,7 +93,7 @@ class DateWithTime extends AbstractValidator
      * @return bool
      */
     #[\Override]
-    public function isValid($value, array $context = null)
+    public function isValid($value, ?array $context = null)
     {
         unset($value);
 

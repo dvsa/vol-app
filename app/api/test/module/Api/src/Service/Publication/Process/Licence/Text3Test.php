@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class Text3Test extends MockeryTestCase
+final class Text3Test extends MockeryTestCase
 {
     public function testProcess(): void
     {

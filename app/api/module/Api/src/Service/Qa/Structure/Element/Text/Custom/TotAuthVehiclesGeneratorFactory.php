@@ -18,7 +18,7 @@ class TotAuthVehiclesGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TotAuthVehiclesGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TotAuthVehiclesGenerator
     {
         return new TotAuthVehiclesGenerator(
             $container->get('QaTextElementGenerator')

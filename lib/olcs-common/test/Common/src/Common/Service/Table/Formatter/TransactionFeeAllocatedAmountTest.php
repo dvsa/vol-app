@@ -6,6 +6,8 @@
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\TransactionFeeAllocatedAmount as Sut;
@@ -15,43 +17,41 @@ use Common\Service\Table\Formatter\TransactionFeeAllocatedAmount as Sut;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class TransactionFeeAllocatedAmountTest extends \PHPUnit\Framework\TestCase
+final class TransactionFeeAllocatedAmountTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group FeeStatusFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('FeeStatusFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $expected): void
     {
-        $this->assertEquals($expected, (new Sut())->format($data, ['name' => 'amount']));
+        $this->assertEquals($expected, new Sut()->format($data, ['name' => 'amount']));
     }
 
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'standard' => [
-                [
-                    'amount' => '100',
-                    'reversingTransaction' => null,
-                ],
-                '£100.00',
+        yield 'standard' => [
+            [
+                'amount' => '100',
+                'reversingTransaction' => null,
             ],
-            'reversed' => [
-                [
-                    'amount' => '100',
-                    'reversingTransaction' => ['id' => 99],
-                ],
-                '<span class="void">£100.00</span>',
+            '£100.00',
+        ];
+        yield 'reversed' => [
+            [
+                'amount' => '100',
+                'reversingTransaction' => ['id' => 99],
             ],
+            '<span class="void">£100.00</span>',
         ];
     }
 }

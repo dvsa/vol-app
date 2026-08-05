@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase as TestCase;
  * Class SupportingDocumentsTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\XmlValidator
  */
-class SupportingDocumentsTest extends TestCase
+final class SupportingDocumentsTest extends TestCase
 {
     /**
      * @param $xml
@@ -34,15 +34,13 @@ class SupportingDocumentsTest extends TestCase
         $this->assertEquals($valid, $sut->isValid($dom, $context));
     }
 
-    public static function isValidProvider(): array
+    public static function isValidProvider(): \Iterator
     {
-        return [
-            ['<DocumentUri></DocumentUri>', false],
-            ['<DocumentUri>notexisting</DocumentUri>', false],
-            ['<DocumentUri>existing</DocumentUri>', true],
-            ['<SchematicMap>notexisting</SchematicMap>', false],
-            ['<SchematicMap>existing</SchematicMap>', true],
-            ['<SchematicMap></SchematicMap>', false],
-        ];
+        yield ['<DocumentUri></DocumentUri>', false];
+        yield ['<DocumentUri>notexisting</DocumentUri>', false];
+        yield ['<DocumentUri>existing</DocumentUri>', true];
+        yield ['<SchematicMap>notexisting</SchematicMap>', false];
+        yield ['<SchematicMap>existing</SchematicMap>', true];
+        yield ['<SchematicMap></SchematicMap>', false];
     }
 }

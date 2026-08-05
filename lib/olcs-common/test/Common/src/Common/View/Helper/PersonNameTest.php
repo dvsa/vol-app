@@ -6,6 +6,8 @@
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper;
 
 use Common\View\Helper\PersonName;
@@ -15,7 +17,7 @@ use Common\View\Helper\PersonName;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class PersonNameTest extends \PHPUnit\Framework\TestCase
+final class PersonNameTest extends \PHPUnit\Framework\TestCase
 {
     public $viewHelper;
     /**
@@ -29,8 +31,8 @@ class PersonNameTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test invoke
-     * @dataProvider personNameDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('personNameDataProvider')]
     public function testInvokeDefaultFields($input, $expected): void
     {
         if (!empty($input['fields'])) {
@@ -43,58 +45,56 @@ class PersonNameTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return ((null|string[])[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(array<string> | null)> | string)>>
      *
      * @psalm-return list{list{array{person: array{title: 't', forename: 'f', familyName: 's'}}, 't f s'}, list{array{person: array{forename: 'f', familyName: 's'}, fields: null}, 'f s'}, list{array{person: array{title: 't', forename: 'f', familyName: 's'}, fields: list{'title', 'familyName'}}, 't s'}}
      */
-    public function personNameDataProvider(): array
+    public static function personNameDataProvider(): \Iterator
     {
-        return [
-            [ // include title
-                [
-                    'person' => [
-                        'title' => 't',
-                        'forename' => 'f',
-                        'familyName' => 's'
-                    ]
-                ],
-                't f s'
-            ],
-            [ // no title
-                [
-                    'person' => [
-                        'forename' => 'f',
-                        'familyName' => 's'
-                    ],
-                    'fields' => null
-                ],
-                'f s'
-            ],
-            [ // include select fields
-                [
-                    'person' => [
-                        'title' => 't',
-                        'forename' => 'f',
-                        'familyName' => 's'
-                    ],
-                    'fields' => [
-                        'title',
-                        'familyName'
-                    ]
-                ],
-                't s'
-            ],
+        yield [ // include title
             [
-                [
-                    'person' => [
-                        'title' => ['description' => 'Mr'],
-                        'forename' => 'John',
-                        'familyName' => 'Doe'
-                    ],
-                    'fields' => null
-                ],
-                'Mr John Doe'
+                'person' => [
+                    'title' => 't',
+                    'forename' => 'f',
+                    'familyName' => 's'
+                ]
             ],
+            't f s'
+        ];
+        yield [ // no title
+            [
+                'person' => [
+                    'forename' => 'f',
+                    'familyName' => 's'
+                ],
+                'fields' => null
+            ],
+            'f s'
+        ];
+        yield [ // include select fields
+            [
+                'person' => [
+                    'title' => 't',
+                    'forename' => 'f',
+                    'familyName' => 's'
+                ],
+                'fields' => [
+                    'title',
+                    'familyName'
+                ]
+            ],
+            't s'
+        ];
+        yield [
+            [
+                'person' => [
+                    'title' => ['description' => 'Mr'],
+                    'forename' => 'John',
+                    'familyName' => 'Doe'
+                ],
+                'fields' => null
+            ],
+            'Mr John Doe'
         ];
     }
 }

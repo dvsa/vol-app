@@ -17,7 +17,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class TxcInboxEntityTest extends EntityTester
+final class TxcInboxEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -55,14 +55,12 @@ class TxcInboxEntityTest extends EntityTester
     /**
      * Provides invalid data which should cause a validation error
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function validDataProvider(): array
+    public static function validDataProvider(): \Iterator
     {
-        return [
-            [new LocalAuthorityEntity(), null],
-            [null, new OrganisationEntity()]
-        ];
+        yield [new LocalAuthorityEntity(), null];
+        yield [null, new OrganisationEntity()];
     }
 
     public function testCreateNotFromEbsr(): void
@@ -97,14 +95,12 @@ class TxcInboxEntityTest extends EntityTester
     /**
      * Provides invalid data which should cause a validation error
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function createValidationErrorProvider(): array
+    public static function createValidationErrorProvider(): \Iterator
     {
-        return [
-            [new LocalAuthorityEntity(), new OrganisationEntity()],
-            [null, null]
-        ];
+        yield [new LocalAuthorityEntity(), new OrganisationEntity()];
+        yield [null, null];
     }
 
     public function testGetRelatedOrganisation(): void

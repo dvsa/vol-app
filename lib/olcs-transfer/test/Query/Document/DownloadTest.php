@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Document;
 
 use Dvsa\Olcs\Transfer\Query\Document\Download;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Query\Document\Download
- */
-class DownloadTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\Document\Download::class)]
+final class DownloadTest extends MockeryTestCase
 {
     public function testGetSet()
     {
@@ -19,6 +19,6 @@ class DownloadTest extends MockeryTestCase
 
         $sut = Download::create($data);
 
-        static::assertEquals(123456, $sut->getIdentifier());
+        $this->assertEquals(123456, $sut->getIdentifier());
     }
 }

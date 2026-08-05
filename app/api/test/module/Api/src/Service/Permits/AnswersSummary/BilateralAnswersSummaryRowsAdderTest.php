@@ -22,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class BilateralAnswersSummaryRowsAdderTest extends MockeryTestCase
+final class BilateralAnswersSummaryRowsAdderTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpSnapshot')]
     public function testAddRows(mixed $isSnapshot, mixed $countriesQuestionKey): void
@@ -156,12 +156,10 @@ class BilateralAnswersSummaryRowsAdderTest extends MockeryTestCase
         $bilateralAnswersSummaryRowsAdder->addRows($answersSummary, $irhpApplication, $isSnapshot);
     }
 
-    public static function dpSnapshot(): array
+    public static function dpSnapshot(): \Iterator
     {
-        return [
-            [true, 'permits.irhp.application.question.countries-snapshot'],
-            [false, 'permits.irhp.application.question.countries']
-        ];
+        yield [true, 'permits.irhp.application.question.countries-snapshot'];
+        yield [false, 'permits.irhp.application.question.countries'];
     }
 
     private function createMockIrhpPermitApplication(mixed $countryName): mixed

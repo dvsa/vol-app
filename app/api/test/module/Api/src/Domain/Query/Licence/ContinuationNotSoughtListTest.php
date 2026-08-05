@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Query\Licence\ContinuationNotSoughtList;
 /**
  * ContinuationNotSoughtList test
  */
-class ContinuationNotSoughtListTest extends \PHPUnit\Framework\TestCase
+final class ContinuationNotSoughtListTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

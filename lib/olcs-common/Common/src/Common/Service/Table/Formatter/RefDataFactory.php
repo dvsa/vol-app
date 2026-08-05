@@ -13,7 +13,7 @@ class RefDataFactory implements FactoryInterface
      * @return RefData
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $translator = $container->get('translator');
         return new RefData($translator);

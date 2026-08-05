@@ -13,7 +13,7 @@ use Mockery as m;
 /**
  * ContinuationDetail Entity Unit Tests
  */
-class ContinuationDetailEntityTest extends EntityTester
+final class ContinuationDetailEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -47,18 +47,16 @@ class ContinuationDetailEntityTest extends EntityTester
         $this->assertEquals('ORG', $continuationDetail->getRelatedOrganisation());
     }
 
-    public static function dpGetAmountDeclaredDataProvider(): array
+    public static function dpGetAmountDeclaredDataProvider(): \Iterator
     {
-        return [
-            [0.00, null, null, null, null],
-            [0.00, 0, 0, 0, 0],
-            [10.00, 1, 2, 3, 4],
-            [10.10, 1.01, 2.02, 3.03, 4.04],
-            [1.01, 1.01, null, null, null],
-            [1.01, null, 1.01, null, null],
-            [1.01, null, null, 1.01, null],
-            [1.01, null, null, null, 1.01],
-        ];
+        yield [0.00, null, null, null, null];
+        yield [0.00, 0, 0, 0, 0];
+        yield [10.00, 1, 2, 3, 4];
+        yield [10.10, 1.01, 2.02, 3.03, 4.04];
+        yield [1.01, 1.01, null, null, null];
+        yield [1.01, null, 1.01, null, null];
+        yield [1.01, null, null, 1.01, null];
+        yield [1.01, null, null, null, 1.01];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetAmountDeclaredDataProvider')]

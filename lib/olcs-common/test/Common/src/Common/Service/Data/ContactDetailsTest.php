@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -7,10 +9,8 @@ use Common\Service\Data\ContactDetails;
 use Dvsa\Olcs\Transfer\Query\ContactDetail\ContactDetailsList as Qry;
 use Mockery as m;
 
-/**
- * @covers \Common\Service\Data\ContactDetails
- */
-class ContactDetailsTest extends AbstractListDataServiceTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Data\ContactDetails::class)]
+final class ContactDetailsTest extends AbstractListDataServiceTestCase
 {
     /** @var ContactDetails */
     private $sut;
@@ -19,7 +19,6 @@ class ContactDetailsTest extends AbstractListDataServiceTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->sut = new ContactDetails($this->abstractListDataServiceServices);
     }
 
@@ -60,11 +59,11 @@ class ContactDetailsTest extends AbstractListDataServiceTestCase
 
     public function testSetters(): void
     {
-        static::assertNull($this->sut->getContactType());
+        $this->assertNull($this->sut->getContactType());
 
         $this->sut->setContactType('unit_ContactType');
 
-        static::assertEquals('unit_ContactType', $this->sut->getContactType());
+        $this->assertEquals('unit_ContactType', $this->sut->getContactType());
     }
 
     public function testFetchListDataCache(): void
@@ -77,7 +76,7 @@ class ContactDetailsTest extends AbstractListDataServiceTestCase
         ];
         $this->sut->setData('ContactDetails', $data);
 
-        static::assertEquals([9999 => 'EXPECTED'], $this->sut->fetchListOptions());
+        $this->assertEquals([9999 => 'EXPECTED'], $this->sut->fetchListOptions());
     }
 
     public function testFetchListDataWithException(): void

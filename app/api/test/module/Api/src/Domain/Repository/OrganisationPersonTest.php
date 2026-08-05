@@ -11,11 +11,12 @@ use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\OrganisationPerson as OrganisationPersonRepo;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\OrganisationPerson::class)]
-class OrganisationPersonTest extends RepositoryTestCase
+final class OrganisationPersonTest extends RepositoryTestCase
 {
     /** @var OrganisationPersonRepo  */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(OrganisationPersonRepo::class);

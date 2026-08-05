@@ -182,19 +182,17 @@ abstract class AbstractWithdrawApplicationHandlerTestCase extends AbstractComman
         $this->assertEquals(['Application withdrawn'], $result->getMessages());
     }
 
-    public static function dpReasonProvider(): array
+    public static function dpReasonProvider(): \Iterator
     {
-        return [
-            [WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS, false, true],
-            [WithdrawableInterface::WITHDRAWN_REASON_BY_USER, false, true],
-            [WithdrawableInterface::WITHDRAWN_REASON_DECLINED, false, true],
-            [WithdrawableInterface::WITHDRAWN_REASON_UNPAID, false, true],
-            [WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED, false, true],
-            [WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS, true, false],
-            [WithdrawableInterface::WITHDRAWN_REASON_BY_USER, true, false],
-            [WithdrawableInterface::WITHDRAWN_REASON_DECLINED, true, false],
-            [WithdrawableInterface::WITHDRAWN_REASON_UNPAID, true, false],
-            [WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED, true, false],
-        ];
+        yield [WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS, false, true];
+        yield [WithdrawableInterface::WITHDRAWN_REASON_BY_USER, false, true];
+        yield [WithdrawableInterface::WITHDRAWN_REASON_DECLINED, false, true];
+        yield [WithdrawableInterface::WITHDRAWN_REASON_UNPAID, false, true];
+        yield [WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED, false, true];
+        yield [WithdrawableInterface::WITHDRAWN_REASON_NOTSUCCESS, true, false];
+        yield [WithdrawableInterface::WITHDRAWN_REASON_BY_USER, true, false];
+        yield [WithdrawableInterface::WITHDRAWN_REASON_DECLINED, true, false];
+        yield [WithdrawableInterface::WITHDRAWN_REASON_UNPAID, true, false];
+        yield [WithdrawableInterface::WITHDRAWN_REASON_PERMITS_REVOKED, true, false];
     }
 }

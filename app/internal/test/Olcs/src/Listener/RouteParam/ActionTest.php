@@ -17,7 +17,7 @@ use Olcs\Listener\RouteParam\Action;
 use Mockery as m;
 use Olcs\Listener\RouteParams;
 
-class ActionTest extends TestCase
+final class ActionTest extends TestCase
 {
     private Action $sut;
 

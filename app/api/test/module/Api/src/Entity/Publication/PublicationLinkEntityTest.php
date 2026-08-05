@@ -28,7 +28,7 @@ use Olcs\Logging\Log\Logger;
  *
  * Initially auto-generated but won't be overridden
  */
-class PublicationLinkEntityTest extends EntityTester
+final class PublicationLinkEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -37,6 +37,7 @@ class PublicationLinkEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
+    #[\Override]
     public function setUp(): void
     {
         Logger::setLogger(new \Psr\Log\NullLogger());

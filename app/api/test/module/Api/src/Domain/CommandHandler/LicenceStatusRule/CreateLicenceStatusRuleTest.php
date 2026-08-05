@@ -27,7 +27,7 @@ use Dvsa\Olcs\Transfer\Command\LicenceStatusRule\CreateLicenceStatusRule as Cmd;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class CreateLicenceStatusRuleTest extends AbstractCommandHandlerTestCase
+final class CreateLicenceStatusRuleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -77,9 +77,9 @@ class CreateLicenceStatusRuleTest extends AbstractCommandHandlerTestCase
                     $this->assertEquals($rule->getLicence(), $this->references[Licence::class][1]);
                     $this->assertEquals($rule->getLicenceStatus(), $this->refData['lsts_curtailed']);
                     $this->assertInstanceOf('DateTime', $rule->getStartDate());
-                    $this->assertEquals($rule->getStartDate()->format('Y-m-d H:i:s'), $data['startDate']);
+                    $this->assertSame($rule->getStartDate()->format('Y-m-d H:i:s'), $data['startDate']);
                     $this->assertInstanceOf('DateTime', $rule->getEndDate());
-                    $this->assertEquals($rule->getEndDate()->format('Y-m-d H:i:s'), $data['endDate']);
+                    $this->assertSame($rule->getEndDate()->format('Y-m-d H:i:s'), $data['endDate']);
                 }
             );
 

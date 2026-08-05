@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Meetingvenue as Sut;
 /**
  * MeetingvenueTest
  */
-class MeetingvenueTest extends \PHPUnit\Framework\TestCase
+final class MeetingvenueTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

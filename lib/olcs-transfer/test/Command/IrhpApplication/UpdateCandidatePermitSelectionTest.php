@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\IrhpApplication;
 
 use Dvsa\Olcs\Transfer\Command\IrhpApplication\UpdateCandidatePermitSelection;
@@ -8,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * UpdateCandidatePermitSelectionTest
  */
-class UpdateCandidatePermitSelectionTest extends TestCase
+final class UpdateCandidatePermitSelectionTest extends TestCase
 {
     public function testStructure()
     {

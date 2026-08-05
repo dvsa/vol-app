@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * Data Retention Assign Test
  */
-class DataRetentionAssignTest extends MockeryTestCase
+final class DataRetentionAssignTest extends MockeryTestCase
 {
     public function testMapFromForm(): void
     {

@@ -24,7 +24,7 @@ use Mockery as m;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class ReopenSubmissionTest extends AbstractCommandHandlerTestCase
+final class ReopenSubmissionTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

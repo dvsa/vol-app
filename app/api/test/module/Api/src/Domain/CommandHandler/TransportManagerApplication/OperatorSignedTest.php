@@ -20,10 +20,8 @@ use Dvsa\Olcs\Api\Domain\Command\TransportManagerApplication\Snapshot;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class OperatorSignedTest extends AbstractCommandHandlerTestCase
+final class OperatorSignedTest extends AbstractCommandHandlerTestCase
 {
-    protected $loggedInUser;
-
     public function setUp(): void
     {
         $this->sut = new CommandHandler();

@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Bus\CreateNoticePeriod;
 /**
  * @see CreateNoticePeriod
  */
-class CreateNoticePeriodTest extends \PHPUnit\Framework\TestCase
+final class CreateNoticePeriodTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

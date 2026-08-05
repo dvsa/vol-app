@@ -25,7 +25,7 @@ use Dvsa\Olcs\Api\Entity\Organisation\CompanySubsidiary as Entity;
  * @author Rob Caiger <rob@clocal.co.uk>
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CompanySubsidiaryTest extends QueryHandlerTestCase
+final class CompanySubsidiaryTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

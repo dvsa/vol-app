@@ -19,7 +19,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

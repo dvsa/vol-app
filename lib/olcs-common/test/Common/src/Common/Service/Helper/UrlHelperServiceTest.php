@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Helper;
 
 use Common\Service\Helper\UrlHelperService;
@@ -19,7 +21,8 @@ use Laminas\View\Helper\Url;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UrlHelperServiceTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+final class UrlHelperServiceTest extends MockeryTestCase
 {
     /**
      * Holds the SUT
@@ -41,17 +44,15 @@ class UrlHelperServiceTest extends MockeryTestCase
         $this->mockUrlViewHelper = $this->createPartialMock(Url::class, ['__invoke']);
 
         $this->mockViewHelperManager = $this->createPartialMock(HelperPluginManager::class, ['get']);
-        $this->mockViewHelperManager->expects($this->any())
+        $this->mockViewHelperManager
             ->method('get')
-            ->will($this->returnValue($this->mockUrlViewHelper));
+            ->willReturn($this->mockUrlViewHelper);
 
         $this->sut = new UrlHelperService($this->mockViewHelperManager, []);
     }
 
-    /**
-     * @group helper_service
-     * @group url_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('url_helper_service')]
     public function testFromRoute(): void
     {
         $route = 'foo/bar';
@@ -63,15 +64,13 @@ class UrlHelperServiceTest extends MockeryTestCase
         $this->mockUrlViewHelper->expects($this->once())
             ->method('__invoke')
             ->with($route, $params, $options, $reuseMatchedParams)
-            ->will($this->returnValue($builtUrl));
+            ->willReturn($builtUrl);
 
         $this->assertEquals($builtUrl, $this->sut->fromRoute($route, $params, $options, $reuseMatchedParams));
     }
 
-    /**
-     * @group helper_service
-     * @group url_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('url_helper_service')]
     public function testFromRouteWithDefaults(): void
     {
         $route = 'foo/bar';
@@ -80,7 +79,7 @@ class UrlHelperServiceTest extends MockeryTestCase
         $this->mockUrlViewHelper->expects($this->once())
             ->method('__invoke')
             ->with($route, [], [], false)
-            ->will($this->returnValue($builtUrl));
+            ->willReturn($builtUrl);
 
         $this->assertEquals($builtUrl, $this->sut->fromRoute($route));
     }
@@ -96,7 +95,7 @@ class UrlHelperServiceTest extends MockeryTestCase
         try {
             $this->sut->fromRouteWithHost('foo');
         } catch (\RuntimeException $runtimeException) {
-            $this->assertEquals("Hostname for 'foo' not found", $runtimeException->getMessage());
+            $this->assertSame("Hostname for 'foo' not found", $runtimeException->getMessage());
             return;
         }
 
@@ -119,7 +118,7 @@ class UrlHelperServiceTest extends MockeryTestCase
 
         $this->mockUrlViewHelper->expects($this->once())
             ->method('__invoke')
-            ->will($this->returnCallback($urlMock));
+            ->willReturnCallback($urlMock);
 
         $config = [
             'hostnames' => ['foo' => 'http://selfserve']
@@ -127,7 +126,7 @@ class UrlHelperServiceTest extends MockeryTestCase
 
         $this->sut = new UrlHelperService($this->mockViewHelperManager, $config);
 
-        $this->assertEquals(
+        $this->assertSame(
             'http://selfserve/a/url',
             $this->sut->fromRouteWithHost('foo', 'a_route')
         );

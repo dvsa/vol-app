@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa;
 
 use Common\Service\Qa\FieldsetAdder;
@@ -18,15 +20,15 @@ use Laminas\Form\Form;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class FieldsetAdderTest extends MockeryTestCase
+final class FieldsetAdderTest extends MockeryTestCase
 {
-    public const FIELDSET_NAME = 'fields123';
+    public const string FIELDSET_NAME = 'fields123';
 
-    public const ELEMENT_TYPE = 'elementType';
+    public const string ELEMENT_TYPE = 'elementType';
 
-    public const SHORT_NAME = 'Cabotage';
+    public const string SHORT_NAME = 'Cabotage';
 
-    public const ELEMENT_OPTIONS = [
+    public const array ELEMENT_OPTIONS = [
         'elementProperty1' => 'elementValue1',
         'elementProperty2' => 'elementValue2'
     ];
@@ -81,9 +83,7 @@ class FieldsetAdderTest extends MockeryTestCase
         $this->sut = new FieldsetAdder($fieldsetPopulatorProvider, $fieldsetFactory, $fieldsetModifier);
     }
 
-    /**
-     * @dataProvider dpEnabled
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpEnabled')]
     public function testAddSelfserve($enabled, $expectedDataEnabledAttribute): void
     {
         $options = [
@@ -101,9 +101,7 @@ class FieldsetAdderTest extends MockeryTestCase
         $this->sut->add($this->form, $options, UsageContext::CONTEXT_SELFSERVE);
     }
 
-    /**
-     * @dataProvider dpEnabled
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpEnabled')]
     public function testAddInternal($enabled, $expectedDataEnabledAttribute): void
     {
         $options = [
@@ -134,15 +132,13 @@ class FieldsetAdderTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string)>>
      *
      * @psalm-return list{list{true, 'true'}, list{false, 'false'}}
      */
-    public function dpEnabled(): array
+    public static function dpEnabled(): \Iterator
     {
-        return [
-            [true, 'true'],
-            [false, 'false'],
-        ];
+        yield [true, 'true'];
+        yield [false, 'false'];
     }
 }

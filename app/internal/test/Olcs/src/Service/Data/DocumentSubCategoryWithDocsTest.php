@@ -8,7 +8,7 @@ use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 use Olcs\Service\Data\DocumentSubCategoryWithDocs;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\DocumentSubCategoryWithDocs::class)]
-class DocumentSubCategoryWithDocsTest extends AbstractListDataServiceTestCase
+final class DocumentSubCategoryWithDocsTest extends AbstractListDataServiceTestCase
 {
     /** @var DocumentSubCategoryWithDocs */
     private $sut;
@@ -22,7 +22,7 @@ class DocumentSubCategoryWithDocsTest extends AbstractListDataServiceTestCase
 
     public function testFetchListData(): void
     {
-        static::assertEquals(DocumentSubCategoryWithDocs::TYPE_IS_DOC, $this->sut->getCategoryType());
-        static::assertTrue($this->sut->getIsOnlyWithItems());
+        $this->assertEquals(DocumentSubCategoryWithDocs::TYPE_IS_DOC, $this->sut->getCategoryType());
+        $this->assertTrue($this->sut->getIsOnlyWithItems());
     }
 }

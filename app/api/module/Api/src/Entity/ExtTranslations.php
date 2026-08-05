@@ -8,10 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * ExtTranslations Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="ext_translations")
  */
+#[ORM\Table(name: 'ext_translations')]
+#[ORM\Entity]
 class ExtTranslations extends AbstractExtTranslations
 {
 }

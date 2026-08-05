@@ -10,20 +10,19 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\FormService\Form\Lva\ApplicationTaxiPhv;
 
-class ApplicationTaxiPhvTest extends MockeryTestCase
+final class ApplicationTaxiPhvTest extends MockeryTestCase
 {
     /** @var  ApplicationTaxiPhv */
     protected $sut;
 
     /** @var  m\MockInterface|\Common\Service\Helper\FormHelperService */
     protected $formHelper;
-    /** @var  \Common\FormService\FormServiceManager */
-    protected $fsm;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
-        $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
+        $fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
 
         $this->sut = new ApplicationTaxiPhv($this->formHelper, m::mock(\LmcRbacMvc\Service\AuthorizationService::class));
     }

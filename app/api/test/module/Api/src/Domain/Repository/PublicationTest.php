@@ -27,8 +27,9 @@ use Doctrine\ORM\EntityRepository;
  *
  * @property Publication|m\Mock $sut
  */
-class PublicationTest extends RepositoryTestCase
+final class PublicationTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(PublicationRepo::class, true);
@@ -302,13 +303,11 @@ class PublicationTest extends RepositoryTestCase
         );
     }
 
-    public static function providePublishedListCases(): array
+    public static function providePublishedListCases(): \Iterator
     {
-        return [
-            [false, true],
-            [true, true],
-            [false, false],
-            [true, false],
-        ];
+        yield [false, true];
+        yield [true, true];
+        yield [false, false];
+        yield [true, false];
     }
 }

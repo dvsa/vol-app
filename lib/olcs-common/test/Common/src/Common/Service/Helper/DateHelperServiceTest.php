@@ -6,6 +6,8 @@
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Helper;
 
 use Mockery as m;
@@ -17,7 +19,7 @@ use Common\Service\Helper\DateHelperService;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DateHelperServiceTest extends MockeryTestCase
+final class DateHelperServiceTest extends MockeryTestCase
 {
     public $sut;
     #[\Override]
@@ -56,6 +58,6 @@ class DateHelperServiceTest extends MockeryTestCase
         );
 
         $this->assertInstanceOf('DateTime', $obj);
-        $this->assertEquals('2015-01-07', $obj->format('Y-m-d'));
+        $this->assertSame('2015-01-07', $obj->format('Y-m-d'));
     }
 }

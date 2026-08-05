@@ -14,43 +14,31 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\FormService\Form\Lva\People\SoleTrader\ApplicationSoleTrader as Sut;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class ApplicationSoleTraderTest extends MockeryTestCase
+final class ApplicationSoleTraderTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $authService;
     public $peopleLvaService;
-    public $fsl;
-    public $mockApplicationService;
     protected $sut;
 
     protected $formHelper;
-
-    protected $fsm;
-
-    protected $sm;
 
     #[\Override]
     protected function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
-        $this->authService = m::mock(AuthorizationService::class);
+        $authService = m::mock(AuthorizationService::class);
         $this->peopleLvaService = m::mock(PeopleLvaService::class);
-        $this->fsl = m::mock(FormServiceManager::class)->makePartial();
+        $fsl = m::mock(FormServiceManager::class)->makePartial();
 
-        $this->mockApplicationService = m::mock(Application::class);
+        $mockApplicationService = m::mock(Application::class);
 
-        $this->fsl->shouldReceive('get')
+        $fsl->shouldReceive('get')
             ->with('lva-application')
-            ->andReturn($this->mockApplicationService);
+            ->andReturn($mockApplicationService);
 
-        $this->sut = new Sut($this->formHelper, $this->authService, $this->peopleLvaService);
+        $this->sut = new Sut($this->formHelper, $authService, $this->peopleLvaService);
     }
 
-    /**
-     * @dataProvider noDisqualifyProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('noDisqualifyProvider')]
     public function testGetFormNoDisqualify($params): void
     {
         $params['canModify'] = true;
@@ -131,29 +119,27 @@ class ApplicationSoleTraderTest extends MockeryTestCase
     }
 
     /**
-     * @return (int|null|string|true)[][][]
+     * @return \Iterator<(int | string), array<array<(int | string | true | null)>>>
      *
      * @psalm-return list{list{array{location: 'external'}}, list{array{location: 'internal', personId: null}}, list{array{location: 'internal', personId: 123, isDisqualified: true}}}
      */
-    public function noDisqualifyProvider(): array
+    public static function noDisqualifyProvider(): \Iterator
     {
-        return [
+        yield [
+            ['location' => 'external']
+        ];
+        yield [
             [
-                ['location' => 'external']
-            ],
+                'location' => 'internal',
+                'personId' => null
+            ]
+        ];
+        yield [
             [
-                [
-                    'location' => 'internal',
-                    'personId' => null
-                ]
-            ],
-            [
-                [
-                    'location' => 'internal',
-                    'personId' => 123,
-                    'isDisqualified' => true
-                ]
-            ],
+                'location' => 'internal',
+                'personId' => 123,
+                'isDisqualified' => true
+            ]
         ];
     }
 }

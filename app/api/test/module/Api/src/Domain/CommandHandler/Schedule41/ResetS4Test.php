@@ -20,7 +20,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  * @package Dvsa\OlcsTest\Api\Domain\CommandHandler\Schedule41
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class ResetS4Test extends AbstractCommandHandlerTestCase
+final class ResetS4Test extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

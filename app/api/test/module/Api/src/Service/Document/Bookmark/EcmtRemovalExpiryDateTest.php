@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\EcmtRemovalExpiryDate;
 /**
  * Class EcmtRemovalExpiryDate
  */
-class EcmtRemovalExpiryDateTest extends SingleValueTestAbstract
+final class EcmtRemovalExpiryDateTest extends SingleValueTestAbstract
 {
     public const SUT_CLASS_NAME = EcmtRemovalExpiryDate::class;
 }

@@ -11,7 +11,7 @@ use Olcs\Event\RouteParam;
 use Olcs\Listener\RouteParams;
 use Laminas\Mvc\MvcEvent;
 
-class RouteParamsTest extends TestCase
+final class RouteParamsTest extends TestCase
 {
     private RouteParams $sut;
 

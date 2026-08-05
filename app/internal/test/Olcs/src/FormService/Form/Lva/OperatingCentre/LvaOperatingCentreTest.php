@@ -21,12 +21,13 @@ use Olcs\FormService\Form\Lva\OperatingCentre\LvaOperatingCentre;
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class LvaOperatingCentreTest extends MockeryTestCase
+final class LvaOperatingCentreTest extends MockeryTestCase
 {
     protected $sut;
 
     protected $formHelper;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
@@ -166,11 +167,9 @@ class LvaOperatingCentreTest extends MockeryTestCase
         $this->sut->alterForm($form, $params);
     }
 
-    public static function alterFormProvider(): array
+    public static function alterFormProvider(): \Iterator
     {
-        return [
-            [RefData::APPLIED_VIA_POST],
-            [['id' => RefData::APPLIED_VIA_POST]]
-        ];
+        yield [RefData::APPLIED_VIA_POST];
+        yield [['id' => RefData::APPLIED_VIA_POST]];
     }
 }

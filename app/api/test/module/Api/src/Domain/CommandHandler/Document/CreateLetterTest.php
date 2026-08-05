@@ -23,11 +23,11 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateLetterTest extends AbstractCommandHandlerTestCase
+final class CreateLetterTest extends AbstractCommandHandlerTestCase
 {
-    protected const LICENCE_ID = 2;
-    protected const APPLICATION_ID = 4;
-    protected const USER_ID = 123;
+    protected const int LICENCE_ID = 2;
+    protected const int APPLICATION_ID = 4;
+    protected const int USER_ID = 123;
 
     public function setUp(): void
     {
@@ -358,41 +358,39 @@ class CreateLetterTest extends AbstractCommandHandlerTestCase
         return array_map(fn($v) => [$v], CreateLetter::DOCUMENT_TEMPLATE_IDENTIFIERS_FOLLOW_UP_FIRST);
     }
 
-    public static function followUpTaskForApplicationOrVariationFirstLetterExceptionProvider(): array
+    public static function followUpTaskForApplicationOrVariationFirstLetterExceptionProvider(): \Iterator
     {
-        return [
-            'missing_application' => [
-                'commandData' => [
-                    'template' => 111,
-                    'data' => [
-                        'details' => [
-                            'category' => '123',
-                            'documentSubCategory' => '321'
-                        ],
-                        'licence' => static::LICENCE_ID
+        yield 'missing_application' => [
+            'commandData' => [
+                'template' => 111,
+                'data' => [
+                    'details' => [
+                        'category' => '123',
+                        'documentSubCategory' => '321'
                     ],
-                    'meta' => 'foo',
-                    'disableBookmarks' => true
+                    'licence' => static::LICENCE_ID
                 ],
-                'templateIdentifier' => CreateLetter::DOCUMENT_TEMPLATE_IDENTIFIERS_FOLLOW_UP_FIRST[0],
-                'expectedExceptionMessage' => 'Expected `applicationId` when creating a task for first letter.'
+                'meta' => 'foo',
+                'disableBookmarks' => true
             ],
-            'missing_licence' => [
-                'commandData' => [
-                    'template' => 111,
-                    'data' => [
-                        'details' => [
-                            'category' => '123',
-                            'documentSubCategory' => '321'
-                        ],
-                        'application' => static::APPLICATION_ID,
+            'templateIdentifier' => CreateLetter::DOCUMENT_TEMPLATE_IDENTIFIERS_FOLLOW_UP_FIRST[0],
+            'expectedExceptionMessage' => 'Expected `applicationId` when creating a task for first letter.'
+        ];
+        yield 'missing_licence' => [
+            'commandData' => [
+                'template' => 111,
+                'data' => [
+                    'details' => [
+                        'category' => '123',
+                        'documentSubCategory' => '321'
                     ],
-                    'meta' => 'foo',
-                    'disableBookmarks' => true
+                    'application' => static::APPLICATION_ID,
                 ],
-                'templateIdentifier' => CreateLetter::DOCUMENT_TEMPLATE_IDENTIFIERS_FOLLOW_UP_FIRST[0],
-                'expectedExceptionMessage' => 'Expected `licenceId` when creating a task for first letter.'
-            ]
+                'meta' => 'foo',
+                'disableBookmarks' => true
+            ],
+            'templateIdentifier' => CreateLetter::DOCUMENT_TEMPLATE_IDENTIFIERS_FOLLOW_UP_FIRST[0],
+            'expectedExceptionMessage' => 'Expected `licenceId` when creating a task for first letter.'
         ];
     }
 

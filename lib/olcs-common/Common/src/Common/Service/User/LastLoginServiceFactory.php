@@ -9,7 +9,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 final class LastLoginServiceFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LastLoginService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LastLoginService
     {
         /** @var CommandSender $commandSender */
         $commandSender = $container->get('CommandSender');

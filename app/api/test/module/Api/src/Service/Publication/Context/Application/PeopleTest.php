@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class PeopleTest extends MockeryTestCase
+final class PeopleTest extends MockeryTestCase
 {
     /**
      * @var \Dvsa\Olcs\Api\Service\Publication\Context\Application\People

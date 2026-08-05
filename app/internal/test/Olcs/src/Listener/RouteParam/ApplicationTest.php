@@ -20,7 +20,7 @@ use Olcs\Listener\RouteParams;
 use Olcs\Listener\RouteParam\Application;
 use Laminas\Navigation\Page\AbstractPage;
 
-class ApplicationTest extends MockeryTestCase
+final class ApplicationTest extends MockeryTestCase
 {
     private Application $sut;
 
@@ -438,44 +438,42 @@ class ApplicationTest extends MockeryTestCase
         $this->sut->onApplication($event);
     }
 
-    public static function onApplicationProvider(): array
+    public static function onApplicationProvider(): \Iterator
     {
-        return [
-            [
-                RefData::APPLICATION_STATUS_UNDER_CONSIDERATION,
-                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
-                RefData::APPLICATION_TYPE_NEW,
-                true,
-                0
-            ],
-            [
-                RefData::APPLICATION_STATUS_GRANTED,
-                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
-                RefData::APPLICATION_TYPE_NEW,
-                false,
-                1
-            ],
-            [
-                RefData::APPLICATION_STATUS_GRANTED,
-                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
-                RefData::APPLICATION_TYPE_VARIATION,
-                false,
-                1
-            ],
-            [
-                RefData::APPLICATION_STATUS_VALID,
-                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
-                RefData::APPLICATION_TYPE_VARIATION,
-                false,
-                1
-            ],
-            [
-                RefData::APPLICATION_STATUS_NOT_SUBMITTED,
-                RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
-                RefData::APPLICATION_TYPE_NEW,
-                true,
-                0
-            ],
+        yield [
+            RefData::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+            RefData::APPLICATION_TYPE_NEW,
+            true,
+            0
+        ];
+        yield [
+            RefData::APPLICATION_STATUS_GRANTED,
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+            RefData::APPLICATION_TYPE_NEW,
+            false,
+            1
+        ];
+        yield [
+            RefData::APPLICATION_STATUS_GRANTED,
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+            RefData::APPLICATION_TYPE_VARIATION,
+            false,
+            1
+        ];
+        yield [
+            RefData::APPLICATION_STATUS_VALID,
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+            RefData::APPLICATION_TYPE_VARIATION,
+            false,
+            1
+        ];
+        yield [
+            RefData::APPLICATION_STATUS_NOT_SUBMITTED,
+            RefData::LICENCE_CATEGORY_GOODS_VEHICLE,
+            RefData::APPLICATION_TYPE_NEW,
+            true,
+            0
         ];
     }
 

@@ -19,7 +19,7 @@ use Psr\Container\ContainerInterface;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class TranslationLoaderFactoryTest extends MockeryTestCase
+final class TranslationLoaderFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {
@@ -37,6 +37,6 @@ class TranslationLoaderFactoryTest extends MockeryTestCase
         $sut = new TranslationLoaderFactory();
         $service = $sut->__invoke($mockSl, TranslationLoader::class);
 
-        self::assertInstanceOf(TranslationLoader::class, $service);
+        $this->assertInstanceOf(TranslationLoader::class, $service);
     }
 }

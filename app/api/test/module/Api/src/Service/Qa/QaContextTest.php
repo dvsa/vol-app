@@ -13,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see QaContext
  */
-class QaContextTest extends MockeryTestCase
+final class QaContextTest extends MockeryTestCase
 {
     private $applicationStep;
 
@@ -21,6 +21,7 @@ class QaContextTest extends MockeryTestCase
 
     private $qaContext;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->applicationStep = m::mock(ApplicationStep::class);
@@ -85,17 +86,15 @@ class QaContextTest extends MockeryTestCase
         );
     }
 
-    public static function dpIsApplicationStepEnabled(): array
+    public static function dpIsApplicationStepEnabled(): \Iterator
     {
-        return [
-            [true, true, true, true],
-            [true, true, false, true],
-            [true, false, true, true],
-            [true, false, false, true],
-            [false, true, true, true],
-            [false, true, false, true],
-            [false, false, true, true],
-            [false, false, false, false],
-        ];
+        yield [true, true, true, true];
+        yield [true, true, false, true];
+        yield [true, false, true, true];
+        yield [true, false, false, true];
+        yield [false, true, true, true];
+        yield [false, true, false, true];
+        yield [false, false, true, true];
+        yield [false, false, false, false];
     }
 }

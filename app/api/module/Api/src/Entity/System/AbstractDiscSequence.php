@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="disc_sequence",
- *    indexes={
- *        @ORM\Index(name="ix_disc_sequence_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_disc_sequence_goods_or_psv", columns={"goods_or_psv"}),
- *        @ORM\Index(name="ix_disc_sequence_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_disc_sequence_traffic_area_id", columns={"traffic_area_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'disc_sequence')]
+#[ORM\Index(name: 'ix_disc_sequence_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_disc_sequence_goods_or_psv', columns: ['goods_or_psv'])]
+#[ORM\Index(name: 'ix_disc_sequence_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_disc_sequence_traffic_area_id', columns: ['traffic_area_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractDiscSequence implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,152 +41,136 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      * Primary key
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     protected $id = 0;
 
     /**
      * GoodsOrPsv
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $goodsOrPsv;
 
     /**
      * Foreign Key to traffic_area
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Restricted
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="restricted", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'restricted', nullable: true, options: ['unsigned' => true])]
     protected $restricted;
 
     /**
      * Special restricted
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="special_restricted", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'special_restricted', nullable: true, options: ['unsigned' => true])]
     protected $specialRestricted;
 
     /**
      * Standard national
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="standard_national", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'standard_national', nullable: true, options: ['unsigned' => true])]
     protected $standardNational;
 
     /**
      * Standard international
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="standard_international", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'standard_international', nullable: true, options: ['unsigned' => true])]
     protected $standardInternational;
 
     /**
      * R prefix
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="r_prefix", length=3, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'r_prefix', length: 3, nullable: true)]
     protected $rPrefix;
 
     /**
      * Sr prefix
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="sr_prefix", length=3, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'sr_prefix', length: 3, nullable: true)]
     protected $srPrefix;
 
     /**
      * Sn prefix
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="sn_prefix", length=3, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'sn_prefix', length: 3, nullable: true)]
     protected $snPrefix;
 
     /**
      * Si prefix
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="si_prefix", length=3, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'si_prefix', length: 3, nullable: true)]
     protected $siPrefix;
 
     /**
      * isSelfServe
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_self_serve", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_self_serve', nullable: false, options: ['default' => 0])]
     protected $isSelfServe = 0;
 
     /**
      * isNiSelfServe
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_ni_self_serve", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_ni_self_serve', nullable: false, options: ['default' => 0])]
     protected $isNiSelfServe = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -214,7 +194,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return DiscSequence
+     * @return static
      */
     public function setId($id)
     {
@@ -238,7 +218,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
-     * @return DiscSequence
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -262,7 +242,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
-     * @return DiscSequence
+     * @return static
      */
     public function setTrafficArea($trafficArea)
     {
@@ -286,7 +266,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return DiscSequence
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -310,7 +290,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return DiscSequence
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -334,7 +314,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @param int $restricted new value being set
      *
-     * @return DiscSequence
+     * @return static
      */
     public function setRestricted($restricted)
     {
@@ -358,7 +338,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @param int $specialRestricted new value being set
      *
-     * @return DiscSequence
+     * @return static
      */
     public function setSpecialRestricted($specialRestricted)
     {
@@ -382,7 +362,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @param int $standardNational new value being set
      *
-     * @return DiscSequence
+     * @return static
      */
     public function setStandardNational($standardNational)
     {
@@ -406,7 +386,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @param int $standardInternational new value being set
      *
-     * @return DiscSequence
+     * @return static
      */
     public function setStandardInternational($standardInternational)
     {
@@ -430,7 +410,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @param string $rPrefix new value being set
      *
-     * @return DiscSequence
+     * @return static
      */
     public function setRPrefix($rPrefix)
     {
@@ -454,7 +434,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @param string $srPrefix new value being set
      *
-     * @return DiscSequence
+     * @return static
      */
     public function setSrPrefix($srPrefix)
     {
@@ -478,7 +458,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @param string $snPrefix new value being set
      *
-     * @return DiscSequence
+     * @return static
      */
     public function setSnPrefix($snPrefix)
     {
@@ -502,7 +482,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @param string $siPrefix new value being set
      *
-     * @return DiscSequence
+     * @return static
      */
     public function setSiPrefix($siPrefix)
     {
@@ -526,7 +506,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @param string $isSelfServe new value being set
      *
-     * @return DiscSequence
+     * @return static
      */
     public function setIsSelfServe($isSelfServe)
     {
@@ -550,7 +530,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @param string $isNiSelfServe new value being set
      *
-     * @return DiscSequence
+     * @return static
      */
     public function setIsNiSelfServe($isNiSelfServe)
     {
@@ -574,7 +554,7 @@ abstract class AbstractDiscSequence implements BundleSerializableInterface, Json
      *
      * @param int $version new value being set
      *
-     * @return DiscSequence
+     * @return static
      */
     public function setVersion($version)
     {

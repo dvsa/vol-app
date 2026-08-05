@@ -19,7 +19,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\Result;
 /**
  * BusReg Decision Test
  */
-class BusRegDecisionTest extends QueryHandlerTestCase
+final class BusRegDecisionTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

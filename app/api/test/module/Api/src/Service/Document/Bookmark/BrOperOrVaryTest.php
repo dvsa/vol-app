@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BrOperOrVary as BookmarkClass;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BrOperOrVaryTest extends AbstractBrRegOrVary
+final class BrOperOrVaryTest extends AbstractBrRegOrVary
 {
     protected const RENDER_REG = 'operate this service';
     protected const RENDER_VARY = 'vary this registration';

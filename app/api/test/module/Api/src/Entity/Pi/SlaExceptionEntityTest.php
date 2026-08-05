@@ -12,7 +12,7 @@ use Mockery as m;
  * SlaException Entity Unit Tests
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Pi\SlaException::class)]
-class SlaExceptionEntityTest extends EntityTester
+final class SlaExceptionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -21,13 +21,11 @@ class SlaExceptionEntityTest extends EntityTester
      */
     protected $entityClass = Entity::class;
 
-    /** @var  \Dvsa\Olcs\Api\Entity\Pi\SlaException */
-    protected $entity;
-
+    #[\Override]
     public function setUp(): void
     {
         /** @var \Dvsa\Olcs\Api\Entity\Pi\SlaException entity */
-        $this->entity = $this->instantiate($this->entityClass);
+        $entity = $this->instantiate($this->entityClass);
     }
 
     /**
@@ -82,6 +80,6 @@ class SlaExceptionEntityTest extends EntityTester
     {
         $entity = new Entity('Test SLA Description', 'Test Exception Description', new \DateTime());
         $expected = 'Test SLA Description - Test Exception Description';
-        $this->assertEquals($expected, (string) $entity);
+        $this->assertSame($expected, (string) $entity);
     }
 }

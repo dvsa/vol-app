@@ -9,9 +9,9 @@ use Dvsa\Olcs\Transfer\Service\CacheEncryptionFactory;
 use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Laminas\Cache\Storage\StorageInterface;
+use Psr\Cache\CacheItemPoolInterface;
 
-class CacheEncryptionFactoryTest extends MockeryTestCase
+final class CacheEncryptionFactoryTest extends MockeryTestCase
 {
     public function testInvokeNoConfig()
     {
@@ -36,7 +36,7 @@ class CacheEncryptionFactoryTest extends MockeryTestCase
             ],
         ];
 
-        $cache = m::mock(StorageInterface::class);
+        $cache = m::mock(CacheItemPoolInterface::class);
 
         $mockSl = m::mock(ContainerInterface::class);
         $mockSl->shouldReceive('get')->with('Config')->andReturn($config);
@@ -45,9 +45,9 @@ class CacheEncryptionFactoryTest extends MockeryTestCase
         $sut = new CacheEncryptionFactory();
         $service = $sut->__invoke($mockSl, CacheEncryption::class);
 
-        self::assertInstanceOf(CacheEncryption::class, $service);
-        self::assertEquals('ssweb', $service->getNodeSuffix());
-        self::assertEquals('nonprod/redis-ss', $service->getNodeKey());
-        self::assertEquals('nonprod/redis-shared', $service->getSharedKey());
+        $this->assertInstanceOf(CacheEncryption::class, $service);
+        $this->assertSame('ssweb', $service->getNodeSuffix());
+        $this->assertSame('nonprod/redis-ss', $service->getNodeKey());
+        $this->assertSame('nonprod/redis-shared', $service->getSharedKey());
     }
 }

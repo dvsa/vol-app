@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Service\File\ContentStoreFileUploader;
 
-class ProcessRequestMapTest extends AbstractCommandHandlerTestCase
+final class ProcessRequestMapTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

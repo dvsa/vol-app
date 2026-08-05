@@ -13,20 +13,17 @@ use Olcs\FormService\Form\Lva\People\SoleTrader\VariationSoleTrader as Sut;
 use Laminas\Form\Form;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class VariationSoleTraderTest extends MockeryTestCase
+final class VariationSoleTraderTest extends MockeryTestCase
 {
     protected $sut;
 
     protected $formHelper;
 
-    protected $fsm;
-
-    protected $sm;
-
     protected $mockVariationService;
 
     private $peopleLvaService;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
@@ -34,12 +31,12 @@ class VariationSoleTraderTest extends MockeryTestCase
         $this->mockVariationService = m::mock(Form::class);
 
         /** @var FormServiceManager fsm */
-        $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
+        $fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
         $this->peopleLvaService = m::mock(PeopleLvaService::class);
 
-        $this->fsm->setService('lva-variation', $this->mockVariationService);
+        $fsm->setService('lva-variation', $this->mockVariationService);
 
-        $this->sut = new Sut($this->formHelper, m::mock(AuthorizationService::class), $this->peopleLvaService, $this->fsm);
+        $this->sut = new Sut($this->formHelper, m::mock(AuthorizationService::class), $this->peopleLvaService, $fsm);
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('noDisqualifyProvider')]
@@ -156,29 +153,27 @@ class VariationSoleTraderTest extends MockeryTestCase
     }
 
     /**
-     * @return (int|null|string|true)[][][]
+     * @return \Iterator<(int | string), array<array<(int | string | true | null)>>>
      *
      * @psalm-return list{list{array{location: 'external'}}, list{array{location: 'internal', personId: null}}, list{array{location: 'internal', personId: 123, isDisqualified: true}}}
      */
-    public static function noDisqualifyProvider(): array
+    public static function noDisqualifyProvider(): \Iterator
     {
-        return [
+        yield [
+            ['location' => 'external']
+        ];
+        yield [
             [
-                ['location' => 'external']
-            ],
+                'location' => 'internal',
+                'personId' => null
+            ]
+        ];
+        yield [
             [
-                [
-                    'location' => 'internal',
-                    'personId' => null
-                ]
-            ],
-            [
-                [
-                    'location' => 'internal',
-                    'personId' => 123,
-                    'isDisqualified' => true
-                ]
-            ],
+                'location' => 'internal',
+                'personId' => 123,
+                'isDisqualified' => true
+            ]
         ];
     }
 }

@@ -16,7 +16,7 @@ use Psr\Container\ContainerInterface;
  * Class FileProcessorFactoryTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr
  */
-class FileProcessorFactoryTest extends TestCase
+final class FileProcessorFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {

@@ -16,7 +16,7 @@ use LmcRbacMvc\Identity\IdentityInterface;
 use Mockery as m;
 use Mockery\MockInterface;
 
-class CanAccessDocumentTest extends AbstractValidatorsTestCase
+final class CanAccessDocumentTest extends AbstractValidatorsTestCase
 {
     /**
      * @var CanAccessDocument
@@ -421,7 +421,7 @@ class CanAccessDocumentTest extends AbstractValidatorsTestCase
     private function getMockDocument(
         bool $isExternal,
         int $createdById = 123456,
-        m\MockInterface $relatedOrganisation = null,
+        ?m\MockInterface $relatedOrganisation = null,
         int $categoryId = 100,
         int $subCategoryId = 1000,
         string $description = 'Description'
@@ -459,7 +459,7 @@ class CanAccessDocumentTest extends AbstractValidatorsTestCase
      * @throws NotFoundException
      * @throws Exception
      */
-    private function setupMockIdentity(int $userType, m\MockInterface $organisation = null, int $userId = 123456, m\MockInterface $localAuthority = null): void
+    private function setupMockIdentity(int $userType, ?m\MockInterface $organisation = null, int $userId = 123456, ?m\MockInterface $localAuthority = null): void
     {
         $mockIdentity = m::mock(IdentityInterface::class);
         if ($organisation === null) {
@@ -550,12 +550,10 @@ class CanAccessDocumentTest extends AbstractValidatorsTestCase
         return $mockOrganisation;
     }
 
-    public static function localAuthorityTypeProvider(): array
+    public static function localAuthorityTypeProvider(): \Iterator
     {
-        return [
-            'LOCAL AUTHORITY USER' => [static::IS_LOCAL_AUTHORITY_USER],
-            'LOCAL AUTHORITY ADMIN' => [static::IS_LOCAL_AUTHORITY_ADMIN],
-        ];
+        yield 'LOCAL AUTHORITY USER' => [static::IS_LOCAL_AUTHORITY_USER];
+        yield 'LOCAL AUTHORITY ADMIN' => [static::IS_LOCAL_AUTHORITY_ADMIN];
     }
 
     public function testIsLicencePrintDocumentGV(): void

@@ -31,11 +31,11 @@ use RuntimeException;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\Application::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Application\AbstractApplication::class)]
-class ApplicationEntityTest extends EntityTester
+final class ApplicationEntityTest extends EntityTester
 {
     use TotAuthVehiclesTraitTestCase;
 
-    protected const A_NUMBER_OF_VEHICLES = 2;
+    protected const int A_NUMBER_OF_VEHICLES = 2;
 
     /**
      * @var Entity|null
@@ -54,30 +54,25 @@ class ApplicationEntityTest extends EntityTester
      */
     protected $entity;
 
-    /**
-     * @var  Licence
-     */
-    private $licence;
-
     public function testSetGet(): void
     {
         /** @var Entity $sut */
         $sut = $this->instantiate(Entity::class);
 
         $sut->setPublicationNo('unit_PubNo');
-        static::assertEquals('unit_PubNo', $sut->getPublicationNo());
+        $this->assertEquals('unit_PubNo', $sut->getPublicationNo());
 
         $sut->setOooDate('unit_OooDate');
-        static::assertEquals('unit_OooDate', $sut->getOooDate());
+        $this->assertEquals('unit_OooDate', $sut->getOooDate());
 
         $sut->setOorDate('unit_OorDate');
-        static::assertEquals('unit_OorDate', $sut->getOorDate());
+        $this->assertEquals('unit_OorDate', $sut->getOorDate());
 
         $sut->setIsOpposed('unit_IsOpposed');
-        static::assertEquals('unit_IsOpposed', $sut->getIsOpposed());
+        $this->assertEquals('unit_IsOpposed', $sut->getIsOpposed());
 
         $sut->setPublishedDate('unit_PublDate');
-        static::assertEquals('unit_PublDate', $sut->getPublishedDate());
+        $this->assertEquals('unit_PublDate', $sut->getPublishedDate());
     }
 
     public function testUpdateDigitalSignature(): void
@@ -106,13 +101,13 @@ class ApplicationEntityTest extends EntityTester
             ->with($niFlag, $gop, $licType, $vehType, $lgvDecCon)
             ->andReturnTrue();
 
-        static::assertTrue($sut->updateTypeOfLicence($niFlag, $gop, $licType, $vehType, $lgvDecCon));
+        $this->assertTrue($sut->updateTypeOfLicence($niFlag, $gop, $licType, $vehType, $lgvDecCon));
 
-        static::assertEquals($niFlag, $sut->getNiFlag());
-        static::assertEquals($gop, $sut->getGoodsOrPsv());
-        static::assertEquals($licType, $sut->getLicenceType());
-        static::assertEquals($vehType, $sut->getVehicleType());
-        static::assertEquals($lgvDecCon, $sut->getLgvDeclarationConfirmation());
+        $this->assertEquals($niFlag, $sut->getNiFlag());
+        $this->assertEquals($gop, $sut->getGoodsOrPsv());
+        $this->assertEquals($licType, $sut->getLicenceType());
+        $this->assertEquals($vehType, $sut->getVehicleType());
+        $this->assertEquals($lgvDecCon, $sut->getLgvDeclarationConfirmation());
     }
 
     public function testUpdateTypeOfLicenceNull(): void
@@ -130,13 +125,13 @@ class ApplicationEntityTest extends EntityTester
             ->with($niFlag, $gop, $licType, $vehType, $lgvDecCon)
             ->andReturnFalse();
 
-        static::assertNull($sut->updateTypeOfLicence($niFlag, $gop, $licType, $vehType, $lgvDecCon));
+        $this->assertNull($sut->updateTypeOfLicence($niFlag, $gop, $licType, $vehType, $lgvDecCon));
 
-        static::assertNull($sut->getNiFlag());
-        static::assertNull($sut->getGoodsOrPsv());
-        static::assertNull($sut->getLicenceType());
-        static::assertNull($sut->getVehicleType());
-        static::assertEquals(0, $sut->getLgvDeclarationConfirmation());
+        $this->assertNull($sut->getNiFlag());
+        $this->assertNull($sut->getGoodsOrPsv());
+        $this->assertNull($sut->getLicenceType());
+        $this->assertNull($sut->getVehicleType());
+        $this->assertEquals(0, $sut->getLgvDeclarationConfirmation());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpUpdateTypeOfLicenceFromMixed')]
@@ -158,41 +153,39 @@ class ApplicationEntityTest extends EntityTester
         $sut->updateTotAuthHgvVehicles(10);
         $sut->setTotAuthTrailers(5);
 
-        static::assertTrue($sut->updateTypeOfLicence($niFlag, $gop, $licType, $vehType, $lgvDecCon));
+        $this->assertTrue($sut->updateTypeOfLicence($niFlag, $gop, $licType, $vehType, $lgvDecCon));
 
-        static::assertEquals($vehType, $sut->getVehicleType());
-        static::assertEquals($expectTotAuthLgvVehicles, $sut->getTotAuthLgvVehicles());
-        static::assertEquals($expectTotAuthHgvVehicles, $sut->getTotAuthHgvVehicles());
-        static::assertEquals($expectTotAuthTrailers, $sut->getTotAuthTrailers());
+        $this->assertEquals($vehType, $sut->getVehicleType());
+        $this->assertEquals($expectTotAuthLgvVehicles, $sut->getTotAuthLgvVehicles());
+        $this->assertEquals($expectTotAuthHgvVehicles, $sut->getTotAuthHgvVehicles());
+        $this->assertEquals($expectTotAuthTrailers, $sut->getTotAuthTrailers());
     }
 
-    public static function dpUpdateTypeOfLicenceFromMixed(): array
+    public static function dpUpdateTypeOfLicenceFromMixed(): \Iterator
     {
-        return [
-            [
-                'vehType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'expectTotAuthLgvVehicles' => null,
-                'expectTotAuthHgvVehicles' => 10,
-                'expectTotAuthTrailers' => 5,
-            ],
-            [
-                'vehType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'expectTotAuthLgvVehicles' => null,
-                'expectTotAuthHgvVehicles' => 10,
-                'expectTotAuthTrailers' => null,
-            ],
-            [
-                'vehType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'expectTotAuthLgvVehicles' => 3,
-                'expectTotAuthHgvVehicles' => null,
-                'expectTotAuthTrailers' => null,
-            ],
-            [
-                'vehType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'expectTotAuthLgvVehicles' => 3,
-                'expectTotAuthHgvVehicles' => 10,
-                'expectTotAuthTrailers' => 5,
-            ],
+        yield [
+            'vehType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'expectTotAuthLgvVehicles' => null,
+            'expectTotAuthHgvVehicles' => 10,
+            'expectTotAuthTrailers' => 5,
+        ];
+        yield [
+            'vehType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'expectTotAuthLgvVehicles' => null,
+            'expectTotAuthHgvVehicles' => 10,
+            'expectTotAuthTrailers' => null,
+        ];
+        yield [
+            'vehType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'expectTotAuthLgvVehicles' => 3,
+            'expectTotAuthHgvVehicles' => null,
+            'expectTotAuthTrailers' => null,
+        ];
+        yield [
+            'vehType' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'expectTotAuthLgvVehicles' => 3,
+            'expectTotAuthHgvVehicles' => 10,
+            'expectTotAuthTrailers' => 5,
         ];
     }
 
@@ -213,31 +206,29 @@ class ApplicationEntityTest extends EntityTester
         $sut->setVehicleType(RefData::APP_VEHICLE_TYPE_LGV);
         $sut->updateTotAuthLgvVehicles(10);
 
-        static::assertTrue($sut->updateTypeOfLicence($niFlag, $gop, $licType, $vehType, $lgvDecCon));
+        $this->assertTrue($sut->updateTypeOfLicence($niFlag, $gop, $licType, $vehType, $lgvDecCon));
 
-        static::assertEquals($vehType, $sut->getVehicleType());
-        static::assertEquals($expectTotAuthLgvVehicles, $sut->getTotAuthLgvVehicles());
+        $this->assertEquals($vehType, $sut->getVehicleType());
+        $this->assertEquals($expectTotAuthLgvVehicles, $sut->getTotAuthLgvVehicles());
     }
 
-    public static function dpUpdateTypeOfLicenceFromLgvOnly(): array
+    public static function dpUpdateTypeOfLicenceFromLgvOnly(): \Iterator
     {
-        return [
-            [
-                'vehType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'expectTotAuthLgvVehicles' => null,
-            ],
-            [
-                'vehType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'expectTotAuthLgvVehicles' => null,
-            ],
-            [
-                'vehType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'expectTotAuthLgvVehicles' => 10,
-            ],
-            [
-                'vehType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'expectTotAuthLgvVehicles' => 10,
-            ],
+        yield [
+            'vehType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'expectTotAuthLgvVehicles' => null,
+        ];
+        yield [
+            'vehType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'expectTotAuthLgvVehicles' => null,
+        ];
+        yield [
+            'vehType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'expectTotAuthLgvVehicles' => 10,
+        ];
+        yield [
+            'vehType' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'expectTotAuthLgvVehicles' => 10,
         ];
     }
 
@@ -259,36 +250,34 @@ class ApplicationEntityTest extends EntityTester
         $sut->updateTotAuthHgvVehicles(10);
         $sut->setTotAuthTrailers(5);
 
-        static::assertTrue($sut->updateTypeOfLicence($niFlag, $gop, $licType, $vehType, $lgvDecCon));
+        $this->assertTrue($sut->updateTypeOfLicence($niFlag, $gop, $licType, $vehType, $lgvDecCon));
 
-        static::assertEquals($vehType, $sut->getVehicleType());
-        static::assertEquals($expectTotAuthHgvVehicles, $sut->getTotAuthHgvVehicles());
-        static::assertEquals($expectTotAuthTrailers, $sut->getTotAuthTrailers());
+        $this->assertEquals($vehType, $sut->getVehicleType());
+        $this->assertEquals($expectTotAuthHgvVehicles, $sut->getTotAuthHgvVehicles());
+        $this->assertEquals($expectTotAuthTrailers, $sut->getTotAuthTrailers());
     }
 
-    public static function dpUpdateTypeOfLicenceFromHgvOnly(): array
+    public static function dpUpdateTypeOfLicenceFromHgvOnly(): \Iterator
     {
-        return [
-            [
-                'vehType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'expectTotAuthHgvVehicles' => 10,
-                'expectTotAuthTrailers' => 5,
-            ],
-            [
-                'vehType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'expectTotAuthHgvVehicles' => 10,
-                'expectTotAuthTrailers' => null,
-            ],
-            [
-                'vehType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'expectTotAuthHgvVehicles' => null,
-                'expectTotAuthTrailers' => null,
-            ],
-            [
-                'vehType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'expectTotAuthHgvVehicles' => 10,
-                'expectTotAuthTrailers' => 5,
-            ],
+        yield [
+            'vehType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'expectTotAuthHgvVehicles' => 10,
+            'expectTotAuthTrailers' => 5,
+        ];
+        yield [
+            'vehType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'expectTotAuthHgvVehicles' => 10,
+            'expectTotAuthTrailers' => null,
+        ];
+        yield [
+            'vehType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'expectTotAuthHgvVehicles' => null,
+            'expectTotAuthTrailers' => null,
+        ];
+        yield [
+            'vehType' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'expectTotAuthHgvVehicles' => 10,
+            'expectTotAuthTrailers' => 5,
         ];
     }
 
@@ -309,31 +298,29 @@ class ApplicationEntityTest extends EntityTester
         $sut->setVehicleType(RefData::APP_VEHICLE_TYPE_PSV);
         $sut->updateTotAuthHgvVehicles(10);
 
-        static::assertTrue($sut->updateTypeOfLicence($niFlag, $gop, $licType, $vehType, $lgvDecCon));
+        $this->assertTrue($sut->updateTypeOfLicence($niFlag, $gop, $licType, $vehType, $lgvDecCon));
 
-        static::assertEquals($vehType, $sut->getVehicleType());
-        static::assertEquals($expectTotAuthHgvVehicles, $sut->getTotAuthHgvVehicles());
+        $this->assertEquals($vehType, $sut->getVehicleType());
+        $this->assertEquals($expectTotAuthHgvVehicles, $sut->getTotAuthHgvVehicles());
     }
 
-    public static function dpUpdateTypeOfLicenceFromPsv(): array
+    public static function dpUpdateTypeOfLicenceFromPsv(): \Iterator
     {
-        return [
-            [
-                'vehType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'expectTotAuthHgvVehicles' => 10,
-            ],
-            [
-                'vehType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'expectTotAuthHgvVehicles' => 10,
-            ],
-            [
-                'vehType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'expectTotAuthHgvVehicles' => null,
-            ],
-            [
-                'vehType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'expectTotAuthHgvVehicles' => 10,
-            ],
+        yield [
+            'vehType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'expectTotAuthHgvVehicles' => 10,
+        ];
+        yield [
+            'vehType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'expectTotAuthHgvVehicles' => 10,
+        ];
+        yield [
+            'vehType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'expectTotAuthHgvVehicles' => null,
+        ];
+        yield [
+            'vehType' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'expectTotAuthHgvVehicles' => 10,
         ];
     }
 
@@ -353,7 +340,7 @@ class ApplicationEntityTest extends EntityTester
             ->andReturn('EXPECTED')
             ->getMock();
 
-        static::assertEquals('EXPECTED', $sut->isValidTol($niFlag, $gop, $licType, $vehType, $lgvDecCon));
+        $this->assertEquals('EXPECTED', $sut->isValidTol($niFlag, $gop, $licType, $vehType, $lgvDecCon));
     }
 
     public function testIsValidTolReturnNull(): void
@@ -364,23 +351,21 @@ class ApplicationEntityTest extends EntityTester
             ->andThrowExceptions([new ValidationException([])])
             ->getMock();
 
-        static::assertFalse($sut->isValidTol('A', 'B', 'C', 'D', 'E'));
+        $this->assertFalse($sut->isValidTol('A', 'B', 'C', 'D', 'E'));
     }
 
-    public static function dataProviderTestHasUpgrade(): array
+    public static function dataProviderTestHasUpgrade(): \Iterator
     {
-        return [
-            [false, null, null],
-            [false, Licence::LICENCE_TYPE_RESTRICTED, null],
-            [false, null, Licence::LICENCE_TYPE_RESTRICTED],
-            [false, Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_RESTRICTED],
-            [false, Licence::LICENCE_TYPE_STANDARD_NATIONAL, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL],
-            [false, Licence::LICENCE_TYPE_STANDARD_NATIONAL, Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
-            [false, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL, Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
-            [true, Licence::LICENCE_TYPE_STANDARD_NATIONAL, Licence::LICENCE_TYPE_RESTRICTED],
-            [true, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL, Licence::LICENCE_TYPE_RESTRICTED],
-            [true, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL, Licence::LICENCE_TYPE_STANDARD_NATIONAL],
-        ];
+        yield [false, null, null];
+        yield [false, Licence::LICENCE_TYPE_RESTRICTED, null];
+        yield [false, null, Licence::LICENCE_TYPE_RESTRICTED];
+        yield [false, Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_RESTRICTED];
+        yield [false, Licence::LICENCE_TYPE_STANDARD_NATIONAL, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL];
+        yield [false, Licence::LICENCE_TYPE_STANDARD_NATIONAL, Licence::LICENCE_TYPE_SPECIAL_RESTRICTED];
+        yield [false, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL, Licence::LICENCE_TYPE_SPECIAL_RESTRICTED];
+        yield [true, Licence::LICENCE_TYPE_STANDARD_NATIONAL, Licence::LICENCE_TYPE_RESTRICTED];
+        yield [true, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL, Licence::LICENCE_TYPE_RESTRICTED];
+        yield [true, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL, Licence::LICENCE_TYPE_STANDARD_NATIONAL];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestHasUpgrade')]
@@ -414,16 +399,14 @@ class ApplicationEntityTest extends EntityTester
         $this->assertFalse($sut->hasUpgrade());
     }
 
-    public static function dpHasAuthTrailersIncrease(): array
+    public static function dpHasAuthTrailersIncrease(): \Iterator
     {
-        return [
-            [false, null, null],
-            [false, null, 23],
-            [true, 1, null],
-            [false, 12, 22],
-            [false, 4, 4],
-            [true, 12, 11],
-        ];
+        yield [false, null, null];
+        yield [false, null, 23];
+        yield [true, 1, null];
+        yield [false, 12, 22];
+        yield [false, 4, 4];
+        yield [true, 12, 11];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHasAuthTrailersIncrease')]
@@ -440,16 +423,14 @@ class ApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $sut->hasAuthTrailersIncrease());
     }
 
-    public static function dataProviderTestHasNewOperatingCentre(): array
+    public static function dataProviderTestHasNewOperatingCentre(): \Iterator
     {
-        return [
-            [false, ['D', 'D', 'D']],
-            [false, ['D', 'U', 'D']],
-            [false, ['U', 'U', 'U']],
-            [true, ['D', 'A', 'D']],
-            [true, ['A', 'U', 'U']],
-            [true, ['A', 'A', 'A']],
-        ];
+        yield [false, ['D', 'D', 'D']];
+        yield [false, ['D', 'U', 'D']];
+        yield [false, ['U', 'U', 'U']];
+        yield [true, ['D', 'A', 'D']];
+        yield [true, ['A', 'U', 'U']];
+        yield [true, ['A', 'A', 'A']];
     }
 
     #[\PHPUnit\Framework\Attributes\Group('applicationEntity')]
@@ -530,41 +511,39 @@ class ApplicationEntityTest extends EntityTester
             $insolvencyConfirmation
         );
 
-        static::assertEquals($this->entity->getBankrupt(), $bankrupt);
-        static::assertEquals($this->entity->getLiquidation(), $liquidation);
-        static::assertEquals($this->entity->getReceivership(), $receivership);
-        static::assertEquals($this->entity->getAdministration(), $administration);
-        static::assertEquals($this->entity->getDisqualified(), $disqualified);
-        static::assertEquals($this->entity->getInsolvencyDetails(), $insolvencyDetails);
-        static::assertEquals($this->entity->getInsolvencyConfirmation(), $expect['insolvencyConfirmation']);
+        $this->assertEquals($this->entity->getBankrupt(), $bankrupt);
+        $this->assertEquals($this->entity->getLiquidation(), $liquidation);
+        $this->assertEquals($this->entity->getReceivership(), $receivership);
+        $this->assertEquals($this->entity->getAdministration(), $administration);
+        $this->assertEquals($this->entity->getDisqualified(), $disqualified);
+        $this->assertEquals($this->entity->getInsolvencyDetails(), $insolvencyDetails);
+        $this->assertEquals($this->entity->getInsolvencyConfirmation(), $expect['insolvencyConfirmation']);
     }
 
-    public static function dpTestUpdateFinancialHistory(): array
+    public static function dpTestUpdateFinancialHistory(): \Iterator
     {
-        return [
-            [
-                'bankrupt' => 'N',
-                'liquidation' => 'N',
-                'receivership' => 'N',
-                'administration' => 'N',
-                'disqualified' => 'N',
-                'insolvencyDetails' => '',
-                'insolvencyConfirmation' => false,
-                'expect' => [
-                    'insolvencyConfirmation' => null,
-                ],
+        yield [
+            'bankrupt' => 'N',
+            'liquidation' => 'N',
+            'receivership' => 'N',
+            'administration' => 'N',
+            'disqualified' => 'N',
+            'insolvencyDetails' => '',
+            'insolvencyConfirmation' => false,
+            'expect' => [
+                'insolvencyConfirmation' => null,
             ],
-            [
-                'bankrupt' => 'Y',
-                'liquidation' => 'N',
-                'receivership' => 'N',
-                'administration' => 'N',
-                'disqualified' => 'N',
-                'insolvencyDetails' => str_repeat('X', 200),
-                'insolvencyConfirmation' => 1,
-                'expect' => [
-                    'insolvencyConfirmation' => 'Y',
-                ],
+        ];
+        yield [
+            'bankrupt' => 'Y',
+            'liquidation' => 'N',
+            'receivership' => 'N',
+            'administration' => 'N',
+            'disqualified' => 'N',
+            'insolvencyDetails' => str_repeat('X', 200),
+            'insolvencyConfirmation' => 1,
+            'expect' => [
+                'insolvencyConfirmation' => 'Y',
             ],
         ];
     }
@@ -661,39 +640,37 @@ class ApplicationEntityTest extends EntityTester
         $this->assertNull($this->entity->getOccupationEvidenceUploaded());
     }
 
-    public static function dpTestUpdatePsvVehicleSize(): array
+    public static function dpTestUpdatePsvVehicleSize(): \Iterator
     {
-        return [
-            'small variation' => [
-                Entity::PSV_VEHICLE_SIZE_SMALL,
-                'Y',
-                true,
-            ],
-            'large variation' => [
-                Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
-                'N',
-                true,
-            ],
-            'both variation' => [
-                Entity::PSV_VEHICLE_SIZE_BOTH,
-                null,
-                true,
-            ],
-            'small new app' => [
-                Entity::PSV_VEHICLE_SIZE_SMALL,
-                'Y',
-                false,
-            ],
-            'large new app' => [
-                Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
-                'N',
-                false,
-            ],
-            'both new app' => [
-                Entity::PSV_VEHICLE_SIZE_BOTH,
-                null,
-                false,
-            ],
+        yield 'small variation' => [
+            Entity::PSV_VEHICLE_SIZE_SMALL,
+            'Y',
+            true,
+        ];
+        yield 'large variation' => [
+            Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
+            'N',
+            true,
+        ];
+        yield 'both variation' => [
+            Entity::PSV_VEHICLE_SIZE_BOTH,
+            null,
+            true,
+        ];
+        yield 'small new app' => [
+            Entity::PSV_VEHICLE_SIZE_SMALL,
+            'Y',
+            false,
+        ];
+        yield 'large new app' => [
+            Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
+            'N',
+            false,
+        ];
+        yield 'both new app' => [
+            Entity::PSV_VEHICLE_SIZE_BOTH,
+            null,
+            false,
         ];
     }
 
@@ -756,29 +733,27 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($isCompleted, $this->entity->isSectionCompleted('PsvMainOccupationUndertakings'));
     }
 
-    public static function dpTestIsMainOccupationUndertakingsSectionCompleted(): array
+    public static function dpTestIsMainOccupationUndertakingsSectionCompleted(): \Iterator
     {
-        return [
-            'both fields null' => [
-                false,
-                null,
-                null,
-            ],
-            'missing occupation record' => [
-                false,
-                null,
-                'Y',
-            ],
-            'missing income record' => [
-                false,
-                'Y',
-                null,
-            ],
-            'both fields present' => [
-                true,
-                'Y',
-                'Y',
-            ],
+        yield 'both fields null' => [
+            false,
+            null,
+            null,
+        ];
+        yield 'missing occupation record' => [
+            false,
+            null,
+            'Y',
+        ];
+        yield 'missing income record' => [
+            false,
+            'Y',
+            null,
+        ];
+        yield 'both fields present' => [
+            true,
+            'Y',
+            'Y',
         ];
     }
 
@@ -795,39 +770,37 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($isCompleted, $this->entity->isSectionCompleted('PsvSmallPartWritten'));
     }
 
-    public static function dpTestIsWrittenEvidenceSectionCompleted(): array
+    public static function dpTestIsWrittenEvidenceSectionCompleted(): \Iterator
     {
-        return [
-            'all fields null' => [
-                false,
-                null,
-                null,
-                null,
-            ],
-            'notes field missing' => [
-                false,
-                null,
-                10,
-                20,
-            ],
-            'small vehicles missing' => [
-                false,
-                'notes',
-                null,
-                20,
-            ],
-            'large vehicles missing' => [
-                false,
-                'notes',
-                10,
-                null,
-            ],
-            'all fields present' => [
-                true,
-                'notes',
-                10,
-                20,
-            ],
+        yield 'all fields null' => [
+            false,
+            null,
+            null,
+            null,
+        ];
+        yield 'notes field missing' => [
+            false,
+            null,
+            10,
+            20,
+        ];
+        yield 'small vehicles missing' => [
+            false,
+            'notes',
+            null,
+            20,
+        ];
+        yield 'large vehicles missing' => [
+            false,
+            'notes',
+            10,
+            null,
+        ];
+        yield 'all fields present' => [
+            true,
+            'notes',
+            10,
+            20,
         ];
     }
 
@@ -866,45 +839,43 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($isCompleted, $this->entity->isSectionCompleted('PsvOperateNovelty'));
     }
 
-    public static function dpTestIsNoveltyVehiclesSectionCompletedUsingLimosNotSmallVehicles(): array
+    public static function dpTestIsNoveltyVehiclesSectionCompletedUsingLimosNotSmallVehicles(): \Iterator
     {
-        return [
-            'both with no confirmation' => [
-                false,
-                Entity::PSV_VEHICLE_SIZE_BOTH,
-                null,
-                null,
-            ],
-            'large with no confirmation' => [
-                false,
-                Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
-                null,
-                null,
-            ],
-            'both with incorrect confirmation' => [
-                false,
-                Entity::PSV_VEHICLE_SIZE_BOTH,
-                'Y',
-                null,
-            ],
-            'large with incorrect confirmation' => [
-                false,
-                Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
-                'Y',
-                null,
-            ],
-            'both with correct confirmation' => [
-                true,
-                Entity::PSV_VEHICLE_SIZE_BOTH,
-                null,
-                'Y',
-            ],
-            'large with correct confirmation' => [
-                true,
-                Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
-                null,
-                'Y',
-            ],
+        yield 'both with no confirmation' => [
+            false,
+            Entity::PSV_VEHICLE_SIZE_BOTH,
+            null,
+            null,
+        ];
+        yield 'large with no confirmation' => [
+            false,
+            Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
+            null,
+            null,
+        ];
+        yield 'both with incorrect confirmation' => [
+            false,
+            Entity::PSV_VEHICLE_SIZE_BOTH,
+            'Y',
+            null,
+        ];
+        yield 'large with incorrect confirmation' => [
+            false,
+            Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
+            'Y',
+            null,
+        ];
+        yield 'both with correct confirmation' => [
+            true,
+            Entity::PSV_VEHICLE_SIZE_BOTH,
+            null,
+            'Y',
+        ];
+        yield 'large with correct confirmation' => [
+            true,
+            Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
+            null,
+            'Y',
         ];
     }
 
@@ -920,24 +891,22 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($isCompleted, $this->entity->isSectionCompleted('PsvOperateNovelty'));
     }
 
-    public static function dpTestIsNoveltyVehiclesSectionCompletedNotUsingLimos(): array
+    public static function dpTestIsNoveltyVehiclesSectionCompletedNotUsingLimos(): \Iterator
     {
-        return [
-            'no confirmation' => [
-                false,
-                null,
-                null,
-            ],
-            'with wrong confirmation' => [
-                false,
-                null,
-                'Y',
-            ],
-            'with correct confirmation' => [
-                true,
-                'Y',
-                null,
-            ],
+        yield 'no confirmation' => [
+            false,
+            null,
+            null,
+        ];
+        yield 'with wrong confirmation' => [
+            false,
+            null,
+            'Y',
+        ];
+        yield 'with correct confirmation' => [
+            true,
+            'Y',
+            null,
         ];
     }
 
@@ -950,25 +919,23 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($isCompleted, $this->entity->isSectionCompleted('PsvDocumentaryEvidenceLarge'));
     }
 
-    public static function dpTestPsvEvidenceSectionsCompleted(): array
+    public static function dpTestPsvEvidenceSectionsCompleted(): \Iterator
     {
-        return [
-            'field is null' => [
-                false,
-                null,
-            ],
-            'uploaded' => [
-                true,
-                Entity::FINANCIAL_EVIDENCE_UPLOADED,
-            ],
-            'upload later' => [
-                false,
-                Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
-            ],
-            'upload later as string' => [
-                false,
-                '2',
-            ],
+        yield 'field is null' => [
+            false,
+            null,
+        ];
+        yield 'uploaded' => [
+            true,
+            Entity::FINANCIAL_EVIDENCE_UPLOADED,
+        ];
+        yield 'upload later' => [
+            false,
+            Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+        ];
+        yield 'upload later as string' => [
+            false,
+            '2',
         ];
     }
 
@@ -1020,42 +987,36 @@ class ApplicationEntityTest extends EntityTester
         $sut = m::mock($this->entity)->makePartial();
 
         try {
-            static::assertTrue($sut->validateFinancialHistory($flags, $text));
+            $this->assertTrue($sut->validateFinancialHistory($flags, $text));
         } catch (ValidationException $e) {
-            static::assertEquals(
-                [
-                    'insolvencyDetails' => [
-                        Entity::ERROR_FINANCIAL_HISTORY_DETAILS_REQUIRED => 'FhAdditionalInfo.api.validation.too_short',
-                    ],
+            $this->assertEquals([
+                'insolvencyDetails' => [
+                    Entity::ERROR_FINANCIAL_HISTORY_DETAILS_REQUIRED => 'FhAdditionalInfo.api.validation.too_short',
                 ],
-                $e->getMessages()
-            );
+            ], $e->getMessages());
         }
     }
 
-    public static function dpTestValidateFinancialHistory(): array
+    public static function dpTestValidateFinancialHistory(): \Iterator
     {
         $a50 = str_repeat('a', 50);
         $b50 = str_repeat('b', 50);
         $c45 = str_repeat('c', 45);
-
-        return [
-            [
-                'flags' => ['N'],
-                'text' => '',
-            ],
-            [
-                'flags' => ['Y', 'N'],
-                'text' => 'to short',
-            ],
-            [
-                'flags' => ['Y'],
-                'text' => $a50 . PHP_EOL . ' ' . $b50 . PHP_EOL . ' ' . PHP_EOL . $c45,
-            ],
-            [
-                'flags' => ['Y'],
-                'text' => $a50 . PHP_EOL . ' ' . $b50 . PHP_EOL . ' ' . PHP_EOL . $a50,
-            ],
+        yield [
+            'flags' => ['N'],
+            'text' => '',
+        ];
+        yield [
+            'flags' => ['Y', 'N'],
+            'text' => 'to short',
+        ];
+        yield [
+            'flags' => ['Y'],
+            'text' => $a50 . PHP_EOL . ' ' . $b50 . PHP_EOL . ' ' . PHP_EOL . $c45,
+        ];
+        yield [
+            'flags' => ['Y'],
+            'text' => $a50 . PHP_EOL . ' ' . $b50 . PHP_EOL . ' ' . PHP_EOL . $a50,
         ];
     }
 
@@ -1115,7 +1076,7 @@ class ApplicationEntityTest extends EntityTester
         $licenceCentres = $this->setupOperatingCentres();
         $sut->shouldReceive('getLicence->getOperatingCentres')->with()->andReturn($licenceCentres);
 
-        $this->assertSame(false, $sut->hasIncreaseInOperatingCentre());
+        $this->assertFalse($sut->hasIncreaseInOperatingCentre());
     }
 
     public function testHasIncreaseInOperatingCentreVehiclesIncreased(): void
@@ -1128,7 +1089,7 @@ class ApplicationEntityTest extends EntityTester
         $licenceCentres = $this->setupOperatingCentres();
         $sut->shouldReceive('getLicence->getOperatingCentres')->with()->andReturn($licenceCentres);
 
-        $this->assertSame(true, $sut->hasIncreaseInOperatingCentre());
+        $this->assertTrue($sut->hasIncreaseInOperatingCentre());
     }
 
     public function testHasIncreaseInOperatingCentreTrailersIncreased(): void
@@ -1141,7 +1102,7 @@ class ApplicationEntityTest extends EntityTester
         $licenceCentres = $this->setupOperatingCentres();
         $sut->shouldReceive('getLicence->getOperatingCentres')->with()->andReturn($licenceCentres);
 
-        $this->assertSame(true, $sut->hasIncreaseInOperatingCentre());
+        $this->assertTrue($sut->hasIncreaseInOperatingCentre());
     }
 
     public function testHasIncreaseInOperatingCentreCentreDeleted(): void
@@ -1155,7 +1116,7 @@ class ApplicationEntityTest extends EntityTester
         $licenceCentres = $this->setupOperatingCentres();
         $sut->shouldReceive('getLicence->getOperatingCentres')->with()->andReturn($licenceCentres);
 
-        $this->assertSame(false, $sut->hasIncreaseInOperatingCentre());
+        $this->assertFalse($sut->hasIncreaseInOperatingCentre());
     }
 
     public function testHasIncreaseInOperatingCentreNoOperatingCentreChanges(): void
@@ -1167,7 +1128,7 @@ class ApplicationEntityTest extends EntityTester
         $licenceCentres = $this->setupOperatingCentres();
         $sut->shouldReceive('getLicence->getOperatingCentres')->with()->andReturn($licenceCentres);
 
-        $this->assertSame(false, $sut->hasIncreaseInOperatingCentre());
+        $this->assertFalse($sut->hasIncreaseInOperatingCentre());
     }
 
     public function testCanHaveInterimLicencePsv(): void
@@ -1198,7 +1159,7 @@ class ApplicationEntityTest extends EntityTester
 
         $sut->shouldReceive('hasHgvAuthorisationIncreased')->withNoArgs()->once()->andReturn(true);
 
-        $this->assertSame(true, $sut->canHaveInterimLicence());
+        $this->assertTrue($sut->canHaveInterimLicence());
     }
 
     public function testCanHaveInterimLicenceWithLgvAuthorisationIncreased(): void
@@ -1211,7 +1172,7 @@ class ApplicationEntityTest extends EntityTester
         $sut->shouldReceive('hasHgvAuthorisationIncreased')->withNoArgs()->once()->andReturn(false);
         $sut->shouldReceive('hasLgvAuthorisationIncreased')->withNoArgs()->once()->andReturn(true);
 
-        $this->assertSame(true, $sut->canHaveInterimLicence());
+        $this->assertTrue($sut->canHaveInterimLicence());
     }
 
     public function testCanHaveInterimLicenceWithAuthTrailersIncreased(): void
@@ -1225,7 +1186,7 @@ class ApplicationEntityTest extends EntityTester
         $sut->shouldReceive('hasLgvAuthorisationIncreased')->withNoArgs()->once()->andReturn(false);
         $sut->shouldReceive('hasAuthTrailersIncrease')->with()->once()->andReturn(true);
 
-        $this->assertSame(true, $sut->canHaveInterimLicence());
+        $this->assertTrue($sut->canHaveInterimLicence());
     }
 
     public function testCanHaveInterimLicenceWithUpgrade(): void
@@ -1240,7 +1201,7 @@ class ApplicationEntityTest extends EntityTester
         $sut->shouldReceive('hasAuthTrailersIncrease')->with()->once()->andReturn(false);
         $sut->shouldReceive('hasUpgrade')->with()->once()->andReturn(true);
 
-        $this->assertSame(true, $sut->canHaveInterimLicence());
+        $this->assertTrue($sut->canHaveInterimLicence());
     }
 
     public function testCanHaveInterimLicenceWithNewOperatingCentre(): void
@@ -1256,7 +1217,7 @@ class ApplicationEntityTest extends EntityTester
         $sut->shouldReceive('hasUpgrade')->with()->once()->andReturn(false);
         $sut->shouldReceive('hasNewOperatingCentre')->with()->once()->andReturn(true);
 
-        $this->assertSame(true, $sut->canHaveInterimLicence());
+        $this->assertTrue($sut->canHaveInterimLicence());
     }
 
     public function testCanHaveInterimLicenceWithIncreaseInOperatingCentre(): void
@@ -1273,7 +1234,7 @@ class ApplicationEntityTest extends EntityTester
         $sut->shouldReceive('hasNewOperatingCentre')->with()->once()->andReturn(false);
         $sut->shouldReceive('hasIncreaseInOperatingCentre')->with()->once()->andReturn(true);
 
-        $this->assertSame(true, $sut->canHaveInterimLicence());
+        $this->assertTrue($sut->canHaveInterimLicence());
     }
 
     public function testCanHaveInterimLicenceWhenItCannot(): void
@@ -1290,7 +1251,7 @@ class ApplicationEntityTest extends EntityTester
         $sut->shouldReceive('hasNewOperatingCentre')->with()->once()->andReturn(false);
         $sut->shouldReceive('hasIncreaseInOperatingCentre')->with()->once()->andReturn(false);
 
-        $this->assertSame(false, $sut->canHaveInterimLicence());
+        $this->assertFalse($sut->canHaveInterimLicence());
     }
 
     public function testIsLicenceUpgradeApplication(): void
@@ -1299,17 +1260,15 @@ class ApplicationEntityTest extends EntityTester
 
         $sut->shouldReceive('getIsVariation')->with()->once()->andReturn(false);
 
-        $this->assertSame(false, $sut->isLicenceUpgrade());
+        $this->assertFalse($sut->isLicenceUpgrade());
     }
 
-    public static function dataProviderTestIsLicenceUpgrade(): array
+    public static function dataProviderTestIsLicenceUpgrade(): \Iterator
     {
-        return [
-            [false, Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_RESTRICTED],
-            [false, Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_SPECIAL_RESTRICTED],
-            [true, Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL],
-            [true, Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_STANDARD_NATIONAL],
-        ];
+        yield [false, Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_RESTRICTED];
+        yield [false, Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_SPECIAL_RESTRICTED];
+        yield [true, Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL];
+        yield [true, Licence::LICENCE_TYPE_RESTRICTED, Licence::LICENCE_TYPE_STANDARD_NATIONAL];
     }
 
     /**
@@ -1356,13 +1315,13 @@ class ApplicationEntityTest extends EntityTester
     public function testUpdateLicenceHistory(): void
     {
         $this->entity->updateLicenceHistory('Y', 'Y', 'Y', 'Y', 'Y', 'Y', 'Y');
-        $this->assertEquals($this->entity->getPrevHasLicence(), 'Y');
-        $this->assertEquals($this->entity->getPrevHadLicence(), 'Y');
-        $this->assertEquals($this->entity->getPrevBeenRefused(), 'Y');
-        $this->assertEquals($this->entity->getPrevBeenRevoked(), 'Y');
-        $this->assertEquals($this->entity->getPrevBeenAtPi(), 'Y');
-        $this->assertEquals($this->entity->getPrevBeenDisqualifiedTc(), 'Y');
-        $this->assertEquals($this->entity->getPrevPurchasedAssets(), 'Y');
+        $this->assertEquals('Y', $this->entity->getPrevHasLicence());
+        $this->assertEquals('Y', $this->entity->getPrevHadLicence());
+        $this->assertEquals('Y', $this->entity->getPrevBeenRefused());
+        $this->assertEquals('Y', $this->entity->getPrevBeenRevoked());
+        $this->assertEquals('Y', $this->entity->getPrevBeenAtPi());
+        $this->assertEquals('Y', $this->entity->getPrevBeenDisqualifiedTc());
+        $this->assertEquals('Y', $this->entity->getPrevPurchasedAssets());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('codeProvider')]
@@ -1378,58 +1337,56 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->getCode());
     }
 
-    public static function codeProvider(): array
+    public static function codeProvider(): \Iterator
     {
-        return [
-            'gv new app' => [
-                false,
-                null,
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                'GV79'
-            ],
-            'psv new app' => [
-                false,
-                null,
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                'PSV421'
-            ],
-            'psv sr new app' => [
-                false,
-                null,
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                'PSV356'
-            ],
-            'gv variation upgrade' => [
-                true,
-                true,
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                'GV80A'
-            ],
-            'gv variation no upgrade' => [
-                true,
-                false,
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                'GV81'
-            ],
-            'psv variation upgrade' => [
-                true,
-                true,
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                'PSV431A'
-            ],
-            'psv variation no upgrade' => [
-                true,
-                false,
-                Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                'PSV431'
-            ],
+        yield 'gv new app' => [
+            false,
+            null,
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'GV79'
+        ];
+        yield 'psv new app' => [
+            false,
+            null,
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'PSV421'
+        ];
+        yield 'psv sr new app' => [
+            false,
+            null,
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            'PSV356'
+        ];
+        yield 'gv variation upgrade' => [
+            true,
+            true,
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'GV80A'
+        ];
+        yield 'gv variation no upgrade' => [
+            true,
+            false,
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'GV81'
+        ];
+        yield 'psv variation upgrade' => [
+            true,
+            true,
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'PSV431A'
+        ];
+        yield 'psv variation no upgrade' => [
+            true,
+            false,
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'PSV431'
         ];
     }
 
@@ -1454,20 +1411,18 @@ class ApplicationEntityTest extends EntityTester
             ->andReturn($appType)
             ->getMock();
 
-        static::assertEquals($expect, $sut->getApplicationTypeDescription());
+        $this->assertEquals($expect, $sut->getApplicationTypeDescription());
     }
 
-    public static function dpTestGetApplicationTypeDescription(): array
+    public static function dpTestGetApplicationTypeDescription(): \Iterator
     {
-        return [
-            [
-                'appType' => Entity::APPLICATION_TYPE_VARIATION,
-                'expect' => Entity::APPLICATION_TYPE_VARIATION_DESCRIPTION,
-            ],
-            [
-                'appType' => Entity::APPLICATION_TYPE_NEW,
-                'expect' => Entity::APPLICATION_TYPE_NEW_DESCRIPTION,
-            ],
+        yield [
+            'appType' => Entity::APPLICATION_TYPE_VARIATION,
+            'expect' => Entity::APPLICATION_TYPE_VARIATION_DESCRIPTION,
+        ];
+        yield [
+            'appType' => Entity::APPLICATION_TYPE_NEW,
+            'expect' => Entity::APPLICATION_TYPE_NEW_DESCRIPTION,
         ];
     }
 
@@ -1480,17 +1435,15 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->canSubmit());
     }
 
-    public static function canSubmitProvider(): array
+    public static function canSubmitProvider(): \Iterator
     {
-        return [
-            [Entity::APPLICATION_STATUS_NOT_SUBMITTED, true],
-            [Entity::APPLICATION_STATUS_GRANTED, false],
-            [Entity::APPLICATION_STATUS_UNDER_CONSIDERATION, false],
-            [Entity::APPLICATION_STATUS_VALID, false],
-            [Entity::APPLICATION_STATUS_WITHDRAWN, false],
-            [Entity::APPLICATION_STATUS_REFUSED, false],
-            [Entity::APPLICATION_STATUS_NOT_TAKEN_UP, false],
-        ];
+        yield [Entity::APPLICATION_STATUS_NOT_SUBMITTED, true];
+        yield [Entity::APPLICATION_STATUS_GRANTED, false];
+        yield [Entity::APPLICATION_STATUS_UNDER_CONSIDERATION, false];
+        yield [Entity::APPLICATION_STATUS_VALID, false];
+        yield [Entity::APPLICATION_STATUS_WITHDRAWN, false];
+        yield [Entity::APPLICATION_STATUS_REFUSED, false];
+        yield [Entity::APPLICATION_STATUS_NOT_TAKEN_UP, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('canCreateCaseProvider')]
@@ -1503,26 +1456,23 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->canCreateCase());
     }
 
-    public static function canCreateCaseProvider(): array
+    public static function canCreateCaseProvider(): \Iterator
     {
         $licNo = 12345;
-
-        return [
-            [Entity::APPLICATION_STATUS_NOT_SUBMITTED, null, false],
-            [Entity::APPLICATION_STATUS_GRANTED, null, false],
-            [Entity::APPLICATION_STATUS_UNDER_CONSIDERATION, null, false],
-            [Entity::APPLICATION_STATUS_VALID, null, false],
-            [Entity::APPLICATION_STATUS_WITHDRAWN, null, false],
-            [Entity::APPLICATION_STATUS_REFUSED, null, false],
-            [Entity::APPLICATION_STATUS_NOT_TAKEN_UP, null, false],
-            [Entity::APPLICATION_STATUS_NOT_SUBMITTED, $licNo, false],
-            [Entity::APPLICATION_STATUS_GRANTED, $licNo, true],
-            [Entity::APPLICATION_STATUS_UNDER_CONSIDERATION, $licNo, true],
-            [Entity::APPLICATION_STATUS_VALID, $licNo, true],
-            [Entity::APPLICATION_STATUS_WITHDRAWN, $licNo, true],
-            [Entity::APPLICATION_STATUS_REFUSED, $licNo, true],
-            [Entity::APPLICATION_STATUS_NOT_TAKEN_UP, $licNo, true],
-        ];
+        yield [Entity::APPLICATION_STATUS_NOT_SUBMITTED, null, false];
+        yield [Entity::APPLICATION_STATUS_GRANTED, null, false];
+        yield [Entity::APPLICATION_STATUS_UNDER_CONSIDERATION, null, false];
+        yield [Entity::APPLICATION_STATUS_VALID, null, false];
+        yield [Entity::APPLICATION_STATUS_WITHDRAWN, null, false];
+        yield [Entity::APPLICATION_STATUS_REFUSED, null, false];
+        yield [Entity::APPLICATION_STATUS_NOT_TAKEN_UP, null, false];
+        yield [Entity::APPLICATION_STATUS_NOT_SUBMITTED, $licNo, false];
+        yield [Entity::APPLICATION_STATUS_GRANTED, $licNo, true];
+        yield [Entity::APPLICATION_STATUS_UNDER_CONSIDERATION, $licNo, true];
+        yield [Entity::APPLICATION_STATUS_VALID, $licNo, true];
+        yield [Entity::APPLICATION_STATUS_WITHDRAWN, $licNo, true];
+        yield [Entity::APPLICATION_STATUS_REFUSED, $licNo, true];
+        yield [Entity::APPLICATION_STATUS_NOT_TAKEN_UP, $licNo, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('goodsOrPsvHelperProvider')]
@@ -1536,12 +1486,10 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($isPsv, $sut->isPsv());
     }
 
-    public static function goodsOrPsvHelperProvider(): array
+    public static function goodsOrPsvHelperProvider(): \Iterator
     {
-        return [
-            [Licence::LICENCE_CATEGORY_PSV, false, true],
-            [Licence::LICENCE_CATEGORY_GOODS_VEHICLE, true, false],
-        ];
+        yield [Licence::LICENCE_CATEGORY_PSV, false, true];
+        yield [Licence::LICENCE_CATEGORY_GOODS_VEHICLE, true, false];
     }
 
     public function testIsGoodsAndIsPsvHelperNull(): void
@@ -1568,14 +1516,12 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->getApplicationDate());
     }
 
-    public static function applicationDateProvider(): array
+    public static function applicationDateProvider(): \Iterator
     {
-        return [
-            ['2015-06-19', '2015-06-22', '2015-06-22'],
-            ['2015-06-19', null, '2015-06-19'],
-            [null, '2015-06-22', '2015-06-22'],
-            [null, null, null],
-        ];
+        yield ['2015-06-19', '2015-06-22', '2015-06-22'];
+        yield ['2015-06-19', null, '2015-06-19'];
+        yield [null, '2015-06-22', '2015-06-22'];
+        yield [null, null, null];
     }
 
     public function testGetRemainingSpaces(): void
@@ -1742,9 +1688,9 @@ class ApplicationEntityTest extends EntityTester
             ->getMock();
 
         $result = $sut->getOcForInspectionRequest();
-        $this->assertEquals(count($result), 2);
-        $this->assertEquals($result[0]->getId(), 1);
-        $this->assertEquals($result[1]->getId(), 3);
+        $this->assertCount(2, $result);
+        $this->assertEquals(1, $result[0]->getId());
+        $this->assertEquals(3, $result[1]->getId());
     }
 
     public function testGetVariationCompletionNotVariation(): void
@@ -1804,12 +1750,10 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $this->entity->getFeeTrafficAreaId());
     }
 
-    public static function niFlagProvider(): array
+    public static function niFlagProvider(): \Iterator
     {
-        return [
-            ['Y', 'N'],
-            ['N', null],
-        ];
+        yield ['Y', 'N'];
+        yield ['N', null];
     }
 
     public function testGetActiveVehicles(): void
@@ -1832,47 +1776,45 @@ class ApplicationEntityTest extends EntityTester
 
         $entity->setApplicationCompletion($ac);
 
-        static::assertEquals($expect, $entity->getSectionsRequiringAttention());
+        $this->assertEquals($expect, $entity->getSectionsRequiringAttention());
     }
 
-    public static function dpTestGetSectionsRequiringAttention(): array
+    public static function dpTestGetSectionsRequiringAttention(): \Iterator
     {
-        return [
-            [
-                'entity' =>  static::instantiate(Entity::class)
-                    ->setStatus(new RefData(Entity::APPLICATION_STATUS_NOT_SUBMITTED))
-                    ->setAuthSignature(true),
-                'statuses' => [
-                    'businessTypeStatus' => Entity::VARIATION_STATUS_REQUIRES_ATTENTION,
-                    'businessDetailsStatus' => Entity::VARIATION_STATUS_UNCHANGED,
-                    'undertakingsStatus' => Entity::VARIATION_STATUS_REQUIRES_ATTENTION,
-                ],
-                'expect' => [
-                    'business_type',
-                    'undertakings',
-                ],
+        yield [
+            'entity' =>  static::instantiate(Entity::class)
+                ->setStatus(new RefData(Entity::APPLICATION_STATUS_NOT_SUBMITTED))
+                ->setAuthSignature(true),
+            'statuses' => [
+                'businessTypeStatus' => Entity::VARIATION_STATUS_REQUIRES_ATTENTION,
+                'businessDetailsStatus' => Entity::VARIATION_STATUS_UNCHANGED,
+                'undertakingsStatus' => Entity::VARIATION_STATUS_REQUIRES_ATTENTION,
             ],
-            [
-                'entity' =>  static::instantiate(Entity::class)
-                    ->setStatus(new RefData(Entity::APPLICATION_STATUS_UNDER_CONSIDERATION))
-                    ->setAuthSignature(false),
-                'statuses' => [
-                    'businessTypeStatus' => Entity::VARIATION_STATUS_UPDATED,
-                    'undertakingsStatus' => Entity::VARIATION_STATUS_REQUIRES_ATTENTION,
-                ],
-                'expect' => [
-                    'undertakings',
-                ],
+            'expect' => [
+                'business_type',
+                'undertakings',
             ],
-            [
-                'entity' =>  static::instantiate(Entity::class)
-                    ->setStatus(new RefData('OTHER THAN APPLICATION_STATUS_NOT_SUBMITTED STATUS'))
-                    ->setAuthSignature(true),
-                'statuses' => [
-                    'undertakingsStatus' => Entity::VARIATION_STATUS_REQUIRES_ATTENTION,
-                ],
-                'expect' => [],
+        ];
+        yield [
+            'entity' =>  static::instantiate(Entity::class)
+                ->setStatus(new RefData(Entity::APPLICATION_STATUS_UNDER_CONSIDERATION))
+                ->setAuthSignature(false),
+            'statuses' => [
+                'businessTypeStatus' => Entity::VARIATION_STATUS_UPDATED,
+                'undertakingsStatus' => Entity::VARIATION_STATUS_REQUIRES_ATTENTION,
             ],
+            'expect' => [
+                'undertakings',
+            ],
+        ];
+        yield [
+            'entity' =>  static::instantiate(Entity::class)
+                ->setStatus(new RefData('OTHER THAN APPLICATION_STATUS_NOT_SUBMITTED STATUS'))
+                ->setAuthSignature(true),
+            'statuses' => [
+                'undertakingsStatus' => Entity::VARIATION_STATUS_REQUIRES_ATTENTION,
+            ],
+            'expect' => [],
         ];
     }
 
@@ -2977,7 +2919,7 @@ class ApplicationEntityTest extends EntityTester
             ->getMock();
         $sut->shouldReceive('getOperatingCentresAdded->count')->andReturn(0);
 
-        static::assertEquals(Entity::NOT_APPLICABLE, $sut->getOutOfOppositionDate());
+        $this->assertEquals(Entity::NOT_APPLICABLE, $sut->getOutOfOppositionDate());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('providerDatesAsString')]
@@ -3006,15 +2948,13 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $oorDate);
     }
 
-    public static function providerDatesAsString(): array
+    public static function providerDatesAsString(): \Iterator
     {
-        return [
-            [Entity::NOT_APPLICABLE, Entity::NOT_APPLICABLE],
-            [new DateTime('2015-01-01'), '01 Jan 2015'],
-            [Entity::UNKNOWN, Entity::UNKNOWN],
-            ['', ''],
-            [null, ''],
-        ];
+        yield [Entity::NOT_APPLICABLE, Entity::NOT_APPLICABLE];
+        yield [new DateTime('2015-01-01'), '01 Jan 2015'];
+        yield [Entity::UNKNOWN, Entity::UNKNOWN];
+        yield ['', ''];
+        yield [null, ''];
     }
 
     public function testHasActiveS4(): void
@@ -3026,7 +2966,7 @@ class ApplicationEntityTest extends EntityTester
             ->shouldReceive('getActiveS4s')->once()->andReturn([$mockS4, clone $mockS4])
             ->getMock();
 
-        static::assertTrue($sut->hasActiveS4());
+        $this->assertTrue($sut->hasActiveS4());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('canHaveCommunityLicencesProvider')]
@@ -3070,7 +3010,7 @@ class ApplicationEntityTest extends EntityTester
         /** @var ArrayCollection $collection */
         $collection = $application->getDeltaAocByOc($oc);
 
-        $this->assertEquals(1, $collection->count());
+        $this->assertCount(1, $collection);
         $this->assertSame($aoc, $collection->first());
     }
 
@@ -3106,9 +3046,9 @@ class ApplicationEntityTest extends EntityTester
         $active = $application->getActiveS4s();
 
         $this->assertCount(2, $active);
-        static::assertTrue(in_array($s42, $active, true));
-        static::assertFalse(in_array($s43, $active, true));
-        static::assertTrue(in_array($s41, $active, true));
+        $this->assertContains($s42, $active);
+        $this->assertNotContains($s43, $active);
+        $this->assertContains($s41, $active);
     }
 
     public function testIsNew(): void
@@ -3133,13 +3073,11 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->isNi());
     }
 
-    public static function dpIsNi(): array
+    public static function dpIsNi(): \Iterator
     {
-        return [
-            ['Y', true],
-            ['N', false],
-            [null, false],
-        ];
+        yield ['Y', true];
+        yield ['N', false];
+        yield [null, false];
     }
 
     public function testIsRestricted(): void
@@ -3173,10 +3111,10 @@ class ApplicationEntityTest extends EntityTester
         /** @var Entity $application */
         $application = $this->instantiate(Entity::class);
 
-        static::assertFalse($application->isStandardNational());
+        $this->assertFalse($application->isStandardNational());
 
         $application->setLicenceType($sn);
-        static::assertTrue($application->isStandardNational());
+        $this->assertTrue($application->isStandardNational());
     }
 
     public function testIsStandardInternational(): void
@@ -3229,12 +3167,10 @@ class ApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpZeroCoalesced(): array
+    public static function dpZeroCoalesced(): \Iterator
     {
-        return [
-            [9, 9],
-            [null, 0],
-        ];
+        yield [9, 9];
+        yield [null, 0];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpCanHaveLgv')]
@@ -3249,14 +3185,12 @@ class ApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpCanHaveLgv(): array
+    public static function dpCanHaveLgv(): \Iterator
     {
-        return [
-            [RefData::APP_VEHICLE_TYPE_HGV, false],
-            [RefData::APP_VEHICLE_TYPE_LGV, true],
-            [RefData::APP_VEHICLE_TYPE_MIXED, true],
-            [RefData::APP_VEHICLE_TYPE_PSV, false],
-        ];
+        yield [RefData::APP_VEHICLE_TYPE_HGV, false];
+        yield [RefData::APP_VEHICLE_TYPE_LGV, true];
+        yield [RefData::APP_VEHICLE_TYPE_MIXED, true];
+        yield [RefData::APP_VEHICLE_TYPE_PSV, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpMustHaveLgv')]
@@ -3271,14 +3205,12 @@ class ApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpMustHaveLgv(): array
+    public static function dpMustHaveLgv(): \Iterator
     {
-        return [
-            [RefData::APP_VEHICLE_TYPE_HGV, false],
-            [RefData::APP_VEHICLE_TYPE_LGV, true],
-            [RefData::APP_VEHICLE_TYPE_MIXED, false],
-            [RefData::APP_VEHICLE_TYPE_PSV, false],
-        ];
+        yield [RefData::APP_VEHICLE_TYPE_HGV, false];
+        yield [RefData::APP_VEHICLE_TYPE_LGV, true];
+        yield [RefData::APP_VEHICLE_TYPE_MIXED, false];
+        yield [RefData::APP_VEHICLE_TYPE_PSV, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsLgv')]
@@ -3293,14 +3225,12 @@ class ApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsLgv(): array
+    public static function dpIsLgv(): \Iterator
     {
-        return [
-            [RefData::APP_VEHICLE_TYPE_HGV, false],
-            [RefData::APP_VEHICLE_TYPE_LGV, true],
-            [RefData::APP_VEHICLE_TYPE_MIXED, false],
-            [RefData::APP_VEHICLE_TYPE_PSV, false],
-        ];
+        yield [RefData::APP_VEHICLE_TYPE_HGV, false];
+        yield [RefData::APP_VEHICLE_TYPE_LGV, true];
+        yield [RefData::APP_VEHICLE_TYPE_MIXED, false];
+        yield [RefData::APP_VEHICLE_TYPE_PSV, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpCanHaveHgv')]
@@ -3315,14 +3245,12 @@ class ApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpCanHaveHgv(): array
+    public static function dpCanHaveHgv(): \Iterator
     {
-        return [
-            [RefData::APP_VEHICLE_TYPE_HGV, true],
-            [RefData::APP_VEHICLE_TYPE_LGV, false],
-            [RefData::APP_VEHICLE_TYPE_MIXED, true],
-            [RefData::APP_VEHICLE_TYPE_PSV, true],
-        ];
+        yield [RefData::APP_VEHICLE_TYPE_HGV, true];
+        yield [RefData::APP_VEHICLE_TYPE_LGV, false];
+        yield [RefData::APP_VEHICLE_TYPE_MIXED, true];
+        yield [RefData::APP_VEHICLE_TYPE_PSV, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpCanHaveOperatingCentre')]
@@ -3337,14 +3265,12 @@ class ApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpCanHaveOperatingCentre(): array
+    public static function dpCanHaveOperatingCentre(): \Iterator
     {
-        return [
-            [RefData::APP_VEHICLE_TYPE_HGV, true],
-            [RefData::APP_VEHICLE_TYPE_LGV, false],
-            [RefData::APP_VEHICLE_TYPE_MIXED, true],
-            [RefData::APP_VEHICLE_TYPE_PSV, true],
-        ];
+        yield [RefData::APP_VEHICLE_TYPE_HGV, true];
+        yield [RefData::APP_VEHICLE_TYPE_LGV, false];
+        yield [RefData::APP_VEHICLE_TYPE_MIXED, true];
+        yield [RefData::APP_VEHICLE_TYPE_PSV, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpMustHaveOperatingCentre')]
@@ -3359,14 +3285,12 @@ class ApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpMustHaveOperatingCentre(): array
+    public static function dpMustHaveOperatingCentre(): \Iterator
     {
-        return [
-            [RefData::APP_VEHICLE_TYPE_HGV, true],
-            [RefData::APP_VEHICLE_TYPE_LGV, false],
-            [RefData::APP_VEHICLE_TYPE_MIXED, true],
-            [RefData::APP_VEHICLE_TYPE_PSV, true],
-        ];
+        yield [RefData::APP_VEHICLE_TYPE_HGV, true];
+        yield [RefData::APP_VEHICLE_TYPE_LGV, false];
+        yield [RefData::APP_VEHICLE_TYPE_MIXED, true];
+        yield [RefData::APP_VEHICLE_TYPE_PSV, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpCanHaveTrailer')]
@@ -3381,14 +3305,12 @@ class ApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpCanHaveTrailer(): array
+    public static function dpCanHaveTrailer(): \Iterator
     {
-        return [
-            [RefData::APP_VEHICLE_TYPE_HGV, true],
-            [RefData::APP_VEHICLE_TYPE_LGV, false],
-            [RefData::APP_VEHICLE_TYPE_MIXED, true],
-            [RefData::APP_VEHICLE_TYPE_PSV, false],
-        ];
+        yield [RefData::APP_VEHICLE_TYPE_HGV, true];
+        yield [RefData::APP_VEHICLE_TYPE_LGV, false];
+        yield [RefData::APP_VEHICLE_TYPE_MIXED, true];
+        yield [RefData::APP_VEHICLE_TYPE_PSV, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHasHgvLgvAuthorisationIncreased')]
@@ -3439,20 +3361,18 @@ class ApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpHasHgvLgvAuthorisationIncreased(): array
+    public static function dpHasHgvLgvAuthorisationIncreased(): \Iterator
     {
-        return [
-            [true, 4, 6, false],
-            [true, 5, 6, false],
-            [true, 8, 8, false],
-            [true, 9, 8, true],
-            [true, 11, 9, true],
-            [false, 4, 6, false],
-            [false, 5, 6, false],
-            [false, 8, 8, false],
-            [false, 9, 8, false],
-            [false, 11, 9, false],
-        ];
+        yield [true, 4, 6, false];
+        yield [true, 5, 6, false];
+        yield [true, 8, 8, false];
+        yield [true, 9, 8, true];
+        yield [true, 11, 9, true];
+        yield [false, 4, 6, false];
+        yield [false, 5, 6, false];
+        yield [false, 8, 8, false];
+        yield [false, 9, 8, false];
+        yield [false, 11, 9, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHasLgvAuthorisationChangedFromNullToNumeric')]
@@ -3474,15 +3394,13 @@ class ApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpHasLgvAuthorisationChangedFromNullToNumeric(): array
+    public static function dpHasLgvAuthorisationChangedFromNullToNumeric(): \Iterator
     {
-        return [
-            [null, null, false],
-            [0, 0, false],
-            [0, 1, false],
-            [null, 0, true],
-            [null, 1, true],
-        ];
+        yield [null, null, false];
+        yield [0, 0, false];
+        yield [0, 1, false];
+        yield [null, 0, true];
+        yield [null, 1, true];
     }
 
     public function testHasLgvAuthorisationChangedFromNullToNumericException(): void
@@ -3508,9 +3426,9 @@ class ApplicationEntityTest extends EntityTester
         //  publication with invalid section
         /** @var Entities\Publication\Publication $mockPub */
         $mockPub = m::mock(Entities\Publication\Publication::class);
-        $pubLinkInvalicSection = (new Entities\Publication\PublicationLink())
+        $pubLinkInvalicSection = new Entities\Publication\PublicationLink()
             ->setPublicationSection(
-                (new Entities\Publication\PublicationSection())
+                new Entities\Publication\PublicationSection()
                     ->setId('INVALID_SECTION')
             )
             ->setPublication($mockPub);
@@ -3524,7 +3442,7 @@ class ApplicationEntityTest extends EntityTester
         $pubLinkLose = new Entities\Publication\PublicationLink();
         $pubLinkLose
             ->setPublicationSection(
-                (new Entities\Publication\PublicationSection())
+                new Entities\Publication\PublicationSection()
                     ->setId(Entities\Publication\PublicationSection::APP_NEW_SECTION)
             )
             ->setPublication($mockPub1);
@@ -3535,9 +3453,9 @@ class ApplicationEntityTest extends EntityTester
             ->shouldReceive('getPubDate')->times(2)->andReturn($publDate2)
             ->getMock();
 
-        $pubLinkWin = (new Entities\Publication\PublicationLink())
+        $pubLinkWin = new Entities\Publication\PublicationLink()
             ->setPublicationSection(
-                (new Entities\Publication\PublicationSection())
+                new Entities\Publication\PublicationSection()
                     ->setId(Entities\Publication\PublicationSection::APP_NEW_SECTION)
             )
             ->setPublication($mockWin);
@@ -3547,7 +3465,7 @@ class ApplicationEntityTest extends EntityTester
         $sut = $this->instantiate(Entity::class);
         $sut->setPublicationLinks(new ArrayCollection([$pubLinkInvalicSection, $pubLinkLose, $pubLinkWin]));
 
-        static::assertEquals($publDate2, $sut->determinePublishedDate());
+        $this->assertEquals($publDate2, $sut->determinePublishedDate());
     }
 
     public function testGetActiveVehiclesCount(): void
@@ -3561,33 +3479,31 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals(10, $application->getActiveLicenceVehiclesCount());
     }
 
-    public static function canHaveCommunityLicencesProvider(): array
+    public static function canHaveCommunityLicencesProvider(): \Iterator
     {
-        return [
-            'Goods SI' => [
-                true,
-                false,
-                false,
-                true
-            ],
-            'PSV SI' => [
-                true,
-                true,
-                false,
-                true
-            ],
-            'PSV R' => [
-                false,
-                true,
-                true,
-                true
-            ],
-            'PSV Non R' => [
-                false,
-                true,
-                false,
-                false
-            ]
+        yield 'Goods SI' => [
+            true,
+            false,
+            false,
+            true
+        ];
+        yield 'PSV SI' => [
+            true,
+            true,
+            false,
+            true
+        ];
+        yield 'PSV R' => [
+            false,
+            true,
+            true,
+            true
+        ];
+        yield 'PSV Non R' => [
+            false,
+            true,
+            false,
+            false
         ];
     }
 
@@ -3606,12 +3522,10 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $application->getCategoryPrefix());
     }
 
-    public static function categoryPrefixDp(): array
+    public static function categoryPrefixDp(): \Iterator
     {
-        return [
-            [Licence::LICENCE_CATEGORY_PSV, 'P'],
-            [Licence::LICENCE_CATEGORY_GOODS_VEHICLE, 'O'],
-        ];
+        yield [Licence::LICENCE_CATEGORY_PSV, 'P'];
+        yield [Licence::LICENCE_CATEGORY_GOODS_VEHICLE, 'O'];
     }
 
     public function testDeterminePublicationNrDateOk(): void
@@ -3628,7 +3542,7 @@ class ApplicationEntityTest extends EntityTester
         $pubLink = new Entities\Publication\PublicationLink();
         $pubLink
             ->setPublicationSection(
-                (new Entities\Publication\PublicationSection())
+                new Entities\Publication\PublicationSection()
                     ->setId(Entities\Publication\PublicationSection::APP_NEW_SECTION)
             )
             ->setPublication($mockPub);
@@ -3638,14 +3552,14 @@ class ApplicationEntityTest extends EntityTester
         $sut = $this->instantiate(Entity::class);
         $sut->setPublicationLinks(new ArrayCollection([$pubLink]));
 
-        static::assertEquals($publNo, $sut->determinePublicationNo());
-        static::assertEquals($publDate, $sut->determinePublishedDate());
+        $this->assertEquals($publNo, $sut->determinePublicationNo());
+        $this->assertEquals($publDate, $sut->determinePublishedDate());
 
         //  check return null
         $sut->setPublicationLinks(new ArrayCollection([]));
 
-        static::assertNull($sut->determinePublicationNo());
-        static::assertNull($sut->determinePublishedDate());
+        $this->assertNull($sut->determinePublicationNo());
+        $this->assertNull($sut->determinePublishedDate());
     }
 
     public function testHasOpposition(): void
@@ -3659,7 +3573,7 @@ class ApplicationEntityTest extends EntityTester
         $sut = $this->instantiate(Entity::class);
         $sut->setCases(new ArrayCollection([$mockCase]));
 
-        static::assertTrue($sut->hasOpposition());
+        $this->assertTrue($sut->hasOpposition());
 
         //  check False
         $mockCase = m::mock(Entities\Cases\Cases::class)
@@ -3668,12 +3582,12 @@ class ApplicationEntityTest extends EntityTester
 
         $sut->setCases(new ArrayCollection([$mockCase]));
 
-        static::assertFalse($sut->hasOpposition());
+        $this->assertFalse($sut->hasOpposition());
 
         //  check False
         $sut->setCases(new ArrayCollection([]));
 
-        static::assertFalse($sut->hasOpposition());
+        $this->assertFalse($sut->hasOpposition());
     }
 
     public function testGetOtherActiveLicencesForOrganisation(): void
@@ -3707,7 +3621,7 @@ class ApplicationEntityTest extends EntityTester
         $application = $this->instantiate(Entity::class);
         $application->setLicence($licence);
 
-        static::assertEquals([], $application->getOtherActiveLicencesForOrganisation());
+        $this->assertEquals([], $application->getOtherActiveLicencesForOrganisation());
     }
 
     public function testGetOtherActiveLicencesForOrganisationNull(): void
@@ -3716,7 +3630,7 @@ class ApplicationEntityTest extends EntityTester
         $sut = $this->instantiate(Entity::class);
         $sut->setLicence(null);
 
-        static::assertNull($sut->getOtherActiveLicencesForOrganisation());
+        $this->assertNull($sut->getOtherActiveLicencesForOrganisation());
     }
 
     public function testGetActiveLicencesForOrganisation(): void
@@ -3743,7 +3657,7 @@ class ApplicationEntityTest extends EntityTester
 
         $sut = new Entity($mockLic, new RefData(), false);
 
-        static::assertEquals('EXPECTED', $sut->getTrafficArea());
+        $this->assertEquals('EXPECTED', $sut->getTrafficArea());
     }
 
     public function testGetOperatingCentresNetDelta(): void
@@ -3782,10 +3696,7 @@ class ApplicationEntityTest extends EntityTester
 
         $sut->setTargetCompletionDateFromReceivedDate();
 
-        static::assertEquals(
-            $date->modify('+8 week')->getTimestamp(),
-            $sut->getTargetCompletionDate()->getTimestamp()
-        );
+        $this->assertSame($date->modify('+8 week')->getTimestamp(), $sut->getTargetCompletionDate()->getTimestamp());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('allowFeePaymentsProvider')]
@@ -3816,87 +3727,85 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $application->allowFeePayments());
     }
 
-    public static function dpIsLicenceChangeWhichRequiresOperatingCentre(): array
+    public static function dpIsLicenceChangeWhichRequiresOperatingCentre(): \Iterator
     {
-        return [
-            'application' => [
-                'isVariation' => false,
-                'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'expected' => false,
-            ],
-            'lgv to hgv' => [
-                'isVariation' => true,
-                'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'expected' => true,
-            ],
-            'lgv to mixed' => [
-                'isVariation' => true,
-                'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'expected' => true,
-            ],
-            'lgv to psv' => [
-                'isVariation' => true,
-                'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'expected' => true,
-            ],
-            'hgv to lgv' => [
-                'isVariation' => true,
-                'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'expected' => false,
-            ],
-            'hgv to mixed' => [
-                'isVariation' => true,
-                'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'expected' => false,
-            ],
-            'hgv to psv' => [
-                'isVariation' => true,
-                'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'expected' => false,
-            ],
-            'mixed to lgv' => [
-                'isVariation' => true,
-                'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'expected' => false,
-            ],
-            'mixed to hgv' => [
-                'isVariation' => true,
-                'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'expected' => false,
-            ],
-            'mixed to psv' => [
-                'isVariation' => true,
-                'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'expected' => false,
-            ],
-            'psv to lgv' => [
-                'isVariation' => true,
-                'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'expected' => false,
-            ],
-            'psv to hgv' => [
-                'isVariation' => true,
-                'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'expected' => false,
-            ],
-            'psv to mixed' => [
-                'isVariation' => true,
-                'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'expected' => false,
-            ],
+        yield 'application' => [
+            'isVariation' => false,
+            'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'expected' => false,
+        ];
+        yield 'lgv to hgv' => [
+            'isVariation' => true,
+            'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'expected' => true,
+        ];
+        yield 'lgv to mixed' => [
+            'isVariation' => true,
+            'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'expected' => true,
+        ];
+        yield 'lgv to psv' => [
+            'isVariation' => true,
+            'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'expected' => true,
+        ];
+        yield 'hgv to lgv' => [
+            'isVariation' => true,
+            'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'expected' => false,
+        ];
+        yield 'hgv to mixed' => [
+            'isVariation' => true,
+            'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'expected' => false,
+        ];
+        yield 'hgv to psv' => [
+            'isVariation' => true,
+            'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'expected' => false,
+        ];
+        yield 'mixed to lgv' => [
+            'isVariation' => true,
+            'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'expected' => false,
+        ];
+        yield 'mixed to hgv' => [
+            'isVariation' => true,
+            'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'expected' => false,
+        ];
+        yield 'mixed to psv' => [
+            'isVariation' => true,
+            'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'expected' => false,
+        ];
+        yield 'psv to lgv' => [
+            'isVariation' => true,
+            'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'expected' => false,
+        ];
+        yield 'psv to hgv' => [
+            'isVariation' => true,
+            'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'expected' => false,
+        ];
+        yield 'psv to mixed' => [
+            'isVariation' => true,
+            'licenceVehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'applicationVehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'expected' => false,
         ];
     }
 
@@ -3988,49 +3897,47 @@ class ApplicationEntityTest extends EntityTester
         $this->assertFalse($application->hasAuthChanged());
     }
 
-    public static function allowFeePaymentsProvider(): array
+    public static function allowFeePaymentsProvider(): \Iterator
     {
-        return [
-            'refused' => [
-                Entity::APPLICATION_STATUS_REFUSED,
-                Licence::LICENCE_STATUS_REFUSED,
-                false,
-            ],
-            'withdrawn' => [
-                Entity::APPLICATION_STATUS_WITHDRAWN,
-                Licence::LICENCE_STATUS_WITHDRAWN,
-                false,
-            ],
-            'ntu' => [
-                Entity::APPLICATION_STATUS_NOT_TAKEN_UP,
-                Licence::LICENCE_STATUS_NOT_TAKEN_UP,
-                false,
-            ],
-            'licence surrendered' => [
-                Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
-                Licence::LICENCE_STATUS_SURRENDERED,
-                false,
-            ],
-            'licence terminated' => [
-                Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
-                Licence::LICENCE_STATUS_TERMINATED,
-                false,
-            ],
-            'licence revoked' => [
-                Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
-                Licence::LICENCE_STATUS_REVOKED,
-                false,
-            ],
-            'licence cns' => [
-                Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
-                Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
-                false,
-            ],
-            'under consideration' => [
-                Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
-                Licence::LICENCE_STATUS_UNDER_CONSIDERATION,
-                true,
-            ],
+        yield 'refused' => [
+            Entity::APPLICATION_STATUS_REFUSED,
+            Licence::LICENCE_STATUS_REFUSED,
+            false,
+        ];
+        yield 'withdrawn' => [
+            Entity::APPLICATION_STATUS_WITHDRAWN,
+            Licence::LICENCE_STATUS_WITHDRAWN,
+            false,
+        ];
+        yield 'ntu' => [
+            Entity::APPLICATION_STATUS_NOT_TAKEN_UP,
+            Licence::LICENCE_STATUS_NOT_TAKEN_UP,
+            false,
+        ];
+        yield 'licence surrendered' => [
+            Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            Licence::LICENCE_STATUS_SURRENDERED,
+            false,
+        ];
+        yield 'licence terminated' => [
+            Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            Licence::LICENCE_STATUS_TERMINATED,
+            false,
+        ];
+        yield 'licence revoked' => [
+            Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            Licence::LICENCE_STATUS_REVOKED,
+            false,
+        ];
+        yield 'licence cns' => [
+            Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            Licence::LICENCE_STATUS_CONTINUATION_NOT_SOUGHT,
+            false,
+        ];
+        yield 'under consideration' => [
+            Entity::APPLICATION_STATUS_UNDER_CONSIDERATION,
+            Licence::LICENCE_STATUS_UNDER_CONSIDERATION,
+            true,
         ];
     }
 
@@ -4043,17 +3950,15 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->isUnderConsideration());
     }
 
-    public static function isUnderConsiderationProvider(): array
+    public static function isUnderConsiderationProvider(): \Iterator
     {
-        return [
-            [Entity::APPLICATION_STATUS_NOT_SUBMITTED, false],
-            [Entity::APPLICATION_STATUS_GRANTED, false],
-            [Entity::APPLICATION_STATUS_UNDER_CONSIDERATION, true],
-            [Entity::APPLICATION_STATUS_VALID, false],
-            [Entity::APPLICATION_STATUS_WITHDRAWN, false],
-            [Entity::APPLICATION_STATUS_REFUSED, false],
-            [Entity::APPLICATION_STATUS_NOT_TAKEN_UP, false],
-        ];
+        yield [Entity::APPLICATION_STATUS_NOT_SUBMITTED, false];
+        yield [Entity::APPLICATION_STATUS_GRANTED, false];
+        yield [Entity::APPLICATION_STATUS_UNDER_CONSIDERATION, true];
+        yield [Entity::APPLICATION_STATUS_VALID, false];
+        yield [Entity::APPLICATION_STATUS_WITHDRAWN, false];
+        yield [Entity::APPLICATION_STATUS_REFUSED, false];
+        yield [Entity::APPLICATION_STATUS_NOT_TAKEN_UP, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsNotSubmitted')]
@@ -4064,17 +3969,15 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $sut->isNotSubmitted());
     }
 
-    public static function dpTestIsNotSubmitted(): array
+    public static function dpTestIsNotSubmitted(): \Iterator
     {
-        return [
-            [Entity::APPLICATION_STATUS_NOT_SUBMITTED, true],
-            [Entity::APPLICATION_STATUS_GRANTED, false],
-            [Entity::APPLICATION_STATUS_UNDER_CONSIDERATION, false],
-            [Entity::APPLICATION_STATUS_VALID, false],
-            [Entity::APPLICATION_STATUS_WITHDRAWN, false],
-            [Entity::APPLICATION_STATUS_REFUSED, false],
-            [Entity::APPLICATION_STATUS_NOT_TAKEN_UP, false],
-        ];
+        yield [Entity::APPLICATION_STATUS_NOT_SUBMITTED, true];
+        yield [Entity::APPLICATION_STATUS_GRANTED, false];
+        yield [Entity::APPLICATION_STATUS_UNDER_CONSIDERATION, false];
+        yield [Entity::APPLICATION_STATUS_VALID, false];
+        yield [Entity::APPLICATION_STATUS_WITHDRAWN, false];
+        yield [Entity::APPLICATION_STATUS_REFUSED, false];
+        yield [Entity::APPLICATION_STATUS_NOT_TAKEN_UP, false];
     }
 
     /**
@@ -4086,20 +3989,18 @@ class ApplicationEntityTest extends EntityTester
     {
         $licence = new Licence(new Organisation(), new RefData());
         $application = new Entity($licence, new RefData(), false);
-        $application->setLicenceType((new RefData())->setId($licenceType));
+        $application->setLicenceType(new RefData()->setId($licenceType));
 
         $this->assertSame($shortCode, $application->getLicenceTypeShortCode());
     }
 
-    public static function dpTestGetLicenceTypeShortCode(): array
+    public static function dpTestGetLicenceTypeShortCode(): \Iterator
     {
-        return [
-            ['ltyp_r', 'R'],
-            ['ltyp_si', 'SI'],
-            ['ltyp_sn', 'SN'],
-            ['ltyp_sr', 'SR'],
-            ['XXXX', null],
-        ];
+        yield ['ltyp_r', 'R'];
+        yield ['ltyp_si', 'SI'];
+        yield ['ltyp_sn', 'SN'];
+        yield ['ltyp_sr', 'SR'];
+        yield ['XXXX', null];
     }
 
     public function testGetContextValue(): void
@@ -4144,7 +4045,7 @@ class ApplicationEntityTest extends EntityTester
             ->shouldReceive('getTasks')->once()->andReturn($mockTasks)
             ->getMock();
 
-        static::assertEquals([$mockTask], $sut->getOpenTasksForCategory($catId, $subCatId)->toArray());
+        $this->assertEquals([$mockTask], $sut->getOpenTasksForCategory($catId, $subCatId)->toArray());
     }
 
     public function testIsPublishableNewApplication(): void
@@ -4226,7 +4127,7 @@ class ApplicationEntityTest extends EntityTester
             ->shouldReceive('isSpecialRestricted')->once()->andReturn(true)
             ->getMock();
 
-        static::assertFalse($sut->isPublishable());
+        $this->assertFalse($sut->isPublishable());
     }
 
     public function testIsPublishableVariationFalse(): void
@@ -4243,7 +4144,7 @@ class ApplicationEntityTest extends EntityTester
             ->shouldReceive('getConditionUndertakings')->once()->andReturn(new ArrayCollection())
             ->getMock();
 
-        static::assertFalse($sut->isPublishable());
+        $this->assertFalse($sut->isPublishable());
     }
 
     public function testIsPublishableVariationConditionUndertakingChanged(): void
@@ -4260,7 +4161,7 @@ class ApplicationEntityTest extends EntityTester
             ->shouldReceive('getConditionUndertakings')->once()->andReturn(new ArrayCollection(['FOO']))
             ->getMock();
 
-        static::assertTrue($sut->isPublishable());
+        $this->assertTrue($sut->isPublishable());
     }
 
     public function testIsPublishableLgvAuthorisationIncreased(): void
@@ -4271,7 +4172,7 @@ class ApplicationEntityTest extends EntityTester
             ->shouldReceive('hasLgvAuthorisationIncreased')->with()->once()->andReturn(true)
             ->getMock();
 
-        static::assertTrue($sut->isPublishable());
+        $this->assertTrue($sut->isPublishable());
     }
 
     public function testIsPublishableGoodsHgvAuthorisationIncreased(): void
@@ -4284,7 +4185,7 @@ class ApplicationEntityTest extends EntityTester
             ->shouldReceive('isGoods')->with()->once()->andReturn(true)
             ->getMock();
 
-        static::assertTrue($sut->isPublishable());
+        $this->assertTrue($sut->isPublishable());
     }
 
     public function testIsPublishablePsvHgvAuthorisationIncreased(): void
@@ -4302,7 +4203,7 @@ class ApplicationEntityTest extends EntityTester
             ->shouldReceive('getConditionUndertakings')->once()->andReturn(new ArrayCollection())
             ->getMock();
 
-        static::assertFalse($sut->isPublishable());
+        $this->assertFalse($sut->isPublishable());
     }
 
     public function testIsPublishableTrailerAuthorisationIncreased(): void
@@ -4315,87 +4216,81 @@ class ApplicationEntityTest extends EntityTester
             ->shouldReceive('hasAuthTrailersIncrease')->with()->once()->andReturn(true)
             ->getMock();
 
-        static::assertTrue($sut->isPublishable());
+        $this->assertTrue($sut->isPublishable());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsPsvVehicleSizeSmall')]
     public function testIsPsvVehicleSizeSmall(mixed $type, mixed $expect): void
     {
-        $mockRefData = (new RefData())->setId($type);
+        $mockRefData = new RefData()->setId($type);
 
         /** @var Entity $sut */
         $sut = m::mock(Entity::class)->makePartial()
             ->shouldReceive('getPsvWhichVehicleSizes')->times(2)->andReturn($mockRefData)
             ->getMock();
 
-        static::assertEquals($expect, $sut->isPsvVehicleSizeSmall());
+        $this->assertEquals($expect, $sut->isPsvVehicleSizeSmall());
     }
 
-    public static function dpTestIsPsvVehicleSizeSmall(): array
+    public static function dpTestIsPsvVehicleSizeSmall(): \Iterator
     {
-        return [
-            [
-                'type' => Entity::PSV_VEHICLE_SIZE_SMALL,
-                'expect' => true,
-            ],
-            [
-                'type' => 'INVALID_TYPE',
-                'expect' => false,
-            ],
+        yield [
+            'type' => Entity::PSV_VEHICLE_SIZE_SMALL,
+            'expect' => true,
+        ];
+        yield [
+            'type' => 'INVALID_TYPE',
+            'expect' => false,
         ];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsPsvVehicleSizeMediumLarge')]
     public function testIsPsvVehicleSizeMediumLarge(mixed $type, mixed $expect): void
     {
-        $mockRefData = (new RefData())->setId($type);
+        $mockRefData = new RefData()->setId($type);
 
         /** @var Entity $sut */
         $sut = m::mock(Entity::class)->makePartial()
             ->shouldReceive('getPsvWhichVehicleSizes')->times(2)->andReturn($mockRefData)
             ->getMock();
 
-        static::assertEquals($expect, $sut->isPsvVehicleSizeMediumLarge());
+        $this->assertEquals($expect, $sut->isPsvVehicleSizeMediumLarge());
     }
 
-    public static function dpTestIsPsvVehicleSizeMediumLarge(): array
+    public static function dpTestIsPsvVehicleSizeMediumLarge(): \Iterator
     {
-        return [
-            [
-                'type' => Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
-                'expect' => true,
-            ],
-            [
-                'type' => 'INVALID_TYPE',
-                'expect' => false,
-            ],
+        yield [
+            'type' => Entity::PSV_VEHICLE_SIZE_MEDIUM_LARGE,
+            'expect' => true,
+        ];
+        yield [
+            'type' => 'INVALID_TYPE',
+            'expect' => false,
         ];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsPsvVehicleSizeBoth')]
     public function testIsPsvVehicleSizeBoth(mixed $type, mixed $expect): void
     {
-        $refData = (new RefData())->setId($type);
+        $refData = new RefData()->setId($type);
 
         /** @var Entity $sut */
         $sut = m::mock(Entity::class)->makePartial()
             ->shouldReceive('getPsvWhichVehicleSizes')->times(2)->andReturn($refData)
             ->getMock();
 
-        static::assertEquals($expect, $sut->isPsvVehicleSizeBoth());
+        $this->assertEquals($expect, $sut->isPsvVehicleSizeBoth());
     }
 
-    public static function dpTestIsPsvVehicleSizeBoth(): array
+    public static function dpTestIsPsvVehicleSizeBoth(): \Iterator
     {
-        return [
-            [
-                'type' => Entity::PSV_VEHICLE_SIZE_BOTH,
-                'expect' => true,
-            ],
-            [
-                'type' => 'INVALID_TYPE',
-                'expect' => false,
-            ],
+        yield [
+            'type' => Entity::PSV_VEHICLE_SIZE_BOTH,
+            'expect' => true,
+        ];
+        yield [
+            'type' => 'INVALID_TYPE',
+            'expect' => false,
         ];
     }
 
@@ -4412,7 +4307,7 @@ class ApplicationEntityTest extends EntityTester
         $mockFees = m::mock(ArrayCollection::class)
             ->shouldReceive('matching')->once()->andReturnUsing(
                 function (Criteria $item) use ($mockFee) {
-                    static::assertEquals(['invoicedDate' => 'DESC'], $item->getOrderings());
+                    $this->assertEquals(['invoicedDate' => 'DESC'], $item->getOrderings());
 
                     return new \ArrayIterator([$mockFee]);
                 }
@@ -4425,39 +4320,34 @@ class ApplicationEntityTest extends EntityTester
             ->shouldReceive('getFees')->once()->andReturn($mockFees)
             ->getMock();
 
-        static::assertEquals(
-            ($expect === null ? null : $mockFee),
-            $sut->getLatestOutstandingApplicationFee()
-        );
+        $this->assertEquals(($expect === null ? null : $mockFee), $sut->getLatestOutstandingApplicationFee());
     }
 
-    public static function dpTestGetLatestOutstandingApplicationFeeOk(): array
+    public static function dpTestGetLatestOutstandingApplicationFeeOk(): \Iterator
     {
-        return [
-            [
-                'isOutstanding' => true,
-                'isVariation' => true,
-                'expectFeeType' => Entities\Fee\FeeType::FEE_TYPE_VAR,
-                'expect' => 'MOCK',
-            ],
-            [
-                'isOutstanding' => true,
-                'isVariation' => false,
-                'expectFeeType' => Entities\Fee\FeeType::FEE_TYPE_APP,
-                'expect' => 'MOCK',
-            ],
-            [
-                'isOutstanding' => false,
-                'isVariation' => false,
-                'expectFeeType' => Entities\Fee\FeeType::FEE_TYPE_APP,
-                'expect' => null,
-            ],
-            [
-                'isOutstanding' => true,
-                'isVariation' => false,
-                'expectFeeType' => 'INVALID_TYPE',
-                'expect' => null,
-            ],
+        yield [
+            'isOutstanding' => true,
+            'isVariation' => true,
+            'expectFeeType' => Entities\Fee\FeeType::FEE_TYPE_VAR,
+            'expect' => 'MOCK',
+        ];
+        yield [
+            'isOutstanding' => true,
+            'isVariation' => false,
+            'expectFeeType' => Entities\Fee\FeeType::FEE_TYPE_APP,
+            'expect' => 'MOCK',
+        ];
+        yield [
+            'isOutstanding' => false,
+            'isVariation' => false,
+            'expectFeeType' => Entities\Fee\FeeType::FEE_TYPE_APP,
+            'expect' => null,
+        ];
+        yield [
+            'isOutstanding' => true,
+            'isVariation' => false,
+            'expectFeeType' => 'INVALID_TYPE',
+            'expect' => null,
         ];
     }
 
@@ -4473,7 +4363,7 @@ class ApplicationEntityTest extends EntityTester
         $mockFees = m::mock(ArrayCollection::class)
             ->shouldReceive('matching')->once()->andReturnUsing(
                 function (Criteria $item) use ($mockFee) {
-                    static::assertEquals(['invoicedDate' => 'DESC'], $item->getOrderings());
+                    $this->assertEquals(['invoicedDate' => 'DESC'], $item->getOrderings());
 
                     return new \ArrayIterator([$mockFee]);
                 }
@@ -4485,7 +4375,7 @@ class ApplicationEntityTest extends EntityTester
             ->shouldReceive('getFees')->once()->andReturn($mockFees)
             ->getMock();
 
-        static::assertEquals($mockFee, $sut->getLatestOutstandingInterimFee());
+        $this->assertEquals($mockFee, $sut->getLatestOutstandingInterimFee());
     }
 
     public function testGetLatestOutstandingInterimFeeNull(): void
@@ -4494,7 +4384,7 @@ class ApplicationEntityTest extends EntityTester
         $sut = m::mock(Entity::class)->makePartial();
         $sut->shouldReceive('getFees->matching')->once()->andReturn([]);
 
-        static::assertNull($sut->getLatestOutstandingInterimFee());
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Fee\Fee::class, $sut->getLatestOutstandingInterimFee());
     }
 
     public function testHasOutstandingGrantFee(): void
@@ -4530,25 +4420,23 @@ class ApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $application->createdInternally());
     }
 
-    public static function createdInternallyProvider(): array
+    public static function createdInternallyProvider(): \Iterator
     {
-        return [
-            [
-                null,
-                null,
-            ],
-            [
-                new RefData(Entity::APPLIED_VIA_POST),
-                true,
-            ],
-            [
-                new RefData(Entity::APPLIED_VIA_PHONE),
-                true,
-            ],
-            [
-                new RefData(Entity::APPLIED_VIA_SELFSERVE),
-                false,
-            ],
+        yield [
+            null,
+            null,
+        ];
+        yield [
+            new RefData(Entity::APPLIED_VIA_POST),
+            true,
+        ];
+        yield [
+            new RefData(Entity::APPLIED_VIA_PHONE),
+            true,
+        ];
+        yield [
+            new RefData(Entity::APPLIED_VIA_SELFSERVE),
+            false,
         ];
     }
 
@@ -4570,46 +4458,44 @@ class ApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $application->hasApplicationFee());
     }
 
-    public static function hasApplicationFeeProvider(): array
+    public static function hasApplicationFeeProvider(): \Iterator
     {
-        return [
-            'no fee' => [
-                null,
-                false,
-            ],
-            'cancelled fee' => [
-                m::mock()
-                    ->shouldReceive('isNewApplicationFee')
-                    ->andReturn(true)
-                    ->shouldReceive('isVariationFee')
-                    ->andReturn(false)
-                    ->shouldReceive('isCancelled')
-                    ->andReturn(true)
-                    ->getMock(),
-                false,
-            ],
-            'new app fee' => [
-                m::mock()
-                    ->shouldReceive('isNewApplicationFee')
-                    ->andReturn(true)
-                    ->shouldReceive('isVariationFee')
-                    ->andReturn(false)
-                    ->shouldReceive('isCancelled')
-                    ->andReturn(false)
-                    ->getMock(),
-                true,
-            ],
-            'variation fee' => [
-                m::mock()
-                    ->shouldReceive('isNewApplicationFee')
-                    ->andReturn(false)
-                    ->shouldReceive('isVariationFee')
-                    ->andReturn(true)
-                    ->shouldReceive('isCancelled')
-                    ->andReturn(false)
-                    ->getMock(),
-                true,
-            ],
+        yield 'no fee' => [
+            null,
+            false,
+        ];
+        yield 'cancelled fee' => [
+            m::mock()
+                ->shouldReceive('isNewApplicationFee')
+                ->andReturn(true)
+                ->shouldReceive('isVariationFee')
+                ->andReturn(false)
+                ->shouldReceive('isCancelled')
+                ->andReturn(true)
+                ->getMock(),
+            false,
+        ];
+        yield 'new app fee' => [
+            m::mock()
+                ->shouldReceive('isNewApplicationFee')
+                ->andReturn(true)
+                ->shouldReceive('isVariationFee')
+                ->andReturn(false)
+                ->shouldReceive('isCancelled')
+                ->andReturn(false)
+                ->getMock(),
+            true,
+        ];
+        yield 'variation fee' => [
+            m::mock()
+                ->shouldReceive('isNewApplicationFee')
+                ->andReturn(false)
+                ->shouldReceive('isVariationFee')
+                ->andReturn(true)
+                ->shouldReceive('isCancelled')
+                ->andReturn(false)
+                ->getMock(),
+            true,
         ];
     }
 
@@ -4664,160 +4550,158 @@ class ApplicationEntityTest extends EntityTester
         $sut->validateTol($niFlag, $mockGoodsOrPsv, $mockLicenceType, $mockVehicleType, $lgvDeclarationConfirmation);
     }
 
-    public static function dataProviderValidateTol(): array
+    public static function dataProviderValidateTol(): \Iterator
     {
-        return [
-            [
-                'niFlag' => 'Y',
-                'goodsOrPsv' => null,
-                'licenceType' => null,
-                'vehicleType' => null,
-                'lgvDeclarationConfirmation' => null,
-                'isVariation' => false,
-                'currentGoodsOrPsv' => null,
-                'currentNiFlag' => null,
-                'expectedErrors' => [
-                    'goodsOrPsv' => [
-                        [Entity::ERROR_OT_REQUIRED => 'Operator type is required'],
-                    ],
+        yield [
+            'niFlag' => 'Y',
+            'goodsOrPsv' => null,
+            'licenceType' => null,
+            'vehicleType' => null,
+            'lgvDeclarationConfirmation' => null,
+            'isVariation' => false,
+            'currentGoodsOrPsv' => null,
+            'currentNiFlag' => null,
+            'expectedErrors' => [
+                'goodsOrPsv' => [
+                    [Entity::ERROR_OT_REQUIRED => 'Operator type is required'],
                 ],
             ],
-            [
-                'niFlag' => 'Y',
-                'goodsOrPsv' => Licence::LICENCE_CATEGORY_PSV,
-                'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                'vehicleType' => null,
-                'lgvDeclarationConfirmation' => null,
-                'isVariation' => false,
-                'currentGoodsOrPsv' => null,
-                'currentNiFlag' => null,
-                'expectedErrors' => [
-                    'goodsOrPsv' => [
-                        [Entity::ERROR_NI_NON_GOODS => 'NI can only apply for goods licences'],
-                    ],
-                    'licenceType' => [
-                        ['Vehicle type must be specified for all licences'],
-                    ],
+        ];
+        yield [
+            'niFlag' => 'Y',
+            'goodsOrPsv' => Licence::LICENCE_CATEGORY_PSV,
+            'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'vehicleType' => null,
+            'lgvDeclarationConfirmation' => null,
+            'isVariation' => false,
+            'currentGoodsOrPsv' => null,
+            'currentNiFlag' => null,
+            'expectedErrors' => [
+                'goodsOrPsv' => [
+                    [Entity::ERROR_NI_NON_GOODS => 'NI can only apply for goods licences'],
+                ],
+                'licenceType' => [
+                    ['Vehicle type must be specified for all licences'],
                 ],
             ],
-            [
-                'niFlag' => 'N',
-                'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                'licenceType' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                'vehicleType' => null,
-                'lgvDeclarationConfirmation' => null,
-                'isVariation' => false,
-                'currentGoodsOrPsv' => null,
-                'currentNiFlag' => null,
-                'expectedErrors' => [
-                    'licenceType' => [
-                        [Entity::ERROR_GV_NON_SR => 'GV operators cannot apply for special restricted licences'],
-                        ['Vehicle type must be specified for all licences'],
-                    ],
+        ];
+        yield [
+            'niFlag' => 'N',
+            'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            'licenceType' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            'vehicleType' => null,
+            'lgvDeclarationConfirmation' => null,
+            'isVariation' => false,
+            'currentGoodsOrPsv' => null,
+            'currentNiFlag' => null,
+            'expectedErrors' => [
+                'licenceType' => [
+                    [Entity::ERROR_GV_NON_SR => 'GV operators cannot apply for special restricted licences'],
+                    ['Vehicle type must be specified for all licences'],
                 ],
             ],
-            [
-                'niFlag' => 'Y',
-                'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                'licenceType' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                'vehicleType' => null,
-                'lgvDeclarationConfirmation' => null,
-                'isVariation' => true,
-                'currentGoodsOrPsv' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                'currentNiFlag' => null,
-                'expectedErrors' => [
-                    'licenceType' => [
-                        [Entity::ERROR_GV_NON_SR => 'GV operators cannot apply for special restricted licences'],
-                        ['Vehicle type must be specified for all licences'],
-                    ],
-                    'goodsOrPsv' => [
-                        [Entity::ERROR_GV_NON_SR => 'GV operators cannot apply for special restricted licences'],
-                    ],
-                    'niFlag' => [
-                        [Entity::ERROR_GV_NON_SR => 'GV operators cannot apply for special restricted licences'],
-                    ],
+        ];
+        yield [
+            'niFlag' => 'Y',
+            'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            'licenceType' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            'vehicleType' => null,
+            'lgvDeclarationConfirmation' => null,
+            'isVariation' => true,
+            'currentGoodsOrPsv' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'currentNiFlag' => null,
+            'expectedErrors' => [
+                'licenceType' => [
+                    [Entity::ERROR_GV_NON_SR => 'GV operators cannot apply for special restricted licences'],
+                    ['Vehicle type must be specified for all licences'],
+                ],
+                'goodsOrPsv' => [
+                    [Entity::ERROR_GV_NON_SR => 'GV operators cannot apply for special restricted licences'],
+                ],
+                'niFlag' => [
+                    [Entity::ERROR_GV_NON_SR => 'GV operators cannot apply for special restricted licences'],
                 ],
             ],
-            [
-                'niFlag' => 'Y',
-                'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                'vehicleType' => null,
-                'lgvDeclarationConfirmation' => null,
-                'isVariation' => true,
-                'currentGoodsOrPsv' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                'currentNiFlag' => 'N',
-                'expectedErrors' => [
-                    'goodsOrPsv' => [
-                        [Entity::ERROR_GV_NON_SR => 'GV operators cannot apply for special restricted licences'],
-                    ],
-                    'niFlag' => [
-                        [Entity::ERROR_GV_NON_SR => 'GV operators cannot apply for special restricted licences'],
-                    ],
-                    'licenceType' => [
-                        ['Vehicle type must be specified for all licences'],
-                    ],
+        ];
+        yield [
+            'niFlag' => 'Y',
+            'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'vehicleType' => null,
+            'lgvDeclarationConfirmation' => null,
+            'isVariation' => true,
+            'currentGoodsOrPsv' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'currentNiFlag' => 'N',
+            'expectedErrors' => [
+                'goodsOrPsv' => [
+                    [Entity::ERROR_GV_NON_SR => 'GV operators cannot apply for special restricted licences'],
+                ],
+                'niFlag' => [
+                    [Entity::ERROR_GV_NON_SR => 'GV operators cannot apply for special restricted licences'],
+                ],
+                'licenceType' => [
+                    ['Vehicle type must be specified for all licences'],
                 ],
             ],
-            [
-                'niFlag' => 'N',
-                'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                'licenceType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'lgvDeclarationConfirmation' => null,
-                'isVariation' => false,
-                'currentGoodsOrPsv' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                'currentNiFlag' => 'N',
-                'expectedErrors' => [
-                    'licenceType' => [
-                        ['Vehicle type must be either HGV or LGV when application is for Goods/Standard International'],
-                    ],
+        ];
+        yield [
+            'niFlag' => 'N',
+            'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            'licenceType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'lgvDeclarationConfirmation' => null,
+            'isVariation' => false,
+            'currentGoodsOrPsv' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            'currentNiFlag' => 'N',
+            'expectedErrors' => [
+                'licenceType' => [
+                    ['Vehicle type must be either HGV or LGV when application is for Goods/Standard International'],
                 ],
             ],
-            [
-                'niFlag' => 'N',
-                'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                'licenceType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'lgvDeclarationConfirmation' => null,
-                'isVariation' => false,
-                'currentGoodsOrPsv' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                'currentNiFlag' => 'N',
-                'expectedErrors' => [
-                    'licenceType' => [
-                        ['LGV declaration confirmation must be ticked for Goods/Standard International/LGV'],
-                    ],
+        ];
+        yield [
+            'niFlag' => 'N',
+            'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            'licenceType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'lgvDeclarationConfirmation' => null,
+            'isVariation' => false,
+            'currentGoodsOrPsv' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            'currentNiFlag' => 'N',
+            'expectedErrors' => [
+                'licenceType' => [
+                    ['LGV declaration confirmation must be ticked for Goods/Standard International/LGV'],
                 ],
             ],
-            [
-                'niFlag' => 'N',
-                'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'lgvDeclarationConfirmation' => 1,
-                'isVariation' => false,
-                'currentGoodsOrPsv' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                'currentNiFlag' => 'N',
-                'expectedErrors' => [
-                    'licenceType' => [
-                        ['Provided vehicle type must match the corresponding licence category value'],
-                        ['LGV declaration confirmation must only be specified for Goods/Standard International licences'],
-                    ],
+        ];
+        yield [
+            'niFlag' => 'N',
+            'goodsOrPsv' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'lgvDeclarationConfirmation' => 1,
+            'isVariation' => false,
+            'currentGoodsOrPsv' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            'currentNiFlag' => 'N',
+            'expectedErrors' => [
+                'licenceType' => [
+                    ['Provided vehicle type must match the corresponding licence category value'],
+                    ['LGV declaration confirmation must only be specified for Goods/Standard International licences'],
                 ],
             ],
-            [
-                'niFlag' => 'N',
-                'goodsOrPsv' => Licence::LICENCE_CATEGORY_PSV,
-                'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'lgvDeclarationConfirmation' => null,
-                'isVariation' => false,
-                'currentGoodsOrPsv' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                'currentNiFlag' => 'N',
-                'expectedErrors' => [
-                    'licenceType' => [
-                        ['Provided vehicle type must match the corresponding licence category value'],
-                    ],
+        ];
+        yield [
+            'niFlag' => 'N',
+            'goodsOrPsv' => Licence::LICENCE_CATEGORY_PSV,
+            'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'lgvDeclarationConfirmation' => null,
+            'isVariation' => false,
+            'currentGoodsOrPsv' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            'currentNiFlag' => 'N',
+            'expectedErrors' => [
+                'licenceType' => [
+                    ['Provided vehicle type must match the corresponding licence category value'],
                 ],
             ],
         ];
@@ -4852,13 +4736,10 @@ class ApplicationEntityTest extends EntityTester
             ->shouldReceive('getOutstandingGrantFees')->once()->andReturn([])
             ->getMock();
 
-        static::assertEquals(
-            [
-                'applicationReference' => 'EXPECTED',
-                'awaitingGrantFeeId' => null
-            ],
-            $sut->getCalculatedBundleValues()
-        );
+        $this->assertEquals([
+            'applicationReference' => 'EXPECTED',
+            'awaitingGrantFeeId' => null
+        ], $sut->getCalculatedBundleValues());
     }
 
     public function testGetRelatedOrganisation(): void
@@ -4867,7 +4748,7 @@ class ApplicationEntityTest extends EntityTester
         $sut = m::mock(Entity::class)->makePartial();
         $sut->shouldReceive('getLicence->getOrganisation')->once()->andReturn('EXPECTED');
 
-        static::assertEquals('EXPECTED', $sut->getRelatedOrganisation());
+        $this->assertEquals('EXPECTED', $sut->getRelatedOrganisation());
     }
 
     public function testGetOutOfRepresentationDateWithDeletedOc(): void
@@ -4909,18 +4790,16 @@ class ApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $sut->isDigitallySigned());
     }
 
-    public static function dpTestIsDigitallySigned(): array
+    public static function dpTestIsDigitallySigned(): \Iterator
     {
-        return [
-            [false, null, null],
-            [false, Entity::SIG_PHYSICAL_SIGNATURE, null],
-            [false, Entity::SIG_DIGITAL_SIGNATURE, null],
-            [false, Entity::SIG_SIGNATURE_NOT_REQUIRED, null],
-            [false, Entity::SIG_PHYSICAL_SIGNATURE, new Entities\DigitalSignature()],
-            [false, Entity::SIG_SIGNATURE_NOT_REQUIRED, new Entities\DigitalSignature()],
-            [false, '', new Entities\DigitalSignature()],
-            [true, Entity::SIG_DIGITAL_SIGNATURE, new Entities\DigitalSignature()],
-        ];
+        yield [false, null, null];
+        yield [false, Entity::SIG_PHYSICAL_SIGNATURE, null];
+        yield [false, Entity::SIG_DIGITAL_SIGNATURE, null];
+        yield [false, Entity::SIG_SIGNATURE_NOT_REQUIRED, null];
+        yield [false, Entity::SIG_PHYSICAL_SIGNATURE, new Entities\DigitalSignature()];
+        yield [false, Entity::SIG_SIGNATURE_NOT_REQUIRED, new Entities\DigitalSignature()];
+        yield [false, '', new Entities\DigitalSignature()];
+        yield [true, Entity::SIG_DIGITAL_SIGNATURE, new Entities\DigitalSignature()];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsPreviouslyPublished')]
@@ -4943,38 +4822,36 @@ class ApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $application->isPreviouslyPublished());
     }
 
-    public static function dpIsPreviouslyPublished(): array
+    public static function dpIsPreviouslyPublished(): \Iterator
     {
-        return [
-            [PublicationSectionEntity::APP_NEW_SECTION, true],
-            [PublicationSectionEntity::APP_GRANTED_SECTION, true],
-            [PublicationSectionEntity::APP_REFUSED_SECTION, false],
-            [PublicationSectionEntity::APP_WITHDRAWN_SECTION, false],
-            [PublicationSectionEntity::APP_GRANT_NOT_TAKEN_SECTION, false],
-            [PublicationSectionEntity::VAR_NEW_SECTION, true],
-            [PublicationSectionEntity::VAR_GRANTED_SECTION, true],
-            [PublicationSectionEntity::VAR_REFUSED_SECTION, false],
-            [PublicationSectionEntity::SCHEDULE_1_NI_NEW, true],
-            [PublicationSectionEntity::SCHEDULE_4_NEW, true],
-            [PublicationSectionEntity::SCHEDULE_1_NI_UNTRUE, true],
-            [PublicationSectionEntity::SCHEDULE_4_UNTRUE, true],
-            [PublicationSectionEntity::SCHEDULE_1_NI_TRUE, true],
-            [PublicationSectionEntity::SCHEDULE_4_TRUE, true],
-            [PublicationSectionEntity::LIC_SURRENDERED_SECTION, false],
-            [PublicationSectionEntity::LIC_TERMINATED_SECTION, false],
-            [PublicationSectionEntity::LIC_REVOKED_SECTION, false],
-            [PublicationSectionEntity::LIC_CNS_SECTION, false],
-            [PublicationSectionEntity::HEARING_SECTION, false],
-            [PublicationSectionEntity::DECISION_SECTION, false],
-            [PublicationSectionEntity::TM_HEARING_SECTION, false],
-            [PublicationSectionEntity::TM_DECISION_SECTION, false],
-            [PublicationSectionEntity::BUS_NEW_SECTION, false],
-            [PublicationSectionEntity::BUS_NEW_SHORT_SECTION, false],
-            [PublicationSectionEntity::BUS_VAR_SECTION, false],
-            [PublicationSectionEntity::BUS_VAR_SHORT_SECTION, false],
-            [PublicationSectionEntity::BUS_CANCEL_SECTION, false],
-            [PublicationSectionEntity::BUS_CANCEL_SHORT_SECTION, false],
-        ];
+        yield [PublicationSectionEntity::APP_NEW_SECTION, true];
+        yield [PublicationSectionEntity::APP_GRANTED_SECTION, true];
+        yield [PublicationSectionEntity::APP_REFUSED_SECTION, false];
+        yield [PublicationSectionEntity::APP_WITHDRAWN_SECTION, false];
+        yield [PublicationSectionEntity::APP_GRANT_NOT_TAKEN_SECTION, false];
+        yield [PublicationSectionEntity::VAR_NEW_SECTION, true];
+        yield [PublicationSectionEntity::VAR_GRANTED_SECTION, true];
+        yield [PublicationSectionEntity::VAR_REFUSED_SECTION, false];
+        yield [PublicationSectionEntity::SCHEDULE_1_NI_NEW, true];
+        yield [PublicationSectionEntity::SCHEDULE_4_NEW, true];
+        yield [PublicationSectionEntity::SCHEDULE_1_NI_UNTRUE, true];
+        yield [PublicationSectionEntity::SCHEDULE_4_UNTRUE, true];
+        yield [PublicationSectionEntity::SCHEDULE_1_NI_TRUE, true];
+        yield [PublicationSectionEntity::SCHEDULE_4_TRUE, true];
+        yield [PublicationSectionEntity::LIC_SURRENDERED_SECTION, false];
+        yield [PublicationSectionEntity::LIC_TERMINATED_SECTION, false];
+        yield [PublicationSectionEntity::LIC_REVOKED_SECTION, false];
+        yield [PublicationSectionEntity::LIC_CNS_SECTION, false];
+        yield [PublicationSectionEntity::HEARING_SECTION, false];
+        yield [PublicationSectionEntity::DECISION_SECTION, false];
+        yield [PublicationSectionEntity::TM_HEARING_SECTION, false];
+        yield [PublicationSectionEntity::TM_DECISION_SECTION, false];
+        yield [PublicationSectionEntity::BUS_NEW_SECTION, false];
+        yield [PublicationSectionEntity::BUS_NEW_SHORT_SECTION, false];
+        yield [PublicationSectionEntity::BUS_VAR_SECTION, false];
+        yield [PublicationSectionEntity::BUS_VAR_SHORT_SECTION, false];
+        yield [PublicationSectionEntity::BUS_CANCEL_SECTION, false];
+        yield [PublicationSectionEntity::BUS_CANCEL_SHORT_SECTION, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestCanAddFinancialEvidence')]
@@ -5002,97 +4879,95 @@ class ApplicationEntityTest extends EntityTester
         $this->assertSame($expected, $sut->canAddFinancialEvidence());
     }
 
-    public static function dataProviderTestCanAddFinancialEvidence(): array
+    public static function dataProviderTestCanAddFinancialEvidence(): \Iterator
     {
-        return [
-            [
-                true,
-                true,
-                Entities\Application\ApplicationTracking::STATUS_NOT_SET,
-                Entity::FINANCIAL_EVIDENCE_SEND_IN_POST,
-                Licence::LICENCE_TYPE_RESTRICTED,
-                ApplicationCompletion::STATUS_VARIATION_UPDATED
-            ],
-            [
-                true,
-                true,
-                Entities\Application\ApplicationTracking::STATUS_NOT_ACCEPTED,
-                Entity::FINANCIAL_EVIDENCE_SEND_IN_POST,
-                Licence::LICENCE_TYPE_RESTRICTED,
-                ApplicationCompletion::STATUS_VARIATION_UPDATED
-            ],
-            [
-                true,
-                true,
-                Entities\Application\ApplicationTracking::STATUS_NOT_ACCEPTED,
-                Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                ApplicationCompletion::STATUS_VARIATION_UPDATED
-            ],
-            [
-                true,
-                true,
-                Entities\Application\ApplicationTracking::STATUS_NOT_ACCEPTED,
-                Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                ApplicationCompletion::STATUS_VARIATION_UPDATED
-            ],
-            [
-                true,
-                false,
-                Entities\Application\ApplicationTracking::STATUS_NOT_ACCEPTED,
-                Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                ApplicationCompletion::STATUS_NOT_STARTED
-            ],
-            [
-                true,
-                false,
-                Entities\Application\ApplicationTracking::STATUS_NOT_ACCEPTED,
-                Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                ApplicationCompletion::STATUS_INCOMPLETE
-            ],
-            [
-                false,
-                false,
-                Entities\Application\ApplicationTracking::STATUS_ACCEPTED,
-                Entity::FINANCIAL_EVIDENCE_SEND_IN_POST,
-                Licence::LICENCE_TYPE_RESTRICTED,
-                ApplicationCompletion::STATUS_VARIATION_UPDATED
-            ],
-            [
-                false,
-                false,
-                Entities\Application\ApplicationTracking::STATUS_NOT_APPLICABLE,
-                Entity::FINANCIAL_EVIDENCE_SEND_IN_POST,
-                Licence::LICENCE_TYPE_RESTRICTED,
-                ApplicationCompletion::STATUS_VARIATION_UPDATED
-            ],
-            [
-                false,
-                false,
-                Entities\Application\ApplicationTracking::STATUS_NOT_SET,
-                Entity::FINANCIAL_EVIDENCE_UPLOADED,
-                Licence::LICENCE_TYPE_RESTRICTED,
-                ApplicationCompletion::STATUS_VARIATION_UPDATED
-            ],
-            [
-                false,
-                false,
-                Entities\Application\ApplicationTracking::STATUS_NOT_SET,
-                Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
-                Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                ApplicationCompletion::STATUS_VARIATION_UPDATED
-            ],
-            [
-                false,
-                true,
-                Entities\Application\ApplicationTracking::STATUS_NOT_SET,
-                Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
-                Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                ApplicationCompletion::STATUS_VARIATION_REQUIRES_ATTENTION
-            ],
+        yield [
+            true,
+            true,
+            Entities\Application\ApplicationTracking::STATUS_NOT_SET,
+            Entity::FINANCIAL_EVIDENCE_SEND_IN_POST,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            ApplicationCompletion::STATUS_VARIATION_UPDATED
+        ];
+        yield [
+            true,
+            true,
+            Entities\Application\ApplicationTracking::STATUS_NOT_ACCEPTED,
+            Entity::FINANCIAL_EVIDENCE_SEND_IN_POST,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            ApplicationCompletion::STATUS_VARIATION_UPDATED
+        ];
+        yield [
+            true,
+            true,
+            Entities\Application\ApplicationTracking::STATUS_NOT_ACCEPTED,
+            Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            ApplicationCompletion::STATUS_VARIATION_UPDATED
+        ];
+        yield [
+            true,
+            true,
+            Entities\Application\ApplicationTracking::STATUS_NOT_ACCEPTED,
+            Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            ApplicationCompletion::STATUS_VARIATION_UPDATED
+        ];
+        yield [
+            true,
+            false,
+            Entities\Application\ApplicationTracking::STATUS_NOT_ACCEPTED,
+            Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            ApplicationCompletion::STATUS_NOT_STARTED
+        ];
+        yield [
+            true,
+            false,
+            Entities\Application\ApplicationTracking::STATUS_NOT_ACCEPTED,
+            Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            ApplicationCompletion::STATUS_INCOMPLETE
+        ];
+        yield [
+            false,
+            false,
+            Entities\Application\ApplicationTracking::STATUS_ACCEPTED,
+            Entity::FINANCIAL_EVIDENCE_SEND_IN_POST,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            ApplicationCompletion::STATUS_VARIATION_UPDATED
+        ];
+        yield [
+            false,
+            false,
+            Entities\Application\ApplicationTracking::STATUS_NOT_APPLICABLE,
+            Entity::FINANCIAL_EVIDENCE_SEND_IN_POST,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            ApplicationCompletion::STATUS_VARIATION_UPDATED
+        ];
+        yield [
+            false,
+            false,
+            Entities\Application\ApplicationTracking::STATUS_NOT_SET,
+            Entity::FINANCIAL_EVIDENCE_UPLOADED,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            ApplicationCompletion::STATUS_VARIATION_UPDATED
+        ];
+        yield [
+            false,
+            false,
+            Entities\Application\ApplicationTracking::STATUS_NOT_SET,
+            Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            ApplicationCompletion::STATUS_VARIATION_UPDATED
+        ];
+        yield [
+            false,
+            true,
+            Entities\Application\ApplicationTracking::STATUS_NOT_SET,
+            Entity::FINANCIAL_EVIDENCE_UPLOAD_LATER,
+            Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            ApplicationCompletion::STATUS_VARIATION_REQUIRES_ATTENTION
         ];
     }
 
@@ -5116,9 +4991,9 @@ class ApplicationEntityTest extends EntityTester
 
         $applicationOrganisationPersonsAdded = $sut->getApplicationOrganisationPersonsAdded();
 
-        $this->assertEquals(
+        $this->assertCount(
             count($expectedApplicationOrganisationPersons),
-            count($applicationOrganisationPersonsAdded)
+            $applicationOrganisationPersonsAdded
         );
 
         /* @var \Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson $applicationOrganisationPersonAdded */
@@ -5208,16 +5083,17 @@ class ApplicationEntityTest extends EntityTester
         );
     }
 
+    #[\Override]
     public function setUp(): void
     {
         $organisation = new Organisation();
 
-        $this->licence = new Licence($organisation, new RefData(Licence::LICENCE_STATUS_NOT_SUBMITTED));
-        $this->licence->setLicenceType(new RefData(Licence::LICENCE_TYPE_STANDARD_NATIONAL));
+        $licence = new Licence($organisation, new RefData(Licence::LICENCE_STATUS_NOT_SUBMITTED));
+        $licence->setLicenceType(new RefData(Licence::LICENCE_TYPE_STANDARD_NATIONAL));
 
         $this->entity = $this->instantiate($this->entityClass);
-        $this->entity->setLicence($this->licence);
-        $this->entity->setLicenceType($this->licence->getLicenceType());
+        $this->entity->setLicence($licence);
+        $this->entity->setLicenceType($licence->getLicenceType());
     }
 
     protected function setUpSut(): void
@@ -5268,15 +5144,13 @@ class ApplicationEntityTest extends EntityTester
         $this->assertEquals($expected, $application->getInterimAuthVehicles());
     }
 
-    public static function dpUpdateInterimAuthVehicles(): array
+    public static function dpUpdateInterimAuthVehicles(): \Iterator
     {
-        return [
-            [null, null, 0],
-            [0, 0, 0],
-            [1, 0, 1],
-            [0, 1, 1],
-            [1, 1, 2],
-        ];
+        yield [null, null, 0];
+        yield [0, 0, 0];
+        yield [1, 0, 1];
+        yield [0, 1, 1];
+        yield [1, 1, 2];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetApplicableAuthProperties')]
@@ -5302,76 +5176,74 @@ class ApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpGetApplicableAuthProperties(): array
+    public static function dpGetApplicableAuthProperties(): \Iterator
     {
-        return [
-            'goods/standard international/lgv/null lgv count' => [
-                RefData::APP_VEHICLE_TYPE_LGV,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                null,
-                [
-                    'totAuthLgvVehicles',
-                ],
+        yield 'goods/standard international/lgv/null lgv count' => [
+            RefData::APP_VEHICLE_TYPE_LGV,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            null,
+            [
+                'totAuthLgvVehicles',
             ],
-            'goods/standard international/lgv/nonzero lgv count' => [
-                RefData::APP_VEHICLE_TYPE_LGV,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                5,
-                [
-                    'totAuthLgvVehicles',
-                ],
+        ];
+        yield 'goods/standard international/lgv/nonzero lgv count' => [
+            RefData::APP_VEHICLE_TYPE_LGV,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            5,
+            [
+                'totAuthLgvVehicles',
             ],
-            'goods/standard international/mixed/null lgv count' => [
-                RefData::APP_VEHICLE_TYPE_MIXED,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                null,
-                [
-                    'totAuthVehicles',
-                    'totAuthTrailers',
-                ],
+        ];
+        yield 'goods/standard international/mixed/null lgv count' => [
+            RefData::APP_VEHICLE_TYPE_MIXED,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            null,
+            [
+                'totAuthVehicles',
+                'totAuthTrailers',
             ],
-            'goods/standard international/mixed/zero lgv count' => [
-                RefData::APP_VEHICLE_TYPE_MIXED,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                0,
-                [
-                    'totAuthHgvVehicles',
-                    'totAuthLgvVehicles',
-                    'totAuthTrailers',
-                ],
+        ];
+        yield 'goods/standard international/mixed/zero lgv count' => [
+            RefData::APP_VEHICLE_TYPE_MIXED,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            0,
+            [
+                'totAuthHgvVehicles',
+                'totAuthLgvVehicles',
+                'totAuthTrailers',
             ],
-            'goods/standard international/mixed/nonzero lgv count' => [
-                RefData::APP_VEHICLE_TYPE_MIXED,
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                4,
-                [
-                    'totAuthHgvVehicles',
-                    'totAuthLgvVehicles',
-                    'totAuthTrailers',
-                ],
+        ];
+        yield 'goods/standard international/mixed/nonzero lgv count' => [
+            RefData::APP_VEHICLE_TYPE_MIXED,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            4,
+            [
+                'totAuthHgvVehicles',
+                'totAuthLgvVehicles',
+                'totAuthTrailers',
             ],
-            'goods/other' => [
-                RefData::APP_VEHICLE_TYPE_HGV,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                null,
-                [
-                    'totAuthVehicles',
-                    'totAuthTrailers',
-                ],
+        ];
+        yield 'goods/other' => [
+            RefData::APP_VEHICLE_TYPE_HGV,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            null,
+            [
+                'totAuthVehicles',
+                'totAuthTrailers',
             ],
-            'psv/special restricted' => [
-                RefData::APP_VEHICLE_TYPE_PSV,
-                Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                null,
-                [],
-            ],
-            'psv/other' => [
-                RefData::APP_VEHICLE_TYPE_PSV,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                null,
-                [
-                    'totAuthVehicles',
-                ],
+        ];
+        yield 'psv/special restricted' => [
+            RefData::APP_VEHICLE_TYPE_PSV,
+            Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            null,
+            [],
+        ];
+        yield 'psv/other' => [
+            RefData::APP_VEHICLE_TYPE_PSV,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            null,
+            [
+                'totAuthVehicles',
             ],
         ];
     }
@@ -5405,22 +5277,20 @@ class ApplicationEntityTest extends EntityTester
         );
     }
 
-    public static function dpIsVehicleTypeMixedWithLgv(): array
+    public static function dpIsVehicleTypeMixedWithLgv(): \Iterator
     {
-        return [
-            [RefData::APP_VEHICLE_TYPE_PSV, null, false],
-            [RefData::APP_VEHICLE_TYPE_HGV, null, false],
-            [RefData::APP_VEHICLE_TYPE_MIXED, null, false],
-            [RefData::APP_VEHICLE_TYPE_LGV, null, false],
-            [RefData::APP_VEHICLE_TYPE_PSV, 0, false],
-            [RefData::APP_VEHICLE_TYPE_HGV, 0, false],
-            [RefData::APP_VEHICLE_TYPE_MIXED, 0, true],
-            [RefData::APP_VEHICLE_TYPE_LGV, 0, false],
-            [RefData::APP_VEHICLE_TYPE_PSV, 1, false],
-            [RefData::APP_VEHICLE_TYPE_HGV, 1, false],
-            [RefData::APP_VEHICLE_TYPE_MIXED, 1, true],
-            [RefData::APP_VEHICLE_TYPE_LGV, 1, false],
-        ];
+        yield [RefData::APP_VEHICLE_TYPE_PSV, null, false];
+        yield [RefData::APP_VEHICLE_TYPE_HGV, null, false];
+        yield [RefData::APP_VEHICLE_TYPE_MIXED, null, false];
+        yield [RefData::APP_VEHICLE_TYPE_LGV, null, false];
+        yield [RefData::APP_VEHICLE_TYPE_PSV, 0, false];
+        yield [RefData::APP_VEHICLE_TYPE_HGV, 0, false];
+        yield [RefData::APP_VEHICLE_TYPE_MIXED, 0, true];
+        yield [RefData::APP_VEHICLE_TYPE_LGV, 0, false];
+        yield [RefData::APP_VEHICLE_TYPE_PSV, 1, false];
+        yield [RefData::APP_VEHICLE_TYPE_HGV, 1, false];
+        yield [RefData::APP_VEHICLE_TYPE_MIXED, 1, true];
+        yield [RefData::APP_VEHICLE_TYPE_LGV, 1, false];
     }
 
     public function testGetOutstandingGrantFees(): void
@@ -5660,8 +5530,8 @@ class ApplicationEntityTest extends EntityTester
 
         $messages = $result['messages'];
         $this->assertCount(2, $messages);
-        $this->assertStringContainsString('123 TEST STREET TEST DISTRICT TESTVILLE TE1 1ST', $messages[0]);
-        $this->assertStringContainsString('Your updated vehicle authority is now 10 vehicles and 5 trailers.', $messages[1]);
+        $this->assertStringContainsString('123 TEST STREET TEST DISTRICT TESTVILLE TE1 1ST', (string) $messages[0]);
+        $this->assertStringContainsString('Your updated vehicle authority is now 10 vehicles and 5 trailers.', (string) $messages[1]);
     }
 
     public function testGetAutoGrantChangeSummaryHandlesMultipleOCRemovals(): void
@@ -5710,9 +5580,9 @@ class ApplicationEntityTest extends EntityTester
 
         $messages = $result['messages'];
         $this->assertCount(3, $messages); // 2 OC removals + 1 vehicle reduction message
-        $this->assertStringContainsString('1 FIRST STREET TOWN1 T1 1AA', $messages[0]);
-        $this->assertStringContainsString('2 SECOND AVENUE TOWN2 T2 2BB', $messages[1]);
-        $this->assertStringContainsString('Your updated vehicle authority is now 20 vehicles and 10 trailers.', $messages[2]);
+        $this->assertStringContainsString('1 FIRST STREET TOWN1 T1 1AA', (string) $messages[0]);
+        $this->assertStringContainsString('2 SECOND AVENUE TOWN2 T2 2BB', (string) $messages[1]);
+        $this->assertStringContainsString('Your updated vehicle authority is now 20 vehicles and 10 trailers.', (string) $messages[2]);
     }
 
     public function testShowPeriodOfGraceQuestionNotVariation(): void

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Bilateral;
 
 use Common\Service\Qa\Custom\Bilateral\Radio;
@@ -20,9 +22,9 @@ use Laminas\Form\Form;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StandardAndCabotageFieldsetPopulatorTest extends MockeryTestCase
+final class StandardAndCabotageFieldsetPopulatorTest extends MockeryTestCase
 {
-    public const STANDARD_YES_NO_VALUE_OPTIONS = [
+    public const array STANDARD_YES_NO_VALUE_OPTIONS = [
         'key1' => 'value1',
         'key2' => 'value2'
     ];
@@ -156,9 +158,7 @@ class StandardAndCabotageFieldsetPopulatorTest extends MockeryTestCase
         $this->standardAndCabotageFieldsetPopulator->populate($this->form, $this->fieldset, $options);
     }
 
-    /**
-     * @dataProvider dpPopulateCabotageRequired
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpPopulateCabotageRequired')]
     public function testPopulateCabotageRequired($answerValue): void
     {
         $options = [
@@ -182,15 +182,13 @@ class StandardAndCabotageFieldsetPopulatorTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return list{list{'qanda.bilaterals.cabotage.answer.cabotage-only'}, list{'qanda.bilaterals.cabotage.answer.standard-and-cabotage'}}
      */
-    public function dpPopulateCabotageRequired(): array
+    public static function dpPopulateCabotageRequired(): \Iterator
     {
-        return [
-            [StandardAndCabotageFieldsetPopulator::ANSWER_CABOTAGE_ONLY],
-            [StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_AND_CABOTAGE],
-        ];
+        yield [StandardAndCabotageFieldsetPopulator::ANSWER_CABOTAGE_ONLY];
+        yield [StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_AND_CABOTAGE];
     }
 }

@@ -29,7 +29,7 @@ class TransactioningCommandHandler implements CommandHandlerInterface
     /**
      * @param CommandInterface $command
      * @return \Dvsa\Olcs\Api\Domain\Command\Result
-     * @throws \Exception
+     * @throws \Throwable
      */
     #[\Override]
     public function handleCommand(CommandInterface $command)
@@ -39,7 +39,7 @@ class TransactioningCommandHandler implements CommandHandlerInterface
             $result = $this->wrapped->handleCommand($command);
             $this->repo->commit();
             return $result;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if (method_exists($this->wrapped, 'rollbackCommand')) {
                 // wrapped command rollback
                 $this->wrapped->rollbackCommand($command, $e);

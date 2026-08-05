@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\DataHelperService;
@@ -18,7 +20,7 @@ use Mockery as m;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class AddressLinesTest extends MockeryTestCase
+final class AddressLinesTest extends MockeryTestCase
 {
     public $sut;
     protected $dataHelper;
@@ -39,11 +41,11 @@ class AddressLinesTest extends MockeryTestCase
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group AddressLinesFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('AddressLinesFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $column, $expected): void
     {
         $this->assertEquals($expected, $this->sut->format($data, $column));
@@ -52,65 +54,62 @@ class AddressLinesTest extends MockeryTestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
+        yield [
+            ['addressLine1' => 'foo'], [], '<p>foo</p>'
+        ];
+        yield [
+            ['addressLine1' => 'foo', 'addressLine2' => 'bar'], [], '<p>foo</p>'
+        ];
+        yield [
+            ['addressLine1' => 'foo', 'addressLine2' => 'bar', 'town' => 'cake'],
+            [],
+            '<p>foo,<br />cake</p>'
+        ];
+        yield [
             [
-                ['addressLine1' => 'foo'], [], '<p>foo</p>'
+                'addressLine1' => 'foo',
+                'addressLine2' => 'bar',
+                'addressLine3' => 'cake',
+                'town' => 'fourth'
             ],
+            [],
+            '<p>foo,<br />fourth</p>'
+        ];
+        yield [
+            ['addressLine1' => 'foo', 'addressLine2' => 'bar', 'addressLine3' => 'cake'],
+            ['addressFields' => ['addressLine1', 'addressLine2']],
+            '<p>foo,<br />bar</p>'
+        ];
+        yield [
+            ['addressLine1' => 'foo', 'addressLine2' => 'bar', 'addressLine3' => 'cake'],
+            ['addressFields' => 'FULL'],
+            '<p>foo,<br />bar,<br />cake</p>'
+        ];
+        yield [
             [
-                ['addressLine1' => 'foo', 'addressLine2' => 'bar'], [], '<p>foo</p>'
-            ],
-            [
-                ['addressLine1' => 'foo', 'addressLine2' => 'bar', 'town' => 'cake'],
-                [],
-                '<p>foo,<br />cake</p>'
-            ],
-            [
-                [
+                'address' => [
                     'addressLine1' => 'foo',
                     'addressLine2' => 'bar',
                     'addressLine3' => 'cake',
                     'town' => 'fourth'
-                ],
-                [],
-                '<p>foo,<br />fourth</p>'
+                ]
             ],
             [
-                ['addressLine1' => 'foo', 'addressLine2' => 'bar', 'addressLine3' => 'cake'],
-                ['addressFields' => ['addressLine1', 'addressLine2']],
-                '<p>foo,<br />bar</p>'
+                'name' => 'address'
             ],
-            [
-                ['addressLine1' => 'foo', 'addressLine2' => 'bar', 'addressLine3' => 'cake'],
-                ['addressFields' => 'FULL'],
-                '<p>foo,<br />bar,<br />cake</p>'
-            ],
-            [
-                [
-                    'address' => [
-                        'addressLine1' => 'foo',
-                        'addressLine2' => 'bar',
-                        'addressLine3' => 'cake',
-                        'town' => 'fourth'
-                    ]
-                ],
-                [
-                    'name' => 'address'
-                ],
-                '<p>foo,<br />fourth</p>'
-            ]
+            '<p>foo,<br />fourth</p>'
         ];
     }
 
     /**
      * Test the format method with nested keys
-     *
-     * @group Formatters
-     * @group AddressLinesFormatter
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('AddressLinesFormatter')]
     public function testFormatWithNestedKeys(): void
     {
         $this->dataHelper->shouldReceive('fetchNestedData')

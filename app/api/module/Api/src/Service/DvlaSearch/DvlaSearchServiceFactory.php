@@ -18,7 +18,7 @@ class DvlaSearchServiceFactory implements FactoryInterface
     protected $options;
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DvlaSearchService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DvlaSearchService
     {
         $logger = $container->get('Logger');
         $config = $container->get('config');

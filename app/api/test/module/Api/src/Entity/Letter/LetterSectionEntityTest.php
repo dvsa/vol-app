@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class LetterSectionEntityTest extends EntityTester
+final class LetterSectionEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -68,7 +68,7 @@ class LetterSectionEntityTest extends EntityTester
     {
         $section = new Entity();
 
-        $this->assertNull($section->getDefaultVariant());
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant::class, $section->getDefaultVariant());
     }
 
     public function testGetDefaultVariantReturnsNullWhenNoDefaultExists(): void
@@ -80,7 +80,7 @@ class LetterSectionEntityTest extends EntityTester
         $conditionedVariant = $this->createVariant(goodsOrPsv: $gvRefData);
         $section->addVariant($conditionedVariant);
 
-        $this->assertNull($section->getDefaultVariant());
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant::class, $section->getDefaultVariant());
     }
 
     // ---------------------------------------------------------------
@@ -142,7 +142,7 @@ class LetterSectionEntityTest extends EntityTester
             'goodsOrPsv' => 'lcat_gv',
         ]);
 
-        $this->assertNull($result);
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant::class, $result);
     }
 
     public function testGetVariantForContextConditionedVariantWinsOverDefault(): void
@@ -237,6 +237,6 @@ class LetterSectionEntityTest extends EntityTester
         $result = $section->getVariantForContext([
             'goodsOrPsv' => 'lcat_psv',
         ]);
-        $this->assertNull($result);
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Letter\LetterSectionVariant::class, $result);
     }
 }

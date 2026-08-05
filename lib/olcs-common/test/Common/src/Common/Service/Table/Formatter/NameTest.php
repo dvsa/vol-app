@@ -6,6 +6,8 @@
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\DataHelperService;
@@ -18,7 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class NameTest extends MockeryTestCase
+final class NameTest extends MockeryTestCase
 {
     protected $dataHelper;
 
@@ -40,41 +42,39 @@ class NameTest extends MockeryTestCase
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group AddressFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('AddressFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $expected): void
     {
-        $this->assertEquals($expected, (new Name(new DataHelperService()))->format($data, []));
+        $this->assertEquals($expected, new Name(new DataHelperService())->format($data, []));
     }
 
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'forename' => 'A',
-                    'familyName' => 'Person',
-                    'title' => [
-                        'description' => 'Mr'
-                    ]
-                ],
-                'Mr A Person'
+                'forename' => 'A',
+                'familyName' => 'Person',
+                'title' => [
+                    'description' => 'Mr'
+                ]
             ],
+            'Mr A Person'
+        ];
+        yield [
             [
-                [
-                    'forename' => 'A',
-                    'familyName' => 'Person',
-                ],
-                'A Person'
-            ]
+                'forename' => 'A',
+                'familyName' => 'Person',
+            ],
+            'A Person'
         ];
     }
 
@@ -86,7 +86,7 @@ class NameTest extends MockeryTestCase
                 'familyName' => 'Smith',
             ]
         ];
-        $this->assertEquals('John Smith', (new Name(new DataHelperService()))->format($data, ['name' => 'foo']));
+        $this->assertEquals('John Smith', new Name(new DataHelperService())->format($data, ['name' => 'foo']));
     }
 
     public function testEscapedName(): void
@@ -97,7 +97,7 @@ class NameTest extends MockeryTestCase
                 'familyName' => 'Smith',
             ]
         ];
-        $this->assertEquals('John&quot; Smith', (new Name(new DataHelperService()))->format($data, ['name' => 'foo']));
+        $this->assertEquals('John&quot; Smith', new Name(new DataHelperService())->format($data, ['name' => 'foo']));
     }
 
     public function testFormatDeepNestedData(): void

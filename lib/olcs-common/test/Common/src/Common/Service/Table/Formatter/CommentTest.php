@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\Comment;
@@ -8,7 +10,7 @@ use Common\Service\Table\Formatter\Comment;
  * Class CommentTest
  * @package CommonTest\Service\Table\Formatter
  */
-class CommentTest extends \PHPUnit\Framework\TestCase
+final class CommentTest extends \PHPUnit\Framework\TestCase
 {
     public function testFormat(): void
     {

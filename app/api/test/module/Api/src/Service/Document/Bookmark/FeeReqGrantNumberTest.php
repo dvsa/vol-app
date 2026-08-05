@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\FeeReqGrantNumber;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class FeeReqGrantNumberTest extends \PHPUnit\Framework\TestCase
+final class FeeReqGrantNumberTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

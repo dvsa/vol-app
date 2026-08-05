@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Service\Permits\GrantabilityChecker;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Mockery as m;
 
-class GrantTest extends AbstractCommandHandlerTestCase
+final class GrantTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -160,19 +160,17 @@ class GrantTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($irhpApplicationId, $result->getId('irhpApplication'));
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            [
-                'isEcmtShortTerm' => true,
-                'issueFeeProductReference' => FeeType::FEE_TYPE_ECMT_SHORT_TERM_ISSUE_PRODUCT_REF,
-                'expectedEmailCmd' => SendEcmtShortTermSuccessful::class,
-            ],
-            [
-                'isEcmtShortTerm' => false,
-                'issueFeeProductReference' => FeeType::FEE_TYPE_IRHP_ISSUE,
-                'expectedEmailCmd' => SendEcmtApggAppGranted::class,
-            ],
+        yield [
+            'isEcmtShortTerm' => true,
+            'issueFeeProductReference' => FeeType::FEE_TYPE_ECMT_SHORT_TERM_ISSUE_PRODUCT_REF,
+            'expectedEmailCmd' => SendEcmtShortTermSuccessful::class,
+        ];
+        yield [
+            'isEcmtShortTerm' => false,
+            'issueFeeProductReference' => FeeType::FEE_TYPE_IRHP_ISSUE,
+            'expectedEmailCmd' => SendEcmtApggAppGranted::class,
         ];
     }
 

@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CommunityLicenceTest extends QueryHandlerTestCase
+final class CommunityLicenceTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

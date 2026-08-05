@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Util;
 
 use Common\Util\FileContent;
 
-/**
- * @covers \Common\Util\FileContent
- */
-class FileContentTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Util\FileContent::class)]
+final class FileContentTest extends \PHPUnit\Framework\TestCase
 {
     public function testFileContent(): void
     {
@@ -16,7 +16,7 @@ class FileContentTest extends \PHPUnit\Framework\TestCase
         $fileContent = new FileContent('foo.pdf', $mimeType);
 
         $this->assertEquals('foo.pdf', $fileContent->getFileName());
-        static::assertEquals($mimeType, $fileContent->getMimeType());
-        $this->assertEquals('foo.pdf', (string)$fileContent);
+        $this->assertEquals($mimeType, $fileContent->getMimeType());
+        $this->assertSame('foo.pdf', (string)$fileContent);
     }
 }

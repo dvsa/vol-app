@@ -23,7 +23,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Create TxcInbox Test
  */
-class CreateTxcInboxTest extends AbstractCommandHandlerTestCase
+final class CreateTxcInboxTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

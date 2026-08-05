@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class PrinterTest extends QueryHandlerTestCase
+final class PrinterTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

@@ -6,6 +6,8 @@
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\Postcode;
@@ -15,7 +17,7 @@ use Dvsa\Olcs\Transfer\Validators\Postcode;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class PostcodeTest extends \PHPUnit\Framework\TestCase
+final class PostcodeTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 
@@ -24,9 +26,7 @@ class PostcodeTest extends \PHPUnit\Framework\TestCase
         $this->sut = new Postcode();
     }
 
-    /**
-     * @dataProvider isValidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($value, $context, $expected, $expectedErrors = [], $options = [])
     {
         $this->sut->setOptions($options);
@@ -36,56 +36,51 @@ class PostcodeTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expectedErrors, $this->sut->getMessages());
     }
 
-    public function isValidProvider()
+    public static function isValidProvider(): \Iterator
     {
-        return [
-            ['LS9 6NF', ['countryCode' => 'GB'], true],
-            ['ls9 6nf', ['countryCode' => 'GB'], true],
-            ['ls96NF', ['countryCode' => 'GB'], true],
-            [' ls96NF', ['countryCode' => 'GB'], true],
-            ['ls99 6NF', ['countryCode' => 'GB'], true],
-            [
-                'ls9336NF',
-                ['countryCode' => 'GB'],
-                false,
-                ['invalidPostcodeFormat' => 'postcode.validation.invalidPostcodeFormat']
-            ],
-            ['W1A4AA', ['countryCode' => 'GB'], true],
-            ['GIR 0AA', ['countryCode' => 'GB'], true],
-            [
-                'not a postcode',
-                ['countryCode' => 'GB'],
-                false,
-                ['postcodeBadLength' => 'postcode.validation.postcodeBadLength'],
-            ],
-            ['GIR 0AA', ['countryCode' => 'GB'], true],
-            ['L2 3SW', ['countryCode' => 'GB'], true],
-
-            ['L23SW', ['countryCode' => 'GB'], true],
-
-            ['f0reign', ['countryCode' => 'US'], true],
-            [
-                'f0reign too long',
-                ['countryCode' => 'US'],
-                false,
-                ['stringLengthTooLong' => 'postcode.validation.stringLengthTooLong'],
-            ],
-            ['', ['countryCode' => 'US'], true],
-            ['', [], true],
-            [
-                '',
-                ['countryCode' => 'GB'],
-                false,
-                ['isEmpty' => 'postcode.validation.isEmpty'],
-            ],
-            [
-                '',
-                ['countryCode' => 'GB'],
-                true,
-                [],
-                ['allow_empty' => true],
-            ],
-
+        yield ['LS9 6NF', ['countryCode' => 'GB'], true];
+        yield ['ls9 6nf', ['countryCode' => 'GB'], true];
+        yield ['ls96NF', ['countryCode' => 'GB'], true];
+        yield [' ls96NF', ['countryCode' => 'GB'], true];
+        yield ['ls99 6NF', ['countryCode' => 'GB'], true];
+        yield [
+            'ls9336NF',
+            ['countryCode' => 'GB'],
+            false,
+            ['invalidPostcodeFormat' => 'postcode.validation.invalidPostcodeFormat']
+        ];
+        yield ['W1A4AA', ['countryCode' => 'GB'], true];
+        yield ['GIR 0AA', ['countryCode' => 'GB'], true];
+        yield [
+            'not a postcode',
+            ['countryCode' => 'GB'],
+            false,
+            ['postcodeBadLength' => 'postcode.validation.postcodeBadLength'],
+        ];
+        yield ['GIR 0AA', ['countryCode' => 'GB'], true];
+        yield ['L2 3SW', ['countryCode' => 'GB'], true];
+        yield ['L23SW', ['countryCode' => 'GB'], true];
+        yield ['f0reign', ['countryCode' => 'US'], true];
+        yield [
+            'f0reign too long',
+            ['countryCode' => 'US'],
+            false,
+            ['stringLengthTooLong' => 'postcode.validation.stringLengthTooLong'],
+        ];
+        yield ['', ['countryCode' => 'US'], true];
+        yield ['', [], true];
+        yield [
+            '',
+            ['countryCode' => 'GB'],
+            false,
+            ['isEmpty' => 'postcode.validation.isEmpty'],
+        ];
+        yield [
+            '',
+            ['countryCode' => 'GB'],
+            true,
+            [],
+            ['allow_empty' => true],
         ];
     }
 }

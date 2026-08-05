@@ -22,18 +22,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="decision",
- *    indexes={
- *        @ORM\Index(name="ix_decision_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_decision_goods_or_psv", columns={"goods_or_psv"}),
- *        @ORM\Index(name="ix_decision_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'decision')]
+#[ORM\Index(name: 'ix_decision_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_decision_goods_or_psv', columns: ['goods_or_psv'])]
+#[ORM\Index(name: 'ix_decision_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractDecision implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -47,106 +43,95 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      * Primary key
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     protected $id = 0;
 
     /**
      * GoodsOrPsv
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="goods_or_psv", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $goodsOrPsv;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Section code
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="section_code", length=50, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'section_code', length: 50, nullable: false)]
     protected $sectionCode = '';
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: false)]
     protected $description = '';
 
     /**
      * Is read only
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_read_only", nullable=false)
      */
+    #[ORM\Column(type: 'boolean', name: 'is_read_only', nullable: false)]
     protected $isReadOnly = 0;
 
     /**
      * Is ni
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_ni", nullable=false)
      */
+    #[ORM\Column(type: 'boolean', name: 'is_ni', nullable: false)]
     protected $isNi = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Licences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", mappedBy="decisions", fetch="LAZY")
      */
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, mappedBy: 'decisions', fetch: 'LAZY')]
     protected $licences;
 
     /**
      * Pis
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Pi", mappedBy="decisions", fetch="LAZY")
      */
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, mappedBy: 'decisions', fetch: 'LAZY')]
     protected $pis;
 
     /**
@@ -172,7 +157,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param int $id new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setId($id)
     {
@@ -196,7 +181,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $goodsOrPsv new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setGoodsOrPsv($goodsOrPsv)
     {
@@ -220,7 +205,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -244,7 +229,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -268,7 +253,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param string $sectionCode new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setSectionCode($sectionCode)
     {
@@ -292,7 +277,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param string $description new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setDescription($description)
     {
@@ -316,7 +301,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param bool $isReadOnly new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setIsReadOnly($isReadOnly)
     {
@@ -340,7 +325,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param bool $isNi new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setIsNi($isNi)
     {
@@ -364,7 +349,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param int $version new value being set
      *
-     * @return Decision
+     * @return static
      */
     public function setVersion($version)
     {
@@ -388,7 +373,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $licences collection being set as the value
      *
-     * @return Decision
+     * @return static
      */
     public function setLicences($licences)
     {
@@ -412,7 +397,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $licences collection being added
      *
-     * @return Decision
+     * @return static
      */
     public function addLicences($licences)
     {
@@ -435,7 +420,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $licences collection being removed
      *
-     * @return Decision
+     * @return static
      */
     public function removeLicences($licences)
     {
@@ -451,7 +436,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $pis collection being set as the value
      *
-     * @return Decision
+     * @return static
      */
     public function setPis($pis)
     {
@@ -475,7 +460,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $pis collection being added
      *
-     * @return Decision
+     * @return static
      */
     public function addPis($pis)
     {
@@ -498,7 +483,7 @@ abstract class AbstractDecision implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $pis collection being removed
      *
-     * @return Decision
+     * @return static
      */
     public function removePis($pis)
     {

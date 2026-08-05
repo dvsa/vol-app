@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Types;
 
 use Common\Form\Elements\Types\RadioYesNo;
@@ -7,7 +9,7 @@ use Common\Form\Elements\Types\RadioYesNo;
 /**
  * RadioYesNoTest
  */
-class RadioYesNoTest extends \PHPUnit\Framework\TestCase
+final class RadioYesNoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var RadioYesNo

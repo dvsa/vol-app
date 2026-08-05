@@ -33,7 +33,7 @@ use ReflectionClass;
 /**
  * Create User Selfserve Test
  */
-class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
+final class CreateUserSelfserveTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var ValidatableAdapterInterface|m\LegacyMockInterface|m\MockInterface

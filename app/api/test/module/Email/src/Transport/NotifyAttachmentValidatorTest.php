@@ -8,7 +8,7 @@ use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 use Dvsa\Olcs\Email\Transport\NotifyAttachmentValidator;
 use PHPUnit\Framework\TestCase;
 
-class NotifyAttachmentValidatorTest extends TestCase
+final class NotifyAttachmentValidatorTest extends TestCase
 {
     public function testAcceptsAllowedExtension(): void
     {

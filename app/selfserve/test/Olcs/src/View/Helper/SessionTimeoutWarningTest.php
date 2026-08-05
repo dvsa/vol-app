@@ -10,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Olcs\View\Helper\SessionTimeoutWarning\SessionTimeoutWarning;
 
-class SessionTimeoutWarningTest extends MockeryTestCase
+final class SessionTimeoutWarningTest extends MockeryTestCase
 {
     /**
      * Stores ini_get('session.gc_maxlifetime').
@@ -19,6 +19,7 @@ class SessionTimeoutWarningTest extends MockeryTestCase
     private const int SECONDS_BEFORE_TIMEOUT_WARNING = 60;
     private const string TIMEOUT_REDIRECT_URL = 'some-url';
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sessionGcMaxLifeTime = (int) ini_get('session.gc_maxlifetime');
@@ -30,7 +31,7 @@ class SessionTimeoutWarningTest extends MockeryTestCase
         $headMeta = m::mock(HeadMeta::class);
         $sut = $this->setupSessionTimeoutWarning($headMeta);
 
-        $this->assertEquals('', $sut->generateHeadMetaTags());
+        $this->assertSame('', $sut->generateHeadMetaTags());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -58,7 +59,7 @@ class SessionTimeoutWarningTest extends MockeryTestCase
         $sut = $this->setupSessionTimeoutWarning($headMeta, true);
 
         $result = $sut->generateHeadMetaTags($indent);
-        self::assertEquals($expectedResult, $result);
+        $this->assertSame($expectedResult, $result);
     }
 
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -7,7 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 /**
  * DataRetentionRule Link test
  */
-class DataRetentionRuleActionTypeTest extends TestCase
+final class DataRetentionRuleActionTypeTest extends TestCase
 {
     public function testFormat(): void
     {
@@ -36,6 +38,6 @@ class DataRetentionRuleActionTypeTest extends TestCase
             "retentionPeriod" => "60"
         ];
 
-        $this->assertEquals($data['actionType']['id'], (new \Common\Service\Table\Formatter\DataRetentionRuleActionType())->format($data));
+        $this->assertEquals($data['actionType']['id'], new \Common\Service\Table\Formatter\DataRetentionRuleActionType()->format($data));
     }
 }

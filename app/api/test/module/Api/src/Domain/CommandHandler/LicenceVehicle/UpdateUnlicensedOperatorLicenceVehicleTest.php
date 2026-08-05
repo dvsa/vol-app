@@ -25,7 +25,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class UpdateUnlicensedOperatorLicenceVehicleTest extends AbstractCommandHandlerTestCase
+final class UpdateUnlicensedOperatorLicenceVehicleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

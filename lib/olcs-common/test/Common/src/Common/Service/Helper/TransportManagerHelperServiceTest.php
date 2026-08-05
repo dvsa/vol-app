@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Helper;
 
 use Common\Service\Cqrs\Query\CachingQueryService as QueryService;
@@ -18,10 +20,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder as TransferAnnotationBuilder;
 use Dvsa\Olcs\Transfer\Query\QueryContainerInterface;
 
-/**
- * @covers \Common\Service\Helper\TransportManagerHelperService
- */
-class TransportManagerHelperServiceTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Service\Helper\TransportManagerHelperService::class)]
+final class TransportManagerHelperServiceTest extends MockeryTestCase
 {
     /** @var TransportManagerHelperService */
     protected $sut;

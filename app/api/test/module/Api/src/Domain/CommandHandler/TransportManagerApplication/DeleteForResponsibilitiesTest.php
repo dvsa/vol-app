@@ -25,7 +25,7 @@ use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\DeleteForResponsibili
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DeleteForResponsibilitiesTest extends AbstractCommandHandlerTestCase
+final class DeleteForResponsibilitiesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

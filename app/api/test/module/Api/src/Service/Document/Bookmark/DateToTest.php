@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\DateTo;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DateToTest extends \PHPUnit\Framework\TestCase
+final class DateToTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -46,12 +46,10 @@ class DateToTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function expiryDateProvider(): array
+    public static function expiryDateProvider(): \Iterator
     {
-        return [
-            [new \DateTime('2014-02-03 11:12:34')],
-            ['2014-02-03 11:12:34']
-        ];
+        yield [new \DateTime('2014-02-03 11:12:34')];
+        yield ['2014-02-03 11:12:34'];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('interimEndDateProvider')]
@@ -80,11 +78,9 @@ class DateToTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public static function interimEndDateProvider(): array
+    public static function interimEndDateProvider(): \Iterator
     {
-        return [
-            [new \DateTime('2011-01-01 10:10:10')],
-            ['2011-01-01 10:10:10']
-        ];
+        yield [new \DateTime('2011-01-01 10:10:10')];
+        yield ['2011-01-01 10:10:10'];
     }
 }

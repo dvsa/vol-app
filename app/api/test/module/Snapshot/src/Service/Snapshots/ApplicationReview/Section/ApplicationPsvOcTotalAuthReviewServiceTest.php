@@ -22,10 +22,11 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationPsvOcTotalAuthReviewServiceTest extends MockeryTestCase
+final class ApplicationPsvOcTotalAuthReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);
@@ -50,70 +51,68 @@ class ApplicationPsvOcTotalAuthReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public static function licenceTypeProvider(): array
+    public static function licenceTypeProvider(): \Iterator
     {
-        return [
-            'standard national' => [
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                [
-                    'header' => 'review-operating-centres-authorisation-title',
-                    'multiItems' => [
+        yield 'standard national' => [
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            [
+                'header' => 'review-operating-centres-authorisation-title',
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'review-operating-centres-authorisation-vehicles',
-                                'value' => 60
-                            ]
+                            'label' => 'review-operating-centres-authorisation-vehicles',
+                            'value' => 60
                         ]
                     ]
                 ]
-            ],
-            'standard international' => [
-                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                [
-                    'header' => 'review-operating-centres-authorisation-title',
-                    'multiItems' => [
+            ]
+        ];
+        yield 'standard international' => [
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            [
+                'header' => 'review-operating-centres-authorisation-title',
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'review-operating-centres-authorisation-vehicles',
-                                'value' => 60
-                            ],
-                            [
-                                'label' => 'review-operating-centres-authorisation-community-licences.psv',
-                                'value' => 50
-                            ]
+                            'label' => 'review-operating-centres-authorisation-vehicles',
+                            'value' => 60
+                        ],
+                        [
+                            'label' => 'review-operating-centres-authorisation-community-licences.psv',
+                            'value' => 50
                         ]
                     ]
                 ]
-            ],
-            'restricted' => [
-                Licence::LICENCE_TYPE_RESTRICTED,
-                [
-                    'header' => 'review-operating-centres-authorisation-title',
-                    'multiItems' => [
+            ]
+        ];
+        yield 'restricted' => [
+            Licence::LICENCE_TYPE_RESTRICTED,
+            [
+                'header' => 'review-operating-centres-authorisation-title',
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'review-operating-centres-authorisation-vehicles',
-                                'value' => 60
-                            ],
-                            [
-                                'label' => 'review-operating-centres-authorisation-community-licences.psv',
-                                'value' => 50
-                            ]
+                            'label' => 'review-operating-centres-authorisation-vehicles',
+                            'value' => 60
+                        ],
+                        [
+                            'label' => 'review-operating-centres-authorisation-community-licences.psv',
+                            'value' => 50
                         ]
                     ]
                 ]
-            ],
-            'special restricted' => [
-                Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                [
-                    'header' => 'review-operating-centres-authorisation-title',
-                    'multiItems' => [
+            ]
+        ];
+        yield 'special restricted' => [
+            Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+            [
+                'header' => 'review-operating-centres-authorisation-title',
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'review-operating-centres-authorisation-vehicles',
-                                'value' => 60
-                            ],
-                        ]
+                            'label' => 'review-operating-centres-authorisation-vehicles',
+                            'value' => 60
+                        ],
                     ]
                 ]
             ]

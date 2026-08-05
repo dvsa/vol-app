@@ -26,30 +26,26 @@ use Mockery as m;
 use PHPUnit\Framework\MockObject\MockObject;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers \Common\Form\View\Helper\FormRow
- * @covers \Common\Form\View\Helper\Extended\FormRow
- */
-class FormRowTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\View\Helper\FormRow::class)]
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+final class FormRowTest extends MockeryTestCase
 {
     use MocksServicesTrait;
 
-    protected const VALIDATOR_MANAGER = 'ValidatorManager';
+    protected const string VALIDATOR_MANAGER = 'ValidatorManager';
 
-    protected const AN_ELEMENT_NAME = 'AN ELEMENT NAME';
+    protected const string AN_ELEMENT_NAME = 'AN ELEMENT NAME';
 
-    protected const AN_EMPTY_FIELD = '<div class="field "></div>';
+    protected const string AN_EMPTY_FIELD = '<div class="field "></div>';
 
-    protected const AN_EMPTY_STRING = '';
+    protected const string AN_EMPTY_STRING = '';
 
     /**
      * @var FormRow|null
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeIsCallable(): void
     {
         // Setup
@@ -59,10 +55,8 @@ class FormRowTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, '__invoke']);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeClassicNoLabel(): void
     {
         // Setup
@@ -80,10 +74,8 @@ class FormRowTest extends MockeryTestCase
         );
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeClassicWithId(): void
     {
         // Setup
@@ -98,10 +90,8 @@ class FormRowTest extends MockeryTestCase
         $this->assertMatchesRegularExpression('/^<div class="field "><label(.*)>(.*)<\/label>(.*)<\/div>$/', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeClassicWithPartial(): void
     {
         // Setup
@@ -115,11 +105,9 @@ class FormRowTest extends MockeryTestCase
         $this->assertMatchesRegularExpression('/^<div class="field "><\/div>$/', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     * @group questionable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Group('questionable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersActionButton(): void
     {
         // Setup
@@ -133,11 +121,9 @@ class FormRowTest extends MockeryTestCase
         $this->assertMatchesRegularExpression('/^$/', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     * @group questionable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Group('questionable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersNoRender(): void
     {
         // Setup
@@ -151,10 +137,8 @@ class FormRowTest extends MockeryTestCase
         $this->assertMatchesRegularExpression('/^$/', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersTable(): void
     {
         // Setup
@@ -162,11 +146,11 @@ class FormRowTest extends MockeryTestCase
         $element = $this->setUpElement(\Common\Form\Elements\Types\Table::class);
         $mockTable = $this->getMockBuilder(\Common\Service\Table\TableBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['render'])
+            ->onlyMethods(['render'])
             ->getMock();
-        $mockTable->expects($this->any())
+        $mockTable
             ->method('render')
-            ->will($this->returnValue('<table></table>'));
+            ->willReturn('<table></table>');
         $element->setTable($mockTable);
 
         // Execute
@@ -176,10 +160,8 @@ class FormRowTest extends MockeryTestCase
         $this->assertMatchesRegularExpression('/^<div class="field "><table><\/table><\/div>$/', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersSingleCheckbox(): void
     {
         // Setup
@@ -194,10 +176,8 @@ class FormRowTest extends MockeryTestCase
         $this->assertMatchesRegularExpression('/^<div class="field "><label>(.*)<\/label>(.*)<\/div>$/', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersCheckbox(): void
     {
         // Setup
@@ -218,10 +198,8 @@ class FormRowTest extends MockeryTestCase
         $this->assertMatchesRegularExpression('/^<div class="field "><label for="test">(.*)<\/label>(.*)<\/div>$/', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendesrRadioNoAttribute(): void
     {
         // Setup
@@ -235,10 +213,8 @@ class FormRowTest extends MockeryTestCase
         $this->assertMatchesRegularExpression('/^<fieldset><legend>(.*)<\/legend><\/fieldset>$/', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersRadioLegendAttribute(): void
     {
         // Setup
@@ -259,10 +235,8 @@ class FormRowTest extends MockeryTestCase
         $this->assertMatchesRegularExpression('/^<fieldset><legend class="A_CLASS">(.*)<\/legend><\/fieldset>$/', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersRadioWithDataGroupAttribute(): void
     {
         // Setup
@@ -281,10 +255,8 @@ class FormRowTest extends MockeryTestCase
         $this->assertMatchesRegularExpression('/^<fieldset data-group="data-group"><legend>(.*)<\/legend><\/fieldset>$/', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersRadioWithInlineAttribute(): void
     {
         // Setup
@@ -306,11 +278,9 @@ class FormRowTest extends MockeryTestCase
         $this->assertMatchesRegularExpression('/^<fieldset class="inline" data-group="data-group"><legend>(.*)<\/legend><\/fieldset>$/', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     * @group formRow
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Group('formRow')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersCsrfElement(): void
     {
         // Setup
@@ -336,11 +306,9 @@ class FormRowTest extends MockeryTestCase
         $this->assertEquals('<label for="security">Label</label>', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     * @group formRow
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Group('formRow')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersVisuallyHiddenElement(): void
     {
         // Setup
@@ -360,11 +328,9 @@ class FormRowTest extends MockeryTestCase
         $this->assertMatchesRegularExpression('/^<div class="field govuk-visually-hidden">(.*)<\/div>$/', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     * @group formRow
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Group('formRow')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersHiddenElement(): void
     {
         // Setup
@@ -392,10 +358,8 @@ class FormRowTest extends MockeryTestCase
         ];
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersWithRenderAsFieldset(): void
     {
         // Setup
@@ -410,10 +374,8 @@ class FormRowTest extends MockeryTestCase
         $this->assertEquals('<fieldset class="fieldset--primary"><legend>Label</legend><p class="hint">Hint</p></fieldset>', $markup);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersReadonlyElement(): void
     {
         // Setup
@@ -435,10 +397,8 @@ class FormRowTest extends MockeryTestCase
         $this->assertEquals('<div class="field read-only "><p>Foo<br><b>Bar</b></p></div>', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersDateSelectElement(): void
     {
         // Setup
@@ -460,10 +420,8 @@ class FormRowTest extends MockeryTestCase
         $this->assertEquals('<div class="field "><fieldset class="date"><legend>Foo unit_LabelSfx</legend><p class="hint">Hint</p></fieldset></div>', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersDateSelectWithFieldsetClass(): void
     {
         // Setup
@@ -486,10 +444,8 @@ class FormRowTest extends MockeryTestCase
         $this->assertEquals('<div class="field "><fieldset class="user"><legend>Foo</legend></fieldset></div>', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersDateTimeSelectElement(): void
     {
         // Setup
@@ -510,10 +466,8 @@ class FormRowTest extends MockeryTestCase
         $this->assertEquals('<div class="field "><fieldset class="date"><legend>Foo</legend><p class="hint">Hint</p></fieldset></div>', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersAttachFilesButtonElement(): void
     {
         // Setup
@@ -537,11 +491,9 @@ class FormRowTest extends MockeryTestCase
         $this->assertEquals('<div class=""><label for="files">Label</label></div>', $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     * @group questionable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Group('questionable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeRendersSingleRadio(): void
     {
         // Setup
@@ -555,28 +507,24 @@ class FormRowTest extends MockeryTestCase
         $this->assertMatchesRegularExpression('/^$/', $result);
     }
 
-    public function allowWrapValuesThatCauseMarkupToBeWrappedDataProvider(): array
+    public static function allowWrapValuesThatCauseMarkupToBeWrappedDataProvider(): \Iterator
     {
-        return [
-            'an empty string' => [''],
-            'a string true' => ['true'],
-            'a string false' => ['false'],
-            'a zero integer' => [0],
-            'a zero float' => [0.0],
-            'a integer string with the value one' => ['1'],
-            'a integer string with the value zero' => ['0'],
-            'an empty array' => [[]],
-            'an empty object' => [(object) []],
-            'null' => [null],
-            'true' => [true],
-        ];
+        yield 'an empty string' => [''];
+        yield 'a string true' => ['true'];
+        yield 'a string false' => ['false'];
+        yield 'a zero integer' => [0];
+        yield 'a zero float' => [0.0];
+        yield 'a integer string with the value one' => ['1'];
+        yield 'a integer string with the value zero' => ['0'];
+        yield 'an empty array' => [[]];
+        yield 'an empty object' => [(object) []];
+        yield 'null' => [null];
+        yield 'true' => [true];
     }
 
-    /**
-     * @test
-     * @dataProvider allowWrapValuesThatCauseMarkupToBeWrappedDataProvider
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('allowWrapValuesThatCauseMarkupToBeWrappedDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeWrapsMarkupInAField($allowWrapAttributeValue): void
     {
         // Setup
@@ -591,10 +539,8 @@ class FormRowTest extends MockeryTestCase
         $this->assertEquals(static::AN_EMPTY_FIELD, $result);
     }
 
-    /**
-     * @test
-     * @depends invokeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function invokeDoesNotWrapMarkupInAFieldIfAllowWrapAttributeIsFalse(): void
     {
         // Setup
@@ -646,7 +592,7 @@ class FormRowTest extends MockeryTestCase
 
     protected function setUpFormElementErrors(ContainerInterface $serviceLocator): CommonHelper\FormElementErrors
     {
-        return (new CommonHelper\FormElementErrorsFactory())->__invoke($serviceLocator, CommonHelper\FormElementErrors::class);
+        return new CommonHelper\FormElementErrorsFactory()->__invoke($serviceLocator, CommonHelper\FormElementErrors::class);
     }
 
     #[\Override]

@@ -9,16 +9,11 @@ use RuntimeException;
 
 /**
  * Answer Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="answer",
- *    indexes={
- *        @ORM\Index(name="fk_answers_question_text1_idx", columns={"question_text_id"}),
- *        @ORM\Index(name="fk_application_path_irhp_permit_application_id",
-     *     columns={"irhp_permit_application_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'answer')]
+#[ORM\Index(name: 'fk_answers_question_text1_idx', columns: ['question_text_id'])]
+#[ORM\Index(name: 'fk_application_path_irhp_permit_application_id', columns: ['irhp_permit_application_id'])]
+#[ORM\Entity]
 class Answer extends AbstractAnswer
 {
     public const BILATERAL_CABOTAGE_ONLY = 'qanda.bilaterals.cabotage.answer.cabotage-only';

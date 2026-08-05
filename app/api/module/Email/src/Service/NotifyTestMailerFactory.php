@@ -18,7 +18,7 @@ use Psr\Container\ContainerInterface;
 final class NotifyTestMailerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): NotifyTestMailer
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): NotifyTestMailer
     {
         $config = $container->get('config');
         $dsn = $config['email']['notify_test']['dsn'] ?? null;

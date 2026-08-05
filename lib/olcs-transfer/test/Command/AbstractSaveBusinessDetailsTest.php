@@ -1,17 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command;
 
 use Dvsa\Olcs\Transfer\Command\AbstractSaveBusinessDetails;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Command\AbstractSaveBusinessDetails
- * @covers \Dvsa\Olcs\Transfer\Command\Licence\UpdateBusinessDetails
- * @covers \Dvsa\Olcs\Transfer\Command\Application\UpdateBusinessDetails
- */
-class AbstractSaveBusinessDetailsTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\AbstractSaveBusinessDetails::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Licence\UpdateBusinessDetails::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Application\UpdateBusinessDetails::class)]
+final class AbstractSaveBusinessDetailsTest extends MockeryTestCase
 {
     public function testGetSet()
     {
@@ -31,14 +31,14 @@ class AbstractSaveBusinessDetailsTest extends MockeryTestCase
         $sut = m::mock(AbstractSaveBusinessDetails::class)->makePartial();
         $sut->exchangeArray($data);
 
-        static::assertEquals(111, $sut->getId());
-        static::assertEquals(2, $sut->getVersion());
-        static::assertEquals('myname', $sut->getName());
-        static::assertEquals('mynob', $sut->getNatureOfBusiness());
-        static::assertEquals('mynumber', $sut->getCompanyOrLlpNo());
-        static::assertEquals('myaddress', $sut->getRegisteredAddress());
-        static::assertEquals(['mytradingnames'], $sut->getTradingNames());
-        static::assertEquals(false, $sut->getPartial());
-        static::assertEquals('unit_AllowEmail', $sut->getAllowEmail());
+        $this->assertEquals(111, $sut->getId());
+        $this->assertEquals(2, $sut->getVersion());
+        $this->assertEquals('myname', $sut->getName());
+        $this->assertEquals('mynob', $sut->getNatureOfBusiness());
+        $this->assertEquals('mynumber', $sut->getCompanyOrLlpNo());
+        $this->assertEquals('myaddress', $sut->getRegisteredAddress());
+        $this->assertEquals(['mytradingnames'], $sut->getTradingNames());
+        $this->assertEquals(false, $sut->getPartial());
+        $this->assertEquals('unit_AllowEmail', $sut->getAllowEmail());
     }
 }

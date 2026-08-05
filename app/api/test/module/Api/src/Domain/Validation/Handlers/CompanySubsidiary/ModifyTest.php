@@ -23,7 +23,7 @@ use Dvsa\Olcs\Transfer\Query\CompanySubsidiary\CompanySubsidiary as Qry;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ModifyTest extends AbstractHandlerTestCase
+final class ModifyTest extends AbstractHandlerTestCase
 {
     /**
      * @var Modify

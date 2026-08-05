@@ -20,7 +20,7 @@ use Mockery as m;
 /**
  * Update ReputeNotLost Test
  */
-class UpdateReputeNotLostTest extends AbstractCommandHandlerTestCase
+final class UpdateReputeNotLostTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

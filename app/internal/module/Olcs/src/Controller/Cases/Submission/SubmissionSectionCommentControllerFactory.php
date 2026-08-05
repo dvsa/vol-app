@@ -12,7 +12,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class SubmissionSectionCommentControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SubmissionSectionCommentController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SubmissionSectionCommentController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         assert($translationHelper instanceof TranslationHelperService);

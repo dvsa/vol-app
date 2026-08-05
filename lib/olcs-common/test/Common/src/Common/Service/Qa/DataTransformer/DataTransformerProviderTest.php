@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa;
 
 use Common\Service\Qa\DataTransformer\DataTransformerProvider;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class DataTransformerProviderTest extends MockeryTestCase
+final class DataTransformerProviderTest extends MockeryTestCase
 {
     public function testGetTransformer(): void
     {
@@ -27,7 +29,8 @@ class DataTransformerProviderTest extends MockeryTestCase
             $sut->getTransformer($slug)
         );
 
-        $this->assertNull(
+        $this->assertNotInstanceOf(
+            \Common\Service\Qa\DataTransformer\DataTransformerInterface::class,
             $sut->getTransformer('international-journeys')
         );
     }

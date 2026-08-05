@@ -15,7 +15,7 @@ use Olcs\Service\Data\OperatingCentresForInspectionRequest;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCase
+final class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCase
 {
     /** @var OperatingCentresForInspectionRequest */
     private $sut;
@@ -70,32 +70,30 @@ class OperatingCentresForInspectionRequestTest extends AbstractDataServiceTestCa
     /**
      * Data provider
      */
-    public static function providerListOptions(): array
+    public static function providerListOptions(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'results'  => [
-                        [
-                            'id' => 2,
-                            'address' => [
-                                'addressLine1' => 'line3',
-                                'addressLine2' => 'line4',
-                                'town' => 'town1'
-                            ]
+                'results'  => [
+                    [
+                        'id' => 2,
+                        'address' => [
+                            'addressLine1' => 'line3',
+                            'addressLine2' => 'line4',
+                            'town' => 'town1'
                         ]
                     ]
-                ],
-                [
-                    2 => 'line3, line4, town1'
                 ]
             ],
             [
-                [
-                    'results'  => []
-                ],
-                []
+                2 => 'line3, line4, town1'
+            ]
+        ];
+        yield [
+            [
+                'results'  => []
             ],
+            []
         ];
     }
 

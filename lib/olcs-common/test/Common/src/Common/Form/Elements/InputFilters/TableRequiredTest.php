@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\InputFilters;
 
 use Common\Form\Elements\InputFilters\TableRequired;
@@ -16,7 +18,7 @@ use Common\Form\Elements\Validators\TableRequiredValidator;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TableRequiredTest extends \PHPUnit\Framework\TestCase
+final class TableRequiredTest extends \PHPUnit\Framework\TestCase
 {
     /**+
      * Holds the element
@@ -39,6 +41,6 @@ class TableRequiredTest extends \PHPUnit\Framework\TestCase
     {
         $spec = $this->element->getInputSpecification();
 
-        $this->assertTrue($spec['validators'][0] instanceof TableRequiredValidator);
+        $this->assertInstanceOf(\Common\Form\Elements\Validators\TableRequiredValidator::class, $spec['validators'][0]);
     }
 }

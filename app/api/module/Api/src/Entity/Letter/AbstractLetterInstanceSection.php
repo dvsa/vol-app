@@ -21,18 +21,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_instance_section",
- *    indexes={
- *        @ORM\Index(name="ix_letter_instance_section_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_instance_section_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_letter_instance_section_letter_instance_id", columns={"letter_instance_id"}),
- *        @ORM\Index(name="ix_letter_instance_section_letter_section_version_id", columns={"letter_section_version_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_instance_section')]
+#[ORM\Index(name: 'ix_letter_instance_section_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_instance_section_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_letter_instance_section_letter_instance_id', columns: ['letter_instance_id'])]
+#[ORM\Index(name: 'ix_letter_instance_section_letter_section_version_id', columns: ['letter_section_version_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterInstanceSection implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -45,81 +41,73 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * LetterInstance
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterInstance
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterInstance", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_instance_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_instance_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterInstance::class, inversedBy: 'letterInstanceSections', fetch: 'LAZY')]
     protected $letterInstance;
 
     /**
      * LetterSectionVersion
      *
      * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion", fetch="LAZY")
-     * @ORM\JoinColumn(name="letter_section_version_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'letter_section_version_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion::class, fetch: 'LAZY')]
     protected $letterSectionVersion;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * User edits to default content
      *
      * @var array
-     *
-     * @ORM\Column(type="json", name="edited_content", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'edited_content', nullable: true)]
     protected $editedContent;
 
     /**
      * Display order
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="display_order", nullable=false)
      */
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['unsigned' => true])]
     protected $displayOrder = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -143,7 +131,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return LetterInstanceSection
+     * @return static
      */
     public function setId($id)
     {
@@ -167,7 +155,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterInstance $letterInstance new value being set
      *
-     * @return LetterInstanceSection
+     * @return static
      */
     public function setLetterInstance($letterInstance)
     {
@@ -191,7 +179,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion $letterSectionVersion new value being set
      *
-     * @return LetterInstanceSection
+     * @return static
      */
     public function setLetterSectionVersion($letterSectionVersion)
     {
@@ -215,7 +203,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterInstanceSection
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -239,7 +227,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterInstanceSection
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -263,7 +251,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      *
      * @param array $editedContent new value being set
      *
-     * @return LetterInstanceSection
+     * @return static
      */
     public function setEditedContent($editedContent)
     {
@@ -287,7 +275,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      *
      * @param int $displayOrder new value being set
      *
-     * @return LetterInstanceSection
+     * @return static
      */
     public function setDisplayOrder($displayOrder)
     {
@@ -311,7 +299,7 @@ abstract class AbstractLetterInstanceSection implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return LetterInstanceSection
+     * @return static
      */
     public function setVersion($version)
     {

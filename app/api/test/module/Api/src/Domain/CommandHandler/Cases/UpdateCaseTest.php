@@ -19,7 +19,7 @@ use Dvsa\Olcs\Api\Entity\Cases\Cases as CasesEntity;
 /**
  * Update Case Test
  */
-class UpdateCaseTest extends AbstractCommandHandlerTestCase
+final class UpdateCaseTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -6,6 +6,8 @@
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Validators;
 
 use Common\Form\Elements\Validators\NoOfPermitsMax;
@@ -16,7 +18,7 @@ use Laminas\Validator\LessThan;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsMaxTest extends \PHPUnit\Framework\TestCase
+final class NoOfPermitsMaxTest extends \PHPUnit\Framework\TestCase
 {
     public $validator;
     /**
@@ -30,9 +32,8 @@ class NoOfPermitsMaxTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test isValid
-     *
-     * @dataProvider providerIsValid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerIsValid')]
     public function testIsValid($value, $expected): void
     {
         $this->assertEquals($expected, $this->validator->isValid($value, null));
@@ -53,17 +54,15 @@ class NoOfPermitsMaxTest extends \PHPUnit\Framework\TestCase
     /**
      * Provider for isValid
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function providerIsValid()
+    public static function providerIsValid(): \Iterator
     {
-        return [
-            [14, true],
-            [15, true],
-            [16, false],
-            [0, true],
-            [7, true],
-            [70, false]
-        ];
+        yield [14, true];
+        yield [15, true];
+        yield [16, false];
+        yield [0, true];
+        yield [7, true];
+        yield [70, false];
     }
 }

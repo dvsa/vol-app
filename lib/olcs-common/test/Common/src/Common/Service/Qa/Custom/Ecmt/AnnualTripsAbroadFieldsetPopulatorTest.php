@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Ecmt;
 
 use Common\Service\Helper\TranslationHelperService;
@@ -18,11 +20,9 @@ use Laminas\Form\Form;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class AnnualTripsAbroadFieldsetPopulatorTest extends MockeryTestCase
+final class AnnualTripsAbroadFieldsetPopulatorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTrueFalse
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalse')]
     public function testPopulate($showNiWarning): void
     {
         $markup = '<div class="govuk-inset-text">Trips abroad guidance</div><p>paragraph 1</p><p>paragraph</p>';
@@ -92,15 +92,13 @@ class AnnualTripsAbroadFieldsetPopulatorTest extends MockeryTestCase
     }
 
     /**
-     * @return bool[][]
+     * @return \Iterator<(int | string), array<bool>>
      *
      * @psalm-return list{list{true}, list{false}}
      */
-    public function dpTrueFalse(): array
+    public static function dpTrueFalse(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 }

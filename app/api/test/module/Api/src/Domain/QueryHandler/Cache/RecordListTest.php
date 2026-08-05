@@ -17,7 +17,7 @@ use Mockery as m;
  *
  * @see Handler
  */
-class RecordListTest extends QueryHandlerTestCase
+final class RecordListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

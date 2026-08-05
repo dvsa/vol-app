@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Api\Domain\QueryPartial;
 use Dvsa\Olcs\Api\Domain\QueryPartial\WithIrhpApplication;
 use Dvsa\Olcs\Api\Domain\QueryPartial\With;
 
-class WithIrhpApplicationTest extends QueryPartialTestCase
+final class WithIrhpApplicationTest extends QueryPartialTestCase
 {
     public function setUp(): void
     {
@@ -28,12 +28,10 @@ class WithIrhpApplicationTest extends QueryPartialTestCase
         );
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
-            ['SELECT a, ia FROM foo a LEFT JOIN a.irhpApplication ia', []],
-            ['SELECT a, ia FROM foo a LEFT JOIN a.irhpApplication ia', ['ENTITY']],
-            ['SELECT a, ia FROM foo a LEFT JOIN ALIAS.irhpApplication ia', ['ENTITY', 'ALIAS']],
-        ];
+        yield ['SELECT a, ia FROM foo a LEFT JOIN a.irhpApplication ia', []];
+        yield ['SELECT a, ia FROM foo a LEFT JOIN a.irhpApplication ia', ['ENTITY']];
+        yield ['SELECT a, ia FROM foo a LEFT JOIN ALIAS.irhpApplication ia', ['ENTITY', 'ALIAS']];
     }
 }

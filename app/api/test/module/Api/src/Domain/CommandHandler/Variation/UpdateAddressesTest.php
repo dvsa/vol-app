@@ -31,7 +31,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class UpdateAddressesTest extends AbstractCommandHandlerTestCase
+final class UpdateAddressesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -82,7 +82,7 @@ class UpdateAddressesTest extends AbstractCommandHandlerTestCase
             $result
         );
 
-        $now = (new DateTime())->format('Y-m-d H:i:s');
+        $now = new DateTime()->format('Y-m-d H:i:s');
         $this->expectedSideEffect(
             CreateTask::class,
             [

@@ -12,8 +12,9 @@ use Mockery as m;
 /**
  * BusRegSearchViewTest
  */
-class BusRegBrowseViewTest extends RepositoryTestCase
+final class BusRegBrowseViewTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

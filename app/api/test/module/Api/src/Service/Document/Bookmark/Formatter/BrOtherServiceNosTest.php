@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\Formatter\BrOtherServiceNos;
 /**
  * BrOtherServiceNos Test
  */
-class BrOtherServiceNosTest extends AbstractArrayList
+final class BrOtherServiceNosTest extends AbstractArrayList
 {
     public const SUT_CLASS_NAME = BrOtherServiceNos::class;
     public const ARRAY_FIELD = 'serviceNo';

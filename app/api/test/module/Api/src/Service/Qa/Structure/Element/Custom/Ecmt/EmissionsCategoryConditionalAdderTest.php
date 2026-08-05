@@ -18,12 +18,12 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EmissionsCategoryConditionalAdderTest extends MockeryTestCase
+final class EmissionsCategoryConditionalAdderTest extends MockeryTestCase
 {
-    public const TYPE = 'euro5';
-    public const VALUE = 45;
-    public const EMISSIONS_CATEGORY_ID = RefData::EMISSIONS_CATEGORY_EURO5_REF;
-    public const STOCK_ID = 28;
+    public const string TYPE = 'euro5';
+    public const int VALUE = 45;
+    public const string EMISSIONS_CATEGORY_ID = RefData::EMISSIONS_CATEGORY_EURO5_REF;
+    public const int STOCK_ID = 28;
 
     private $emissionsCategoryFactory;
 
@@ -33,6 +33,7 @@ class EmissionsCategoryConditionalAdderTest extends MockeryTestCase
 
     private $noOfPermits;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->emissionsCategoryFactory = m::mock(EmissionsCategoryFactory::class);

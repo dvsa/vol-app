@@ -116,7 +116,7 @@ trait LicenceControllerTrait
      *
      * @return \Laminas\View\Model\ViewModel
      */
-    protected function render($content, Form $form = null, $variables = [])
+    protected function render($content, ?Form $form = null, $variables = [])
     {
         $this->attachCurrentMessages();
 

@@ -76,7 +76,7 @@ class DateCompare extends AbstractCompare
      * @return bool
      */
     #[\Override]
-    public function isValid($value, array $context = null)
+    public function isValid($value, ?array $context = null)
     {
         if (empty($value)) {
             $this->error(self::INVALID_FIELD);

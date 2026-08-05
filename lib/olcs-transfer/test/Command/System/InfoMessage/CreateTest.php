@@ -1,18 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\System\InfoMessage;
 
 use Dvsa\Olcs\Transfer\Command\System\InfoMessage\Create as CreateCommand;
 
-/**
- * @covers Dvsa\Olcs\Transfer\Command\System\InfoMessage\Create
- */
-class CreateTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\System\InfoMessage\Create::class)]
+final class CreateTest extends \PHPUnit\Framework\TestCase
 {
     public function test()
     {
-        $startDate = (new \DateTime())->setTime(0, 0, 0);
-        $endDate = (new \DateTime())->setTime(23, 59, 59);
+        $startDate = new \DateTime()->setTime(0, 0, 0);
+        $endDate = new \DateTime()->setTime(23, 59, 59);
 
         $data = [
             'description' => 'unit_Desc',
@@ -22,9 +22,9 @@ class CreateTest extends \PHPUnit\Framework\TestCase
         ];
         $command = CreateCommand::create($data);
 
-        static::assertEquals('unit_Desc', $command->getDescription());
-        static::assertEquals($startDate, $command->getStartDate());
-        static::assertEquals($endDate, $command->getEndDate());
-        static::assertEquals('Y', $command->getIsInternal());
+        $this->assertEquals('unit_Desc', $command->getDescription());
+        $this->assertEquals($startDate, $command->getStartDate());
+        $this->assertEquals($endDate, $command->getEndDate());
+        $this->assertEquals('Y', $command->getIsInternal());
     }
 }

@@ -21,7 +21,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class CreateForIrhpApplicationTest extends AbstractCommandHandlerTestCase
+final class CreateForIrhpApplicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

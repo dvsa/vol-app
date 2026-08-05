@@ -3,8 +3,6 @@
 $config = [
     'modules' => [
         'Dvsa\LaminasConfigCloudParameters',
-        'Laminas\Cache\Module',
-        'Laminas\Cache\Storage\Adapter\Redis',
         'Olcs\Logging',
         'Laminas\I18n',
         'Laminas\Mvc\Plugin\FlashMessenger',

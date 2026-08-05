@@ -10,7 +10,7 @@ use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
 /**
  * Local Authority Entity Unit Tests
  */
-class LocalAuthorityEntityTest extends EntityTester
+final class LocalAuthorityEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class FixedAnswerQuestionHandlerTest extends MockeryTestCase
+final class FixedAnswerQuestionHandlerTest extends MockeryTestCase
 {
     public function testHandle(): void
     {

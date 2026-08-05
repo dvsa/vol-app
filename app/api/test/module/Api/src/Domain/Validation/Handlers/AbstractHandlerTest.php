@@ -21,7 +21,7 @@ use Laminas\ServiceManager\ServiceManager;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class AbstractHandlerTest extends AbstractHandlerTestCase
+final class AbstractHandlerTest extends AbstractHandlerTestCase
 {
     /**
      * @var Modify

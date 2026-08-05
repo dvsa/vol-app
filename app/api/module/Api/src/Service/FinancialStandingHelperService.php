@@ -510,7 +510,7 @@ class FinancialStandingHelperService implements FactoryInterface
         );
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->ratesRepo = $container->get('RepositoryServiceManager')->get('FinancialStandingRate');
         $this->organisationRepo = $container->get('RepositoryServiceManager')->get('Organisation');

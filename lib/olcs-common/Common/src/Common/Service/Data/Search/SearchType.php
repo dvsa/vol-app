@@ -112,7 +112,7 @@ class SearchType implements ListDataInterface, FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchType
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SearchType
     {
         $this->setNavigationFactory(new NavigationFactory($container));
         $this->setRoleService($container->get(RoleService::class));

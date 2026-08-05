@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Logging\Log;
 
 use Mockery as m;
@@ -13,7 +15,7 @@ use Olcs\Logging\Log\Processor\Microtime;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LogLevel;
 
-class LoggerFactoryTest extends TestCase
+final class LoggerFactoryTest extends TestCase
 {
     public function testInvokeBuildsMonologLoggerFromConfig(): void
     {
@@ -98,9 +100,7 @@ class LoggerFactoryTest extends TestCase
         $this->assertSame(Level::Debug, $handler->getLevel());
     }
 
-    /**
-     * @dataProvider dpPriorityFormats
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpPriorityFormats')]
     public function testResolveLevelAcceptsBothStringAndIntPriorities(mixed $priority, Level $expected): void
     {
         $container = m::mock(ContainerInterface::class);
@@ -127,26 +127,22 @@ class LoggerFactoryTest extends TestCase
         $this->assertSame($expected, $handler->getLevel());
     }
 
-    public static function dpPriorityFormats(): array
+    public static function dpPriorityFormats(): \Iterator
     {
-        return [
-            'PSR-3 string: debug' => [LogLevel::DEBUG, Level::Debug],
-            'PSR-3 string: info' => [LogLevel::INFO, Level::Info],
-            'PSR-3 string: warning' => [LogLevel::WARNING, Level::Warning],
-            'PSR-3 string: error' => [LogLevel::ERROR, Level::Error],
-            'PSR-3 string: critical' => [LogLevel::CRITICAL, Level::Critical],
-            'PSR-3 string: emergency' => [LogLevel::EMERGENCY, Level::Emergency],
-            'PSR-3 string uppercase' => ['DEBUG', Level::Debug],
-            'syslog int 0 (emerg)' => [0, Level::Emergency],
-            'syslog int 4 (warn)' => [4, Level::Warning],
-            'syslog int 7 (debug)' => [7, Level::Debug],
-            'numeric string 4' => ['4', Level::Warning],
-        ];
+        yield 'PSR-3 string: debug' => [LogLevel::DEBUG, Level::Debug];
+        yield 'PSR-3 string: info' => [LogLevel::INFO, Level::Info];
+        yield 'PSR-3 string: warning' => [LogLevel::WARNING, Level::Warning];
+        yield 'PSR-3 string: error' => [LogLevel::ERROR, Level::Error];
+        yield 'PSR-3 string: critical' => [LogLevel::CRITICAL, Level::Critical];
+        yield 'PSR-3 string: emergency' => [LogLevel::EMERGENCY, Level::Emergency];
+        yield 'PSR-3 string uppercase' => ['DEBUG', Level::Debug];
+        yield 'syslog int 0 (emerg)' => [0, Level::Emergency];
+        yield 'syslog int 4 (warn)' => [4, Level::Warning];
+        yield 'syslog int 7 (debug)' => [7, Level::Debug];
+        yield 'numeric string 4' => ['4', Level::Warning];
     }
 
-    /**
-     * @dataProvider dpInvalidPriorities
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpInvalidPriorities')]
     public function testResolveLevelThrowsOnUnrecognisedPriority(mixed $priority): void
     {
         $container = m::mock(ContainerInterface::class);
@@ -172,17 +168,15 @@ class LoggerFactoryTest extends TestCase
         (new LoggerFactory())($container, 'Logger');
     }
 
-    public static function dpInvalidPriorities(): array
+    public static function dpInvalidPriorities(): \Iterator
     {
-        return [
-            'unrecognised string' => ['nonsense'],
-            'empty string' => [''],
-            'int out of range (high)' => [99],
-            'int out of range (negative)' => [-1],
-            'numeric string out of range' => ['99'],
-            'array' => [['debug']],
-            'bool' => [true],
-        ];
+        yield 'unrecognised string' => ['nonsense'];
+        yield 'empty string' => [''];
+        yield 'int out of range (high)' => [99];
+        yield 'int out of range (negative)' => [-1];
+        yield 'numeric string out of range' => ['99'];
+        yield 'array' => [['debug']];
+        yield 'bool' => [true];
     }
 
     public function testResolveLevelThrowsWhenPriorityFilterMissing(): void

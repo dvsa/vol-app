@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\LicenceStatus;
@@ -9,7 +11,7 @@ use Dvsa\Olcs\Transfer\Validators\LicenceStatus;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class LicenceStatusTest extends \PHPUnit\Framework\TestCase
+final class LicenceStatusTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 
@@ -18,35 +20,31 @@ class LicenceStatusTest extends \PHPUnit\Framework\TestCase
         $this->sut = new LicenceStatus();
     }
 
-    /**
-     * @dataProvider isValidProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
     public function testIsValid($value, $expected)
     {
         $this->assertEquals($expected, $this->sut->isValid($value));
     }
 
-    public function isValidProvider()
+    public static function isValidProvider(): \Iterator
     {
-        return [
-            ['lsts_consideration', true],
-            ['lsts_not_submitted', true],
-            ['lsts_suspended', true],
-            ['lsts_valid', true],
-            ['lsts_curtailed', true],
-            ['lsts_granted', true],
-            ['lsts_surrendered', true],
-            ['lsts_withdrawn', true],
-            ['lsts_refused', true],
-            ['lsts_revoked', true],
-            ['lsts_ntu', true],
-            ['lsts_terminated', true],
-            ['lsts_cns', true],
-            ['LSTS_cns', false],
-            ['foobar', false],
-            [1, false],
-            [' ', false],
-            [null, false],
-        ];
+        yield ['lsts_consideration', true];
+        yield ['lsts_not_submitted', true];
+        yield ['lsts_suspended', true];
+        yield ['lsts_valid', true];
+        yield ['lsts_curtailed', true];
+        yield ['lsts_granted', true];
+        yield ['lsts_surrendered', true];
+        yield ['lsts_withdrawn', true];
+        yield ['lsts_refused', true];
+        yield ['lsts_revoked', true];
+        yield ['lsts_ntu', true];
+        yield ['lsts_terminated', true];
+        yield ['lsts_cns', true];
+        yield ['LSTS_cns', false];
+        yield ['foobar', false];
+        yield [1, false];
+        yield [' ', false];
+        yield [null, false];
     }
 }

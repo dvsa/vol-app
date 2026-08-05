@@ -11,7 +11,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
 /**
  * Class FixIsIrfoTest
  */
-class FixIsIrfoTest extends AbstractDbQueryTestCase
+final class FixIsIrfoTest extends AbstractDbQueryTestCase
 {
     protected $tableNameMap = [
         Entity\Organisation\Organisation::class => 'organisation',
@@ -55,15 +55,13 @@ class FixIsIrfoTest extends AbstractDbQueryTestCase
         ],
     ];
 
-    public static function paramProvider(): array
+    public static function paramProvider(): \Iterator
     {
-        return [
-            [
-                [],
-                [],
-                [],
-                []
-            ]
+        yield [
+            [],
+            [],
+            [],
+            []
         ];
     }
 

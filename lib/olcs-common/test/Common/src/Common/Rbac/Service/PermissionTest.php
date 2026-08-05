@@ -10,9 +10,8 @@ use Common\RefData;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use PHPUnit\Framework\MockObject\MockObject;
 
-class PermissionTest extends MockeryTestCase
+final class PermissionTest extends MockeryTestCase
 {
     private $sut;
 
@@ -36,7 +35,7 @@ class PermissionTest extends MockeryTestCase
 
     public function testIsSelfWithIncompleteUserData(): void
     {
-        $user = $this->createMock(User::class);
+        $user = $this->createStub(User::class);
         $user->method('getUserData')->willReturn(['something-else' => 1]);
 
         $this->authService->expects('getIdentity')->andReturn($user);
@@ -118,9 +117,7 @@ class PermissionTest extends MockeryTestCase
         $this->assertFalse($this->sut->canRemoveSelfserveUser('userId2', RefData::ROLE_OPERATOR_ADMIN));
     }
 
-    /**
-     * @dataProvider dpIsGranted
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsGranted')]
     public function testIsGranted(bool $isGranted): void
     {
         $permission = 'permission';
@@ -130,22 +127,20 @@ class PermissionTest extends MockeryTestCase
         $this->assertEquals($isGranted, $this->sut->isGranted($permission, $context));
     }
 
-    public function dpIsGranted(): array
+    public static function dpIsGranted(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 
-    public function getUser(string $userId, $canDeleteOperatorAdmin = true): MockObject
+    public function getUser(string $userId, $canDeleteOperatorAdmin = true): User
     {
         $data = [
             'id' => $userId,
             'canDeleteOperatorAdmin' => $canDeleteOperatorAdmin,
         ];
 
-        $user = $this->createMock(User::class);
+        $user = $this->createStub(User::class);
         $user->method('getUserData')->willReturn($data);
 
         return $user;

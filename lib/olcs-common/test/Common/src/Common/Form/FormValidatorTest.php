@@ -13,16 +13,14 @@ use Mockery\MockInterface;
 /**
  * @see FormValidator
  */
-class FormValidatorTest extends MockeryTestCase
+final class FormValidatorTest extends MockeryTestCase
 {
     /**
      * @var FormValidator
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isValidIsCallable(): void
     {
         // Setup
@@ -32,10 +30,8 @@ class FormValidatorTest extends MockeryTestCase
         $this->assertIsCallable(fn(\Laminas\Form\Form $form): bool => $this->sut->isValid($form));
     }
 
-    /**
-     * @test
-     * @depends isValidIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('isValidIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isValidReturnsABoolean(): void
     {
         // Setup
@@ -46,10 +42,8 @@ class FormValidatorTest extends MockeryTestCase
         $this->assertIsBool($this->sut->isValid($form));
     }
 
-    /**
-     * @test
-     * @depends isValidReturnsABoolean
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('isValidReturnsABoolean')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isValidReturnsABooleanThatIsTrueWhenAFormIsValid(): void
     {
         // Setup
@@ -60,10 +54,8 @@ class FormValidatorTest extends MockeryTestCase
         $this->assertTrue($this->sut->isValid($form));
     }
 
-    /**
-     * @test
-     * @depends isValidReturnsABoolean
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('isValidReturnsABoolean')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isValidReturnsABooleanThatIsFalseWhenAFormIsNotValid(): void
     {
         // Setup

@@ -8,20 +8,18 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Olcs\View\Helper\CookieManager;
 
-class CookieManagerTest extends MockeryTestCase
+final class CookieManagerTest extends MockeryTestCase
 {
     /**
      * @var CookieManager
      */
     protected $sut;
 
-    /** @var array */
-    protected $config;
-
+    #[\Override]
     public function setUp(): void
     {
-        $this->config = ['cookie-manager' => 'TEST'];
-        $this->sut = new CookieManager($this->config);
+        $config = ['cookie-manager' => 'TEST'];
+        $this->sut = new CookieManager($config);
     }
 
     public function testInvoke(): void

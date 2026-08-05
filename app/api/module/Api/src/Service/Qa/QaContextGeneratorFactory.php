@@ -18,7 +18,7 @@ class QaContextGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): QaContextGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): QaContextGenerator
     {
         return new QaContextGenerator(
             $container->get('RepositoryServiceManager')->get('ApplicationStep'),

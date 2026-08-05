@@ -22,10 +22,11 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationConvictionsPenaltiesReviewServiceTest extends MockeryTestCase
+final class ApplicationConvictionsPenaltiesReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);
@@ -44,118 +45,116 @@ class ApplicationConvictionsPenaltiesReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public static function providerGetConfigFromData(): array
+    public static function providerGetConfigFromData(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'prevConviction' => 'N',
-                    'convictionsConfirmation' => 'Y',
-                    'variationType' => [
-                        'id' => 'kdjasn'
-                    ]
-                ],
-                [
-                    'multiItems' => [
+                'prevConviction' => 'N',
+                'convictionsConfirmation' => 'Y',
+                'variationType' => [
+                    'id' => 'kdjasn'
+                ]
+            ],
+            [
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'application-review-convictions-penalties-question',
-                                'value' => 'No'
-                            ]
-                        ],
-                        [
-                            [
-                                'label' => 'application-review-convictions-penalties-confirmation',
-                                'value' => 'Confirmed'
-                            ]
+                            'label' => 'application-review-convictions-penalties-question',
+                            'value' => 'No'
                         ]
+                    ],
+                    [
+                        [
+                            'label' => 'application-review-convictions-penalties-confirmation',
+                            'value' => 'Confirmed'
+                        ]
+                    ]
+                ]
+            ]
+        ];
+        yield [
+            [
+                'prevConviction' => 'Y',
+                'convictionsConfirmation' => 'Y',
+                'variationType' => [
+                    'id' => 'kjknnk'
+                ],
+                'previousConvictions' => [
+                    [
+                        'forename' => 'Bob',
+                        'familyName' => 'Smith',
+                        'title' => [
+                            'description' => 'Mr'
+                        ],
+                        'convictionDate' => '1989-08-23',
+                        'categoryText' => 'Some crime',
+                        'notes' => 'Details about crime',
+                        'courtFpn' => 'Some court',
+                        'penalty' => 'Slapped wrist'
                     ]
                 ]
             ],
             [
-                [
-                    'prevConviction' => 'Y',
-                    'convictionsConfirmation' => 'Y',
-                    'variationType' => [
-                        'id' => 'kjknnk'
-                    ],
-                    'previousConvictions' => [
-                        [
-                            'forename' => 'Bob',
-                            'familyName' => 'Smith',
-                            'title' => [
-                                'description' => 'Mr'
-                            ],
-                            'convictionDate' => '1989-08-23',
-                            'categoryText' => 'Some crime',
-                            'notes' => 'Details about crime',
-                            'courtFpn' => 'Some court',
-                            'penalty' => 'Slapped wrist'
-                        ]
-                    ]
-                ],
-                [
-                    'subSections' => [
-                        [
-                            'mainItems' => [
-                                [
-                                    'header' => 'Bob Smith',
-                                    'multiItems' => [
+                'subSections' => [
+                    [
+                        'mainItems' => [
+                            [
+                                'header' => 'Bob Smith',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-convictions-penalties-conviction-title',
-                                                'value' => 'Mr'
-                                            ],
-                                            [
-                                                'label'
-                                                => 'application-review-convictions-penalties-conviction-forename',
-                                                'value' => 'Bob'
-                                            ],
-                                            [
-                                                'label'
-                                                => 'application-review-convictions-penalties-conviction-familyName',
-                                                'value' => 'Smith'
-                                            ],
-                                            [
-                                                'label'
-                                                => 'application-review-convictions-penalties-conviction-'
-                                                    . 'convictionDate',
-                                                'value' => '23 Aug 1989'
-                                            ],
-                                            [
-                                                'label'
-                                                => 'application-review-convictions-penalties-conviction-offence',
-                                                'value' => 'Some crime'
-                                            ],
-                                            [
-                                                'label'
-                                                => 'application-review-convictions-penalties-conviction-offence-'
-                                                    . 'details',
-                                                'value' => 'Details about crime'
-                                            ],
-                                            [
-                                                'label'
-                                                => 'application-review-convictions-penalties-conviction-offence-'
-                                                    . 'court',
-                                                'value' => 'Some court'
-                                            ],
-                                            [
-                                                'label'
-                                                => 'application-review-convictions-penalties-conviction-offence-'
-                                                    . 'penalty',
-                                                'value' => 'Slapped wrist'
-                                            ]
+                                            'label' => 'application-review-convictions-penalties-conviction-title',
+                                            'value' => 'Mr'
+                                        ],
+                                        [
+                                            'label'
+                                            => 'application-review-convictions-penalties-conviction-forename',
+                                            'value' => 'Bob'
+                                        ],
+                                        [
+                                            'label'
+                                            => 'application-review-convictions-penalties-conviction-familyName',
+                                            'value' => 'Smith'
+                                        ],
+                                        [
+                                            'label'
+                                            => 'application-review-convictions-penalties-conviction-'
+                                                . 'convictionDate',
+                                            'value' => '23 Aug 1989'
+                                        ],
+                                        [
+                                            'label'
+                                            => 'application-review-convictions-penalties-conviction-offence',
+                                            'value' => 'Some crime'
+                                        ],
+                                        [
+                                            'label'
+                                            => 'application-review-convictions-penalties-conviction-offence-'
+                                                . 'details',
+                                            'value' => 'Details about crime'
+                                        ],
+                                        [
+                                            'label'
+                                            => 'application-review-convictions-penalties-conviction-offence-'
+                                                . 'court',
+                                            'value' => 'Some court'
+                                        ],
+                                        [
+                                            'label'
+                                            => 'application-review-convictions-penalties-conviction-offence-'
+                                                . 'penalty',
+                                            'value' => 'Slapped wrist'
                                         ]
                                     ]
-                                ],
-                                [
-                                    'multiItems' => [
-                                        [],
+                                ]
+                            ],
+                            [
+                                'multiItems' => [
+                                    [],
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-convictions-penalties-confirmation',
-                                                'value' => 'Confirmed'
-                                            ]
+                                            'label' => 'application-review-convictions-penalties-confirmation',
+                                            'value' => 'Confirmed'
                                         ]
                                     ]
                                 ]
@@ -163,103 +162,103 @@ class ApplicationConvictionsPenaltiesReviewServiceTest extends MockeryTestCase
                         ]
                     ]
                 ]
+            ]
+        ];
+        yield [
+            [
+                'prevConviction' => 'N',
+                'convictionsConfirmation' => 'Y',
+                'variationType' => [
+                    'id' => Application::VARIATION_TYPE_DIRECTOR_CHANGE
+                ]
             ],
             [
-                [
-                    'prevConviction' => 'N',
-                    'convictionsConfirmation' => 'Y',
-                    'variationType' => [
-                        'id' => Application::VARIATION_TYPE_DIRECTOR_CHANGE
-                    ]
-                ],
-                [
-                    'multiItems' => [
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'application-review-convictions-penalties-question',
-                                'value' => 'No'
-                            ]
+                            'label' => 'application-review-convictions-penalties-question',
+                            'value' => 'No'
+                        ]
+                    ],
+                ]
+            ]
+        ];
+        yield [
+            [
+                'prevConviction' => 'Y',
+                'convictionsConfirmation' => 'Y',
+                'variationType' => [
+                    'id' => Application::VARIATION_TYPE_DIRECTOR_CHANGE
+                ],
+                'previousConvictions' => [
+                    [
+                        'forename' => 'Bob',
+                        'familyName' => 'Smith',
+                        'title' => [
+                            'description' => 'Mr'
                         ],
+                        'convictionDate' => '1989-08-23',
+                        'categoryText' => 'Some crime',
+                        'notes' => 'Details about crime',
+                        'courtFpn' => 'Some court',
+                        'penalty' => 'Slapped wrist'
                     ]
                 ]
             ],
             [
-                [
-                    'prevConviction' => 'Y',
-                    'convictionsConfirmation' => 'Y',
-                    'variationType' => [
-                        'id' => Application::VARIATION_TYPE_DIRECTOR_CHANGE
-                    ],
-                    'previousConvictions' => [
-                        [
-                            'forename' => 'Bob',
-                            'familyName' => 'Smith',
-                            'title' => [
-                                'description' => 'Mr'
-                            ],
-                            'convictionDate' => '1989-08-23',
-                            'categoryText' => 'Some crime',
-                            'notes' => 'Details about crime',
-                            'courtFpn' => 'Some court',
-                            'penalty' => 'Slapped wrist'
-                        ]
-                    ]
-                ],
-                [
-                    'subSections' => [
-                        [
-                            'mainItems' => [
-                                [
-                                    'header' => 'Bob Smith',
-                                    'multiItems' => [
+                'subSections' => [
+                    [
+                        'mainItems' => [
+                            [
+                                'header' => 'Bob Smith',
+                                'multiItems' => [
+                                    [
                                         [
-                                            [
-                                                'label' => 'application-review-convictions-penalties-conviction-title',
-                                                'value' => 'Mr'
-                                            ],
-                                            [
-                                                'label'
-                                                => 'application-review-convictions-penalties-conviction-forename',
-                                                'value' => 'Bob'
-                                            ],
-                                            [
-                                                'label'
-                                                => 'application-review-convictions-penalties-conviction-familyName',
-                                                'value' => 'Smith'
-                                            ],
-                                            [
-                                                'label'
-                                                => 'application-review-convictions-penalties-conviction-'
-                                                    . 'convictionDate',
-                                                'value' => '23 Aug 1989'
-                                            ],
-                                            [
-                                                'label'
-                                                => 'application-review-convictions-penalties-conviction-offence',
-                                                'value' => 'Some crime'
-                                            ],
-                                            [
-                                                'label'
-                                                => 'application-review-convictions-penalties-conviction-offence-'
-                                                    . 'details',
-                                                'value' => 'Details about crime'
-                                            ],
-                                            [
-                                                'label'
-                                                => 'application-review-convictions-penalties-conviction-offence-'
-                                                    . 'court',
-                                                'value' => 'Some court'
-                                            ],
-                                            [
-                                                'label'
-                                                => 'application-review-convictions-penalties-conviction-offence-'
-                                                    . 'penalty',
-                                                'value' => 'Slapped wrist'
-                                            ]
+                                            'label' => 'application-review-convictions-penalties-conviction-title',
+                                            'value' => 'Mr'
+                                        ],
+                                        [
+                                            'label'
+                                            => 'application-review-convictions-penalties-conviction-forename',
+                                            'value' => 'Bob'
+                                        ],
+                                        [
+                                            'label'
+                                            => 'application-review-convictions-penalties-conviction-familyName',
+                                            'value' => 'Smith'
+                                        ],
+                                        [
+                                            'label'
+                                            => 'application-review-convictions-penalties-conviction-'
+                                                . 'convictionDate',
+                                            'value' => '23 Aug 1989'
+                                        ],
+                                        [
+                                            'label'
+                                            => 'application-review-convictions-penalties-conviction-offence',
+                                            'value' => 'Some crime'
+                                        ],
+                                        [
+                                            'label'
+                                            => 'application-review-convictions-penalties-conviction-offence-'
+                                                . 'details',
+                                            'value' => 'Details about crime'
+                                        ],
+                                        [
+                                            'label'
+                                            => 'application-review-convictions-penalties-conviction-offence-'
+                                                . 'court',
+                                            'value' => 'Some court'
+                                        ],
+                                        [
+                                            'label'
+                                            => 'application-review-convictions-penalties-conviction-offence-'
+                                                . 'penalty',
+                                            'value' => 'Slapped wrist'
                                         ]
                                     ]
-                                ],
-                            ]
+                                ]
+                            ],
                         ]
                     ]
                 ]

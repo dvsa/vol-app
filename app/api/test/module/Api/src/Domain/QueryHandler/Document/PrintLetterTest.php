@@ -14,10 +14,9 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Document\PrintLetter::class)]
-class PrintLetterTest extends QueryHandlerTestCase
+final class PrintLetterTest extends QueryHandlerTestCase
 {
-    public $container;
-    public const DOC_ID = 9999;
+    public const int DOC_ID = 9999;
 
     /** @var  m\MockInterface */
     private $mockPrintLetterSrv;
@@ -54,37 +53,34 @@ class PrintLetterTest extends QueryHandlerTestCase
 
         $actual = $this->sut->handleQuery($query);
 
-        static::assertEquals($expect, $actual);
+        $this->assertEquals($expect, $actual);
     }
 
-    public static function dpTestHandleQuery(): array
+    public static function dpTestHandleQuery(): \Iterator
     {
-        return [
-            [
-                'params' => [
-                    'email' => true,
-                    'print' => false,
-                ],
-                'expect' => [
-                    'flags' => [
-                        TransferCmd\Document\PrintLetter::METHOD_EMAIL => true,
-                        TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST => false,
-                    ],
+        yield [
+            'params' => [
+                'email' => true,
+                'print' => false,
+            ],
+            'expect' => [
+                'flags' => [
+                    TransferCmd\Document\PrintLetter::METHOD_EMAIL => true,
+                    TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST => false,
                 ],
             ],
-            [
-                'params' => [
-                    'email' => false,
-                    'print' => true,
-                ],
-                'expect' => [
-                    'flags' => [
-                        TransferCmd\Document\PrintLetter::METHOD_EMAIL => false,
-                        TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST => true,
-                    ],
+        ];
+        yield [
+            'params' => [
+                'email' => false,
+                'print' => true,
+            ],
+            'expect' => [
+                'flags' => [
+                    TransferCmd\Document\PrintLetter::METHOD_EMAIL => false,
+                    TransferCmd\Document\PrintLetter::METHOD_PRINT_AND_POST => true,
                 ],
             ],
-
         ];
     }
 }

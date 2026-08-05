@@ -17,72 +17,70 @@ use Laminas\InputFilter\Input;
 /**
  * @see ChainValidatedInput
  */
-class ChainValidatedInputTest extends MockeryTestCase
+final class ChainValidatedInputTest extends MockeryTestCase
 {
-    protected const AN_INPUT_NAME = 'AN INPUT NAME';
+    protected const string AN_INPUT_NAME = 'AN INPUT NAME';
 
-    protected const A_CUSTOM_INPUT_NAME = 'A CUSTOM INPUT NAME';
+    protected const string A_CUSTOM_INPUT_NAME = 'A CUSTOM INPUT NAME';
 
-    protected const AN_ALTERNATIVE_INPUT_NAME = 'AN ALTERNATIVE INPUT NAME';
+    protected const string AN_ALTERNATIVE_INPUT_NAME = 'AN ALTERNATIVE INPUT NAME';
 
-    protected const EXPECTED_STRING_EXCEPTION_MESSAGE = 'Expected string';
+    protected const string EXPECTED_STRING_EXCEPTION_MESSAGE = 'Expected string';
 
-    protected const AN_INT = 0;
+    protected const int AN_INT = 0;
 
-    protected const REQUIRED = true;
+    protected const bool REQUIRED = true;
 
-    protected const NOT_REQUIRED = false;
+    protected const bool NOT_REQUIRED = false;
 
-    protected const EXPECTED_BOOL_EXCEPTION_MESSAGE = 'Expected bool';
+    protected const string EXPECTED_BOOL_EXCEPTION_MESSAGE = 'Expected bool';
 
-    protected const ALLOW_EMPTY = true;
+    protected const bool ALLOW_EMPTY = true;
 
-    protected const DONT_ALLOW_EMPTY = false;
+    protected const bool DONT_ALLOW_EMPTY = false;
 
-    protected const BREAK_ON_FAILURE = true;
+    protected const bool BREAK_ON_FAILURE = true;
 
-    protected const DONT_BREAK_ON_FAILURE = false;
+    protected const bool DONT_BREAK_ON_FAILURE = false;
 
-    protected const A_CUSTOM_ERROR_MESSAGE = 'AN ERROR MESSAGE';
+    protected const string A_CUSTOM_ERROR_MESSAGE = 'AN ERROR MESSAGE';
 
-    protected const A_MESSAGES_ARRAY_CONTAINING_A_CUSTOM_ERROR_MESSAGE = [self::A_CUSTOM_ERROR_MESSAGE];
+    protected const array A_MESSAGES_ARRAY_CONTAINING_A_CUSTOM_ERROR_MESSAGE = [self::A_CUSTOM_ERROR_MESSAGE];
 
-    protected const NO_ERROR_MESSAGE = null;
+    protected const null NO_ERROR_MESSAGE = null;
 
-    protected const THE_DEFAULT_INPUT_VALUE = null;
+    protected const null THE_DEFAULT_INPUT_VALUE = null;
 
-    protected const A_RAW_INPUT_VALUE = 'A RAW INPUT VALUE';
+    protected const string A_RAW_INPUT_VALUE = 'A RAW INPUT VALUE';
 
-    protected const A_SECOND_RAW_INPUT_VALUE = 'A SECOND RAW INPUT VALUE';
+    protected const string A_SECOND_RAW_INPUT_VALUE = 'A SECOND RAW INPUT VALUE';
 
-    protected const A_FILTERED_INPUT_VALUE = 'A FILTERED INPUT VALUE';
+    protected const string A_FILTERED_INPUT_VALUE = 'A FILTERED INPUT VALUE';
 
-    protected const EMPTY_VALIDATION_CONTEXT = [];
+    protected const array EMPTY_VALIDATION_CONTEXT = [];
 
-    protected const VALID = true;
+    protected const bool VALID = true;
 
-    protected const NOT_VALID = false;
+    protected const bool NOT_VALID = false;
 
-    protected const MESSAGES_FOR_A_VALID_INPUT = [];
+    protected const array MESSAGES_FOR_A_VALID_INPUT = [];
 
-    protected const MESSAGES_FOR_AN_INVALID_INPUT = ['A VALIDATOR KEY' => 'AN VALIDATION MESSAGE'];
+    protected const array MESSAGES_FOR_AN_INVALID_INPUT = ['A VALIDATOR KEY' => 'AN VALIDATION MESSAGE'];
 
-    protected const THE_DEFAULT_ERROR_MESSAGE = null;
+    protected const null THE_DEFAULT_ERROR_MESSAGE = null;
 
-    protected const A_STRING_SUFFIX = 'A STRING SUFFIX';
+    protected const string A_STRING_SUFFIX = 'A STRING SUFFIX';
 
-    protected const A_SECOND_STRING_SUFFIX = 'A SECOND STRING SUFFIX';
+    protected const string A_SECOND_STRING_SUFFIX = 'A SECOND STRING SUFFIX';
 
-    protected const AN_EMPTY_RAW_INPUT_VALUE = '';
+    protected const string AN_EMPTY_RAW_INPUT_VALUE = '';
 
     /**
      * @var ChainValidatedInput|null
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getNameIsCallable(): void
     {
         // Setup
@@ -92,10 +90,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'getName']);
     }
 
-    /**
-     * @test
-     * @depends getNameIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getNameIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getNameReturnsTheNameOfAnInput(): void
     {
         // Setup
@@ -105,9 +101,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::AN_INPUT_NAME, $this->sut->getName());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setNameIsCallable(): void
     {
         // Setup
@@ -117,10 +111,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'setName']);
     }
 
-    /**
-     * @test
-     * @depends setNameIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setNameIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setNameReturnsSelf(): void
     {
         // Setup
@@ -130,11 +122,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame($this->sut, $this->sut->setName(static::AN_INPUT_NAME));
     }
 
-    /**
-     * @test
-     * @depends setNameIsCallable
-     * @depends getNameReturnsTheNameOfAnInput
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setNameIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('getNameReturnsTheNameOfAnInput')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setNameSetsTheName(): void
     {
         // Setup
@@ -147,11 +137,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::AN_ALTERNATIVE_INPUT_NAME, $this->sut->getName());
     }
 
-    /**
-     * @test
-     * @depends setNameIsCallable
-     * @depends getNameReturnsTheNameOfAnInput
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setNameIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('getNameReturnsTheNameOfAnInput')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setNameThrowsInvalidArgumentExceptionIfNotPassedAString(): void
     {
         // Setup
@@ -165,9 +153,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->sut->setName(static::AN_INT);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isRequiredIsCallable(): void
     {
         // Setup
@@ -177,10 +163,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'isRequired']);
     }
 
-    /**
-     * @test
-     * @depends isRequiredIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('isRequiredIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isRequiredReturnsABoolean(): void
     {
         // Setup
@@ -193,10 +177,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsBool($result);
     }
 
-    /**
-     * @test
-     * @depends isRequiredReturnsABoolean
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('isRequiredReturnsABoolean')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isRequiredReturnsTrueByDefault(): void
     {
         // Setup
@@ -206,13 +188,11 @@ class ChainValidatedInputTest extends MockeryTestCase
         $result = $this->sut->isRequired();
 
         // Assert
-        $this->assertSame(true, $result);
+        $this->assertTrue($result);
     }
 
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setRequiredIsCallable(): void
     {
         // Setup
@@ -222,10 +202,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'setRequired']);
     }
 
-    /**
-     * @test
-     * @depends setRequiredIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setRequiredIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setRequiredReturnsSelf(): void
     {
         // Setup
@@ -238,10 +216,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame($this->sut, $result);
     }
 
-    /**
-     * @test
-     * @depends setRequiredIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setRequiredIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setRequiredThrowsInvalidArgumentExceptionIfProvidedNonBoolean(): void
     {
         // Setup
@@ -255,11 +231,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->sut->setRequired(static::AN_INT);
     }
 
-    /**
-     * @test
-     * @depends setRequiredIsCallable
-     * @depends isRequiredReturnsABoolean
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setRequiredIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('isRequiredReturnsABoolean')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setRequiredSetsAnInputAsRequired(): void
     {
         // Setup
@@ -272,11 +246,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::REQUIRED, $this->sut->isRequired());
     }
 
-    /**
-     * @test
-     * @depends setRequiredIsCallable
-     * @depends isRequiredReturnsABoolean
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setRequiredIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('isRequiredReturnsABoolean')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setRequiredSetsAnInputAsNotRequired(): void
     {
         // Setup
@@ -289,9 +261,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::NOT_REQUIRED, $this->sut->isRequired());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getValidatorChainIsCallable(): void
     {
         // Setup
@@ -302,10 +272,8 @@ class ChainValidatedInputTest extends MockeryTestCase
     }
 
 
-    /**
-     * @test
-     * @depends getValidatorChainIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getValidatorChainIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getValidatorChainReturnsAValidatorChain(): void
     {
         // Setup
@@ -315,10 +283,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertInstanceOf(ValidatorChain::class, $this->sut->getValidatorChain());
     }
 
-    /**
-     * @test
-     * @depends getValidatorChainReturnsAValidatorChain
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getValidatorChainReturnsAValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getValidatorChainThatIsEmptyByDefault(): void
     {
         // Setup
@@ -326,14 +292,13 @@ class ChainValidatedInputTest extends MockeryTestCase
 
         // Execute
         $result = $this->sut->getValidatorChain();
+        $this->assertInstanceOf(\Laminas\Validator\ValidatorChain::class, $result);
 
         // Assert
         $this->assertEmpty($result->getValidators());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setValidatorChainIsCallable(): void
     {
         // Setup
@@ -343,10 +308,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'setValidatorChain']);
     }
 
-    /**
-     * @test
-     * @depends setValidatorChainIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setValidatorChainIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setValidatorChainReturnsSelf(): void
     {
         // Setup
@@ -359,11 +322,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame($this->sut, $result);
     }
 
-    /**
-     * @test
-     * @depends setValidatorChainIsCallable
-     * @depends getValidatorChainIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setValidatorChainIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('getValidatorChainIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setValidatorChainSetsTheValidatorChain(): void
     {
         // Setup
@@ -377,9 +338,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame($newValidatorChain, $this->sut->getValidatorChain());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allowEmptyIsCallable(): void
     {
         // Setup
@@ -389,27 +348,24 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'allowEmpty']);
     }
 
-    /**
-     * @test
-     * @depends allowEmptyIsCallable
-     * @depends getValidatorChainReturnsAValidatorChain
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('allowEmptyIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('getValidatorChainReturnsAValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allowEmptyReturnsTrueIfNotEmptyValidatorExistsInTheValidatorChain(): void
     {
         // Setup
         $this->setUpSut();
         $validatorChain = $this->sut->getValidatorChain();
+        $this->assertInstanceOf(\Laminas\Validator\ValidatorChain::class, $validatorChain);
         $validatorChain->attach(new NotEmpty());
 
         // Assert
         $this->assertSame(static::ALLOW_EMPTY, $this->sut->allowEmpty());
     }
 
-    /**
-     * @test
-     * @depends allowEmptyIsCallable
-     * @depends setValidatorChainSetsTheValidatorChain
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('allowEmptyIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('setValidatorChainSetsTheValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function allowEmptyReturnsFalseIfNotEmptyValidatorDoesNotExistInTheValidatorChain(): void
     {
         // Setup
@@ -420,9 +376,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::DONT_ALLOW_EMPTY, $this->sut->allowEmpty());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setAllowEmptyIsCallable(): void
     {
         // Setup
@@ -432,10 +386,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'setAllowEmpty']);
     }
 
-    /**
-     * @test
-     * @depends setAllowEmptyIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setAllowEmptyIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setAllowEmptyReturnsSelf(): void
     {
         // Setup
@@ -448,10 +400,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame($this->sut, $result);
     }
 
-    /**
-     * @test
-     * @depends setAllowEmptyIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setAllowEmptyIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setAllowEmptyThrowsInvalidArgumentExceptionIfNotPassedABool(): void
     {
         // Setup
@@ -465,12 +415,10 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->sut->setAllowEmpty(static::AN_INT);
     }
 
-    /**
-     * @test
-     * @depends setAllowEmptyIsCallable
-     * @depends allowEmptyReturnsTrueIfNotEmptyValidatorExistsInTheValidatorChain
-     * @depends allowEmptyReturnsFalseIfNotEmptyValidatorDoesNotExistInTheValidatorChain
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setAllowEmptyIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('allowEmptyReturnsTrueIfNotEmptyValidatorExistsInTheValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Depends('allowEmptyReturnsFalseIfNotEmptyValidatorDoesNotExistInTheValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setAllowEmptyWhenPassedFalseAndNotEmptyValidatorIsNotPresentInTheValidatorChainAddsNotEmptyValidatorToTheValidatorChain(): void
     {
         // Setup
@@ -480,16 +428,14 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->sut->setAllowEmpty(static::DONT_ALLOW_EMPTY);
 
         // Assert
-        $this->assertNotNull($this->getNotEmptyValidatorFromValidatorChain($this->sut->getValidatorChain()));
+        $this->assertInstanceOf(\Laminas\Validator\NotEmpty::class, $this->getNotEmptyValidatorFromValidatorChain($this->sut->getValidatorChain()));
     }
 
-    /**
-     * @test
-     * @depends setAllowEmptyIsCallable
-     * @depends allowEmptyReturnsTrueIfNotEmptyValidatorExistsInTheValidatorChain
-     * @depends allowEmptyReturnsFalseIfNotEmptyValidatorDoesNotExistInTheValidatorChain
-     * @depends setValidatorChainSetsTheValidatorChain
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setAllowEmptyIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('allowEmptyReturnsTrueIfNotEmptyValidatorExistsInTheValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Depends('allowEmptyReturnsFalseIfNotEmptyValidatorDoesNotExistInTheValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Depends('setValidatorChainSetsTheValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setAllowEmptyWhenPassedFalseAndNotEmptyValidatorIsPresentInTheValidatorChainLeavesNotEmptyValidator(): void
     {
         // Setup
@@ -504,13 +450,11 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame($notEmptyValidator, $this->getNotEmptyValidatorFromValidatorChain($this->sut->getValidatorChain()));
     }
 
-    /**
-     * @test
-     * @depends setAllowEmptyIsCallable
-     * @depends allowEmptyReturnsTrueIfNotEmptyValidatorExistsInTheValidatorChain
-     * @depends allowEmptyReturnsFalseIfNotEmptyValidatorDoesNotExistInTheValidatorChain
-     * @depends setValidatorChainSetsTheValidatorChain
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setAllowEmptyIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('allowEmptyReturnsTrueIfNotEmptyValidatorExistsInTheValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Depends('allowEmptyReturnsFalseIfNotEmptyValidatorDoesNotExistInTheValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Depends('setValidatorChainSetsTheValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setAllowEmptyWhenPassedTrueAndNotEmptyValidatorIsPresentInTheValidatorChainRemovesNotEmptyValidatorFromTheValidatorChain(): void
     {
         // Setup
@@ -522,16 +466,14 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->sut->setAllowEmpty(static::ALLOW_EMPTY);
 
         // Assert
-        $this->assertNull($this->getNotEmptyValidatorFromValidatorChain($this->sut->getValidatorChain()));
+        $this->assertNotInstanceOf(\Laminas\Validator\NotEmpty::class, $this->getNotEmptyValidatorFromValidatorChain($this->sut->getValidatorChain()));
     }
 
-    /**
-     * @test
-     * @depends setAllowEmptyIsCallable
-     * @depends allowEmptyReturnsTrueIfNotEmptyValidatorExistsInTheValidatorChain
-     * @depends allowEmptyReturnsFalseIfNotEmptyValidatorDoesNotExistInTheValidatorChain
-     * @depends setValidatorChainSetsTheValidatorChain
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setAllowEmptyIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('allowEmptyReturnsTrueIfNotEmptyValidatorExistsInTheValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Depends('allowEmptyReturnsFalseIfNotEmptyValidatorDoesNotExistInTheValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Depends('setValidatorChainSetsTheValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setAllowEmptyWhenPassedTrueAndNotEmptyValidatorIsNotPresentInTheValidatorChainDoesNotAddNotEmptyValidator(): void
     {
         // Setup
@@ -542,12 +484,10 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->sut->setAllowEmpty(static::ALLOW_EMPTY);
 
         // Assert
-        $this->assertNull($this->getNotEmptyValidatorFromValidatorChain($this->sut->getValidatorChain()));
+        $this->assertNotInstanceOf(\Laminas\Validator\NotEmpty::class, $this->getNotEmptyValidatorFromValidatorChain($this->sut->getValidatorChain()));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function breakOnFailureIsCallable(): void
     {
         // Setup
@@ -557,10 +497,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'breakOnFailure']);
     }
 
-    /**
-     * @test
-     * @depends breakOnFailureIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('breakOnFailureIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function breakOnFailureReturnsFalseByDefault(): void
     {
         // Setup
@@ -570,9 +508,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertEquals(static::DONT_BREAK_ON_FAILURE, $this->sut->breakOnFailure());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setBreakOnFailureIsCallable(): void
     {
         // Setup
@@ -582,10 +518,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'setBreakOnFailure']);
     }
 
-    /**
-     * @test
-     * @depends setBreakOnFailureIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setBreakOnFailureIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setBreakOnFailureThrowsInvalidArgumentExceptionIfNotPassedABool(): void
     {
         // Setup
@@ -599,11 +533,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->sut->setBreakOnFailure(static::AN_INT);
     }
 
-    /**
-     * @test
-     * @depends setBreakOnFailureIsCallable
-     * @depends breakOnFailureIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setBreakOnFailureIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('breakOnFailureIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setBreakOnFailureSetsTheBreakOnFailureFlagToTrue(): void
     {
         // Setup
@@ -616,9 +548,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::BREAK_ON_FAILURE, $this->sut->breakOnFailure());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getErrorMessageIsCallable(): void
     {
         // Setup
@@ -628,10 +558,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'getErrorMessage']);
     }
 
-    /**
-     * @test
-     * @depends getErrorMessageIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getErrorMessageIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getErrorMessageReturnsNullByDefault(): void
     {
         // Setup
@@ -644,9 +572,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::THE_DEFAULT_ERROR_MESSAGE, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setErrorMessageIsCallable(): void
     {
         // Setup
@@ -656,11 +582,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'setErrorMessage']);
     }
 
-    /**
-     * @test
-     * @depends getErrorMessageIsCallable
-     * @depends setErrorMessageIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getErrorMessageIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('setErrorMessageIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setErrorMessageWhenProvidedAStringSetsTheString(): void
     {
         // Setup
@@ -673,11 +597,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::A_CUSTOM_ERROR_MESSAGE, $this->sut->getErrorMessage());
     }
 
-    /**
-     * @test
-     * @depends getErrorMessageIsCallable
-     * @depends setErrorMessageIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getErrorMessageIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('setErrorMessageIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setErrorMessageWhenProvidedNullSetsNull(): void
     {
         // Setup
@@ -690,11 +612,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::NO_ERROR_MESSAGE, $this->sut->getErrorMessage());
     }
 
-    /**
-     * @test
-     * @depends getErrorMessageIsCallable
-     * @depends setErrorMessageIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getErrorMessageIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('setErrorMessageIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setErrorMessageWhenProvidedAnObjectSetsStringRepresentationOfAnObject(): void
     {
         // Setup
@@ -707,9 +627,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::A_CUSTOM_ERROR_MESSAGE, $this->sut->getErrorMessage());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getFilterChainIsCallable(): void
     {
         // Setup
@@ -719,9 +637,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'getFilterChain']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getFilterChainReturnsAFilterChain(): void
     {
         // Setup
@@ -734,9 +650,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertInstanceOf(FilterChain::class, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setFilterChainIsCallable(): void
     {
         // Setup
@@ -746,10 +660,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'setFilterChain']);
     }
 
-    /**
-     * @test
-     * @depends setFilterChainIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setFilterChainIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setFilterChainReturnsSelf(): void
     {
         // Setup
@@ -763,11 +675,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame($this->sut, $result);
     }
 
-    /**
-     * @test
-     * @depends setFilterChainIsCallable
-     * @depends getFilterChainReturnsAFilterChain
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setFilterChainIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('getFilterChainReturnsAFilterChain')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setFilterChainSetsAFilterChain(): void
     {
         // Setup
@@ -781,9 +691,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame($filterChain, $this->sut->getFilterChain());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRawValueIsCallable(): void
     {
         // Setup
@@ -793,10 +701,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'getRawValue']);
     }
 
-    /**
-     * @test
-     * @depends getRawValueIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRawValueIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRawValueReturnsNullByDefault(): void
     {
         // Setup
@@ -809,11 +715,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::THE_DEFAULT_INPUT_VALUE, $result);
     }
 
-    /**
-     * @test
-     * @depends getRawValueIsCallable
-     * @depends setFilterChainSetsAFilterChain
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getRawValueIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('setFilterChainSetsAFilterChain')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getRawValueReturnsTheInputValueWithoutTheFilterChainApplied(): void
     {
         // Setup
@@ -827,9 +731,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::THE_DEFAULT_INPUT_VALUE, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getValueIsCallable(): void
     {
         // Setup
@@ -839,9 +741,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'getValue']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getValueReturnsNullByDefault(): void
     {
         // Setup
@@ -854,11 +754,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::THE_DEFAULT_INPUT_VALUE, $result);
     }
 
-    /**
-     * @test
-     * @depends getValueIsCallable
-     * @depends setFilterChainSetsAFilterChain
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getValueIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('setFilterChainSetsAFilterChain')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getValueReturnsTheInputValueWithTheFilterChainApplied(): void
     {
         // Setup
@@ -872,9 +770,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::A_FILTERED_INPUT_VALUE, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setValueIsCallable(): void
     {
         // Setup
@@ -884,10 +780,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'setValue']);
     }
 
-    /**
-     * @test
-     * @depends setValueIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setValueIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setValueReturnsSelf(): void
     {
         // Setup
@@ -900,11 +794,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame($this->sut, $result);
     }
 
-    /**
-     * @test
-     * @depends setValueIsCallable
-     * @depends getRawValueReturnsTheInputValueWithoutTheFilterChainApplied
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setValueIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('getRawValueReturnsTheInputValueWithoutTheFilterChainApplied')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setValueSetsAValue(): void
     {
         // Setup
@@ -918,9 +810,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::A_RAW_INPUT_VALUE, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isValidIsCallable(): void
     {
         // Setup
@@ -930,9 +820,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'isValid']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isValidReturnsBoolean(): void
     {
         // Setup
@@ -942,9 +830,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsBool($this->sut->isValid());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isValidReturnsTrueByDefault(): void
     {
         // Setup
@@ -954,13 +840,11 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::VALID, $this->sut->isValid());
     }
 
-    /**
-     * @test
-     * @depends isValidReturnsBoolean
-     * @depends setValidatorChainSetsTheValidatorChain
-     * @depends setValueSetsAValue
-     * @depends setFilterChainSetsAFilterChain
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('isValidReturnsBoolean')]
+    #[\PHPUnit\Framework\Attributes\Depends('setValidatorChainSetsTheValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Depends('setValueSetsAValue')]
+    #[\PHPUnit\Framework\Attributes\Depends('setFilterChainSetsAFilterChain')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isValidProxiesToValidatorChain(): void
     {
         // Setup
@@ -984,9 +868,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::NOT_VALID, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getMessagesIsCallable(): void
     {
         // Setup
@@ -996,10 +878,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'getMessages']);
     }
 
-    /**
-     * @test
-     * @depends getMessagesIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getMessagesIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getMessagesReturnsAnArray(): void
     {
         // Setup
@@ -1012,10 +892,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsArray($result);
     }
 
-    /**
-     * @test
-     * @depends getMessagesReturnsAnArray
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getMessagesReturnsAnArray')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getMessagesReturnsAnEmptyArrayByDefault(): void
     {
         // Setup
@@ -1028,11 +906,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::MESSAGES_FOR_A_VALID_INPUT, $result);
     }
 
-    /**
-     * @test
-     * @depends getMessagesReturnsAnArray
-     * @depends setValidatorChainSetsTheValidatorChain
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getMessagesReturnsAnArray')]
+    #[\PHPUnit\Framework\Attributes\Depends('setValidatorChainSetsTheValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getMessagesReturnsMessagesFromValidatorChain(): void
     {
         // Setup
@@ -1048,11 +924,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::MESSAGES_FOR_AN_INVALID_INPUT, $result);
     }
 
-    /**
-     * @test
-     * @depends getMessagesReturnsAnArray
-     * @depends setErrorMessageWhenProvidedAStringSetsTheString
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getMessagesReturnsAnArray')]
+    #[\PHPUnit\Framework\Attributes\Depends('setErrorMessageWhenProvidedAStringSetsTheString')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getMessagesReturnsAnArrayWithCustomErrorMessage(): void
     {
         // Setup
@@ -1066,10 +940,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::A_MESSAGES_ARRAY_CONTAINING_A_CUSTOM_ERROR_MESSAGE, $result);
     }
 
-    /**
-     * @test
-     * @depends getMessagesReturnsAnArrayWithCustomErrorMessage
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getMessagesReturnsAnArrayWithCustomErrorMessage')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getMessagesReturnsAnArrayWithCustomErrorMessageWhenThereAreValidationMessagesFromTheChain(): void
     {
         // Setup
@@ -1084,9 +956,7 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::A_MESSAGES_ARRAY_CONTAINING_A_CUSTOM_ERROR_MESSAGE, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function mergeIsCallable(): void
     {
         // Setup
@@ -1096,10 +966,8 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'merge']);
     }
 
-    /**
-     * @test
-     * @depends mergeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('mergeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function mergeReturnsSelf(): void
     {
         // Setup
@@ -1113,11 +981,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame($this->sut, $result);
     }
 
-    /**
-     * @test
-     * @depends mergeIsCallable
-     * @depends setBreakOnFailureSetsTheBreakOnFailureFlagToTrue
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('mergeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('setBreakOnFailureSetsTheBreakOnFailureFlagToTrue')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function mergeSetsBreakOnFailure(): void
     {
         // Setup
@@ -1133,12 +999,10 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::BREAK_ON_FAILURE, $result);
     }
 
-    /**
-     * @test
-     * @depends mergeIsCallable
-     * @depends setErrorMessageWhenProvidedAStringSetsTheString
-     * @depends getErrorMessageIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('mergeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('setErrorMessageWhenProvidedAStringSetsTheString')]
+    #[\PHPUnit\Framework\Attributes\Depends('getErrorMessageIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function mergeSetsErrorMessage(): void
     {
         // Setup
@@ -1154,12 +1018,10 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::A_CUSTOM_ERROR_MESSAGE, $result);
     }
 
-    /**
-     * @test
-     * @depends mergeIsCallable
-     * @depends setNameSetsTheName
-     * @depends getNameReturnsTheNameOfAnInput
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('mergeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('setNameSetsTheName')]
+    #[\PHPUnit\Framework\Attributes\Depends('getNameReturnsTheNameOfAnInput')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function mergeSetsName(): void
     {
         // Setup
@@ -1175,12 +1037,10 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::A_CUSTOM_INPUT_NAME, $result);
     }
 
-    /**
-     * @test
-     * @depends mergeIsCallable
-     * @depends isRequiredReturnsABoolean
-     * @depends setRequiredSetsAnInputAsNotRequired
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('mergeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('isRequiredReturnsABoolean')]
+    #[\PHPUnit\Framework\Attributes\Depends('setRequiredSetsAnInputAsNotRequired')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function mergeSetsIsRequired(): void
     {
         // Setup
@@ -1196,13 +1056,11 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::NOT_REQUIRED, $result);
     }
 
-    /**
-     * @test
-     * @depends mergeIsCallable
-     * @depends setValueSetsAValue
-     * @depends setFilterChainSetsAFilterChain
-     * @depends getRawValueReturnsTheInputValueWithoutTheFilterChainApplied
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('mergeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('setValueSetsAValue')]
+    #[\PHPUnit\Framework\Attributes\Depends('setFilterChainSetsAFilterChain')]
+    #[\PHPUnit\Framework\Attributes\Depends('getRawValueReturnsTheInputValueWithoutTheFilterChainApplied')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function mergeSetsValueToRawValueForInputsThatAreNotLaminas(): void
     {
         // Setup
@@ -1220,11 +1078,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::A_SECOND_RAW_INPUT_VALUE, $result);
     }
 
-    /**
-     * @test
-     * @depends mergeIsCallable
-     * @depends getRawValueReturnsTheInputValueWithoutTheFilterChainApplied
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('mergeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('getRawValueReturnsTheInputValueWithoutTheFilterChainApplied')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function mergeSetsValueToRawValueForInputsThatAreLaminasAndHaveAValueSet(): void
     {
         // Setup
@@ -1242,11 +1098,9 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::A_SECOND_RAW_INPUT_VALUE, $result);
     }
 
-    /**
-     * @test
-     * @depends mergeIsCallable
-     * @depends getRawValueReturnsTheInputValueWithoutTheFilterChainApplied
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('mergeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Depends('getRawValueReturnsTheInputValueWithoutTheFilterChainApplied')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function mergeDoesNotSetValueForInputsThatAreLaminasDoNotHaveAValueSet(): void
     {
         // Setup
@@ -1263,12 +1117,10 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertSame(static::A_RAW_INPUT_VALUE, $result);
     }
 
-    /**
-     * @test
-     * @depends getFilterChainReturnsAFilterChain
-     * @depends setFilterChainSetsAFilterChain
-     * @depends mergeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('getFilterChainReturnsAFilterChain')]
+    #[\PHPUnit\Framework\Attributes\Depends('setFilterChainSetsAFilterChain')]
+    #[\PHPUnit\Framework\Attributes\Depends('mergeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function mergeMergesFilterChain(): void
     {
         // Setup
@@ -1285,12 +1137,10 @@ class ChainValidatedInputTest extends MockeryTestCase
         $this->assertEquals(static::A_STRING_SUFFIX . static::A_SECOND_STRING_SUFFIX, $result);
     }
 
-    /**
-     * @test
-     * @depends setValidatorChainSetsTheValidatorChain
-     * @depends getValidatorChainReturnsAValidatorChain
-     * @depends mergeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setValidatorChainSetsTheValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Depends('getValidatorChainReturnsAValidatorChain')]
+    #[\PHPUnit\Framework\Attributes\Depends('mergeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function mergeMergesValidatorChain(): void
     {
         // Setup
@@ -1341,7 +1191,7 @@ class ChainValidatedInputTest extends MockeryTestCase
 
     protected function errorMessageObjectThatCastsToAString(string $errorMessage): object
     {
-        return new class ($errorMessage) {
+        return new readonly class ($errorMessage) {
             public function __construct(private string $val)
             {
             }

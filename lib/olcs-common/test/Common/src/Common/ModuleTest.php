@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest;
 
 use Common\Module;
@@ -9,10 +11,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Mvc\Application;
 use Laminas\Validator\Csrf;
 
-/**
- * @covers \Common\Module
- */
-class ModuleTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Module::class)]
+final class ModuleTest extends MockeryTestCase
 {
     private static $cfg = [
         'csrf' => [
@@ -62,7 +62,7 @@ class ModuleTest extends MockeryTestCase
 
         $this->mockEvent->shouldReceive('getApplication')->never();
 
-        static::assertNull($this->sut->validateCsrfToken($this->mockEvent));
+        $this->assertNull($this->sut->validateCsrfToken($this->mockEvent));
     }
 
     public function testValidateCsrfTokenWitelisted(): void
@@ -74,7 +74,7 @@ class ModuleTest extends MockeryTestCase
 
         $this->mockEvent->shouldReceive('getApplication')->once()->andReturn($this->mockApp);
 
-        static::assertNull($this->sut->validateCsrfToken($this->mockEvent));
+        $this->assertNull($this->sut->validateCsrfToken($this->mockEvent));
     }
 
     public function testValidateCsrfTokenEmptyPost(): void
@@ -84,7 +84,7 @@ class ModuleTest extends MockeryTestCase
 
         $this->mockEvent->shouldReceive('getApplication')->never();
 
-        static::assertNull($this->sut->validateCsrfToken($this->mockEvent));
+        $this->assertNull($this->sut->validateCsrfToken($this->mockEvent));
     }
 
     public function testValidateCsrfTokenValid(): void
@@ -104,7 +104,7 @@ class ModuleTest extends MockeryTestCase
 
         $this->mockEvent->shouldReceive('getApplication')->once()->andReturn($this->mockApp);
 
-        static::assertNull($this->sut->validateCsrfToken($this->mockEvent));
+        $this->assertNull($this->sut->validateCsrfToken($this->mockEvent));
     }
 
     public function testValidateCsrfTokenNotValid(): void
@@ -130,6 +130,6 @@ class ModuleTest extends MockeryTestCase
             ->once()
             ->with('X-CSRF-error', '1');
 
-        static::assertNull($this->sut->validateCsrfToken($this->mockEvent));
+        $this->assertNull($this->sut->validateCsrfToken($this->mockEvent));
     }
 }

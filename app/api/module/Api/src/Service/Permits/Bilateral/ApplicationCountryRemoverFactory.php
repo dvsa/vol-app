@@ -16,7 +16,7 @@ class ApplicationCountryRemoverFactory implements FactoryInterface
      * @return ApplicationCountryRemover
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationCountryRemover
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ApplicationCountryRemover
     {
         return new ApplicationCountryRemover(
             $container->get('CqrsCommandCreator'),

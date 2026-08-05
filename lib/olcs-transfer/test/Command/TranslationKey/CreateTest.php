@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\TranslationKey;
 
 use Dvsa\Olcs\Transfer\Command\TranslationKey\Create;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\TranslationKey\Create;
 /**
  * Create test
  */
-class CreateTest extends \PHPUnit\Framework\TestCase
+final class CreateTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

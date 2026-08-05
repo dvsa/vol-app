@@ -84,8 +84,8 @@ final class UpdateTradingNames extends AbstractCommandHandler implements Transac
     private function updateTradingNames(
         Collection $current,
         array $new,
-        Organisation $organisation = null,
-        Licence $licence = null
+        ?Organisation $organisation = null,
+        ?Licence $licence = null
     ) {
         // Differentiate between trading names to keep and trading names to remove
         [$maintain, $remove] = $current->partition(
@@ -120,7 +120,7 @@ final class UpdateTradingNames extends AbstractCommandHandler implements Transac
         return [$newCount, $unchangedCount, $removedCount];
     }
 
-    private function createTradingName($name, Organisation $organisation = null, Licence $licence = null)
+    private function createTradingName($name, ?Organisation $organisation = null, ?Licence $licence = null)
     {
         $tradingName = new TradingName($name, $organisation);
 

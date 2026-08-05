@@ -30,7 +30,7 @@ use Dvsa\Olcs\Api\Domain\Command\System\GenerateSlaTargetDate as GenerateSlaTarg
 /**
  * Update Hearing Test
  */
-class UpdateHearingTest extends AbstractCommandHandlerTestCase
+final class UpdateHearingTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -192,13 +192,11 @@ class UpdateHearingTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function handleCommandProvider(): array
+    public static function handleCommandProvider(): \Iterator
     {
-        return [
-            [true, 'transportManager', null],
-            [false, 'licence', 66]
-        ];
+        yield [true, 'transportManager', null];
+        yield [false, 'licence', 66];
     }
 }

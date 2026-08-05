@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class AppealEntityTest extends EntityTester
+final class AppealEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -67,19 +67,19 @@ class AppealEntityTest extends EntityTester
 
         $this->assertInstanceOf(Entity::class, $returnedValue);
         $this->assertSame($reason, $entity->getReason());
-        $this->assertEquals($appealDate, $entity->getAppealDate()->format('Y-m-d'));
+        $this->assertSame($appealDate, $entity->getAppealDate()->format('Y-m-d'));
         $this->assertEquals($appealNo, $entity->getAppealNo());
-        $this->assertEquals($deadlineDate, $entity->getDeadlineDate()->format('Y-m-d'));
+        $this->assertSame($deadlineDate, $entity->getDeadlineDate()->format('Y-m-d'));
         $this->assertEquals($outlineGround, $entity->getOutlineGround());
-        $this->assertEquals($hearingDate, $entity->getHearingDate()->format('Y-m-d'));
-        $this->assertEquals($decisionDate, $entity->getDecisionDate()->format('Y-m-d'));
-        $this->assertEquals($papersDueDate, $entity->getPapersDueDate()->format('Y-m-d'));
-        $this->assertEquals($papersDueTcDate, $entity->getPapersDueTcDate()->format('Y-m-d'));
-        $this->assertEquals($papersSentDate, $entity->getPapersSentDate()->format('Y-m-d'));
-        $this->assertEquals($papersSentTcDate, $entity->getPapersSentTcDate()->format('Y-m-d'));
+        $this->assertSame($hearingDate, $entity->getHearingDate()->format('Y-m-d'));
+        $this->assertSame($decisionDate, $entity->getDecisionDate()->format('Y-m-d'));
+        $this->assertSame($papersDueDate, $entity->getPapersDueDate()->format('Y-m-d'));
+        $this->assertSame($papersDueTcDate, $entity->getPapersDueTcDate()->format('Y-m-d'));
+        $this->assertSame($papersSentDate, $entity->getPapersSentDate()->format('Y-m-d'));
+        $this->assertSame($papersSentTcDate, $entity->getPapersSentTcDate()->format('Y-m-d'));
         $this->assertEquals($comment, $entity->getComment());
         $this->assertSame($outcome, $entity->getOutcome());
-        $this->assertEquals($withdrawnDate, $entity->getWithdrawnDate()->format('Y-m-d'));
+        $this->assertSame($withdrawnDate, $entity->getWithdrawnDate()->format('Y-m-d'));
         $this->assertEquals($dvsaNotified, $entity->getDvsaNotified());
     }
 

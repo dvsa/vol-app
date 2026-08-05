@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Licence as LicenceRepo;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class EnforcementAreaTest extends QueryHandlerTestCase
+final class EnforcementAreaTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

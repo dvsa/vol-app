@@ -13,6 +13,11 @@ use Laminas\Stdlib\ArraySerializableInterface;
  * Trait DtoTest
  *
  * Do not use this directly - @see QueryTest
+ *
+ * NOTE: cases are iterated inside each test method rather than supplied via
+ * @dataProvider. PHPUnit 10+ requires data providers to be static, but these
+ * cases are derived from the per-DTO abstract methods below (getValidFieldValues
+ * etc.) which are instance state, so a static provider cannot reach them.
  */
 trait DtoTest
 {
@@ -96,132 +101,167 @@ trait DtoTest
      */
     abstract protected function createDtoContainer(ArraySerializableInterface $dto);
 
-    /**
-     * @dataProvider provideValidFieldsValidateCases
-     *
-     * @param string $fieldName
-     */
-    public function testValidFieldsValidate(array $fieldValues, $fieldName)
+    public function testValidFieldsValidate(): void
     {
-        $dto = $this->createPopulatedDto($fieldValues);
-        $this->assertDtoFieldValid($dto, $fieldName);
-    }
+        $asserted = false;
 
-    /**
-     * @dataProvider provideValidFieldsRemainUnchangedCases
-     *
-     * @param $fieldName
-     * @param $fieldValue
-     */
-    public function testValidFieldsRemainUnchanged($fieldName, $fieldValue)
-    {
-        $dto = $this->createPopulatedDto([$fieldName => $fieldValue]);
-        $dtoContainer = $this->createDtoContainer($dto);
-        $dtoContainer->getInputFilter()->setValidationGroup([$fieldName]);
-        $dtoContainer->isValid();
+        foreach ($this->getOptionalDtoFields() as $field) {
+            foreach ([[$field => null], [$field => ''], [$field => false], [$field => []], []] as $fieldValues) {
+                $this->assertDtoFieldValid($this->createPopulatedDto($fieldValues), $field);
+                $asserted = true;
+            }
+        }
 
-        $actual = $dto->getArrayCopy()[$fieldName];
-        Assert::assertSame(
-            $fieldValue,
-            $actual,
-            sprintf(
-                "Expected %s value %s to remain the same, but it got transformed to %s",
-                $fieldName,
-                var_export($fieldValue, true),
-                var_export($actual, true)
-            )
-        );
-    }
+        foreach ($this->getValidFieldValues() as $fieldName => $validValues) {
+            foreach ($validValues as $validValue) {
+                $this->assertDtoFieldValid($this->createPopulatedDto([$fieldName => $validValue]), $fieldName);
+                $asserted = true;
+            }
+        }
 
-    /**
-     * @dataProvider provideInvalidFieldCases
-     *
-     * @param $fieldName
-     * @param $value
-     */
-    public function testInvalidField($fieldName, $value)
-    {
-        $fieldValues = [$fieldName => $value];
-        $dto = $this->createPopulatedDto($fieldValues);
-        $this->assertDtoFieldInvalid($dto, $fieldName);
-    }
-
-    /**
-     * @dataProvider provideFieldTransformationCases
-     *
-     * @param string $fieldName
-     */
-    public function testFieldTransformations($fieldName, mixed $inputValue, mixed $expectedValue)
-    {
-        $fieldValues = [$fieldName => $inputValue];
-        $dto = $this->createPopulatedDto($fieldValues);
-        $this->assertTransformation($dto, $fieldName, $inputValue, $expectedValue);
-    }
-
-    /**
-     * @dataProvider provideGetterCases
-     *
-     * @param $fieldName
-     */
-    public function testGetterNames($fieldName)
-    {
-        Assert::assertSame(
-            "get" . ucwords($fieldName),
-            (new ReflectionMethod($this->createBlankDto(), "get$fieldName"))->getName(),
-            "Getter for $fieldName is named incorrectly name"
-        );
-    }
-
-    /**
-     * @dataProvider provideGetterCases
-     *
-     * @param $fieldName
-     */
-    public function testGetters($fieldName)
-    {
-        $dto = $this->createPopulatedDto([$fieldName => 'DUMMY-VALUE']);
-
-        Assert::assertTrue(
-            method_exists($dto, "get$fieldName"),
-            "Getter for $fieldName doesn't exit"
-        );
-
-        Assert::assertSame(
-            'DUMMY-VALUE',
-            $dto->{"get$fieldName"}(),
-            "Getter for $fieldName did not return the correct data"
-        );
-    }
-
-    /**
-     * @dataProvider provideDefaultValueCases
-     *
-     * @param $fieldName
-     */
-    public function testDefaultValues($fieldName)
-    {
-        $dto = $this->createBlankDto();
-        $dtoContainer = $this->createDtoContainer($dto);
-        $inputFilter = $dtoContainer->getInputFilter();
-        $inputFilter->setValidationGroup([$fieldName]);
-        $dtoContainer->isValid();
-
-        Assert::assertNull(
-            $inputFilter->getValues()[$fieldName],
-            sprintf("Expected %s to be when omitted", $fieldName)
-        );
-    }
-
-    public function provideDefaultValueCases()
-    {
-        foreach ($this->getOptionalDtoFields() as $fieldName) {
-            yield [$fieldName];
+        if (!$asserted) {
+            $this->expectNotToPerformAssertions();
         }
     }
 
-    public function provideGetterCases()
+    public function testValidFieldsRemainUnchanged(): void
     {
-        $fieldNames = array_unique(
+        $asserted = false;
+
+        foreach ($this->getValidFieldValues() as $fieldName => $validValues) {
+            foreach ($validValues as $fieldValue) {
+                $dto = $this->createPopulatedDto([$fieldName => $fieldValue]);
+                $dtoContainer = $this->createDtoContainer($dto);
+                $dtoContainer->getInputFilter()->setValidationGroup([$fieldName]);
+                $dtoContainer->isValid();
+
+                $actual = $dto->getArrayCopy()[$fieldName];
+                Assert::assertSame(
+                    $fieldValue,
+                    $actual,
+                    sprintf(
+                        "Expected %s value %s to remain the same, but it got transformed to %s",
+                        $fieldName,
+                        var_export($fieldValue, true),
+                        var_export($actual, true)
+                    )
+                );
+                $asserted = true;
+            }
+        }
+
+        if (!$asserted) {
+            $this->expectNotToPerformAssertions();
+        }
+    }
+
+    public function testInvalidField(): void
+    {
+        $asserted = false;
+
+        foreach ($this->getInvalidFieldValues() as $fieldName => $invalidValues) {
+            foreach ($invalidValues as $value) {
+                $dto = $this->createPopulatedDto([$fieldName => $value]);
+                $this->assertDtoFieldInvalid($dto, $fieldName);
+                $asserted = true;
+            }
+        }
+
+        if (!$asserted) {
+            $this->expectNotToPerformAssertions();
+        }
+    }
+
+    public function testFieldTransformations(): void
+    {
+        $asserted = false;
+
+        foreach ($this->getFilterTransformations() as $fieldName => $transformations) {
+            foreach ($transformations as [$inputValue, $expectedValue]) {
+                $dto = $this->createPopulatedDto([$fieldName => $inputValue]);
+                $this->assertTransformation($dto, $fieldName, $inputValue, $expectedValue);
+                $asserted = true;
+            }
+        }
+
+        if (!$asserted) {
+            $this->expectNotToPerformAssertions();
+        }
+    }
+
+    public function testGetterNames(): void
+    {
+        $fieldNames = $this->getterCaseFieldNames();
+
+        if ($fieldNames === []) {
+            $this->expectNotToPerformAssertions();
+            return;
+        }
+
+        foreach ($fieldNames as $fieldName) {
+            Assert::assertSame(
+                "get" . ucwords((string) $fieldName),
+                new ReflectionMethod($this->createBlankDto(), "get$fieldName")->getName(),
+                "Getter for $fieldName is named incorrectly name"
+            );
+        }
+    }
+
+    public function testGetters(): void
+    {
+        $fieldNames = $this->getterCaseFieldNames();
+
+        if ($fieldNames === []) {
+            $this->expectNotToPerformAssertions();
+            return;
+        }
+
+        foreach ($fieldNames as $fieldName) {
+            $dto = $this->createPopulatedDto([$fieldName => 'DUMMY-VALUE']);
+
+            Assert::assertTrue(
+                method_exists($dto, "get$fieldName"),
+                "Getter for $fieldName doesn't exit"
+            );
+
+            Assert::assertSame(
+                'DUMMY-VALUE',
+                $dto->{"get$fieldName"}(),
+                "Getter for $fieldName did not return the correct data"
+            );
+        }
+    }
+
+    public function testDefaultValues(): void
+    {
+        $optionalFields = $this->getOptionalDtoFields();
+
+        if ($optionalFields === []) {
+            $this->expectNotToPerformAssertions();
+            return;
+        }
+
+        foreach ($optionalFields as $fieldName) {
+            $dto = $this->createBlankDto();
+            $dtoContainer = $this->createDtoContainer($dto);
+            $inputFilter = $dtoContainer->getInputFilter();
+            $inputFilter->setValidationGroup([$fieldName]);
+            $dtoContainer->isValid();
+
+            Assert::assertNull(
+                $inputFilter->getValues()[$fieldName],
+                sprintf("Expected %s to be when omitted", $fieldName)
+            );
+        }
+    }
+
+    /**
+     * Unique set of field names referenced across the optional, valid, invalid and
+     * transformation field definitions - used by the getter tests.
+     */
+    private function getterCaseFieldNames(): array
+    {
+        return array_unique(
             array_merge(
                 $this->getOptionalDtoFields(),
                 array_keys($this->getValidFieldValues()),
@@ -229,59 +269,7 @@ trait DtoTest
                 array_keys($this->getFilterTransformations())
             )
         );
-        foreach ($fieldNames as $fieldName) {
-            yield [$fieldName];
-        }
     }
-
-    public function provideValidFieldsValidateCases()
-    {
-        foreach ($this->getOptionalDtoFields() as $field) {
-            yield "$field optional - null" => [[$field => null], $field];
-            yield "$field optional - ''" => [[$field => ''], $field];
-            yield "$field optional - false" => [[$field => false], $field];
-            yield "$field optional - []" => [[$field => []], $field];
-            yield "$field optional - unset" => [[], $field];
-        }
-
-        foreach ($this->getValidFieldValues() as $fieldName => $validValues) {
-            foreach ($validValues as $validValue) {
-                yield "$fieldName valid - " . var_export($validValue, true) => [
-                    [$fieldName => $validValue],
-                    $fieldName
-                ];
-            }
-        }
-    }
-
-    public function provideValidFieldsRemainUnchangedCases()
-    {
-        foreach ($this->getValidFieldValues() as $fieldName => $validValues) {
-            foreach ($validValues as $validValue) {
-                yield [$fieldName, $validValue];
-            }
-        }
-    }
-
-    public function provideInvalidFieldCases()
-    {
-        $invalidFieldValues = $this->getInvalidFieldValues();
-        foreach ($invalidFieldValues as $fieldName => $invalidValues) {
-            foreach ($invalidValues as $invalidValue) {
-                yield "$fieldName invalid - " . var_export($invalidValue, true) => [$fieldName, $invalidValue];
-            }
-        }
-    }
-
-    public function provideFieldTransformationCases()
-    {
-        foreach ($this->getFilterTransformations() as $fieldName => $transformations) {
-            foreach ($transformations as [$inputValue, $expectedValue]) {
-                yield [$fieldName, $inputValue, $expectedValue];
-            }
-        }
-    }
-
 
     protected function assertDtoFieldValid(ArraySerializableInterface $dto, $fieldName)
     {

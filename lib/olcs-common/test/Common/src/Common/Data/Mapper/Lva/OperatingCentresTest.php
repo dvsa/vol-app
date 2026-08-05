@@ -10,14 +10,12 @@ use Common\Service\Helper\TranslationHelperService;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Common\Data\Mapper\Lva\OperatingCentres
- */
-class OperatingCentresTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Data\Mapper\Lva\OperatingCentres::class)]
+final class OperatingCentresTest extends MockeryTestCase
 {
-    public const LOCATION = 'EXTERNAL';
+    public const string LOCATION = 'EXTERNAL';
 
-    public const TRANSL = '_TRANSL_';
+    public const string TRANSL = '_TRANSL_';
 
     /** @var  m\MockInterface | TranslationHelperService*/
     private $mockTranslator;
@@ -32,56 +30,67 @@ class OperatingCentresTest extends MockeryTestCase
         $this->mockFlashMsg = m::mock(FlashMessengerHelperService::class);
     }
 
-    /**
-     * @dataProvider dpTestMapFromResult
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestMapFromResult')]
     public function testMapFromResult($result, $expected): void
     {
         $this->assertEquals($expected, OperatingCentres::mapFromResult($result));
     }
 
     /**
-     * @return ((((int|string)[]|int|null|string)[]|int|null|string)[]|int|null|string)[][][]
+     * @return \Iterator<(int | string), array<array<(array<(array<(array<(int | string)> | int | string | null)> | int | string | null)> | int | string | null)>>>
      *
      * @psalm-return list{array{result: array{foo: 'bar', licence: array{enforcementArea: array{id: 123}}, totAuthHgvVehicles: null, totAuthLgvVehicles: 0, totAuthTrailers: 1, totCommunityLicences: 2}, expected: array{data: array{foo: 'bar', licence: array{enforcementArea: array{id: 123}}, totAuthHgvVehiclesFieldset: array{totAuthHgvVehicles: null}, totAuthLgvVehiclesFieldset: array{totAuthLgvVehicles: 0}, totAuthTrailersFieldset: array{totAuthTrailers: 1}, totCommunityLicencesFieldset: array{totCommunityLicences: 2}}, dataTrafficArea: array{trafficArea: null, enforcementArea: 123}}}, list{array{foo: 'bar', enforcementArea: array{id: 123}, licence: array{trafficArea: array{id: 'X'}}, totAuthHgvVehicles: null, totAuthLgvVehicles: 0, totAuthTrailers: 1, totCommunityLicences: 2}, array{data: array{foo: 'bar', enforcementArea: array{id: 123}, licence: array{trafficArea: array{id: 'X'}}, totAuthHgvVehiclesFieldset: array{totAuthHgvVehicles: null}, totAuthLgvVehiclesFieldset: array{totAuthLgvVehicles: 0}, totAuthTrailersFieldset: array{totAuthTrailers: 1}, totCommunityLicencesFieldset: array{totCommunityLicences: 2}}, dataTrafficArea: array{trafficArea: 'X', enforcementArea: 123}}}, list{array{foo: 'bar', enforcementArea: array{id: 123}, trafficArea: array{id: 'X'}, totAuthHgvVehicles: null, totAuthLgvVehicles: 0, totAuthTrailers: 1, totCommunityLicences: 2}, array{data: array{foo: 'bar', enforcementArea: array{id: 123}, trafficArea: array{id: 'X'}, totAuthHgvVehiclesFieldset: array{totAuthHgvVehicles: null}, totAuthLgvVehiclesFieldset: array{totAuthLgvVehicles: 0}, totAuthTrailersFieldset: array{totAuthTrailers: 1}, totCommunityLicencesFieldset: array{totCommunityLicences: 2}}, dataTrafficArea: array{trafficArea: 'X', enforcementArea: 123}}}}
      */
-    public function dpTestMapFromResult(): array
+    public static function dpTestMapFromResult(): \Iterator
     {
-        return [
-            [
-                'result' => [
+        yield [
+            'result' => [
+                'foo' => 'bar',
+                'licence' => [
+                    'enforcementArea' => [
+                        'id' => 123
+                    ]
+                ],
+                'totAuthHgvVehicles' => null,
+                'totAuthLgvVehicles' => 0,
+                'totAuthTrailers' => 1,
+                'totCommunityLicences' => 2,
+            ],
+            'expected' => [
+                'data' => [
                     'foo' => 'bar',
                     'licence' => [
                         'enforcementArea' => [
                             'id' => 123
                         ]
                     ],
-                    'totAuthHgvVehicles' => null,
-                    'totAuthLgvVehicles' => 0,
-                    'totAuthTrailers' => 1,
-                    'totCommunityLicences' => 2,
+                    'totAuthHgvVehiclesFieldset' => ['totAuthHgvVehicles' => null],
+                    'totAuthLgvVehiclesFieldset' => ['totAuthLgvVehicles' => 0],
+                    'totAuthTrailersFieldset' => ['totAuthTrailers' => 1],
+                    'totCommunityLicencesFieldset' => ['totCommunityLicences' => 2],
                 ],
-                'expected' => [
-                    'data' => [
-                        'foo' => 'bar',
-                        'licence' => [
-                            'enforcementArea' => [
-                                'id' => 123
-                            ]
-                        ],
-                        'totAuthHgvVehiclesFieldset' => ['totAuthHgvVehicles' => null],
-                        'totAuthLgvVehiclesFieldset' => ['totAuthLgvVehicles' => 0],
-                        'totAuthTrailersFieldset' => ['totAuthTrailers' => 1],
-                        'totCommunityLicencesFieldset' => ['totCommunityLicences' => 2],
-                    ],
-                    'dataTrafficArea' => [
-                        'trafficArea' => null,
-                        'enforcementArea' => 123
-                    ]
+                'dataTrafficArea' => [
+                    'trafficArea' => null,
+                    'enforcementArea' => 123
                 ]
+            ]
+        ];
+        yield [
+            [
+                'foo' => 'bar',
+                'enforcementArea' => [
+                    'id' => 123
+                ],
+                'licence' => [
+                    'trafficArea' => ['id' => 'X']
+                ],
+                'totAuthHgvVehicles' => null,
+                'totAuthLgvVehicles' => 0,
+                'totAuthTrailers' => 1,
+                'totCommunityLicences' => 2,
             ],
             [
-                [
+                'data' => [
                     'foo' => 'bar',
                     'enforcementArea' => [
                         'id' => 123
@@ -89,111 +98,92 @@ class OperatingCentresTest extends MockeryTestCase
                     'licence' => [
                         'trafficArea' => ['id' => 'X']
                     ],
-                    'totAuthHgvVehicles' => null,
-                    'totAuthLgvVehicles' => 0,
-                    'totAuthTrailers' => 1,
-                    'totCommunityLicences' => 2,
+                    'totAuthHgvVehiclesFieldset' => ['totAuthHgvVehicles' => null],
+                    'totAuthLgvVehiclesFieldset' => ['totAuthLgvVehicles' => 0],
+                    'totAuthTrailersFieldset' => ['totAuthTrailers' => 1],
+                    'totCommunityLicencesFieldset' => ['totCommunityLicences' => 2],
                 ],
-                [
-                    'data' => [
-                        'foo' => 'bar',
-                        'enforcementArea' => [
-                            'id' => 123
-                        ],
-                        'licence' => [
-                            'trafficArea' => ['id' => 'X']
-                        ],
-                        'totAuthHgvVehiclesFieldset' => ['totAuthHgvVehicles' => null],
-                        'totAuthLgvVehiclesFieldset' => ['totAuthLgvVehicles' => 0],
-                        'totAuthTrailersFieldset' => ['totAuthTrailers' => 1],
-                        'totCommunityLicencesFieldset' => ['totCommunityLicences' => 2],
-                    ],
-                    'dataTrafficArea' => [
-                        'trafficArea' => 'X',
-                        'enforcementArea' => 123
-                    ]
+                'dataTrafficArea' => [
+                    'trafficArea' => 'X',
+                    'enforcementArea' => 123
                 ]
+            ]
+        ];
+        yield [
+            [
+                'foo' => 'bar',
+                'enforcementArea' => [
+                    'id' => 123
+                ],
+                'trafficArea' => ['id' => 'X'],
+                'totAuthHgvVehicles' => null,
+                'totAuthLgvVehicles' => 0,
+                'totAuthTrailers' => 1,
+                'totCommunityLicences' => 2,
             ],
             [
-                [
+                'data' => [
                     'foo' => 'bar',
                     'enforcementArea' => [
                         'id' => 123
                     ],
                     'trafficArea' => ['id' => 'X'],
-                    'totAuthHgvVehicles' => null,
-                    'totAuthLgvVehicles' => 0,
-                    'totAuthTrailers' => 1,
-                    'totCommunityLicences' => 2,
+                    'totAuthHgvVehiclesFieldset' => ['totAuthHgvVehicles' => null],
+                    'totAuthLgvVehiclesFieldset' => ['totAuthLgvVehicles' => 0],
+                    'totAuthTrailersFieldset' => ['totAuthTrailers' => 1],
+                    'totCommunityLicencesFieldset' => ['totCommunityLicences' => 2],
                 ],
-                [
-                    'data' => [
-                        'foo' => 'bar',
-                        'enforcementArea' => [
-                            'id' => 123
-                        ],
-                        'trafficArea' => ['id' => 'X'],
-                        'totAuthHgvVehiclesFieldset' => ['totAuthHgvVehicles' => null],
-                        'totAuthLgvVehiclesFieldset' => ['totAuthLgvVehicles' => 0],
-                        'totAuthTrailersFieldset' => ['totAuthTrailers' => 1],
-                        'totCommunityLicencesFieldset' => ['totCommunityLicences' => 2],
-                    ],
-                    'dataTrafficArea' => [
-                        'trafficArea' => 'X',
-                        'enforcementArea' => 123
-                    ]
+                'dataTrafficArea' => [
+                    'trafficArea' => 'X',
+                    'enforcementArea' => 123
                 ]
             ]
         ];
     }
 
-    /**
-     * @dataProvider dpMapFromForm
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpMapFromForm')]
     public function testMapFromForm($formData, $expected): void
     {
         $this->assertEquals($expected, OperatingCentres::mapFromForm($formData));
     }
 
     /**
-     * @return (((int|null)[]|string)[]|int|null|string)[][][]
+     * @return \Iterator<(int | string), array<array<(array<(array<(int | null)> | string)> | int | string | null)>>>
      *
      * @psalm-return array{'all fieldsets included': array{formData: array{data: array{foo: 'bar', totAuthHgvVehiclesFieldset: array{totAuthHgvVehicles: null}, totAuthLgvVehiclesFieldset: array{totAuthLgvVehicles: 0}, totAuthTrailersFieldset: array{totAuthTrailers: 1}, totCommunityLicencesFieldset: array{totCommunityLicences: 2}}, dataTrafficArea: array{bar: 'cake'}}, expected: array{foo: 'bar', bar: 'cake', totAuthHgvVehicles: null, totAuthLgvVehicles: 0, totAuthTrailers: 1, totCommunityLicences: 2}}, 'all fieldsets removed': array{formData: array{data: array{foo: 'bar'}}, expected: array{foo: 'bar'}}}
      */
-    public function dpMapFromForm(): array
+    public static function dpMapFromForm(): \Iterator
     {
-        return [
-            'all fieldsets included' => [
-                'formData' => [
-                    'data' => [
-                        'foo' => 'bar',
-                        'totAuthHgvVehiclesFieldset' => ['totAuthHgvVehicles' => null],
-                        'totAuthLgvVehiclesFieldset' => ['totAuthLgvVehicles' => 0],
-                        'totAuthTrailersFieldset' => ['totAuthTrailers' => 1],
-                        'totCommunityLicencesFieldset' => ['totCommunityLicences' => 2],
-                    ],
-                    'dataTrafficArea' => [
-                        'bar' => 'cake'
-                    ]
-                ],
-                'expected' => [
+        yield 'all fieldsets included' => [
+            'formData' => [
+                'data' => [
                     'foo' => 'bar',
-                    'bar' => 'cake',
-                    'totAuthHgvVehicles' => null,
-                    'totAuthLgvVehicles' => 0,
-                    'totAuthTrailers' => 1,
-                    'totCommunityLicences' => 2,
+                    'totAuthHgvVehiclesFieldset' => ['totAuthHgvVehicles' => null],
+                    'totAuthLgvVehiclesFieldset' => ['totAuthLgvVehicles' => 0],
+                    'totAuthTrailersFieldset' => ['totAuthTrailers' => 1],
+                    'totCommunityLicencesFieldset' => ['totCommunityLicences' => 2],
+                ],
+                'dataTrafficArea' => [
+                    'bar' => 'cake'
+                ]
+            ],
+            'expected' => [
+                'foo' => 'bar',
+                'bar' => 'cake',
+                'totAuthHgvVehicles' => null,
+                'totAuthLgvVehicles' => 0,
+                'totAuthTrailers' => 1,
+                'totCommunityLicences' => 2,
+            ],
+        ];
+        yield 'all fieldsets removed' => [
+            'formData' => [
+                'data' => [
+                    'foo' => 'bar',
                 ],
             ],
-            'all fieldsets removed' => [
-                'formData' => [
-                    'data' => [
-                        'foo' => 'bar',
-                    ],
-                ],
-                'expected' => [
-                    'foo' => 'bar',
-                ],
+            'expected' => [
+                'foo' => 'bar',
             ],
         ];
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\User;
 
 use Common\Service\Cqrs\Command\CommandSender;
@@ -12,9 +14,9 @@ use Mockery as m;
  * Class LastLoginServiceTest
  * @package CommonTest\Service\User
  */
-class LastLoginServiceTest extends MockeryTestCase
+final class LastLoginServiceTest extends MockeryTestCase
 {
-    public const TOKEN = "exampleToken";
+    public const string TOKEN = "exampleToken";
 
     /** @var LastLoginService */
     private $sut;
@@ -38,7 +40,7 @@ class LastLoginServiceTest extends MockeryTestCase
             ->with(
                 m::on(function ($command) {
                     $this->assertInstanceOf(UpdateUserLastLoginAt::class, $command);
-                    $this->assertEquals($command->getSecureToken(), self::TOKEN);
+                    $this->assertEquals(self::TOKEN, $command->getSecureToken());
                     return true;
                 })
             );

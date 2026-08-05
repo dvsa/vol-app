@@ -13,7 +13,7 @@ use Laminas\Http\Response;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-class CompanySearchTest extends MockeryTestCase
+final class CompanySearchTest extends MockeryTestCase
 {
     protected CompanySearchStub $sut;
 
@@ -105,25 +105,21 @@ class CompanySearchTest extends MockeryTestCase
         $this->assertSame($actual, $form);
     }
 
-    /**
-     * @dataProvider dpCompanyNumbers
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpCompanyNumbers')]
     public function testisValidCompanyNumber($comanyNumber, $expected): void
     {
         $this->assertEquals($expected, $this->sut->isValidCompanyNumber($comanyNumber));
     }
 
-    public function dpCompanyNumbers(): array
+    public static function dpCompanyNumbers(): \Iterator
     {
-        return [
-            'valid' => [
-                12345678,
-                true
-            ],
-            'invalid' => [
-                123,
-                false
-            ]
+        yield 'valid' => [
+            12345678,
+            true
+        ];
+        yield 'invalid' => [
+            123,
+            false
         ];
     }
 }

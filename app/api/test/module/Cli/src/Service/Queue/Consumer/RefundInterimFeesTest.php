@@ -17,9 +17,9 @@ use Dvsa\Olcs\Cli\Service\Queue\Consumer\RefundInterimFees;
 use Dvsa\Olcs\Transfer\Command\Fee\RefundFee;
 use Mockery as m;
 
-class RefundInterimFeesTest extends AbstractConsumerTestCase
+final class RefundInterimFeesTest extends AbstractConsumerTestCase
 {
-    public const QUEUE_ITEM_ENTITY_ID = 17;
+    public const int QUEUE_ITEM_ENTITY_ID = 17;
 
     /**
      * @var QueueEntity

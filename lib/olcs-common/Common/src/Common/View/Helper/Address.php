@@ -17,7 +17,7 @@ class Address extends AbstractHelper
      *
      * @return string HTML
      */
-    public function __invoke(array $address, array $fields = null, $glue = ', ')
+    public function __invoke(array $address, ?array $fields = null, $glue = ', ')
     {
         $parts = [];
 

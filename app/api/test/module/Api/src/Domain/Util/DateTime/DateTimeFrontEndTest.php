@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\AddMonthsRoundingDown;
  *
  * @package Dvsa\OlcsTest\Api\Domain\Util\DateTime
  */
-class DateTimeFrontEndTest extends MockeryTestCase
+final class DateTimeFrontEndTest extends MockeryTestCase
 {
     public function testConstructorGmt(): void
     {

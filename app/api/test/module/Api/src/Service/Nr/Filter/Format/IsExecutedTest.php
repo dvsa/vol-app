@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase as TestCase;
  * Class IsExecutedTest
  * @package Dvsa\OlcsTest\Api\Service\NrFilter\Format
  */
-class IsExecutedTest extends TestCase
+final class IsExecutedTest extends TestCase
 {
     /**
      * Tests the filter
@@ -29,27 +29,24 @@ class IsExecutedTest extends TestCase
     /**
      * data provider for testFilterProvider
      */
-    public static function filterProvider(): array
+    public static function filterProvider(): \Iterator
     {
         $sut = new IsExecuted();
-
-        return [
-            [
-                ['imposedErrus' => []],
-                ['imposedErrus' => []]
-            ],
-            [
-                ['imposedErrus' => [0 => ['executed' => 'Yes']]],
-                ['imposedErrus' => [0 => ['executed' => $sut::YES_EXECUTED_KEY]]]
-            ],
-            [
-                ['imposedErrus' => [0 => ['executed' => 'No']]],
-                ['imposedErrus' => [0 => ['executed' => $sut::NO_EXECUTED_KEY]]]
-            ],
-            [
-                ['imposedErrus' => [0 => ['executed' => 'Unknown']]],
-                ['imposedErrus' => [0 => ['executed' => $sut::UNKNOWN_EXECUTED_KEY]]]
-            ]
+        yield [
+            ['imposedErrus' => []],
+            ['imposedErrus' => []]
+        ];
+        yield [
+            ['imposedErrus' => [0 => ['executed' => 'Yes']]],
+            ['imposedErrus' => [0 => ['executed' => $sut::YES_EXECUTED_KEY]]]
+        ];
+        yield [
+            ['imposedErrus' => [0 => ['executed' => 'No']]],
+            ['imposedErrus' => [0 => ['executed' => $sut::NO_EXECUTED_KEY]]]
+        ];
+        yield [
+            ['imposedErrus' => [0 => ['executed' => 'Unknown']]],
+            ['imposedErrus' => [0 => ['executed' => $sut::UNKNOWN_EXECUTED_KEY]]]
         ];
     }
 }

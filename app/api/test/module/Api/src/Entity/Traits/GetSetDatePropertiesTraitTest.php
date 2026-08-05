@@ -9,7 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * GetSetDatePropertiesTraitTest
  */
-class GetSetDatePropertiesTraitTest extends MockeryTestCase
+final class GetSetDatePropertiesTraitTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderAsDateTime')]
     public function testGetDates(mixed $expected, mixed $dateTime): void
@@ -24,12 +24,10 @@ class GetSetDatePropertiesTraitTest extends MockeryTestCase
         }
     }
 
-    public static function dataProviderAsDateTime(): array
+    public static function dataProviderAsDateTime(): \Iterator
     {
-        return [
-            [new \DateTime('2017-09-29'), '2017-09-29'],
-            [new \DateTime('2017-09-29'), new \DateTime('2017-09-29')],
-            [null, null],
-        ];
+        yield [new \DateTime('2017-09-29'), '2017-09-29'];
+        yield [new \DateTime('2017-09-29'), new \DateTime('2017-09-29')];
+        yield [null, null];
     }
 }

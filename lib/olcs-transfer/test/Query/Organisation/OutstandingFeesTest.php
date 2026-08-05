@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Organisation;
 
 use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Organisation\OutstandingFees;
 /**
  * Outstanding Fees test
  */
-class OutstandingFeesTest extends \PHPUnit\Framework\TestCase
+final class OutstandingFeesTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

@@ -25,21 +25,15 @@ use RuntimeException;
 
 /**
  * IrhpPermitApplication Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="irhp_permit_application",
- *    indexes={
- *        @ORM\Index(name="fk_irhp_permit_applications_irhp_permit_windows1_idx",
-     *     columns={"irhp_permit_window_id"}),
- *        @ORM\Index(name="fk_irhp_permit_applications_licence1_idx", columns={"licence_id"}),
- *        @ORM\Index(name="fk_irhp_permit_application_sectors_id1_idx", columns={"sectors_id"}),
- *        @ORM\Index(name="irhp_permit_type_ref_data_status_id_fk", columns={"status"}),
- *        @ORM\Index(name="fk_irhp_permit_application_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_irhp_permit_application_last_modified_by_user_id",
-     *     columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_permit_application')]
+#[ORM\Index(name: 'fk_irhp_permit_applications_irhp_permit_windows1_idx', columns: ['irhp_permit_window_id'])]
+#[ORM\Index(name: 'fk_irhp_permit_applications_licence1_idx', columns: ['licence_id'])]
+#[ORM\Index(name: 'fk_irhp_permit_application_sectors_id1_idx', columns: ['sectors_id'])]
+#[ORM\Index(name: 'irhp_permit_type_ref_data_status_id_fk', columns: ['status'])]
+#[ORM\Index(name: 'fk_irhp_permit_application_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_irhp_permit_application_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Entity]
 class IrhpPermitApplication extends AbstractIrhpPermitApplication implements QaEntityInterface
 {
     use TieredProductReference;
@@ -135,7 +129,7 @@ class IrhpPermitApplication extends AbstractIrhpPermitApplication implements QaE
     public static function createNew(
         IrhpPermitWindow $IrhpPermitWindow,
         Licence $licence,
-        IrhpApplication $irhpApplication = null
+        ?IrhpApplication $irhpApplication = null
     ) {
         $IrhpPermitApplication = new self();
 

@@ -22,7 +22,7 @@ class FormFileUploadList extends AbstractHelper
      *
      * @return string
      */
-    public function __invoke(FieldsetInterface $element = null)
+    public function __invoke(?FieldsetInterface $element = null)
     {
         return $this->render($element);
     }

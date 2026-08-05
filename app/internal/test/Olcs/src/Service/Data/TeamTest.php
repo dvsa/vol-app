@@ -11,7 +11,7 @@ use Mockery as m;
 use Olcs\Service\Data\Team;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class TeamTest extends AbstractDataServiceTestCase
+final class TeamTest extends AbstractDataServiceTestCase
 {
     private Team $sut;
 
@@ -38,19 +38,17 @@ class TeamTest extends AbstractDataServiceTestCase
         $this->assertEquals($expected, $this->sut->fetchListOptions(''));
     }
 
-    public static function provideFetchListOptions(): array
+    public static function provideFetchListOptions(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    ['id' => 'val-1', 'name' => 'Value 1'],
-                    ['id' => 'val-2', 'name' => 'Value 2'],
-                    ['id' => 'val-3', 'name' => 'Value 3'],
-                ],
-                self::SINGLE_EXPECTED,
+                ['id' => 'val-1', 'name' => 'Value 1'],
+                ['id' => 'val-2', 'name' => 'Value 2'],
+                ['id' => 'val-3', 'name' => 'Value 3'],
             ],
-            [false, []]
+            self::SINGLE_EXPECTED,
         ];
+        yield [false, []];
     }
 
     public function testFetchListData(): void

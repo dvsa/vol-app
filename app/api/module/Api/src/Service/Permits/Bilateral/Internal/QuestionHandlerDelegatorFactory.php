@@ -19,7 +19,7 @@ class QuestionHandlerDelegatorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): QuestionHandlerDelegator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): QuestionHandlerDelegator
     {
         $questionHandlerDelegator = new QuestionHandlerDelegator(
             $container->get('QaContextFactory')

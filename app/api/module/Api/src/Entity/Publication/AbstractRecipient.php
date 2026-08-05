@@ -22,21 +22,14 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="recipient",
- *    indexes={
- *        @ORM\Index(name="ix_recipient_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_recipient_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_recipient_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_recipient_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'recipient')]
+#[ORM\Index(name: 'ix_recipient_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_recipient_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\UniqueConstraint(name: 'uk_recipient_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractRecipient implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -50,123 +43,106 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Recipient registered for AD, Applications and Decisions, publications
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="send_app_decision", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'send_app_decision', nullable: false, options: ['default' => 0])]
     protected $sendAppDecision = 0;
 
     /**
      * Recipient registered for NP, Notices and Procedures, publications
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="send_notices_procs", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'send_notices_procs', nullable: false, options: ['default' => 0])]
     protected $sendNoticesProcs = 0;
 
     /**
      * Recipient receives extra sensitive info. DOBs for people in publication.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_police", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_police', nullable: false, options: ['default' => 0])]
     protected $isPolice = 0;
 
     /**
      * Is objector or representor
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_objector", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_objector', nullable: false, options: ['default' => 0])]
     protected $isObjector = 0;
 
     /**
      * Contact name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="contact_name", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'contact_name', length: 100, nullable: true)]
     protected $contactName;
 
     /**
      * Email address
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="email_address", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'email_address', length: 255, nullable: true)]
     protected $emailAddress;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
      * TrafficAreas
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", inversedBy="recipients", fetch="LAZY")
-     * @ORM\JoinTable(name="recipient_traffic_area",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="recipient_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'recipient_traffic_area')]
+    #[ORM\JoinColumn(name: 'recipient_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'traffic_area_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, inversedBy: 'recipients', fetch: 'LAZY')]
     protected $trafficAreas;
 
     /**
@@ -191,7 +167,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param int $id new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setId($id)
     {
@@ -215,7 +191,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -239,7 +215,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -263,7 +239,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param string $sendAppDecision new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setSendAppDecision($sendAppDecision)
     {
@@ -287,7 +263,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param string $sendNoticesProcs new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setSendNoticesProcs($sendNoticesProcs)
     {
@@ -311,7 +287,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param string $isPolice new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setIsPolice($isPolice)
     {
@@ -335,7 +311,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param string $isObjector new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setIsObjector($isObjector)
     {
@@ -359,7 +335,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param string $contactName new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setContactName($contactName)
     {
@@ -383,7 +359,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param string $emailAddress new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setEmailAddress($emailAddress)
     {
@@ -407,7 +383,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param int $version new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setVersion($version)
     {
@@ -431,7 +407,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param int $olbsKey new value being set
      *
-     * @return Recipient
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -455,7 +431,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $trafficAreas collection being set as the value
      *
-     * @return Recipient
+     * @return static
      */
     public function setTrafficAreas($trafficAreas)
     {
@@ -479,7 +455,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $trafficAreas collection being added
      *
-     * @return Recipient
+     * @return static
      */
     public function addTrafficAreas($trafficAreas)
     {
@@ -502,7 +478,7 @@ abstract class AbstractRecipient implements BundleSerializableInterface, JsonSer
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $trafficAreas collection being removed
      *
-     * @return Recipient
+     * @return static
      */
     public function removeTrafficAreas($trafficAreas)
     {

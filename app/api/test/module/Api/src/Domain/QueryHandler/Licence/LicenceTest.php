@@ -22,7 +22,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class LicenceTest extends QueryHandlerTestCase
+final class LicenceTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -259,41 +259,39 @@ class LicenceTest extends QueryHandlerTestCase
         $this->assertSame($isLicenceSurrenderAllowed, $resultArray['isLicenceSurrenderAllowed']);
     }
 
-    public static function dptestHandleQueryShowExpiryWarningDataProvider(): array
+    public static function dptestHandleQueryShowExpiryWarningDataProvider(): \Iterator
     {
-        return [
-            'should show' => [
-                'expected' => true,
-                'isExpiring' => true,
-                'isSystemParamDisabled' => false,
-                'continuationDetailStatusId' => ContinuationDetail::STATUS_PRINTED,
-                'isLicenceSurrenderAllowed' => true,
-                'openApplicationsForLicence' => [],
-            ],
-            'licence is expiring' => [
-                'expected' => false,
-                'isExpiring' => false,
-                'isSystemParamDisabled' => false,
-                'continuationDetailStatusId' => ContinuationDetail::STATUS_PRINTED,
-                'isLicenceSurrenderAllowed' => true,
-                'openApplicationsForLicence' => [],
-            ],
-            'system Parameter disabled' => [
-                'expected' => false,
-                'isExpiring' => true,
-                'isSystemParamDisabled' => true,
-                'continuationDetailStatusId' => ContinuationDetail::STATUS_PRINTED,
-                'isLicenceSurrenderAllowed' => false,
-                'openApplicationsForLicence' => ['some data'],
-            ],
-            'wrong continuation detail status' => [
-                'expected' => false,
-                'isExpiring' => true,
-                'isSystemParamDisabled' => false,
-                'continuationDetailStatusId' => ContinuationDetail::STATUS_PRINTING,
-                'isLicenceSurrenderAllowed' => false,
-                'openApplicationsForLicence' => ['some data'],
-            ],
+        yield 'should show' => [
+            'expected' => true,
+            'isExpiring' => true,
+            'isSystemParamDisabled' => false,
+            'continuationDetailStatusId' => ContinuationDetail::STATUS_PRINTED,
+            'isLicenceSurrenderAllowed' => true,
+            'openApplicationsForLicence' => [],
+        ];
+        yield 'licence is expiring' => [
+            'expected' => false,
+            'isExpiring' => false,
+            'isSystemParamDisabled' => false,
+            'continuationDetailStatusId' => ContinuationDetail::STATUS_PRINTED,
+            'isLicenceSurrenderAllowed' => true,
+            'openApplicationsForLicence' => [],
+        ];
+        yield 'system Parameter disabled' => [
+            'expected' => false,
+            'isExpiring' => true,
+            'isSystemParamDisabled' => true,
+            'continuationDetailStatusId' => ContinuationDetail::STATUS_PRINTED,
+            'isLicenceSurrenderAllowed' => false,
+            'openApplicationsForLicence' => ['some data'],
+        ];
+        yield 'wrong continuation detail status' => [
+            'expected' => false,
+            'isExpiring' => true,
+            'isSystemParamDisabled' => false,
+            'continuationDetailStatusId' => ContinuationDetail::STATUS_PRINTING,
+            'isLicenceSurrenderAllowed' => false,
+            'openApplicationsForLicence' => ['some data'],
         ];
     }
 
@@ -353,17 +351,15 @@ class LicenceTest extends QueryHandlerTestCase
         }
     }
 
-    public static function dptestHandleQuery(): array
+    public static function dptestHandleQuery(): \Iterator
     {
-        return [
-            [
-                'isLicenceSurrenderAllowed' => true,
-                'openApplicationsForLicence' => []
-            ],
-            [
-                'isLicenceSurrenderAllowed' => false,
-                'openApplicationsForLicence' => ['some data']
-            ]
+        yield [
+            'isLicenceSurrenderAllowed' => true,
+            'openApplicationsForLicence' => []
+        ];
+        yield [
+            'isLicenceSurrenderAllowed' => false,
+            'openApplicationsForLicence' => ['some data']
         ];
     }
 }

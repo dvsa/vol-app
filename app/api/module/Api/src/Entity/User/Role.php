@@ -7,15 +7,11 @@ use Rbac\Role\RoleInterface;
 
 /**
  * Role Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="role",
- *    indexes={
- *        @ORM\Index(name="ix_role_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_role_last_modified_by", columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'role')]
+#[ORM\Index(name: 'ix_role_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_role_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Entity]
 class Role extends AbstractRole implements RoleInterface
 {
     public const ROLE_SYSTEM_ADMIN = 'system-admin';

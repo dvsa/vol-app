@@ -34,7 +34,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class StopTest extends AbstractCommandHandlerTestCase
+final class StopTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -187,19 +187,17 @@ class StopTest extends AbstractCommandHandlerTestCase
         $this->assertEquals('reason', $communityLicSuspensionReason->getType()->getId());
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
-            [(new \DateTime())->format('Y-m-d'), 'The licence 10 have been suspended'],
-            [(new \DateTime('3000-01-01'))->format('Y-m-d'), 'The licence 10 due to suspend'],
-        ];
+        yield [new \DateTime()->format('Y-m-d'), 'The licence 10 have been suspended'];
+        yield [new \DateTime('3000-01-01')->format('Y-m-d'), 'The licence 10 due to suspend'];
     }
 
     public function testHandleCommandSuspensionWithApplication(): void
     {
         $licenceId = 1;
         $communityLicenceIds = [10];
-        $startDate = (new \DateTime())->format('Y-m-d');
+        $startDate = new \DateTime()->format('Y-m-d');
         $endDate = '3017-01-01';
 
         $data = [

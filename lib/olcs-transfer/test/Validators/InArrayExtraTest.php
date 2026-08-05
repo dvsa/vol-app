@@ -1,19 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\InArrayExtra;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Validators\InArrayExtra
- */
-class InArrayExtraTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Validators\InArrayExtra::class)]
+final class InArrayExtraTest extends MockeryTestCase
 {
     /** @var  InArrayExtra */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(InArrayExtra::class)->makePartial();
@@ -23,7 +24,7 @@ class InArrayExtraTest extends MockeryTestCase
     {
         $extHaystack = ['extra_3', 'unit_extra4'];
         $this->sut->setExtraHaystack($extHaystack);
-        static::assertSame($extHaystack, $this->sut->getExtraHaystack());
+        $this->assertSame($extHaystack, $this->sut->getExtraHaystack());
     }
 
     public function testGetHaystack()
@@ -33,9 +34,6 @@ class InArrayExtraTest extends MockeryTestCase
         $extHaystack = ['extra_3', 'unit_extra4'];
         $this->sut->setExtraHaystack($extHaystack);
 
-        static::assertSame(
-            ['opt_1', 'opt_2', 'extra_3', 'unit_extra4'],
-            $this->sut->getHaystack()
-        );
+        $this->assertSame(['opt_1', 'opt_2', 'extra_3', 'unit_extra4'], $this->sut->getHaystack());
     }
 }

@@ -11,7 +11,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\DataService\ApplicationStatus::class)]
-class ApplicationStatusTest extends QueryHandlerTestCase
+final class ApplicationStatusTest extends QueryHandlerTestCase
 {
     /** @var QueryHandler\DataService\ApplicationStatus  */
     protected $sut;
@@ -41,12 +41,9 @@ class ApplicationStatusTest extends QueryHandlerTestCase
 
         $actual = $this->sut->handleQuery($query);
 
-        static::assertEquals(
-            [
-                'result' => ['EXPECT', 'EXPECT'],
-                'count' => 2,
-            ],
-            $actual
-        );
+        $this->assertEquals([
+            'result' => ['EXPECT', 'EXPECT'],
+            'count' => 2,
+        ], $actual);
     }
 }

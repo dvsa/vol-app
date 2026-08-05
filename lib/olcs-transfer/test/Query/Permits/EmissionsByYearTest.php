@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Permits;
 
 use Dvsa\Olcs\Transfer\Query\Permits\EmissionsByYear;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\EmissionsByYear;
 /**
  * Emissions By Year test
  */
-class EmissionsByYearTest extends \PHPUnit\Framework\TestCase
+final class EmissionsByYearTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

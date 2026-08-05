@@ -11,7 +11,7 @@ use Dvsa\Olcs\Cli\Domain\Command\Permits\InitialiseScope;
  *
  * @author Jason de Jonge <jason.de-jonge@capgemini.co.uk>
  */
-class InitialiseScopeTest extends \PHPUnit\Framework\TestCase
+final class InitialiseScopeTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {
@@ -21,6 +21,6 @@ class InitialiseScopeTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals(7, $sut->getStockId());
+        $this->assertEquals(7, $sut->getStockId());
     }
 }

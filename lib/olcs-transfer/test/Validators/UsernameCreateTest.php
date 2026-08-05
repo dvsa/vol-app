@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\UsernameCreate;
@@ -8,18 +10,17 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * UsernameCreate Test
  */
-class UsernameCreateTest extends MockeryTestCase
+final class UsernameCreateTest extends MockeryTestCase
 {
     private $validator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->validator = new UsernameCreate();
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testValidator($input, $isValid)
     {
         $outcome = $this->validator->isValid($input);
@@ -27,28 +28,26 @@ class UsernameCreateTest extends MockeryTestCase
         $this->assertEquals($isValid, $outcome);
     }
 
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            ['0123456789', false],
-            ['abcdefghijklmnoprstuvwxyz', true],
-            ['ABCDEFGHIJKLMNOPRSTUVWXYZ', false],
-            ['#$%\'+-/=?^_.@`|~",:;<>', false],
-            ['a¬bs', false],
-            ['a!bs', false],
-            ['a£bs', false],
-            ['a&bs', false],
-            ['a*bs', false],
-            ['a(bs', false],
-            ['a)bs', false],
-            ['a bs', false],
-            ['0', false],
-            ['01', false],
-            ['0123456789012345678901234567890123456789', false],
-            ['01234567890123456789012345678901234567890', false],
-            ['0thisisausernane', false],
-            ['thisisausername', true],
-            ['thisisausername0', true],
-        ];
+        yield ['0123456789', false];
+        yield ['abcdefghijklmnoprstuvwxyz', true];
+        yield ['ABCDEFGHIJKLMNOPRSTUVWXYZ', false];
+        yield ['#$%\'+-/=?^_.@`|~",:;<>', false];
+        yield ['a¬bs', false];
+        yield ['a!bs', false];
+        yield ['a£bs', false];
+        yield ['a&bs', false];
+        yield ['a*bs', false];
+        yield ['a(bs', false];
+        yield ['a)bs', false];
+        yield ['a bs', false];
+        yield ['0', false];
+        yield ['01', false];
+        yield ['0123456789012345678901234567890123456789', false];
+        yield ['01234567890123456789012345678901234567890', false];
+        yield ['0thisisausernane', false];
+        yield ['thisisausername', true];
+        yield ['thisisausername0', true];
     }
 }

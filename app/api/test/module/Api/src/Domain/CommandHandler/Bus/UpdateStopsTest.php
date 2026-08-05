@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Update Stops Test
  */
-class UpdateStopsTest extends AbstractCommandHandlerTestCase
+final class UpdateStopsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

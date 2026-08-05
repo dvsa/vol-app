@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Exception;
 
 use Common\Exception\BailOutException;
@@ -9,13 +11,13 @@ use Common\Exception\BailOutException;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class BailOutExceptionTest extends \PHPUnit\Framework\TestCase
+final class BailOutExceptionTest extends \PHPUnit\Framework\TestCase
 {
     public function testException(): void
     {
         $exception = new BailOutException('foo', 'bar');
 
-        $this->assertEquals('foo', $exception->getMessage());
+        $this->assertSame('foo', $exception->getMessage());
         $this->assertEquals('bar', $exception->getResponse());
     }
 }

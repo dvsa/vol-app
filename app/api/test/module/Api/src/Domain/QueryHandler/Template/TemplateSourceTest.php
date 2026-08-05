@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class TemplateSourceTest extends AbstractQueryByIdHandlerTestCase
+final class TemplateSourceTest extends AbstractQueryByIdHandlerTestCase
 {
     protected $sutClass = TemplateSourceHandler::class;
     protected $sutRepo = 'Template';
@@ -36,6 +36,7 @@ class TemplateSourceTest extends AbstractQueryByIdHandlerTestCase
      * Overrides the generic base test because this handler also fetches siblings (VOL-7238)
      * and merges them into the result via the Result `values` arg.
      */
+    #[\Override]
     public function testHandleQuery(): void
     {
         $query = QryClass::create(['id' => 1]);
@@ -57,10 +58,10 @@ class TemplateSourceTest extends AbstractQueryByIdHandlerTestCase
 
         $result = $this->sut->handleQuery($query)->serialize();
 
-        self::assertSame('auth-forgot-password', $result['name']);
-        self::assertSame($siblings, $result['siblings']);
-        self::assertFalse($result['notifyTestEnabled']);
-        self::assertSame('', $result['notifyTestHint']);
+        $this->assertSame('auth-forgot-password', $result['name']);
+        $this->assertSame($siblings, $result['siblings']);
+        $this->assertFalse($result['notifyTestEnabled']);
+        $this->assertSame('', $result['notifyTestHint']);
     }
 
     public function testNotifyTestEnabledWithMailpitDsnExposesMailpitHint(): void
@@ -84,8 +85,8 @@ class TemplateSourceTest extends AbstractQueryByIdHandlerTestCase
 
         $result = $this->sut->handleQuery($query)->serialize();
 
-        self::assertTrue($result['notifyTestEnabled']);
-        self::assertStringContainsString('Mailpit', $result['notifyTestHint']);
+        $this->assertTrue($result['notifyTestEnabled']);
+        $this->assertStringContainsString('Mailpit', (string) $result['notifyTestHint']);
     }
 
     public function testNotifyTestEnabledWithRealNotifyDsnExposesSafelistHint(): void
@@ -109,7 +110,7 @@ class TemplateSourceTest extends AbstractQueryByIdHandlerTestCase
 
         $result = $this->sut->handleQuery($query)->serialize();
 
-        self::assertTrue($result['notifyTestEnabled']);
-        self::assertStringContainsString('safelist', $result['notifyTestHint']);
+        $this->assertTrue($result['notifyTestEnabled']);
+        $this->assertStringContainsString('safelist', (string) $result['notifyTestHint']);
     }
 }

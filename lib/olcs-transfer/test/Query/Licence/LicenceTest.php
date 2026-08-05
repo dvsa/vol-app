@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Licence;
 
 use Dvsa\Olcs\Transfer\Query\Licence\Licence;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Licence\Licence;
 /**
  * Licence test
  */
-class LicenceTest extends \PHPUnit\Framework\TestCase
+final class LicenceTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

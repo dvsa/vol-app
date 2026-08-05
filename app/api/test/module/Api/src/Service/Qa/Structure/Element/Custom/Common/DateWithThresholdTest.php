@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class DateWithThresholdTest extends MockeryTestCase
+final class DateWithThresholdTest extends MockeryTestCase
 {
     public function testGetRepresentation(): void
     {

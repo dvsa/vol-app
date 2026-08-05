@@ -26,7 +26,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class DeleteTest extends AbstractCommandHandlerTestCase
+final class DeleteTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

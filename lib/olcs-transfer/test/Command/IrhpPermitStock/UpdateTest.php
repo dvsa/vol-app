@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\IrhpPermitStock;
 
 use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Update;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpPermitStock\Update;
 /**
  * Update test
  */
-class UpdateTest extends \PHPUnit\Framework\TestCase
+final class UpdateTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

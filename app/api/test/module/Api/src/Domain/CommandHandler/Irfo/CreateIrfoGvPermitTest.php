@@ -26,7 +26,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Create Irfo Gv Permit Test
  */
-class CreateIrfoGvPermitTest extends AbstractCommandHandlerTestCase
+final class CreateIrfoGvPermitTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -145,7 +145,7 @@ class CreateIrfoGvPermitTest extends AbstractCommandHandlerTestCase
             $savedIrfoGvPermit->getIrfoPermitStatus()
         );
         $this->assertEquals(2014, $savedIrfoGvPermit->getYearRequired());
-        $this->assertEquals('2015-01-01', $savedIrfoGvPermit->getInForceDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $savedIrfoGvPermit->getInForceDate()->format('Y-m-d'));
         $this->assertEquals('N', $savedIrfoGvPermit->getIsFeeExempt());
         $this->assertEquals(2, $savedIrfoGvPermit->getNoOfCopies());
     }
@@ -229,7 +229,7 @@ class CreateIrfoGvPermitTest extends AbstractCommandHandlerTestCase
             $savedIrfoGvPermit->getIrfoPermitStatus()
         );
         $this->assertEquals(2014, $savedIrfoGvPermit->getYearRequired());
-        $this->assertEquals('2015-01-01', $savedIrfoGvPermit->getInForceDate()->format('Y-m-d'));
+        $this->assertSame('2015-01-01', $savedIrfoGvPermit->getInForceDate()->format('Y-m-d'));
         $this->assertEquals('Y', $savedIrfoGvPermit->getIsFeeExempt());
         $this->assertEquals(1, $savedIrfoGvPermit->getNoOfCopies());
     }
