@@ -47,31 +47,36 @@ abstract class TableEscapingInvariantTestCase extends TestCase
         $fixed = array_values(array_intersect(array_diff($baseline['leaking'], $leaking), $result['rendered']));
         $this->assertSame([], $fixed, $this->fixedMessage($fixed));
 
-        // Values that rendered without the payload, because a type constraint rejected the probe.
-        // Asserted in both directions like the leak list: a new one is coverage quietly lost, and a
-        // stale one is coverage regained that nobody recorded.
+        // Values a type constraint stops from carrying the payload. Each one was put back on its
+        // own and the render rejected it before writing anything, so the constraint — not an
+        // escaping call — is what keeps it off the page. That is a proof rather than an exemption,
+        // but it is a narrower one than "this value is escaped", so it stays recorded.
+        //
+        // Asserted in both directions like the leak list. A new entry means a value that used to be
+        // escaped is now merely rejected, which is worth seeing; a stale one means the constraint
+        // went away and the value is fully covered again.
         $this->assertSame(
-            $baseline['unprobed'],
-            $this->unprobedLines($result['unprobed']),
-            "The set of values that cannot carry a payload has changed.\n\n"
-            . "A new entry means a column stopped being probed — usually a formatter that now needs\n"
-            . "a number or a date where it took anything before. That column is no longer tested for\n"
-            . "escaping; check it by hand before recording it. A disappearing entry means the\n"
-            . "constraint went away and the baseline should shrink."
+            $baseline['constrained'],
+            $this->constrainedLines($result['constrained']),
+            "The set of values kept off the page by a type constraint has changed.\n\n"
+            . "A new entry means a value stopped being escaped and is now only unreachable —\n"
+            . "usually a formatter that started requiring a number or a date. Check by hand that\n"
+            . "nothing else emits it before recording it. A disappearing entry means the constraint\n"
+            . "went away, so the value is probed like any other and the baseline should shrink."
         );
     }
 
     /**
-     * The unprobed map as one sorted "table key=type" line per value.
+     * The constrained map as one sorted "table key=type" line per value.
      *
-     * @param array<string, array<string, string>> $unprobed
+     * @param array<string, array<string, string>> $constrained
      * @return string[]
      */
-    private function unprobedLines(array $unprobed): array
+    private function constrainedLines(array $constrained): array
     {
         $lines = [];
 
-        foreach ($unprobed as $table => $values) {
+        foreach ($constrained as $table => $values) {
             foreach ($values as $key => $type) {
                 $lines[] = sprintf('%s %s=%s', $table, $key, $type);
             }
@@ -83,12 +88,12 @@ abstract class TableEscapingInvariantTestCase extends TestCase
     }
 
     /**
-     * @return array{leaking: string[], unprobed: string[]}
+     * @return array{leaking: string[], constrained: string[]}
      */
     private function baseline(): array
     {
         $file = $this->baselineFile();
-        $sections = ['leaking' => [], 'unprobed' => []];
+        $sections = ['leaking' => [], 'constrained' => []];
 
         if (!file_exists($file)) {
             return $sections;
@@ -112,7 +117,7 @@ abstract class TableEscapingInvariantTestCase extends TestCase
             $sections[$current][] = $line;
         }
 
-        sort($sections['unprobed']);
+        sort($sections['constrained']);
 
         return $sections;
     }

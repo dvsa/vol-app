@@ -3,33 +3,46 @@
 # FormatterEscapingInvariantTest calls every formatter directly with a hostile row and
 # asserts the value reaches the output escaped. All three sections are asserted, so none
 # of them can rot: a formatter that starts leaking fails, one that stops leaking fails as
-# a stale entry, and anything moving into or out of [skipped] or [unprobed] fails too.
+# a stale entry, and anything moving into or out of [skipped] or [constrained] fails too.
 #
 # 149 exercised, 0 leaking, 0 could not be driven. 149 formatters in total.
+# Every row value reaching them is either asserted escaped or proven unreachable below.
 #
 # The leaking list is a to-do list, not a permission slip. It should only ever shrink.
 
 [leaking]
 
-# Values that render but cannot carry a payload, because the formatter requires a number
-# or a parseable date and neither can contain "<script>". The column renders; that one
-# value is not asserted. Dotted paths come from a hand-written fixture (see
-# FormatterEscapingHarness::fixtures) — the same accounting applies to those, so a fixture
-# cannot quietly de-probe a value and still read as covered.
-[unprobed]
+# Values a type constraint keeps off the page rather than an escaping call: the formatter
+# requires a number or a parseable date, and neither can contain "<script>".
+#
+# Each one is put back on its own — the payload restored at exactly that path, every other
+# value left as the settled run had it, and the formatter called once more with no
+# adaptation. Being listed here means that call threw and had written nothing by then, so
+# the constraint rejects the value before it can reach the output. In production the same
+# input is a 500, not a payload on a page.
+#
+# That is a proof rather than an exemption, and it is re-derived on every run, so it cannot
+# outlive the constraint that justifies it. It is still narrower than "this value is
+# escaped", which is why it stays recorded and is asserted in both directions.
+#
+# One path at a time, never in a batch, and the conversation formatters show why:
+# getFirstReadBy() returns early when createdBy.id equals the read's user.id, so restoring
+# the payload to both at once would skip the branch and report "no leak" about code that
+# never ran. Isolated, both of those values render and come out escaped, so neither is
+# listed — they are covered like any other value.
+#
+# Dotted paths come from a hand-written fixture (see RowFixtures) — the same accounting
+# applies to those, so a fixture cannot quietly de-probe a value and still read as covered.
+[constrained]
 ExternalConversationLink.createdOn=date
-ExternalConversationMessage.createdBy.id=numeric
 ExternalConversationMessage.createdOn=date
 ExternalConversationMessage.documents.0.size=numeric
 ExternalConversationMessage.userMessageReads.0.createdOn=date
-ExternalConversationMessage.userMessageReads.0.user.id=numeric
 FeeAmount.name=numeric
 InternalConversationLink.createdOn=date
-InternalConversationMessage.createdBy.id=numeric
 InternalConversationMessage.createdOn=date
 InternalConversationMessage.documents.0.size=numeric
 InternalConversationMessage.userMessageReads.0.createdOn=date
-InternalConversationMessage.userMessageReads.0.user.id=numeric
 Money.name=numeric
 NoteUrl.createdOn=date
 NumberStackValue.name=numeric

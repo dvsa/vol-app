@@ -8,15 +8,28 @@
 # regression; a listed table that passes is a stale entry and also fails, so the list cannot
 # silently rot.
 #
-# [unprobed] records individual values that rendered without the payload, because a type
-# constraint rejected the probe — a number_format() argument, a date that has to parse. The
-# column still renders, but that value is not being tested for escaping, so it is recorded
-# rather than counted as covered. Asserted in both directions, exactly like the leak list.
+# [constrained] records values that a type constraint keeps off the page rather than an
+# escaping call — a number_format() argument, a date that has to parse. A value that has to
+# be a number or a date cannot also be "<script>…", so it renders without the payload and
+# the ordinary assertion says nothing about it.
+#
+# Each one is therefore put back on its own: the payload is restored at exactly that path,
+# every other value stays as the settled render left it, and the table is rendered once more
+# with no adaptation. Being listed here means that render threw and had written nothing by
+# then, so the constraint rejects the value before it can reach the page — in production the
+# same input is a 500, not a payload on a page. That is a proof rather than an exemption,
+# and it is re-derived on every run, so it cannot outlive the constraint that justifies it.
+#
+# It is still a narrower guarantee than "this value is escaped", which is why it stays
+# recorded and is asserted in both directions. An entry arriving means a value that used to
+# be escaped is now only unreachable; an entry leaving means the constraint went away and
+# the value is probed like any other.
 #
 # 0 leaking, 43 covered, 0 could not be rendered by the probe.
+# Of the 43, every row value is either asserted escaped or proven unreachable below.
 #
 [leaking]
 
-[unprobed]
+[constrained]
 pay-fees.table.php amount=numeric
 pay-fees.table.php outstanding=numeric

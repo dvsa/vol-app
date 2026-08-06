@@ -21,9 +21,13 @@ use Mockery as m;
  * changes, has nothing to rubber-stamp, and — because it globs the table directory — covers new
  * tables automatically.
  *
- * Coverage is partial by design. The probe cannot satisfy definitions that parse dates, call
- * array_map on a row value, or otherwise require real data shapes; those are reported as skipped
- * with the reason rather than silently passing. A skip is "not covered here", never "safe".
+ * A definition that cannot be rendered at all is reported as skipped with the reason rather than
+ * silently passing. A skip is "not covered here", never "safe".
+ *
+ * Individual values a type constraint pins down — a number_format() argument, a date that has to
+ * parse — cannot carry the payload, so the ordinary render says nothing about them. Those do not
+ * stay unknown either: isolate() puts each one back on its own and reports whether the constraint
+ * is what keeps it off the page. See PayloadIsolation.
  */
 final class TableEscapingHarness
 {
@@ -83,7 +87,7 @@ final class TableEscapingHarness
      *     leaking: array<string, string[]>,
      *     skipped: array<string, string>,
      *     rendered: string[],
-     *     unprobed: array<string, array<string, string>>
+     *     constrained: array<string, array<string, string>>
      * }
      */
     public function inspect(array $directories): array
@@ -91,33 +95,25 @@ final class TableEscapingHarness
         $leaking = [];
         $skipped = [];
         $rendered = [];
-        $unprobed = [];
+        $constrained = [];
 
         $tableBuilder = $this->tableBuilder($directories);
 
+        $renders = [];
+
         foreach ($this->tableFiles($directories) as $name => $path) {
-            try {
-                $result = $this->render($tableBuilder, $name, $path, self::MARKER);
-            } catch (\Throwable $e) {
-                $skipped[$name] = $e::class . ': ' . $e->getMessage();
-                continue;
-            }
-
-            $rendered[] = $name;
-
-            if ($result['unprobed'] !== []) {
-                $unprobed[$name] = $result['unprobed'];
-            }
-
-            $leaks = $this->findLeaks($result['output']);
-            if ($leaks !== []) {
-                $leaking[$name] = $leaks;
-            }
+            $renders[$name] = ['path' => $path, 'builder' => $tableBuilder];
         }
 
+        // Appended rather than merged, so a shadowed file cannot displace its winner: both are real
+        // definitions and both are inspected, each through the builder that resolves it.
         foreach ($this->shadowedRenders($directories) as $name => $shadowed) {
+            $renders[$name] = $shadowed;
+        }
+
+        foreach ($renders as $name => $render) {
             try {
-                $result = $this->render($shadowed['builder'], $name, $shadowed['path'], self::MARKER);
+                $result = $this->render($render['builder'], $name, $render['path'], self::MARKER);
             } catch (\Throwable $e) {
                 $skipped[$name] = $e::class . ': ' . $e->getMessage();
                 continue;
@@ -125,11 +121,28 @@ final class TableEscapingHarness
 
             $rendered[] = $name;
 
+            $leaks = $this->findLeaks($result['output']);
+
+            // Every value the settled render could not probe is put back one at a time, so it ends
+            // up either proven unreachable or covered like any other value. A payload that reaches
+            // the output only under isolation is a leak the shared row was masking, and it joins
+            // the leaks the ordinary render found.
             if ($result['unprobed'] !== []) {
-                $unprobed[$name] = $result['unprobed'];
+                $isolated = $this->isolate(
+                    $render['builder'],
+                    $name,
+                    $render['path'],
+                    $result['unprobed'],
+                    $result,
+                );
+
+                if ($isolated['constrained'] !== []) {
+                    $constrained[$name] = $isolated['constrained'];
+                }
+
+                $leaks = array_merge($leaks, $isolated['leaking']);
             }
 
-            $leaks = $this->findLeaks($result['output']);
             if ($leaks !== []) {
                 $leaking[$name] = $leaks;
             }
@@ -137,14 +150,14 @@ final class TableEscapingHarness
 
         ksort($leaking);
         ksort($skipped);
-        ksort($unprobed);
+        ksort($constrained);
         sort($rendered);
 
         return [
             'leaking' => $leaking,
             'skipped' => $skipped,
             'rendered' => $rendered,
-            'unprobed' => $unprobed,
+            'constrained' => $constrained,
         ];
     }
 
@@ -408,77 +421,40 @@ final class TableEscapingHarness
     /**
      * Render the table, adapting the row when a type constraint rejects the probe.
      *
-     * @return array{output: string, unprobed: array<string, string>}
+     * @return array{
+     *     output: string,
+     *     unprobed: array<string, string>,
+     *     adapted: array<string, string>,
+     *     overrides: array<string, mixed>
+     * }
      */
     private function render(TableBuilder $tableBuilder, string $fileName, string $path, string $probeValue): array
     {
-        // Passed by name, not as a loaded array. Definitions are include()d by TableBuilder and
-        // several call $this->callFormatter(...) in inline closures, where $this is meant to be the
-        // TableBuilder. Loading the file here instead would bind $this to the harness.
-        //
-        // The basename, not the caller's key: keys carry a directory prefix so shadowed files stay
-        // distinguishable, but TableBuilder resolves definitions by bare name.
-        $tableName = substr(basename($fileName), 0, -strlen('.table.php'));
+        $tableName = $this->tableName($fileName);
 
         $adapted = [];
         $overrides = [];
-        $row = $this->row($path, $probeValue);
+        $row = $this->buildRow($path, $probeValue, $overrides, $adapted);
 
         for ($attempt = 0; $attempt <= RowProbeAdaptation::MAX_ADAPTATIONS; $attempt++) {
-            // Some table partials echo directly rather than returning, so capture anything written
-            // to stdout — both to keep it out of the test output and because a leak could appear
-            // there.
-            //
-            // The buffer level is restored explicitly: TableBuilder renders partials inside its own
-            // ob_start()/ob_end_clean() pair, and a partial that throws leaves that buffer open.
-            $bufferLevel = ob_get_level();
+            $result = $this->attempt($tableBuilder, $tableName, $row);
 
-            // The probe is deliberately nonsense data, so undefined-key notices and null-argument
-            // deprecations are expected noise from a formatter meeting a shape it was not written
-            // for. They are not what is under test, and left unhandled they drown the signal.
-            set_error_handler(static fn(): bool => true, E_WARNING | E_NOTICE | E_DEPRECATED);
+            if ($result['thrown'] !== null) {
+                $this->adapt($result['thrown'], $adapted, $overrides, $path, $row);
 
-            ob_start();
-
-            try {
-                $returned = (string)$tableBuilder->buildTable($tableName, [$row], [], true);
-            } catch (\Throwable $e) {
-                $this->drainBuffers($bufferLevel);
-                restore_error_handler();
-
-                $this->adapt($e, $adapted, $overrides, $path, $row);
-
-                $row = $this->row($path, $probeValue, $overrides);
-
-                // An override may be rooted at a key the definition never spells, because the read
-                // happens inside a formatter. Give it a probe to hang off, or the override sits at
-                // a path nothing ever walks.
-                foreach (array_keys($overrides) as $target) {
-                    $root = explode('.', $target)[0];
-
-                    if (!isset($row[$root])) {
-                        $row[$root] = new RecursiveProbe($probeValue, $overrides, $root);
-                    }
-                }
-
-                foreach ($adapted as $target => $type) {
-                    if (!str_contains($target, '.')) {
-                        $row[$target] = $this->adaptation->substitute($type);
-                    }
-                }
+                $row = $this->buildRow($path, $probeValue, $overrides, $adapted);
 
                 continue;
             }
 
-            $echoed = $this->drainBuffers($bufferLevel);
-            restore_error_handler();
-
             return [
-                'output' => $returned . $echoed,
+                'output' => $result['output'],
                 'unprobed' => array_merge(
                     $this->adaptation->payloadLosing($adapted),
                     RowFixtures::gaps(RowFixtures::forSource((string)file_get_contents($path))),
                 ),
+                'adapted' => $adapted,
+                'overrides' => $overrides,
             ];
         }
 
@@ -491,6 +467,152 @@ final class TableEscapingHarness
                 $adapted
             ))
         ));
+    }
+
+    /**
+     * Put each payload-losing value back, one at a time, and report what the table does with it.
+     *
+     * See PayloadIsolation for why this exists: a substituted value is both untested and, because
+     * the row is shared by every column, capable of hiding a leak in a column that never needed the
+     * substitution. Restoring it at one path while the rest of the row stays settled is what tells
+     * those apart.
+     *
+     * No adaptation loop here on purpose. Violating the constraint is the whole point, so adapting
+     * away from it would put the substitution straight back.
+     *
+     * @param array<string, string> $unprobed path => type, from the settled render
+     * @param array{adapted: array<string, string>, overrides: array<string, mixed>} $settled
+     * @return array{constrained: array<string, string>, leaking: string[]}
+     */
+    private function isolate(
+        TableBuilder $tableBuilder,
+        string $fileName,
+        string $path,
+        array $unprobed,
+        array $settled
+    ): array {
+        $tableName = $this->tableName($fileName);
+        $constrained = [];
+        $leaking = [];
+
+        foreach ($unprobed as $target => $type) {
+            // Dropping the override is what restores a probe-served path: the probe answers any key
+            // with itself, and itself is the marker. A fixture leaf has no override to drop, so
+            // withMarkerAt() writes it into the built row instead.
+            $overrides = $settled['overrides'];
+            $adapted = $settled['adapted'];
+            unset($overrides[$target], $adapted[$target]);
+
+            $row = $this->buildRow($path, self::MARKER, $overrides, $adapted);
+            $row = PayloadIsolation::withMarkerAt($row, $target, self::MARKER);
+
+            $result = $this->attempt($tableBuilder, $tableName, $row);
+            $verdict = PayloadIsolation::verdict($result['output'], $result['thrown'], self::MARKER);
+
+            if ($verdict === PayloadIsolation::LEAKING) {
+                $leaking[] = sprintf('%s reaches the output raw', $target);
+                continue;
+            }
+
+            if ($verdict === PayloadIsolation::CONSTRAINED) {
+                $constrained[$target] = $type;
+            }
+
+            // ESCAPED needs no record. The value carried the payload, the output escaped it, and it
+            // is covered by the ordinary assertion like any other value.
+        }
+
+        ksort($constrained);
+        sort($leaking);
+
+        return ['constrained' => $constrained, 'leaking' => $leaking];
+    }
+
+    /**
+     * One render, with no adaptation and nothing discarded.
+     *
+     * Both halves of the result matter to the caller. render() wants the exception so it can learn
+     * a type from it; isolate() wants the output *and* the exception, because output written before
+     * a throw has still been written — a column that echoes a value and a later column that rejects
+     * it is a leak, not a constraint, and only the buffer contents tell them apart.
+     *
+     * @param array<string, mixed> $row
+     * @return array{output: string, thrown: ?\Throwable}
+     */
+    private function attempt(TableBuilder $tableBuilder, string $tableName, array $row): array
+    {
+        // Some table partials echo directly rather than returning, so capture anything written to
+        // stdout — both to keep it out of the test output and because a leak could appear there.
+        //
+        // The buffer level is restored explicitly: TableBuilder renders partials inside its own
+        // ob_start()/ob_end_clean() pair, and a partial that throws leaves that buffer open.
+        $bufferLevel = ob_get_level();
+
+        // The probe is deliberately nonsense data, so undefined-key notices and null-argument
+        // deprecations are expected noise from a formatter meeting a shape it was not written for.
+        // They are not what is under test, and left unhandled they drown the signal.
+        set_error_handler(static fn(): bool => true, E_WARNING | E_NOTICE | E_DEPRECATED);
+
+        ob_start();
+
+        $returned = '';
+        $thrown = null;
+
+        try {
+            $returned = (string)$tableBuilder->buildTable($tableName, [$row], [], true);
+        } catch (\Throwable $e) {
+            $thrown = $e;
+        }
+
+        $echoed = $this->drainBuffers($bufferLevel);
+        restore_error_handler();
+
+        return ['output' => $returned . $echoed, 'thrown' => $thrown];
+    }
+
+    /**
+     * The name TableBuilder resolves a definition by.
+     *
+     * The basename, not the caller's key: keys carry a directory prefix so shadowed files stay
+     * distinguishable, but TableBuilder resolves definitions by bare name.
+     */
+    private function tableName(string $fileName): string
+    {
+        return substr(basename($fileName), 0, -strlen('.table.php'));
+    }
+
+    /**
+     * The row as the adaptation state describes it.
+     *
+     * Shared by the adaptation loop and the isolation pass, so both build the row the same way and
+     * an isolated render differs from the settled one in exactly the value under test.
+     *
+     * @param array<string, mixed> $overrides dotted path => value
+     * @param array<string, string> $adapted target => type
+     * @return array<string, mixed>
+     */
+    private function buildRow(string $path, string $probeValue, array $overrides, array $adapted): array
+    {
+        $row = $this->row($path, $probeValue, $overrides);
+
+        // An override may be rooted at a key the definition never spells, because the read happens
+        // inside a formatter. Give it a probe to hang off, or the override sits at a path nothing
+        // ever walks.
+        foreach (array_keys($overrides) as $target) {
+            $root = explode('.', $target)[0];
+
+            if (!isset($row[$root])) {
+                $row[$root] = new RecursiveProbe($probeValue, $overrides, $root);
+            }
+        }
+
+        foreach ($adapted as $target => $type) {
+            if (!str_contains($target, '.')) {
+                $row[$target] = $this->adaptation->substitute($type);
+            }
+        }
+
+        return $row;
     }
 
     /**

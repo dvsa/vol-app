@@ -52,14 +52,14 @@ abstract class FormatterEscapingInvariantTestCase extends TestCase
         ));
     }
 
-    public function testTheSetOfUnprobedValuesHasNotChanged(): void
+    public function testTheSetOfConstrainedValuesHasNotChanged(): void
     {
         $result = new FormatterEscapingHarness()->inspect();
 
-        $expected = $this->entries('unprobed');
+        $expected = $this->entries('constrained');
         $actual = [];
 
-        foreach ($result['unprobed'] as $formatter => $keys) {
+        foreach ($result['constrained'] as $formatter => $keys) {
             foreach ($keys as $key => $type) {
                 $actual[] = "{$formatter}.{$key}={$type}";
             }
@@ -69,12 +69,15 @@ abstract class FormatterEscapingInvariantTestCase extends TestCase
         sort($actual);
 
         $this->assertSame($expected, $actual, sprintf(
-            "The set of values the probe could not carry a payload into has changed.\n\n"
-            . "Newly unprobed: %s\nNow probed:     %s\n\n"
-            . "A value that has to be a number or a date cannot also contain a payload, so these\n"
-            . "columns render but are not asserted. That is a coverage gap, and it is listed rather\n"
-            . "than absorbed so it cannot grow quietly. One disappearing is good news — the\n"
-            . "constraint went away and the value is fully probed again; remove it from %s.",
+            "The set of values kept off the page by a type constraint has changed.\n\n"
+            . "Newly constrained: %s\nNow escaped:       %s\n\n"
+            . "A value that has to be a number or a date cannot also carry a payload, so each of\n"
+            . "these was put back on its own and the formatter rejected it before writing anything.\n"
+            . "That is a proof it cannot reach the output, but a narrower one than \"this value is\n"
+            . "escaped\", so it stays recorded. One arriving means a value that used to be escaped is\n"
+            . "now only unreachable — check by hand that nothing else emits it. One leaving is good\n"
+            . "news: the constraint went away and the value is probed like any other, so remove it\n"
+            . "from %s.",
             implode(', ', array_diff($actual, $expected)) ?: '(none)',
             implode(', ', array_diff($expected, $actual)) ?: '(none)',
             basename($this->baselineFile()),

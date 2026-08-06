@@ -49,7 +49,7 @@ final class FormatterEscapingHarness
      *     leaking: array<string, string[]>,
      *     skipped: array<string, string>,
      *     exercised: string[],
-     *     unprobed: array<string, array<string, string>>
+     *     constrained: array<string, array<string, string>>
      * }
      */
     public function inspect(): array
@@ -57,7 +57,7 @@ final class FormatterEscapingHarness
         $leaking = [];
         $skipped = [];
         $exercised = [];
-        $unprobed = [];
+        $constrained = [];
 
         $container = HarnessContainer::create();
 
@@ -93,11 +93,21 @@ final class FormatterEscapingHarness
 
                 $exercised[] = $short;
 
+                $leaks = $this->findLeaks($result['output']);
+
+                // Every value the settled run could not probe is put back one at a time, so it ends
+                // up either proven unreachable or covered like any other. A payload that reaches
+                // the output only under isolation is a leak the shared row was masking.
                 if ($result['unprobed'] !== []) {
-                    $unprobed[$short] = $result['unprobed'];
+                    $isolated = $this->isolate($formatter, $class, $result['unprobed'], $result);
+
+                    if ($isolated['constrained'] !== []) {
+                        $constrained[$short] = $isolated['constrained'];
+                    }
+
+                    $leaks = array_merge($leaks, $isolated['leaking']);
                 }
 
-                $leaks = $this->findLeaks($result['output']);
                 if ($leaks !== []) {
                     $leaking[$short] = $leaks;
                 }
@@ -108,14 +118,14 @@ final class FormatterEscapingHarness
 
         ksort($leaking);
         ksort($skipped);
-        ksort($unprobed);
+        ksort($constrained);
         sort($exercised);
 
         return [
             'leaking' => $leaking,
             'skipped' => $skipped,
             'exercised' => $exercised,
-            'unprobed' => $unprobed,
+            'constrained' => $constrained,
         ];
     }
 
@@ -135,27 +145,28 @@ final class FormatterEscapingHarness
      * way the skip list would.
      *
      * Most substitutions keep the payload — a plain string carries the marker, and so does an array
-     * of probes. Only numeric and date values genuinely cannot, and those are reported as unprobed
-     * rather than quietly counted as covered.
+     * of probes. Only numeric and date values genuinely cannot, and rather than quietly counting
+     * those as covered, isolate() puts each one back on its own to find out whether the constraint
+     * is what keeps it off the page.
      *
-     * @return array{output: string, unprobed: array<string, string>}
+     * @return array{
+     *     output: string,
+     *     unprobed: array<string, string>,
+     *     adapted: array<string, string>,
+     *     fixture: array<string, mixed>
+     * }
      */
     private function drive(object $formatter, string $class): array
     {
         $fixture = $this->fixtures()[$class] ?? [];
-        $row = array_replace($this->row($class), $fixture);
         $column = $this->column();
         $adapted = [];
+        $row = $this->buildRow($class, $fixture, $adapted);
 
         for ($attempt = 0; $attempt <= RowProbeAdaptation::MAX_ADAPTATIONS; $attempt++) {
-            $level = ob_get_level();
-            ob_start();
+            $result = $this->attempt($formatter, $row, $column);
 
-            try {
-                $output = (string)$formatter->format($row, $column);
-            } catch (\Throwable $e) {
-                $this->drainBuffers($level);
-
+            if (($e = $result['thrown']) !== null) {
                 $type = $this->adaptation->requiredType($e);
 
                 // Nothing learned, so retrying would loop on the same failure. This is where the
@@ -222,11 +233,11 @@ final class FormatterEscapingHarness
                 continue;
             }
 
-            $echoed = $this->drainBuffers($level);
-
             return [
-                'output' => $output . $echoed,
+                'output' => $result['output'],
                 'unprobed' => $this->unprobed($adapted, $fixture),
+                'adapted' => $adapted,
+                'fixture' => $fixture,
             ];
         }
 
@@ -239,6 +250,108 @@ final class FormatterEscapingHarness
                 $adapted
             ))
         ));
+    }
+
+    /**
+     * Put each payload-losing value back, one at a time, and report what the formatter does with it.
+     *
+     * See PayloadIsolation for the reasoning. The short version is that a substituted value is
+     * untested, and — because one row feeds every branch the formatter takes — capable of hiding a
+     * leak on a branch that never needed the substitution.
+     *
+     * No adaptation loop here on purpose: violating the constraint is the point, and adapting would
+     * put the substitution straight back.
+     *
+     * @param array<string, string> $unprobed path => type, from the settled run
+     * @param array{adapted: array<string, string>, fixture: array<string, mixed>} $settled
+     * @return array{constrained: array<string, string>, leaking: string[]}
+     */
+    private function isolate(object $formatter, string $class, array $unprobed, array $settled): array
+    {
+        $column = $this->column();
+        $constrained = [];
+        $leaking = [];
+
+        foreach ($unprobed as $target => $type) {
+            // Dropping the adaptation restores a probe at a root key; a fixture leaf has no
+            // adaptation to drop, so withMarkerAt() writes the payload into the built row instead.
+            $adapted = $settled['adapted'];
+            unset($adapted[$target]);
+
+            $row = $this->buildRow($class, $settled['fixture'], $adapted);
+            $row = PayloadIsolation::withMarkerAt($row, $target, self::MARKER);
+
+            $result = $this->attempt($formatter, $row, $column);
+            $verdict = PayloadIsolation::verdict($result['output'], $result['thrown'], self::MARKER);
+
+            if ($verdict === PayloadIsolation::LEAKING) {
+                $leaking[] = sprintf('%s reaches the output raw', $target);
+                continue;
+            }
+
+            if ($verdict === PayloadIsolation::CONSTRAINED) {
+                $constrained[$target] = $type;
+            }
+
+            // ESCAPED needs no record: the value carried the payload and the output escaped it, so
+            // it is covered by the ordinary assertion like any other.
+        }
+
+        ksort($constrained);
+        sort($leaking);
+
+        return ['constrained' => $constrained, 'leaking' => $leaking];
+    }
+
+    /**
+     * One call into the formatter, with no adaptation and nothing discarded.
+     *
+     * The output is kept even when the call throws, because a formatter that echoes a value and
+     * only then meets a constraint has already emitted it — that is a leak, not a constraint, and
+     * the buffer contents are the only thing that tells them apart.
+     *
+     * @param array<string, mixed> $row
+     * @param array<string, string> $column
+     * @return array{output: string, thrown: ?\Throwable}
+     */
+    private function attempt(object $formatter, array $row, array $column): array
+    {
+        $level = ob_get_level();
+        ob_start();
+
+        $output = '';
+        $thrown = null;
+
+        try {
+            $output = (string)$formatter->format($row, $column);
+        } catch (\Throwable $e) {
+            $thrown = $e;
+        }
+
+        $echoed = $this->drainBuffers($level);
+
+        return ['output' => $output . $echoed, 'thrown' => $thrown];
+    }
+
+    /**
+     * The row as the adaptation state describes it.
+     *
+     * Shared by the adaptation loop and the isolation pass, so an isolated run differs from the
+     * settled one in exactly the value under test and nothing else.
+     *
+     * @param array<string, mixed> $fixture
+     * @param array<string, string> $adapted
+     * @return array<string, mixed>
+     */
+    private function buildRow(string $class, array $fixture, array $adapted): array
+    {
+        $row = array_replace($this->row($class), $fixture);
+
+        foreach ($adapted as $key => $type) {
+            $row[$key] = $this->adaptation->substitute($type);
+        }
+
+        return $row;
     }
 
     /**
