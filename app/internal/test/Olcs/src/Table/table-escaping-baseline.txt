@@ -1,12 +1,35 @@
 # Tables not yet covered by the table escaping contract.
 #
 # TableEscapingInvariantTest renders every *.table.php in this app and asserts that row
-# values reach the output escaped. Tables listed here are known exceptions and are exempt
-# from that assertion.
+# values reach the output escaped. Tables listed under [leaking] are known exceptions and
+# are exempt from that assertion.
 #
 # The list should only ever shrink. A table that is not listed and fails the assertion is a
 # regression; a listed table that passes is a stale entry and also fails, so the list cannot
 # silently rot.
 #
-# 0 exempt, 136 covered, 14 could not be rendered by the probe.
+# [unprobed] records individual values that rendered without the payload, because a type
+# constraint rejected the probe — a number_format() argument, a date that has to parse. The
+# column still renders, but that value is not being tested for escaping, so it is recorded
+# rather than counted as covered. Asserted in both directions, exactly like the leak list.
 #
+# 0 leaking, 150 covered, 0 could not be rendered by the probe.
+#
+[leaking]
+
+[unprobed]
+admin-interim-refunds-report.table.php amount=numeric
+conversations-list.table.php createdOn=date
+fee-transactions.table.php amount=numeric
+fees.table.php amount=numeric
+fees.table.php outstanding=numeric
+messages-list.table.php createdBy.id=numeric
+messages-list.table.php createdOn=date
+messages-list.table.php documents.0.size=numeric
+messages-list.table.php userMessageReads.0.createdOn=date
+messages-list.table.php userMessageReads.0.user.id=numeric
+note.table.php createdOn=date
+publication.table.php publication.pubDate=date
+tm.publication.table.php publication.pubDate=date
+transaction-fees.table.php allocatedAmount=numeric
+transaction-fees.table.php amount=numeric

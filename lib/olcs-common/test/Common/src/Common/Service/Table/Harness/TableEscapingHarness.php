@@ -65,22 +65,39 @@ final class TableEscapingHarness
     private array $locations = [];
 
     /**
+     * Learning a probe's required type from the failure that rejected it, shared with
+     * FormatterEscapingHarness so both tests treat a constraint the same way.
+     */
+    private RowProbeAdaptation $adaptation;
+
+    public function __construct()
+    {
+        $this->adaptation = new RowProbeAdaptation();
+    }
+
+    /**
      * Inspect every *.table.php under the given directories.
      *
      * @param string[] $directories
-     * @return array{leaking: array<string, string[]>, skipped: array<string, string>, rendered: string[]}
+     * @return array{
+     *     leaking: array<string, string[]>,
+     *     skipped: array<string, string>,
+     *     rendered: string[],
+     *     unprobed: array<string, array<string, string>>
+     * }
      */
     public function inspect(array $directories): array
     {
         $leaking = [];
         $skipped = [];
         $rendered = [];
+        $unprobed = [];
 
         $tableBuilder = $this->tableBuilder($directories);
 
         foreach ($this->tableFiles($directories) as $name => $path) {
             try {
-                $html = $this->render($tableBuilder, $name, $path, self::MARKER);
+                $result = $this->render($tableBuilder, $name, $path, self::MARKER);
             } catch (\Throwable $e) {
                 $skipped[$name] = $e::class . ': ' . $e->getMessage();
                 continue;
@@ -88,7 +105,11 @@ final class TableEscapingHarness
 
             $rendered[] = $name;
 
-            $leaks = $this->findLeaks($html);
+            if ($result['unprobed'] !== []) {
+                $unprobed[$name] = $result['unprobed'];
+            }
+
+            $leaks = $this->findLeaks($result['output']);
             if ($leaks !== []) {
                 $leaking[$name] = $leaks;
             }
@@ -96,7 +117,7 @@ final class TableEscapingHarness
 
         foreach ($this->shadowedRenders($directories) as $name => $shadowed) {
             try {
-                $html = $this->render($shadowed['builder'], $name, $shadowed['path'], self::MARKER);
+                $result = $this->render($shadowed['builder'], $name, $shadowed['path'], self::MARKER);
             } catch (\Throwable $e) {
                 $skipped[$name] = $e::class . ': ' . $e->getMessage();
                 continue;
@@ -104,7 +125,11 @@ final class TableEscapingHarness
 
             $rendered[] = $name;
 
-            $leaks = $this->findLeaks($html);
+            if ($result['unprobed'] !== []) {
+                $unprobed[$name] = $result['unprobed'];
+            }
+
+            $leaks = $this->findLeaks($result['output']);
             if ($leaks !== []) {
                 $leaking[$name] = $leaks;
             }
@@ -112,9 +137,15 @@ final class TableEscapingHarness
 
         ksort($leaking);
         ksort($skipped);
+        ksort($unprobed);
         sort($rendered);
 
-        return ['leaking' => $leaking, 'skipped' => $skipped, 'rendered' => $rendered];
+        return [
+            'leaking' => $leaking,
+            'skipped' => $skipped,
+            'rendered' => $rendered,
+            'unprobed' => $unprobed,
+        ];
     }
 
     /**
@@ -167,7 +198,7 @@ final class TableEscapingHarness
         try {
             foreach ($this->tableFiles($directories) as $name => $path) {
                 try {
-                    $html = $this->render($tableBuilder, $name, $path, self::BENIGN);
+                    $html = $this->render($tableBuilder, $name, $path, self::BENIGN)['output'];
                 } catch (\Throwable $e) {
                     $skipped[$name] = $e::class . ': ' . $e->getMessage();
                     continue;
@@ -189,7 +220,7 @@ final class TableEscapingHarness
 
         foreach ($this->shadowedRenders($directories) as $name => $shadowed) {
             try {
-                $html = $this->render($shadowed['builder'], $name, $shadowed['path'], self::BENIGN);
+                $html = $this->render($shadowed['builder'], $name, $shadowed['path'], self::BENIGN)['output'];
             } catch (\Throwable $e) {
                 $skipped[$name] = $e::class . ': ' . $e->getMessage();
                 continue;
@@ -226,8 +257,6 @@ final class TableEscapingHarness
      *
      * Asserted absolutely rather than against a baseline: there is no legitimate reason for an
      * entity to appear in a CSV, so there is nothing to record.
-     *
-     * @param string[] $directories
      */
     private function emitsHtmlEntitiesAsCsv(array $directories, string $name, string $path): bool
     {
@@ -235,7 +264,7 @@ final class TableEscapingHarness
         $builder->setContentType(TableBuilder::CONTENT_TYPE_CSV);
 
         try {
-            $csv = $this->render($builder, $name, $path, self::BENIGN);
+            $csv = $this->render($builder, $name, $path, self::BENIGN)['output'];
         } catch (\Throwable) {
             // Not every definition renders as CSV, and the ones that do not are not exported that
             // way either. A failure here says nothing about escaping.
@@ -376,7 +405,12 @@ final class TableEscapingHarness
         return $files;
     }
 
-    private function render(TableBuilder $tableBuilder, string $fileName, string $path, string $probeValue): string
+    /**
+     * Render the table, adapting the row when a type constraint rejects the probe.
+     *
+     * @return array{output: string, unprobed: array<string, string>}
+     */
+    private function render(TableBuilder $tableBuilder, string $fileName, string $path, string $probeValue): array
     {
         // Passed by name, not as a loaded array. Definitions are include()d by TableBuilder and
         // several call $this->callFormatter(...) in inline closures, where $this is meant to be the
@@ -386,31 +420,339 @@ final class TableEscapingHarness
         // distinguishable, but TableBuilder resolves definitions by bare name.
         $tableName = substr(basename($fileName), 0, -strlen('.table.php'));
 
-        // Some table partials echo directly rather than returning, so capture anything written to
-        // stdout — both to keep it out of the test output and because a leak could appear there.
-        //
-        // The buffer level is restored explicitly: TableBuilder renders partials inside its own
-        // ob_start()/ob_end_clean() pair, and a partial that throws leaves that buffer open.
-        $bufferLevel = ob_get_level();
+        $adapted = [];
+        $overrides = [];
+        $row = $this->row($path, $probeValue);
 
-        // The probe is deliberately nonsense data, so undefined-key notices and null-argument
-        // deprecations are expected noise from a formatter meeting a shape it was not written for.
-        // They are not what is under test, and left unhandled they drown the signal.
-        set_error_handler(static fn(): bool => true, E_WARNING | E_NOTICE | E_DEPRECATED);
+        for ($attempt = 0; $attempt <= RowProbeAdaptation::MAX_ADAPTATIONS; $attempt++) {
+            // Some table partials echo directly rather than returning, so capture anything written
+            // to stdout — both to keep it out of the test output and because a leak could appear
+            // there.
+            //
+            // The buffer level is restored explicitly: TableBuilder renders partials inside its own
+            // ob_start()/ob_end_clean() pair, and a partial that throws leaves that buffer open.
+            $bufferLevel = ob_get_level();
 
-        ob_start();
-        try {
-            $returned = (string)$tableBuilder->buildTable($tableName, [$this->row($path, $probeValue)], [], true);
-        } finally {
-            $echoed = '';
-            while (ob_get_level() > $bufferLevel) {
-                $echoed = (string)ob_get_clean() . $echoed;
+            // The probe is deliberately nonsense data, so undefined-key notices and null-argument
+            // deprecations are expected noise from a formatter meeting a shape it was not written
+            // for. They are not what is under test, and left unhandled they drown the signal.
+            set_error_handler(static fn(): bool => true, E_WARNING | E_NOTICE | E_DEPRECATED);
+
+            ob_start();
+
+            try {
+                $returned = (string)$tableBuilder->buildTable($tableName, [$row], [], true);
+            } catch (\Throwable $e) {
+                $this->drainBuffers($bufferLevel);
+                restore_error_handler();
+
+                $this->adapt($e, $adapted, $overrides, $path, $row);
+
+                $row = $this->row($path, $probeValue, $overrides);
+
+                // An override may be rooted at a key the definition never spells, because the read
+                // happens inside a formatter. Give it a probe to hang off, or the override sits at
+                // a path nothing ever walks.
+                foreach (array_keys($overrides) as $target) {
+                    $root = explode('.', $target)[0];
+
+                    if (!isset($row[$root])) {
+                        $row[$root] = new RecursiveProbe($probeValue, $overrides, $root);
+                    }
+                }
+
+                foreach ($adapted as $target => $type) {
+                    if (!str_contains($target, '.')) {
+                        $row[$target] = $this->adaptation->substitute($type);
+                    }
+                }
+
+                continue;
             }
 
+            $echoed = $this->drainBuffers($bufferLevel);
             restore_error_handler();
+
+            return [
+                'output' => $returned . $echoed,
+                'unprobed' => array_merge(
+                    $this->adaptation->payloadLosing($adapted),
+                    RowFixtures::gaps(RowFixtures::forSource((string)file_get_contents($path))),
+                ),
+            ];
         }
 
-        return $returned . $echoed;
+        throw new \RuntimeException(sprintf(
+            'adaptation did not settle after %d attempts; adapted: %s',
+            RowProbeAdaptation::MAX_ADAPTATIONS,
+            implode(', ', array_map(
+                static fn(string $k, string $t): string => "{$k}={$t}",
+                array_keys($adapted),
+                $adapted
+            ))
+        ));
+    }
+
+    /**
+     * Record what the failure demanded, or rethrow when nothing can be learned from it.
+     *
+     * Table-level adaptation is deliberately narrower than the formatter-level one. There, a failure
+     * that cannot name its key may widen to every remaining probe, because a string substitution
+     * still carries the marker. Here one row is shared by every column in the table, so widening
+     * would de-probe columns that were never at fault and quietly weaken the assertion for the whole
+     * definition. A failure this cannot attribute is reported as a skip instead.
+     *
+     * @param array<string, string> $adapted target => type, mutated in place
+     * @param array<string, mixed> $overrides dotted path => value, mutated in place
+     * @param array<string, mixed> $row the row as it stands, for widening and membership checks
+     */
+    private function adapt(\Throwable $e, array &$adapted, array &$overrides, string $path, array $row): void
+    {
+        $type = $this->adaptation->requiredType($e);
+
+        // Nothing learned, so retrying would loop on the same failure. A missing service or a
+        // partial that cannot render is not a probe problem.
+        if ($type === null) {
+            throw $e;
+        }
+
+        $files = $this->readableFiles($e, $path);
+        $column = $this->columnFromTrace($e);
+
+        // Paths first, because a table's constraint is usually at depth. Root keys are the fallback
+        // for a read the path pattern cannot see — a value passed through a local variable, say.
+        $targets = $this->adaptation->offendingPaths($e, $files);
+
+        if ($targets === []) {
+            $targets = $this->adaptation->offendingKeys($e, $files, $column);
+        }
+
+        // Last resort, and bounded: the keys this column's own config names. A formatter that reads
+        // its value indirectly — Formatter\Money is $data[$column['name']] — has no literal
+        // subscript for the search to find, but the column config still says which value it wants.
+        // Bounded to that column, so unlike widening it cannot de-probe the rest of the row.
+        if ($targets === []) {
+            $targets = $this->columnKeys($column);
+        }
+
+        // Nothing could name the value: it reached the failure through a local alias — Formatter
+        // \LicenceTypeShort reads $licence['goodsOrPsv']['id'] after assigning $licence from the
+        // row, and the admin letter queue table strlen()s a $text assigned above. Widening is only
+        // acceptable where the substitution still carries the marker, which is exactly the string
+        // case: MARKER *is* a string, so every widened key keeps its payload and the assertion is
+        // as strong as it was. Numeric and date would silently de-probe the whole row, so those give
+        // up and are reported as unrenderable, which is the honest answer.
+        if ($targets === [] && $type === RowProbeAdaptation::TYPE_STRING) {
+            $targets = array_keys(array_filter(
+                $row,
+                static fn(mixed $value): bool => $value instanceof RecursiveProbe
+            ));
+        }
+
+        if ($targets === []) {
+            throw $e;
+        }
+
+        $rowKeys = array_keys($row);
+
+        // Prefer targets the row already holds, since those are certainly this table's data. When
+        // none of them are, the read is real anyway — the row's keys are harvested from the
+        // definition's source, so a key a *formatter* reads is missing from it even though
+        // production supplies it. Formatter\InternalConversationLink reads $row['createdOn'] while
+        // conversations-list.table.php never spells it, and refusing to adapt there left the whole
+        // table unrendered. Adding the key makes the row more like production, not less.
+        $known = array_values(array_filter(
+            $targets,
+            static fn(string $target): bool => in_array(explode('.', $target)[0], $rowKeys, true)
+        ));
+
+        if ($known !== []) {
+            $targets = $known;
+        }
+
+        // Only strings are safe to apply broadly, because MARKER is a string and every substituted
+        // key keeps its payload. Anything else changes the shape of the value or drops the payload,
+        // so it goes one target at a time — the search names every row read in the window, and a
+        // window usually spans more than the argument that actually failed. users.table.php is the
+        // case in point: array_map() rejected $row['roles'], but $row['id'] sat in the same window
+        // and turning that into an array made Escape::html() refuse it outright.
+        if ($type !== RowProbeAdaptation::TYPE_STRING) {
+            $targets = array_slice($targets, 0, 1);
+        }
+
+        $progressed = false;
+
+        foreach ($targets as $target) {
+            if (($adapted[$target] ?? null) === $type) {
+                continue;
+            }
+
+            $adapted[$target] = $type;
+
+            if (str_contains($target, '.')) {
+                $overrides[$target] = $this->adaptation->substitute($type);
+            }
+
+            $progressed = true;
+        }
+
+        if (!$progressed) {
+            throw $e;
+        }
+    }
+
+    /**
+     * Row keys read by the formatter classes a definition names.
+     *
+     * The definition's own subscripts are not the whole row. A formatter reads keys the table never
+     * spells — Formatter\ConditionsUndertakingsType reads $data['conditionType'], which
+     * lva-conditions-undertakings.table.php never mentions — and a key missing from the row arrives
+     * as null. That is not a harmless gap: Escape::html(null) returns null rather than a string, so
+     * the formatter returned null into a `: string` return type and took the whole table down.
+     * More importantly a missing key makes isset() false, so the branch that would leak never runs
+     * and the table passes while production does not.
+     *
+     * @return string[]
+     */
+    private function formatterKeys(string $source): array
+    {
+        $keys = [];
+
+        if (!preg_match_all('/use\s+(Common\\\\Service\\\\Table\\\\Formatter\\\\[A-Za-z0-9_]+)\s*;/', $source, $matches)) {
+            return $keys;
+        }
+
+        foreach ($matches[1] as $class) {
+            if (!class_exists($class)) {
+                continue;
+            }
+
+            for ($r = new \ReflectionClass($class); $r !== false; $r = $r->getParentClass()) {
+                $file = $r->getFileName();
+
+                if ($file === false || !is_readable($file)) {
+                    continue;
+                }
+
+                if (
+                    preg_match_all(
+                        '/\$(?:row|data)\s*\[\s*[\'"]([A-Za-z0-9_]+)[\'"]\s*\]/',
+                        (string)file_get_contents($file),
+                        $found
+                    )
+                ) {
+                    $keys = array_merge($keys, $found[1]);
+                }
+            }
+        }
+
+        return $keys;
+    }
+
+    /**
+     * The column config the failing formatter was handed.
+     *
+     * Formatters are called as format($row, $column), so the config is sitting in the trace. Taking
+     * it from there rather than reconstructing it from the definition means it is the real one,
+     * including whatever the definition's own closures put in it before delegating.
+     *
+     * @return array<string, string>
+     */
+    private function columnFromTrace(\Throwable $e): array
+    {
+        foreach ($e->getTrace() as $frame) {
+            if (($frame['function'] ?? '') !== 'format') {
+                continue;
+            }
+
+            $column = $frame['args'][1] ?? null;
+
+            if (is_array($column)) {
+                return array_filter($column, 'is_string');
+            }
+        }
+
+        return [];
+    }
+
+    /**
+     * Row keys a column config points at, by either spelling.
+     *
+     * 'name' and 'stack' both name a value, and both may be a "licence->organisation->name" chain
+     * whose first segment is the root key.
+     *
+     * @param array<string, string> $column
+     * @return string[]
+     */
+    private function columnKeys(array $column): array
+    {
+        $keys = [];
+
+        foreach (['name', 'stack'] as $key) {
+            if (isset($column[$key])) {
+                // "vehicle->platedWeight" is a path, not a key. Answering with just "vehicle" puts
+                // the substitution at the root, where the stack helper walks straight past it and
+                // still arrives at null — Formatter\NumberStackValue is the worked example.
+                $keys[] = implode('.', explode('->', $column[$key]));
+            }
+        }
+
+        return array_values(array_unique($keys));
+    }
+
+    /**
+     * Source files the key search may read: the definition, and the library code it called.
+     *
+     * A table's row is read in two places — inline closures in the definition itself, and the
+     * formatter or type classes it names. Both are in the trace, and both are ours. Vendor frames
+     * are excluded: a subscript inside Laminas is not a read of this row.
+     *
+     * Compared as real paths. The tests point the harness at directories built with __DIR__ and a
+     * run of "..", so the paths this walks keep those segments while the ones PHP reports on an
+     * exception do not — and an unresolved comparison silently matched nothing, which read as "no
+     * key could be attributed" and skipped every table whose constraint lived at depth.
+     *
+     * @return array<string, true>
+     */
+    private function readableFiles(\Throwable $e, string $path): array
+    {
+        $library = realpath(__DIR__ . '/../../../../../../../Common/src/Common') ?: '';
+
+        $files = [];
+        $definition = realpath($path);
+
+        if ($definition !== false) {
+            $files[$definition] = true;
+        }
+
+        $candidates = [$e->getFile()];
+
+        foreach ($e->getTrace() as $frame) {
+            if (isset($frame['file'])) {
+                $candidates[] = $frame['file'];
+            }
+        }
+
+        foreach ($candidates as $candidate) {
+            $real = realpath($candidate);
+
+            if ($real !== false && $library !== '' && str_starts_with($real, $library)) {
+                $files[$real] = true;
+            }
+        }
+
+        return $files;
+    }
+
+    private function drainBuffers(int $level): string
+    {
+        $echoed = '';
+
+        while (ob_get_level() > $level) {
+            $echoed = (string)ob_get_clean() . $echoed;
+        }
+
+        return $echoed;
     }
 
     /**
@@ -426,9 +768,8 @@ final class TableEscapingHarness
      *
      * @return array<string, RecursiveProbe>
      */
-    private function row(string $path, string $probeValue): array
+    private function row(string $path, string $probeValue, array $overrides = []): array
     {
-        $probe = new RecursiveProbe($probeValue);
         $source = (string)file_get_contents($path);
 
         $keys = ['id', 'version', 'action'];
@@ -444,7 +785,22 @@ final class TableEscapingHarness
             }
         }
 
-        return array_fill_keys(array_unique($keys), $probe);
+        $keys = array_merge($keys, $this->formatterKeys($source));
+
+        $row = [];
+
+        foreach (array_unique($keys) as $key) {
+            // Each root value knows where it sits, so an override recorded as "publication.pubDate"
+            // is answered at that leaf and nowhere else.
+            $row[$key] = new RecursiveProbe($probeValue, $overrides, $key);
+        }
+
+        // A definition naming one of the fixtured formatters gets that formatter's hand-written row.
+        // The conversation message formatters need $row['documents'] to be an array *and* each
+        // element's 'size' to be an int, which no single substitution can satisfy — the adaptation
+        // loop oscillates between the two until it gives up. Whatever the fixture does not carry is
+        // still a probe, and its payload-less leaves are reported as unprobed.
+        return array_replace($row, RowFixtures::forSource($source));
     }
 
     /**

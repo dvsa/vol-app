@@ -33,28 +33,16 @@ final class FormatterEscapingHarness
 {
     public const MARKER = TableEscapingHarness::MARKER;
 
-    private const TYPE_STRING = 'string';
-    private const TYPE_ARRAY = 'array';
-    private const TYPE_NUMERIC = 'numeric';
-    private const TYPE_INTEGER = 'integer';
-    private const TYPE_DATE = 'date';
-
     /**
-     * Enough for the deepest chain observed (string -> date, when a value is first required to be a
-     * string and then required to parse), with room to spare. A bound rather than a while(true):
-     * a formatter whose constraints contradict each other should be reported, not hang the suite.
+     * Learning a probe's required type from the failure that rejected it is shared with
+     * TableEscapingHarness, which drives the same formatters through a rendered table.
      */
-    private const MAX_ADAPTATIONS = 12;
+    private RowProbeAdaptation $adaptation;
 
-    /**
-     * How far a statement may run before the search gives up on it. Comfortably past the longest
-     * argument list here (getFileList's array_map spans ten), and short enough that an unterminated
-     * scan cannot swallow the rest of a method.
-     */
-    private const STATEMENT_MAX_LINES = 20;
-
-    /** @var array<string, string[]> */
-    private array $uncommented = [];
+    public function __construct()
+    {
+        $this->adaptation = new RowProbeAdaptation();
+    }
 
     /**
      * @return array{
@@ -159,7 +147,7 @@ final class FormatterEscapingHarness
         $column = $this->column();
         $adapted = [];
 
-        for ($attempt = 0; $attempt <= self::MAX_ADAPTATIONS; $attempt++) {
+        for ($attempt = 0; $attempt <= RowProbeAdaptation::MAX_ADAPTATIONS; $attempt++) {
             $level = ob_get_level();
             ob_start();
 
@@ -168,7 +156,7 @@ final class FormatterEscapingHarness
             } catch (\Throwable $e) {
                 $this->drainBuffers($level);
 
-                $type = $this->requiredType($e);
+                $type = $this->adaptation->requiredType($e);
 
                 // Nothing learned, so retrying would loop on the same failure. This is where the
                 // container-fidelity failures land — a missing service is not a probe problem.
@@ -176,7 +164,7 @@ final class FormatterEscapingHarness
                     throw $e;
                 }
 
-                $keys = $this->offendingKeys($e, $class);
+                $keys = $this->adaptation->offendingKeys($e, $this->ownFiles($class), $this->column());
 
                 if ($keys === []) {
                     // The value could not be traced to a key: it reached the failure through a
@@ -204,7 +192,7 @@ final class FormatterEscapingHarness
                     // places that wanted a scalar — Escape::html() rejects arrays outright — so a
                     // failure that cannot name its key is reported rather than guessed at.
                     if ($keys === [] || ($adapted[$keys[0]] ?? null) === $type) {
-                        if ($type !== self::TYPE_STRING) {
+                        if ($type !== RowProbeAdaptation::TYPE_STRING) {
                             throw $e;
                         }
 
@@ -223,7 +211,7 @@ final class FormatterEscapingHarness
                     }
 
                     $adapted[$key] = $type;
-                    $row[$key] = $this->substitute($type);
+                    $row[$key] = $this->adaptation->substitute($type);
                     $progressed = true;
                 }
 
@@ -244,7 +232,7 @@ final class FormatterEscapingHarness
 
         throw new \RuntimeException(sprintf(
             'adaptation did not settle after %d attempts; last row shape: %s',
-            self::MAX_ADAPTATIONS,
+            RowProbeAdaptation::MAX_ADAPTATIONS,
             implode(', ', array_map(
                 static fn(string $k, string $t): string => "{$k}={$t}",
                 array_keys($adapted),
@@ -253,91 +241,15 @@ final class FormatterEscapingHarness
         ));
     }
 
-    private function drainBuffers(int $level): string
-    {
-        $echoed = '';
-
-        while (ob_get_level() > $level) {
-            $echoed = (string)ob_get_clean() . $echoed;
-        }
-
-        return $echoed;
-    }
-
     /**
-     * What the failure says the value has to be, or null when it is not about the value at all.
+     * The formatter's own source files, parents included.
      *
-     * Deliberately reads the engine's own wording rather than guessing from the key name: a key
-     * called "amount" is not necessarily numeric, and one called "reference" sometimes is.
+     * Bounds the key search to code that belongs to the formatter under test: a stack frame in
+     * Escape or TableBuilder may well mention $data['x'], but it is not this formatter's read.
+     *
+     * @return array<string, true>
      */
-    private function requiredType(\Throwable $e): ?string
-    {
-        $message = $e->getMessage();
-
-        return match (true) {
-            // Union types are checked before any single-type pattern below, because the single-type
-            // patterns match inside them: /must be of type \??array\b/ matches "must be of type
-            // array|string" at the word boundary before the pipe, and would claim a union that
-            // accepts a string as array-only. str_replace()'s $subject is the case in point — read
-            // as array, the row value became [probe, probe] and the next Escape::html() call threw
-            // "Array provided to Escape helper", which is not a type this can learn from, so the
-            // whole formatter was reported undrivable on the strength of a misread union.
-            //
-            // String is the right reading of any union containing it: it is the only member that
-            // carries the marker, so it keeps the assertion at full strength.
-            str_contains($message, 'must be of type array|string'),
-            str_contains($message, 'must be of type string|array') => self::TYPE_STRING,
-
-            str_contains($message, 'must be of type int|float'),
-            str_contains($message, 'must be of type ?int'),
-            str_contains($message, 'must be of type ?float'),
-            str_contains($message, 'Unsupported operand types') => self::TYPE_NUMERIC,
-
-            // Plain int and float, which the patterns above do not cover: they name the union and
-            // the nullable forms only. readableBytes(int $bytes) is the case in point.
-            (bool)preg_match('/must be of type (int|float)\b/', $message) => self::TYPE_INTEGER,
-
-            // A date that failed to parse has already been given a string; only a real date will do.
-            // createFromFormat signals that by *returning false* rather than throwing, so the
-            // failure surfaces one call later as a method call on a bool.
-            str_contains($message, 'Failed to parse time string'),
-            str_contains($message, 'DateMalformedStringException'),
-            (bool)preg_match(
-                '/Call to a member function (setTimezone|format|modify|diff|getTimestamp|setTime)\(\) on (bool|false)/',
-                $message
-            ) => self::TYPE_DATE,
-
-            (bool)preg_match('/must be of type \??array\b/', $message) => self::TYPE_ARRAY,
-
-            (bool)preg_match('/must be of type \??string/', $message),
-            // Objects cannot be array keys, whatever __toString says.
-            str_contains($message, 'Cannot access offset of type') => self::TYPE_STRING,
-
-            default => null,
-        };
-    }
-
-    /**
-     * Which row keys the failing expression touched.
-     *
-     * Located from the stack rather than by adapting every key, so a single numeric column does not
-     * de-probe the whole row. Precision matters in both directions here: naming too few keys stalls
-     * the adaptation, and naming too many de-probes values that were never at fault.
-     *
-     * Two passes per site, narrowest first:
-     *
-     *   1. the failing line alone
-     *   2. the failing *statement*, which is where a multi-line call puts its arguments
-     *
-     * The line is tried first because a statement can mention several keys while only one of them
-     * is at fault. Formatter\InternalConversationLink is the worked example: str_replace() rejects
-     * $row['userContextStatus'] on one line of a sprintf() whose neighbouring line reads
-     * $row['subject'], and adapting both turned a value the formatter escapes correctly into an
-     * array, which Escape::html() then refused outright.
-     *
-     * @return string[]
-     */
-    private function offendingKeys(\Throwable $e, string $class): array
+    private function ownFiles(string $class): array
     {
         $files = [];
 
@@ -349,192 +261,18 @@ final class FormatterEscapingHarness
             }
         }
 
-        $sites = [[$e->getFile(), $e->getLine()]];
-
-        foreach ($e->getTrace() as $frame) {
-            if (isset($frame['file'], $frame['line'])) {
-                $sites[] = [$frame['file'], $frame['line']];
-            }
-        }
-
-        foreach ($sites as [$file, $line]) {
-            if (!isset($files[$file]) || !is_readable($file)) {
-                continue;
-            }
-
-            $lines = $this->uncommentedLines($file);
-
-            foreach ([$this->line($lines, $line), $this->statement($lines, $line)] as $window) {
-                $keys = $this->keysIn($window);
-
-                if ($keys !== []) {
-                    return $keys;
-                }
-            }
-        }
-
-        return [];
+        return $files;
     }
 
-    /**
-     * The row keys a fragment of source reads, by either spelling.
-     *
-     * @return string[]
-     */
-    private function keysIn(string $window): array
+    private function drainBuffers(int $level): string
     {
-        if (
-            preg_match_all(
-                '/\$(?:row|data)\s*\[\s*[\'"]([A-Za-z0-9_]+)[\'"]\s*\]/',
-                $window,
-                $matches
-            )
-        ) {
-            return array_values(array_unique($matches[1]));
+        $echoed = '';
+
+        while (ob_get_level() > $level) {
+            $echoed = (string)ob_get_clean() . $echoed;
         }
 
-        // $data[$column['name']] — the key is indirect, so resolve it through the column config
-        // the harness supplied. Formatter\Money reads its amount this way, and without this the
-        // literal-subscript pattern above finds nothing on the line.
-        if (
-            preg_match_all(
-                '/\$(?:row|data)\s*\[\s*\$column\s*\[\s*[\'"]([A-Za-z0-9_]+)[\'"]\s*\]\s*\]/',
-                $window,
-                $matches
-            )
-        ) {
-            $column = $this->column();
-            $keys = [];
-
-            foreach ($matches[1] as $columnKey) {
-                if (isset($column[$columnKey])) {
-                    $keys[] = $column[$columnKey];
-                }
-            }
-
-            if ($keys !== []) {
-                return array_values(array_unique($keys));
-            }
-        }
-
-        return [];
-    }
-
-    /**
-     * @param string[] $lines
-     */
-    private function line(array $lines, int $line): string
-    {
-        return $lines[$line - 1] ?? '';
-    }
-
-    /**
-     * The whole statement containing a line, in both directions.
-     *
-     * A multi-line call puts the failing argument on a different line from the one PHP reports, and
-     * which side it lands on depends on the call. Both directions are needed:
-     *
-     *   forwards   array_map() is reported at its own line and names $row['documents'] eight lines
-     *              below, in AbstractConversationMessage::getFileList()
-     *   backwards  ->setTimezone() is reported at the line the arrow sits on, one line *below* the
-     *              createFromFormat() argument that actually failed, in every conversation formatter
-     *
-     * Bounded at both ends by statement boundaries rather than by a line count, so the window grows
-     * to fit the call instead of being a guess. Pass 1 in offendingKeys() tries the failing line by
-     * itself first, so widening to the statement here only ever happens when the narrow answer came
-     * back empty.
-     *
-     * @param string[] $lines
-     */
-    private function statement(array $lines, int $line): string
-    {
-        $first = $line - 1;
-        $last = $line - 1;
-        $floor = max(0, $line - 1 - self::STATEMENT_MAX_LINES);
-
-        // Backwards to just after the previous statement or block boundary. A blanked comment line
-        // is not a boundary — it is a hole in the middle of the statement it documents.
-        while ($first > $floor) {
-            $previous = rtrim($lines[$first - 1] ?? '');
-
-            if ($previous !== '' && preg_match('/[;{}:]$/', $previous) === 1) {
-                break;
-            }
-
-            $first--;
-        }
-
-        $ceiling = min($line - 1 + self::STATEMENT_MAX_LINES, count($lines) - 1);
-
-        while ($last < $ceiling && !str_ends_with(rtrim($lines[$last]), ';')) {
-            $last++;
-        }
-
-        return implode("\n", array_slice($lines, $first, $last - $first + 1));
-    }
-
-    /**
-     * A file's lines with comments blanked out, numbering preserved.
-     *
-     * Comments are prose about the code, and prose quotes the code it describes. The comment above
-     * AbstractConversationMessage's date conversion contains the literal $data["createdOn"], so a
-     * plain text scan attributed an unrelated failure in ExternalConversationMessage::getSenderName()
-     * to createdOn, adapted that key, changed nothing, and stalled — reporting the formatter as
-     * undrivable on the strength of a match inside a sentence.
-     *
-     * Rebuilt through the tokeniser rather than by regex, since a regex for "not inside a string
-     * literal" is the same problem one level down. Comment tokens keep their newlines so every
-     * remaining line stays where it was.
-     *
-     * @return string[]
-     */
-    private function uncommentedLines(string $file): array
-    {
-        if (isset($this->uncommented[$file])) {
-            return $this->uncommented[$file];
-        }
-
-        $source = (string)file_get_contents($file);
-        $stripped = '';
-
-        foreach (token_get_all($source) as $token) {
-            if (!is_array($token)) {
-                $stripped .= $token;
-                continue;
-            }
-
-            $stripped .= match ($token[0]) {
-                T_COMMENT, T_DOC_COMMENT => str_repeat("\n", substr_count($token[1], "\n")),
-                default => $token[1],
-            };
-        }
-
-        return $this->uncommented[$file] = explode("\n", $stripped);
-    }
-
-    /**
-     * A value satisfying the constraint, carrying the marker wherever the type permits.
-     */
-    private function substitute(string $type): mixed
-    {
-        return match ($type) {
-            // Both keep the payload: a plain string *is* the marker, and the array holds probes.
-            self::TYPE_STRING => self::MARKER,
-            self::TYPE_ARRAY => [new RecursiveProbe(self::MARKER), new RecursiveProbe(self::MARKER)],
-
-            // Neither can. A number or a timestamp that also contains "<script>" does not exist,
-            // which is the honest limit of this approach rather than an oversight.
-            self::TYPE_NUMERIC => 1234.56,
-            // Separate from the above because a float fails an int parameter under strict_types,
-            // and every formatter in this library declares it. Positive, because the one int
-            // parameter here feeds log() in readableBytes().
-            self::TYPE_INTEGER => 1234,
-            // ATOM, because that is what the conversation formatters pass to createFromFormat, and
-            // it is also parseable by new DateTime() for the ones that use that instead.
-            self::TYPE_DATE => '2020-01-01T00:00:00+00:00',
-
-            default => self::MARKER,
-        };
+        return $echoed;
     }
 
     /**
@@ -561,39 +299,12 @@ final class FormatterEscapingHarness
      *
      * @return array<class-string, array<string, mixed>>
      */
+    /**
+     * @return array<class-string, array<string, mixed>>
+     */
     private function fixtures(): array
     {
-        $marker = self::MARKER;
-        $person = ['forename' => $marker, 'familyName' => $marker];
-
-        // The two message formatters read the same row; only their templates differ.
-        $conversationMessage = [
-            'createdOn' => '2023-08-12T12:00:00+00:00',
-            'createdBy' => [
-                'id' => 1,
-                'loginId' => $marker,
-                // Non-empty, so the caseworker footer branch renders rather than being skipped.
-                'team' => $marker,
-                'contactDetails' => ['person' => $person],
-            ],
-            'messagingContent' => ['text' => $marker],
-            'documents' => [
-                ['id' => $marker, 'description' => $marker, 'size' => 2048],
-            ],
-            'userMessageReads' => [
-                [
-                    'createdOn' => '2023-08-12T13:00:00+00:00',
-                    // A different id from createdBy above, or getFirstReadBy() discards the read as
-                    // the sender's own and returns nothing.
-                    'user' => ['id' => 2, 'contactDetails' => ['person' => $person]],
-                ],
-            ],
-        ];
-
-        return [
-            \Common\Service\Table\Formatter\ExternalConversationMessage::class => $conversationMessage,
-            \Common\Service\Table\Formatter\InternalConversationMessage::class => $conversationMessage,
-        ];
+        return RowFixtures::all();
     }
 
     /**
@@ -611,69 +322,12 @@ final class FormatterEscapingHarness
      */
     private function unprobed(array $adapted, array $fixture): array
     {
-        $unprobed = array_merge($this->payloadLosing($adapted), $this->fixtureGaps($fixture));
+        $unprobed = array_merge($this->adaptation->payloadLosing($adapted), RowFixtures::gaps($fixture));
         ksort($unprobed);
 
         return $unprobed;
     }
 
-    /**
-     * The fixture leaves that do not carry the marker, by dotted path.
-     *
-     * @param array<array-key, mixed> $fixture
-     * @return array<string, string>
-     */
-    private function fixtureGaps(array $fixture, string $prefix = ''): array
-    {
-        $gaps = [];
-
-        foreach ($fixture as $key => $value) {
-            $path = $prefix === '' ? (string)$key : $prefix . '.' . $key;
-
-            if (is_array($value)) {
-                $gaps = array_merge($gaps, $this->fixtureGaps($value, $path));
-                continue;
-            }
-
-            if ($value === self::MARKER) {
-                continue;
-            }
-
-            $gaps[$path] = match (true) {
-                is_int($value) || is_float($value) => self::TYPE_NUMERIC,
-                is_string($value) && strtotime($value) !== false => self::TYPE_DATE,
-                default => 'literal',
-            };
-        }
-
-        return $gaps;
-    }
-
-    /**
-     * The adaptations that cost coverage, which are the only ones worth reporting.
-     *
-     * String and array substitutions still carry the marker, so the assertion is as strong as it
-     * was. Numeric and date ones are not, and saying so is the difference between "covered" and
-     * "rendered".
-     *
-     * @param array<string, string> $adapted
-     * @return array<string, string>
-     */
-    private function payloadLosing(array $adapted): array
-    {
-        $lost = array_filter(
-            $adapted,
-            static fn(string $type): bool => in_array(
-                $type,
-                [self::TYPE_NUMERIC, self::TYPE_INTEGER, self::TYPE_DATE],
-                true
-            )
-        );
-
-        ksort($lost);
-
-        return $lost;
-    }
 
     /**
      * Every formatter the application can actually resolve, short name => FQCN.

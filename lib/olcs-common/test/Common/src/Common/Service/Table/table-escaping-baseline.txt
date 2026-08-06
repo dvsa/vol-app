@@ -1,12 +1,22 @@
 # Tables not yet covered by the table escaping contract.
 #
 # TableEscapingInvariantTest renders every *.table.php in this app and asserts that row
-# values reach the output escaped. Tables listed here are known exceptions and are exempt
-# from that assertion.
+# values reach the output escaped. Tables listed under [leaking] are known exceptions and
+# are exempt from that assertion.
 #
 # The list should only ever shrink. A table that is not listed and fails the assertion is a
 # regression; a listed table that passes is a stale entry and also fails, so the list cannot
 # silently rot.
 #
-# 0 exempt, 39 covered, 4 could not be rendered by the probe.
+# [unprobed] records individual values that rendered without the payload, because a type
+# constraint rejected the probe — a number_format() argument, a date that has to parse. The
+# column still renders, but that value is not being tested for escaping, so it is recorded
+# rather than counted as covered. Asserted in both directions, exactly like the leak list.
 #
+# 0 leaking, 43 covered, 0 could not be rendered by the probe.
+#
+[leaking]
+
+[unprobed]
+pay-fees.table.php amount=numeric
+pay-fees.table.php outstanding=numeric

@@ -39,32 +39,82 @@ abstract class TableEscapingInvariantTestCase extends TestCase
         $baseline = $this->baseline();
         $leaking = array_keys($result['leaking']);
 
-        $newLeaks = array_values(array_diff($leaking, $baseline));
+        $newLeaks = array_values(array_diff($leaking, $baseline['leaking']));
         $this->assertSame([], $newLeaks, $this->newLeakMessage($newLeaks));
 
         // Only tables that actually rendered can be judged fixed; a table that moved into the
         // skipped list is unknown, not resolved.
-        $fixed = array_values(array_intersect(array_diff($baseline, $leaking), $result['rendered']));
+        $fixed = array_values(array_intersect(array_diff($baseline['leaking'], $leaking), $result['rendered']));
         $this->assertSame([], $fixed, $this->fixedMessage($fixed));
+
+        // Values that rendered without the payload, because a type constraint rejected the probe.
+        // Asserted in both directions like the leak list: a new one is coverage quietly lost, and a
+        // stale one is coverage regained that nobody recorded.
+        $this->assertSame(
+            $baseline['unprobed'],
+            $this->unprobedLines($result['unprobed']),
+            "The set of values that cannot carry a payload has changed.\n\n"
+            . "A new entry means a column stopped being probed — usually a formatter that now needs\n"
+            . "a number or a date where it took anything before. That column is no longer tested for\n"
+            . "escaping; check it by hand before recording it. A disappearing entry means the\n"
+            . "constraint went away and the baseline should shrink."
+        );
     }
 
     /**
+     * The unprobed map as one sorted "table key=type" line per value.
+     *
+     * @param array<string, array<string, string>> $unprobed
      * @return string[]
+     */
+    private function unprobedLines(array $unprobed): array
+    {
+        $lines = [];
+
+        foreach ($unprobed as $table => $values) {
+            foreach ($values as $key => $type) {
+                $lines[] = sprintf('%s %s=%s', $table, $key, $type);
+            }
+        }
+
+        sort($lines);
+
+        return $lines;
+    }
+
+    /**
+     * @return array{leaking: string[], unprobed: string[]}
      */
     private function baseline(): array
     {
         $file = $this->baselineFile();
+        $sections = ['leaking' => [], 'unprobed' => []];
 
         if (!file_exists($file)) {
-            return [];
+            return $sections;
         }
 
         $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [];
+        $current = 'leaking';
 
-        return array_values(array_filter(
-            array_map('trim', $lines),
-            static fn(string $line): bool => $line !== '' && !str_starts_with($line, '#'),
-        ));
+        foreach ($lines as $line) {
+            $line = trim($line);
+
+            if ($line === '' || str_starts_with($line, '#')) {
+                continue;
+            }
+
+            if (isset($sections[trim($line, '[]')]) && str_starts_with($line, '[')) {
+                $current = trim($line, '[]');
+                continue;
+            }
+
+            $sections[$current][] = $line;
+        }
+
+        sort($sections['unprobed']);
+
+        return $sections;
     }
 
     /**

@@ -105,6 +105,20 @@ final class HarnessContainer
 
         $router->shouldReceive('match')->withAnyArgs()->andReturn($routeMatch);
 
+        // Pass-through like the translator above, so a row value routed through translateReplace()
+        // still carries the marker into the output rather than being swallowed.
+        $translationHelper = m::mock(\Common\Service\Helper\TranslationHelperService::class);
+        $translationHelper->shouldReceive('translate')->withAnyArgs()->andReturnUsing(
+            static fn($message) => is_string($message) ? $message : ''
+        );
+        $translationHelper->shouldReceive('translateReplace')->withAnyArgs()->andReturnUsing(
+            static fn($key, $args) => implode(' ', array_map(
+                static fn(mixed $arg): string => is_scalar($arg) || $arg instanceof \Stringable ? (string)$arg : '',
+                is_array($args) ? $args : []
+            ))
+        );
+        $translationHelper->shouldIgnoreMissing('');
+
         $services = [
             'Helper\Url' => $urlHelper,
             UrlHelperService::class => $urlHelper,
@@ -129,6 +143,8 @@ final class HarnessContainer
             \Common\Service\Helper\DataHelperService::class => $dataHelper,
             'Helper\Date' => $dateHelper,
             \Common\Service\Helper\DateHelperService::class => $dateHelper,
+            'Helper\Translation' => $translationHelper,
+            \Common\Service\Helper\TranslationHelperService::class => $translationHelper,
         ];
 
         $container = new ServiceManager(['services' => $services]);

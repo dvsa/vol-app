@@ -16,13 +16,27 @@ namespace CommonTest\Common\Service\Table\Harness;
  * this actually does: any offset is accepted and answered with the probe itself, and iterating
  * yields the probe under an integer key.
  *
+ * The one thing a self-returning probe cannot do is satisfy a *type* — number_format() wants a
+ * float, new DateTime() wants something parseable. Overrides answer exactly that, and only at the
+ * dotted path given: $data['publication']['pubDate'] can be a real date while
+ * $data['publication']['trafficArea']['name'] stays a probe carrying the marker. Substituting the
+ * whole 'publication' key instead would de-probe every sibling column in the table, which is the
+ * difference between "this one value cannot carry a payload" and "this table is no longer tested".
+ *
  * @implements \ArrayAccess<mixed, self>
  * @implements \IteratorAggregate<int, self>
  */
 final class RecursiveProbe implements \ArrayAccess, \Countable, \IteratorAggregate, \Stringable, \JsonSerializable
 {
-    public function __construct(private readonly string $marker)
-    {
+    /**
+     * @param array<string, mixed> $overrides dotted path => the value to answer with
+     * @param string $path where this probe sits, '' at the root of a row value
+     */
+    public function __construct(
+        private readonly string $marker,
+        private readonly array $overrides = [],
+        private readonly string $path = '',
+    ) {
     }
 
     #[\Override]
@@ -36,7 +50,17 @@ final class RecursiveProbe implements \ArrayAccess, \Countable, \IteratorAggrega
     #[\Override]
     public function offsetGet(mixed $offset): mixed
     {
-        return $this;
+        if ($this->overrides === []) {
+            return $this;
+        }
+
+        $path = $this->path === '' ? (string)$offset : $this->path . '.' . (string)$offset;
+
+        if (array_key_exists($path, $this->overrides)) {
+            return $this->overrides[$path];
+        }
+
+        return new self($this->marker, $this->overrides, $path);
     }
 
     #[\Override]
