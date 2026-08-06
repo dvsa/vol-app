@@ -23,6 +23,41 @@ use Laminas\Uri\Http as HttpUri;
  * Everything else is rejected, including scheme-bearing URLs (javascript:, data:),
  * protocol-relative URLs (//evil.example) and their backslash variants, which several
  * browsers normalise to forward slashes and would otherwise slip past a naive check.
+ *
+ * Why this is hand-written, since that is the first question it invites
+ * ------------------------------------------------------------------------------------
+ * Not because URL parsing is being reimplemented — the parsing is delegated to
+ * Laminas\Uri below. It is because the two things disagree about what a backslash is,
+ * and the disagreement is the whole vulnerability.
+ *
+ * RFC 3986 says a backslash is an ordinary path character, so "/\evil.example" is a
+ * perfectly ordinary absolute path and every RFC-conformant parser will say so. The
+ * WHATWG URL Standard, which is what browsers actually implement, folds "\" into "/"
+ * while parsing the authority of an http(s) URL — so a browser handed that same string
+ * in a Location header navigates to http://evil.example. Both parsers are correct; only
+ * one of them predicts where the user ends up, and that is the one that matters here.
+ *
+ * So an off-the-shelf RFC 3986 validator cannot stand in for this. It would accept
+ * "/\evil.example" and "/\/evil.example" and reopen the hole this class was written to
+ * close. Verified rather than assumed: run those two through any RFC-conformant parser's
+ * "is this an absolute path" check and it returns true.
+ *
+ * Nor is the policy itself something a library can own. "Safe" is application-specific —
+ * whether sibling subdomains count as same-origin, whether a bare relative path is
+ * acceptable, whether an absolute URL is allowed at all. Libraries supply the parse; the
+ * decision stays here.
+ *
+ * Revisit on PHP 8.5
+ * ------------------------------------------------------------------------------------
+ * PHP 8.5 ships a WHATWG-conformant parser in core as Uri\WhatWg\Url. Once the apps are
+ * on it, the browser-quirk handling in isSafePath() — the backslash normalisation, the
+ * leading-whitespace and control-character rejection — can be deleted in favour of
+ * parsing the candidate with that class and comparing origins, because it models the
+ * same behaviour the browser will apply. What should stay is the policy: which shapes
+ * this service is willing to redirect to.
+ *
+ * Until then the checks below are load-bearing. Do not "simplify" them into a scheme
+ * test or a generic URL validator without re-reading the paragraph above.
  */
 class SafeRedirectUrl
 {

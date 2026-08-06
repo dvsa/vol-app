@@ -36,9 +36,12 @@ class SafeRedirectUrlTest extends TestCase
             'relative without leading slash' => [false, 'documents/'],
 
             // Browsers normalise backslashes in the authority to forward slashes, so these
-            // are protocol-relative in practice even though they do not look it.
+            // are protocol-relative in practice even though they do not look it. An RFC 3986
+            // parser reads every one of them as an ordinary path and calls it safe, which is
+            // the reason this class does not delegate the decision to one — see its docblock.
             'backslash protocol relative' => [false, '/\\evil.example/x'],
             'double backslash' => [false, '\\\\evil.example/x'],
+            'slash backslash slash' => [false, '/\\/evil.example/x'],
 
             // Leading whitespace and control characters are stripped before parsing.
             'leading space then scheme' => [false, ' javascript:alert(1)'],
