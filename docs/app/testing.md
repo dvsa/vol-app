@@ -224,10 +224,11 @@ Two things make this honest rather than convenient:
   actually rejects the probe, so the adaptation disappears by itself when the
   constraint does. A hand-maintained "these keys are numeric" map would rot the
   way a skip list does.
-- Substitutions that **lose the payload** are recorded. A string or an array of
-  probes still carries the marker, so the assertion is unweakened; a number or a
-  date cannot, so those land in the baseline's `[unprobed]` section, asserted in
-  both directions. A column that quietly stops being probed fails the build.
+- Substitutions that **lose the payload** are recorded, and then proved. A string
+  or an array of probes still carries the marker, so the assertion is unweakened;
+  a number or a date cannot, so each of those goes through the isolation pass
+  below and ends up in the baseline's `[constrained]` section, asserted in both
+  directions.
 
 Table-level adaptation substitutes at a **dotted path**, not a root key:
 `publication.pubDate` can be a real date while
@@ -235,6 +236,40 @@ Table-level adaptation substitutes at a **dotted path**, not a root key:
 `publication` key instead would de-probe every sibling column to fix one, which
 is the difference between "this value cannot carry a payload" and "this table is
 no longer tested".
+
+### Putting the payload back
+
+A substituted value is not tested, and "not tested" is where a leak hides. Worse,
+the substitution lands in the row **every column shares**: if one column parses
+`createdOn` as a date and another interpolates it into markup, the date that
+satisfies the first is what the second emits — so the substitution masks the leak
+it should have found. The more constrained a value is, the better it is hidden.
+
+So every payload-losing value is put back. One at a time, the marker is restored
+at exactly that path while the rest of the row stays as the settled render left
+it, and the render runs once more with **no adaptation** — recovering from the
+constraint is what the pass exists to avoid. Three outcomes, all of them answers:
+
+| Outcome         | Meaning                                                                                                                                                                                  |
+| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **leaking**     | The payload reached the output raw — a real leak nothing else could see, because the ordinary run substitutes this value away first. Fails the build.                                    |
+| **constrained** | The render threw and had written nothing by then. The value cannot reach the output at all; in production the same input is a 500, not a payload on a page. Recorded in `[constrained]`. |
+| **escaped**     | The render survived and the payload came out escaped. Covered like any other value, so nothing is recorded.                                                                              |
+
+Reading the output buffer **even when the render throws** is what separates the
+first two. A value echoed by one column and only later rejected by another is
+already on the page; the throw does not retract it.
+
+One path at a time, never in a batch. `AbstractConversationMessage::getFirstReadBy()`
+returns early when `createdBy.id` equals the read's `user.id`, so restoring the
+payload to both at once would skip the branch and report "no leak" about code
+that never ran. Isolated, both render and come out escaped — which is why neither
+appears in `[constrained]` even though the fixture pins both to integers.
+
+`[constrained]` is a proof, not an exemption, and it is re-derived on every run,
+so it cannot outlive the constraint that justifies it. It is still narrower than
+"this value is escaped", which is why it stays recorded: an entry arriving means
+a value that used to be escaped is now only unreachable.
 
 Attributing a failure to the right value is most of the work, and it is done in
 four ways, narrowest first: the failing line, the statement below it (a
@@ -338,8 +373,8 @@ numeric" map would rot exactly the way a skip list does, whereas an adaptation
 disappears by itself the moment the constraint does.
 
 Most substitutions keep the payload — a string **is** the marker, and an array
-holds probes. Numbers and dates cannot, and those are reported rather than
-quietly counted as covered (see `[unprobed]` below).
+holds probes. Numbers and dates cannot, so each of those is put back on its own
+and proved rather than quietly counted as covered (see `[constrained]` below).
 
 Two formatters need more than this. `RecursiveProbe` cannot satisfy a type at
 **depth** — `getSenderName(): string` returns `$row['createdBy'][…]['forename']`,
@@ -353,11 +388,11 @@ probe rather than missing.
 
 `formatter-escaping-baseline.txt`. All three are asserted, so none can rot:
 
-| Section      | Fails when                                                          |
-| ------------ | ------------------------------------------------------------------- |
-| `[leaking]`  | a formatter starts leaking, or a listed one stops (stale entry)     |
-| `[unprobed]` | a value stops carrying the payload, **or starts carrying it again** |
-| `[skipped]`  | a formatter becomes undrivable, **or becomes drivable**             |
+| Section         | Fails when                                                              |
+| --------------- | ----------------------------------------------------------------------- |
+| `[leaking]`     | a formatter starts leaking, or a listed one stops (stale entry)         |
+| `[constrained]` | a value stops being escaped and is only unreachable, **or the reverse** |
+| `[skipped]`     | a formatter becomes undrivable, **or becomes drivable**                 |
 
 Asserting `[skipped]` matters more than it looks. A skip is not "safe" — it is
 "unknown", and without this it would stay unknown long after the reason for it
@@ -365,13 +400,15 @@ disappeared. If a formatter is skipped because `number_format()` rejects the pro
 and someone later drops that call, the value starts flowing raw; comparing the set
 means that shows up as a failure rather than sitting unnoticed behind a stale entry.
 
-`[unprobed]` is the honest accounting for values that **render but are not
-asserted**: a number or a date cannot also contain `<script>`, so those columns
-are exercised without being proved safe. Entries are `Formatter.key=type`, and
-dotted paths (`ExternalConversationMessage.documents.0.size=numeric`) come from a
-fixture leaf. Fixture leaves are counted the same way adapted keys are,
-deliberately — otherwise a fixture could quietly de-probe a value and the
-formatter would still read as fully covered.
+`[constrained]` records values a **type constraint** keeps off the page rather
+than an escaping call: a number or a date cannot also contain `<script>`, so each
+one is put back on its own (see [Putting the payload back](#putting-the-payload-back))
+and the formatter rejects it before writing anything. Entries are
+`Formatter.key=type`, and dotted paths
+(`ExternalConversationMessage.documents.0.size=numeric`) come from a fixture leaf.
+Fixture leaves are counted the same way adapted keys are, deliberately —
+otherwise a fixture could quietly de-probe a value and the formatter would still
+read as fully covered.
 
 ### When a formatter's constructor or signature changes
 
@@ -382,7 +419,7 @@ The most common way to make this test red without touching escaping:
 | `unresolvable: …` in the skipped list    | the factory is broken, or a new dependency is missing from `HarnessContainer`                  |
 | a formatter moved into `[skipped]`       | a new type constraint the probe cannot satisfy — add the service, or a fixture if it is nested |
 | a formatter moved **out** of `[skipped]` | good news; delete the entry                                                                    |
-| a new `[unprobed]` entry                 | a value now has to be a number or a date, so it is no longer asserted — check that is intended |
+| a new `[constrained]` entry              | a value now has to be a number or a date, so it is only unreachable rather than escaped        |
 
 If you add a formatter dependency, add it to `HarnessContainer` as the **real**
 class wherever the real thing does not need the world. A mock that answers
