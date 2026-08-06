@@ -8,39 +8,26 @@
 # regression; a listed table that passes is a stale entry and also fails, so the list cannot
 # silently rot.
 #
-# [constrained] records values that a type constraint keeps off the page rather than an
-# escaping call — a number_format() argument, a date that has to parse. A value that has to
-# be a number or a date cannot also be "<script>…", so it renders without the payload and
-# the ordinary assertion says nothing about it.
-#
-# Each one is therefore put back on its own: the payload is restored at exactly that path,
-# every other value stays as the settled render left it, and the table is rendered once more
-# with no adaptation. Being listed here means that render threw and had written nothing by
-# then, so the constraint rejects the value before it can reach the page — in production the
-# same input is a 500, not a payload on a page. That is a proof rather than an exemption,
-# and it is re-derived on every run, so it cannot outlive the constraint that justifies it.
-#
-# It is still a narrower guarantee than "this value is escaped", which is why it stays
-# recorded and is asserted in both directions. An entry arriving means a value that used to
-# be escaped is now only unreachable; an entry leaving means the constraint went away and
-# the value is probed like any other.
-#
 # 0 leaking, 150 covered, 0 could not be rendered by the probe.
-# Of the 150, every row value is either asserted escaped or proven unreachable below.
+#
+# There is no second list. A row value is either safe or it is not, and every value in every
+# one of these tables has been shown to be safe — most because the output escapes them, and a
+# few because their own type rejects the payload before a byte is written (a number_format()
+# argument, a date that has to parse). Those two are equally conclusive, so neither is
+# recorded here.
+#
+# The second one is worth understanding rather than taking on trust, because it looks like a
+# let-off. The type partitions every possible value: one that satisfies it is a number or a
+# strict date, neither of which can contain "<", ">", "&" or a quote, and the rendered output
+# is derived from the parsed value rather than copied from the input. One that does not
+# satisfy it never renders — in production that input is a 500, not a payload on a page.
+# There is no third case, so there is nothing left to test and nothing to keep a list of.
+#
+# That is established by rendering, not by argument. Each such value is put back on its own,
+# with the payload restored at exactly that path and the rest of the row left alone, and the
+# result is checked — including whatever was written before any exception, since a value
+# echoed by one column and rejected later by another is already on the page. If that ever
+# comes back neither escaped nor type-rejected, the test fails and names it; there is no
+# baseline section to absorb it.
 #
 [leaking]
-
-[constrained]
-admin-interim-refunds-report.table.php amount=numeric
-conversations-list.table.php createdOn=date
-fee-transactions.table.php amount=numeric
-fees.table.php amount=numeric
-fees.table.php outstanding=numeric
-messages-list.table.php createdOn=date
-messages-list.table.php documents.0.size=numeric
-messages-list.table.php userMessageReads.0.createdOn=date
-note.table.php createdOn=date
-publication.table.php publication.pubDate=date
-tm.publication.table.php publication.pubDate=date
-transaction-fees.table.php allocatedAmount=numeric
-transaction-fees.table.php amount=numeric

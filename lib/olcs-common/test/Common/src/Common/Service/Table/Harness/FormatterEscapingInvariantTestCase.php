@@ -52,35 +52,35 @@ abstract class FormatterEscapingInvariantTestCase extends TestCase
         ));
     }
 
-    public function testTheSetOfConstrainedValuesHasNotChanged(): void
+    public function testEveryValueIsProvedSafeOneWayOrTheOther(): void
     {
         $result = new FormatterEscapingHarness()->inspect();
 
-        $expected = $this->entries('constrained');
-        $actual = [];
+        $unproven = [];
 
-        foreach ($result['constrained'] as $formatter => $keys) {
-            foreach ($keys as $key => $type) {
-                $actual[] = "{$formatter}.{$key}={$type}";
+        foreach ($result['unproven'] as $formatter => $keys) {
+            foreach ($keys as $key => $reason) {
+                $unproven[] = "{$formatter}.{$key} ({$reason})";
             }
         }
 
-        sort($expected);
-        sort($actual);
+        sort($unproven);
 
-        $this->assertSame($expected, $actual, sprintf(
-            "The set of values kept off the page by a type constraint has changed.\n\n"
-            . "Newly constrained: %s\nNow escaped:       %s\n\n"
-            . "A value that has to be a number or a date cannot also carry a payload, so each of\n"
-            . "these was put back on its own and the formatter rejected it before writing anything.\n"
-            . "That is a proof it cannot reach the output, but a narrower one than \"this value is\n"
-            . "escaped\", so it stays recorded. One arriving means a value that used to be escaped is\n"
-            . "now only unreachable — check by hand that nothing else emits it. One leaving is good\n"
-            . "news: the constraint went away and the value is probed like any other, so remove it\n"
-            . "from %s.",
-            implode(', ', array_diff($actual, $expected)) ?: '(none)',
-            implode(', ', array_diff($expected, $actual)) ?: '(none)',
-            basename($this->baselineFile()),
+        // A value that cannot carry the payload is put back on its own and comes back either
+        // escaped or rejected by its own type. Both are proofs, so neither is recorded and there is
+        // no third category to explain: a value is safe or it is not.
+        //
+        // This is the case where neither was established. No baseline to add to on purpose — it is
+        // empty today, and an entry means someone has to look.
+        $this->assertSame([], $unproven, sprintf(
+            "These values could not be shown to be safe either way:\n  %s\n\n"
+            . "Each was formatted with the payload restored, and the call failed for a reason that\n"
+            . "is not its type rejecting it — so it neither reached the output nor was proven unable\n"
+            . "to. That is unknown, not safe, and unknown is what this test exists to prevent.\n\n"
+            . "Usually the formatter is broken for an unrelated reason: a missing service, or a\n"
+            . "throw before it gets near the value. Fix that and the value goes back to being\n"
+            . "proved one way or the other.",
+            implode("\n  ", $unproven),
         ));
     }
 

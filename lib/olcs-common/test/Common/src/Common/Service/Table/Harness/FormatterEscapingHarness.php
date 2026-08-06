@@ -49,7 +49,7 @@ final class FormatterEscapingHarness
      *     leaking: array<string, string[]>,
      *     skipped: array<string, string>,
      *     exercised: string[],
-     *     constrained: array<string, array<string, string>>
+     *     unproven: array<string, array<string, string>>
      * }
      */
     public function inspect(): array
@@ -57,7 +57,7 @@ final class FormatterEscapingHarness
         $leaking = [];
         $skipped = [];
         $exercised = [];
-        $constrained = [];
+        $unproven = [];
 
         $container = HarnessContainer::create();
 
@@ -96,13 +96,14 @@ final class FormatterEscapingHarness
                 $leaks = $this->findLeaks($result['output']);
 
                 // Every value the settled run could not probe is put back one at a time, so it ends
-                // up either proven unreachable or covered like any other. A payload that reaches
-                // the output only under isolation is a leak the shared row was masking.
+                // up either escaped or rejected by its type — both proofs — rather than unknown. A
+                // payload that reaches the output only under isolation is a leak the shared row
+                // was masking.
                 if ($result['unprobed'] !== []) {
                     $isolated = $this->isolate($formatter, $class, $result['unprobed'], $result);
 
-                    if ($isolated['constrained'] !== []) {
-                        $constrained[$short] = $isolated['constrained'];
+                    if ($isolated['unproven'] !== []) {
+                        $unproven[$short] = $isolated['unproven'];
                     }
 
                     $leaks = array_merge($leaks, $isolated['leaking']);
@@ -118,14 +119,14 @@ final class FormatterEscapingHarness
 
         ksort($leaking);
         ksort($skipped);
-        ksort($constrained);
+        ksort($unproven);
         sort($exercised);
 
         return [
             'leaking' => $leaking,
             'skipped' => $skipped,
             'exercised' => $exercised,
-            'constrained' => $constrained,
+            'unproven' => $unproven,
         ];
     }
 
@@ -262,14 +263,17 @@ final class FormatterEscapingHarness
      * No adaptation loop here on purpose: violating the constraint is the point, and adapting would
      * put the substitution straight back.
      *
+     * Nothing is returned for a value that comes back safe, by either route. Escaped and rejected
+     * are both proofs, so there is no gradation to record — only the two ways of not being safe.
+     *
      * @param array<string, string> $unprobed path => type, from the settled run
      * @param array{adapted: array<string, string>, fixture: array<string, mixed>} $settled
-     * @return array{constrained: array<string, string>, leaking: string[]}
+     * @return array{unproven: array<string, string>, leaking: string[]}
      */
     private function isolate(object $formatter, string $class, array $unprobed, array $settled): array
     {
         $column = $this->column();
-        $constrained = [];
+        $unproven = [];
         $leaking = [];
 
         foreach ($unprobed as $target => $type) {
@@ -282,25 +286,32 @@ final class FormatterEscapingHarness
             $row = PayloadIsolation::withMarkerAt($row, $target, self::MARKER);
 
             $result = $this->attempt($formatter, $row, $column);
-            $verdict = PayloadIsolation::verdict($result['output'], $result['thrown'], self::MARKER);
 
-            if ($verdict === PayloadIsolation::LEAKING) {
-                $leaking[] = sprintf('%s reaches the output raw', $target);
-                continue;
-            }
+            $verdict = PayloadIsolation::verdict(
+                $result['output'],
+                $result['thrown'],
+                self::MARKER,
+                $result['thrown'] !== null && $this->adaptation->requiredType($result['thrown']) !== null,
+            );
 
-            if ($verdict === PayloadIsolation::CONSTRAINED) {
-                $constrained[$target] = $type;
-            }
-
-            // ESCAPED needs no record: the value carried the payload and the output escaped it, so
-            // it is covered by the ordinary assertion like any other.
+            match ($verdict) {
+                PayloadIsolation::LEAKING => $leaking[] = sprintf('%s reaches the output raw', $target),
+                PayloadIsolation::UNPROVEN => $unproven[$target] = sprintf(
+                    '%s: %s',
+                    $type,
+                    $result['thrown'] !== null
+                        ? $result['thrown']::class . ': ' . $result['thrown']->getMessage()
+                        : 'no exception',
+                ),
+                // CONSTRAINED and ESCAPED are both proofs, so neither is recorded.
+                default => null,
+            };
         }
 
-        ksort($constrained);
+        ksort($unproven);
         sort($leaking);
 
-        return ['constrained' => $constrained, 'leaking' => $leaking];
+        return ['unproven' => $unproven, 'leaking' => $leaking];
     }
 
     /**

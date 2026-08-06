@@ -20,21 +20,33 @@ namespace CommonTest\Common\Service\Table\Harness;
  * So each such value is put back. One at a time, the payload is restored at exactly that path while
  * every other value stays as the settled render left it, and the render is run once more with no
  * adaptation — the point is to see what happens when the constraint is violated, so recovering from
- * it would defeat the exercise. Three things can happen, and all three are answers:
+ * it would defeat the exercise.
+ *
+ * The outcome is binary: the value is safe, or it is not. Safe arrives two ways, and neither is
+ * weaker than the other, so neither is recorded anywhere:
+ *
+ *   escaped      the render survived and the payload came out escaped.
+ *   constrained  the type rejected the payload before anything was written, so it cannot reach the
+ *                page at all. In production the same input is a 500, not a payload on a page.
+ *
+ * Calling the second one safe is a complete argument rather than a lenient one, and it is worth
+ * spelling out because it looks like a let-off. The constraint partitions every possible value:
+ * one that satisfies it is a number or a strict ATOM date, and neither can contain "<", ">", "&"
+ * or a quote — the rendered output is derived from the parsed value, not copied from the input.
+ * One that does not satisfy it is rejected before a byte is written. There is no third case, so
+ * there is nothing left to test and nothing to keep a list of.
+ *
+ * Not safe also arrives two ways, and both fail:
  *
  *   leaking      the payload reached the output raw. A real leak, and one nothing else could see:
  *                the ordinary run substitutes this value away before it gets there.
- *   constrained  the render threw, and had emitted nothing by then. The value cannot reach the
- *                output at all, because the type constraint rejects it first — in production the
- *                same input is a 500, not a payload on a page. That is a proof, not an exemption.
- *   escaped      the render survived and the payload came out escaped. The constraint applied
- *                somewhere else, or on a branch this row does not take, and the value is covered
- *                exactly like any other.
+ *   unproven     the render failed for a reason that is not the type rejecting the value, so
+ *                nothing was established either way. Reported rather than assumed benign.
  *
- * "Emitted nothing by then" is the part worth being careful about, and why the output buffer is
- * read even when the render throws. A value that is echoed by one column and only later rejected by
- * another is already on the page; the throw does not retract it. Checking what was written before
- * the exception is what separates that from a genuine constraint.
+ * Two things stop "it threw" from being read as "it is safe" when it is not. The first is *why* it
+ * threw — see verdict(). The second is *when*: the output buffer is read even on a throw, because a
+ * value echoed by one column and only later rejected by another is already on the page, and the
+ * exception does not retract it.
  *
  * One path at a time, never in a batch, and the conversation formatters show why. getFirstReadBy()
  * compares $row['createdBy']['id'] against $firstRead['user']['id'] and returns early when they
@@ -46,25 +58,47 @@ final class PayloadIsolation
     /** The payload reached the output raw. */
     public const LEAKING = 'leaking';
 
-    /** The render threw before emitting anything: the constraint keeps the value off the page. */
+    /** The type rejected the payload before anything was written: it cannot reach the page. */
     public const CONSTRAINED = 'constrained';
 
     /** The render survived and the value came out escaped. */
     public const ESCAPED = 'escaped';
+
+    /** The render failed for a reason that says nothing about the value. Not a result. */
+    public const UNPROVEN = 'unproven';
 
     /**
      * What one isolated render says about the value.
      *
      * The leak test comes first and applies whether or not the render finished, because output
      * written before an exception has still been written.
+     *
+     * The rest turns on *why* it threw, and that distinction is the difference between a proof and
+     * a coincidence. "It threw, so the value cannot get out" only holds when the throw is the type
+     * rejecting the payload. An exception from somewhere else — a missing service, a formatter
+     * broken by an unrelated change — would otherwise be read as proof of safety, and would go on
+     * reading that way for as long as the unrelated breakage lasted. That is a false negative in
+     * the one place that must not have them, so an unrecognised failure is UNPROVEN and says so.
+     *
+     * $rejectedTheType is the same question the adaptation loop asks to learn a constraint from a
+     * failure, which is what makes this exact rather than a guess about exception classes: the
+     * message either names a type the value has to satisfy, or it does not.
      */
-    public static function verdict(string $output, ?\Throwable $thrown, string $marker): string
-    {
+    public static function verdict(
+        string $output,
+        ?\Throwable $thrown,
+        string $marker,
+        bool $rejectedTheType = false
+    ): string {
         if (self::leaks($output, $marker)) {
             return self::LEAKING;
         }
 
-        return $thrown === null ? self::ESCAPED : self::CONSTRAINED;
+        if ($thrown === null) {
+            return self::ESCAPED;
+        }
+
+        return $rejectedTheType ? self::CONSTRAINED : self::UNPROVEN;
     }
 
     /**

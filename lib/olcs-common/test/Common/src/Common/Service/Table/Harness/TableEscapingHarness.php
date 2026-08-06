@@ -87,7 +87,7 @@ final class TableEscapingHarness
      *     leaking: array<string, string[]>,
      *     skipped: array<string, string>,
      *     rendered: string[],
-     *     constrained: array<string, array<string, string>>
+     *     unproven: array<string, array<string, string>>
      * }
      */
     public function inspect(array $directories): array
@@ -95,7 +95,7 @@ final class TableEscapingHarness
         $leaking = [];
         $skipped = [];
         $rendered = [];
-        $constrained = [];
+        $unproven = [];
 
         $tableBuilder = $this->tableBuilder($directories);
 
@@ -124,9 +124,9 @@ final class TableEscapingHarness
             $leaks = $this->findLeaks($result['output']);
 
             // Every value the settled render could not probe is put back one at a time, so it ends
-            // up either proven unreachable or covered like any other value. A payload that reaches
-            // the output only under isolation is a leak the shared row was masking, and it joins
-            // the leaks the ordinary render found.
+            // up either escaped or rejected by its type — both proofs — rather than unknown. A
+            // payload that reaches the output only under isolation is a leak the shared row was
+            // masking, and it joins the leaks the ordinary render found.
             if ($result['unprobed'] !== []) {
                 $isolated = $this->isolate(
                     $render['builder'],
@@ -136,8 +136,8 @@ final class TableEscapingHarness
                     $result,
                 );
 
-                if ($isolated['constrained'] !== []) {
-                    $constrained[$name] = $isolated['constrained'];
+                if ($isolated['unproven'] !== []) {
+                    $unproven[$name] = $isolated['unproven'];
                 }
 
                 $leaks = array_merge($leaks, $isolated['leaking']);
@@ -150,14 +150,14 @@ final class TableEscapingHarness
 
         ksort($leaking);
         ksort($skipped);
-        ksort($constrained);
+        ksort($unproven);
         sort($rendered);
 
         return [
             'leaking' => $leaking,
             'skipped' => $skipped,
             'rendered' => $rendered,
-            'constrained' => $constrained,
+            'unproven' => $unproven,
         ];
     }
 
@@ -480,9 +480,13 @@ final class TableEscapingHarness
      * No adaptation loop here on purpose. Violating the constraint is the whole point, so adapting
      * away from it would put the substitution straight back.
      *
+     * Nothing is returned for a value that comes back safe, by either route. Escaped and rejected
+     * are both proofs, so there is no gradation to record and no list to keep — only the two ways
+     * of not being safe are worth reporting.
+     *
      * @param array<string, string> $unprobed path => type, from the settled render
      * @param array{adapted: array<string, string>, overrides: array<string, mixed>} $settled
-     * @return array{constrained: array<string, string>, leaking: string[]}
+     * @return array{unproven: array<string, string>, leaking: string[]}
      */
     private function isolate(
         TableBuilder $tableBuilder,
@@ -492,7 +496,7 @@ final class TableEscapingHarness
         array $settled
     ): array {
         $tableName = $this->tableName($fileName);
-        $constrained = [];
+        $unproven = [];
         $leaking = [];
 
         foreach ($unprobed as $target => $type) {
@@ -507,25 +511,32 @@ final class TableEscapingHarness
             $row = PayloadIsolation::withMarkerAt($row, $target, self::MARKER);
 
             $result = $this->attempt($tableBuilder, $tableName, $row);
-            $verdict = PayloadIsolation::verdict($result['output'], $result['thrown'], self::MARKER);
 
-            if ($verdict === PayloadIsolation::LEAKING) {
-                $leaking[] = sprintf('%s reaches the output raw', $target);
-                continue;
-            }
+            $verdict = PayloadIsolation::verdict(
+                $result['output'],
+                $result['thrown'],
+                self::MARKER,
+                $result['thrown'] !== null && $this->adaptation->requiredType($result['thrown']) !== null,
+            );
 
-            if ($verdict === PayloadIsolation::CONSTRAINED) {
-                $constrained[$target] = $type;
-            }
-
-            // ESCAPED needs no record. The value carried the payload, the output escaped it, and it
-            // is covered by the ordinary assertion like any other value.
+            match ($verdict) {
+                PayloadIsolation::LEAKING => $leaking[] = sprintf('%s reaches the output raw', $target),
+                PayloadIsolation::UNPROVEN => $unproven[$target] = sprintf(
+                    '%s: %s',
+                    $type,
+                    $result['thrown'] !== null
+                        ? $result['thrown']::class . ': ' . $result['thrown']->getMessage()
+                        : 'no exception',
+                ),
+                // CONSTRAINED and ESCAPED are both proofs, so neither is recorded.
+                default => null,
+            };
         }
 
-        ksort($constrained);
+        ksort($unproven);
         sort($leaking);
 
-        return ['constrained' => $constrained, 'leaking' => $leaking];
+        return ['unproven' => $unproven, 'leaking' => $leaking];
     }
 
     /**

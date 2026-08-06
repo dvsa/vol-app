@@ -47,38 +47,39 @@ abstract class TableEscapingInvariantTestCase extends TestCase
         $fixed = array_values(array_intersect(array_diff($baseline['leaking'], $leaking), $result['rendered']));
         $this->assertSame([], $fixed, $this->fixedMessage($fixed));
 
-        // Values a type constraint stops from carrying the payload. Each one was put back on its
-        // own and the render rejected it before writing anything, so the constraint — not an
-        // escaping call — is what keeps it off the page. That is a proof rather than an exemption,
-        // but it is a narrower one than "this value is escaped", so it stays recorded.
+        // A value that cannot carry the payload is put back on its own and comes back either
+        // escaped or rejected by its own type. Both are proofs, so neither is recorded and there
+        // is no third category to explain: a value is safe or it is not.
         //
-        // Asserted in both directions like the leak list. A new entry means a value that used to be
-        // escaped is now merely rejected, which is worth seeing; a stale one means the constraint
-        // went away and the value is fully covered again.
+        // This is the case where neither was established — the isolated render failed for a reason
+        // that says nothing about the value, so "it threw" is not evidence of anything. No baseline
+        // to add to on purpose: it is empty today and an entry means someone has to look.
         $this->assertSame(
-            $baseline['constrained'],
-            $this->constrainedLines($result['constrained']),
-            "The set of values kept off the page by a type constraint has changed.\n\n"
-            . "A new entry means a value stopped being escaped and is now only unreachable —\n"
-            . "usually a formatter that started requiring a number or a date. Check by hand that\n"
-            . "nothing else emits it before recording it. A disappearing entry means the constraint\n"
-            . "went away, so the value is probed like any other and the baseline should shrink."
+            [],
+            $this->unprovenLines($result['unproven']),
+            "These values could not be shown to be safe either way.\n\n"
+            . "Each was rendered with the payload restored, and the render failed for a reason that\n"
+            . "is not its type rejecting it — so it neither reached the output nor was proven unable\n"
+            . "to. That is unknown, not safe, and unknown is what this test exists to prevent.\n\n"
+            . "Usually the render is broken for an unrelated reason: a missing service, or a\n"
+            . "formatter that throws before it gets near the value. Fix that and the value goes\n"
+            . "back to being proved one way or the other."
         );
     }
 
     /**
-     * The constrained map as one sorted "table key=type" line per value.
+     * The unproven map as one sorted "table key: reason" line per value.
      *
-     * @param array<string, array<string, string>> $constrained
+     * @param array<string, array<string, string>> $unproven
      * @return string[]
      */
-    private function constrainedLines(array $constrained): array
+    private function unprovenLines(array $unproven): array
     {
         $lines = [];
 
-        foreach ($constrained as $table => $values) {
-            foreach ($values as $key => $type) {
-                $lines[] = sprintf('%s %s=%s', $table, $key, $type);
+        foreach ($unproven as $table => $values) {
+            foreach ($values as $key => $reason) {
+                $lines[] = sprintf('%s %s (%s)', $table, $key, $reason);
             }
         }
 
@@ -88,18 +89,23 @@ abstract class TableEscapingInvariantTestCase extends TestCase
     }
 
     /**
-     * @return array{leaking: string[], constrained: string[]}
+     * @return array{leaking: string[]}
      */
     private function baseline(): array
     {
         $file = $this->baselineFile();
-        $sections = ['leaking' => [], 'constrained' => []];
+        $sections = ['leaking' => []];
 
         if (!file_exists($file)) {
             return $sections;
         }
 
         $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [];
+
+        // Every bracketed line is a section header, not just the one recognised below. A header
+        // this does not know about therefore *stops* collection rather than falling through into
+        // the current section, so a stale file left over from an older format reads as an empty
+        // section instead of silently turning its contents into leak entries.
         $current = 'leaking';
 
         foreach ($lines as $line) {
@@ -109,15 +115,15 @@ abstract class TableEscapingInvariantTestCase extends TestCase
                 continue;
             }
 
-            if (isset($sections[trim($line, '[]')]) && str_starts_with($line, '[')) {
+            if (str_starts_with($line, '[')) {
                 $current = trim($line, '[]');
                 continue;
             }
 
-            $sections[$current][] = $line;
+            if (isset($sections[$current])) {
+                $sections[$current][] = $line;
+            }
         }
-
-        sort($sections['constrained']);
 
         return $sections;
     }

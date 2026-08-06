@@ -227,8 +227,9 @@ Two things make this honest rather than convenient:
 - Substitutions that **lose the payload** are recorded, and then proved. A string
   or an array of probes still carries the marker, so the assertion is unweakened;
   a number or a date cannot, so each of those goes through the isolation pass
-  below and ends up in the baseline's `[constrained]` section, asserted in both
-  directions.
+  below, which ends with it either escaped or rejected by its own type. Both are
+  proofs, so neither is recorded — see
+  [Putting the payload back](#putting-the-payload-back).
 
 Table-level adaptation substitutes at a **dotted path**, not a root key:
 `publication.pubDate` can be a real date while
@@ -248,28 +249,52 @@ it should have found. The more constrained a value is, the better it is hidden.
 So every payload-losing value is put back. One at a time, the marker is restored
 at exactly that path while the rest of the row stays as the settled render left
 it, and the render runs once more with **no adaptation** — recovering from the
-constraint is what the pass exists to avoid. Three outcomes, all of them answers:
+constraint is what the pass exists to avoid.
 
-| Outcome         | Meaning                                                                                                                                                                                  |
-| --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **leaking**     | The payload reached the output raw — a real leak nothing else could see, because the ordinary run substitutes this value away first. Fails the build.                                    |
-| **constrained** | The render threw and had written nothing by then. The value cannot reach the output at all; in production the same input is a 500, not a payload on a page. Recorded in `[constrained]`. |
-| **escaped**     | The render survived and the payload came out escaped. Covered like any other value, so nothing is recorded.                                                                              |
+**The outcome is binary: the value is safe, or it is not.** There is no third
+category and no list of values that are "safe for a different reason" — that
+distinction is real but it is not actionable, and a reader who has just written a
+table cannot do anything with it.
 
-Reading the output buffer **even when the render throws** is what separates the
-first two. A value echoed by one column and only later rejected by another is
+Safe arrives two ways, and neither is weaker, so neither is recorded anywhere:
+
+| Safe            | Meaning                                                                            |
+| --------------- | ---------------------------------------------------------------------------------- |
+| **escaped**     | The render survived and the payload came out escaped.                              |
+| **constrained** | The value's own type rejected the payload before anything was written to the page. |
+
+Calling the second one safe is a complete argument, not a lenient one, and it is
+worth spelling out because it looks like a let-off. The type partitions every
+possible value: one that **satisfies** it is a number or a strict date, neither of
+which can contain `<`, `>`, `&` or a quote — and the output is derived from the
+parsed value rather than copied from the input. One that **does not** is rejected
+before a byte is written; in production that input is a 500, not a payload on a
+page. There is no third case, so there is nothing left to test.
+
+Not safe also arrives two ways, and both fail the build:
+
+| Not safe     | Meaning                                                                                                                         |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------- |
+| **leaking**  | The payload reached the output raw — a real leak nothing else could see, because the ordinary run substitutes this value first. |
+| **unproven** | The render failed for a reason that is **not** its type rejecting it, so nothing was established either way.                    |
+
+`unproven` is the one that keeps the argument above honest. "It threw, so it
+cannot get out" only holds when the throw _is_ the type rejecting the payload —
+an exception from anywhere else (a missing service, a formatter broken by an
+unrelated change) would otherwise read as proof of safety, and go on reading that
+way for as long as the breakage lasted. So the exception is checked against the
+same question the adaptation loop asks to learn a constraint, and anything it does
+not recognise is reported by name. There is no baseline section for it: it is
+empty today, and an entry means someone has to look.
+
+Reading the output buffer **even when the render throws** matters for the same
+reason. A value echoed by one column and only later rejected by another is
 already on the page; the throw does not retract it.
 
 One path at a time, never in a batch. `AbstractConversationMessage::getFirstReadBy()`
 returns early when `createdBy.id` equals the read's `user.id`, so restoring the
 payload to both at once would skip the branch and report "no leak" about code
-that never ran. Isolated, both render and come out escaped — which is why neither
-appears in `[constrained]` even though the fixture pins both to integers.
-
-`[constrained]` is a proof, not an exemption, and it is re-derived on every run,
-so it cannot outlive the constraint that justifies it. It is still narrower than
-"this value is escaped", which is why it stays recorded: an entry arriving means
-a value that used to be escaped is now only unreachable.
+that never ran. Isolated, both render and come out escaped.
 
 Attributing a failure to the right value is most of the work, and it is done in
 four ways, narrowest first: the failing line, the statement below it (a
@@ -374,7 +399,8 @@ disappears by itself the moment the constraint does.
 
 Most substitutions keep the payload — a string **is** the marker, and an array
 holds probes. Numbers and dates cannot, so each of those is put back on its own
-and proved rather than quietly counted as covered (see `[constrained]` below).
+and proved rather than quietly counted as covered (see
+[Putting the payload back](#putting-the-payload-back)).
 
 Two formatters need more than this. `RecursiveProbe` cannot satisfy a type at
 **depth** — `getSenderName(): string` returns `$row['createdBy'][…]['forename']`,
@@ -384,15 +410,14 @@ two conversation _message_ formatters therefore get a hand-written row from
 generated row, so a key the formatter starts reading tomorrow still arrives as a
 probe rather than missing.
 
-### The three baseline sections
+### The two baseline sections
 
-`formatter-escaping-baseline.txt`. All three are asserted, so none can rot:
+`formatter-escaping-baseline.txt`. Both are asserted, so neither can rot:
 
-| Section         | Fails when                                                              |
-| --------------- | ----------------------------------------------------------------------- |
-| `[leaking]`     | a formatter starts leaking, or a listed one stops (stale entry)         |
-| `[constrained]` | a value stops being escaped and is only unreachable, **or the reverse** |
-| `[skipped]`     | a formatter becomes undrivable, **or becomes drivable**                 |
+| Section     | Fails when                                                      |
+| ----------- | --------------------------------------------------------------- |
+| `[leaking]` | a formatter starts leaking, or a listed one stops (stale entry) |
+| `[skipped]` | a formatter becomes undrivable, **or becomes drivable**         |
 
 Asserting `[skipped]` matters more than it looks. A skip is not "safe" — it is
 "unknown", and without this it would stay unknown long after the reason for it
@@ -400,15 +425,13 @@ disappeared. If a formatter is skipped because `number_format()` rejects the pro
 and someone later drops that call, the value starts flowing raw; comparing the set
 means that shows up as a failure rather than sitting unnoticed behind a stale entry.
 
-`[constrained]` records values a **type constraint** keeps off the page rather
-than an escaping call: a number or a date cannot also contain `<script>`, so each
-one is put back on its own (see [Putting the payload back](#putting-the-payload-back))
-and the formatter rejects it before writing anything. Entries are
-`Formatter.key=type`, and dotted paths
-(`ExternalConversationMessage.documents.0.size=numeric`) come from a fixture leaf.
-Fixture leaves are counted the same way adapted keys are, deliberately —
-otherwise a fixture could quietly de-probe a value and the formatter would still
-read as fully covered.
+There is deliberately **no section for values a type constraint keeps off the
+page**, and there used to be. Listing them said "safe, but for a different
+reason", which is true and useless: nobody reading it for the first time can act
+on it. Those values are safe outright — see
+[Putting the payload back](#putting-the-payload-back) for why the argument is
+complete rather than lenient — so they are proved on every run and not recorded.
+A value that can be proved neither way fails the build by name instead.
 
 ### When a formatter's constructor or signature changes
 
@@ -419,7 +442,7 @@ The most common way to make this test red without touching escaping:
 | `unresolvable: …` in the skipped list    | the factory is broken, or a new dependency is missing from `HarnessContainer`                  |
 | a formatter moved into `[skipped]`       | a new type constraint the probe cannot satisfy — add the service, or a fixture if it is nested |
 | a formatter moved **out** of `[skipped]` | good news; delete the entry                                                                    |
-| a new `[constrained]` entry              | a value now has to be a number or a date, so it is only unreachable rather than escaped        |
+| an `unproven` value in the failure       | the formatter throws before reaching the value, for a reason unrelated to the value's type     |
 
 If you add a formatter dependency, add it to `HarnessContainer` as the **real**
 class wherever the real thing does not need the world. A mock that answers
