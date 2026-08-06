@@ -66,6 +66,21 @@ abstract class TableRenderSnapshotTestCase extends TestCase
             implode("\n  ", $result['htmlInCsv']),
         ));
 
+        // The other thing a spreadsheet does that a browser does not: evaluate the cell. A value
+        // beginning "=", "-", "+", "@", tab or CR is a formula, and Excel's DDE syntax reaches
+        // outside the document — so an operator who names a vehicle "=cmd|' /c calc'!A1" is writing
+        // code that runs on the caseworker's machine when the export is opened.
+        $this->assertSame([], $result['formulaInCsv'], sprintf(
+            "These tables put a live formula into their CSV export:\n  %s\n\n"
+            . "TableBuilder::renderCsv() writes the file with League\\Csv\\Writer and neutralises\n"
+            . "cells with League\\Csv\\EscapeFormula. A failure here means a value reached the file\n"
+            . "without going through the writer, or a new output format needs the same treatment.\n"
+            . "Note that the probe value contains a comma as well as a leading \"=\", so a table\n"
+            . "whose fields are not quoted fails this too: the half after the comma arrives as a\n"
+            . "field of its own that nothing neutralised.",
+            implode("\n  ", $result['formulaInCsv']),
+        ));
+
         $actual = $this->format($result);
 
         if (getenv(self::UPDATE_ENV) !== false) {

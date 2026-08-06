@@ -176,24 +176,40 @@ it is feeding.
 "Smith & Sons Ltd" would reach the spreadsheet as `Smith &amp; Sons Ltd`.
 `TableBuilder::renderBodyColumn()` decodes when the content type is CSV.
 
-**Formulas.** Excel, LibreOffice and Sheets evaluate a cell beginning `=`, `+`,
-`-` or `@`, and Excel's DDE syntax reaches outside the document — a vehicle marked
-`=cmd|' /c calc'!A1` is code that runs on the caseworker's machine when they open
-the export. `TableBuilder::csvField()` prefixes such a value with an apostrophe.
-Wholly numeric values are exempt: `-100.50` is a negative amount, not an
-expression, and prefixing it would turn every credit in a fee export into text
-that will not sum.
+**Formulas.** Excel, LibreOffice and Sheets evaluate a cell beginning `=`, `-`,
+`+`, `@`, tab or CR, and Excel's DDE syntax reaches outside the document — a
+vehicle marked `=cmd|' /c calc'!A1` is code that runs on the caseworker's machine
+when they open the export. `League\Csv\EscapeFormula` prefixes such a value with
+an apostrophe.
 
-**Framing.** Fields are quoted and internal quotes doubled, and the layouts join
-with a bare comma. This is not merely tidiness — it is what makes the formula fix
+**Framing.** Fields are quoted, internal quotes doubled, and embedded newlines
+kept inside the field. Not merely tidiness — it is what makes the formula handling
 work. Unquoted, a value of `x,=cmd|...` arrives as _two_ fields, and the second
-starts with `=` and never passed through the neutralisation.
+starts with `=` having never passed through any neutralisation.
 
-`TableRenderSnapshotTest` asserts all of this absolutely, with no baseline: there
-is no legitimate reason for an entity or a formula to appear in an export of
-licence data. The formula probe is `=1+1,=2+2` and the output is parsed back with
-a real CSV reader rather than split on commas, because splitting on commas is
-precisely the mistake being tested for.
+None of that is hand-written, and that is the point. `TableBuilder::renderCsv()`
+assembles the file with `League\Csv\Writer` — which wraps `fputcsv` — instead of
+rendering a `.phtml` layout and joining with `implode`. The quoting rules are
+RFC 4180 and the formula-starting characters are a published list; a local
+implementation of either is a maintained copy of someone else's better-tested one.
+
+Bypassing the template also fixes a third bug that no per-field encoding could
+reach: `render()` used to pass the finished CSV back through `replaceContent()`
+with the table's variables, so a cell containing `{{title}}` was silently blanked.
+
+One consequence worth knowing: `EscapeFormula` escapes **every** value starting
+with `-`, including `-100.50`, which a spreadsheet would otherwise read as a
+negative number. None of the six exports is a money table, so this costs nothing
+today; if one ever is, that is a decision to take deliberately rather than a
+default to drift into.
+
+`TableRenderSnapshotTest` asserts the entity and formula properties absolutely,
+with no baseline: there is no legitimate reason for either to appear in an export
+of licence data. The formula probe is `=1+1,=2+2` and the output is parsed back
+with a real CSV reader rather than split on commas, because splitting on commas is
+precisely the mistake being tested for. Its idea of "a formula" comes from
+`EscapeFormula::FORMULA_STARTING_CHARS` rather than being written out again, so
+the guard cannot drift from the code it guards.
 
 ### The escaping contract
 

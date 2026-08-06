@@ -2559,6 +2559,77 @@ final class TableBuilderTest extends MockeryTestCase
     }
 
     /**
+     * A CSV export is assembled by a CSV writer, not by the markup pipeline.
+     *
+     * Asserts the composition rather than the quoting rules — the rules belong to league/csv and
+     * are its tests' job. What is ours is that the CSV path goes through the writer at all, and
+     * that it no longer runs the finished file back through replaceContent(): a cell containing
+     * "{{title}}" used to be silently blanked, which is data loss that no amount of per-field
+     * encoding can reach.
+     */
+    public function testRenderCsvIsWellFormedAndDoesNotRetemplateValues(): void
+    {
+        $mockContentHelper = $this->createPartialMock(ContentHelper::class, ['replaceContent']);
+
+        // The CSV element partials are bare "{{content}}" and "{{title}}", so returning the value
+        // is what they do.
+        $mockContentHelper->method('replaceContent')->willReturnCallback(
+            static fn(string $wrapper, array $replacements): string
+                => (string)($replacements['content'] ?? $replacements['title'] ?? '')
+        );
+
+        $table = $this->getMockTableBuilder(['getContentHelper']);
+        $table->method('getContentHelper')->willReturn($mockContentHelper);
+
+        $table->setContentType(TableBuilder::CONTENT_TYPE_CSV);
+        $table->setColumns([['title' => 'VRM', 'name' => 'vrm'], ['title' => 'Notes', 'name' => 'notes']]);
+        $table->setRows([
+            ['vrm' => 'AB12 CDE', 'notes' => 'comma, inside'],
+            ['vrm' => "quote \" inside", 'notes' => "newline\ninside"],
+            ['vrm' => '=cmd|\' /c calc\'!A1', 'notes' => 'formula'],
+            ['vrm' => 'has {{title}} token', 'notes' => 'not a template'],
+        ]);
+
+        $records = $this->parseCsv($table->render());
+
+        $this->assertCount(5, $records, 'One header and four rows: a comma or a newline in a value must not start a new field or record.');
+
+        foreach ($records as $record) {
+            $this->assertCount(2, $record, 'Every record has exactly the two columns declared.');
+        }
+
+        // The mock translator prefixes what it is given, which is how the header proves it went
+        // through renderHeaderColumn rather than being written out raw.
+        $this->assertSame(['_TRSLTD_VRM', '_TRSLTD_Notes'], $records[0]);
+        $this->assertSame(['AB12 CDE', 'comma, inside'], $records[1]);
+        $this->assertSame(['quote " inside', "newline\ninside"], $records[2]);
+        $this->assertSame('\'=cmd|\' /c calc\'!A1', $records[3][0], 'EscapeFormula prefixes a formula-leading value.');
+        $this->assertSame('has {{title}} token', $records[4][0], 'A value that looks like a template token survives untouched.');
+    }
+
+    /**
+     * Read a CSV back the way a spreadsheet would.
+     *
+     * @return array<int, array<int, string|null>>
+     */
+    private function parseCsv(string $csv): array
+    {
+        $handle = fopen('php://memory', 'r+');
+        fwrite($handle, $csv);
+        rewind($handle);
+
+        $records = [];
+
+        while (($record = fgetcsv($handle, 0, ',', '"', '')) !== false) {
+            $records[] = $record;
+        }
+
+        fclose($handle);
+
+        return $records;
+    }
+
+    /**
      * Test renderBodyColumn Custom Wrapper
      */
     public function testRenderBodyColumnCustomWrapper(): void

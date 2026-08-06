@@ -9,6 +9,7 @@ use Common\Service\Helper\UrlHelperService;
 use Common\Service\Table\Formatter\FormatterPluginManager;
 use Common\Service\Table\TableBuilder;
 use Laminas\ServiceManager\ServiceManager;
+use League\Csv\EscapeFormula;
 use Common\Rbac\Service\Permission;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
@@ -42,6 +43,19 @@ final class TableEscapingHarness
      * is not a payload, and the snapshot should stay readable as ordinary output.
      */
     public const BENIGN = 'Ampersand & Co';
+
+    /**
+     * The row value used to probe CSV exports, chosen to test two properties with one string.
+     *
+     * It *starts* with "=", so a cell that reaches a spreadsheet unneutralised is a live formula.
+     * It also contains a comma followed by a second "=", so if fields are not quoted the comma
+     * becomes a column boundary and the half after it arrives as its own field — one that starts
+     * with "=" and never passed through the neutralisation. That is not hypothetical: it is how
+     * the export behaved when it was assembled by joining fields with implode(), and it is why
+     * neutralising cells without quoting them would be cosmetic. One payload, so a regression in
+     * either the escaping or the framing surfaces as the same failure.
+     */
+    public const CSV_PAYLOAD = '=1+1,=2+2';
 
     /**
      * Definitions another file's basename made unreachable, as name => the name that won.
@@ -186,7 +200,8 @@ final class TableEscapingHarness
      *     digests: array<string, string>,
      *     skipped: array<string, string>,
      *     doubleEscaped: string[],
-     *     htmlInCsv: string[]
+     *     htmlInCsv: string[],
+     *     formulaInCsv: string[]
      * }
      */
     public function snapshot(array $directories): array
@@ -195,6 +210,7 @@ final class TableEscapingHarness
         $skipped = [];
         $doubleEscaped = [];
         $htmlInCsv = [];
+        $formulaInCsv = [];
 
         $tableBuilder = $this->tableBuilder($directories);
 
@@ -226,6 +242,10 @@ final class TableEscapingHarness
                 if ($this->emitsHtmlEntitiesAsCsv($directories, $name, $path)) {
                     $htmlInCsv[] = $name;
                 }
+
+                if ($this->emitsLiveFormulaAsCsv($directories, $name, $path)) {
+                    $formulaInCsv[] = $name;
+                }
             }
         } finally {
             date_default_timezone_set($timezone);
@@ -250,12 +270,14 @@ final class TableEscapingHarness
         ksort($skipped);
         sort($doubleEscaped);
         sort($htmlInCsv);
+        sort($formulaInCsv);
 
         return [
             'digests' => $digests,
             'skipped' => $skipped,
             'doubleEscaped' => $doubleEscaped,
             'htmlInCsv' => $htmlInCsv,
+            'formulaInCsv' => $formulaInCsv,
         ];
     }
 
@@ -285,6 +307,80 @@ final class TableEscapingHarness
         }
 
         return str_contains($csv, htmlspecialchars('&'));
+    }
+
+    /**
+     * Whether a table rendered as CSV puts a live formula in front of whoever opens it.
+     *
+     * Excel, LibreOffice and Sheets evaluate a cell beginning "=", "+", "-" or "@", and Excel's DDE
+     * syntax reaches outside the document entirely. The values in these exports are operator-
+     * supplied and the file is opened by a caseworker, so the attacker writes the payload and
+     * someone else's machine runs it.
+     *
+     * Parsed back with a real CSV reader rather than split on commas, because that is what the
+     * spreadsheet does: a field is only a field once quoting has been honoured. Reading it the
+     * naive way would report the pre-fix output as fine, since the dangerous half only becomes a
+     * separate field after parsing.
+     *
+     * Asserted absolutely — there is no legitimate reason for a formula to appear in an export of
+     * licence data, so there is nothing to baseline.
+     *
+     * @param string[] $directories
+     */
+    private function emitsLiveFormulaAsCsv(array $directories, string $name, string $path): bool
+    {
+        $builder = $this->tableBuilder($directories);
+        $builder->setContentType(TableBuilder::CONTENT_TYPE_CSV);
+
+        try {
+            $csv = $this->render($builder, $name, $path, self::CSV_PAYLOAD)['output'];
+        } catch (\Throwable) {
+            // Not every definition renders as CSV, and the ones that do not are not exported that
+            // way either. A failure here says nothing about formula injection.
+            return false;
+        }
+
+        $handle = fopen('php://memory', 'r+');
+
+        if ($handle === false) {
+            return false;
+        }
+
+        fwrite($handle, $csv);
+        rewind($handle);
+
+        $live = false;
+
+        while (($record = fgetcsv($handle, 0, ',', '"', '')) !== false) {
+            foreach ($record as $field) {
+                if (self::isLiveFormula((string)$field)) {
+                    $live = true;
+                    break 2;
+                }
+            }
+        }
+
+        fclose($handle);
+
+        return $live;
+    }
+
+    /**
+     * Whether one parsed CSV field would be evaluated rather than displayed.
+     *
+     * The definition is taken from EscapeFormula rather than written out again, so this asks
+     * exactly the question the production code answers. A guard with its own opinion about what a
+     * formula is would fail on values league/csv deliberately passes, or — worse — pass values it
+     * deliberately escapes, and either way the two would drift apart the next time the library
+     * revised its list.
+     *
+     * First character only, with no whitespace stripped, because that is the rule the library
+     * applies: a leading space makes a spreadsheet read the cell as text, so " =1+1" is not a
+     * formula and escaping it would put an apostrophe in front of ordinary indented data.
+     */
+    private static function isLiveFormula(string $field): bool
+    {
+        return $field !== '' && in_array($field[0], EscapeFormula::FORMULA_STARTING_CHARS, true);
     }
 
     /**
