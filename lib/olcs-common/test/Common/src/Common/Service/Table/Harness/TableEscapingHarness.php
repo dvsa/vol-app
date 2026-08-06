@@ -40,6 +40,31 @@ final class TableEscapingHarness
     public const BENIGN = 'Ampersand & Co';
 
     /**
+     * Definitions another file's basename made unreachable, as name => the name that won.
+     *
+     * Populated by tableFiles() on every call.
+     *
+     * @var array<string, string>
+     */
+    private array $shadowed = [];
+
+    /**
+     * The shadowed files' absolute paths, so they can be rendered with a builder of their own.
+     *
+     * @var array<string, string>
+     */
+    private array $shadowedPaths = [];
+
+    /**
+     * Directories holding table definitions, as handed to TableBuilder.
+     *
+     * Populated by tableFiles(), which has to walk the tree to find them anyway.
+     *
+     * @var string[]
+     */
+    private array $locations = [];
+
+    /**
      * Inspect every *.table.php under the given directories.
      *
      * @param string[] $directories
@@ -56,6 +81,22 @@ final class TableEscapingHarness
         foreach ($this->tableFiles($directories) as $name => $path) {
             try {
                 $html = $this->render($tableBuilder, $name, $path, self::MARKER);
+            } catch (\Throwable $e) {
+                $skipped[$name] = $e::class . ': ' . $e->getMessage();
+                continue;
+            }
+
+            $rendered[] = $name;
+
+            $leaks = $this->findLeaks($html);
+            if ($leaks !== []) {
+                $leaking[$name] = $leaks;
+            }
+        }
+
+        foreach ($this->shadowedRenders($directories) as $name => $shadowed) {
+            try {
+                $html = $this->render($shadowed['builder'], $name, $shadowed['path'], self::MARKER);
             } catch (\Throwable $e) {
                 $skipped[$name] = $e::class . ': ' . $e->getMessage();
                 continue;
@@ -144,6 +185,21 @@ final class TableEscapingHarness
             }
         } finally {
             date_default_timezone_set($timezone);
+        }
+
+        foreach ($this->shadowedRenders($directories) as $name => $shadowed) {
+            try {
+                $html = $this->render($shadowed['builder'], $name, $shadowed['path'], self::BENIGN);
+            } catch (\Throwable $e) {
+                $skipped[$name] = $e::class . ': ' . $e->getMessage();
+                continue;
+            }
+
+            $digests[$name] = hash('sha256', $this->normalise($html));
+
+            if (str_contains($html, htmlspecialchars(htmlspecialchars('&')))) {
+                $doubleEscaped[] = $name;
+            }
         }
 
         ksort($digests);
@@ -250,16 +306,19 @@ final class TableEscapingHarness
 
     /**
      * @param string[] $directories
-     * @return array<string, string> name => path
+     * @return array<string, string> path relative to its scanned directory => absolute path
      */
     public function tableFiles(array $directories): array
     {
-        $files = [];
+        $candidates = [];
+        $locations = [];
 
         foreach ($directories as $directory) {
             if (!is_dir($directory)) {
                 continue;
             }
+
+            $root = rtrim($directory, DIRECTORY_SEPARATOR);
 
             $iterator = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($directory, \FilesystemIterator::SKIP_DOTS),
@@ -270,11 +329,49 @@ final class TableEscapingHarness
                     continue;
                 }
 
-                $files[$file->getFilename()] = $file->getPathname();
+                $candidates[$file->getFilename()][] = [
+                    'path' => $file->getPathname(),
+                    'relative' => ltrim(substr($file->getPathname(), strlen($root)), DIRECTORY_SEPARATOR),
+                ];
+
+                $locations[dirname($file->getPathname()) . '/'] = true;
+            }
+        }
+
+        $this->locations = array_keys($locations);
+
+        // A definition is resolved by name against the configured locations, so two files sharing
+        // a basename cannot both be reached — one wins and the other is unreachable here. Pick the
+        // winner by TableBuilder's own rule (it reverses the list and takes the first hit) rather
+        // than by discovery order, or the harness reports one file while rendering the other.
+        $order = array_flip(array_reverse($this->locations));
+
+        $files = [];
+        $this->shadowed = [];
+        $this->shadowedPaths = [];
+
+        foreach ($candidates as $entries) {
+            usort(
+                $entries,
+                static fn(array $a, array $b): int
+                    => $order[dirname($a['path']) . '/'] <=> $order[dirname($b['path']) . '/'],
+            );
+
+            $winner = array_shift($entries);
+
+            // Keyed by path relative to the scanned directory, not by basename: a shadowed file
+            // and its winner would otherwise appear under one name, one as a digest and one as a
+            // skip. The name TableBuilder resolves is still the basename — see render().
+            $files[$winner['relative']] = $winner['path'];
+
+            foreach ($entries as $loser) {
+                $this->shadowed[$loser['relative']] = $winner['relative'];
+                $this->shadowedPaths[$loser['relative']] = $loser['path'];
             }
         }
 
         ksort($files);
+        ksort($this->shadowed);
 
         return $files;
     }
@@ -284,7 +381,10 @@ final class TableEscapingHarness
         // Passed by name, not as a loaded array. Definitions are include()d by TableBuilder and
         // several call $this->callFormatter(...) in inline closures, where $this is meant to be the
         // TableBuilder. Loading the file here instead would bind $this to the harness.
-        $tableName = substr($fileName, 0, -strlen('.table.php'));
+        //
+        // The basename, not the caller's key: keys carry a directory prefix so shadowed files stay
+        // distinguishable, but TableBuilder resolves definitions by bare name.
+        $tableName = substr(basename($fileName), 0, -strlen('.table.php'));
 
         // Some table partials echo directly rather than returning, so capture anything written to
         // stdout — both to keep it out of the test output and because a leak could appear there.
@@ -372,7 +472,7 @@ final class TableEscapingHarness
     /**
      * @param string[] $directories
      */
-    private function tableBuilder(array $directories): TableBuilder
+    private function tableBuilder(array $directories, ?string $prefer = null): TableBuilder
     {
         $container = $this->container();
 
@@ -383,7 +483,7 @@ final class TableEscapingHarness
             $container->get('Helper\Url'),
             [
                 'tables' => [
-                    'config' => $this->configLocations($directories),
+                    'config' => $this->configLocations($directories, $prefer),
                     'partials' => [
                         'html' => __DIR__ . '/../../../../../../../Common/view/table/',
                         'csv' => __DIR__ . '/../../../../../../../Common/view/table/csv',
@@ -407,15 +507,50 @@ final class TableEscapingHarness
      * @param string[] $directories
      * @return string[]
      */
-    private function configLocations(array $directories): array
+    private function configLocations(array $directories, ?string $prefer = null): array
     {
-        $locations = [];
+        $this->tableFiles($directories);
 
-        foreach ($this->tableFiles($directories) as $path) {
-            $locations[dirname($path) . '/'] = true;
+        if ($prefer === null) {
+            return $this->locations;
         }
 
-        return array_keys($locations);
+        // TableBuilder reverses this list and takes the first hit, so the way to make a given
+        // directory win a name contest is to put it last.
+        $locations = array_values(array_filter(
+            $this->locations,
+            static fn(string $location): bool => $location !== $prefer
+        ));
+        $locations[] = $prefer;
+
+        return $locations;
+    }
+
+    /**
+     * A builder per shadowed file, each configured so that file wins its name.
+     *
+     * Shadowed definitions are real, ship to production and are as likely to leak as any other, so
+     * reporting them as permanently unknown would be a hole the size of however many name clashes
+     * the repository accumulates. They cannot share the main builder — by definition another file
+     * answers to their name there — so each gets one whose locations are ordered in its favour.
+     *
+     * @param string[] $directories
+     * @return array<string, array{path: string, builder: TableBuilder}>
+     */
+    private function shadowedRenders(array $directories): array
+    {
+        // Snapshotted first: building a TableBuilder re-walks the tree and resets these.
+        $shadowed = $this->shadowedPaths;
+        $renders = [];
+
+        foreach ($shadowed as $name => $path) {
+            $renders[$name] = [
+                'path' => $path,
+                'builder' => $this->tableBuilder($directories, dirname($path) . '/'),
+            ];
+        }
+
+        return $renders;
     }
 
     /**
