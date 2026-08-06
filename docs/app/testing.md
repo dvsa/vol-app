@@ -122,6 +122,11 @@ third reaches code the first two structurally cannot.
 | `TableRenderSnapshotTest`        | something that was **not** a row value getting escaped | Yes — literal `&lt;b&gt;` on the page |
 | `FormatterEscapingInvariantTest` | a formatter leaking, whatever any table does           | No — it is an XSS hole                |
 
+`TableRenderSnapshotTest` also carries the two checks that are about the **other**
+output format, both asserted absolutely rather than against the snapshot: a table
+whose CSV export still contains HTML entities, and one whose CSV export contains a
+live formula. See [CSV exports](#csv-exports).
+
 The first two exist three times, once per table location, all sharing one harness
 in olcs-common (`test/Common/src/Common/Service/Table/Harness/`): `app/internal`,
 `app/selfserve` and olcs-common's own `Common/src/Common/Table/Tables`. The third
@@ -158,24 +163,37 @@ Regenerating the snapshot is the one thing that is not just "run the test":
 UPDATE_TABLE_SNAPSHOTS=1 vendor/bin/phpunit --filter TableRenderSnapshotTest
 ```
 
-### Escaping is per output format
+### CSV exports
 
 Escaping happens at the **source** here — a formatter escapes the row value it
 interpolates — which is right for HTML and wrong for everything else. Six
-controllers export a table as CSV (`ResponseHelperService::tableToCsv`), and a
-CSV is not HTML: nothing downstream decodes it, so an operator called
-"Smith & Sons Ltd" reaches the spreadsheet as `Smith &amp; Sons Ltd`.
+controllers export a table as CSV (`ResponseHelperService::tableToCsv`), and a CSV
+is neither HTML nor a passive document. Three things follow, all handled by the
+renderer rather than the formatter, because the formatter has no idea which format
+it is feeding.
 
-`TableBuilder::renderBodyColumn()` therefore decodes entities when the content
-type is CSV. That is the renderer's job, not the formatter's — the formatter has
-no idea which format it is feeding. `TableRenderSnapshotTest` asserts absolutely
-that no table emits an entity when rendered as CSV, so a new output format that
-needs the same treatment fails the build rather than shipping mojibake.
+**Entities.** Nothing downstream decodes them, so an operator called
+"Smith & Sons Ltd" would reach the spreadsheet as `Smith &amp; Sons Ltd`.
+`TableBuilder::renderBodyColumn()` decodes when the content type is CSV.
 
-Two things this does **not** fix, both pre-existing and worth their own tickets:
-CSV fields are joined with `', '` and never quoted, so a value containing a comma
-splits the row; and a cell beginning `=`, `+`, `-` or `@` is executed as a formula
-by Excel and LibreOffice.
+**Formulas.** Excel, LibreOffice and Sheets evaluate a cell beginning `=`, `+`,
+`-` or `@`, and Excel's DDE syntax reaches outside the document — a vehicle marked
+`=cmd|' /c calc'!A1` is code that runs on the caseworker's machine when they open
+the export. `TableBuilder::csvField()` prefixes such a value with an apostrophe.
+Wholly numeric values are exempt: `-100.50` is a negative amount, not an
+expression, and prefixing it would turn every credit in a fee export into text
+that will not sum.
+
+**Framing.** Fields are quoted and internal quotes doubled, and the layouts join
+with a bare comma. This is not merely tidiness — it is what makes the formula fix
+work. Unquoted, a value of `x,=cmd|...` arrives as _two_ fields, and the second
+starts with `=` and never passed through the neutralisation.
+
+`TableRenderSnapshotTest` asserts all of this absolutely, with no baseline: there
+is no legitimate reason for an entity or a formula to appear in an export of
+licence data. The formula probe is `=1+1,=2+2` and the output is parsed back with
+a real CSV reader rather than split on commas, because splitting on commas is
+precisely the mistake being tested for.
 
 ### The escaping contract
 
@@ -313,6 +331,47 @@ Two consequences worth knowing:
 - The row is harvested from the definition **and** from the formatter classes it
   names. A key only a formatter reads would otherwise arrive as `null`, which
   makes `isset()` false and skips the very branch that leaks.
+
+### Keys the harvest cannot see
+
+That last point has a sharper edge than it reads. The harvest looks for
+`$row['literal']`, so a key read through a **variable** is invisible to it — and
+the miss is silent in the worst possible way. A key the row does not carry is
+absent, `isset()` on it is false, the branch that would have interpolated it never
+runs, and the table renders clean. Green, and nothing tested.
+
+`Formatter\Address` was the worked example. Its field names live in a class
+property, not in a subscript:
+
+```php
+protected $formats = ['FULL' => ['addressLine1', 'addressLine2', 'town', ...]];
+
+foreach ($fields as $item) {
+    if (!isset($data[$item])) { continue; }   // always true, so...
+    $parts[] = $data[$item];
+}
+return implode(', ', array_map(fn($p) => Escape::html($p), $parts));  // ...never ran
+```
+
+Nothing reads `$data['addressLine1']`, so the harvest never added it, so every
+iteration hit the `continue` and `$parts` came back empty. The formatter counted
+as exercised while the only line that matters had never executed.
+
+`DynamicRowKeys` closes it: where a file reads the row through a variable, the
+quoted identifier lists in that same file are taken as candidate keys. It is a
+heuristic and deliberately a narrow one — only files that actually do dynamic row
+access contribute (19 of 149 formatters, and only a handful have a list to find),
+and only identifier-shaped strings in comma-separated array literals count, so a
+lone `'FULL'` or a CSS class does not become a row key.
+
+Guessing is justified because the costs are asymmetric. An extra key the code
+never reads is an unused probe and changes nothing. A missing key is a branch that
+silently stops being tested. And the failure direction is loud: a value the row
+should not have had reaching the output is reported as a leak for a human to
+judge, rather than passing quietly.
+
+`$column` is excluded from "dynamic", because `$data[$column['name']]` is resolved
+properly elsewhere from the column config the formatter was actually handed.
 
 One mechanism is worth knowing about, because it is not about probe data at all:
 **shadowing**. Definitions resolve by bare name against a list of directories, so

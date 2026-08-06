@@ -534,6 +534,11 @@ final class FormatterEscapingHarness
             }
         }
 
+        // Keys read through a variable, which the pattern above cannot see. Formatter\Address is
+        // the case in point: its field names live in a class property, so without these every
+        // iteration of its loop hit the `continue` and the Escape::html() it exists for never ran.
+        $keys = array_merge($keys, DynamicRowKeys::forClass($class));
+
         return array_fill_keys(array_unique($keys), new RecursiveProbe(self::MARKER));
     }
 

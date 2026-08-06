@@ -767,15 +767,22 @@ final class TableEscapingHarness
                     continue;
                 }
 
+                $formatterSource = (string)file_get_contents($file);
+
                 if (
                     preg_match_all(
                         '/\$(?:row|data)\s*\[\s*[\'"]([A-Za-z0-9_]+)[\'"]\s*\]/',
-                        (string)file_get_contents($file),
+                        $formatterSource,
                         $found
                     )
                 ) {
                     $keys = array_merge($keys, $found[1]);
                 }
+
+                // Keys the formatter reads through a variable, which the pattern above cannot see.
+                // Without these the guarded branch is skipped and the formatter counts as exercised
+                // while the line that escapes never runs — see DynamicRowKeys.
+                $keys = array_merge($keys, DynamicRowKeys::forSource($formatterSource));
             }
         }
 
