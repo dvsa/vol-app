@@ -100,7 +100,8 @@ final class TableEscapingHarness
      * @return array{
      *     digests: array<string, string>,
      *     skipped: array<string, string>,
-     *     doubleEscaped: string[]
+     *     doubleEscaped: string[],
+     *     htmlInCsv: string[]
      * }
      */
     public function snapshot(array $directories): array
@@ -108,6 +109,7 @@ final class TableEscapingHarness
         $digests = [];
         $skipped = [];
         $doubleEscaped = [];
+        $htmlInCsv = [];
 
         $tableBuilder = $this->tableBuilder($directories);
 
@@ -135,6 +137,10 @@ final class TableEscapingHarness
                 if (str_contains($html, htmlspecialchars(htmlspecialchars('&')))) {
                     $doubleEscaped[] = $name;
                 }
+
+                if ($this->emitsHtmlEntitiesAsCsv($directories, $name, $path)) {
+                    $htmlInCsv[] = $name;
+                }
             }
         } finally {
             date_default_timezone_set($timezone);
@@ -143,8 +149,44 @@ final class TableEscapingHarness
         ksort($digests);
         ksort($skipped);
         sort($doubleEscaped);
+        sort($htmlInCsv);
 
-        return ['digests' => $digests, 'skipped' => $skipped, 'doubleEscaped' => $doubleEscaped];
+        return [
+            'digests' => $digests,
+            'skipped' => $skipped,
+            'doubleEscaped' => $doubleEscaped,
+            'htmlInCsv' => $htmlInCsv,
+        ];
+    }
+
+    /**
+     * Whether a table rendered as CSV still carries HTML entities.
+     *
+     * The pipeline escapes at the source — a formatter escapes the row value it interpolates —
+     * which is right for HTML and wrong for every other output format. Six controllers export a
+     * table as CSV, and nothing downstream of them decodes, so an escaped ampersand reaches the
+     * spreadsheet as "&amp;". Three exports were doing exactly that before TableBuilder learned to
+     * decode for CSV, and no test noticed because every test rendered HTML.
+     *
+     * Asserted absolutely rather than against a baseline: there is no legitimate reason for an
+     * entity to appear in a CSV, so there is nothing to record.
+     *
+     * @param string[] $directories
+     */
+    private function emitsHtmlEntitiesAsCsv(array $directories, string $name, string $path): bool
+    {
+        $builder = $this->tableBuilder($directories);
+        $builder->setContentType(TableBuilder::CONTENT_TYPE_CSV);
+
+        try {
+            $csv = $this->render($builder, $name, $path, self::BENIGN);
+        } catch (\Throwable) {
+            // Not every definition renders as CSV, and the ones that do not are not exported that
+            // way either. A failure here says nothing about escaping.
+            return false;
+        }
+
+        return str_contains($csv, htmlspecialchars('&'));
     }
 
     /**

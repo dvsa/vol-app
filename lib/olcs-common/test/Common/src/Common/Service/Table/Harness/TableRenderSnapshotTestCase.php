@@ -55,6 +55,17 @@ abstract class TableRenderSnapshotTestCase extends TestCase
             implode("\n  ", $result['doubleEscaped']),
         ));
 
+        // Same reasoning as above, for the other output format. Escaping happens at the source, so
+        // the CSV exports inherit HTML escaping that nothing will ever decode.
+        $this->assertSame([], $result['htmlInCsv'], sprintf(
+            "These tables carry HTML entities when rendered as CSV:\n  %s\n\n"
+            . "A CSV is not HTML — nothing downstream decodes it, so an operator called\n"
+            . "\"Smith & Sons Ltd\" reaches the spreadsheet as \"Smith &amp; Sons Ltd\".\n"
+            . "TableBuilder decodes for CONTENT_TYPE_CSV; a failure here means something\n"
+            . "escaped after that point, or a new output format needs the same treatment.",
+            implode("\n  ", $result['htmlInCsv']),
+        ));
+
         $actual = $this->format($result);
 
         if (getenv(self::UPDATE_ENV) !== false) {

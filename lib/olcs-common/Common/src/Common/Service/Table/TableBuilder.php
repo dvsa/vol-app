@@ -1566,6 +1566,15 @@ class TableBuilder implements \Stringable
                 : '';
         }
 
+        // Escaping in this pipeline happens at the source — formatters and closures escape the row
+        // values they interpolate — which is right for HTML and wrong for anything else. CSV is not
+        // HTML: nothing downstream will decode entities, so an operator called "Smith & Sons Ltd"
+        // reaches the spreadsheet as "Smith &amp; Sons Ltd". Undo it here, at the renderer, which
+        // is the only place that knows the output format.
+        if ($this->contentType === self::CONTENT_TYPE_CSV) {
+            $content = html_entity_decode((string)$content, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+        }
+
         $replacements = [
             'content' => $content,
             'attrs' => $this->processBodyColumnAttributes($column, $customAttributes)
