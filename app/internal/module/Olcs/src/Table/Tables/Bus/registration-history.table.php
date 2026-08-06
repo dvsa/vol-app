@@ -42,7 +42,7 @@ return [
         ],
         [
             'title' => 'Status',
-            'formatter' => fn($data) => $data['status']['description']
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['status']['description'])
         ],
         [
             'title' => 'Application type',
@@ -82,7 +82,8 @@ return [
             'width' => 'checkbox',
             'formatter' => function ($data) {
                 if ($data['isLatestVariation']) {
-                    return '<input type="radio" name="id" value="' . $data['id'] . '">';
+                    return '<input type="radio" name="id" value="'
+                        . \Common\Util\Escape::html($data['id']) . '">';
                 }
             },
         ],

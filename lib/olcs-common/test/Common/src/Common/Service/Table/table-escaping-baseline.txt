@@ -8,6 +8,5 @@
 # regression; a listed table that passes is a stale entry and also fails, so the list cannot
 # silently rot.
 #
-# 1 exempt, 37 covered, 5 could not be rendered by the probe.
+# 0 exempt, 38 covered, 5 could not be rendered by the probe.
 #
-lva-variation-conditions-undertakings.table.php

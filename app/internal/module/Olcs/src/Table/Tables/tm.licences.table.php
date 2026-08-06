@@ -20,7 +20,7 @@ return [
                 $url = $this->generateUrl($routeParams);
                 return '<a class="govuk-link" href="' . $url . '">' .
                 ((isset($row['tmType']['description']) && $row['tmType']['description']) ?
-                    $row['tmType']['description'] : 'Not set') . '</a>';
+                    \Common\Util\Escape::html($row['tmType']['description']) : 'Not set') . '</a>';
             },
         ],
         [
@@ -39,7 +39,7 @@ return [
         [
             'title' => 'Operator name',
             'name' => 'operatorName',
-            'formatter' => fn($row) => $row['licence']['organisation']['name'],
+            'formatter' => fn($row) => \Common\Util\Escape::html($row['licence']['organisation']['name']),
         ],
         [
             'title' => 'Hours per week',
