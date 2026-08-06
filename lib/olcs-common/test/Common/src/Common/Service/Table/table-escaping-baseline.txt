@@ -8,5 +8,5 @@
 # regression; a listed table that passes is a stale entry and also fails, so the list cannot
 # silently rot.
 #
-# 0 exempt, 38 covered, 5 could not be rendered by the probe.
+# 0 exempt, 39 covered, 4 could not be rendered by the probe.
 #
