@@ -158,6 +158,25 @@ Regenerating the snapshot is the one thing that is not just "run the test":
 UPDATE_TABLE_SNAPSHOTS=1 vendor/bin/phpunit --filter TableRenderSnapshotTest
 ```
 
+### Escaping is per output format
+
+Escaping happens at the **source** here — a formatter escapes the row value it
+interpolates — which is right for HTML and wrong for everything else. Six
+controllers export a table as CSV (`ResponseHelperService::tableToCsv`), and a
+CSV is not HTML: nothing downstream decodes it, so an operator called
+"Smith & Sons Ltd" reaches the spreadsheet as `Smith &amp; Sons Ltd`.
+
+`TableBuilder::renderBodyColumn()` therefore decodes entities when the content
+type is CSV. That is the renderer's job, not the formatter's — the formatter has
+no idea which format it is feeding. `TableRenderSnapshotTest` asserts absolutely
+that no table emits an entity when rendered as CSV, so a new output format that
+needs the same treatment fails the build rather than shipping mojibake.
+
+Two things this does **not** fix, both pre-existing and worth their own tickets:
+CSV fields are joined with `', '` and never quoted, so a value containing a comma
+splits the row; and a cell beginning `=`, `+`, `-` or `@` is executed as a formula
+by Excel and LibreOffice.
+
 ### The escaping contract
 
 Escape by **provenance**, not by what the value looks like:
@@ -182,11 +201,68 @@ Tables the synthetic probe cannot drive are reported as **skipped**, which means
 "not covered here", never "safe".
 
 Adding a table to the baseline is not the fix, and neither is regenerating
-anything — the baseline only shrinks. A table that genuinely cannot be rendered
-by the probe is worth a look at `FormatterEscapingInvariantTest` instead, which
-reaches formatters no table can drive: `lva-psv-vehicles-readonly` renders with
-no data rows at all, so its `StackValue` columns are exercised only by the
-formatter-level test.
+anything — the baseline only shrinks.
+
+**Every table definition in the repository renders.** There is no skip list: all
+233 are driven against a hostile row, and a table that stops rendering fails the
+build rather than quietly dropping out of the count. `FormatterEscapingInvariantTest`
+still earns its place — `lva-psv-vehicles-readonly` renders with no data rows at
+all, so its `StackValue` columns are exercised only there.
+
+### When a type rejects the probe
+
+`RecursiveProbe` answers any key to any depth with itself, which is what lets one
+value drive every table without knowing their shapes. What it cannot do is
+satisfy a **type**: `number_format()` wants a float, `new DateTime()` wants
+something parseable. Rather than record those tables as undrivable, both
+harnesses learn the constraint from the failure and retry — see
+`RowProbeAdaptation`, which they share.
+
+Two things make this honest rather than convenient:
+
+- The substitution is learned, never declared. Nothing is replaced until the code
+  actually rejects the probe, so the adaptation disappears by itself when the
+  constraint does. A hand-maintained "these keys are numeric" map would rot the
+  way a skip list does.
+- Substitutions that **lose the payload** are recorded. A string or an array of
+  probes still carries the marker, so the assertion is unweakened; a number or a
+  date cannot, so those land in the baseline's `[unprobed]` section, asserted in
+  both directions. A column that quietly stops being probed fails the build.
+
+Table-level adaptation substitutes at a **dotted path**, not a root key:
+`publication.pubDate` can be a real date while
+`publication.pubStatus.description` stays a probe. Replacing the whole
+`publication` key instead would de-probe every sibling column to fix one, which
+is the difference between "this value cannot carry a payload" and "this table is
+no longer tested".
+
+Attributing a failure to the right value is most of the work, and it is done in
+four ways, narrowest first: the failing line, the statement below it (a
+multi-line call puts its arguments there), a local alias of the row resolved back
+to its path (`$licence = $data['licence']` … `$licence['goodsOrPsv']['id']`), and
+the column config the formatter was handed, read out of the exception trace. Only
+if all four come back empty does it widen — and only for strings, because `MARKER`
+_is_ a string, so a widened substitution keeps its payload. Numeric and date
+never widen; they would silently de-probe the row.
+
+Two consequences worth knowing:
+
+- The harness reads exception trace arguments, so `zend.exception_ignore_args` is
+  pinned to `0` in all three `phpunit.xml.dist` files. With args stripped, the
+  column config is invisible and those tables stop rendering.
+- The row is harvested from the definition **and** from the formatter classes it
+  names. A key only a formatter reads would otherwise arrive as `null`, which
+  makes `isset()` false and skips the very branch that leaks.
+
+One mechanism is worth knowing about, because it is not about probe data at all:
+**shadowing**. Definitions resolve by bare name against a list of directories, so
+two files sharing a basename cannot both be reached through one builder — the
+first hit wins. Two pairs exist today in `app/internal`: `conditions.table.php`
+(in `Bus/` and in `SubmissionSections/`) and `environmental-complaints.table.php`
+(in the table root and in `SubmissionSections/`). The loser used to vanish from
+the report entirely, which read as full coverage; it now gets a builder of its
+own, with its directory ordered to win. Keys carry their directory prefix
+(`SubmissionSections/conditions.table.php`) so the two stay distinguishable.
 
 ### When the snapshot test fails
 
