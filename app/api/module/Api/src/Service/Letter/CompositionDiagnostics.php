@@ -31,15 +31,68 @@ class CompositionDiagnostics
     /**
      * @param SectionResolution $resolution
      * @param string            $renderedHtml Rendered letter, searched for placeholders that survived
+     * @param GrabOutcomeCollector|null $grabOutcomes what became of each [[GRAB]] during the render
      * @return array<int, array{code:string, severity:string, section:?string, message:string, detail:array}>
      */
-    public function forResolution(SectionResolution $resolution, string $renderedHtml = ''): array
-    {
+    public function forResolution(
+        SectionResolution $resolution,
+        string $renderedHtml = '',
+        ?GrabOutcomeCollector $grabOutcomes = null
+    ): array {
         return [
             ...$this->unresolvedSections($resolution),
             ...$this->variantWarnings($resolution),
             ...$this->unsupportedPlaceholders($renderedHtml),
+            ...$this->grabOutcomes($grabOutcomes),
         ];
+    }
+
+    /**
+     * Grabs that will not say anything in the letter. An empty one is stripped at render time,
+     * so the preview looks clean while the operator's letter carries a hole; an unknown one was
+     * written with a token no bookmark answers to. Neither is visible in the rendered output,
+     * which is exactly why they are reported here.
+     */
+    private function grabOutcomes(?GrabOutcomeCollector $grabOutcomes): array
+    {
+        if ($grabOutcomes === null) {
+            return [];
+        }
+
+        $diagnostics = [];
+
+        $empty = $grabOutcomes->tokensWith(GrabOutcomeCollector::EMPTY);
+        if ($empty !== []) {
+            $diagnostics[] = [
+                'code' => 'grabEmpty',
+                'severity' => self::SEVERITY_WARNING,
+                'section' => null,
+                'message' => sprintf(
+                    '%d grab(s) resolved to nothing for this record and will be blank in the letter: %s. '
+                        . 'Try a record with fuller data.',
+                    count($empty),
+                    implode(', ', $empty)
+                ),
+                'detail' => ['tokens' => $empty],
+            ];
+        }
+
+        $unknown = $grabOutcomes->tokensWith(GrabOutcomeCollector::UNKNOWN);
+        if ($unknown !== []) {
+            $diagnostics[] = [
+                'code' => 'grabUnknown',
+                'severity' => self::SEVERITY_BLOCKING,
+                'section' => null,
+                'message' => sprintf(
+                    '%d grab(s) are not recognised by the letters engine and will be silently removed: %s.',
+                    count($unknown),
+                    implode(', ', $unknown)
+                ),
+                'detail' => ['tokens' => $unknown],
+            ];
+        }
+
+        return $diagnostics;
     }
 
     /**

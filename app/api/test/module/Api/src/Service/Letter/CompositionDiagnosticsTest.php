@@ -13,6 +13,7 @@ use Dvsa\Olcs\Api\Service\Letter\Resolution\SectionResolution;
 use Dvsa\Olcs\Api\Service\Letter\Resolution\UnresolvedSection;
 use Dvsa\Olcs\Api\Service\Letter\Resolution\VariantResolution;
 use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Service\Letter\GrabOutcomeCollector;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -321,5 +322,33 @@ class CompositionDiagnosticsTest extends TestCase
 
         $this->assertStringContainsString('differs only on Vehicle type', $diagnostic['message']);
         $this->assertSame(['goodsOrPsv' => 'lcat_psv'], $diagnostic['detail']['suggestedContext']);
+    }
+
+    public function testGrabOutcomesSurfaceTheInvisibleFailures(): void
+    {
+        // Both kinds are stripped from the render, so neither is visible in the HTML --
+        // which is exactly why they must be reported here.
+        $collector = new GrabOutcomeCollector();
+        $collector->record('OP_NAME', GrabOutcomeCollector::RESOLVED);
+        $collector->record('CORRESPONDENCE_ADDRESS', GrabOutcomeCollector::EMPTY);
+        $collector->record('MADE_UP_TOKEN', GrabOutcomeCollector::UNKNOWN);
+
+        $diagnostics = $this->sut->forResolution(new SectionResolution([], []), '', $collector);
+
+        $empty = $this->firstOfCode($diagnostics, 'grabEmpty');
+        $this->assertSame('warning', $empty['severity']);
+        $this->assertSame(['CORRESPONDENCE_ADDRESS'], $empty['detail']['tokens']);
+
+        $unknown = $this->firstOfCode($diagnostics, 'grabUnknown');
+        $this->assertSame('blocking', $unknown['severity']);
+        $this->assertSame(['MADE_UP_TOKEN'], $unknown['detail']['tokens']);
+    }
+
+    public function testFullyResolvedGrabsProduceNoNoise(): void
+    {
+        $collector = new GrabOutcomeCollector();
+        $collector->record('OP_NAME', GrabOutcomeCollector::RESOLVED);
+
+        $this->assertSame([], $this->sut->forResolution(new SectionResolution([], []), '', $collector));
     }
 }

@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
 use Dvsa\Olcs\Api\Entity\Letter\LetterType as LetterTypeEntity;
 use Dvsa\Olcs\Api\Service\Letter\CompositionDiagnostics;
+use Dvsa\Olcs\Api\Service\Letter\GrabOutcomeCollector;
 use Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer;
 use Dvsa\Olcs\Api\Service\Letter\LetterPreviewService;
 use Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolver;
@@ -102,10 +103,14 @@ final class PreviewComposition extends AbstractCommandHandler
         // chrome too -- otherwise an NI preview renders NI wording under a GB letterhead.
         $masterTemplate = $this->masterTemplateResolver->resolve($letterInstance, $context['isNi']);
 
-        $html = $this->previewService->renderPreview($letterInstance, $masterTemplate);
+        // Collecting grab outcomes is what lets the diagnostics flag a token that rendered to
+        // nothing -- invisible in the HTML precisely because it was stripped.
+        $grabOutcomes = new GrabOutcomeCollector();
+
+        $html = $this->previewService->renderPreview($letterInstance, $masterTemplate, grabOutcomes: $grabOutcomes);
 
         $this->result->setFlag('html', $html);
-        $this->result->setFlag('diagnostics', $this->diagnostics->forResolution($resolution, $html));
+        $this->result->setFlag('diagnostics', $this->diagnostics->forResolution($resolution, $html, $grabOutcomes));
         $this->result->setFlag('context', $context);
 
         return $this->result;

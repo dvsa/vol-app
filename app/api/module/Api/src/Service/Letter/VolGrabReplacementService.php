@@ -76,6 +76,8 @@ class VolGrabReplacementService
             // Step 4: Render bookmarks to get values
             $populatedData = $this->renderBookmarks($bookmarks, $queryResults);
 
+            $this->recordOutcomes($context, $tokens, $bookmarks, $populatedData);
+
             // Step 5: Replace in JSON, then strip anything that couldn't be resolved
             // (unknown bookmark, or a dynamic bookmark whose query produced nothing)
             // so literal [[TOKEN]] text never reaches a letter sent to an operator.
@@ -84,6 +86,37 @@ class VolGrabReplacementService
             // Log error but return original content to avoid breaking letters
             Logger::err('VOL Grab replacement failed: ' . $e->getMessage());
             return $editorJsJson;
+        }
+    }
+
+    /**
+     * Tell the collector, when the caller sent one, what became of each token. Anything that is
+     * about to be stripped -- an unknown bookmark, or one whose render came back blank -- would
+     * otherwise vanish without trace, leaving the preview looking cleaner than the real letter.
+     *
+     * @param array<string, mixed> $populatedData rendered values keyed by token
+     */
+    private function recordOutcomes(array $context, array $tokens, array $bookmarks, array $populatedData): void
+    {
+        $collector = $context[GrabOutcomeCollector::CONTEXT_KEY] ?? null;
+
+        if (!$collector instanceof GrabOutcomeCollector) {
+            return;
+        }
+
+        foreach ($tokens as $token) {
+            if (!isset($bookmarks[$token])) {
+                $collector->record($token, GrabOutcomeCollector::UNKNOWN);
+                continue;
+            }
+
+            $value = $populatedData[$token] ?? null;
+            $collector->record(
+                $token,
+                ($value === null || trim((string) $value) === '')
+                    ? GrabOutcomeCollector::EMPTY
+                    : GrabOutcomeCollector::RESOLVED
+            );
         }
     }
 

@@ -23,6 +23,13 @@ class LetterPreviewService
     private const string OTC_LOGO_SLUG_NI = 'otclogo-letters-ni';
     private const string OTC_LOGO_TOKEN = '[[OTC_LOGO]]';
 
+    /**
+     * Collector for the current render, when the caller wants grab outcomes reported.
+     * Held as state because the vol-grab context is built in several private renderers;
+     * set on entry to renderPreview and cleared on exit.
+     */
+    private ?GrabOutcomeCollector $grabOutcomes = null;
+
     public function __construct(
         private readonly SectionRendererPluginManager $rendererManager,
         private $contentStore,
@@ -39,7 +46,18 @@ class LetterPreviewService
      * @param MasterTemplate|null $masterTemplate The master template to use (null for basic rendering)
      * @return string Complete HTML for the letter preview
      */
-    public function renderPreview(LetterInstance $letterInstance, ?MasterTemplate $masterTemplate = null, bool $excludePdfAppendices = false): string
+    public function renderPreview(LetterInstance $letterInstance, ?MasterTemplate $masterTemplate = null, bool $excludePdfAppendices = false, ?GrabOutcomeCollector $grabOutcomes = null): string
+    {
+        $this->grabOutcomes = $grabOutcomes;
+
+        try {
+            return $this->doRenderPreview($letterInstance, $masterTemplate, $excludePdfAppendices);
+        } finally {
+            $this->grabOutcomes = null;
+        }
+    }
+
+    private function doRenderPreview(LetterInstance $letterInstance, ?MasterTemplate $masterTemplate, bool $excludePdfAppendices): string
     {
         // Render assembled content (sections + issues interleaved by display order)
         $assembledHtml = $this->renderAssembledContent($letterInstance);
@@ -574,6 +592,10 @@ class LetterPreviewService
         // signal for any future region-aware bookmark. Added outside the array_filter
         // because false is a meaningful value (GB letter) that should survive.
         $context['isNi'] = (bool) ($letterInstance->getLicence()?->isNi() ?? false);
+
+        if ($this->grabOutcomes !== null) {
+            $context[GrabOutcomeCollector::CONTEXT_KEY] = $this->grabOutcomes;
+        }
 
         return $context;
     }
