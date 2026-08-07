@@ -8,7 +8,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
+use Dvsa\Olcs\Api\Entity\Organisation\OrganisationPerson;
 use Dvsa\Olcs\Api\Entity\Organisation\TradingName;
+use Dvsa\Olcs\Api\Entity\Person\Person;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Service\FinancialStandingHelperService;
 use Dvsa\Olcs\Api\Service\Idp\ApplicantProfileBuilder;
@@ -31,90 +33,108 @@ final class ApplicantProfileBuilderTest extends TestCase
         $this->sut = new ApplicantProfileBuilder($this->helper);
     }
 
-    public function testBuildsTheFullEventAProfile(): void
+    public function testBuildsTheFullApplicantProfile(): void
     {
         $application = $this->givenApplication(
-            totAuthVehicles: 10,
-            otherLicenceVehicles: [5],
-            otherApplicationVehicles: [2],
-            tradingNames: ['Speedy Freight']
+            tradingNames: ['Speedy Freight'],
+            people: [['Mr', 'John', 'Smith'], ['Ms', 'Jane', 'Doe']],
+            requiredFinance: 26000,
         );
-
-        $this->helper->shouldReceive('getRequiredFinance')->with($application)->once()->andReturn(94600);
 
         $this->assertSame(
             [
                 'organisation_name' => 'Test Haulage Ltd',
-                'trading_name' => 'Speedy Freight',
+                'licence_number' => 'OB2014165',
+                'nature_of_business' => 'Marketing',
                 'business_type' => 'Registered Company',
+                'people' => [
+                    'Mr John Smith',
+                    'Ms Jane Doe',
+                ],
+                'application_number' => 1056017,
+                'trading_name' => 'Speedy Freight',
+                'required_funds' => 26000,
                 'licence_type' => 'Standard National',
-                'vehicles_requested' => 17,
-                'required_finance' => 94600.0,
+                'application_date' => '2018-01-08',
+                'vehicles_requested' => 0,
             ],
             $this->sut->build($application)
         );
     }
 
-    /** vehicles_requested must span the same set getRequiredFinance() sums over. */
-    public function testVehiclesRequestedSpansLicencesAndOtherApplications(): void
+    public function testTradingNameIsNoneStringWhenTheLicenceHasNone(): void
     {
-        $application = $this->givenApplication(
-            totAuthVehicles: 1,
-            otherLicenceVehicles: [2, 3],
-            otherApplicationVehicles: [4, 5],
-            tradingNames: []
-        );
-
-        $this->helper->shouldReceive('getRequiredFinance')->andReturn(0);
-
-        $this->assertSame(15, $this->sut->build($application)['vehicles_requested']);
-    }
-
-    public function testTradingNameIsNullWhenTheLicenceHasNone(): void
-    {
-        $application = $this->givenApplication(1, [], [], []);
-        $this->helper->shouldReceive('getRequiredFinance')->andReturn(0);
-
-        $this->assertNull($this->sut->build($application)['trading_name']);
+        $application = $this->givenApplication(tradingNames: []);
+        $this->assertSame('None', $this->sut->build($application)['trading_name']);
     }
 
     public function testMultipleTradingNamesAreJoinedAndDeduplicated(): void
     {
-        $application = $this->givenApplication(1, [], [], ['Alpha', 'Beta', 'Alpha', '  ']);
-        $this->helper->shouldReceive('getRequiredFinance')->andReturn(0);
-
+        $application = $this->givenApplication(tradingNames: ['Alpha', 'Beta', 'Alpha', '  ']);
         $this->assertSame('Alpha, Beta', $this->sut->build($application)['trading_name']);
     }
 
-    /** Description is preferred; the refdata id is the fallback when none is set. */
+    public function testRequiredFundsIsReturnedDirectlyFromHelper(): void
+    {
+        $application = $this->givenApplication(requiredFinance: 94600);
+        $this->assertSame(94600, $this->sut->build($application)['required_funds']);
+    }
+
     public function testFallsBackToRefDataIdWhenDescriptionIsEmpty(): void
     {
-        $application = $this->givenApplication(1, [], [], [], businessTypeDescription: '');
-        $this->helper->shouldReceive('getRequiredFinance')->andReturn(0);
-
+        $application = $this->givenApplication(businessTypeDescription: '');
         $this->assertSame('org_t_rc', $this->sut->build($application)['business_type']);
     }
 
+    public function testPeopleIsEmptyWhenOrganisationHasNone(): void
+    {
+        $application = $this->givenApplication(people: []);
+        $this->assertSame([], $this->sut->build($application)['people']);
+    }
+
+    public function testPeopleSkipsPersonWithNoNameParts(): void
+    {
+        $application = $this->givenApplication(people: [['', '', '']]);
+        $this->assertSame([], $this->sut->build($application)['people']);
+    }
+
     /**
-     * @param int[] $otherLicenceVehicles
-     * @param int[] $otherApplicationVehicles
      * @param string[] $tradingNames
+     * @param array<int, array{0: string, 1: string, 2: string}> $people
      */
     private function givenApplication(
-        int $totAuthVehicles,
-        array $otherLicenceVehicles,
-        array $otherApplicationVehicles,
-        array $tradingNames,
-        string $businessTypeDescription = 'Registered Company'
+        array $tradingNames = [],
+        array $people = [],
+        float|int $requiredFinance = 0,
+        string $businessTypeDescription = 'Registered Company',
     ): m\MockInterface {
+        $orgPersons = new ArrayCollection(array_map(function (array $p): m\MockInterface {
+            [$title, $forename, $familyName] = $p;
+
+            $titleRefData = $title !== '' ? $this->refData('title_mr', $title) : null;
+
+            $person = m::mock(Person::class);
+            $person->shouldReceive('getTitle')->andReturn($titleRefData);
+            $person->shouldReceive('getForename')->andReturn($forename);
+            $person->shouldReceive('getFamilyName')->andReturn($familyName);
+
+            $orgPerson = m::mock(OrganisationPerson::class);
+            $orgPerson->shouldReceive('getPerson')->andReturn($person);
+
+            return $orgPerson;
+        }, $people));
+
         $organisation = m::mock(Organisation::class);
         $organisation->shouldReceive('getName')->andReturn('Test Haulage Ltd');
+        $organisation->shouldReceive('getNatureOfBusiness')->andReturn('Marketing');
         $organisation->shouldReceive('getType')->andReturn(
             $this->refData('org_t_rc', $businessTypeDescription)
         );
+        $organisation->shouldReceive('getOrganisationPersons')->andReturn($orgPersons);
 
         $licence = m::mock(Licence::class);
         $licence->shouldReceive('getOrganisation')->andReturn($organisation);
+        $licence->shouldReceive('getLicNo')->andReturn('OB2014165');
         $licence->shouldReceive('getTradingNames')->andReturn(
             new ArrayCollection(array_map(function (string $name): m\MockInterface {
                 $tradingName = m::mock(TradingName::class);
@@ -128,22 +148,12 @@ final class ApplicantProfileBuilderTest extends TestCase
         $application->shouldReceive('getLicenceType')->andReturn(
             $this->refData('ltyp_sn', 'Standard National')
         );
-        $application->shouldReceive('getTotAuthVehicles')->andReturn($totAuthVehicles);
-        $application->shouldReceive('getOtherActiveLicencesForOrganisation')->andReturn(
-            array_map(function (int $count): m\MockInterface {
-                $other = m::mock(Licence::class);
-                $other->shouldReceive('getTotAuthVehicles')->andReturn($count);
-                return $other;
-            }, $otherLicenceVehicles)
-        );
-
-        $this->helper->shouldReceive('getOtherNewApplications')->with($application)->andReturn(
-            array_map(function (int $count): m\MockInterface {
-                $other = m::mock(Application::class);
-                $other->shouldReceive('getTotAuthVehicles')->andReturn($count);
-                return $other;
-            }, $otherApplicationVehicles)
-        );
+        $application->shouldReceive('getId')->andReturn(1056017);
+        $application->shouldReceive('getApplicationDate')->withNoArgs()->andReturn('2018-01-08');
+        $application->shouldReceive('getTotAuthVehicles')->andReturn(0);
+        $application->shouldReceive('getOtherActiveLicencesForOrganisation')->andReturn([]);
+        $this->helper->shouldReceive('getOtherNewApplications')->with($application)->andReturn([]);
+        $this->helper->shouldReceive('getRequiredFinance')->with($application)->andReturn($requiredFinance);
 
         return $application;
     }

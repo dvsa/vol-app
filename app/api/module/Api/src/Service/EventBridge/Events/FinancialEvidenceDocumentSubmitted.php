@@ -21,12 +21,17 @@ readonly class FinancialEvidenceDocumentSubmitted implements EventInterface
 
     /**
      * @param array{
-     *     organisation_name: string,
-     *     trading_name: string|null,
+     *     organisation_name: string|null,
+     *     licence_number: string|null,
+     *     nature_of_business: string|null,
      *     business_type: string,
+     *     people: list<string>,
+     *     application_number: mixed,
+     *     trading_name: string,
+     *     required_funds: int,
      *     licence_type: string,
-     *     vehicles_requested: int,
-     *     required_finance: float
+     *     application_date: mixed,
+     *     vehicles_requested: int
      * } $applicantProfile
      */
     public function __construct(

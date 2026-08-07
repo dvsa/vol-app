@@ -33,11 +33,16 @@ final class FinancialEvidenceTest extends TestCase
 
     private const PROFILE = [
         'organisation_name' => 'Test Haulage Ltd',
-        'trading_name' => 'Test Haulage',
+        'licence_number' => 'OB2014165',
+        'nature_of_business' => 'Marketing',
         'business_type' => 'Registered Company',
+        'people' => ['Mr John Smith'],
+        'application_number' => 1056017,
+        'trading_name' => 'Test Haulage',
+        'required_funds' => 26000,
         'licence_type' => 'Standard National',
+        'application_date' => '2018-01-08',
         'vehicles_requested' => 12,
-        'required_finance' => 94600.0,
     ];
 
     private m\MockInterface $eventBridgeClient;

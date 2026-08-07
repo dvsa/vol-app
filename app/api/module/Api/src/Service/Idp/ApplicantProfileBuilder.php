@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Api\Service\Idp;
 
 use Dvsa\Olcs\Api\Entity\Application\Application;
+use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Service\FinancialStandingHelperService;
 
@@ -23,12 +24,17 @@ class ApplicantProfileBuilder
 
     /**
      * @return array{
-     *     organisation_name: string,
-     *     trading_name: string|null,
+     *     organisation_name: string|null,
+     *     licence_number: string|null,
+     *     nature_of_business: string|null,
      *     business_type: string,
+     *     people: list<string>,
+     *     application_number: mixed,
+     *     trading_name: string,
+     *     required_funds: int,
      *     licence_type: string,
-     *     vehicles_requested: int,
-     *     required_finance: float
+     *     application_date: mixed,
+     *     vehicles_requested: int
      * }
      */
     public function build(Application $application): array
@@ -37,16 +43,20 @@ class ApplicantProfileBuilder
         $organisation = $licence?->getOrganisation();
 
         return [
-            'organisation_name' => (string)$organisation?->getName(),
-            'trading_name' => $this->resolveTradingName($licence),
+            'organisation_name' => $organisation?->getName(),
+            'licence_number' => $licence?->getLicNo(),
+            'nature_of_business' => $organisation?->getNatureOfBusiness(),
             'business_type' => $this->describeRefData($organisation?->getType()),
+            'people' => $this->buildPeople($organisation),
+            'application_number' => $application->getId(),
+            'trading_name' => $this->resolveTradingName($licence) ?? 'None',
+            'required_funds' => $this->financialStandingHelper->getRequiredFinance($application),
             'licence_type' => $this->describeRefData($application->getLicenceType()),
+            'application_date' => $application->getApplicationDate(),
             'vehicles_requested' => $this->resolveVehiclesRequested($application),
-            'required_finance' => (float)$this->financialStandingHelper->getRequiredFinance($application),
         ];
     }
 
-    /** Total authorised vehicles across everything the financial-standing calculation covers. */
     private function resolveVehiclesRequested(Application $application): int
     {
         $total = (int)$application->getTotAuthVehicles();
@@ -60,6 +70,40 @@ class ApplicantProfileBuilder
         }
 
         return $total;
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function buildPeople(?object $organisation): array
+    {
+        if ($organisation === null) {
+            return [];
+        }
+
+        $people = [];
+
+        foreach ($organisation->getOrganisationPersons() as $orgPerson) {
+            $person = $orgPerson->getPerson();
+
+            if ($person === null) {
+                continue;
+            }
+
+            $parts = array_filter([
+                $this->describeRefData($person->getTitle()),
+                (string)$person->getForename(),
+                (string)$person->getFamilyName(),
+            ]);
+
+            $fullName = trim(implode(' ', $parts));
+
+            if ($fullName !== '') {
+                $people[] = $fullName;
+            }
+        }
+
+        return $people;
     }
 
     private function resolveTradingName(?object $licence): ?string
@@ -92,4 +136,5 @@ class ApplicantProfileBuilder
 
         return $description !== '' ? $description : (string)$refData->getId();
     }
+
 }
