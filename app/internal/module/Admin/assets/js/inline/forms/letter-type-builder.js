@@ -377,6 +377,19 @@ OLCS.ready(function () {
       var li = document.createElement("li");
       li.textContent = diagnostic.message;
 
+      // Diagnostics about a rendered section can point at it. The handler looks the marker up
+      // at click time: an unresolved section has no marker, and silently doing nothing is the
+      // right answer for "show me a paragraph that is not in the letter".
+      if (diagnostic.sectionId) {
+        li.classList.add("letter-builder__diagnostic--locatable");
+        li.addEventListener("click", function (event) {
+          if (event.target.closest("button")) {
+            return;
+          }
+          locateSection(diagnostic.sectionId);
+        });
+      }
+
       // A near miss comes with the exact context that reaches the variant, so offer it as one
       // click rather than a set of instructions.
       var suggested = diagnostic.detail && diagnostic.detail.suggestedContext;
@@ -394,6 +407,31 @@ OLCS.ready(function () {
 
       list.appendChild(li);
     });
+  }
+
+  function locateSection(sectionId) {
+    var frame = document.getElementById("builder-preview-frame");
+    var doc = frame.contentDocument;
+    if (!doc) {
+      return;
+    }
+    var target = doc.querySelector(
+      "[data-preview-section='" + sectionId + "']",
+    );
+    if (!target) {
+      return;
+    }
+
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+
+    // A brief outline so the eye lands on the right paragraph; inline styles because the
+    // letter's own stylesheet lives inside the iframe and knows nothing of the builder's.
+    target.style.outline = "3px solid #1d70b8";
+    target.style.outlineOffset = "4px";
+    window.setTimeout(function () {
+      target.style.outline = "";
+      target.style.outlineOffset = "";
+    }, 2000);
   }
 
   function boolFlag(value) {

@@ -107,7 +107,7 @@ final class PreviewComposition extends AbstractCommandHandler
         // nothing -- invisible in the HTML precisely because it was stripped.
         $grabOutcomes = new GrabOutcomeCollector();
 
-        $html = $this->previewService->renderPreview($letterInstance, $masterTemplate, grabOutcomes: $grabOutcomes);
+        $html = $this->previewService->renderPreview($letterInstance, $masterTemplate, grabOutcomes: $grabOutcomes, annotateSections: true);
 
         $this->result->setFlag('html', $html);
         $this->result->setFlag('diagnostics', $this->diagnostics->forResolution($resolution, $html, $grabOutcomes));

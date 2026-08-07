@@ -307,7 +307,7 @@ final class PreviewCompositionTest extends AbstractCommandHandlerTestCase
         $this->repoMap['LetterType']->shouldReceive('fetchById')->andReturn($this->letterType(7));
         $this->mockMasterTemplateResolver->shouldReceive('resolve')->once()->andReturn($masterTemplate);
         $this->mockPreviewService->shouldReceive('renderPreview')->once()
-            ->with(m::any(), $masterTemplate, m::any(), m::any())->andReturn('');
+            ->with(m::any(), $masterTemplate, m::any(), m::any(), m::any())->andReturn('');
 
         $this->sut->handleCommand(Cmd::create(['letterType' => 7]));
     }

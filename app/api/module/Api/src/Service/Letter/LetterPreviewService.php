@@ -30,6 +30,13 @@ class LetterPreviewService
      */
     private ?GrabOutcomeCollector $grabOutcomes = null;
 
+    /**
+     * When true, each section's rendered HTML is wrapped in a data-preview-section marker so the
+     * builder can scroll its diagnostics to the paragraph they describe. Never set on the paths
+     * that feed the PDF: the markers are a UI affordance, not letter content.
+     */
+    private bool $annotateSections = false;
+
     public function __construct(
         private readonly SectionRendererPluginManager $rendererManager,
         private $contentStore,
@@ -46,14 +53,16 @@ class LetterPreviewService
      * @param MasterTemplate|null $masterTemplate The master template to use (null for basic rendering)
      * @return string Complete HTML for the letter preview
      */
-    public function renderPreview(LetterInstance $letterInstance, ?MasterTemplate $masterTemplate = null, bool $excludePdfAppendices = false, ?GrabOutcomeCollector $grabOutcomes = null): string
+    public function renderPreview(LetterInstance $letterInstance, ?MasterTemplate $masterTemplate = null, bool $excludePdfAppendices = false, ?GrabOutcomeCollector $grabOutcomes = null, bool $annotateSections = false): string
     {
         $this->grabOutcomes = $grabOutcomes;
+        $this->annotateSections = $annotateSections;
 
         try {
             return $this->doRenderPreview($letterInstance, $masterTemplate, $excludePdfAppendices);
         } finally {
             $this->grabOutcomes = null;
+            $this->annotateSections = false;
         }
     }
 
@@ -119,7 +128,7 @@ class LetterPreviewService
                 $html .= $this->renderIssues($letterInstance);
                 $issuesRendered = true;
             } else {
-                $html .= $sectionRenderer->render($section, $context);
+                $html .= $this->annotate($sectionRenderer->render($section, $context), $parentSection);
             }
         }
 
@@ -577,6 +586,20 @@ class LetterPreviewService
      * @param LetterInstance $letterInstance
      * @return array Context containing entity IDs for bookmark resolution
      */
+    /**
+     * Wraps a section's HTML in a locator the builder's diagnostics can scroll to.
+     * A no-op unless this render asked for annotation, so letters and caseworker
+     * previews are byte-identical to before.
+     */
+    private function annotate(string $html, ?\Dvsa\Olcs\Api\Entity\Letter\LetterSection $section): string
+    {
+        if (!$this->annotateSections || $section === null || $html === '') {
+            return $html;
+        }
+
+        return sprintf('<div data-preview-section="%d">%s</div>', $section->getId(), $html);
+    }
+
     private function buildVolGrabContext(LetterInstance $letterInstance): array
     {
         $context = array_filter([

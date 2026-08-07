@@ -112,6 +112,7 @@ class CompositionDiagnostics
                 'code' => 'sectionUnresolved',
                 'severity' => $unresolved->isRequired ? self::SEVERITY_BLOCKING : self::SEVERITY_WARNING,
                 'section' => $unresolved->getSectionName(),
+                'sectionId' => $unresolved->section->getId(),
                 'message' => sprintf(
                     '%s section "%s" is not in this letter: %s.%s',
                     $unresolved->isRequired ? 'Required' : 'Optional',
@@ -150,6 +151,7 @@ class CompositionDiagnostics
                     'code' => 'defaultFallback',
                     'severity' => self::SEVERITY_WARNING,
                     'section' => $sectionName,
+                    'sectionId' => $resolved->section->getId(),
                     'message' => sprintf(
                         '"%s" is using its default wording. %d specific %s configured, but none match this context.%s',
                         $sectionName,
@@ -171,6 +173,7 @@ class CompositionDiagnostics
                     'code' => 'duplicateDefaults',
                     'severity' => self::SEVERITY_WARNING,
                     'section' => $sectionName,
+                    'sectionId' => $resolved->section->getId(),
                     'message' => sprintf(
                         '"%s" has %d default variants. Only the first is ever used.',
                         $sectionName,
@@ -185,6 +188,7 @@ class CompositionDiagnostics
                     'code' => 'deletedVariants',
                     'severity' => self::SEVERITY_INFO,
                     'section' => $sectionName,
+                    'sectionId' => $resolved->section->getId(),
                     'message' => sprintf(
                         '"%s" has %d deleted variant(s), which are excluded from letters.',
                         $sectionName,
