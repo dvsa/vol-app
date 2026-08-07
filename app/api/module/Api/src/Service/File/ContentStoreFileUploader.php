@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Service\File;
 
 use Dvsa\Olcs\DocumentShare\Data\Object\File as ContentStoreFile;
 use Dvsa\Olcs\DocumentShare\Service\DocumentStoreInterface;
+use Dvsa\Olcs\DocumentShare\Service\ProvidesPresignedUrls;
 use Laminas\Http\Response;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 use Psr\Log\LoggerInterface;
@@ -85,6 +86,24 @@ class ContentStoreFileUploader implements FileUploaderInterface, FactoryInterfac
     public function remove($identifier)
     {
         return $this->contentStoreClient->remove($identifier);
+    }
+
+    /**
+     * A presigned GET URL for the object when the underlying store supports it (S3); null otherwise
+     * (WebDAV), so callers fall back to streaming.
+     */
+    public function presignedGetUrl($identifier, int $ttlSeconds): ?string
+    {
+        if ($this->contentStoreClient instanceof ProvidesPresignedUrls) {
+            return $this->contentStoreClient->presignedGetUrl($identifier, $ttlSeconds);
+        }
+
+        return null;
+    }
+
+    public function supportsPresignedUrls(): bool
+    {
+        return $this->contentStoreClient instanceof ProvidesPresignedUrls;
     }
 
     /**

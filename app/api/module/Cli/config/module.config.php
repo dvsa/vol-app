@@ -29,6 +29,7 @@ return [
             'batch:cache-clear' => Dvsa\Olcs\Cli\Command\Batch\CacheClearCommand::class,
             'batch:ch-vs-olcs-diffs' => Dvsa\Olcs\Cli\Command\Batch\CompaniesHouseVsOlcsDiffsExportCommand::class,
             'batch:clean-up-variations' => Dvsa\Olcs\Cli\Command\Batch\CleanUpAbandonedVariationsCommand::class,
+            'batch:retrieval-link-purge' => Dvsa\Olcs\Cli\Command\Batch\RetrievalLinkPurgeCommand::class,
             'batch:cns' => Dvsa\Olcs\Cli\Command\Batch\ContinuationNotSoughtCommand::class,
             'batch:create-psv-licence-surrender-tasks' => Dvsa\Olcs\Cli\Command\Batch\CreatePsvLicenceSurrenderTasksCommand::class,
             'batch:data-dva-ni-export' => Dvsa\Olcs\Cli\Command\Batch\DataDvaNiExportCommand::class,
@@ -185,6 +186,7 @@ return [
     ConfigAbstractFactory::class => [
         BatchCommands\CacheClearCommand::class => $commonBatchCommandDeps,
         BatchCommands\CleanUpAbandonedVariationsCommand::class => $commonBatchCommandDeps,
+        BatchCommands\RetrievalLinkPurgeCommand::class => $commonBatchCommandDeps,
         BatchCommands\CompaniesHouseVsOlcsDiffsExportCommand::class => $commonBatchCommandDeps,
         BatchCommands\ContinuationNotSoughtCommand::class => $commonBatchCommandDeps,
         BatchCommands\CreatePsvLicenceSurrenderTasksCommand::class => $commonBatchCommandDeps,

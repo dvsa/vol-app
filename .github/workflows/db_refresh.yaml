@@ -105,16 +105,44 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [[ "${PLATFORM_ENV}" == "prep" ]]; then
-            PROXY_URL="http://proxy.ci.olcs.dvsacloud.uk:3128"
+          case "${PLATFORM_ENV}" in
+            prep)
+              PROXY_ENV="pp"
+              PROXY_DOMAIN="olcs.dvsacloud.uk"
+              ;;
+            reg)
+              PROXY_ENV="reg"
+              PROXY_DOMAIN="olcs.dev-dvsacloud.uk"
+              ;;
+            dev)
+              PROXY_ENV="dev"
+              PROXY_DOMAIN="olcs.dev-dvsacloud.uk"
+              ;;
+            int)
+              PROXY_ENV="qa"
+              PROXY_DOMAIN="olcs.dev-dvsacloud.uk"
+              ;;
+            *)
+              echo "Unsupported platformEnv for proxy: ${PLATFORM_ENV}" >&2
+              exit 1
+              ;;
+          esac
+
+          PROXY_HOST="proxy.${PROXY_ENV}.${PROXY_DOMAIN}"
+          PROXY_URL="http://${PROXY_HOST}:3128"
+
+          # Only use proxy if host resolves on this runner; otherwise continue direct
+          if getent hosts "${PROXY_HOST}" >/dev/null 2>&1; then
+            export https_proxy="${PROXY_URL}"
+            export HTTPS_PROXY="${PROXY_URL}"
+            echo "Using proxy ${PROXY_URL}"
           else
-            PROXY_URL="http://proxy.ci.olcs.dev-dvsacloud.uk:3128"
+            unset https_proxy HTTPS_PROXY http_proxy HTTP_PROXY all_proxy ALL_PROXY
+            echo "Proxy host not resolvable (${PROXY_HOST}); proceeding without proxy"
           fi
 
-          export https_proxy="${PROXY_URL}"
-          export HTTPS_PROXY="${PROXY_URL}"
           export no_proxy="169.254.169.254,localhost,127.0.0.1,s3.${AWS_REGION}.amazonaws.com"
-          export NO_PROXY="169.254.169.254,localhost,127.0.0.1,s3.${AWS_REGION}.amazonaws.com"
+          export NO_PROXY="${no_proxy}"
 
           slack_send() {
             local color="$1"
@@ -130,10 +158,9 @@ jobs:
                   --data @- >/dev/null || true
           }
 
-          invoke_lambda() {
+          invoke_lambda_raw() {
             local payload="$1"
-            local expected="$2"
-            local fn="$3"
+            local fn="$2"
             local outfile
             outfile="$(mktemp)"
             trap 'rm -f "${outfile:-}"; trap - RETURN' RETURN
@@ -145,6 +172,7 @@ jobs:
               --payload "${payload}" \
               --region "${AWS_REGION}" \
               "${outfile}")"; then
+              echo "AWS CLI invoke failed for fn=${fn}" >&2
               return 1
             fi
 
@@ -152,12 +180,84 @@ jobs:
             fn_error="$(jq -r '.FunctionError // empty' <<<"${response}")"
             body="$(cat "${outfile}")"
 
-            if [[ "${status}" != "200" ]] || [[ -n "${fn_error}" ]] || [[ "${body}" != *"${expected}"* ]]; then
-              echo "Lambda invoke failed (fn=${fn}, status=${status}, functionError=${fn_error}, expected=${expected}). Body: ${body}" >&2
+            if [[ "${status}" != "200" ]] || [[ -n "${fn_error}" ]]; then
+              echo "Lambda invoke failed (fn=${fn}, status=${status}, functionError=${fn_error}). Body: ${body}" >&2
               return 1
             fi
 
+            printf '%s' "${body}"
             return 0
+          }
+
+          invoke_lambda_expect_contains() {
+            local payload="$1"
+            local expected="$2"
+            local fn="$3"
+            local body
+
+            body="$(invoke_lambda_raw "${payload}" "${fn}")" || return 1
+            if [[ "${body}" != *"${expected}"* ]]; then
+              echo "Lambda response did not contain expected token (fn=${fn}, expected=${expected}). Body: ${body}" >&2
+              return 1
+            fi
+            return 0
+          }
+
+          extract_status() {
+            local body="$1"
+            local parsed
+
+            if parsed="$(jq -r 'if type=="string" then . else (.status // .Status // empty) end' <<<"${body}" 2>/dev/null)"; then
+              if [[ -n "${parsed}" && "${parsed}" != "null" ]]; then
+                printf '%s' "${parsed}"
+                return 0
+              fi
+            fi
+
+            printf '%s' "${body}" | sed -e 's/^"//' -e 's/"$//'
+            return 0
+          }
+
+          wait_for_rds_state() {
+            local event_type="$1"      # GetRDSClusterStatus | GetRDSInstanceStatus
+            local rds_name="$2"
+            local expected="$3"
+            local sleep_s="$4"
+            local retry_limit="$5"
+            local fn="$6"
+            local transient_csv="$7"
+            local i=0
+            local last_status="unknown"
+
+            while [[ $i -lt $retry_limit ]]; do
+              local payload body status
+              payload="{ \"EventType\": \"${event_type}\", \"RDSName\": \"${rds_name}\" }"
+
+              if ! body="$(invoke_lambda_raw "${payload}" "${fn}")"; then
+                i=$((i + 1))
+                sleep "${sleep_s}"
+                continue
+              fi
+
+              status="$(extract_status "${body}")"
+              last_status="${status}"
+              echo "RDS status check (${event_type}, ${rds_name}): ${status} (attempt $((i + 1))/${retry_limit})"
+
+              if [[ "${status}" == "${expected}" ]]; then
+                return 0
+              fi
+
+              if [[ ",${transient_csv}," != *",${status},"* ]]; then
+                echo "Unexpected RDS status '${status}' while waiting for ${event_type}(${rds_name}) to become '${expected}'." >&2
+                return 1
+              fi
+
+              i=$((i + 1))
+              sleep "${sleep_s}"
+            done
+
+            echo "Timed out waiting for ${event_type}(${rds_name}) to become '${expected}'. Last status='${last_status}'." >&2
+            return 1
           }
 
           wait_cluster_status() {
@@ -165,19 +265,13 @@ jobs:
             local expected="$2"
             local sleep_s="$3"
             local retry_limit="$4"
-            local i=0
+            local transient_states="creating,backtracking,modifying,renaming,upgrading,migrating,deleting,stopping,starting"
 
-            while [[ $i -lt $retry_limit ]]; do
-              local payload
-              payload="{ \"EventType\": \"GetRDSClusterStatus\", \"RDSName\": \"${rds_name}\" }"
-              if invoke_lambda "${payload}" "${expected}" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
-                return 0
-              fi
-              i=$((i + 1))
-              sleep "${sleep_s}"
-            done
+            if [[ "${expected}" == "RDSInstanceDoesNotExist" ]]; then
+              transient_states="available,creating,backtracking,modifying,renaming,upgrading,migrating,deleting,stopping,starting"
+            fi
 
-            return 1
+            wait_for_rds_state "GetRDSClusterStatus" "${rds_name}" "${expected}" "${sleep_s}" "${retry_limit}" "${LAMBDA_DB_REFRESH_FUNCTION}" "${transient_states}"
           }
 
           wait_instance_status() {
@@ -185,19 +279,13 @@ jobs:
             local expected="$2"
             local sleep_s="$3"
             local retry_limit="$4"
-            local i=0
+            local transient_states="creating,modifying,rebooting,backing-up,configuring-enhanced-monitoring,deleting,starting,stopping"
 
-            while [[ $i -lt $retry_limit ]]; do
-              local payload
-              payload="{ \"EventType\": \"GetRDSInstanceStatus\", \"RDSName\": \"${rds_name}\" }"
-              if invoke_lambda "${payload}" "${expected}" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
-                return 0
-              fi
-              i=$((i + 1))
-              sleep "${sleep_s}"
-            done
+            if [[ "${expected}" == "RDSInstanceDoesNotExist" ]]; then
+              transient_states="available,creating,modifying,rebooting,backing-up,configuring-enhanced-monitoring,deleting,starting,stopping"
+            fi
 
-            return 1
+            wait_for_rds_state "GetRDSInstanceStatus" "${rds_name}" "${expected}" "${sleep_s}" "${retry_limit}" "${LAMBDA_DB_REFRESH_FUNCTION}" "${transient_states}"
           }
 
           case "${PLATFORM_ENV}" in
@@ -244,7 +332,6 @@ jobs:
           esac
 
           RDS_MONITORING_ROLE_ARN="arn:aws:iam::${ACCOUNT}:role/rds-monitoring-role"
-          LAMBDA_ARN="arn:aws:lambda:${AWS_REGION}:${ACCOUNT}"
           R53_NAME="olcsdb-rds"
           R53_READ_REPLICA_NAME="olcsreaddb-rds"
 
@@ -287,7 +374,7 @@ jobs:
 
           # 1. get RDS status
           payload="{ \"EventType\": \"GetRDSClusterStatus\", \"RDSName\": \"${RDS_CLUSTER_NAME}\" }"
-          invoke_lambda "${payload}" "available" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
+          wait_cluster_status "${RDS_CLUSTER_NAME}" "available" 0 1 || {
             slack_send "${SLACK_FAIL}" "Error. Build failed fetching RDS cluster status"
             exit 1
           }
@@ -295,7 +382,7 @@ jobs:
           # 2. rename existing Aurora cluster
           RDS_NEW_NAME="${RDS_CLUSTER_NAME}-deploy"
           payload="{ \"EventType\": \"RenameRDSInstance\", \"RDSName\": \"${RDS_CLUSTER_NAME}\", \"RDSNewName\": \"${RDS_NEW_NAME}\" }"
-          invoke_lambda "${payload}" "${RDS_NEW_NAME}" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
+          invoke_lambda_expect_contains "${payload}" "${RDS_NEW_NAME}" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
             slack_send "${SLACK_FAIL}" "Error. RDS rename of ${RDS_CLUSTER_NAME} failed"
             exit 1
           }
@@ -311,11 +398,11 @@ jobs:
 
           # 3. remove existing reader
           payload="{ \"EventType\": \"GetRDSInstanceStatus\", \"RDSName\": \"${RDS_READER_NAME}\" }"
-          if invoke_lambda "${payload}" "RDSInstanceDoesNotExist" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+          if invoke_lambda_expect_contains "${payload}" "RDSInstanceDoesNotExist" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
             slack_send "${SLACK_WARN}" "Warning. No existing ReadReplica found: ${RDS_READER_NAME}. Build will continue"
           else
             payload="{ \"EventType\":\"TerminateRDSInstance\", \"RDSName\":\"${RDS_READER_NAME}\", \"RDSFinalSnap\": false, \"RDSType\": \"reader\" }"
-            invoke_lambda "${payload}" "TerminateComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
+            invoke_lambda_expect_contains "${payload}" "TerminateComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
               slack_send "${SLACK_FAIL}" "Error. Failed to delete original ReadReplica"
               exit 1
             }
@@ -328,11 +415,11 @@ jobs:
 
           # 4. remove existing writer
           payload="{ \"EventType\": \"GetRDSInstanceStatus\", \"RDSName\": \"${RDS_WRITER_NAME}\" }"
-          if invoke_lambda "${payload}" "RDSInstanceDoesNotExist" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+          if invoke_lambda_expect_contains "${payload}" "RDSInstanceDoesNotExist" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
             slack_send "${SLACK_WARN}" "Warning. No existing Writer instance found: ${RDS_WRITER_NAME}. Build will continue"
           else
             payload="{ \"EventType\":\"TerminateRDSInstance\", \"RDSName\":\"${RDS_WRITER_NAME}\", \"RDSFinalSnap\": false, \"RDSType\": \"writer\" }"
-            invoke_lambda "${payload}" "TerminateComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
+            invoke_lambda_expect_contains "${payload}" "TerminateComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
               slack_send "${SLACK_FAIL}" "Error. Failed to delete original writer instance"
               exit 1
             }
@@ -359,9 +446,9 @@ jobs:
             --argjson logs "${RDS_LOG_EXPORTS}" \
             --argjson tags "${RDS_TAGS}" \
             --argjson multiAz "${MULTI_AZ}" \
-            '{EventType:$eventType,RDSName:$rdsName,RDSOptionGroup:$optionGroup,RDSCloudwatchLogsExportConfiguration:$logs,RDSBaseSnap:$baseSnap,RDSSubnet:$subnet,EngineVersion:$engineVersion,RDSSnapSource:$snapSource,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSMultiAZ:$multiAz,RDSTags:$tags}'
+            '{EventType:$eventType,RDSName:$rdsName,RDSOptionGroup:$optionGroup,RDSCloudwatchLogsExportConfiguration:$logs,RDSBaseSnap:$baseSnap,RDSSubnet:$subnet,EngineVersion:$engineVersion,RDSSnapSource:$snapSource,RDSTags:$tags,MultiAZ:$multiAz}'
           )"
-          invoke_lambda "${payload}" "RestoreDBComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
+          invoke_lambda_expect_contains "${payload}" "RestoreDBComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
             slack_send "${SLACK_FAIL}" "Error. Build failed restoring from DB snapshot"
             exit 1
           }
@@ -373,7 +460,7 @@ jobs:
 
           # 6. modify master password
           payload="{ \"EventType\": \"UpdateMasterPassword\", \"RDSName\": \"${RDS_CLUSTER_NAME}\", \"ConfigBucket\": \"${S3_CONFIG_BUCKET}\" }"
-          invoke_lambda "${payload}" "pass_update_success" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
+          invoke_lambda_expect_contains "${payload}" "pass_update_success" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
             slack_send "${SLACK_FAIL}" "Error. Build failed modifying master password"
             exit 1
           }
@@ -392,7 +479,7 @@ jobs:
             --argjson logs "${RDS_LOG_EXPORTS}" \
             '{EventType:$eventType,RDSName:$rdsName,RDSSG:$sg,RDSOptionGroup:$optionGroup,RDSCloudwatchLogsExportConfiguration:$logs}'
           )"
-          invoke_lambda "${payload}" "LaunchComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
+          invoke_lambda_expect_contains "${payload}" "LaunchComplete" "${LAMBDA_DB_REFRESH_FUNCTION}" || {
             slack_send "${SLACK_FAIL}" "Error. Lambda failed updating security and parameter groups"
             exit 1
           }
@@ -414,9 +501,9 @@ jobs:
               --arg paramGroup "${RDS_PARAM_GROUP}" \
               --arg secGroup "${RDS_WRITER_SEC_GROUP}" \
               --argjson tags "${RDS_WRITER_TAGS}" \
-              '{EventType:$eventType,RDSDBInstanceClassWriter:$klass,RDSName:$rdsName,RDSWriterName:$writerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParameterGroup:$paramGroup,RDSSG:$secGroup,RDSTags:$tags}'
+              '{EventType:$eventType,RDSDBInstanceClassWriter:$klass,RDSName:$rdsName,RDSWriterName:$writerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParamGroup:$paramGroup,RDSSecGroup:$secGroup,RDSTags:$tags}'
             )"
-            if ! invoke_lambda "${payload}" "CreateWriterSuccess" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+            if ! invoke_lambda_expect_contains "${payload}" "CreateWriterSuccess" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
               slack_send "${SLACK_WARN}" "Warning. Failed to create Writer ${RDS_WRITER_NAME} for ${RDS_CLUSTER_NAME}. Build will continue - manually create Writer"
             fi
             if ! wait_instance_status "${RDS_WRITER_NAME}" "available" 60 30; then
@@ -432,13 +519,13 @@ jobs:
               --arg rdsName "${RDS_CLUSTER_NAME}" \
               --arg readerName "${RDS_READER_NAME}" \
               --arg monitoringRoleArn "${RDS_MONITORING_ROLE_ARN}" \
-              --arg monitoringInterval "${RDS_MONITORING_INTERVAL}" \
+              --argjson monitoringInterval "${RDS_MONITORING_INTERVAL}" \
               --arg paramGroup "${RDS_PARAM_GROUP}" \
               --arg secGroup "${RDS_SEC_GROUP}" \
               --argjson tags "${RDS_READER_TAGS}" \
-              '{EventType:$eventType,RDSDBInstanceClassReader:$klass,RDSName:$rdsName,RDSReaderName:$readerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParameterGroup:$paramGroup,RDSSG:$secGroup,RDSTags:$tags}'
+              '{EventType:$eventType,RDSDBInstanceClassReader:$klass,RDSName:$rdsName,RDSReaderName:$readerName,RDSMonitoringRoleArn:$monitoringRoleArn,RDSMonitoringInterval:$monitoringInterval,RDSParamGroup:$paramGroup,RDSSecGroup:$secGroup,RDSTags:$tags}'
             )"
-            if ! invoke_lambda "${payload}" "CreateReaderSuccess" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+            if ! invoke_lambda_expect_contains "${payload}" "CreateReaderSuccess" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
               slack_send "${SLACK_WARN}" "Warning. Failed to create Reader ${RDS_READER_NAME} for ${RDS_CLUSTER_NAME}. Build will continue - manually create Reader"
             fi
             if ! wait_instance_status "${RDS_READER_NAME}" "available" 60 30; then
@@ -449,7 +536,7 @@ jobs:
 
             # 10. update writer dns
             payload="{ \"EventType\":\"UpdateRDSR53Record\", \"RDSName\":\"${RDS_WRITER_NAME}\", \"RDSRecord\":\"${R53_NAME}.${HOSTED_ZONE}\" }"
-            if ! invoke_lambda "${payload}" "UpdateR53Success" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+            if ! invoke_lambda_expect_contains "${payload}" "UpdateR53Success" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
               slack_send "${SLACK_WARN}" "Warning. Failed to update route53 CNAME record for ${R53_NAME}.${HOSTED_ZONE}. Build will continue - manually create route53 CNAME record"
             else
               slack_send "${SLACK_COMPLETED}" "Route53 CNAME record successfully updated for ${R53_NAME}.${HOSTED_ZONE}"
@@ -457,7 +544,7 @@ jobs:
 
             # 11. update reader dns
             payload="{ \"EventType\":\"UpdateRDSR53Record\", \"RDSName\":\"${RDS_READER_NAME}\", \"RDSRecord\":\"${R53_READ_REPLICA_NAME}.${HOSTED_ZONE}\" }"
-            if ! invoke_lambda "${payload}" "UpdateR53Success" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+            if ! invoke_lambda_expect_contains "${payload}" "UpdateR53Success" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
               slack_send "${SLACK_WARN}" "Warning. Failed to update route53 CNAME record for ${R53_READ_REPLICA_NAME}.${HOSTED_ZONE}. Build will continue - manually create route53 CNAME record"
             else
               slack_send "${SLACK_COMPLETED}" "Route53 CNAME record successfully updated for ${R53_READ_REPLICA_NAME}.${HOSTED_ZONE}"
@@ -466,7 +553,7 @@ jobs:
 
           # 12. delete original cluster
           payload="{ \"EventType\":\"TerminateRDSInstance\", \"RDSName\":\"${RDS_CLUSTER_NAME}-deploy\", \"RDSFinalSnap\": ${RDS_FINAL_SNAP}, \"RDSType\": \"cluster\" }"
-          if ! invoke_lambda "${payload}" "TerminateComplete" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
+          if ! invoke_lambda_expect_contains "${payload}" "TerminateComplete" "${LAMBDA_DB_REFRESH_FUNCTION}"; then
             slack_send "${SLACK_WARN}" "Warning. Failed to delete original RDS instance. Build will continue - manually delete original RDS instance"
           fi
           if ! wait_cluster_status "${RDS_CLUSTER_NAME}-deploy" "RDSInstanceDoesNotExist" 60 30; then
@@ -478,7 +565,7 @@ jobs:
           # 13. optional init sql for prep
           if [[ "${RUN_INIT_SQL}" == "true" ]]; then
             payload="{ \"EventType\":\"InitDB\", \"RDSName\":\"${RDS_CLUSTER_NAME}\", \"ConfigBucket\": \"${S3_CONFIG_BUCKET}\" }"
-            if ! invoke_lambda "${payload}" "pass_update_success" "${LAMBDA_INIT_DB_FUNCTION}"; then
+            if ! invoke_lambda_expect_contains "${payload}" "pass_update_success" "${LAMBDA_INIT_DB_FUNCTION}"; then
               slack_send "${SLACK_WARN}" "Warning. Initialise and Run SQL failed"
             else
               slack_send "${SLACK_COMPLETED}" "Initialise and Run SQL ${RDS_CLUSTER_NAME} succeeded"

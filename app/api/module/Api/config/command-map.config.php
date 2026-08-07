@@ -1089,6 +1089,13 @@ return [
     // Transfer - FeatureToggle
     TransferCommand\FeatureToggle\Create::class =>
         CommandHandler\FeatureToggle\Create::class,
+    // Retrieve-via-Link
+    TransferCommand\RetrievalLink\RequestOtp::class =>
+        CommandHandler\RetrievalLink\RequestOtp::class,
+    TransferCommand\RetrievalLink\VerifyOtp::class =>
+        CommandHandler\RetrievalLink\VerifyOtp::class,
+    Command\RetrievalLink\PurgeExpired::class =>
+        CommandHandler\RetrievalLink\PurgeExpired::class,
     TransferCommand\FeatureToggle\Update::class =>
         CommandHandler\FeatureToggle\Update::class,
     TransferCommand\FeatureToggle\Delete::class                =>
@@ -1354,6 +1361,7 @@ return [
     TransferCommand\Letter\LetterType\Create::class => CommandHandler\Letter\LetterType\Create::class,
     TransferCommand\Letter\LetterType\Update::class => CommandHandler\Letter\LetterType\Update::class,
     TransferCommand\Letter\LetterType\Delete::class => CommandHandler\Letter\LetterType\Delete::class,
+    TransferCommand\Letter\LetterType\PreviewComposition::class => CommandHandler\Letter\LetterType\PreviewComposition::class,
     TransferCommand\Letter\LetterSection\Create::class => CommandHandler\Letter\LetterSection\Create::class,
     TransferCommand\Letter\LetterSection\Update::class => CommandHandler\Letter\LetterSection\Update::class,
     TransferCommand\Letter\LetterSection\Delete::class => CommandHandler\Letter\LetterSection\Delete::class,
@@ -1375,6 +1383,7 @@ return [
     TransferCommand\Letter\LetterInstance\PrepareToSend::class => CommandHandler\Letter\LetterInstance\PrepareToSend::class,
     TransferCommand\Letter\LetterInstanceIssue\UpdateContent::class => CommandHandler\Letter\LetterInstanceIssue\UpdateContent::class,
     TransferCommand\Letter\LetterInstanceSection\UpdateContent::class => CommandHandler\Letter\LetterInstanceSection\UpdateContent::class,
+    TransferCommand\Letter\LetterInstanceTodo\UpdateContent::class => CommandHandler\Letter\LetterInstanceTodo\UpdateContent::class,
     TransferCommand\Letter\LetterInstanceAppendix\UpdateContent::class => CommandHandler\Letter\LetterInstanceAppendix\UpdateContent::class,
     TransferCommand\Letter\MasterTemplate\Create::class => CommandHandler\Letter\MasterTemplate\Create::class,
     TransferCommand\Letter\MasterTemplate\Update::class => CommandHandler\Letter\MasterTemplate\Update::class,

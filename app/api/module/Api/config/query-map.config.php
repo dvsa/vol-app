@@ -345,6 +345,8 @@ return [
     TransferQuery\Document\Letter::class => QueryHandler\Document\Letter::class,
     TransferQuery\Document\DocumentList::class => QueryHandler\Document\DocumentList::class,
     TransferQuery\Document\Download::class => QueryHandler\Document\Download::class,
+    TransferQuery\RetrievalLink\Resolve::class => QueryHandler\RetrievalLink\Resolve::class,
+    TransferQuery\RetrievalLink\Download::class => QueryHandler\RetrievalLink\Download::class,
     TransferQuery\Document\DownloadGuide::class => QueryHandler\Document\DownloadGuide::class,
     TransferQuery\Document\BucketBrowserList::class => QueryHandler\Document\BucketBrowserList::class,
     TransferQuery\Document\BucketBrowserDownload::class => QueryHandler\Document\BucketBrowserDownload::class,

@@ -437,6 +437,12 @@ module "service" {
 
     jobs = [
       {
+        name     = "retrieval-link-purge",
+        commands = ["batch:retrieval-link-purge"],
+        timeout  = 3600,
+        schedule = ["cron(30 03 * * ? *)"],
+      },
+      {
         name     = "cache-clear",
         commands = ["batch:cache-clear", "--flush-all", "--force"],
         timeout  = 300,
@@ -705,13 +711,6 @@ module "service" {
         name     = "sas-mi-extract",
         commands = ["/mnt/data/scripts/sas_mi_extract.sh"],
         type     = "scripts"
-      },
-      {
-        name     = "import-anondb",
-        commands = ["/mnt/data/scripts/import_anondb.sh"],
-        type     = "scripts"
-        cpu      = 2,
-        memory   = 8192,
       },
       {
         name     = "populate-anondb",

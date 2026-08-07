@@ -18,7 +18,7 @@ use Psr\Log\LoggerInterface;
  * "/templates/...") and a configurable prefix is applied so the keys align with whatever the
  * EBS->S3 sync produced — alignment is configuration, not code.
  */
-class S3DocumentStore implements DocumentStoreInterface
+class S3DocumentStore implements DocumentStoreInterface, ProvidesPresignedUrls
 {
     use StreamsS3Objects;
 
@@ -99,6 +99,24 @@ class S3DocumentStore implements DocumentStoreInterface
         }
 
         return $response;
+    }
+
+    /**
+     * A presigned GET URL for the object, signed locally (no network call), valid for $ttlSeconds.
+     * Lets a trusted server-side caller fetch the bytes straight from S3 instead of the store
+     * streaming them.
+     */
+    #[\Override]
+    public function presignedGetUrl(string $identifier, int $ttlSeconds): string
+    {
+        $command = $this->s3Client->getCommand('GetObject', [
+            'Bucket' => $this->bucket,
+            'Key' => $this->normaliseKey($identifier),
+        ]);
+
+        return (string) $this->s3Client
+            ->createPresignedRequest($command, '+' . $ttlSeconds . ' seconds')
+            ->getUri();
     }
 
     private function normaliseKey($path): string

@@ -231,5 +231,21 @@ return [
         'redirect-path' => '/govuk-account/process',
         // HTTP_REFERER hostname will be checked to end with the following string.
         'referrer_ends_with' => '.gov.uk'
-    ]
+    ],
+
+    // Retrieve-via-link: server-side fetch of S3 presigned download URLs. On the S3 document store
+    // the API hands selfserve a short-lived presigned URL rather than the bytes; selfserve fetches
+    // it server-side (it never reaches the browser). The frontends have no direct outbound egress,
+    // so that fetch must route through the shared forward proxy (which allow-lists amazonaws.com).
+    // Resolved from Parameter Store in deployed environments; left as an unresolved %placeholder%
+    // locally, where the fetch falls back to a direct connection. The WebDAV store never hits this
+    // path (the API streams those bytes through instead).
+    'retrieve_document' => [
+        'presigned_fetch_proxy' => 'http://%shd_proxy%',
+        'presigned_fetch_timeout' => 30,
+        // Secure flag for the post-OTP grant cookie. True everywhere real (HTTPS terminates at the
+        // load balancer); overridden to false only in local dev, where selfserve is served over
+        // plain HTTP and a Secure cookie would never be stored or returned by the browser.
+        'grant_cookie_secure' => true,
+    ],
 ];
