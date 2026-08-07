@@ -206,12 +206,14 @@ class LetterGenerationController extends AbstractInternalController implements L
 
         $letterInstanceData = $this->fetchLetterInstanceById($letterInstanceId);
 
-        // Extract required section warnings if present
+        // Extract section warnings if present. Optional sections are reported too: a section
+        // dropping out of a letter is worth telling the caseworker about whether or not the
+        // letter type marked it required.
         $warnings = [];
         if (!empty($result['flags']['hasRequiredSectionWarnings'])) {
             $warnings = array_values(array_filter(
                 $result['messages'] ?? [],
-                fn($m) => str_starts_with($m, 'Required section')
+                fn($m) => str_starts_with($m, 'Required section') || str_starts_with($m, 'Optional section')
             ));
         }
 
@@ -320,6 +322,27 @@ class LetterGenerationController extends AbstractInternalController implements L
             ];
         }
 
+        // Build the to-dos list for the sidebar.
+        //
+        // A to-do carries no name of its own on the instance row -- the label lives on the
+        // version, and the key on the parent. Both are needed: two to-dos can share a name
+        // (FI01 and FI02 both read "You need to upload bank statements to your online account"),
+        // so the key is what makes them tellable apart.
+        $todosList = [];
+        foreach ($result['letterInstanceTodos'] ?? [] as $todo) {
+            $todoVersion = $todo['letterTodoVersion'] ?? [];
+            $todoKey = $todoVersion['letterTodo']['todoKey'] ?? null;
+            $name = $todoVersion['name'] ?? null;
+
+            $todosList[] = [
+                'id' => $todo['id'] ?? null,
+                // Falls back to the key alone while the name backfill has not run.
+                'name' => $name === null ? ($todoKey ?? 'To-do') : trim($name . ' (' . $todoKey . ')'),
+                'type' => 'todo',
+                'requiringIssueCount' => (int) ($todo['requiringIssueCount'] ?? 1),
+            ];
+        }
+
         // Check for missing required sections
         $warnings = $this->checkRequiredSections($result);
 
@@ -329,6 +352,7 @@ class LetterGenerationController extends AbstractInternalController implements L
             'sectionsList' => $sectionsList,
             'appendicesList' => $appendicesList,
             'instanceSectionsList' => $instanceSectionsList,
+            'todosList' => $todosList,
         ]);
         $sidebarView->setTemplate('pages/letter/preview-sidebar');
         $this->leftView = $sidebarView;
@@ -412,14 +436,18 @@ class LetterGenerationController extends AbstractInternalController implements L
         $selectedSections = $this->params()->fromQuery('sections', []);
         $selectedAppendices = $this->params()->fromQuery('appendices', []);
         $letterSectionIds = $this->params()->fromQuery('letterSections', []);
+        $todoIds = $this->params()->fromQuery('todos', []);
 
         if (!$letterInstanceId) {
             $this->flashMessengerHelperService->addErrorMessage('Letter instance ID is required');
             return $this->redirect()->toRoute('dashboard');
         }
 
-        if (empty($selectedSections) && empty($selectedAppendices) && empty($letterSectionIds)) {
-            $this->flashMessengerHelperService->addErrorMessage('No sections or appendices selected');
+        if (
+            empty($selectedSections) && empty($selectedAppendices)
+            && empty($letterSectionIds) && empty($todoIds)
+        ) {
+            $this->flashMessengerHelperService->addErrorMessage('Nothing selected to edit');
             return $this->redirect()->toUrl('/letter/preview?id=' . urlencode($letterInstanceId));
         }
 
@@ -554,12 +582,53 @@ class LetterGenerationController extends AbstractInternalController implements L
             ];
         }
 
+        // Build editable to-do data.
+        //
+        // Unlike the three above, the fallback is the shared wording on the version -- there is
+        // no per-instance default. requiringIssueCount comes from the API and drives the note
+        // telling the caseworker that a shared to-do is standing in for several issues.
+        $groupedTodos = [];
+        foreach ($letterInstance['letterInstanceTodos'] ?? [] as $todo) {
+            if (!in_array($todo['id'], $todoIds)) {
+                continue;
+            }
+
+            $todoVersion = $todo['letterTodoVersion'] ?? [];
+            $todoKey = $todoVersion['letterTodo']['todoKey'] ?? null;
+
+            $editedDescription = $todo['editedDescription'] ?? null;
+            $description = $todoVersion['description'] ?? null;
+
+            if (!empty($editedDescription)) {
+                $effectiveContent = is_string($editedDescription)
+                    ? $editedDescription
+                    : json_encode($editedDescription);
+            } elseif (!empty($description)) {
+                $effectiveContent = is_string($description)
+                    ? $description
+                    : json_encode($description);
+            } else {
+                $effectiveContent = json_encode(['blocks' => [], 'version' => '2.28.2']);
+            }
+
+            $name = $todoVersion['name'] ?? null;
+
+            $groupedTodos[] = [
+                'id' => $todo['id'],
+                'name' => $name === null ? ($todoKey ?? 'To-do') : trim($name . ' (' . $todoKey . ')'),
+                'content' => $effectiveContent,
+                'version' => $todo['version'] ?? 1,
+                'requiringIssueCount' => (int) ($todo['requiringIssueCount'] ?? 1),
+            ];
+        }
+
         $view = new ViewModel([
             'letterInstanceId' => $letterInstanceId,
             'letterInstance' => $letterInstance,
             'groupedIssues' => $groupedIssues,
             'groupedAppendices' => $groupedAppendices,
             'groupedSections' => $groupedSections,
+            'groupedTodos' => $groupedTodos,
         ]);
 
         $view->setTemplate('pages/letter/edit');
@@ -668,6 +737,50 @@ class LetterGenerationController extends AbstractInternalController implements L
      *
      * @return Response
      */
+    /**
+     * Save a caseworker's edit to one to-do's wording.
+     *
+     * The field is editedDescription, not editedContent like the three siblings: a to-do's
+     * wording is called `description` throughout its own code path, so the override is named
+     * after what it overrides.
+     */
+    public function saveTodoContentAction()
+    {
+        if (!$this->getRequest()->isPost()) {
+            return $this->jsonError('Method not allowed', 405);
+        }
+
+        $body = json_decode($this->getRequest()->getContent(), true);
+
+        if (empty($body['todoId']) || !isset($body['editedDescription']) || empty($body['version'])) {
+            return $this->jsonError('Missing required fields: todoId, editedDescription, version');
+        }
+
+        $command = \Dvsa\Olcs\Transfer\Command\Letter\LetterInstanceTodo\UpdateContent::create([
+            'id' => (int) $body['todoId'],
+            'editedDescription' => is_string($body['editedDescription'])
+                ? $body['editedDescription']
+                : json_encode($body['editedDescription']),
+            'version' => (int) $body['version'],
+        ]);
+
+        $response = $this->handleCommand($command);
+
+        if (!$response->isOk()) {
+            $messages = $response->getResult()['messages'] ?? [];
+            $errorMessage = is_array($messages) ? implode(', ', $messages) : $messages;
+            return $this->jsonError('Failed to save: ' . $errorMessage);
+        }
+
+        $result = $response->getResult();
+
+        return $this->jsonSuccess([
+            'todoId' => (int) $body['todoId'],
+            'message' => $result['messages'][0] ?? 'Saved successfully',
+            'version' => ($body['version'] + 1),
+        ]);
+    }
+
     public function saveSectionContentAction()
     {
         if (!$this->getRequest()->isPost()) {

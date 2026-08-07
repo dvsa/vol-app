@@ -14,6 +14,34 @@ use Doctrine\ORM\Mapping as ORM;
 class LetterTodoVersion extends AbstractLetterTodoVersion
 {
     /**
+     * The standing wording, normalised to an array.
+     *
+     * The counterpart of LetterSectionVersion::getDefaultContentAsArray, and it exists for the
+     * same reason: the column is mapped `type: json`, but some hydration paths hand back the
+     * JSON-encoded string instead, so callers cannot rely on the shape.
+     *
+     * Total by construction -- anything that is not an array comes back as []. Callers declare
+     * `: array` and the renderer no longer guards the type itself, so letting a scalar through
+     * here would turn today's empty render into a TypeError.
+     */
+    public function getDescriptionAsArray(): array
+    {
+        $description = $this->description;
+
+        if (empty($description)) {
+            return [];
+        }
+
+        if (is_string($description)) {
+            $decoded = json_decode($description, true);
+
+            return (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) ? $decoded : [];
+        }
+
+        return is_array($description) ? $description : [];
+    }
+
+    /**
      * Check if this version is published
      *
      * @return bool

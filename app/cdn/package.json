@@ -21,7 +21,7 @@
     "@editorjs/underline": "^1.2.1",
     "autoprefixer": "^10.4.20",
     "chosen-npm": "^1.4.2",
-    "govuk-frontend": "^6.3.0",
+    "govuk-frontend": "^6.4.0",
     "jquery": "^3.7.1",
     "pace-progress": "^1.0.2"
   },
@@ -45,7 +45,7 @@
     "grunt-scss-lint": "^0.5.0",
     "grunt-svg-sprite": "^2.0.2",
     "handlebars-helper-repeat": "^2.0.0",
-    "postcss": "^8.4.39",
+    "postcss": "^8.5.18",
     "sass": "^1.97.0"
   }
 }
