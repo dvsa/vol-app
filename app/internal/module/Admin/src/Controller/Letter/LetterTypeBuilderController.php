@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Admin\Controller\Letter;
 
 use Dvsa\Olcs\Transfer\Command\Letter\LetterType\PreviewComposition as PreviewCompositionDTO;
+use Dvsa\Olcs\Transfer\Command\Letter\LetterType\SuggestPreviewRecords as SuggestRecordsDTO;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterType\Update as UpdateDTO;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterAppendix\GetList as AppendixListDTO;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterChoice\GetList as ChoiceListDTO;
@@ -128,6 +129,34 @@ class LetterTypeBuilderController extends AbstractInternalController implements 
                 ],
                 $this->fetchList(SectionListDTO::class)
             ),
+        ]);
+    }
+
+    /**
+     * One example record per context combination the on-screen composition branches on.
+     * "None found" rows are kept: they tell the admin that branch is only reachable
+     * through the manual overrides.
+     */
+    public function suggestAction(): JsonModel
+    {
+        $payload = json_decode((string) $this->getRequest()->getContent(), true);
+
+        if (!is_array($payload) || empty($payload['letterType'])) {
+            return new JsonModel(['status' => 400, 'message' => 'A letter type is required']);
+        }
+
+        $response = $this->handleCommand(SuggestRecordsDTO::create([
+            'letterType' => (int) $payload['letterType'],
+            'sections' => array_map('intval', $payload['sections'] ?? []),
+        ]));
+
+        if (!$response->isOk()) {
+            return new JsonModel(['status' => 400, 'message' => 'Could not suggest records']);
+        }
+
+        return new JsonModel([
+            'status' => 200,
+            'suggestions' => $response->getResult()['flags']['suggestions'] ?? [],
         ]);
     }
 

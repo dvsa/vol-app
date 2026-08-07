@@ -516,7 +516,7 @@ OLCS.ready(function () {
     }, 400);
   });
 
-  function lookupRecord(term) {
+  function lookupRecord(term, selectApplicationId) {
     window
       .fetch(
         "/admin/letter-type-builder/record/?term=" + encodeURIComponent(term),
@@ -541,6 +541,12 @@ OLCS.ready(function () {
           data.licence.licNo,
           data.applications,
         );
+        if (selectApplicationId) {
+          var select = document.getElementById("ctx-application");
+          select.value = String(selectApplicationId);
+          renderContextSummary();
+          schedulePreview();
+        }
         showRecordResult(
           data.licence.licNo +
             " \u2014 " +
@@ -595,6 +601,135 @@ OLCS.ready(function () {
 
     renderContextSummary();
     schedulePreview();
+  }
+
+  // --- suggested records ---------------------------------------------------------------
+  //
+  // One example record per context combination the on-screen composition branches on. A row
+  // with no record is kept: that branch is only reachable through the manual overrides.
+
+  document
+    .getElementById("suggest-records")
+    .addEventListener("click", function () {
+      var button = this;
+      button.disabled = true;
+
+      window
+        .fetch("/admin/letter-type-builder/suggest/", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            letterType: letterTypeId,
+            sections: composition.sections.map(function (s) {
+              return s.id;
+            }),
+          }),
+        })
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (data) {
+          button.disabled = false;
+          renderSuggestions(data.status === 200 ? data.suggestions : []);
+        })
+        .catch(function () {
+          button.disabled = false;
+        });
+    });
+
+  // Labels come from the override selects' own option text, so the wording in the list always
+  // matches the wording in the controls.
+  function dimensionLabel(dimensions) {
+    var parts = [];
+
+    if (dimensions.goodsOrPsv !== undefined) {
+      parts.push(optionText("ctx-goods-or-psv", dimensions.goodsOrPsv));
+    }
+    if (dimensions.isVariation !== undefined) {
+      parts.push(dimensions.isVariation ? "Variation" : "New application");
+    }
+    if (dimensions.isNi !== undefined) {
+      parts.push(dimensions.isNi ? "NI" : "GB");
+    }
+    if (dimensions.organisationType !== undefined) {
+      parts.push(optionText("ctx-org-type", dimensions.organisationType));
+    }
+
+    return parts.join(" \u00B7 ");
+  }
+
+  function optionText(selectId, value) {
+    var options = document.getElementById(selectId).options;
+    for (var i = 0; i < options.length; i++) {
+      if (options[i].value === String(value)) {
+        return options[i].textContent.trim();
+      }
+    }
+    return String(value);
+  }
+
+  function renderSuggestions(suggestions) {
+    var list = document.getElementById("suggest-results");
+    list.innerHTML = "";
+
+    if (!suggestions.length) {
+      var none = document.createElement("li");
+      none.textContent =
+        "This composition has no variant-specific branches \u2014 any record will do.";
+      list.appendChild(none);
+      return;
+    }
+
+    suggestions.forEach(function (suggestion) {
+      var li = document.createElement("li");
+      var label = document.createElement("strong");
+      label.textContent = dimensionLabel(suggestion.dimensions) + ": ";
+      li.appendChild(label);
+
+      if (suggestion.record === null) {
+        li.appendChild(
+          document.createTextNode(
+            "no matching record \u2014 preview this branch with the overrides",
+          ),
+        );
+      } else {
+        var link = document.createElement("a");
+        link.href = "#";
+        link.className = "govuk-link";
+        link.textContent =
+          suggestion.record.licNo +
+          " \u00B7 App " +
+          suggestion.record.applicationId +
+          " (" +
+          (suggestion.record.status || "unknown status") +
+          ")";
+        link.addEventListener("click", function (event) {
+          event.preventDefault();
+          applySuggestion(suggestion.record);
+        });
+        li.appendChild(link);
+      }
+
+      list.appendChild(li);
+    });
+  }
+
+  function applySuggestion(record) {
+    // The point of a suggestion is that the record itself carries the context, so the manual
+    // overrides are cleared -- they beat the record, and a stale one would silently defeat it.
+    [
+      "ctx-goods-or-psv",
+      "ctx-is-variation",
+      "ctx-is-ni",
+      "ctx-org-type",
+    ].forEach(function (id) {
+      document.getElementById(id).value = "";
+    });
+
+    var input = document.getElementById("ctx-record");
+    input.value = record.licNo || String(record.licenceId);
+    lookupRecord(input.value.trim(), record.applicationId);
   }
 
   document

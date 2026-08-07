@@ -14,6 +14,7 @@ return [
     CommandHandler\Letter\LetterType\Update::class => IsInternalUser::class,
     CommandHandler\Letter\LetterType\Delete::class => IsInternalUser::class,
     CommandHandler\Letter\LetterType\PreviewComposition::class => IsInternalUser::class,
+    CommandHandler\Letter\LetterType\SuggestPreviewRecords::class => IsInternalUser::class,
 
     // Master Template
     QueryHandler\Letter\MasterTemplate\Get::class => IsInternalUser::class,
