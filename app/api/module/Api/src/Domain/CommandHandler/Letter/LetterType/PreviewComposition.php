@@ -97,7 +97,10 @@ final class PreviewComposition extends AbstractCommandHandler
         // with no A4 page, stylesheet or letterhead, which is not a letter and so not a preview.
         // Measured on a warm local stack the chrome costs ~119ms of a ~1s round trip, which is
         // well inside the debounce and nowhere near the cost the design assumed.
-        $masterTemplate = $this->masterTemplateResolver->resolve($letterInstance);
+        //
+        // The effective isNi is passed through so a Region override picks the matching locale's
+        // chrome too -- otherwise an NI preview renders NI wording under a GB letterhead.
+        $masterTemplate = $this->masterTemplateResolver->resolve($letterInstance, $context['isNi']);
 
         $html = $this->previewService->renderPreview($letterInstance, $masterTemplate);
 
@@ -195,6 +198,15 @@ final class PreviewComposition extends AbstractCommandHandler
         foreach ($overrides as $key => $value) {
             if ($value !== null) {
                 $derived[$key] = $value;
+            }
+        }
+
+        // Overrides arrive over HTTP as strings ('1'/'0'), but variant matching compares with
+        // !== against Doctrine booleans -- so an un-normalised override never matches a variant
+        // that pins isVariation or isNi, it just silently falls back to the default wording.
+        foreach (['isVariation', 'isNi'] as $flag) {
+            if ($derived[$flag] !== null) {
+                $derived[$flag] = filter_var($derived[$flag], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
             }
         }
 

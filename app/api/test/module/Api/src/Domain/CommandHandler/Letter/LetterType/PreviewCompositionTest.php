@@ -272,6 +272,29 @@ final class PreviewCompositionTest extends AbstractCommandHandlerTestCase
         $this->assertSame([2], $context['selectedChoiceIds']);
     }
 
+    /**
+     * The overrides arrive over HTTP as strings. Variant matching compares with !== against
+     * Doctrine booleans, so an un-normalised '1' never matches a variant pinning isVariation --
+     * it silently falls back to the default wording, which is exactly the wrong behaviour for a
+     * screen whose purpose is showing what a context would produce.
+     */
+    public function testStringBooleanOverridesAreNormalisedToRealBooleans(): void
+    {
+        $this->repoMap['LetterType']->shouldReceive('fetchById')->andReturn($this->letterType(7));
+        $this->expectRender();
+
+        $result = $this->sut->handleCommand(Cmd::create([
+            'letterType' => 7,
+            'isVariation' => '1',
+            'isNi' => '0',
+        ]));
+
+        $context = $result->getFlag('context');
+
+        $this->assertTrue($context['isVariation']);
+        $this->assertFalse($context['isNi']);
+    }
+
 
     /**
      * The letter is always rendered through the master template. Without it the renderer returns
