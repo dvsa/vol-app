@@ -9,6 +9,7 @@ use Dvsa\Olcs\Api\Entity\Application\Application;
 use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Uid\UuidV7;
 
 /**
@@ -79,6 +80,26 @@ class DocumentAnalysis
 
     #[ORM\Column(type: 'datetime', name: 'completed_at', nullable: true)]
     protected $completedAt;
+
+    /**
+     * Last modified by
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
+    protected $lastModifiedBy;
+
+    /**
+     * Created by
+     *
+     * @var \Dvsa\Olcs\Api\Entity\User\User
+     */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
+    protected $createdBy;
 
     #[ORM\Column(type: 'integer', name: 'version', nullable: false, options: ['default' => 1])]
     #[ORM\Version]
