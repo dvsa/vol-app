@@ -23,6 +23,18 @@ class PreviewRecordSuggester
 {
     private const RECORD_DIMENSIONS = ['goodsOrPsv', 'isVariation', 'isNi', 'organisationType'];
 
+    /**
+     * Never suggested. Their data still exists, but offering a withdrawn or refused
+     * application as "a record to preview with" reads as a mistake to a caseworker,
+     * and terminal records are the most likely to carry odd or incomplete data.
+     */
+    private const EXCLUDED_STATUSES = [
+        'apsts_cancelled',
+        'apsts_ntu',
+        'apsts_refused',
+        'apsts_withdrawn',
+    ];
+
     public function __construct(
         private readonly EntityManagerInterface $entityManager
     ) {
@@ -113,6 +125,8 @@ class PreviewRecordSuggester
             ->join('a.licence', 'l')
             ->join('l.organisation', 'o')
             ->join('a.status', 's')
+            ->andWhere('IDENTITY(a.status) NOT IN (:excludedStatuses)')
+            ->setParameter('excludedStatuses', self::EXCLUDED_STATUSES)
             ->orderBy('a.id', 'DESC')
             ->setMaxResults(1);
 

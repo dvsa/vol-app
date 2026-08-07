@@ -647,12 +647,20 @@ OLCS.ready(function () {
             (data.licence.goodsOrPsv || "?") +
             ", " +
             (data.licence.isNi ? "NI" : "GB") +
-            ")",
+            ")" +
+            truncationNote(data.applicationsTruncated),
         );
       })
       .catch(function () {
         // Network failure: keep whatever was resolved before rather than wiping it
       });
+  }
+
+  function truncationNote(truncated) {
+    if (truncated) {
+      return " \u2014 showing latest 25 applications";
+    }
+    return "";
   }
 
   function showRecordResult(text) {

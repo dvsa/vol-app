@@ -109,4 +109,36 @@ final class LookupTest extends QueryHandlerTestCase
         $this->assertFalse($result['found']);
         $this->assertArrayNotHasKey('licence', $result);
     }
+
+    public function testApplicationsAreCappedAtTheNewestTwentyFive(): void
+    {
+        $status = m::mock(RefData::class)->makePartial();
+        $status->shouldReceive('getDescription')->andReturn('Valid');
+
+        $applications = [];
+        for ($i = 1; $i <= 30; $i++) {
+            $app = m::mock(ApplicationEntity::class)->makePartial();
+            $app->shouldReceive('getId')->andReturn($i);
+            $app->shouldReceive('getStatus')->andReturn($status);
+            $app->shouldReceive('getIsVariation')->andReturn(false);
+            $applications[] = $app;
+        }
+
+        $licence = m::mock(LicenceEntity::class)->makePartial();
+        $licence->shouldReceive('getId')->andReturn(7);
+        $licence->shouldReceive('getLicNo')->andReturn('OB1234567');
+        $licence->shouldReceive('getOrganisation')->andReturn(null);
+        $licence->shouldReceive('getGoodsOrPsv')->andReturn(null);
+        $licence->shouldReceive('isNi')->andReturn(false);
+        $licence->shouldReceive('getApplications')->andReturn(new ArrayCollection($applications));
+
+        $this->repoMap['Licence']->shouldReceive('fetchByLicNoWithoutAdditionalData')->andReturn($licence);
+
+        $result = $this->sut->handleQuery(Qry::create(['term' => 'OB1234567']));
+
+        $this->assertCount(25, $result['applications']);
+        $this->assertTrue($result['applicationsTruncated']);
+        $this->assertSame(30, $result['applications'][0]['id'], 'newest survive the cap');
+        $this->assertSame(6, $result['applications'][24]['id']);
+    }
 }

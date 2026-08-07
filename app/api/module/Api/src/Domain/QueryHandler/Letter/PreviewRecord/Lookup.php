@@ -15,6 +15,12 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
  */
 class Lookup extends AbstractQueryHandler
 {
+    /**
+     * A long-lived licence can carry a great many applications; the picker only needs the
+     * recent ones, and each row costs a lazy status load. Newest-first, then capped.
+     */
+    private const MAX_APPLICATIONS = 25;
+
     protected $repoServiceName = 'Licence';
 
     #[\Override]
@@ -45,8 +51,14 @@ class Lookup extends AbstractQueryHandler
         // Newest first: the application a caseworker wants is almost always the latest
         usort($applications, static fn(array $a, array $b): int => $b['id'] <=> $a['id']);
 
+        $truncated = count($applications) > self::MAX_APPLICATIONS;
+        if ($truncated) {
+            $applications = array_slice($applications, 0, self::MAX_APPLICATIONS);
+        }
+
         return [
             'found' => true,
+            'applicationsTruncated' => $truncated,
             'term' => $term,
             'licence' => [
                 'id' => $licence->getId(),
