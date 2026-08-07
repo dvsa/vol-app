@@ -143,21 +143,63 @@ foreach (['sections', 'appendices'] as $listKey) {
                 </div>
 
                 <?php if ($availableChoices !== []): ?>
+                <?php
+                    // Choices carry their own input semantics: a radio group is "pick one" --
+                    // the create-letter flow enforces exactly that, so a preview context with
+                    // both First and Final request describes a letter that can never exist.
+                    // Grouped by group_label, mirroring how the caseworker screen presents them.
+                    $choiceGroups = [];
+                    foreach ($availableChoices as $choice) {
+                        $choiceGroups[$choice['groupLabel'] ?? 'Other letter choices'][] = $choice;
+                    }
+                ?>
                 <div class="letter-builder__choices govuk-!-margin-top-2">
-                    <span class="govuk-label govuk-label--s">Letter choices</span>
-                    <div class="govuk-checkboxes govuk-checkboxes--small">
-                        <?php foreach ($availableChoices as $choice): ?>
-                        <div class="govuk-checkboxes__item">
-                            <input class="govuk-checkboxes__input js-ctx-choice" type="checkbox" name="ctxChoices[]"
-                                   id="ctx-choice-<?= $this->escapeHtmlAttr($choice['id']) ?>"
-                                   value="<?= $this->escapeHtmlAttr($choice['id']) ?>">
-                            <label class="govuk-label govuk-checkboxes__label"
-                                   for="ctx-choice-<?= $this->escapeHtmlAttr($choice['id']) ?>">
-                                <?= $this->escapeHtml($choice['label'] ?? $choice['choiceKey'] ?? '') ?>
-                            </label>
+                    <?php foreach ($choiceGroups as $groupLabel => $choices): ?>
+                    <?php $groupName = 'ctxChoiceGroup-' . md5((string) $groupLabel); ?>
+                    <fieldset class="govuk-fieldset govuk-!-margin-bottom-2">
+                        <legend class="govuk-label govuk-label--s"><?= $this->escapeHtml($groupLabel) ?></legend>
+
+                        <?php if (($choices[0]['inputType'] ?? 'checkbox') === 'radio'): ?>
+                        <div class="govuk-radios govuk-radios--small">
+                            <?php // "None" keeps the group unset-able: the builder explores contexts,
+                                  // so "no choice from this group" is a state worth previewing ?>
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input" type="radio"
+                                       name="<?= $this->escapeHtmlAttr($groupName) ?>"
+                                       id="<?= $this->escapeHtmlAttr($groupName) ?>-none" value="" checked>
+                                <label class="govuk-label govuk-radios__label"
+                                       for="<?= $this->escapeHtmlAttr($groupName) ?>-none">None</label>
+                            </div>
+                            <?php foreach ($choices as $choice): ?>
+                            <div class="govuk-radios__item">
+                                <input class="govuk-radios__input js-ctx-choice" type="radio"
+                                       name="<?= $this->escapeHtmlAttr($groupName) ?>"
+                                       id="ctx-choice-<?= $this->escapeHtmlAttr($choice['id']) ?>"
+                                       value="<?= $this->escapeHtmlAttr($choice['id']) ?>">
+                                <label class="govuk-label govuk-radios__label"
+                                       for="ctx-choice-<?= $this->escapeHtmlAttr($choice['id']) ?>">
+                                    <?= $this->escapeHtml($choice['label'] ?? $choice['choiceKey'] ?? '') ?>
+                                </label>
+                            </div>
+                            <?php endforeach; ?>
                         </div>
-                        <?php endforeach; ?>
-                    </div>
+                        <?php else: ?>
+                        <div class="govuk-checkboxes govuk-checkboxes--small">
+                            <?php foreach ($choices as $choice): ?>
+                            <div class="govuk-checkboxes__item">
+                                <input class="govuk-checkboxes__input js-ctx-choice" type="checkbox" name="ctxChoices[]"
+                                       id="ctx-choice-<?= $this->escapeHtmlAttr($choice['id']) ?>"
+                                       value="<?= $this->escapeHtmlAttr($choice['id']) ?>">
+                                <label class="govuk-label govuk-checkboxes__label"
+                                       for="ctx-choice-<?= $this->escapeHtmlAttr($choice['id']) ?>">
+                                    <?= $this->escapeHtml($choice['label'] ?? $choice['choiceKey'] ?? '') ?>
+                                </label>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <?php endif; ?>
+                    </fieldset>
+                    <?php endforeach; ?>
                 </div>
                 <?php endif; ?>
 
