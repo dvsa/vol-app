@@ -47,13 +47,29 @@ trait ListDataTrait
         }
 
         // Build options array with [New] prefix for new templates
+        $seenLetterTypes = [];
         foreach ($response->getResult()['results'] as $item) {
             $key = $item['id'];
             $value = $item['description'];
 
             // Add [New] prefix for templates with letterType when feature is enabled
             if ($isFeatureEnabled && !empty($item['letterType'])) {
-                $value = '[New] ' . $value;
+                $letterTypeId = $item['letterType']['id'] ?? null;
+
+                // Several legacy templates can point at one letter type -- consolidation is
+                // the point of the letters engine, whose choices adapt a single type at
+                // generation time. Listing every linked template offers the same journey
+                // multiple times over, so one entry stands for the type, labelled with the
+                // type's own name: the RTF-era description would name only one of the
+                // variants the type has absorbed.
+                if ($letterTypeId !== null) {
+                    if (isset($seenLetterTypes[$letterTypeId])) {
+                        continue;
+                    }
+                    $seenLetterTypes[$letterTypeId] = true;
+                }
+
+                $value = '[New] ' . ($item['letterType']['name'] ?? $value);
             }
 
             $options[$key] = $value;
