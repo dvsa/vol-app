@@ -10,6 +10,7 @@ use Dvsa\Olcs\Transfer\Query\Letter\LetterAppendix\GetList as AppendixListDTO;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterChoice\GetList as ChoiceListDTO;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterSection\GetList as SectionListDTO;
 use Dvsa\Olcs\Transfer\Query\Letter\LetterType\Get as LetterTypeDTO;
+use Dvsa\Olcs\Transfer\Query\Letter\PreviewRecord\Lookup as RecordLookupDTO;
 use Laminas\Http\Response;
 use Laminas\View\Model\JsonModel;
 use Laminas\View\Model\ViewModel;
@@ -128,6 +129,27 @@ class LetterTypeBuilderController extends AbstractInternalController implements 
                 $this->fetchList(SectionListDTO::class)
             ),
         ]);
+    }
+
+    /**
+     * Resolve a licence number or id to a record for the preview context. Backs the
+     * picker's typeahead, so a miss is a normal answer rather than an error.
+     */
+    public function recordAction(): JsonModel
+    {
+        $term = trim((string) $this->params()->fromQuery('term', ''));
+
+        if ($term === '') {
+            return new JsonModel(['status' => 200, 'found' => false]);
+        }
+
+        $response = $this->handleQuery(RecordLookupDTO::create(['term' => $term]));
+
+        if (!$response->isOk()) {
+            return new JsonModel(['status' => 200, 'found' => false]);
+        }
+
+        return new JsonModel(['status' => 200] + $response->getResult());
     }
 
     private function fetchLetterType(int $id): ?array

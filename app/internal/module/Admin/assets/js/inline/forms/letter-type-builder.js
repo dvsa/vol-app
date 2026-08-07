@@ -39,6 +39,11 @@ OLCS.ready(function () {
   var previewTimer = null;
   var inFlight = null;
 
+  // The record the preview renders against. Caseworkers think in licence numbers, so the
+  // picker resolves whatever was typed (licNo or id) server-side and this holds the answer;
+  // the raw input is never sent to the preview.
+  var resolvedRecord = { licenceId: null, licNo: null };
+
   // Read from select.options rather than querySelector. An unquoted attribute value has to be a
   // CSS identifier, and identifiers cannot begin with a digit -- so `option[value=20]` throws a
   // SyntaxError, which took out the whole change handler and made the picker do nothing at all.
@@ -198,13 +203,12 @@ OLCS.ready(function () {
   function renderContextSummary() {
     var parts = [];
 
-    var licence = document.getElementById("ctx-licence").value.trim();
-    var application = document.getElementById("ctx-application").value.trim();
-    if (licence) {
-      parts.push("Licence " + licence);
+    if (resolvedRecord.licenceId !== null) {
+      parts.push(resolvedRecord.licNo || "Licence " + resolvedRecord.licenceId);
     }
-    if (application) {
-      parts.push("Application " + application);
+    var appSelect = document.getElementById("ctx-application");
+    if (appSelect.value !== "") {
+      parts.push(appSelect.options[appSelect.selectedIndex].textContent.trim());
     }
 
     [
@@ -259,7 +263,7 @@ OLCS.ready(function () {
 
     // An empty context field means "take it from the record", so it is omitted entirely rather
     // than sent as null -- the API treats a null override as "not set".
-    addIfSet(payload, "licence", intValue("ctx-licence"));
+    addIfSet(payload, "licence", resolvedRecord.licenceId);
     addIfSet(payload, "application", intValue("ctx-application"));
     addIfSet(payload, "goodsOrPsv", stringValue("ctx-goods-or-psv"));
     addIfSet(payload, "organisationType", stringValue("ctx-org-type"));
@@ -488,6 +492,109 @@ OLCS.ready(function () {
       .catch(function () {
         // Leaving the old list in place is the safe failure: the admin can still reload by hand.
       });
+  }
+
+  // --- record picker -------------------------------------------------------------------
+  //
+  // Typing pauses for 400ms, then the term goes to the server, which decides whether it is a
+  // licence number or an id. On a hit the application dropdown fills with that licence's real
+  // applications, so an application that does not belong to the licence cannot be chosen.
+
+  var recordTimer = null;
+
+  document.getElementById("ctx-record").addEventListener("input", function () {
+    var term = this.value.trim();
+    window.clearTimeout(recordTimer);
+
+    if (term === "") {
+      setResolvedRecord(null, null);
+      return;
+    }
+
+    recordTimer = window.setTimeout(function () {
+      lookupRecord(term);
+    }, 400);
+  });
+
+  function lookupRecord(term) {
+    window
+      .fetch(
+        "/admin/letter-type-builder/record/?term=" + encodeURIComponent(term),
+        { credentials: "same-origin" },
+      )
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        // A stale response for an earlier term must not clobber the current one
+        if (term !== document.getElementById("ctx-record").value.trim()) {
+          return;
+        }
+        if (!data.found) {
+          setResolvedRecord(null, null);
+          showRecordResult("No licence found for \u201C" + term + "\u201D");
+          return;
+        }
+
+        setResolvedRecord(
+          data.licence.id,
+          data.licence.licNo,
+          data.applications,
+        );
+        showRecordResult(
+          data.licence.licNo +
+            " \u2014 " +
+            (data.licence.organisationName || "Unknown operator") +
+            " (" +
+            (data.licence.goodsOrPsv || "?") +
+            ", " +
+            (data.licence.isNi ? "NI" : "GB") +
+            ")",
+        );
+      })
+      .catch(function () {
+        // Network failure: keep whatever was resolved before rather than wiping it
+      });
+  }
+
+  function showRecordResult(text) {
+    var el = document.getElementById("record-result");
+    el.textContent = text;
+    el.hidden = false;
+  }
+
+  function setResolvedRecord(licenceId, licNo, applications) {
+    resolvedRecord.licenceId = licenceId;
+    resolvedRecord.licNo = licNo;
+
+    var select = document.getElementById("ctx-application");
+    select.innerHTML = "";
+
+    var licenceOnly = document.createElement("option");
+    licenceOnly.value = "";
+    licenceOnly.textContent = "Licence only";
+    select.appendChild(licenceOnly);
+
+    (applications || []).forEach(function (app) {
+      var option = document.createElement("option");
+      option.value = app.id;
+      option.textContent =
+        "App " +
+        app.id +
+        " \u2014 " +
+        (app.status || "unknown status") +
+        (app.isVariation ? " (variation)" : "");
+      select.appendChild(option);
+    });
+
+    select.disabled = licenceId === null;
+
+    if (licenceId === null) {
+      document.getElementById("record-result").hidden = true;
+    }
+
+    renderContextSummary();
+    schedulePreview();
   }
 
   document
