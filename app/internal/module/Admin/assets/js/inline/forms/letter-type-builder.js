@@ -376,8 +376,62 @@ OLCS.ready(function () {
     diagnostics.forEach(function (diagnostic) {
       var li = document.createElement("li");
       li.textContent = diagnostic.message;
+
+      // A near miss comes with the exact context that reaches the variant, so offer it as one
+      // click rather than a set of instructions.
+      var suggested = diagnostic.detail && diagnostic.detail.suggestedContext;
+      if (suggested) {
+        li.appendChild(document.createTextNode(" "));
+        var apply = document.createElement("button");
+        apply.type = "button";
+        apply.className = "govuk-link letter-builder__apply-context";
+        apply.textContent = "Apply this context";
+        apply.addEventListener("click", function () {
+          applyContext(suggested);
+        });
+        li.appendChild(apply);
+      }
+
       list.appendChild(li);
     });
+  }
+
+  function boolFlag(value) {
+    if (value) {
+      return "1";
+    }
+    return "0";
+  }
+
+  // Sets the override controls to a suggested context. Overrides beat the record, so whatever
+  // is set here is what the preview renders -- which is exactly the guarantee the diagnostic
+  // makes when it says "the closest variant differs only on X".
+  function applyContext(context) {
+    if (context.goodsOrPsv !== undefined) {
+      document.getElementById("ctx-goods-or-psv").value = context.goodsOrPsv;
+    }
+    if (context.isVariation !== undefined) {
+      document.getElementById("ctx-is-variation").value = boolFlag(
+        context.isVariation,
+      );
+    }
+    if (context.isNi !== undefined) {
+      document.getElementById("ctx-is-ni").value = boolFlag(context.isNi);
+    }
+    if (context.organisationType !== undefined) {
+      document.getElementById("ctx-org-type").value = context.organisationType;
+    }
+    (context.selectedChoiceIds || []).forEach(function (choiceId) {
+      var box = document.querySelector(
+        ".js-ctx-choice[value='" + String(choiceId) + "']",
+      );
+      if (box) {
+        box.checked = true;
+      }
+    });
+
+    renderContextSummary();
+    schedulePreview();
   }
 
   document

@@ -208,6 +208,16 @@
       }
     }
   }
+
+  // The "Apply this context" affordance inside a diagnostic: reads as a link, works as a button
+  &__apply-context {
+    padding: 0;
+    background: none;
+    border: 0;
+    color: $link-colour;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 }
 
 // Preview and edit letter

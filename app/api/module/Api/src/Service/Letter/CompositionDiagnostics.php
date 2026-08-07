@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Service\Letter;
 
+use Dvsa\Olcs\Api\Service\Letter\Resolution;
 use Dvsa\Olcs\Api\Service\Letter\Resolution\SectionResolution;
 
 /**
@@ -50,19 +51,24 @@ class CompositionDiagnostics
         $diagnostics = [];
 
         foreach ($resolution->unresolved as $unresolved) {
+            $nearMiss = $unresolved->reason === $unresolved::REASON_NO_MATCHING_VARIANT
+                ? $this->nearMiss($unresolved->variantResolution)
+                : null;
+
             $diagnostics[] = [
                 'code' => 'sectionUnresolved',
                 'severity' => $unresolved->isRequired ? self::SEVERITY_BLOCKING : self::SEVERITY_WARNING,
                 'section' => $unresolved->getSectionName(),
                 'message' => sprintf(
-                    '%s section "%s" is not in this letter: %s.',
+                    '%s section "%s" is not in this letter: %s.%s',
                     $unresolved->isRequired ? 'Required' : 'Optional',
                     $unresolved->getSectionName(),
                     $unresolved->reason === $unresolved::REASON_NO_CURRENT_VERSION
                         ? 'a variant matched but has no published version'
-                        : 'no variant matches this context'
+                        : 'no variant matches this context',
+                    $nearMiss['sentence'] ?? ''
                 ),
-                'detail' => ['reason' => $unresolved->reason],
+                'detail' => ['reason' => $unresolved->reason] + ($nearMiss['detail'] ?? []),
             ];
         }
 
@@ -85,20 +91,23 @@ class CompositionDiagnostics
             // reaches none of it, so the catch-all goes out instead. This is how a letter quietly
             // carries generic wording nobody intended to send.
             if ($variantResolution->fellBackDespiteConditionedVariants()) {
+                $nearMiss = $this->nearMiss($variantResolution);
+
                 $diagnostics[] = [
                     'code' => 'defaultFallback',
                     'severity' => self::SEVERITY_WARNING,
                     'section' => $sectionName,
                     'message' => sprintf(
-                        '"%s" is using its default wording. %d specific %s configured, but none match this context.',
+                        '"%s" is using its default wording. %d specific %s configured, but none match this context.%s',
                         $sectionName,
                         $variantResolution->conditionedCount,
-                        $variantResolution->conditionedCount === 1 ? 'variant is' : 'variants are'
+                        $variantResolution->conditionedCount === 1 ? 'variant is' : 'variants are',
+                        $nearMiss['sentence'] ?? ''
                     ),
                     'detail' => [
                         'conditionedCount' => $variantResolution->conditionedCount,
                         'rejectedOn' => $this->summariseRejections($variantResolution->rejections),
-                    ],
+                    ] + ($nearMiss['detail'] ?? []),
                 ];
             }
 
@@ -162,15 +171,15 @@ class CompositionDiagnostics
     }
 
     /**
-     * @param array<int, string[]> $rejections
+     * @param array<int, array{variant: mixed, failed: string[]}> $rejections
      * @return string[] Dimension names that blocked variants, most obstructive first
      */
     private function summariseRejections(array $rejections): array
     {
         $counts = [];
 
-        foreach ($rejections as $failedDimensions) {
-            foreach ($failedDimensions as $dimension) {
+        foreach ($rejections as $rejection) {
+            foreach ($rejection['failed'] as $dimension) {
                 $counts[$dimension] = ($counts[$dimension] ?? 0) + 1;
             }
         }
@@ -178,5 +187,58 @@ class CompositionDiagnostics
         arsort($counts);
 
         return array_keys($counts);
+    }
+
+    private const DIMENSION_LABELS = [
+        'goodsOrPsv' => 'Vehicle type',
+        'isVariation' => 'Application type',
+        'isNi' => 'Region',
+        'organisationType' => 'Organisation',
+        'letterChoice' => 'Letter choices',
+    ];
+
+    /**
+     * The near miss: which rejected variant was closest, what blocked it, and the exact context
+     * that would make it match. The suggested context is the variant's own pinned dimensions, so
+     * applying it is guaranteed to reach that variant.
+     *
+     * @return array{sentence: string, detail: array}|null
+     */
+    private function nearMiss(?Resolution\VariantResolution $variantResolution): ?array
+    {
+        $closest = $variantResolution?->closestRejection();
+        if ($closest === null) {
+            return null;
+        }
+
+        $variant = $closest['variant'];
+
+        $suggestedContext = array_filter([
+            'goodsOrPsv' => $variant->getGoodsOrPsv()?->getId(),
+            'isVariation' => $variant->getIsVariation(),
+            'isNi' => $variant->getIsNi(),
+            'organisationType' => $variant->getOrganisationType()?->getId(),
+        ], static fn($v) => $v !== null);
+
+        $choice = $variant->getLetterChoice()?->getId();
+        if ($choice !== null) {
+            $suggestedContext['selectedChoiceIds'] = [$choice];
+        }
+
+        $labels = array_map(
+            static fn(string $dimension) => self::DIMENSION_LABELS[$dimension] ?? $dimension,
+            $closest['failed']
+        );
+
+        return [
+            'sentence' => sprintf(
+                ' The closest variant differs only on %s.',
+                implode(', ', $labels)
+            ),
+            'detail' => [
+                'failedDimensions' => $closest['failed'],
+                'suggestedContext' => $suggestedContext,
+            ],
+        ];
     }
 }
