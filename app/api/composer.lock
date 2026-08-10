@@ -1580,16 +1580,16 @@
     },
     {
       "name": "dvsa/authentication-cognito",
-      "version": "v3.3.0",
+      "version": "v3.3.1",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/authentication-cognito.git",
-        "reference": "8261471df232f743548d53f0197a7df191584788"
+        "reference": "6743e7a0be452bd8ea295426e167d81e0fb3cfef"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/authentication-cognito/zipball/8261471df232f743548d53f0197a7df191584788",
-        "reference": "8261471df232f743548d53f0197a7df191584788",
+        "url": "https://api.github.com/repos/dvsa/authentication-cognito/zipball/6743e7a0be452bd8ea295426e167d81e0fb3cfef",
+        "reference": "6743e7a0be452bd8ea295426e167d81e0fb3cfef",
         "shasum": ""
       },
       "require": {
@@ -1634,9 +1634,9 @@
       "keywords": ["Authentication", "Cognito", "dvsa"],
       "support": {
         "issues": "https://github.com/dvsa/authentication-cognito/issues",
-        "source": "https://github.com/dvsa/authentication-cognito/tree/v3.3.0"
+        "source": "https://github.com/dvsa/authentication-cognito/tree/v3.3.1"
       },
-      "time": "2026-01-15T10:47:55+00:00"
+      "time": "2026-08-10T10:26:08+00:00"
     },
     {
       "name": "dvsa/contracts",
