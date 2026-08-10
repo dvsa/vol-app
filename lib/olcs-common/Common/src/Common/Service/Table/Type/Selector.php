@@ -2,6 +2,7 @@
 
 namespace Common\Service\Table\Type;
 
+use Common\Service\Table\ContentHelper;
 use Common\Util\Escape;
 use Laminas\I18n\Translator\TranslatorInterface as Translator;
 
@@ -83,11 +84,21 @@ class Selector extends AbstractType
                 if (isset($data[$attrName])) {
                     // Row data into a quoted data-* attribute; the attribute name comes from column
                     // config, the value does not.
-                    if (is_array($data[$attrName]) && isset($data[$attrName]['id'])) {
-                        $attributes[] = 'data-' . $attrName . '="' . Escape::html($data[$attrName]['id']) . '"';
-                    } else {
-                        $attributes[] = 'data-' . $attrName . '="' . Escape::html($data[$attrName]) . '"';
+                    $value = $data[$attrName];
+
+                    // A to-one entity arrives as an array and is identified by its id. Any other
+                    // array has no single value to put here — a to-many collection, or an entity
+                    // keyed some other way — and Escape::html() rejects one outright, so it would
+                    // take the whole table down rather than render a wrong attribute. Nothing
+                    // configures such a field today: `status`, `action` and `filename` are the only
+                    // data-attributes in the codebase, and status is a RefData carrying an id. This
+                    // is here so that adding one is an empty attribute rather than a 500.
+                    if (is_array($value)) {
+                        $value = $value['id'] ?? null;
                     }
+
+                    $attributes[] = 'data-' . $attrName . '="'
+                        . (ContentHelper::hasStringForm($value) ? Escape::html($value) : '') . '"';
                 }
             }
         }
