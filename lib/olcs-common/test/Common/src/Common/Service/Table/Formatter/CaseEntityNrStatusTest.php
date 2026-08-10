@@ -132,7 +132,7 @@ final class CaseEntityNrStatusTest extends MockeryTestCase
             'application' => null,
         ];
 
-        static::assertSame('', $this->sut->format($data, null));
+        $this->assertSame('', $this->sut->format($data, null));
     }
 
     public function testFormatAppWithNoLicence(): void
@@ -144,6 +144,6 @@ final class CaseEntityNrStatusTest extends MockeryTestCase
             'licence' => null,
         ];
 
-        static::assertSame('', $this->sut->format($data, null));
+        $this->assertSame('', $this->sut->format($data, null));
     }
 }
