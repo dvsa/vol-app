@@ -92,7 +92,6 @@ var sass = require("sass");
      * - browserSync
      * - uglify
      * - jshint
-     * - scsslint
      * - notify
      * - watch
      * - karma
@@ -374,17 +373,6 @@ var sass = require("sass");
       },
 
       /**
-       * SCSS-Lint
-       * https://github.com/ahmednuaman/grunt-scss-lint
-       */
-      scsslint: {
-        allFiles: ["assets/_styles/**/*.scss", "!assets/_styles/vendor/**/*", "!assets/_styles/core/icon-sprite.scss"],
-        options: {
-          config: ".scss-lint.yml",
-        },
-      },
-
-      /**
        * Notify
        * https://github.com/dylang/grunt-notify
        */
@@ -447,9 +435,7 @@ var sass = require("sass");
     grunt.loadNpmTasks("grunt-babel");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-watch");
-    grunt.loadNpmTasks("grunt-gh-pages");
     grunt.loadNpmTasks("grunt-notify");
-    grunt.loadNpmTasks("grunt-scss-lint");
     grunt.loadNpmTasks("@lodder/grunt-postcss");
 
     /**
@@ -500,8 +486,8 @@ var sass = require("sass");
     // Compile the app for production environment
     grunt.registerTask("compile:prod", compile("prod"));
 
-    // JS/SCSS Linting
-    grunt.registerTask("lint", ["jshint:static", "scsslint"]);
+    // JS linting
+    grunt.registerTask("lint", ["jshint:static"]);
 
     // Serve the app for a development environment
     grunt.registerTask("serve", ["compile:local", "browserSync", "watch"]);

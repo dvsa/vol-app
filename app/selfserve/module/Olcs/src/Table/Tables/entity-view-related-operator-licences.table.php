@@ -23,7 +23,7 @@ return [
                         ['entity' => 'licence', 'entityId' => $data['id']],
                         'entity-view',
                         false
-                    ) . '" class="govuk-link">' . $data['licNo'] . '</a>';
+                    ) . '" class="govuk-link">' . \Common\Util\Escape::html($data['licNo']) . '</a>';
                 }
                 return '';
             }

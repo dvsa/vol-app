@@ -5,6 +5,7 @@ namespace Olcs\Controller\Letter;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
+use Common\Util\SafeRedirectUrl;
 use Laminas\Http\Response;
 use Laminas\Navigation\Navigation;
 use Laminas\View\Model\ViewModel;
@@ -1344,7 +1345,11 @@ class LetterGenerationController extends AbstractInternalController implements L
      */
     protected function redirectToReturnUrl(array $queryParams): Response
     {
-        if (isset($queryParams['returnUrl'])) {
+        // returnUrl arrives from the query string, so it is attacker-controlled. Only a
+        // root-relative path is accepted: DocumentGenerationController sets it from
+        // Request::getRequestUri(), which is always a path, so nothing legitimate is lost.
+        // An unchecked redirect here is a phishing primitive inside the authenticated app.
+        if (isset($queryParams['returnUrl']) && SafeRedirectUrl::isSafePath((string) $queryParams['returnUrl'])) {
             return $this->redirect()->toUrl($queryParams['returnUrl']);
         }
 

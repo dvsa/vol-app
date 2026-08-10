@@ -46,6 +46,7 @@
     "laminas/laminas-stdlib": "^3.20",
     "laminas/laminas-validator": "^2.64",
     "laminas/laminas-view": "^2.41",
+    "league/csv": "^9.28",
     "olcs/olcs-logging": "^9.0",
     "olcs/olcs-transfer": "^8.0",
     "olcs/olcs-utils": "^7.1",
