@@ -6,12 +6,11 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
-use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceAppendix;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceChoice;
-use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceIssue;
-use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceSection;
-use Dvsa\Olcs\Api\Entity\Letter\LetterInstanceTodo;
+use Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer;
+use Dvsa\Olcs\Api\Service\Letter\SectionVariantResolver;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate as Cmd;
+use Psr\Container\ContainerInterface;
 
 /**
  * Generate LetterInstance
@@ -35,6 +34,17 @@ final class Generate extends AbstractCommandHandler
         'IrhpApplication',
         'Organisation',
     ];
+
+    private SectionVariantResolver $sectionVariantResolver;
+    private LetterInstanceComposer $letterInstanceComposer;
+
+    #[\Override]
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
+    {
+        $this->sectionVariantResolver = $container->get(SectionVariantResolver::class);
+        $this->letterInstanceComposer = $container->get(LetterInstanceComposer::class);
+        return parent::__invoke($container, $requestedName, $options);
+    }
 
     #[\Override]
     public function handleCommand(CommandInterface $command): Result
@@ -63,101 +73,48 @@ final class Generate extends AbstractCommandHandler
         $context = $this->buildVariantContext($letterInstance, $command);
 
         // Populate instance sections from letter type assembly, resolving variants
-        $unresolvedRequiredSections = [];
+        $resolution = $this->sectionVariantResolver->resolveForLetterType($letterType, $context);
 
-        foreach ($letterType->getLetterTypeSections() ?? [] as $typeSection) {
-            $section = $typeSection->getLetterSection();
-            $variant = $section->getVariantForContext($context);
+        $this->letterInstanceComposer->composeSections($letterInstance, $resolution);
 
-            if ($variant === null || $variant->getCurrentVersion() === null) {
-                // Section was skipped -- check if it was required
-                if ($typeSection->getIsRequired()) {
-                    $unresolvedRequiredSections[] = $section->getName() ?? $section->getSectionKey();
-                }
-                continue;
-            }
-
-            $instanceSection = new LetterInstanceSection();
-            $instanceSection->setLetterInstance($letterInstance);
-            $instanceSection->setLetterSectionVersion($variant->getCurrentVersion());
-            $instanceSection->setDisplayOrder($typeSection->getDisplayOrder());
-            $letterInstance->addLetterInstanceSection($instanceSection);
+        // Warn about any sections that couldn't be resolved
+        foreach ($resolution->getUnresolvedRequired() as $unresolvedSection) {
+            $this->result->addMessage(
+                'Required section "' . $unresolvedSection->getSectionName() . '" could not be included — no matching variant for the current context'
+            );
         }
 
-        // Warn about any required sections that couldn't be resolved
-        if (!empty($unresolvedRequiredSections)) {
-            foreach ($unresolvedRequiredSections as $sectionName) {
-                $this->result->addMessage(
-                    'Required section "' . $sectionName . '" could not be included — no matching variant for the current context'
-                );
-            }
+        foreach ($resolution->getUnresolvedOptional() as $unresolvedSection) {
+            $this->result->addMessage(
+                'Optional section "' . $unresolvedSection->getSectionName() . '" could not be included — no matching variant for the current context'
+            );
+        }
+
+        if ($resolution->hasUnresolved()) {
             $this->result->setFlag('hasRequiredSectionWarnings', true);
         }
 
         // Create instance issues from selected issues
-        if (!empty($command->getSelectedIssues())) {
-            $displayOrder = 0;
-            foreach ($command->getSelectedIssues() as $issueId) {
-                $letterIssue = $this->getRepo('LetterIssue')->fetchById($issueId);
-                $issueVersion = $letterIssue->getCurrentVersion();
-
-                if ($issueVersion) {
-                    $instanceIssue = new LetterInstanceIssue();
-                    $instanceIssue->setLetterInstance($letterInstance);
-                    $instanceIssue->setLetterIssueVersion($issueVersion);
-                    $instanceIssue->setDisplayOrder($displayOrder++);
-
-                    $letterInstance->addLetterInstanceIssue($instanceIssue);
-                }
+        $issueVersions = [];
+        foreach ($command->getSelectedIssues() ?? [] as $issueId) {
+            $issueVersion = $this->getRepo('LetterIssue')->fetchById($issueId)->getCurrentVersion();
+            if ($issueVersion) {
+                $issueVersions[] = $issueVersion;
             }
         }
+        $this->letterInstanceComposer->composeIssues($letterInstance, $issueVersions);
 
-        // Materialise instance to-dos from issues' linked to-dos, deduplicated globally
-        // across the letter (VOL-7280). Each unique to-do attaches to the FIRST issue
-        // (in display order) that brought it, which gives the renderer "appears under
-        // the first issue type it relates to" for free.
-        $seenTodoVersionIds = [];
-        foreach ($letterInstance->getLetterInstanceIssues() as $instanceIssue) {
-            $issueVersion = $instanceIssue->getLetterIssueVersion();
-            if ($issueVersion === null) {
-                continue;
-            }
-            foreach ($issueVersion->getLetterIssueTodos() ?? [] as $issueTodo) {
-                $todoVersion = $issueTodo->getLetterTodoVersion();
-                if ($todoVersion === null) {
-                    continue;
-                }
-                $key = $todoVersion->getId();
-                if (isset($seenTodoVersionIds[$key])) {
-                    continue;
-                }
-                $seenTodoVersionIds[$key] = true;
-
-                $instanceTodo = new LetterInstanceTodo();
-                $instanceTodo->setLetterInstance($letterInstance);
-                $instanceTodo->setLetterInstanceIssue($instanceIssue);
-                $instanceTodo->setLetterTodoVersion($todoVersion);
-                $letterInstance->addLetterInstanceTodo($instanceTodo);
-            }
-        }
+        $this->letterInstanceComposer->composeTodos($letterInstance);
 
         // Create instance appendices from selected appendices
-        if (!empty($command->getSelectedAppendices())) {
-            $displayOrder = 0;
-            foreach ($command->getSelectedAppendices() as $appendixId) {
-                $letterAppendix = $this->getRepo('LetterAppendix')->fetchById($appendixId);
-                $appendixVersion = $letterAppendix->getCurrentVersion();
-
-                if ($appendixVersion) {
-                    $instanceAppendix = new LetterInstanceAppendix();
-                    $instanceAppendix->setLetterInstance($letterInstance);
-                    $instanceAppendix->setLetterAppendixVersion($appendixVersion);
-                    $instanceAppendix->setDisplayOrder($displayOrder++);
-
-                    $letterInstance->addLetterInstanceAppendix($instanceAppendix);
-                }
+        $appendixVersions = [];
+        foreach ($command->getSelectedAppendices() ?? [] as $appendixId) {
+            $appendixVersion = $this->getRepo('LetterAppendix')->fetchById($appendixId)->getCurrentVersion();
+            if ($appendixVersion) {
+                $appendixVersions[] = $appendixVersion;
             }
         }
+        $this->letterInstanceComposer->composeAppendices($letterInstance, $appendixVersions);
 
         // Record selected letter choices
         if (!empty($command->getSelectedChoices())) {

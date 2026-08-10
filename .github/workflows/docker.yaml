@@ -23,6 +23,15 @@ on:
         type: boolean
         required: false
         default: false
+      branch-build:
+        description: >-
+          Build from an unmerged branch. Suppresses the `latest` and commit-sha tags so unmerged code
+          never becomes `latest`, and deletes the version tag before pushing so a re-run is idempotent
+          against the IMMUTABLE app repositories. The caller supplies a `version` that already
+          identifies the branch and commit.
+        type: boolean
+        required: false
+        default: false
 
 env:
   WORKING_DIR: infra/docker/${{ inputs.project }}
@@ -66,6 +75,10 @@ jobs:
         with:
           platforms: linux/arm64
 
+      # On a branch build, `type=sha` and `latest` are both suppressed. `type=sha` resolves from the
+      # github.sha context rather than the checked-out ref, so when dispatched from another ref it
+      # would tag the image with the dispatching commit — wrong, and identical across every branch
+      # build, which collides on the IMMUTABLE repositories. `version` already carries branch+commit.
       - name: Extract Docker metadata
         id: meta
         uses: docker/metadata-action@v5
@@ -74,10 +87,10 @@ jobs:
             ${{ env.REGISTRY }}/vol-app/${{ inputs.project }}
             ${{ env.REGISTRY_MIRROR }}/dvsa/vol-app/${{ inputs.project }}
           tags: |
-            type=sha,prefix=
+            type=sha,prefix=,enable=${{ !inputs.branch-build }}
             type=semver,enable=${{ inputs.is-release }},pattern={{version}},value=${{ inputs.version }}
             type=raw,enable=${{ !inputs.is-release }},value=${{ inputs.version }}
-            type=raw,value=latest
+            type=raw,enable=${{ !inputs.branch-build }},value=latest
 
       - name: Build Docker image
         id: build
@@ -130,9 +143,16 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Untag existing latest image in ECR
-        if: ${{ inputs.push }}
+        if: ${{ inputs.push && !inputs.branch-build }}
         run: |
           aws ecr batch-delete-image --repository-name vol-app/${{ inputs.project }} --image-ids imageTag=latest
+
+      # The app repositories are IMMUTABLE, so re-dispatching a branch deploy for the same commit
+      # would fail on push. Drop the tag first, mirroring the `latest` handling above.
+      - name: Untag existing branch image in ECR
+        if: ${{ inputs.push && inputs.branch-build }}
+        run: |
+          aws ecr batch-delete-image --repository-name vol-app/${{ inputs.project }} --image-ids imageTag=${{ inputs.version }}
 
       - name: Push Docker image
         if: ${{ inputs.push }}

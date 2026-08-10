@@ -63,6 +63,13 @@ OLCS.ready(function () {
     setupDirtyTracking($group, sectionKey);
   });
 
+  // Listen for EditorJS changes via hidden input mutations - to-dos
+  $(".todo-editor-group").each(function () {
+    var $group = $(this);
+    var todoKey = "todo-" + $group.data("todo-id");
+    setupDirtyTracking($group, todoKey);
+  });
+
   // Save issue button handler
   $(".save-issue-btn").on("click", function (e) {
     e.preventDefault();
@@ -210,6 +217,57 @@ OLCS.ready(function () {
     });
   });
 
+  // Save to-do button handler
+  $(".save-todo-btn").on("click", function (e) {
+    e.preventDefault();
+
+    var $btn = $(this);
+    var todoId = $btn.data("todo-id");
+    var version = $btn.data("version");
+    var $group = $btn.closest(".todo-editor-group");
+    var hiddenInput = $group.find("input[type='hidden']");
+    var editedDescription = hiddenInput.val();
+
+    $btn.prop("disabled", true).text("Saving...");
+
+    $.ajax({
+      url: "/letter/save-todo-content",
+      method: "POST",
+      contentType: "application/json",
+      // editedDescription, not editedContent: a to-do's wording is called
+      // description throughout its own code path, and the DTO matches.
+      data: JSON.stringify({
+        todoId: todoId,
+        editedDescription: editedDescription,
+        version: version,
+      }),
+      success: function (response) {
+        if (response.success) {
+          dirtyMap["todo-" + todoId] = false;
+          $btn.data("version", response.version);
+          $group.find(".save-indicator").show();
+          $btn.prop("disabled", false).text("Save changes");
+        } else {
+          showError(response.message || "Failed to save changes");
+          $btn.prop("disabled", false).text("Save changes");
+        }
+      },
+      error: function (xhr) {
+        var message = "Failed to save changes";
+        try {
+          var resp = JSON.parse(xhr.responseText);
+          if (resp.message) {
+            message = resp.message;
+          }
+        } catch (e) {
+          // Use default message
+        }
+        showError(message);
+        $btn.prop("disabled", false).text("Save changes");
+      },
+    });
+  });
+
   // Back to preview handler with unsaved changes warning
   $("#back-to-preview").on("click", function (e) {
     var unsavedSections = [];
@@ -236,6 +294,15 @@ OLCS.ready(function () {
       var $group = $(this);
       var sectionKey = "section-" + $group.data("section-id");
       if (dirtyMap[sectionKey]) {
+        var heading = $group.find("h3").text().trim();
+        unsavedSections.push(heading);
+      }
+    });
+
+    $(".todo-editor-group").each(function () {
+      var $group = $(this);
+      var todoKey = "todo-" + $group.data("todo-id");
+      if (dirtyMap[todoKey]) {
         var heading = $group.find("h3").text().trim();
         unsavedSections.push(heading);
       }
