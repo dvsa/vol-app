@@ -2462,6 +2462,39 @@ final class TableBuilderTest extends MockeryTestCase
     }
 
     /**
+     * A column naming a to-many field renders an empty cell, not the word "Array"
+     *
+     * The report tables name collection fields directly — admin-cases-open-report's Outcome column
+     * is `outcomes` — and rely on a formatter to flatten them. RefData returns '' for an empty
+     * collection, which counts as no content and drops the raw array through to here. Escaping it
+     * would stringify it, and (string)[] is "Array".
+     */
+    public function testRenderBodyColumnWithNameHoldingAnArray(): void
+    {
+        $row = [
+            'outcomes' => []
+        ];
+
+        $column = [
+            'name' => 'outcomes'
+        ];
+
+        $mockContentHelper = $this->createPartialMock(ContentHelper::class, ['replaceContent']);
+
+        $mockContentHelper->expects($this->once())
+            ->method('replaceContent')
+            ->with('{{[elements/td]}}', ['content' => '', 'attrs' => ' class="' . TableBuilder::CLASS_TABLE_CELL . '"']);
+
+        $table = $this->getMockTableBuilder(['getContentHelper']);
+
+        $table
+            ->method('getContentHelper')
+            ->willReturn($mockContentHelper);
+
+        $table->renderBodyColumn($row, $column);
+    }
+
+    /**
      * Test renderBodyColumn With Align
      */
     public function testRenderBodyColumnWithAlign(): void

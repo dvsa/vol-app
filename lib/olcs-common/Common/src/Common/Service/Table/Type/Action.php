@@ -2,6 +2,7 @@
 
 namespace Common\Service\Table\Type;
 
+use Common\Service\Table\ContentHelper;
 use Common\Util\Escape;
 
 class Action extends AbstractType
@@ -26,10 +27,13 @@ class Action extends AbstractType
             // A template with row data substituted in — escape the values, keep the template.
             $value = $this->getTable()->replaceContentEscapingValues($column['value_format'], $data);
         } else {
-            // A bare row value going straight into the button label.
-            $value = isset($column['name']) && isset($data[$column['name']])
-                ? Escape::html($data[$column['name']])
-                : '';
+            // A bare row value going straight into the button label — the same case renderBodyColumn
+            // handles for a cell, and guarded the same way. A column naming a to-many field holds an
+            // array here, which Escape::html() rejects outright; sprintf() below used to turn it
+            // into the label "Array", so nothing is lost by labelling the button with nothing.
+            $rowValue = isset($column['name']) ? ($data[$column['name']] ?? null) : null;
+
+            $value = ContentHelper::hasStringForm($rowValue) ? Escape::html($rowValue) : '';
         }
 
         $name = 'action';

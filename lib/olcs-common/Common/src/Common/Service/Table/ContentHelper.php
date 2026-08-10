@@ -197,6 +197,27 @@ class ContentHelper
     }
 
     /**
+     * Whether a value has a string form worth rendering.
+     *
+     * Ask this before escaping a bare row value, because escaping converts to string and PHP's
+     * conversion of an array is the literal word "Array" — a cell that should be empty ends up
+     * describing its own contents. A column naming a to-many field holds an array whenever the
+     * collection is empty, so this is ordinary data rather than a corrupt row.
+     *
+     * Rendering nothing is what such a column has always done: the value used to travel as far as
+     * replaceContent(), which substitutes strings and numbers and drops the rest, leaving the
+     * placeholder to be swept away. Escaping at the cell moved the string conversion in front of
+     * that, which is what this restores.
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    public static function hasStringForm($value)
+    {
+        return is_scalar($value) || $value instanceof \Stringable;
+    }
+
+    /**
      * Escape a row value for interpolation into table markup.
      *
      * ENT_QUOTES because a template may interpolate into an attribute as readily as into element

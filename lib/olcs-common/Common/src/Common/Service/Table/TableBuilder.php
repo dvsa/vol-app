@@ -1637,9 +1637,16 @@ class TableBuilder implements \Stringable
             // Nothing produced content, so this column is a bare row value going straight into the
             // cell. There is no formatter or type involved that could have escaped it, and no
             // markup here to damage — escaping is unambiguously correct.
-            $content = isset($column['name']) && isset($row[$column['name']])
-                ? ContentHelper::escapeValue($row[$column['name']])
-                : '';
+            //
+            // Only for a value that has a string form, though. A column naming a to-many field
+            // holds an array here, and escaping converts it to the literal "Array": the open cases
+            // report reached this line with `outcomes` for every case with no outcome, because
+            // RefData returns '' for an empty collection and an empty string sends us down this
+            // branch. replaceContent() used to absorb that by dropping the value and sweeping the
+            // placeholder away; escaping ahead of the substitution took away its chance to.
+            $value = isset($column['name']) ? ($row[$column['name']] ?? null) : null;
+
+            $content = ContentHelper::hasStringForm($value) ? ContentHelper::escapeValue($value) : '';
         }
 
         // Escaping in this pipeline happens at the source — formatters and closures escape the row

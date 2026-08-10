@@ -104,6 +104,24 @@ final class ActionTest extends MockeryTestCase
                 ' >unit_FldVal</button>',
             "isInternalReadOnly" => false,
         ];
+        // A column naming a to-many field. Escape::html() rejects an array outright, so without a
+        // guard this is a TypeError rather than the label "Array" sprintf() used to produce.
+        yield [
+            'isFieldset' => false,
+            'data' => [
+                'field' => [],
+            ],
+            'column' => [
+                'action' => 'unit_Action',
+                'name' => 'field',
+            ],
+            'content' => null,
+            'expect' =>
+                '<button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit"' .
+                ' class="action-button-link " name="action[unit_Action][' . self::ID . ']"' .
+                ' ></button>',
+            "isInternalReadOnly" => false,
+        ];
         yield [
             'isFieldset' => false,
             'data' => [
