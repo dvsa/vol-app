@@ -21,7 +21,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class GetForResponsibilitiesTest extends QueryHandlerTestCase
+final class GetForResponsibilitiesTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

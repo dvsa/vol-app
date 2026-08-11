@@ -26,7 +26,7 @@ use Dvsa\Olcs\Api\Domain\Command\Organisation\ChangeBusinessType as Cmd;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ChangeBusinessTypeTest extends AbstractCommandHandlerTestCase
+final class ChangeBusinessTypeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

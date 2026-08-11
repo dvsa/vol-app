@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\EbsrVariationNumber;
@@ -14,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @package CommonTest\Service\Table\Formatter
  */
-class EbsrVariationNumberTest extends MockeryTestCase
+final class EbsrVariationNumberTest extends MockeryTestCase
 {
     protected $translator;
 
@@ -48,9 +50,8 @@ class EbsrVariationNumberTest extends MockeryTestCase
      * Tests that the variation number is returned as is, when the record is not short notice
      *
      * @param array $data data
-     *
-     * @dataProvider dpNotShortNoticeProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpNotShortNoticeProvider')]
     public function testFormatNotShortNotice($data): void
     {
         $this->assertEquals(1234, $this->sut->format($data));
@@ -59,9 +60,9 @@ class EbsrVariationNumberTest extends MockeryTestCase
     /**
      * data provider for testFormatNotShortNotice
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function dpNotShortNoticeProvider()
+    public static function dpNotShortNoticeProvider(): \Iterator
     {
         $notShortNotice = [
             'isShortNotice' => 'N',
@@ -71,22 +72,18 @@ class EbsrVariationNumberTest extends MockeryTestCase
         $shortNoticeNotKnown = [
             'variationNo' => 1234
         ];
-
-        return [
-            [$notShortNotice],
-            [$shortNoticeNotKnown],
-            [['busReg' => $notShortNotice]],
-            [['busReg' => $shortNoticeNotKnown]],
-        ];
+        yield [$notShortNotice];
+        yield [$shortNoticeNotKnown];
+        yield [['busReg' => $notShortNotice]];
+        yield [['busReg' => $shortNoticeNotKnown]];
     }
 
     /**
      * Tests format with short notice
      *
      * @param array $data data
-     *
-     * @dataProvider dpShortNoticeProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpShortNoticeProvider')]
     public function testFormatWithShortNotice($data): void
     {
         $statusLabel = 'Status label';
@@ -120,18 +117,15 @@ class EbsrVariationNumberTest extends MockeryTestCase
     /**
      * data provider for testFormatWithShortNotice
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function dpShortNoticeProvider()
+    public static function dpShortNoticeProvider(): \Iterator
     {
         $data = [
             'isShortNotice' => 'Y',
             'variationNo' => 1234
         ];
-
-        return [
-            [$data],
-            [['busReg' => $data]]
-        ];
+        yield [$data];
+        yield [['busReg' => $data]];
     }
 }

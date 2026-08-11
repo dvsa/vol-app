@@ -10,12 +10,13 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class ClientFactoryTest extends MockeryTestCase
+final class ClientFactoryTest extends MockeryTestCase
 {
     /** @var  ClientFactory */
     protected $sut;
     private $sl;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sl = m::mock(ContainerInterface::class);
@@ -72,6 +73,6 @@ class ClientFactoryTest extends MockeryTestCase
         );
 
         $service = $this->sut->__invoke($this->sl, Client::class);
-        static::assertInstanceOf(Client::class, $service);
+        $this->assertInstanceOf(Client::class, $service);
     }
 }

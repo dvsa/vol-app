@@ -17,7 +17,7 @@ class ChecklistControllerFactory implements FactoryInterface
      * @param array|null $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ChecklistController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ChecklistController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

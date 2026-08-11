@@ -115,7 +115,7 @@ class ApplicationFurniture implements
         $placeholder->getContainer('right')->set($right);
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->setViewHelperManager($container->get('ViewHelperManager'));
         $this->setQuerySender($container->get('QuerySender'));

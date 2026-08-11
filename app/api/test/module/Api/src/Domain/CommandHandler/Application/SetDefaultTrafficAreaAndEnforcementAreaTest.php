@@ -31,7 +31,7 @@ use Dvsa\Olcs\Address\Service\AddressInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class SetDefaultTrafficAreaAndEnforcementAreaTest extends AbstractCommandHandlerTestCase
+final class SetDefaultTrafficAreaAndEnforcementAreaTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -284,7 +284,7 @@ class SetDefaultTrafficAreaAndEnforcementAreaTest extends AbstractCommandHandler
                 'version' => 1,
                 'trafficArea' => TrafficArea::NORTH_EASTERN_TRAFFIC_AREA_CODE
             ],
-            (new Result())->addMessage('Traffic area updated')
+            new Result()->addMessage('Traffic area updated')
         );
 
         $result = $this->sut->handleCommand($command);

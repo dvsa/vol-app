@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper;
 
 use Mockery as m;
@@ -13,9 +15,9 @@ use Laminas\View\Renderer\RendererInterface;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ReadOnlyActionsTest extends MockeryTestCase
+final class ReadOnlyActionsTest extends MockeryTestCase
 {
-    public const BUTTON_LAYOUT = '<input type="submit" name="action" id="%s" class="%s" value="%s">';
+    public const string BUTTON_LAYOUT = '<input type="submit" name="action" id="%s" class="%s" value="%s">';
 
     /**
      * @var ReadOnlyActions

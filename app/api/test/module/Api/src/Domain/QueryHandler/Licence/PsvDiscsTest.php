@@ -23,7 +23,7 @@ use Dvsa\Olcs\Transfer\Query\Licence\PsvDiscs as Qry;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class PsvDiscsTest extends QueryHandlerTestCase
+final class PsvDiscsTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

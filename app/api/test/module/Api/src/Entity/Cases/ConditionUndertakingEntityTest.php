@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData as RefDataEntity;
  *
  * Initially auto-generated but won't be overridden
  */
-class ConditionUndertakingEntityTest extends EntityTester
+final class ConditionUndertakingEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

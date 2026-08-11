@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Entity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateDocumentLinksTest extends AbstractCommandHandlerTestCase
+final class UpdateDocumentLinksTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

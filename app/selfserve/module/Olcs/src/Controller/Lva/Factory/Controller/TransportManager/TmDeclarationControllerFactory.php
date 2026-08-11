@@ -22,7 +22,7 @@ class TmDeclarationControllerFactory implements FactoryInterface
      * @return TmDeclarationController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TmDeclarationController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TmDeclarationController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

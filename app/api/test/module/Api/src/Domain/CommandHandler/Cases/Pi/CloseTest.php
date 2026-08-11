@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Entity\Pi\Pi as PiEntity;
 /**
  * Close
  */
-class CloseTest extends AbstractCommandHandlerTestCase
+final class CloseTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -10,7 +10,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class LicenceConditionsUndertakingsReviewServiceFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceConditionsUndertakingsReviewService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LicenceConditionsUndertakingsReviewService
     {
         return new LicenceConditionsUndertakingsReviewService(
             $container->get(AbstractReviewServiceServices::class),

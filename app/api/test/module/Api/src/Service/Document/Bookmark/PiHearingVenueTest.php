@@ -9,14 +9,14 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\PiHearingVenue;
 /**
  * Pi Hearing Venue test
  */
-class PiHearingVenueTest extends \PHPUnit\Framework\TestCase
+final class PiHearingVenueTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
         $bookmark = new PiHearingVenue();
         $query = $bookmark->getQuery(['hearing' => 123]);
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
-        $this->assertTrue(is_null($bookmark->getQuery([])));
+        $this->assertNull($bookmark->getQuery([]));
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('renderDataProvider')]
@@ -28,22 +28,20 @@ class PiHearingVenueTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'venue' => ['name' => 'pi venue'],
-                    'venueOther' => 'other venue'
-                ],
-                'pi venue'
+                'venue' => ['name' => 'pi venue'],
+                'venueOther' => 'other venue'
             ],
+            'pi venue'
+        ];
+        yield [
             [
-                [
-                    'venueOther' => 'other venue'
-                ],
-                'other venue'
+                'venueOther' => 'other venue'
             ],
+            'other venue'
         ];
     }
 }

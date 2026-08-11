@@ -21,7 +21,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsAnswerSaverTest extends MockeryTestCase
+final class NoOfPermitsAnswerSaverTest extends MockeryTestCase
 {
     public function testSave(): void
     {

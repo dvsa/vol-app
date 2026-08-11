@@ -10,7 +10,7 @@ use Olcs\Service\Data\PublicInquiryDefinition;
  * Class PublicInquiryDefinitionTest
  * @package OlcsTest\Service\Data
  */
-class PublicInquiryDefinitionTest extends AbstractPublicInquiryDataTestCase
+final class PublicInquiryDefinitionTest extends AbstractPublicInquiryDataTestCase
 {
     private $definitions = [
         ['id' => 12, 'piDefinitionCategory' => 'Category A', 'description' => 'Description 1'],

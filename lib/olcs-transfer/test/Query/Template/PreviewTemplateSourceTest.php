@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Template;
 
 use Dvsa\Olcs\Transfer\Query\Template\PreviewTemplateSource;
@@ -8,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * PreviewTemplateSource Test
  */
-class PreviewTemplateSourceTest extends TestCase
+final class PreviewTemplateSourceTest extends TestCase
 {
     public function testStructure()
     {

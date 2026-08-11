@@ -24,7 +24,7 @@ use Mockery as m;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class UpdateSafetyStatusTest extends AbstractUpdateStatusTestCase
+final class UpdateSafetyStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'Safety';
 
@@ -120,39 +120,37 @@ class UpdateSafetyStatusTest extends AbstractUpdateStatusTestCase
         $this->expectStatusChange(ApplicationCompletionEntity::STATUS_INCOMPLETE);
     }
 
-    public static function dpHandleCommandTrailers(): array
+    public static function dpHandleCommandTrailers(): \Iterator
     {
-        return [
-            [
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'safetyInsTrailers' => null,
-                'expected' => ApplicationCompletionEntity::STATUS_INCOMPLETE,
-            ],
-            [
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                'safetyInsTrailers' => 1,
-                'expected' => ApplicationCompletionEntity::STATUS_COMPLETE,
-            ],
-            [
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'safetyInsTrailers' => null,
-                'expected' => ApplicationCompletionEntity::STATUS_INCOMPLETE,
-            ],
-            [
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                'safetyInsTrailers' => 1,
-                'expected' => ApplicationCompletionEntity::STATUS_COMPLETE,
-            ],
-            [
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                'safetyInsTrailers' => null,
-                'expected' => ApplicationCompletionEntity::STATUS_COMPLETE,
-            ],
-            [
-                'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
-                'safetyInsTrailers' => null,
-                'expected' => ApplicationCompletionEntity::STATUS_COMPLETE,
-            ],
+        yield [
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'safetyInsTrailers' => null,
+            'expected' => ApplicationCompletionEntity::STATUS_INCOMPLETE,
+        ];
+        yield [
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
+            'safetyInsTrailers' => 1,
+            'expected' => ApplicationCompletionEntity::STATUS_COMPLETE,
+        ];
+        yield [
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'safetyInsTrailers' => null,
+            'expected' => ApplicationCompletionEntity::STATUS_INCOMPLETE,
+        ];
+        yield [
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+            'safetyInsTrailers' => 1,
+            'expected' => ApplicationCompletionEntity::STATUS_COMPLETE,
+        ];
+        yield [
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+            'safetyInsTrailers' => null,
+            'expected' => ApplicationCompletionEntity::STATUS_COMPLETE,
+        ];
+        yield [
+            'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
+            'safetyInsTrailers' => null,
+            'expected' => ApplicationCompletionEntity::STATUS_COMPLETE,
         ];
     }
 

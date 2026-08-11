@@ -35,7 +35,7 @@ class NiTextTranslation implements FactoryInterface
      * @throws NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): NiTextTranslation
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): NiTextTranslation
     {
         $this->translator = $container->get('translator');
         return $this;

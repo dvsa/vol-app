@@ -9,7 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Data\Mapper\TransportManagerLicence as Sut;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Data\Mapper\TransportManagerLicence::class)]
-class TransportManagerLicenceTest extends MockeryTestCase
+final class TransportManagerLicenceTest extends MockeryTestCase
 {
     public function testMapFromResultForTable(): void
     {

@@ -7,10 +7,11 @@ namespace Dvsa\OlcsTest\Auth\Service;
 use Dvsa\Olcs\Auth\Service\PasswordService;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class PasswordServiceTest extends MockeryTestCase
+final class PasswordServiceTest extends MockeryTestCase
 {
     private PasswordService $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new PasswordService();
@@ -87,6 +88,6 @@ class PasswordServiceTest extends MockeryTestCase
     {
         $password = $this->sut->generatePassword(15);
 
-        self::assertEquals(15, strlen($password));
+        $this->assertSame(15, strlen($password));
     }
 }

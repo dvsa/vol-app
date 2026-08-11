@@ -11,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\XmlTools\Filter\MapXmlFile;
 use Psr\Container\ContainerInterface;
 
-class ComplianceEpisodeXmlFactoryTest extends TestCase
+final class ComplianceEpisodeXmlFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {

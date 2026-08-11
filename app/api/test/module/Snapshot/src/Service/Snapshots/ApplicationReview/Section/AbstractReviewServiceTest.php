@@ -10,10 +10,11 @@ use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\AbstractRevie
 use Dvsa\OlcsTest\Snapshot\Service\Snapshots\ApplicationReview\Section\Stub\AbstractReviewServiceStub;
 use Laminas\I18n\Translator\TranslatorInterface;
 
-class AbstractReviewServiceTest extends MockeryTestCase
+final class AbstractReviewServiceTest extends MockeryTestCase
 {
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);

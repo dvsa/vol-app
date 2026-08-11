@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Logging\Test\RecordingLogger;
 use Psr\Log\LogLevel;
 
-class HttpClientTest extends TestCase
+final class HttpClientTest extends TestCase
 {
     use GuzzleTestTrait;
     use ClientOptionsTestTrait;
@@ -29,6 +29,7 @@ class HttpClientTest extends TestCase
     private $logger;
 
 
+    #[\Override]
     public function setUp(): void
     {
         $this->logger = new RecordingLogger();
@@ -89,7 +90,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals(['application/json'], $this->getLastRequest()->getHeader('Accept'));
         $this->assertEquals(['examplePostReponseKey' => 'examplePostResponseValue'], $response);
         // Check unsupported unicode chrs are sanitized from the payload
-        $this->assertEquals($this->getLastRequest()->getBody()->getContents(), '{"postRequestBodyKeyExample":"postRequestBodyValueExample"}');
+        $this->assertEquals('{"postRequestBodyKeyExample":"postRequestBodyValueExample"}', $this->getLastRequest()->getBody()->getContents());
     }
 
     public function testPut(): void
@@ -110,7 +111,7 @@ class HttpClientTest extends TestCase
         $this->assertEquals(['application/json'], $this->getLastRequest()->getHeader('Accept'));
         $this->assertEquals(['examplePutReponseKey' => 'examplePutResponseValue'], $response);
         // Check unsupported unicode chrs are sanitized from the payload
-        $this->assertEquals($this->getLastRequest()->getBody()->getContents(), '{"putRequestBodyKeyExample":"putRequestBodyValueExample"}');
+        $this->assertEquals('{"putRequestBodyKeyExample":"putRequestBodyValueExample"}', $this->getLastRequest()->getBody()->getContents());
     }
 
     public function testResetHeaders(): void
@@ -144,15 +145,13 @@ class HttpClientTest extends TestCase
         $this->assertSame($expectedDebugLogMessage, $this->logger->records[1]['message']);
     }
 
-    public static function dpTestLogResponseOnSuccess(): array
+    public static function dpTestLogResponseOnSuccess(): \Iterator
     {
-        return [
-            [
-                'statusCode' => 200
-            ],
-            [
-                'statusCode' => 300
-            ]
+        yield [
+            'statusCode' => 200
+        ];
+        yield [
+            'statusCode' => 300
         ];
     }
 
@@ -212,29 +211,27 @@ class HttpClientTest extends TestCase
         $this->assertEquals($dpData['expectedResponse'], $result);
     }
 
-    public static function dpTestLogResponseOnFailure(): array
+    public static function dpTestLogResponseOnFailure(): \Iterator
     {
-        return [
-            'client_error' => [
-                [
-                    'statusCode' => 400,
-                    'responseBody' => json_encode(['error' => 'client error']),
-                    'expectedResponse' => ['error' => 'client error']
-                ]
-            ],
-            'server_error' => [
-                [
-                    'statusCode' => 500,
-                    'responseBody' => json_encode(['error' => 'server error']),
-                    'expectedResponse' => ['error' => 'server error']
-                ]
-            ],
-            'server_error_empty_response' => [
-                [
-                    'statusCode' => 500,
-                    'responseBody' => '',
-                    'expectedResponse' => ''
-                ]
+        yield 'client_error' => [
+            [
+                'statusCode' => 400,
+                'responseBody' => json_encode(['error' => 'client error']),
+                'expectedResponse' => ['error' => 'client error']
+            ]
+        ];
+        yield 'server_error' => [
+            [
+                'statusCode' => 500,
+                'responseBody' => json_encode(['error' => 'server error']),
+                'expectedResponse' => ['error' => 'server error']
+            ]
+        ];
+        yield 'server_error_empty_response' => [
+            [
+                'statusCode' => 500,
+                'responseBody' => '',
+                'expectedResponse' => ''
             ]
         ];
     }

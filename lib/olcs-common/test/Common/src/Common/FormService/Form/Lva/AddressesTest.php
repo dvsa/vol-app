@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Common\RefData;
@@ -7,10 +9,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\FormService\Form\Lva\Addresses;
 
-/**
- * @covers Common\FormService\Form\Lva\Addresses
- */
-class AddressesTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\FormService\Form\Lva\Addresses::class)]
+final class AddressesTest extends MockeryTestCase
 {
     /** @var  Addresses */
     protected $sut;

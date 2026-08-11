@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\LicenceHolderName;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class LicenceHolderNameTest extends \PHPUnit\Framework\TestCase
+final class LicenceHolderNameTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

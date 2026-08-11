@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail as ContinuationDetailEntity;
 /**
  * UpdateFinancesTest
  */
-class UpdateFinancesTest extends AbstractCommandHandlerTestCase
+final class UpdateFinancesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -84,10 +84,10 @@ class UpdateFinancesTest extends AbstractCommandHandlerTestCase
 
         $this->assertSame($data['averageBalanceAmount'], $continuationDetail->getAverageBalanceAmount());
         $this->assertSame($data['hasOverdraft'], $continuationDetail->getHasOverdraft());
-        $this->assertSame(null, $continuationDetail->getOverdraftAmount());
+        $this->assertNull($continuationDetail->getOverdraftAmount());
         $this->assertSame($data['hasOtherFinances'], $continuationDetail->getHasOtherFinances());
-        $this->assertSame(null, $continuationDetail->getOtherFinancesAmount());
-        $this->assertSame(null, $continuationDetail->getOtherFinancesDetails());
+        $this->assertNull($continuationDetail->getOtherFinancesAmount());
+        $this->assertNull($continuationDetail->getOtherFinancesDetails());
 
         $this->assertEquals(['ContinuationDetail finances updated'], $result->getMessages());
         $this->assertEquals(['continuationDetail' => 154], $result->getIds());
@@ -118,7 +118,7 @@ class UpdateFinancesTest extends AbstractCommandHandlerTestCase
 
         $this->assertSame($data['averageBalanceAmount'], $continuationDetail->getAverageBalanceAmount());
         $this->assertSame($data['hasOverdraft'], $continuationDetail->getHasOverdraft());
-        $this->assertSame(null, $continuationDetail->getOverdraftAmount());
+        $this->assertNull($continuationDetail->getOverdraftAmount());
         $this->assertSame($data['hasFactoring'], $continuationDetail->getHasFactoring());
         $this->assertSame($data['factoringAmount'], $continuationDetail->getFactoringAmount());
 
@@ -151,9 +151,9 @@ class UpdateFinancesTest extends AbstractCommandHandlerTestCase
 
         $this->assertSame($data['averageBalanceAmount'], $continuationDetail->getAverageBalanceAmount());
         $this->assertSame($data['hasOverdraft'], $continuationDetail->getHasOverdraft());
-        $this->assertSame(null, $continuationDetail->getOverdraftAmount());
+        $this->assertNull($continuationDetail->getOverdraftAmount());
         $this->assertSame($data['hasFactoring'], $continuationDetail->getHasFactoring());
-        $this->assertSame(null, $continuationDetail->getFactoringAmount());
+        $this->assertNull($continuationDetail->getFactoringAmount());
 
         $this->assertEquals(['ContinuationDetail finances updated'], $result->getMessages());
         $this->assertEquals(['continuationDetail' => 154], $result->getIds());

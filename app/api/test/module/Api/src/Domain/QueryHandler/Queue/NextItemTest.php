@@ -25,7 +25,7 @@ use Olcs\Logging\Log\Logger;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class NextItemTest extends QueryHandlerTestCase
+final class NextItemTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -70,13 +70,11 @@ class NextItemTest extends QueryHandlerTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function exceptionProvider(): array
+    public static function exceptionProvider(): \Iterator
     {
-        return [
-            [m::mock(NotFoundException::class)],
-            [m::mock(OptimisticLockException::class)]
-        ];
+        yield [m::mock(NotFoundException::class)];
+        yield [m::mock(OptimisticLockException::class)];
     }
 }

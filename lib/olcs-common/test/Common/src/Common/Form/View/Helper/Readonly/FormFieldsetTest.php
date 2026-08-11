@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper\Readonly;
 
 use Common\Form\Elements;
@@ -8,14 +10,10 @@ use Common\Form\View\Helper\Readonly\FormFieldset;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Common\Form\View\Helper\Readonly\FormFieldset
- */
-class FormFieldsetTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\View\Helper\Readonly\FormFieldset::class)]
+final class FormFieldsetTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestInvoke
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestInvoke')]
     public function testInvoke($element, $expect): void
     {
         $mockFormCollection = m::mock(Helper\FormCollection::class);
@@ -34,7 +32,7 @@ class FormFieldsetTest extends MockeryTestCase
         $sut = new FormFieldset();
         $sut->setView($mockView);
 
-        static::assertEquals($expect, $sut($element));
+        $this->assertEquals($expect, $sut($element));
     }
 
     /**
@@ -42,17 +40,15 @@ class FormFieldsetTest extends MockeryTestCase
      *
      * @psalm-return list{array{element: m\LegacyMockInterface&m\MockInterface&\Laminas\Form\FieldsetInterface, expect: 'FORM_COLLECTION_RENDER_RESULT'}, array{element: m\LegacyMockInterface&m\MockInterface&Elements\Types\FileUploadList, expect: 'FORM_FILE_UPLOAD_LIST_RENDER_RESULT'}}
      */
-    public function dpTestInvoke(): array
+    public static function dpTestInvoke(): \Iterator
     {
-        return [
-            [
-                'element' => m::mock(\Laminas\Form\FieldsetInterface::class),
-                'expect' => 'FORM_COLLECTION_RENDER_RESULT',
-            ],
-            [
-                'element' => m::mock(Elements\Types\FileUploadList::class),
-                'expect' => 'FORM_FILE_UPLOAD_LIST_RENDER_RESULT',
-            ],
+        yield [
+            'element' => m::mock(\Laminas\Form\FieldsetInterface::class),
+            'expect' => 'FORM_COLLECTION_RENDER_RESULT',
+        ];
+        yield [
+            'element' => m::mock(Elements\Types\FileUploadList::class),
+            'expect' => 'FORM_FILE_UPLOAD_LIST_RENDER_RESULT',
         ];
     }
 }

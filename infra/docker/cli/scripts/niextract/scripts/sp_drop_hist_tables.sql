@@ -1,6 +1,6 @@
-DELIMITER $$
-
 DROP PROCEDURE IF EXISTS sp_drop_hist_tables;
+
+DELIMITER $$
 
 CREATE PROCEDURE sp_drop_hist_tables()
 

@@ -6,6 +6,8 @@
  * @author Michael Cooper <michael.cooper@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Util;
 
 use Laminas\Http\Client as HttpClient;
@@ -24,7 +26,8 @@ use Mockery as m;
  *
  * @author Michael Cooper <michael.cooper@valtech.co.uk>
  */
-class RestClientTest extends m\Adapter\Phpunit\MockeryTestCase
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+final class RestClientTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     public $handleReponseMethods = [
         'checkForValidResponseBody',
@@ -37,11 +40,18 @@ class RestClientTest extends m\Adapter\Phpunit\MockeryTestCase
     {
         // Upstream wont fix this, so we need to suppress the deprecation - https://github.com/laminas/laminas-stdlib/issues/85
         set_error_handler(function ($severity, $message, $file, $line) {
-            if (strpos($message, 'Serializable') !== false) {
+            if (str_contains($message, 'Serializable')) {
                 return true;
             }
             return false;
         }, E_DEPRECATED);
+    }
+
+    #[\Override]
+    protected function tearDown(): void
+    {
+        restore_error_handler();
+        parent::tearDown();
     }
 
     public function getSutMock(array|null $methods = null): RestClient
@@ -165,7 +175,7 @@ class RestClientTest extends m\Adapter\Phpunit\MockeryTestCase
         $send = $this->createPartialMock(HttpClient::class, ['send']);
         $send->expects($this->once())
             ->method('send')
-            ->will($this->returnValue($httpResponse));
+            ->willReturn($httpResponse);
         $mock->client = $send;
 
         $responseHelper = $this->createPartialMock(
@@ -186,14 +196,12 @@ class RestClientTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $mock->expects($this->once())
             ->method('getResponseHelper')
-            ->will($this->returnValue($responseHelper));
+            ->willReturn($responseHelper);
 
         $mock->request('GET', 'licence', ['id' => 7]);
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testGetResponseHelper(): void
     {
         $mock = $this->getSutMock(null);
@@ -213,7 +221,7 @@ class RestClientTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $mock->expects($this->once())
             ->method('getAccept')
-            ->will($this->returnValue($accept));
+            ->willReturn($accept);
 
         $acceptLanguage = $this->createPartialMock(AcceptLanguage::class, ['addLanguage']);
         $acceptLanguage->expects($this->once())
@@ -222,7 +230,7 @@ class RestClientTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $mock->expects($this->once())
             ->method('getAcceptLanguage')
-            ->will($this->returnValue($acceptLanguage));
+            ->willReturn($acceptLanguage);
 
         $client = $this->createPartialMock(
             HttpClient::class,
@@ -262,7 +270,7 @@ class RestClientTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $mock->expects($this->once())
             ->method('getClientRequest')
-            ->will($this->returnValue($request));
+            ->willReturn($request);
 
         $client->expects($this->once())
              ->method('resetParameters');
@@ -285,7 +293,7 @@ class RestClientTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $mock->expects($this->once())
             ->method('getAccept')
-            ->will($this->returnValue($accept));
+            ->willReturn($accept);
 
         $acceptLanguage = $this->createPartialMock(AcceptLanguage::class, ['addLanguage']);
         $acceptLanguage->expects($this->once())
@@ -294,7 +302,7 @@ class RestClientTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $mock->expects($this->once())
             ->method('getAcceptLanguage')
-            ->will($this->returnValue($acceptLanguage));
+            ->willReturn($acceptLanguage);
 
         $client = $this->createPartialMock(
             HttpClient::class,
@@ -331,7 +339,7 @@ class RestClientTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $client->expects($this->once())
             ->method('getRequest')
-            ->will($this->returnValue($request));
+            ->willReturn($request);
         $request->expects('getQuery')->andReturn($parameters);
         $parameters->expects('fromArray')
             ->with(['id' => 7]);
@@ -340,23 +348,19 @@ class RestClientTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $mock->expects($this->once())
             ->method('getClientRequest')
-            ->will($this->returnValue($request));
+            ->willReturn($request);
 
         $mock->prepareRequest('GET', 'licence', ['id' => 7]);
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testGetAccept(): void
     {
         $mock = $this->getSutMock(null);
         $mock->getAccept();
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
+    #[\PHPUnit\Framework\Attributes\DoesNotPerformAssertions]
     public function testGetClientRequest(): void
     {
         $mock = $this->getSutMock(null);

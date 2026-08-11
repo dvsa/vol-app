@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper;
 
 use Common\Service\Cqrs\Query\CachingQueryService as QueryService;
@@ -11,10 +13,8 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Stdlib\ResponseInterface;
 
-/**
- * @covers Common\View\Helper\SystemInfoMessages
- */
-class SystemInfoMessagesTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\View\Helper\SystemInfoMessages::class)]
+final class SystemInfoMessagesTest extends MockeryTestCase
 {
     /** @var m\MockInterface|QueryService */
     protected $mockQuerySrv;
@@ -32,9 +32,7 @@ class SystemInfoMessagesTest extends MockeryTestCase
         $this->mockQuerySrv = m::mock(QueryService::class);
     }
 
-    /**
-     * @dataProvider dataProviderTest
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTest')]
     public function test($data, $expect): void
     {
         $isOk = ($data !== null);
@@ -64,45 +62,43 @@ class SystemInfoMessagesTest extends MockeryTestCase
         $invoke = new SystemInfoMessages($this->mockAnnotationBuilder, $this->mockQuerySrv);
         $actual = $invoke(true); // __invoke
 
-        static::assertEquals($expect, $actual);
+        $this->assertEquals($expect, $actual);
     }
 
     /**
-     * @return ((int|string[][])[]|null|string)[][]
+     * @return \Iterator<(int | string), array<(array<(array<array<string>> | int)> | string | null)>>
      *
      * @psalm-return list{array{data: null, expect: null}, array{data: array{count: 2, results: list{array{description: 'unit_Desc1'}, array{description: 'unit_Desc2 &'}}}, expect: '<div class="system-messages"><div class="system-messages__wrapper"><p>unit_Desc1</p></div><div class="system-messages__wrapper"><p>unit_Desc2 &amp;</p></div></div>'}, array{data: array<never, never>, expect: null}}
      */
-    public function dataProviderTest(): array
+    public static function dataProviderTest(): \Iterator
     {
-        return [
-            //  no data
-            [
-                'data' => null,
-                'expect' => null,
-            ],
-            //  has data
-            [
-                'data' => [
-                    'count' => 2,
-                    'results' => [
-                        [
-                            'description' => 'unit_Desc1',
-                        ],
-                        [
-                            'description' => 'unit_Desc2 &',
-                        ],
+        //  no data
+        yield [
+            'data' => null,
+            'expect' => null,
+        ];
+        //  has data
+        yield [
+            'data' => [
+                'count' => 2,
+                'results' => [
+                    [
+                        'description' => 'unit_Desc1',
+                    ],
+                    [
+                        'description' => 'unit_Desc2 &',
                     ],
                 ],
-                'expect' =>
-                    '<div class="system-messages"><div class="system-messages__wrapper"><p>unit_Desc1</p></div>' .
-                    '<div class="system-messages__wrapper"><p>unit_Desc2 &amp;</p></div>' .
-                    '</div>',
             ],
-            // no data alt
-            [
-                'data' => [],
-                'expect' => null,
-            ],
+            'expect' =>
+                '<div class="system-messages"><div class="system-messages__wrapper"><p>unit_Desc1</p></div>' .
+                '<div class="system-messages__wrapper"><p>unit_Desc2 &amp;</p></div>' .
+                '</div>',
+        ];
+        // no data alt
+        yield [
+            'data' => [],
+            'expect' => null,
         ];
     }
 }

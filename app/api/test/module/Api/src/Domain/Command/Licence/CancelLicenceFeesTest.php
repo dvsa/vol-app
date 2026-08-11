@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Licence\CancelLicenceFees;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CancelLicenceFeesTest extends \PHPUnit\Framework\TestCase
+final class CancelLicenceFeesTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

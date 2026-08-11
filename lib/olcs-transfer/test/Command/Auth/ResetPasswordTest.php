@@ -9,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Auth\ResetPassword;
 /**
  * @see ResetPassword
  */
-class ResetPasswordTest extends \PHPUnit\Framework\TestCase
+final class ResetPasswordTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

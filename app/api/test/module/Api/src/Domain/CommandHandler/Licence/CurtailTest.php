@@ -24,7 +24,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CurtailTest extends AbstractCommandHandlerTestCase
+final class CurtailTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -60,7 +60,7 @@ class CurtailTest extends AbstractCommandHandlerTestCase
                 $this->assertSame($this->refData['lsts_curtailed'], $saveLicence->getStatus());
                 $this->assertInstanceOf(\DateTime::class, $saveLicence->getCurtailedDate());
                 $this->assertSame(
-                    (new \DateTime())->format('Y-m-d'),
+                    new \DateTime()->format('Y-m-d'),
                     $saveLicence->getCurtailedDate()->format('Y-m-d')
                 );
             }

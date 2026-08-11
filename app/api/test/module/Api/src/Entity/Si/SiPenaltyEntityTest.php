@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class SiPenaltyEntityTest extends EntityTester
+final class SiPenaltyEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

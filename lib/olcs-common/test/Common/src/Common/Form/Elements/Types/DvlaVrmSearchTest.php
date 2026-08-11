@@ -10,7 +10,7 @@ use Common\Form\Elements\Types\DvlaVrmSearch;
 use PHPUnit\Framework\TestCase;
 use Laminas\Form\Element\Button;
 
-class DvlaVrmSearchTest extends TestCase
+final class DvlaVrmSearchTest extends TestCase
 {
     public function testVrmSearchCreate(): void
     {

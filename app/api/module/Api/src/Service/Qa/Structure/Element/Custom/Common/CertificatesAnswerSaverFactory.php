@@ -18,7 +18,7 @@ class CertificatesAnswerSaverFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CertificatesAnswerSaver
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CertificatesAnswerSaver
     {
         return new CertificatesAnswerSaver(
             $container->get('QaBaseAnswerSaver')

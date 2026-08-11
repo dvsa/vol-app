@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\DataHelperService;
@@ -17,7 +19,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class AddressTest extends \PHPUnit\Framework\TestCase
+final class AddressTest extends \PHPUnit\Framework\TestCase
 {
     public $sut;
     protected $dataHelper;
@@ -38,11 +40,11 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /**
      * Test the format method
      *
-     * @group Formatters
-     * @group AddressFormatter
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('AddressFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $column, $expected): void
     {
         $this->assertEquals($expected, $this->sut->format($data, $column));
@@ -51,101 +53,98 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
+        yield [
+            ['addressLine1' => 'foo'], [], 'foo'
+        ];
+        yield [
+            ['addressLine1' => 'foo', 'addressLine2' => 'bar'], [], 'foo'
+        ];
+        yield [
+            ['addressLine1' => 'foo', 'addressLine2' => 'bar', 'town' => 'cake'], [], 'foo, cake'
+        ];
+        yield [
             [
-                ['addressLine1' => 'foo'], [], 'foo'
+                'addressLine1' => 'foo',
+                'addressLine2' => 'bar',
+                'addressLine3' => 'cake',
+                'town' => 'fourth'
             ],
+            [],
+            'foo, fourth'
+        ];
+        yield [
+            ['addressLine1' => 'foo', 'addressLine2' => 'bar', 'addressLine3' => 'cake'],
+            ['addressFields' => ['addressLine1', 'addressLine2']],
+            'foo, bar'
+        ];
+        yield [
+            ['addressLine1' => 'foo', 'addressLine2' => 'bar', 'addressLine3' => 'cake'],
+            ['addressFields' => 'FULL'],
+            'foo, bar, cake'
+        ];
+        yield "BRIEF with postCode" => [
             [
-                ['addressLine1' => 'foo', 'addressLine2' => 'bar'], [], 'foo'
+                'addressLine1' => 'foo',
+                'addressLine2' => 'bar',
+                'addressLine3' => 'cake',
+                'addressLine4' => 'baz',
+                'town' => 'spam',
+                'postcode' => 'eggs',
+                'countryCode' => 'ham',
             ],
+            ['addressFields' => 'BRIEF'],
+            'foo, spam, eggs'
+        ];
+        yield "BRIEF with blank postCode" => [
             [
-                ['addressLine1' => 'foo', 'addressLine2' => 'bar', 'town' => 'cake'], [], 'foo, cake'
+                'addressLine1' => 'foo',
+                'addressLine2' => 'bar',
+                'addressLine3' => 'cake',
+                'addressLine4' => 'baz',
+                'town' => 'spam',
+                'postcode' => '',
+                'countryCode' => 'ham',
             ],
+            ['addressFields' => 'BRIEF'],
+            'foo, spam'
+        ];
+        yield "BRIEF without postCode" => [
             [
-                [
+                'addressLine1' => 'foo',
+                'addressLine2' => 'bar',
+                'addressLine3' => 'cake',
+                'addressLine4' => 'baz',
+                'town' => 'spam',
+                'countryCode' => 'ham',
+            ],
+            ['addressFields' => 'BRIEF'],
+            'foo, spam'
+        ];
+        yield [
+            [
+                'address' => [
                     'addressLine1' => 'foo',
                     'addressLine2' => 'bar',
                     'addressLine3' => 'cake',
                     'town' => 'fourth'
-                ],
-                [],
-                'foo, fourth'
+                ]
             ],
             [
-                ['addressLine1' => 'foo', 'addressLine2' => 'bar', 'addressLine3' => 'cake'],
-                ['addressFields' => ['addressLine1', 'addressLine2']],
-                'foo, bar'
+                'name' => 'address'
             ],
-            [
-                ['addressLine1' => 'foo', 'addressLine2' => 'bar', 'addressLine3' => 'cake'],
-                ['addressFields' => 'FULL'],
-                'foo, bar, cake'
-            ],
-            "BRIEF with postCode" => [
-                [
-                    'addressLine1' => 'foo',
-                    'addressLine2' => 'bar',
-                    'addressLine3' => 'cake',
-                    'addressLine4' => 'baz',
-                    'town' => 'spam',
-                    'postcode' => 'eggs',
-                    'countryCode' => 'ham',
-                ],
-                ['addressFields' => 'BRIEF'],
-                'foo, spam, eggs'
-            ],
-            "BRIEF with blank postCode" => [
-                [
-                    'addressLine1' => 'foo',
-                    'addressLine2' => 'bar',
-                    'addressLine3' => 'cake',
-                    'addressLine4' => 'baz',
-                    'town' => 'spam',
-                    'postcode' => '',
-                    'countryCode' => 'ham',
-                ],
-                ['addressFields' => 'BRIEF'],
-                'foo, spam'
-            ],
-            "BRIEF without postCode" => [
-                [
-                    'addressLine1' => 'foo',
-                    'addressLine2' => 'bar',
-                    'addressLine3' => 'cake',
-                    'addressLine4' => 'baz',
-                    'town' => 'spam',
-                    'countryCode' => 'ham',
-                ],
-                ['addressFields' => 'BRIEF'],
-                'foo, spam'
-            ],
-            [
-                [
-                    'address' => [
-                        'addressLine1' => 'foo',
-                        'addressLine2' => 'bar',
-                        'addressLine3' => 'cake',
-                        'town' => 'fourth'
-                    ]
-                ],
-                [
-                    'name' => 'address'
-                ],
-                'foo, fourth'
-            ]
+            'foo, fourth'
         ];
     }
 
     /**
      * Test the format method with nested keys
-     *
-     * @group Formatters
-     * @group AddressFormatter
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\Group('AddressFormatter')]
     public function testFormatWithNestedKeys(): void
     {
         $this->dataHelper->shouldReceive('fetchNestedData')

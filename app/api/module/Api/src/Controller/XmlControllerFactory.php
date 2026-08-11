@@ -22,7 +22,7 @@ class XmlControllerFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): XmlController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): XmlController
     {
         $commandHandlerManager = $container->get('CommandHandlerManager');
 

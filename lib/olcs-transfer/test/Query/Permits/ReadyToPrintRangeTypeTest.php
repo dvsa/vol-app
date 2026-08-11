@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Permits;
 
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintRangeType;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintRangeType;
 /**
  * ReadyToPrintRangeType Test
  */
-class ReadyToPrintRangeTypeTest extends \PHPUnit\Framework\TestCase
+final class ReadyToPrintRangeTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -18,12 +20,9 @@ class ReadyToPrintRangeTypeTest extends \PHPUnit\Framework\TestCase
                 'irhpPermitStock' => $irhpPermitStock,
             ]
         );
-        static::assertEquals($irhpPermitStock, $sut->getIrhpPermitStock());
-        static::assertEquals(
-            [
-                'irhpPermitStock' => $irhpPermitStock,
-            ],
-            $sut->getArrayCopy()
-        );
+        $this->assertEquals($irhpPermitStock, $sut->getIrhpPermitStock());
+        $this->assertEquals([
+            'irhpPermitStock' => $irhpPermitStock,
+        ], $sut->getArrayCopy());
     }
 }

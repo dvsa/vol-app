@@ -9,7 +9,7 @@ use Psr\Container\ContainerInterface;
 class NameActionAndStatusFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): NameActionAndStatus
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): NameActionAndStatus
     {
         return new NameActionAndStatus($container->get(Permission::class));
     }

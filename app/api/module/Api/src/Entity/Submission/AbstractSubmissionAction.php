@@ -21,17 +21,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="submission_action",
- *    indexes={
- *        @ORM\Index(name="ix_submission_action_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_submission_action_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_submission_action_submission_id", columns={"submission_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'submission_action')]
+#[ORM\Index(name: 'ix_submission_action_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_submission_action_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_submission_action_submission_id', columns: ['submission_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractSubmissionAction implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -44,105 +40,86 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to submission
      *
      * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Submission\Submission", fetch="LAZY")
-     * @ORM\JoinColumn(name="submission_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'submission_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\Submission::class, inversedBy: 'submissionActions', fetch: 'LAZY')]
     protected $submission;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * isDecision
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_decision", nullable=false)
      */
+    #[ORM\Column(type: 'yesno', name: 'is_decision', nullable: false)]
     protected $isDecision = 0;
 
     /**
      * Comment
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="comment", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'comment', nullable: true)]
     protected $comment;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Reasons
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Pi\Reason", inversedBy="submissionActions", fetch="LAZY")
-     * @ORM\JoinTable(name="submission_action_reason",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="submission_action_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="reason_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'submission_action_reason')]
+    #[ORM\JoinColumn(name: 'submission_action_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'reason_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Reason::class, inversedBy: 'submissionActions', fetch: 'LAZY')]
     protected $reasons;
 
     /**
      * ActionTypes
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="submissionActions", fetch="LAZY")
-     * @ORM\JoinTable(name="submission_action_type",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="submission_action_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="action_type", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'submission_action_type')]
+    #[ORM\JoinColumn(name: 'submission_action_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'action_type', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $actionTypes;
 
     /**
@@ -168,7 +145,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setId($id)
     {
@@ -192,7 +169,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\Submission\Submission $submission new value being set
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setSubmission($submission)
     {
@@ -216,7 +193,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -240,7 +217,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -264,7 +241,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param string $isDecision new value being set
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setIsDecision($isDecision)
     {
@@ -288,7 +265,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param string $comment new value being set
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setComment($comment)
     {
@@ -312,7 +289,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param int $version new value being set
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setVersion($version)
     {
@@ -336,7 +313,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $reasons collection being set as the value
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setReasons($reasons)
     {
@@ -360,7 +337,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $reasons collection being added
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function addReasons($reasons)
     {
@@ -383,7 +360,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $reasons collection being removed
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function removeReasons($reasons)
     {
@@ -399,7 +376,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $actionTypes collection being set as the value
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function setActionTypes($actionTypes)
     {
@@ -423,7 +400,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $actionTypes collection being added
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function addActionTypes($actionTypes)
     {
@@ -446,7 +423,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $actionTypes collection being removed
      *
-     * @return SubmissionAction
+     * @return static
      */
     public function removeActionTypes($actionTypes)
     {

@@ -15,12 +15,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class HighestAvailabilityRangeSelectorTest extends MockeryTestCase
+final class HighestAvailabilityRangeSelectorTest extends MockeryTestCase
 {
     private $highestAvailabilityRangeSelector;
 
     private $result;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->highestAvailabilityRangeSelector = new HighestAvailabilityRangeSelector();

@@ -10,13 +10,14 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class AddressFactoryTest extends MockeryTestCase
+final class AddressFactoryTest extends MockeryTestCase
 {
     /**
      * @var AddressFactory
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new AddressFactory();

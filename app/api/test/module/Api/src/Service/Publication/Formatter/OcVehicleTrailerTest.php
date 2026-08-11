@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class OcVehicleTrailerTest extends MockeryTestCase
+final class OcVehicleTrailerTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpFormat')]
     public function testFormat(mixed $noOfVehiclesRequired, mixed $noOfTrailersRequired, mixed $useHgvCaption, mixed $expectedOutput): void
@@ -33,39 +33,37 @@ class OcVehicleTrailerTest extends MockeryTestCase
         );
     }
 
-    public static function dpFormat(): array
+    public static function dpFormat(): \Iterator
     {
-        return [
-            'vehicles only' => [
-                5,
-                0,
-                false,
-                '5 vehicle(s)'
-            ],
-            'heavy goods vehicles only' => [
-                4,
-                0,
-                true,
-                '4 Heavy goods vehicle(s)'
-            ],
-            'vehicles and trailers' => [
-                3,
-                7,
-                false,
-                '3 vehicle(s), 7 trailer(s)'
-            ],
-            'heavy goods vehicles only' => [
-                2,
-                4,
-                true,
-                '2 Heavy goods vehicle(s), 4 trailer(s)'
-            ],
-            'trailers only' => [
-                0,
-                8,
-                false,
-                '8 trailer(s)'
-            ],
+        yield 'vehicles only' => [
+            5,
+            0,
+            false,
+            '5 vehicle(s)'
+        ];
+        yield 'heavy goods vehicles only' => [
+            4,
+            0,
+            true,
+            '4 Heavy goods vehicle(s)'
+        ];
+        yield 'vehicles and trailers' => [
+            3,
+            7,
+            false,
+            '3 vehicle(s), 7 trailer(s)'
+        ];
+        yield 'heavy goods vehicles and trailers' => [
+            2,
+            4,
+            true,
+            '2 Heavy goods vehicle(s), 4 trailer(s)'
+        ];
+        yield 'trailers only' => [
+            0,
+            8,
+            false,
+            '8 trailer(s)'
         ];
     }
 }

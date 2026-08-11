@@ -26,7 +26,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CancelFeeTest extends AbstractCommandHandlerTestCase
+final class CancelFeeTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

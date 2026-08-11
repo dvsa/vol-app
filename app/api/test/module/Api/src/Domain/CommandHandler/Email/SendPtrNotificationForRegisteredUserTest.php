@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class SendPtrNotificationForRegisteredUserTest extends AbstractCommandHandlerTestCase
+final class SendPtrNotificationForRegisteredUserTest extends AbstractCommandHandlerTestCase
 {
     /** @var CommandInterface|SendPtrNotificationForRegisteredUser */
     protected $sut;

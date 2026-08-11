@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Email\SendFailedOrganisationsList;
 use Dvsa\Olcs\Email\Domain\Command\SendEmail;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 
-class SendFailedOrganisationsListTest extends AbstractCommandHandlerTestCase
+final class SendFailedOrganisationsListTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

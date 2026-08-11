@@ -21,17 +21,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="local_authority",
- *    indexes={
- *        @ORM\Index(name="ix_local_authority_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_local_authority_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_local_authority_traffic_area_id", columns={"traffic_area_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'local_authority')]
+#[ORM\Index(name: 'ix_local_authority_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_local_authority_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_local_authority_traffic_area_id', columns: ['traffic_area_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLocalAuthority implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -44,107 +40,96 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to traffic_area
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
     protected $trafficArea;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: false)]
     protected $description = '';
 
     /**
      * Email address
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="email_address", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'email_address', length: 255, nullable: true)]
     protected $emailAddress;
 
     /**
      * Authorities name in TransXChange.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="txc_name", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'txc_name', length: 255, nullable: true)]
     protected $txcName;
 
     /**
      * GB National Public Transport Access Nodes code for authority
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="naptan_code", length=3, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'naptan_code', length: 3, nullable: true, options: ['fixed' => true])]
     protected $naptanCode;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * BusRegs
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", mappedBy="localAuthoritys", fetch="LAZY")
      */
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, mappedBy: 'localAuthoritys', fetch: 'LAZY')]
     protected $busRegs;
 
     /**
      * Users
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\User\User", mappedBy="localAuthority")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, mappedBy: 'localAuthority')]
     protected $users;
 
     /**
@@ -170,7 +155,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param int $id new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setId($id)
     {
@@ -194,7 +179,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setTrafficArea($trafficArea)
     {
@@ -218,7 +203,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -242,7 +227,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -266,7 +251,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param string $description new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setDescription($description)
     {
@@ -290,7 +275,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param string $emailAddress new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setEmailAddress($emailAddress)
     {
@@ -314,7 +299,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param string $txcName new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setTxcName($txcName)
     {
@@ -338,7 +323,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param string $naptanCode new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setNaptanCode($naptanCode)
     {
@@ -362,7 +347,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param int $version new value being set
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setVersion($version)
     {
@@ -386,7 +371,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being set as the value
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setBusRegs($busRegs)
     {
@@ -410,7 +395,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $busRegs collection being added
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function addBusRegs($busRegs)
     {
@@ -433,7 +418,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $busRegs collection being removed
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function removeBusRegs($busRegs)
     {
@@ -449,7 +434,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $users collection being set as the value
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function setUsers($users)
     {
@@ -473,7 +458,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $users collection being added
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function addUsers($users)
     {
@@ -496,7 +481,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $users collection being removed
      *
-     * @return LocalAuthority
+     * @return static
      */
     public function removeUsers($users)
     {

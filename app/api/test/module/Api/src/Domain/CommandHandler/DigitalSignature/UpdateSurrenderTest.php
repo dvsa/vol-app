@@ -19,7 +19,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Dvsa\Olcs\Api\Entity\System\Category;
 use Mockery as m;
 
-class UpdateSurrenderTest extends AbstractCommandHandlerTestCase
+final class UpdateSurrenderTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

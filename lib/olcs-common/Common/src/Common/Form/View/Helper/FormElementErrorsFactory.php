@@ -20,7 +20,7 @@ class FormElementErrorsFactory implements FactoryInterface
      * @param null|array $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FormElementErrors
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): FormElementErrors
     {
         return new FormElementErrors(
             $container->get(FormElementMessageFormatter::class),

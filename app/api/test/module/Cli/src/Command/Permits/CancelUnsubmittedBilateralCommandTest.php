@@ -9,7 +9,7 @@ use Dvsa\Olcs\Cli\Domain\Command\Permits\CancelUnsubmittedBilateral;
 use Dvsa\OlcsTest\Cli\Command\Batch\AbstractBatchCommandCases;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class CancelUnsubmittedBilateralCommandTest extends AbstractBatchCommandCases
+final class CancelUnsubmittedBilateralCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

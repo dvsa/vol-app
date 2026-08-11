@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Template as TemplateRepo;
 use Dvsa\Olcs\Transfer\Query\Template\AvailableTemplateGroups as Qry;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 
-class AvailableTemplateGroupsTest extends QueryHandlerTestCase
+final class AvailableTemplateGroupsTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

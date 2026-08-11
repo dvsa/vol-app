@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class BilateralCriteriaTest extends MockeryTestCase
+final class BilateralCriteriaTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpMatches')]
     public function testMatches(
@@ -42,121 +42,119 @@ class BilateralCriteriaTest extends MockeryTestCase
         );
     }
 
-    public static function dpMatches(): array
+    public static function dpMatches(): \Iterator
     {
-        return [
-            [
-                false,
-                RefData::JOURNEY_SINGLE,
-                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED,
-                RefData::JOURNEY_SINGLE,
-                true,
-            ],
-            [
-                false,
-                RefData::JOURNEY_SINGLE,
-                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED,
-                RefData::JOURNEY_MULTIPLE,
-                false,
-            ],
-            [
-                false,
-                RefData::JOURNEY_SINGLE,
-                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
-                RefData::JOURNEY_SINGLE,
-                false,
-            ],
-            [
-                false,
-                RefData::JOURNEY_SINGLE,
-                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
-                RefData::JOURNEY_MULTIPLE,
-                false,
-            ],
-            [
-                false,
-                RefData::JOURNEY_MULTIPLE,
-                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED,
-                RefData::JOURNEY_SINGLE,
-                false,
-            ],
-            [
-                false,
-                RefData::JOURNEY_MULTIPLE,
-                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED,
-                RefData::JOURNEY_MULTIPLE,
-                true,
-            ],
-            [
-                false,
-                RefData::JOURNEY_MULTIPLE,
-                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
-                RefData::JOURNEY_SINGLE,
-                false,
-            ],
-            [
-                false,
-                RefData::JOURNEY_MULTIPLE,
-                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
-                RefData::JOURNEY_MULTIPLE,
-                false,
-            ],
-            [
-                true,
-                RefData::JOURNEY_SINGLE,
-                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED,
-                RefData::JOURNEY_SINGLE,
-                false,
-            ],
-            [
-                true,
-                RefData::JOURNEY_SINGLE,
-                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED,
-                RefData::JOURNEY_MULTIPLE,
-                false,
-            ],
-            [
-                true,
-                RefData::JOURNEY_SINGLE,
-                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
-                RefData::JOURNEY_SINGLE,
-                true,
-            ],
-            [
-                true,
-                RefData::JOURNEY_SINGLE,
-                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
-                RefData::JOURNEY_MULTIPLE,
-                false,
-            ],
-            [
-                true,
-                RefData::JOURNEY_MULTIPLE,
-                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED,
-                RefData::JOURNEY_SINGLE,
-                false,
-            ],
-            [
-                true,
-                RefData::JOURNEY_MULTIPLE,
-                IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED,
-                RefData::JOURNEY_MULTIPLE,
-                false,
-            ],
-            [
-                true,
-                RefData::JOURNEY_MULTIPLE,
-                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
-                RefData::JOURNEY_SINGLE,
-                false,
-            ],
-            [
-                true,
-                RefData::JOURNEY_MULTIPLE,
-                IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
-                RefData::JOURNEY_MULTIPLE,
-                true,
-            ],
+        yield [
+            false,
+            RefData::JOURNEY_SINGLE,
+            IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED,
+            RefData::JOURNEY_SINGLE,
+            true,
+        ];
+        yield [
+            false,
+            RefData::JOURNEY_SINGLE,
+            IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED,
+            RefData::JOURNEY_MULTIPLE,
+            false,
+        ];
+        yield [
+            false,
+            RefData::JOURNEY_SINGLE,
+            IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
+            RefData::JOURNEY_SINGLE,
+            false,
+        ];
+        yield [
+            false,
+            RefData::JOURNEY_SINGLE,
+            IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
+            RefData::JOURNEY_MULTIPLE,
+            false,
+        ];
+        yield [
+            false,
+            RefData::JOURNEY_MULTIPLE,
+            IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED,
+            RefData::JOURNEY_SINGLE,
+            false,
+        ];
+        yield [
+            false,
+            RefData::JOURNEY_MULTIPLE,
+            IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED,
+            RefData::JOURNEY_MULTIPLE,
+            true,
+        ];
+        yield [
+            false,
+            RefData::JOURNEY_MULTIPLE,
+            IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
+            RefData::JOURNEY_SINGLE,
+            false,
+        ];
+        yield [
+            false,
+            RefData::JOURNEY_MULTIPLE,
+            IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
+            RefData::JOURNEY_MULTIPLE,
+            false,
+        ];
+        yield [
+            true,
+            RefData::JOURNEY_SINGLE,
+            IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED,
+            RefData::JOURNEY_SINGLE,
+            false,
+        ];
+        yield [
+            true,
+            RefData::JOURNEY_SINGLE,
+            IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED,
+            RefData::JOURNEY_MULTIPLE,
+            false,
+        ];
+        yield [
+            true,
+            RefData::JOURNEY_SINGLE,
+            IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
+            RefData::JOURNEY_SINGLE,
+            true,
+        ];
+        yield [
+            true,
+            RefData::JOURNEY_SINGLE,
+            IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
+            RefData::JOURNEY_MULTIPLE,
+            false,
+        ];
+        yield [
+            true,
+            RefData::JOURNEY_MULTIPLE,
+            IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED,
+            RefData::JOURNEY_SINGLE,
+            false,
+        ];
+        yield [
+            true,
+            RefData::JOURNEY_MULTIPLE,
+            IrhpPermitApplication::BILATERAL_STANDARD_REQUIRED,
+            RefData::JOURNEY_MULTIPLE,
+            false,
+        ];
+        yield [
+            true,
+            RefData::JOURNEY_MULTIPLE,
+            IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
+            RefData::JOURNEY_SINGLE,
+            false,
+        ];
+        yield [
+            true,
+            RefData::JOURNEY_MULTIPLE,
+            IrhpPermitApplication::BILATERAL_CABOTAGE_REQUIRED,
+            RefData::JOURNEY_MULTIPLE,
+            true,
         ];
     }
 }

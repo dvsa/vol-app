@@ -20,7 +20,7 @@ use Dvsa\Olcs\Transfer\Query\Organisation\BusinessDetails as Qry;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class BusinessDetailsTest extends QueryHandlerTestCase
+final class BusinessDetailsTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

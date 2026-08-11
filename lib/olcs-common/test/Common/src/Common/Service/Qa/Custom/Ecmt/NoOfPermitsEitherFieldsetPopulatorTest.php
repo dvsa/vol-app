@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Ecmt;
 
 use Common\Form\Elements\Custom\EcmtNoOfPermitsEitherElement;
@@ -18,11 +20,9 @@ use Laminas\Form\Form;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsEitherFieldsetPopulatorTest extends MockeryTestCase
+final class NoOfPermitsEitherFieldsetPopulatorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpPopulate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpPopulate')]
     public function testPopulate($euro5Value, $euro6Value, $expectedRadioValue, $expectedTextboxValue): void
     {
         $maxCanApplyFor = 30;
@@ -152,15 +152,13 @@ class NoOfPermitsEitherFieldsetPopulatorTest extends MockeryTestCase
     }
 
     /**
-     * @return (int|null|string)[][]
+     * @return \Iterator<(int | string), array<(int | string | null)>>
      *
      * @psalm-return list{list{20, null, 'euro5', 20}, list{null, 10, 'euro6', 10}}
      */
-    public function dpPopulate(): array
+    public static function dpPopulate(): \Iterator
     {
-        return [
-            [20, null, 'euro5', 20],
-            [null, 10, 'euro6', 10],
-        ];
+        yield [20, null, 'euro5', 20];
+        yield [null, 10, 'euro6', 10];
     }
 }

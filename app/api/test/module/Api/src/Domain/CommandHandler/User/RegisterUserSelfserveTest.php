@@ -29,7 +29,7 @@ use Laminas\Authentication\Adapter\ValidatableAdapterInterface;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
-class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
+final class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var ValidatableAdapterInterface|m\LegacyMockInterface|m\MockInterface
@@ -184,7 +184,7 @@ class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
         );
 
         //if record created by a consultant terms won't have been agreed, if created by the operator, they will be
-        $this->assertEquals(
+        $this->assertSame(
             !$createdByConsultant,
             $savedUser->hasAgreedTermsAndConditions()
         );
@@ -319,7 +319,7 @@ class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
         );
 
         //if record created by a consultant terms won't have been agreed, if created by the operator, they will be
-        $this->assertEquals(
+        $this->assertSame(
             !$createdByConsultant,
             $savedUser->hasAgreedTermsAndConditions()
         );
@@ -452,12 +452,10 @@ class RegisterUserSelfserveTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
 

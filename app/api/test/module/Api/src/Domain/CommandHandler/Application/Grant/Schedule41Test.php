@@ -28,7 +28,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class Schedule41Test extends AbstractCommandHandlerTestCase
+final class Schedule41Test extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -201,7 +201,7 @@ class Schedule41Test extends AbstractCommandHandlerTestCase
                 'category' => Category::CATEGORY_LICENSING,
                 'subCategory' => Category::TASK_SUB_CATEGORY_SUR_41_ASSISTED_DIGITAL,
                 'description' => 'Surrender a donor licence: LIC01',
-                'actionDate' => (new DateTime())->modify('+1 month')->format(\DateTime::W3C),
+                'actionDate' => new DateTime()->modify('+1 month')->format(\DateTime::W3C),
                 'licence' => 74,
                 'assignedToUser' => 1,
                 'assignedToTeam' => 2,
@@ -282,7 +282,7 @@ class Schedule41Test extends AbstractCommandHandlerTestCase
                 'category' => Category::CATEGORY_LICENSING,
                 'subCategory' => Category::TASK_SUB_CATEGORY_SUR_41_ASSISTED_DIGITAL,
                 'description' => 'Surrender a donor licence: LIC01',
-                'actionDate' => (new DateTime())->modify('+1 month')->format(\DateTime::W3C),
+                'actionDate' => new DateTime()->modify('+1 month')->format(\DateTime::W3C),
                 'licence' => 74,
                 'assignedToUser' => 1,
                 'assignedToTeam' => 2,
@@ -362,7 +362,7 @@ class Schedule41Test extends AbstractCommandHandlerTestCase
                 'category' => Category::CATEGORY_LICENSING,
                 'subCategory' => Category::TASK_SUB_CATEGORY_SUR_41_ASSISTED_DIGITAL,
                 'description' => 'Surrender a donor licence: LIC01',
-                'actionDate' => (new DateTime())->modify('+1 month')->format(\DateTime::W3C),
+                'actionDate' => new DateTime()->modify('+1 month')->format(\DateTime::W3C),
                 'licence' => 74,
                 'assignedToUser' => 1,
                 'assignedToTeam' => 2,

@@ -8,10 +8,8 @@ use Dvsa\Olcs\Api\Service\CpmsResponseException;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Service\CpmsResponseException
- */
-class CpmsResponseExceptionTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\CpmsResponseException::class)]
+final class CpmsResponseExceptionTest extends MockeryTestCase
 {
     public function testSetGet(): void
     {
@@ -20,6 +18,6 @@ class CpmsResponseExceptionTest extends MockeryTestCase
         $sut = new CpmsResponseException();
         $sut->setResponse($mockResp);
 
-        static::assertSame($mockResp, $sut->getResponse());
+        $this->assertSame($mockResp, $sut->getResponse());
     }
 }

@@ -27,7 +27,7 @@ use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateCorrespondenceRecordTest extends AbstractCommandHandlerTestCase
+final class CreateCorrespondenceRecordTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -153,12 +153,10 @@ class CreateCorrespondenceRecordTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function usersProvider(): array
+    public static function usersProvider(): \Iterator
     {
-        return [
-            ['foo1@bar.com', 'foo2@bar.com', 2],
-            ['foo1@bar.com', null, 1]
-        ];
+        yield ['foo1@bar.com', 'foo2@bar.com', 2];
+        yield ['foo1@bar.com', null, 1];
     }
 
     public function testHandleCommandValidationError(): void

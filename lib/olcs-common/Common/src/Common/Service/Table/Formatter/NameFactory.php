@@ -13,7 +13,7 @@ class NameFactory implements FactoryInterface
      * @return Name
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $dataHelper = $container->get('Helper\Data');
         return new Name($dataHelper);

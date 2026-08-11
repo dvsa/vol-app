@@ -7,13 +7,15 @@
  * Time: 11:19
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Controller\Traits;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use CommonTest\Common\Controller\Traits\Stubs\MethodToggleTraitStub;
 
-class MethodToggleTraitTest extends MockeryTestCase
+final class MethodToggleTraitTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -29,7 +31,7 @@ class MethodToggleTraitTest extends MockeryTestCase
         $this->sut->shouldReceive('featuresEnabledForMethod')->andReturn(true);
         $this->sut->togglableMethod($this->sut, 'someMethod');
 
-        $this->assertEquals($this->sut->someMethodString, 'method was called');
+        $this->assertEquals('method was called', $this->sut->someMethodString);
     }
 
     public function testTogglableMethodWhenToggleOff(): void
@@ -37,6 +39,6 @@ class MethodToggleTraitTest extends MockeryTestCase
         $this->sut->shouldReceive('featuresEnabledForMethod')->andReturn(false);
         $this->sut->togglableMethod($this->sut, 'someMethod');
 
-        $this->assertEquals($this->sut->someMethodString, 'method was not called');
+        $this->assertEquals('method was not called', $this->sut->someMethodString);
     }
 }

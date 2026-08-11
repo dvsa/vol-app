@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -11,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * ExternalConversationLinkLink test
  */
-class ExternalConversationLinkTest extends MockeryTestCase
+final class ExternalConversationLinkTest extends MockeryTestCase
 {
     /** @var ExternalConversationLink */
     private $sut;

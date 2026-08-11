@@ -17,9 +17,9 @@ use Olcs\Controller\Lva\Adapters\VariationPeopleAdapter;
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Controller\Lva\Adapters\VariationPeopleAdapter::class)]
-class VariationPeopleAdapterTest extends MockeryTestCase
+final class VariationPeopleAdapterTest extends MockeryTestCase
 {
-    public const APP_ID = 999;
+    public const int APP_ID = 999;
 
     /** @var  VariationPeopleAdapter | m\MockInterface */
     protected $sut;
@@ -28,13 +28,12 @@ class VariationPeopleAdapterTest extends MockeryTestCase
     protected $mockForm;
     /** @var  \Common\Service\Table\TableBuilder | m\MockInterface */
     protected $mockTbl;
-    /** @var  ContainerInterface | m\MockInterface */
-    protected $mockContainer;
     /** @var  PeopleLvaService | m\MockInterface */
     protected $mockPplSrv;
     /** @var  \Laminas\Http\Response | m\MockInterface */
     protected $mockResp;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockForm = m::mock(\Laminas\Form\Form::class);
@@ -42,10 +41,10 @@ class VariationPeopleAdapterTest extends MockeryTestCase
 
         $this->mockPplSrv = m::mock(PeopleLvaService::class);
 
-        $this->mockContainer = m::mock(ContainerInterface::class);
-        $this->mockContainer->allows('get')->with('Table')->andReturn($this->mockTbl);
+        $mockContainer = m::mock(ContainerInterface::class);
+        $mockContainer->allows('get')->with('Table')->andReturn($this->mockTbl);
 
-        $this->sut = m::mock(VariationPeopleAdapter::class, [$this->mockContainer, $this->mockPplSrv])
+        $this->sut = m::mock(VariationPeopleAdapter::class, [$mockContainer, $this->mockPplSrv])
             ->makePartial()
             ->shouldAllowMockingProtectedMethods();
 
@@ -58,25 +57,23 @@ class VariationPeopleAdapterTest extends MockeryTestCase
     {
         $this->sut->shouldReceive('isExceptionalOrganisation')->andReturn($isExceptionalOrg);
 
-        static::assertEquals($expect, $this->sut->canModify());
+        $this->assertEquals($expect, $this->sut->canModify());
     }
 
     /**
-     * @return bool[][]
+     * @return \Iterator<(int | string), array<bool>>
      *
      * @psalm-return list{array{isExceptionalOrg: true, expect: false}, array{isExceptionalOrg: false, expect: true}}
      */
-    public static function dpTestCanModify(): array
+    public static function dpTestCanModify(): \Iterator
     {
-        return [
-            [
-                'isExceptionalOrg' => true,
-                'expect' => false,
-            ],
-            [
-                'isExceptionalOrg' => false,
-                'expect' => true,
-            ],
+        yield [
+            'isExceptionalOrg' => true,
+            'expect' => false,
+        ];
+        yield [
+            'isExceptionalOrg' => false,
+            'expect' => true,
         ];
     }
 
@@ -95,21 +92,19 @@ class VariationPeopleAdapterTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string)>>
      *
      * @psalm-return list{array{useDeltas: false, expect: 'lva-people'}, array{useDeltas: true, expect: 'lva-variation-people'}}
      */
-    public static function dpTestGetTableConfig(): array
+    public static function dpTestGetTableConfig(): \Iterator
     {
-        return [
-            [
-                'useDeltas' => false,
-                'expect' => 'lva-people',
-            ],
-            [
-                'useDeltas' => true,
-                'expect' => 'lva-variation-people',
-            ],
+        yield [
+            'useDeltas' => false,
+            'expect' => 'lva-people',
+        ];
+        yield [
+            'useDeltas' => true,
+            'expect' => 'lva-variation-people',
         ];
     }
 
@@ -171,8 +166,8 @@ class VariationPeopleAdapterTest extends MockeryTestCase
             ->once()
             ->andReturnUsing(
                 function (TransferCmd\Application\CreatePeople $cmd) {
-                    static::assertEquals(self::APP_ID, $cmd->getId());
-                    static::assertEquals('unit_familyName', $cmd->getFamilyName());
+                    $this->assertEquals(self::APP_ID, $cmd->getId());
+                    $this->assertEquals('unit_familyName', $cmd->getFamilyName());
 
                     return $this->mockResp;
                 }
@@ -192,9 +187,9 @@ class VariationPeopleAdapterTest extends MockeryTestCase
             ->once()
             ->andReturnUsing(
                 function (TransferCmd\Application\UpdatePeople $cmd) {
-                    static::assertEquals(self::APP_ID, $cmd->getId());
-                    static::assertEquals('unit_familyName', $cmd->getFamilyName());
-                    static::assertEquals(8001, $cmd->getPerson());
+                    $this->assertEquals(self::APP_ID, $cmd->getId());
+                    $this->assertEquals('unit_familyName', $cmd->getFamilyName());
+                    $this->assertEquals(8001, $cmd->getPerson());
 
                     return $this->mockResp;
                 }
@@ -215,7 +210,7 @@ class VariationPeopleAdapterTest extends MockeryTestCase
             ->once()
             ->andReturnUsing(
                 function (TransferCmd\Application\DeletePeople $cmd) {
-                    static::assertEquals(['unit_personIds'], $cmd->getPersonIds());
+                    $this->assertEquals(['unit_personIds'], $cmd->getPersonIds());
 
                     return $this->mockResp;
                 }

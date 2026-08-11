@@ -6,6 +6,8 @@
  * @author Dan Eggleston <dan@stolenegg.com>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\TaskCheckbox;
@@ -17,7 +19,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class TaskCheckboxTest extends \PHPUnit\Framework\TestCase
+final class TaskCheckboxTest extends \PHPUnit\Framework\TestCase
 {
     protected $tableBuilder;
 
@@ -30,9 +32,7 @@ class TaskCheckboxTest extends \PHPUnit\Framework\TestCase
         $this->sut = new TaskCheckbox($this->tableBuilder);
     }
 
-    /**
-     * @dataProvider notClosedProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('notClosedProvider')]
     public function testFormatNotClosed($data): void
     {
         $column = [];
@@ -45,29 +45,27 @@ class TaskCheckboxTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return (int|null|string)[][][]
+     * @return \Iterator<(int | string), array<array<(int | string | null)>>>
      *
      * @psalm-return array{N: list{array{id: 69, isClosed: 'N'}}, 'not set': list{array{id: 69}}, null: list{array{id: 69, isClosed: null}}}
      */
-    public function notClosedProvider(): array
+    public static function notClosedProvider(): \Iterator
     {
-        return [
-            'N' => [
-                [
-                    'id' => 69,
-                    'isClosed' => 'N',
-                ],
+        yield 'N' => [
+            [
+                'id' => 69,
+                'isClosed' => 'N',
             ],
-            'not set' => [
-                [
-                    'id' => 69,
-                ],
+        ];
+        yield 'not set' => [
+            [
+                'id' => 69,
             ],
-            'null' => [
-                [
-                    'id' => 69,
-                    'isClosed' => null,
-                ],
+        ];
+        yield 'null' => [
+            [
+                'id' => 69,
+                'isClosed' => null,
             ],
         ];
     }
@@ -81,6 +79,6 @@ class TaskCheckboxTest extends \PHPUnit\Framework\TestCase
 
         $column = [];
 
-        $this->assertEquals('', (new TaskCheckbox($this->tableBuilder))->format($data, $column));
+        $this->assertEquals('', new TaskCheckbox($this->tableBuilder)->format($data, $column));
     }
 }

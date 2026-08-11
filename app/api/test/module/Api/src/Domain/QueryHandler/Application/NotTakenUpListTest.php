@@ -26,7 +26,7 @@ use Olcs\Logging\Log\Logger;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class NotTakenUpListTest extends QueryHandlerTestCase
+final class NotTakenUpListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -48,7 +48,8 @@ class NotTakenUpListTest extends QueryHandlerTestCase
     public function testHandleQuery(): void
     {
         $trafficAreaId = 1;
-        $query = Qry::create(['date' => new DateTime('2015-01-01')]);
+        // Date is passed as a 'Y-m-d' string, matching the CLI caller (ProcessNtuCommand).
+        $query = Qry::create(['date' => '2015-01-01']);
 
         $mockTrafficArea = m::mock(TrafficAreaEntity::class)
             ->shouldReceive('getId')

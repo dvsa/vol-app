@@ -22,7 +22,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateTrailersTest extends AbstractCommandHandlerTestCase
+final class UpdateTrailersTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

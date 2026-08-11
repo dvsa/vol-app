@@ -16,7 +16,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
 use Psr\Container\ContainerInterface;
 
-class QueryHandlerManagerTest extends MockeryTestCase
+final class QueryHandlerManagerTest extends MockeryTestCase
 {
     /**
      * @var QueryHandlerManager
@@ -25,6 +25,7 @@ class QueryHandlerManagerTest extends MockeryTestCase
 
     private $vhm;
 
+    #[\Override]
     public function setUp(): void
     {
         Logger::setLogger(new \Psr\Log\NullLogger());

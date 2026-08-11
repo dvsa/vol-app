@@ -23,7 +23,7 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationVehiclesPsvReviewServiceTest extends MockeryTestCase
+final class VariationVehiclesPsvReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
@@ -33,6 +33,7 @@ class VariationVehiclesPsvReviewServiceTest extends MockeryTestCase
     /** @var VehiclesPsvReviewService */
     protected $mockVehiclesPsv;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);
@@ -65,64 +66,62 @@ class VariationVehiclesPsvReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public static function providerGetConfigFromData(): array
+    public static function providerGetConfigFromData(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'hasEnteredReg' => 'N'
-                ],
-                [
-                    'subSections' => [
-                        [
-                            'mainItems' => 'MAINITEMS'
+                'hasEnteredReg' => 'N'
+            ],
+            [
+                'subSections' => [
+                    [
+                        'mainItems' => 'MAINITEMS'
+                    ]
+                ]
+            ]
+        ];
+        yield [
+            [
+                'hasEnteredReg' => 'Y',
+                'licenceVehicles' => [
+                    [
+                        'vehicle' => [
+                            'vrm' => 'SM10QWE',
+                            'makeModel' => 'Foo Bar',
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'SM11QWE',
+                            'makeModel' => 'Foo Bar',
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'ME10QWE'
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'ME11QWE'
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'LG10QWE'
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'LG11QWE'
                         ]
                     ]
                 ]
             ],
             [
-                [
-                    'hasEnteredReg' => 'Y',
-                    'licenceVehicles' => [
-                        [
-                            'vehicle' => [
-                                'vrm' => 'SM10QWE',
-                                'makeModel' => 'Foo Bar',
-                            ]
-                        ],
-                        [
-                            'vehicle' => [
-                                'vrm' => 'SM11QWE',
-                                'makeModel' => 'Foo Bar',
-                            ]
-                        ],
-                        [
-                            'vehicle' => [
-                                'vrm' => 'ME10QWE'
-                            ]
-                        ],
-                        [
-                            'vehicle' => [
-                                'vrm' => 'ME11QWE'
-                            ]
-                        ],
-                        [
-                            'vehicle' => [
-                                'vrm' => 'LG10QWE'
-                            ]
-                        ],
-                        [
-                            'vehicle' => [
-                                'vrm' => 'LG11QWE'
-                            ]
-                        ]
-                    ]
-                ],
-                [
-                    'subSections' => [
-                        [
-                            'mainItems' => 'MAINITEMS'
-                        ]
+                'subSections' => [
+                    [
+                        'mainItems' => 'MAINITEMS'
                     ]
                 ]
             ]

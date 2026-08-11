@@ -14,8 +14,9 @@ use Doctrine\ORM\Query;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class NoteTest extends RepositoryTestCase
+final class NoteTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

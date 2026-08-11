@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\IrhpApplication;
 
 use Dvsa\Olcs\Transfer\Query\IrhpApplication\Documents;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Query\IrhpApplication\Documents
- */
-class DocumentsTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Query\IrhpApplication\Documents::class)]
+final class DocumentsTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

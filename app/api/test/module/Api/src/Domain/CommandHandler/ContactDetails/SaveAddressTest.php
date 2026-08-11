@@ -26,7 +26,7 @@ use Dvsa\Olcs\Api\Domain\Command\ContactDetails\SaveAddress as Cmd;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class SaveAddressTest extends AbstractCommandHandlerTestCase
+final class SaveAddressTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -145,12 +145,10 @@ class SaveAddressTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function countryProvider(): array
+    public static function countryProvider(): \Iterator
     {
-        return [
-            [''],
-            ['GB']
-        ];
+        yield [''];
+        yield ['GB'];
     }
 
     public function testHandleCommandCreate(): void

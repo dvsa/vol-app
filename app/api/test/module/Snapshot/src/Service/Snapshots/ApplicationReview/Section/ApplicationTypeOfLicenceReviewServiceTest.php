@@ -23,10 +23,11 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationTypeOfLicenceReviewServiceTest extends MockeryTestCase
+final class ApplicationTypeOfLicenceReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);
@@ -45,154 +46,152 @@ class ApplicationTypeOfLicenceReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data));
     }
 
-    public static function providerGetConfigFromData(): array
+    public static function providerGetConfigFromData(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'niFlag' => 'N',
-                    'isGoods' => true,
-                    'goodsOrPsv' => [
-                        'id' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE
-                    ],
-                    'lgvDeclarationConfirmation' => false,
-                    'licenceType' => [
-                        'description' => 'Standard National'
-                    ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_HGV
-                    ],
+                'niFlag' => 'N',
+                'isGoods' => true,
+                'goodsOrPsv' => [
+                    'id' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE
                 ],
-                [
-                    'multiItems' => [
+                'lgvDeclarationConfirmation' => false,
+                'licenceType' => [
+                    'description' => 'Standard National'
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_HGV
+                ],
+            ],
+            [
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'application-review-type-of-licence-operator-location',
-                                'value' => 'Great Britain'
-                            ],
-                            [
-                                'label' => 'application-review-type-of-licence-operator-type',
-                                'value' => 'Goods'
-                            ]
+                            'label' => 'application-review-type-of-licence-operator-location',
+                            'value' => 'Great Britain'
                         ],
                         [
-                            [
-                                'label' => 'application-review-type-of-licence-licence-type',
-                                'value' => 'Standard National'
-                            ]
+                            'label' => 'application-review-type-of-licence-operator-type',
+                            'value' => 'Goods'
+                        ]
+                    ],
+                    [
+                        [
+                            'label' => 'application-review-type-of-licence-licence-type',
+                            'value' => 'Standard National'
                         ]
                     ]
                 ]
+            ]
+        ];
+        yield [
+            [
+                'niFlag' => 'N',
+                'isGoods' => false,
+                'goodsOrPsv' => [
+                    'id' => Licence::LICENCE_CATEGORY_PSV
+                ],
+                'lgvDeclarationConfirmation' => false,
+                'licenceType' => [
+                    'description' => 'Standard International'
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_MIXED
+                ],
             ],
             [
-                [
-                    'niFlag' => 'N',
-                    'isGoods' => false,
-                    'goodsOrPsv' => [
-                        'id' => Licence::LICENCE_CATEGORY_PSV
-                    ],
-                    'lgvDeclarationConfirmation' => false,
-                    'licenceType' => [
-                        'description' => 'Standard International'
-                    ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_MIXED
-                    ],
-                ],
-                [
-                    'multiItems' => [
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'application-review-type-of-licence-operator-location',
-                                'value' => 'Great Britain'
-                            ],
-                            [
-                                'label' => 'application-review-type-of-licence-operator-type',
-                                'value' => 'PSV'
-                            ]
+                            'label' => 'application-review-type-of-licence-operator-location',
+                            'value' => 'Great Britain'
                         ],
                         [
-                            [
-                                'label' => 'application-review-type-of-licence-licence-type',
-                                'value' => 'Standard International'
-                            ],
-                            [
-                                'label' => 'application-review-type-of-licence-vehicle-type',
-                                'value' => 'No'
-                            ]
+                            'label' => 'application-review-type-of-licence-operator-type',
+                            'value' => 'PSV'
+                        ]
+                    ],
+                    [
+                        [
+                            'label' => 'application-review-type-of-licence-licence-type',
+                            'value' => 'Standard International'
                         ],
-                    ]
+                        [
+                            'label' => 'application-review-type-of-licence-vehicle-type',
+                            'value' => 'No'
+                        ]
+                    ],
                 ]
+            ]
+        ];
+        yield [
+            [
+                'niFlag' => 'N',
+                'isGoods' => false,
+                'goodsOrPsv' => [
+                    'id' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE
+                ],
+                'lgvDeclarationConfirmation' => true,
+                'licenceType' => [
+                    'description' => 'Standard International'
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_LGV
+                ],
             ],
             [
-                [
-                    'niFlag' => 'N',
-                    'isGoods' => false,
-                    'goodsOrPsv' => [
-                        'id' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE
-                    ],
-                    'lgvDeclarationConfirmation' => true,
-                    'licenceType' => [
-                        'description' => 'Standard International'
-                    ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_LGV
-                    ],
-                ],
-                [
-                    'multiItems' => [
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'application-review-type-of-licence-operator-location',
-                                'value' => 'Great Britain'
-                            ],
-                            [
-                                'label' => 'application-review-type-of-licence-operator-type',
-                                'value' => 'PSV'
-                            ]
+                            'label' => 'application-review-type-of-licence-operator-location',
+                            'value' => 'Great Britain'
                         ],
                         [
-                            [
-                                'label' => 'application-review-type-of-licence-licence-type',
-                                'value' => 'Standard International'
-                            ],
-                            [
-                                'label' => 'application-review-type-of-licence-vehicle-type',
-                                'value' => 'Yes'
-                            ]
+                            'label' => 'application-review-type-of-licence-operator-type',
+                            'value' => 'PSV'
+                        ]
+                    ],
+                    [
+                        [
+                            'label' => 'application-review-type-of-licence-licence-type',
+                            'value' => 'Standard International'
                         ],
                         [
-                            [
-                                'label' => 'application-review-type-of-licence-lgv-declaration-confirmation',
-                                'value' => 'Confirmed'
-                            ]
-                        ],
-                    ]
+                            'label' => 'application-review-type-of-licence-vehicle-type',
+                            'value' => 'Yes'
+                        ]
+                    ],
+                    [
+                        [
+                            'label' => 'application-review-type-of-licence-lgv-declaration-confirmation',
+                            'value' => 'Confirmed'
+                        ]
+                    ],
                 ]
+            ]
+        ];
+        yield [
+            [
+                'niFlag' => 'Y',
+                'licenceType' => [
+                    'description' => 'Standard National'
+                ],
+                'vehicleType' => [
+                    'id' => RefData::APP_VEHICLE_TYPE_HGV
+                ],
             ],
             [
-                [
-                    'niFlag' => 'Y',
-                    'licenceType' => [
-                        'description' => 'Standard National'
-                    ],
-                    'vehicleType' => [
-                        'id' => RefData::APP_VEHICLE_TYPE_HGV
-                    ],
-                ],
-                [
-                    'multiItems' => [
+                'multiItems' => [
+                    [
                         [
-                            [
-                                'label' => 'application-review-type-of-licence-operator-location',
-                                'value' => 'Northern Ireland'
-                            ]
-                        ],
+                            'label' => 'application-review-type-of-licence-operator-location',
+                            'value' => 'Northern Ireland'
+                        ]
+                    ],
+                    [
                         [
-                            [
-                                'label' => 'application-review-type-of-licence-licence-type',
-                                'value' => 'Standard National'
-                            ]
+                            'label' => 'application-review-type-of-licence-licence-type',
+                            'value' => 'Standard National'
                         ]
                     ]
                 ]

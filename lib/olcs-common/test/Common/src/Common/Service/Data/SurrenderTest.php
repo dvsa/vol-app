@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -7,7 +9,7 @@ use Common\Service\Data\Surrender;
 use Dvsa\Olcs\Transfer\Query\Surrender\ByLicence as Qry;
 use Mockery as m;
 
-class SurrenderTest extends AbstractDataServiceTestCase
+final class SurrenderTest extends AbstractDataServiceTestCase
 {
     /** @var Surrender */
     private $sut;
@@ -16,7 +18,6 @@ class SurrenderTest extends AbstractDataServiceTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->sut = new Surrender($this->abstractDataServiceServices);
     }
 

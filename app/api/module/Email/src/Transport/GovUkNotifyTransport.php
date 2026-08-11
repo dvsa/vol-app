@@ -60,25 +60,63 @@ final class GovUkNotifyTransport extends AbstractTransport
         }
 
         $payload = $this->extractPayload($original);
-        $recipient = $this->resolveRecipient($message->getEnvelope(), $original);
+        $recipients = $this->resolveRecipients($message->getEnvelope(), $original);
         $templateId = $this->resolveTemplateId($payload['locale'] ?? self::LOCALE_EN_GB);
-
         $personalisation = $this->buildPersonalisation($original, $payload);
 
-        try {
-            $response = $this->notifyClient->sendEmail(
-                $recipient,
-                $templateId,
-                $personalisation,
-                $payload['reference'] ?? '',
-                $payload['emailReplyToId'] ?? null,
-            );
-        } catch (NotifyException $e) {
-            throw $this->mapNotifyException($e);
+        // Notify has no To/Cc/Bcc and takes one address per call, so we deliver an individual copy
+        // to every recipient (SMTP delivered to all of them). Once Notify accepts a send (201) it
+        // owns delivery and its own delivery-retries; here we only handle the acceptance call.
+        $sent = 0;
+        $permanentlyFailed = 0;
+        $transient = null;
+
+        foreach ($recipients as $recipient) {
+            try {
+                $response = $this->notifyClient->sendEmail(
+                    $recipient,
+                    $templateId,
+                    $personalisation,
+                    $payload['reference'] ?? '',
+                    $payload['emailReplyToId'] ?? null,
+                );
+
+                $sent++;
+                $notifyId = is_array($response) ? ($response['id'] ?? null) : null;
+                Logger::info('notify email sent', ['notify_id' => $notifyId, 'locale' => $payload['locale'] ?? null]);
+            } catch (NotifyException $e) {
+                if ($this->isTransient($e)) {
+                    // Transient (429/5xx): the queue will retry the whole message.
+                    $transient = $e;
+                    Logger::info('notify send transient failure, message will be retried', ['code' => (int) $e->getCode()]);
+                } else {
+                    // Permanent (e.g. a malformed address): log and skip this recipient, so one bad
+                    // address can neither fail the batch nor be retried forever (re-duplicating the
+                    // recipients who already succeeded).
+                    $permanentlyFailed++;
+                    Logger::err('notify send permanently failed, recipient skipped', [
+                        'code' => (int) $e->getCode(),
+                        'error' => $e->getMessage(),
+                    ]);
+                }
+            }
         }
 
-        $notifyId = is_array($response) ? ($response['id'] ?? null) : null;
-        Logger::info('notify email sent', ['notify_id' => $notifyId, 'locale' => $payload['locale'] ?? null]);
+        // Any transient failure ⇒ retry the whole message (may re-send to already-accepted
+        // recipients, but a duplicate beats a drop, and transient Notify errors are rare).
+        if ($transient !== null) {
+            throw new EmailNotSentException(
+                sprintf('Notify send failed (HTTP %d): %s', (int) $transient->getCode(), $transient->getMessage()),
+                0,
+                $transient,
+            );
+        }
+
+        // Nothing got through and every recipient failed permanently ⇒ fail hard (DLQ) for ops.
+        if ($sent === 0 && $permanentlyFailed > 0) {
+            $message = sprintf('Notify send permanently failed for all %d recipient(s)', $permanentlyFailed);
+            throw new EmailNotSentException($message, 0, new \DomainException($message));
+        }
     }
 
     /**
@@ -120,19 +158,46 @@ final class GovUkNotifyTransport extends AbstractTransport
         return $decoded;
     }
 
-    private function resolveRecipient(Envelope $envelope, SymfonyEmail $email): string
+    /**
+     * All distinct delivery addresses (To + Cc + Bcc), deduped case-insensitively with first-seen
+     * order preserved. SMTP delivered to exactly these; Notify must too — one send each.
+     *
+     * @return list<string>
+     */
+    private function resolveRecipients(Envelope $envelope, SymfonyEmail $email): array
     {
-        $recipients = $envelope->getRecipients();
-        if ($recipients !== []) {
-            return $recipients[0]->getAddress();
+        $addresses = array_map(static fn ($a): string => $a->getAddress(), $envelope->getRecipients());
+        if ($addresses === []) {
+            $addresses = array_map(static fn ($a): string => $a->getAddress(), $email->getTo());
         }
 
-        $to = $email->getTo();
-        if ($to !== []) {
-            return $to[0]->getAddress();
+        $seen = [];
+        $unique = [];
+        foreach ($addresses as $address) {
+            $key = strtolower($address);
+            if ($address !== '' && !isset($seen[$key])) {
+                $seen[$key] = true;
+                $unique[] = $address;
+            }
         }
 
-        throw new EmailNotSentException('No recipient address present on the Notify message');
+        if ($unique === []) {
+            throw new EmailNotSentException('No recipient address present on the Notify message');
+        }
+
+        return $unique;
+    }
+
+    private function isTransient(NotifyException $e): bool
+    {
+        $code = (int) $e->getCode();
+
+        // 429 (rate limit) and 5xx are transient and must be retried. A code of 0 means the Notify
+        // SDK never received an HTTP response at all — a connection/DNS/timeout/proxy failure
+        // (php-http NetworkException, which is always code 0) — which is the most common transient
+        // class and must NOT be misread as permanent and dropped. Only genuine 4xx client errors
+        // (e.g. a malformed recipient address) are permanent.
+        return $code === 429 || $code < 400 || $code >= 500;
     }
 
     private function resolveTemplateId(string $locale): string
@@ -200,19 +265,5 @@ final class GovUkNotifyTransport extends AbstractTransport
         }
 
         return $prepared;
-    }
-
-    private function mapNotifyException(NotifyException $e): EmailNotSentException
-    {
-        $code = (int) $e->getCode();
-        $retryable = $code === 429 || $code >= 500;
-        $message = sprintf('Notify send failed (HTTP %d): %s', $code, $e->getMessage());
-
-        if ($retryable) {
-            return new EmailNotSentException($message, 0, $e);
-        }
-
-        // Wrap with DomainException so the queue consumer marks the job permanently failed.
-        return new EmailNotSentException($message, 0, new \DomainException($message, 0, $e));
     }
 }

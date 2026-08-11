@@ -14,10 +14,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * StandardAndCabotageAnswerSummaryProviderTest
  */
-class StandardAndCabotageAnswerSummaryProviderTest extends MockeryTestCase
+final class StandardAndCabotageAnswerSummaryProviderTest extends MockeryTestCase
 {
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new StandardAndCabotageAnswerSummaryProvider();
@@ -47,7 +48,7 @@ class StandardAndCabotageAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public static function dpGetTemplateVariables(): array
+    public static function dpGetTemplateVariables(): \Iterator
     {
         $expectedCabotageOnlyTemplateVariables = [
             'yesNo' => 'qanda.bilaterals.cabotage.yes-answer',
@@ -63,14 +64,11 @@ class StandardAndCabotageAnswerSummaryProviderTest extends MockeryTestCase
             'yesNo' => 'qanda.bilaterals.cabotage.no-answer',
             'additionalInfo' => null,
         ];
-
-        return [
-            [Answer::BILATERAL_CABOTAGE_ONLY, true, $expectedCabotageOnlyTemplateVariables],
-            [Answer::BILATERAL_STANDARD_AND_CABOTAGE, true, $expectedStandardAndCabotageTemplateVariables],
-            [Answer::BILATERAL_STANDARD_ONLY, true, $expectedStandardOnlyTemplateVariables],
-            [Answer::BILATERAL_CABOTAGE_ONLY, false, $expectedCabotageOnlyTemplateVariables],
-            [Answer::BILATERAL_STANDARD_AND_CABOTAGE, false, $expectedStandardAndCabotageTemplateVariables],
-            [Answer::BILATERAL_STANDARD_ONLY, false, $expectedStandardOnlyTemplateVariables],
-        ];
+        yield [Answer::BILATERAL_CABOTAGE_ONLY, true, $expectedCabotageOnlyTemplateVariables];
+        yield [Answer::BILATERAL_STANDARD_AND_CABOTAGE, true, $expectedStandardAndCabotageTemplateVariables];
+        yield [Answer::BILATERAL_STANDARD_ONLY, true, $expectedStandardOnlyTemplateVariables];
+        yield [Answer::BILATERAL_CABOTAGE_ONLY, false, $expectedCabotageOnlyTemplateVariables];
+        yield [Answer::BILATERAL_STANDARD_AND_CABOTAGE, false, $expectedStandardAndCabotageTemplateVariables];
+        yield [Answer::BILATERAL_STANDARD_ONLY, false, $expectedStandardOnlyTemplateVariables];
     }
 }

@@ -13,10 +13,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * CabotageOnlyAnswerSummaryProviderTest
  */
-class CabotageOnlyAnswerSummaryProviderTest extends MockeryTestCase
+final class CabotageOnlyAnswerSummaryProviderTest extends MockeryTestCase
 {
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new CabotageOnlyAnswerSummaryProvider();
@@ -44,11 +45,9 @@ class CabotageOnlyAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public static function dpGetTemplateVariables(): array
+    public static function dpGetTemplateVariables(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 }

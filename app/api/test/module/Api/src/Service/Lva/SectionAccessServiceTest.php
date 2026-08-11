@@ -17,7 +17,7 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Lva\SectionAccessService::class)]
-class SectionAccessServiceTest extends MockeryTestCase
+final class SectionAccessServiceTest extends MockeryTestCase
 {
     /**
      * Holds the sut
@@ -28,13 +28,12 @@ class SectionAccessServiceTest extends MockeryTestCase
 
     /** @var m\MockInterface */
     private $mockRestrictionHelper;
-
-    private $serviceLocator;
     /** @var  m\MockInterface */
     private $sectionConfig;
     /** @var  m\MockInterface */
     private $authService;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockRestrictionHelper = m::mock(RestrictionService::class);
@@ -53,13 +52,13 @@ class SectionAccessServiceTest extends MockeryTestCase
                 }
             );
 
-        $this->serviceLocator = $sm;
-        $this->serviceLocator->setService('RestrictionService', $this->mockRestrictionHelper);
-        $this->serviceLocator->setService('SectionConfig', $this->sectionConfig);
-        $this->serviceLocator->setService(AuthorizationService::class, $this->authService);
+        $serviceLocator = $sm;
+        $serviceLocator->setService('RestrictionService', $this->mockRestrictionHelper);
+        $serviceLocator->setService('SectionConfig', $this->sectionConfig);
+        $serviceLocator->setService(AuthorizationService::class, $this->authService);
 
         $sut = new SectionAccessService();
-        $this->sut = $sut->__invoke($this->serviceLocator, SectionAccessService::class);
+        $this->sut = $sut->__invoke($serviceLocator, SectionAccessService::class);
 
         $sections = [
             'no_restriction' => [],
@@ -229,7 +228,7 @@ class SectionAccessServiceTest extends MockeryTestCase
             ->andReturn('EXPECTED')
             ->getMock();
 
-        static::assertEquals('EXPECTED', $sut->getAccessibleSectionsForLicence($mockLic));
+        $this->assertEquals('EXPECTED', $sut->getAccessibleSectionsForLicence($mockLic));
     }
 
     public function testGetAccessibleSectionsForLicenceContinuation(): void
@@ -247,7 +246,7 @@ class SectionAccessServiceTest extends MockeryTestCase
             ->andReturn('EXPECTED')
             ->getMock();
 
-        static::assertEquals('EXPECTED', $sut->getAccessibleSectionsForLicenceContinuation($mockLic));
+        $this->assertEquals('EXPECTED', $sut->getAccessibleSectionsForLicenceContinuation($mockLic));
     }
 
     /**

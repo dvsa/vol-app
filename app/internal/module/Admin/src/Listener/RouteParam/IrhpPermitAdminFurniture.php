@@ -43,7 +43,7 @@ class IrhpPermitAdminFurniture implements
     protected $navigationService;
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->setQuerySender($container->get('QuerySender'));
         $this->setCommandSender($container->get('CommandSender'));

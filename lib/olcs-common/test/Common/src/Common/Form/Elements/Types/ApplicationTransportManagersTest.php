@@ -6,6 +6,8 @@
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Types;
 
 use Common\Form\Elements\Types\ApplicationTransportManagers;
@@ -15,7 +17,7 @@ use Common\Form\Elements\Types\ApplicationTransportManagers;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class ApplicationTransportManagersTest extends \PHPUnit\Framework\TestCase
+final class ApplicationTransportManagersTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the element configuration
@@ -37,6 +39,6 @@ class ApplicationTransportManagersTest extends \PHPUnit\Framework\TestCase
     {
         $element = new ApplicationTransportManagers();
         $element->setMessages(['messages']);
-        $this->assertEquals(['messages'], $element->getMessages());
+        $this->assertSame(['messages'], $element->getMessages());
     }
 }

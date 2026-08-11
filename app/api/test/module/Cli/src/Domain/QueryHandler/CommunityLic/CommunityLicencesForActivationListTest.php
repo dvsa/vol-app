@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CommunityLicencesForActivationListTest extends QueryHandlerTestCase
+final class CommunityLicencesForActivationListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -28,7 +28,7 @@ class CommunityLicencesForActivationListTest extends QueryHandlerTestCase
 
     public function testHandleQuery(): void
     {
-        $now = (new \DateTime())->setTime(0, 0, 0);
+        $now = new \DateTime()->setTime(0, 0, 0);
         $query = Qry::create(['date' => $now]);
 
         $mockComLic = m::mock(\Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface::class)

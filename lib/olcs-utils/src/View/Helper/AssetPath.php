@@ -70,7 +70,7 @@ class AssetPath extends AbstractHelper
      * @param AssetPathCacheBustingStrategy|null $strategy The cache busting strategy to verify, if not provided the default will be used
      * @throws \InvalidArgumentException if the release version is not set when using the Release strategy
      */
-    private function verifyReleaseVersionIsSet(AssetPathCacheBustingStrategy $strategy = null): void
+    private function verifyReleaseVersionIsSet(?AssetPathCacheBustingStrategy $strategy = null): void
     {
         if ($strategy === null) {
             $strategy = $this->cacheBustingStrategy;
@@ -88,7 +88,7 @@ class AssetPath extends AbstractHelper
      * @param string|AssetPathCacheBustingStrategy|null $onDemandCacheBustingStrategy The cache busting strategy to use, if not provided the default will be used
      * @return string
      */
-    public function __invoke(string $path = '', string|AssetPathCacheBustingStrategy $onDemandCacheBustingStrategy = null): string
+    public function __invoke(string $path = '', string|AssetPathCacheBustingStrategy|null $onDemandCacheBustingStrategy = null): string
     {
         $strategy = $this->resolveCacheBustingStrategy($onDemandCacheBustingStrategy);
 

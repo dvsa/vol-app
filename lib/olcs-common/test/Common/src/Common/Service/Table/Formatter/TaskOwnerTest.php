@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\TaskOwner;
@@ -15,59 +17,55 @@ use Common\Service\Table\Formatter\TaskOwner;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TaskOwnerTest extends \PHPUnit\Framework\TestCase
+final class TaskOwnerTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @dataProvider providerFormat
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerFormat')]
     public function testFormat($data, $expected): void
     {
-        $this->assertEquals($expected, (new TaskOwner())->format($data));
+        $this->assertEquals($expected, new TaskOwner()->format($data));
     }
 
     /**
-     * @return ((null|string)[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(string | null)> | string)>>
      *
      * @psalm-return list{list{array{teamName: null, ownerName: ' '}, '(Unassigned)'}, list{array{teamName: 'Footeam', ownerName: ' '}, 'Footeam (Unassigned)'}, list{array{teamName: null, ownerName: 'Foo'}, '(Foo)'}, list{array{teamName: 'Foo', ownerName: 'Bar'}, 'Foo (Bar)'}, list{array{teamName: 'Footeam', ownerName: ','}, 'Footeam (Unassigned)'}}
      */
-    public function providerFormat(): array
+    public static function providerFormat(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'teamName' => null,
-                    'ownerName' => ' '
-                ],
-                '(Unassigned)'
+                'teamName' => null,
+                'ownerName' => ' '
             ],
+            '(Unassigned)'
+        ];
+        yield [
             [
-                [
-                    'teamName' => 'Footeam',
-                    'ownerName' => ' '
-                ],
-                'Footeam (Unassigned)'
+                'teamName' => 'Footeam',
+                'ownerName' => ' '
             ],
+            'Footeam (Unassigned)'
+        ];
+        yield [
             [
-                [
-                    'teamName' => null,
-                    'ownerName' => 'Foo'
-                ],
-                '(Foo)'
+                'teamName' => null,
+                'ownerName' => 'Foo'
             ],
+            '(Foo)'
+        ];
+        yield [
             [
-                [
-                    'teamName' => 'Foo',
-                    'ownerName' => 'Bar'
-                ],
-                'Foo (Bar)'
+                'teamName' => 'Foo',
+                'ownerName' => 'Bar'
             ],
+            'Foo (Bar)'
+        ];
+        yield [
             [
-                [
-                    'teamName' => 'Footeam',
-                    'ownerName' => ','
-                ],
-                'Footeam (Unassigned)'
+                'teamName' => 'Footeam',
+                'ownerName' => ','
             ],
+            'Footeam (Unassigned)'
         ];
     }
 }

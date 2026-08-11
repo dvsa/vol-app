@@ -11,7 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class ApplicationFinancialEvidenceAdapterFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationFinancialEvidenceAdapter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ApplicationFinancialEvidenceAdapter
     {
         return new ApplicationFinancialEvidenceAdapter($container);
     }

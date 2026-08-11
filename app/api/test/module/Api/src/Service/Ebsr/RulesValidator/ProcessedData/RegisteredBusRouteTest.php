@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\ProcessedData\RegisteredBusRoute;
  * Class RegisteredBusRouteTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\RulesValidator\ProcessedData
  */
-class RegisteredBusRouteTest extends \PHPUnit\Framework\TestCase
+final class RegisteredBusRouteTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * tests whether the bus route has a status of registered
@@ -41,47 +41,45 @@ class RegisteredBusRouteTest extends \PHPUnit\Framework\TestCase
     /**
      * Provider for testIsValid
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function isValidProvider(): array
+    public static function isValidProvider(): \Iterator
     {
-        return [
-            [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_NEW, true],
-            [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_VAR, true],
-            [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_CANCEL, true],
-            [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_ADMIN, true],
-            [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_REGISTERED, true],
-            [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_REFUSED, true],
-            [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_WITHDRAWN, true],
-            [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_CNS, true],
-            [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_CANCELLED, true],
-            [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_NEW, false],
-            [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_VAR, false],
-            [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_CANCEL, false],
-            [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_ADMIN, false],
-            [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_REGISTERED, true],
-            [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_REFUSED, false],
-            [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_WITHDRAWN, false],
-            [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_CNS, false],
-            [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_CANCELLED, false],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_NEW, false],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_VAR, false],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_CANCEL, false],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_ADMIN, false],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_REGISTERED, true],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_REFUSED, false],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_WITHDRAWN, false],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_CNS, false],
-            [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_CANCELLED, false],
-            [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_NEW, false],
-            [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_VAR, false],
-            [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_CANCEL, false],
-            [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_ADMIN, false],
-            [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_REGISTERED, true],
-            [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_REFUSED, false],
-            [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_WITHDRAWN, false],
-            [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_CNS, false],
-            [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_CANCELLED, false]
-        ];
+        yield [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_NEW, true];
+        yield [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_VAR, true];
+        yield [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_CANCEL, true];
+        yield [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_ADMIN, true];
+        yield [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_REGISTERED, true];
+        yield [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_REFUSED, true];
+        yield [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_WITHDRAWN, true];
+        yield [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_CNS, true];
+        yield [BusRegEntity::TXC_APP_NEW, BusRegEntity::STATUS_CANCELLED, true];
+        yield [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_NEW, false];
+        yield [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_VAR, false];
+        yield [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_CANCEL, false];
+        yield [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_ADMIN, false];
+        yield [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_REGISTERED, true];
+        yield [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_REFUSED, false];
+        yield [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_WITHDRAWN, false];
+        yield [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_CNS, false];
+        yield [BusRegEntity::TXC_APP_CANCEL, BusRegEntity::STATUS_CANCELLED, false];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_NEW, false];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_VAR, false];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_CANCEL, false];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_ADMIN, false];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_REGISTERED, true];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_REFUSED, false];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_WITHDRAWN, false];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_CNS, false];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, BusRegEntity::STATUS_CANCELLED, false];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_NEW, false];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_VAR, false];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_CANCEL, false];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_ADMIN, false];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_REGISTERED, true];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_REFUSED, false];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_WITHDRAWN, false];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_CNS, false];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, BusRegEntity::STATUS_CANCELLED, false];
     }
 }

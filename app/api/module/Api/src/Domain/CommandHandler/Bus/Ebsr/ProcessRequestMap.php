@@ -169,7 +169,7 @@ final class ProcessRequestMap extends AbstractCommandHandler implements
     }
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->s3Processor = $container->get(S3Processor::class);
         $this->templateBuilder = $container->get(TemplateBuilder::class);

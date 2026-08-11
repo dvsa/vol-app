@@ -30,20 +30,11 @@ use LmcRbacMvc\Service\AuthorizationService;
  * Class User Controller Test
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Controller\UserController::class)]
-class UserControllerTest extends MockeryTestCase
+final class UserControllerTest extends MockeryTestCase
 {
-    /**
-     * @var (\Dvsa\Olcs\Utils\Translation\NiTextTranslation & \Mockery\MockInterface)
-     */
-    public $mockNiTextTranslationUtil;
-    /**
-     * @var (\LmcRbacMvc\Service\AuthorizationService & \Mockery\MockInterface)
-     */
-    public $mockAuthService;
     public $mockUser;
     public $mockScriptFactory;
     public $mockFlashMessengerHelper;
-    public $mockTranslationHelper;
     /** @var  \Olcs\Controller\UserController | m\MockInterface */
     private $sut;
 
@@ -60,36 +51,28 @@ class UserControllerTest extends MockeryTestCase
     /** @var  m\MockInterface */
     private $mockFormHelper;
 
-    /** @var  m\MockInterface */
-    private $mockFlashMsgr;
-
-    /** @var  m\MockInterface */
-    private $mockTranslator;
-
-    /** @var  m\MockInterface */
-    private $mockGuidanceHelper;
-
+    #[\Override]
     public function setUp(): void
     {
 
-        $this->mockNiTextTranslationUtil = m::mock(NiTextTranslation::class);
-        $this->mockAuthService = m::mock(AuthorizationService::class);
+        $mockNiTextTranslationUtil = m::mock(NiTextTranslation::class);
+        $mockAuthService = m::mock(AuthorizationService::class);
         $this->mockUser = m::mock(User::class);
         $this->mockScriptFactory = m::mock(ScriptFactory::class);
         $this->mockFormHelper = m::mock(FormHelperService::class);
         $this->mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
-        $this->mockTranslationHelper = m::mock(TranslationHelperService::class);
-        $this->mockGuidanceHelper = m::mock(GuidanceHelperService::class);
+        $mockTranslationHelper = m::mock(TranslationHelperService::class);
+        $mockGuidanceHelper = m::mock(GuidanceHelperService::class);
 
         $this->sut = m::mock(UserController::class, [
-            $this->mockNiTextTranslationUtil,
-            $this->mockAuthService,
+            $mockNiTextTranslationUtil,
+            $mockAuthService,
             $this->mockUser,
             $this->mockScriptFactory,
             $this->mockFormHelper,
             $this->mockFlashMessengerHelper,
-            $this->mockTranslationHelper,
-            $this->mockGuidanceHelper
+            $mockTranslationHelper,
+            $mockGuidanceHelper
         ])->shouldAllowMockingProtectedMethods()->makePartial();
 
         $this->mockRequest = m::mock(Request::class);
@@ -104,13 +87,14 @@ class UserControllerTest extends MockeryTestCase
         $this->mockForm = m::mock(Form::class);
         $this->mockForm->shouldReceive('get')->with('permission')->andReturnSelf();
 
-        $this->mockTranslationHelper->shouldReceive('translate')->andReturnUsing(
+        $mockTranslationHelper->shouldReceive('translate')->andReturnUsing(
             fn($arg) => $arg . "_translated"
         );
 
-        $this->mockGuidanceHelper->shouldReceive('append');
+        $mockGuidanceHelper->shouldReceive('append');
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         m::close();

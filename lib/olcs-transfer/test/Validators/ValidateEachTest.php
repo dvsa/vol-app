@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\EmailAddress;
@@ -11,7 +13,7 @@ use Laminas\Validator\NotEmpty;
 use Laminas\Validator\ValidatorInterface;
 use PHPUnit\Framework\TestCase;
 
-class ValidateEachTest extends TestCase
+final class ValidateEachTest extends TestCase
 {
     public function testConstructorThrowsExceptionWhenNoChildrenAreSet()
     {
@@ -23,9 +25,7 @@ class ValidateEachTest extends TestCase
         new ValidateEach();
     }
 
-    /**
-     * @depends testConstructorThrowsExceptionWhenNoChildrenAreSet
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testConstructorThrowsExceptionWhenNoChildrenAreSet')]
     public function testConstructorThrowsExceptionWhenNoChildrenAreEmpty()
     {
         // Set Expectations
@@ -45,9 +45,7 @@ class ValidateEachTest extends TestCase
         $this->assertInstanceOf(ValidatorInterface::class, $validator);
     }
 
-    /**
-     * @depends testIsValidator
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidator')]
     public function testIsValidValidatesASingleValidValueAgainstAChildValidatorAndReturnsTrue()
     {
         // Setup
@@ -60,9 +58,7 @@ class ValidateEachTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @depends testIsValidValidatesASingleValidValueAgainstAChildValidatorAndReturnsTrue
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidValidatesASingleValidValueAgainstAChildValidatorAndReturnsTrue')]
     public function testIsValidValidatesASingleValidValueAgainstAChildValidatorAndSetsNoMessages()
     {
         // Setup
@@ -75,9 +71,7 @@ class ValidateEachTest extends TestCase
         $this->assertEmpty($validator->getMessages());
     }
 
-    /**
-     * @depends testIsValidValidatesASingleValidValueAgainstAChildValidatorAndReturnsTrue
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidValidatesASingleValidValueAgainstAChildValidatorAndReturnsTrue')]
     public function testIsValidValidatesMultipleValidValuesAgainstAChildValidatorAndReturnsTrue()
     {
         // Setup
@@ -90,10 +84,8 @@ class ValidateEachTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @depends testIsValidValidatesMultipleValidValuesAgainstAChildValidatorAndReturnsTrue
-     * @depends testIsValidValidatesASingleValidValueAgainstAChildValidatorAndSetsNoMessages
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidValidatesMultipleValidValuesAgainstAChildValidatorAndReturnsTrue')]
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidValidatesASingleValidValueAgainstAChildValidatorAndSetsNoMessages')]
     public function testIsValidValidatesMultipleValidValuesAgainstAChildValidatorAndSetsNoMessages()
     {
         // Setup
@@ -106,9 +98,7 @@ class ValidateEachTest extends TestCase
         $this->assertEmpty($validator->getMessages());
     }
 
-    /**
-     * @depends testIsValidator
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidator')]
     public function testIsValidValidatesASingleInvalidValueAgainstAChildValidatorAndReturnsFalse()
     {
         // Setup
@@ -121,10 +111,8 @@ class ValidateEachTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @depends testIsValidValidatesASingleInvalidValueAgainstAChildValidatorAndReturnsFalse
-     * @depends testIsValidValidatesASingleValidValueAgainstAChildValidatorAndSetsNoMessages
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidValidatesASingleInvalidValueAgainstAChildValidatorAndReturnsFalse')]
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidValidatesASingleValidValueAgainstAChildValidatorAndSetsNoMessages')]
     public function testIsValidValidatesASingleInvalidValueAgainstAChildValidatorAndSetsMessages()
     {
         // Setup
@@ -137,9 +125,7 @@ class ValidateEachTest extends TestCase
         $this->assertCount(1, $validator->getMessages());
     }
 
-    /**
-     * @depends testIsValidValidatesASingleInvalidValueAgainstAChildValidatorAndReturnsFalse
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidValidatesASingleInvalidValueAgainstAChildValidatorAndReturnsFalse')]
     public function testIsValidValidatesMultipleInvalidValuesAgainstAChildValidatorAndReturnsFalse()
     {
         // Setup
@@ -152,10 +138,8 @@ class ValidateEachTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @depends testIsValidValidatesMultipleInvalidValuesAgainstAChildValidatorAndReturnsFalse
-     * @depends testIsValidValidatesASingleInvalidValueAgainstAChildValidatorAndSetsMessages
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidValidatesMultipleInvalidValuesAgainstAChildValidatorAndReturnsFalse')]
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidValidatesASingleInvalidValueAgainstAChildValidatorAndSetsMessages')]
     public function testIsValidValidatesMultipleInvalidValuesAgainstAChildValidatorAndSetsMessages()
     {
         // Setup
@@ -168,9 +152,7 @@ class ValidateEachTest extends TestCase
         $this->assertCount(2, $validator->getMessages());
     }
 
-    /**
-     * @depends testIsValidValidatesASingleInvalidValueAgainstAChildValidatorAndSetsMessages
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidValidatesASingleInvalidValueAgainstAChildValidatorAndSetsMessages')]
     public function testIsValidSetsMessagesWithKeysEqualToTheIndexOfTheInvalidArrayItemAndTheOriginalValidatorKey()
     {
         // Setup
@@ -181,12 +163,10 @@ class ValidateEachTest extends TestCase
         $validator->isValid(['12a34']);
 
         // Assert
-        $this->assertEquals($expectedKeys, array_keys($validator->getMessages()));
+        $this->assertSame($expectedKeys, array_keys($validator->getMessages()));
     }
 
-    /**
-     * @depends testIsValidSetsMessagesWithKeysEqualToTheIndexOfTheInvalidArrayItemAndTheOriginalValidatorKey
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidSetsMessagesWithKeysEqualToTheIndexOfTheInvalidArrayItemAndTheOriginalValidatorKey')]
     public function testIsValidSetsMessagesWithKeysEqualToTheIndexOfTheInvalidArrayItemAndTheOriginalValidatorKeyWhenSomeValuesAreValidAndOthersAreNot()
     {
         // Setup
@@ -197,12 +177,10 @@ class ValidateEachTest extends TestCase
         $validator->isValid([1, 'a']);
 
         // Assert
-        $this->assertEquals($expectedKeys, array_keys($validator->getMessages()));
+        $this->assertSame($expectedKeys, array_keys($validator->getMessages()));
     }
 
-    /**
-     * @depends testIsValidValidatesASingleValidValueAgainstAChildValidatorAndReturnsTrue
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidValidatesASingleValidValueAgainstAChildValidatorAndReturnsTrue')]
     public function testIsValidValidatesAValidValueAgainstMultipleChildValidatorsAndReturnsTrue()
     {
         // Setup
@@ -215,9 +193,7 @@ class ValidateEachTest extends TestCase
         $this->assertTrue($result);
     }
 
-    /**
-     * @depends testIsValidValidatesASingleValidValueAgainstAChildValidatorAndSetsNoMessages
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidValidatesASingleValidValueAgainstAChildValidatorAndSetsNoMessages')]
     public function testIsValidValidatesAValidValueAgainstMultipleChildValidatorsAndDoesNotSetMessages()
     {
         // Setup
@@ -230,9 +206,7 @@ class ValidateEachTest extends TestCase
         $this->assertEmpty($validator->getMessages());
     }
 
-    /**
-     * @depends testIsValidValidatesASingleInvalidValueAgainstAChildValidatorAndReturnsFalse
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidValidatesASingleInvalidValueAgainstAChildValidatorAndReturnsFalse')]
     public function testIsValidValidatesAnInvalidValueAgainstMultipleChildValidatorsAndReturnsFalse()
     {
         // Setup
@@ -245,9 +219,7 @@ class ValidateEachTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @depends testIsValidValidatesASingleInvalidValueAgainstAChildValidatorAndSetsMessages
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidValidatesASingleInvalidValueAgainstAChildValidatorAndSetsMessages')]
     public function testIsValidValidatesAnInvalidValueAgainstMultipleChildValidatorsAndSetsMessages()
     {
         // Setup
@@ -260,10 +232,8 @@ class ValidateEachTest extends TestCase
         $this->assertCount(1, $validator->getMessages());
     }
 
-    /**
-     * @depends testIsValidValidatesAnInvalidValueAgainstMultipleChildValidatorsAndSetsMessages
-     * @depends testIsValidSetsMessagesWithKeysEqualToTheIndexOfTheInvalidArrayItemAndTheOriginalValidatorKey
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidValidatesAnInvalidValueAgainstMultipleChildValidatorsAndSetsMessages')]
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidSetsMessagesWithKeysEqualToTheIndexOfTheInvalidArrayItemAndTheOriginalValidatorKey')]
     public function testIsValidSetsMessagesWithKeysEqualToTheIndexOfTheInvalidArrayItemAndTheOriginalValidatorKeyWithMultipleValidators()
     {
         // Setup
@@ -277,12 +247,10 @@ class ValidateEachTest extends TestCase
         $validator->isValid(['0', 'contact@dvsa.gov.uk']);
 
         // Assert
-        $this->assertEquals($expectedKeys, array_keys($validator->getMessages()));
+        $this->assertSame($expectedKeys, array_keys($validator->getMessages()));
     }
 
-    /**
-     * @depends testIsValidator
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidator')]
     public function testIsValidConfiguresTheOptionsForAChildValidator()
     {
         // Setup
@@ -295,9 +263,7 @@ class ValidateEachTest extends TestCase
         $this->assertFalse($result);
     }
 
-    /**
-     * @depends testIsValidator
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('testIsValidator')]
     public function testGetMessagesReturnsNonUniqueMessagesWhenRepeatedForMultipleKeys()
     {
         // Setup

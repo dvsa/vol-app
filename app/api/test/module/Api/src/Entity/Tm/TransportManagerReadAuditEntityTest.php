@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Tm\TransportManagerReadAudit as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class TransportManagerReadAuditEntityTest extends EntityTester
+final class TransportManagerReadAuditEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

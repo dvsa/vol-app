@@ -14,7 +14,7 @@ use Olcs\FormService\Form\Lva\TypeOfLicence\ApplicationTypeOfLicence;
 use Laminas\Form\Form;
 use Common\FormService\FormServiceManager;
 
-class ApplicationTypeOfLicenceTest extends MockeryTestCase
+final class ApplicationTypeOfLicenceTest extends MockeryTestCase
 {
     /**
      * @var ApplicationTypeOfLicence
@@ -26,6 +26,7 @@ class ApplicationTypeOfLicenceTest extends MockeryTestCase
     protected $fsm;
     private $permission;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();

@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Api\Service\Document\Bookmark;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\CompanyStatus;
 use PHPUnit\Framework\TestCase;
 
-class CompanyStatusTest extends TestCase
+final class CompanyStatusTest extends TestCase
 {
     public function testGetQuery(): void
     {
@@ -31,16 +31,14 @@ class CompanyStatusTest extends TestCase
         );
     }
 
-    public static function dptestRender(): array
+    public static function dptestRender(): \Iterator
     {
-        return [
-            [['status' => 'liquidation', 'expected' => 'Liquidation']],
-            [['status' => 'insolvency-proceedings', 'expected' => 'Insolvency Proceedings']],
-            [['status' => 'administration', 'expected' => 'Administration']],
-            [['status' => 'liquidation', 'expected' => 'Liquidation']],
-            [['status' => 'receivership', 'expected' => 'Receivership']],
-            [['status' => 'voluntary-arrangement', 'expected' => 'Voluntary Arrangement']],
-            [['status' => null, 'expected' => null]],
-        ];
+        yield [['status' => 'liquidation', 'expected' => 'Liquidation']];
+        yield [['status' => 'insolvency-proceedings', 'expected' => 'Insolvency Proceedings']];
+        yield [['status' => 'administration', 'expected' => 'Administration']];
+        yield [['status' => 'liquidation', 'expected' => 'Liquidation']];
+        yield [['status' => 'receivership', 'expected' => 'Receivership']];
+        yield [['status' => 'voluntary-arrangement', 'expected' => 'Voluntary Arrangement']];
+        yield [['status' => null, 'expected' => null]];
     }
 }

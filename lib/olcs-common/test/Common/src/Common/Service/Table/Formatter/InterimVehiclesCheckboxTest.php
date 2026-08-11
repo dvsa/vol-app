@@ -6,6 +6,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -15,47 +17,44 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class InterimVehiclesCheckboxTest extends MockeryTestCase
+final class InterimVehiclesCheckboxTest extends MockeryTestCase
 {
     /**
      * Test formatter
-     *
-     * @group interimFormatter
-     * @dataProvider formatProvider
      */
+    #[\PHPUnit\Framework\Attributes\Group('interimFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('formatProvider')]
     public function testFormat($data, $expected): void
     {
-        $this->assertEquals($expected, (new \Common\Service\Table\Formatter\InterimVehiclesCheckbox())->format($data));
+        $this->assertEquals($expected, new \Common\Service\Table\Formatter\InterimVehiclesCheckbox()->format($data));
     }
 
     /**
-     * @return ((int|int[])[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(array<int> | int)> | string)>>
      *
      * @psalm-return list{list{array{interimApplication: array{id: 2}, id: 1}, '<input type="checkbox" value="1" name="vehicles[id][]" checked>'}, list{array{interimApplication: array<never, never>, id: 1}, '<input type="checkbox" value="1" name="vehicles[id][]" >'}, list{array{id: 1}, '<input type="checkbox" value="1" name="vehicles[id][]" >'}}
      */
-    public function formatProvider(): array
+    public static function formatProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'interimApplication' => ['id' => 2],
-                    'id' => 1
-                ],
-                '<input type="checkbox" value="1" name="vehicles[id][]" checked>'
+                'interimApplication' => ['id' => 2],
+                'id' => 1
             ],
+            '<input type="checkbox" value="1" name="vehicles[id][]" checked>'
+        ];
+        yield [
             [
-                [
-                    'interimApplication' => [],
-                    'id' => 1
-                ],
-                '<input type="checkbox" value="1" name="vehicles[id][]" >'
+                'interimApplication' => [],
+                'id' => 1
             ],
+            '<input type="checkbox" value="1" name="vehicles[id][]" >'
+        ];
+        yield [
             [
-                [
-                    'id' => 1
-                ],
-                '<input type="checkbox" value="1" name="vehicles[id][]" >'
+                'id' => 1
             ],
+            '<input type="checkbox" value="1" name="vehicles[id][]" >'
         ];
     }
 }

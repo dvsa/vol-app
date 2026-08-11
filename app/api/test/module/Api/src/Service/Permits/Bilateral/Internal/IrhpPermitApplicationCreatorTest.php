@@ -20,7 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class IrhpPermitApplicationCreatorTest extends MockeryTestCase
+final class IrhpPermitApplicationCreatorTest extends MockeryTestCase
 {
     public function testHandle(): void
     {

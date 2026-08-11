@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Application as ApplicationRepository;
 use Dvsa\Olcs\Transfer\Query\Application\VehicleDeclaration as Query;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 
-class VehicleDeclarationTest extends QueryHandlerTestCase
+final class VehicleDeclarationTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

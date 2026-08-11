@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Update Fee Status Test
  */
-class UpdateFeeStatusTest extends TestCase
+final class UpdateFeeStatusTest extends TestCase
 {
     public function testStructure(): void
     {

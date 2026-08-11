@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\FormService;
 
 use Common\FormService\FormServiceManager;
@@ -7,7 +9,7 @@ use Common\FormService\FormServiceManagerFactory;
 use Laminas\ServiceManager\ServiceManager;
 use Mockery as m;
 
-class FormServiceManagerFactoryTest extends \PHPUnit\Framework\TestCase
+final class FormServiceManagerFactoryTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 

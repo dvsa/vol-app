@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class UpdateLicenceHistoryStatusTest extends AbstractUpdateStatusTestCase
+final class UpdateLicenceHistoryStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'LicenceHistory';
 

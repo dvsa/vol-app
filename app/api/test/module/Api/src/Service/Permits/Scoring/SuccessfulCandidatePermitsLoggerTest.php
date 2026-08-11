@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class SuccessfulCandidatePermitsLoggerTest extends MockeryTestCase
+final class SuccessfulCandidatePermitsLoggerTest extends MockeryTestCase
 {
     public function testLog(): void
     {

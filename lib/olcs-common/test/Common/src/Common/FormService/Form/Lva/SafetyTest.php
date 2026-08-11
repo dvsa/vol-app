@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\Safety;
@@ -11,7 +13,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class SafetyTest extends AbstractLvaFormServiceTestCase
+final class SafetyTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = Safety::class;
 

@@ -13,7 +13,7 @@ class ChangePasswordControllerFactory implements FactoryInterface
      * @param array|null $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ChangePasswordController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ChangePasswordController
     {
         /** @var array $config */
         $config = $container->get('Config');

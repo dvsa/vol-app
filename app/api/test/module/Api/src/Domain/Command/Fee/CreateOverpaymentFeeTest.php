@@ -20,7 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class CreateOverpaymentFeeTest extends MockeryTestCase
+final class CreateOverpaymentFeeTest extends MockeryTestCase
 {
     public function testStructure(): void
     {

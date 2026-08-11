@@ -9,7 +9,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class FileUploadFieldsetGeneratorFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FileUploadFieldsetGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): FileUploadFieldsetGenerator
     {
         return new FileUploadFieldsetGenerator(
             new FormFactory(),

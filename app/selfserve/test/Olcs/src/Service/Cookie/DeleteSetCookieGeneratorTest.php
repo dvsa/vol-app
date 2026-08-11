@@ -11,7 +11,7 @@ use Olcs\Service\Cookie\SetCookieFactory;
 use Olcs\Service\Cookie\DeleteSetCookieGenerator;
 use Laminas\Http\Header\SetCookie;
 
-class DeleteSetCookieGeneratorTest extends MockeryTestCase
+final class DeleteSetCookieGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

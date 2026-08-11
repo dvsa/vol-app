@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\Xml as XmlValidator;
@@ -12,7 +14,7 @@ use Laminas\Xml\Exception\RuntimeException;
  * Class XmlTest
  * @package Dvsa\OlcsTest\Transfer\Validators
  */
-class XmlTest extends TestCase
+final class XmlTest extends TestCase
 {
     /**
      * Test isValid when the security validator throws an exception

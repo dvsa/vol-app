@@ -15,7 +15,7 @@ class ReviewControllerFactory implements FactoryInterface
      * @param array|null $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ReviewController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ReviewController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

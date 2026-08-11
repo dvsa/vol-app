@@ -13,7 +13,7 @@ class UrlHelperServiceFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): UrlHelperService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): UrlHelperService
     {
         return new UrlHelperService(
             $container->get('ViewHelperManager'),

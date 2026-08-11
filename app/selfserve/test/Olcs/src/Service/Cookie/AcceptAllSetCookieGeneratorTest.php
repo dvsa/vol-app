@@ -12,7 +12,7 @@ use Olcs\Service\Cookie\PreferencesFactory;
 use Olcs\Service\Cookie\PreferencesSetCookieGenerator;
 use Laminas\Http\Header\SetCookie;
 
-class AcceptAllSetCookieGeneratorTest extends MockeryTestCase
+final class AcceptAllSetCookieGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

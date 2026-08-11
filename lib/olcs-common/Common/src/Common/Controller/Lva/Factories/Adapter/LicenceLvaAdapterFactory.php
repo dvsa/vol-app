@@ -11,7 +11,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class LicenceLvaAdapterFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceLvaAdapter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LicenceLvaAdapter
     {
         return new LicenceLvaAdapter($container);
     }

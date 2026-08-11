@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Vehicle;
 
 use Dvsa\Olcs\Transfer\Command\Vehicle\UpdateGoodsVehicle;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Vehicle\UpdateGoodsVehicle;
 /**
  * Update Goods Vehicle test
  */
-class UpdateGoodsVehicleTest extends \PHPUnit\Framework\TestCase
+final class UpdateGoodsVehicleTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

@@ -17,11 +17,11 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DeleteListConditionUndertakingTest extends AbstractCommandHandlerTestCase
+final class DeleteListConditionUndertakingTest extends AbstractCommandHandlerTestCase
 {
-    public const APP_ID = 65;
-    public const CU_ID_1 = 9001;
-    public const CU_ID_2 = 9002;
+    public const int APP_ID = 65;
+    public const int CU_ID_1 = 9001;
+    public const int CU_ID_2 = 9002;
 
     public function setUp(): void
     {
@@ -83,7 +83,7 @@ class DeleteListConditionUndertakingTest extends AbstractCommandHandlerTestCase
                 $this->assertSame('ATTACHED_TO', $cu->getAttachedTo());
                 $this->assertSame(ConditionUndertaking::ACTION_DELETE, $cu->getAction());
                 $this->assertSame($mockConditionUndertaking2, $cu->getLicConditionVariation());
-                $this->assertSame(null, $cu->getLicence());
+                $this->assertNull($cu->getLicence());
                 $this->assertSame(
                     $this->references[\Dvsa\Olcs\Api\Entity\Application\Application::class][self::APP_ID],
                     $cu->getApplication()

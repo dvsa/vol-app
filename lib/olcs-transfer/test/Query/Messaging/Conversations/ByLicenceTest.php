@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Messaging\Conversations;
 
 use Dvsa\Olcs\Transfer\Query\Messaging\Conversations\ByLicence;
@@ -7,7 +9,7 @@ use Dvsa\OlcsTest\Transfer\DtoWithoutOptionalFieldsTest;
 use Dvsa\OlcsTest\Transfer\Query\QueryTest;
 use Laminas\Stdlib\ArraySerializableInterface;
 
-class ByLicenceTest extends \PHPUnit\Framework\TestCase
+final class ByLicenceTest extends \PHPUnit\Framework\TestCase
 {
     use QueryTest, DtoWithoutOptionalFieldsTest {
         DtoWithoutOptionalFieldsTest::testDefaultValues insteadof QueryTest;

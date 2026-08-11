@@ -17,7 +17,7 @@ class IndexControllerFactory implements FactoryInterface
      * @return IndexController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): IndexController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): IndexController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

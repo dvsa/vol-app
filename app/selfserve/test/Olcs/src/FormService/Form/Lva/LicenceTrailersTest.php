@@ -14,7 +14,7 @@ use Laminas\Form\Form;
 use Laminas\Http\Request;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 
-class LicenceTrailersTest extends MockeryTestCase
+final class LicenceTrailersTest extends MockeryTestCase
 {
     use ButtonsAlterations;
 
@@ -25,6 +25,7 @@ class LicenceTrailersTest extends MockeryTestCase
 
     protected $fh;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->fh = m::mock(FormHelperService::class)->makePartial();

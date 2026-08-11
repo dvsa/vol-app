@@ -14,7 +14,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class PresidingTcEntityTest extends EntityTester
+final class PresidingTcEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

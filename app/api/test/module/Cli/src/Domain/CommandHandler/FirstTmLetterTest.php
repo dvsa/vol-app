@@ -22,7 +22,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use Mockery as m;
 use Dvsa\Olcs\Email\Exception\EmailNotSentException;
 
-class FirstTmLetterTest extends AbstractCommandHandlerTestCase
+final class FirstTmLetterTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -42,7 +42,7 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
         parent::setUp();
     }
 
-    public static function dpHandleCommand(): array
+    public static function dpHandleCommand(): \Iterator
     {
         $sideEffectResults = [
             'GenerateAndStore' => [
@@ -66,177 +66,168 @@ class FirstTmLetterTest extends AbstractCommandHandlerTestCase
                 ],
             ],
         ];
-
-        return [
-            'no_licences' => [
-                'dataProvider' => [
-                    'licence' => [],
-                    'sideEffectResults' => $sideEffectResults,
-                ],
-                'expectedResult' => [
-                    'id' => [],
-                    'messages' => [],
-                ],
+        yield 'no_licences' => [
+            'dataProvider' => [
+                'licence' => [],
+                'sideEffectResults' => $sideEffectResults,
             ],
-
-            'licence_with_removed_tm_no_correspondence_cd' => [
-                'dataProvider' => [
-                    'licence' => [
-                        'id' => 1,
-                        'licNo' => 'AB123',
-                        'isNi' => false,
-                        'isPsv' => false,
-                        'translateToWelsh' => 'N',
-                        'organisation' => [
-                            'allowEmail' => 'Y',
-                            'name' => 'Test Operator Ltd',
-                        ],
-                        'correspondenceCd' => null,
-                    ],
-                    'user' => [],
-                    'sideEffectResults' => $sideEffectResults,
-                ],
-                'expectedResult' => [
-                    'id' => [
-                        'document' => 123,
-                    ],
-                    'messages' => [],
-                ],
+            'expectedResult' => [
+                'id' => [],
+                'messages' => [],
             ],
-
-            'licence_with_removed_tm_correspondence_cd_email_null' => [
-                'dataProvider' => [
-                    'licence' => [
-                        'id' => 1,
-                        'licNo' => 'AB123',
-                        'isNi' => false,
-                        'isPsv' => false,
-                        'translateToWelsh' => 'N',
-                        'organisation' => [
-                            'allowEmail' => 'Y',
-                            'name' => 'Test Operator Ltd',
-                        ],
-                        'correspondenceCd' => [
-                            'emailAddress' => null,
-                        ],
+        ];
+        yield 'licence_with_removed_tm_no_correspondence_cd' => [
+            'dataProvider' => [
+                'licence' => [
+                    'id' => 1,
+                    'licNo' => 'AB123',
+                    'isNi' => false,
+                    'isPsv' => false,
+                    'translateToWelsh' => 'N',
+                    'organisation' => [
+                        'allowEmail' => 'Y',
+                        'name' => 'Test Operator Ltd',
                     ],
-                    'user' => [],
-                    'sideEffectResults' => $sideEffectResults,
+                    'correspondenceCd' => null,
                 ],
-                'expectedResult' => [
-                    'id' => [
-                        'document' => 123,
-                    ],
-                    'messages' => [],
-                ],
+                'user' => [],
+                'sideEffectResults' => $sideEffectResults,
             ],
-
-            'licence_with_removed_tm_email_not_registered_user' => [
-                'dataProvider' => [
-                    'licence' => [
-                        'id' => 1,
-                        'licNo' => 'AB123',
-                        'isNi' => false,
-                        'isPsv' => false,
-                        'translateToWelsh' => 'N',
-                        'organisation' => [
-                            'allowEmail' => 'Y',
-                            'name' => 'Test Operator Ltd',
-                        ],
-                        'correspondenceCd' => [
-                            'emailAddress' => 'test@email.com',
-                        ],
-                    ],
-                    'user' => [
-                        'fetchFirstByEmailOrFalse' => false,
-                    ],
-                    'sideEffectResults' => $sideEffectResults,
+            'expectedResult' => [
+                'id' => [
+                    'document' => 123,
                 ],
-                'expectedResult' => [
-                    'id' => [
-                        'document' => 123,
-                    ],
-                    'messages' => [],
-                ],
+                'messages' => [],
             ],
-
-            'licence_with_removed_tm_email_registered_user' => [
-                'dataProvider' => [
-                    'licence' => [
-                        'id' => 1,
-                        'licNo' => 'AB123',
-                        'isNi' => false,
-                        'isPsv' => false,
-                        'translateToWelsh' => 'N',
-                        'organisation' => [
-                            'allowEmail' => 'Y',
-                            'name' => 'Test Operator Ltd',
-                        ],
-                        'correspondenceCd' => [
-                            'emailAddress' => 'test@email.com',
-                        ],
+        ];
+        yield 'licence_with_removed_tm_correspondence_cd_email_null' => [
+            'dataProvider' => [
+                'licence' => [
+                    'id' => 1,
+                    'licNo' => 'AB123',
+                    'isNi' => false,
+                    'isPsv' => false,
+                    'translateToWelsh' => 'N',
+                    'organisation' => [
+                        'allowEmail' => 'Y',
+                        'name' => 'Test Operator Ltd',
                     ],
-                    'user' => [
-                        'fetchFirstByEmailOrFalse' => m::mock(UserEntity::class),
+                    'correspondenceCd' => [
+                        'emailAddress' => null,
                     ],
-                    'sideEffectResults' => $sideEffectResults,
                 ],
-                'expectedResult' => [
-                    'id' => [
-                        'document' => 123,
-                    ],
-                    'messages' => [],
-                ],
+                'user' => [],
+                'sideEffectResults' => $sideEffectResults,
             ],
-
-            'licence_ni_template_path' => [
-                'dataProvider' => [
-                    'licence' => [
-                        'id' => 1,
-                        'licNo' => 'AB123',
-                        'isNi' => true,
-                        'isPsv' => false,
-                        'translateToWelsh' => 'N',
-                        'organisation' => [
-                            'allowEmail' => 'Y',
-                            'name' => 'Test Operator Ltd',
-                        ],
-                        'correspondenceCd' => null,
-                    ],
-                    'user' => [],
-                    'sideEffectResults' => $sideEffectResults,
+            'expectedResult' => [
+                'id' => [
+                    'document' => 123,
                 ],
-                'expectedResult' => [
-                    'id' => [
-                        'document' => 123,
-                    ],
-                    'messages' => [],
-                ],
+                'messages' => [],
             ],
-
-            'licence_psv_template_path' => [
-                'dataProvider' => [
-                    'licence' => [
-                        'id' => 1,
-                        'licNo' => 'AB123',
-                        'isNi' => false,
-                        'isPsv' => true,
-                        'translateToWelsh' => 'N',
-                        'organisation' => [
-                            'allowEmail' => 'Y',
-                            'name' => 'Test Operator Ltd',
-                        ],
-                        'correspondenceCd' => null,
+        ];
+        yield 'licence_with_removed_tm_email_not_registered_user' => [
+            'dataProvider' => [
+                'licence' => [
+                    'id' => 1,
+                    'licNo' => 'AB123',
+                    'isNi' => false,
+                    'isPsv' => false,
+                    'translateToWelsh' => 'N',
+                    'organisation' => [
+                        'allowEmail' => 'Y',
+                        'name' => 'Test Operator Ltd',
                     ],
-                    'user' => [],
-                    'sideEffectResults' => $sideEffectResults,
-                ],
-                'expectedResult' => [
-                    'id' => [
-                        'document' => 123,
+                    'correspondenceCd' => [
+                        'emailAddress' => 'test@email.com',
                     ],
-                    'messages' => [],
                 ],
+                'user' => [
+                    'fetchFirstByEmailOrFalse' => false,
+                ],
+                'sideEffectResults' => $sideEffectResults,
+            ],
+            'expectedResult' => [
+                'id' => [
+                    'document' => 123,
+                ],
+                'messages' => [],
+            ],
+        ];
+        yield 'licence_with_removed_tm_email_registered_user' => [
+            'dataProvider' => [
+                'licence' => [
+                    'id' => 1,
+                    'licNo' => 'AB123',
+                    'isNi' => false,
+                    'isPsv' => false,
+                    'translateToWelsh' => 'N',
+                    'organisation' => [
+                        'allowEmail' => 'Y',
+                        'name' => 'Test Operator Ltd',
+                    ],
+                    'correspondenceCd' => [
+                        'emailAddress' => 'test@email.com',
+                    ],
+                ],
+                'user' => [
+                    'fetchFirstByEmailOrFalse' => m::mock(UserEntity::class),
+                ],
+                'sideEffectResults' => $sideEffectResults,
+            ],
+            'expectedResult' => [
+                'id' => [
+                    'document' => 123,
+                ],
+                'messages' => [],
+            ],
+        ];
+        yield 'licence_ni_template_path' => [
+            'dataProvider' => [
+                'licence' => [
+                    'id' => 1,
+                    'licNo' => 'AB123',
+                    'isNi' => true,
+                    'isPsv' => false,
+                    'translateToWelsh' => 'N',
+                    'organisation' => [
+                        'allowEmail' => 'Y',
+                        'name' => 'Test Operator Ltd',
+                    ],
+                    'correspondenceCd' => null,
+                ],
+                'user' => [],
+                'sideEffectResults' => $sideEffectResults,
+            ],
+            'expectedResult' => [
+                'id' => [
+                    'document' => 123,
+                ],
+                'messages' => [],
+            ],
+        ];
+        yield 'licence_psv_template_path' => [
+            'dataProvider' => [
+                'licence' => [
+                    'id' => 1,
+                    'licNo' => 'AB123',
+                    'isNi' => false,
+                    'isPsv' => true,
+                    'translateToWelsh' => 'N',
+                    'organisation' => [
+                        'allowEmail' => 'Y',
+                        'name' => 'Test Operator Ltd',
+                    ],
+                    'correspondenceCd' => null,
+                ],
+                'user' => [],
+                'sideEffectResults' => $sideEffectResults,
+            ],
+            'expectedResult' => [
+                'id' => [
+                    'document' => 123,
+                ],
+                'messages' => [],
             ],
         ];
     }

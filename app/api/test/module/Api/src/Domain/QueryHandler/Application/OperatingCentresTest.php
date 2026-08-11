@@ -33,7 +33,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class OperatingCentresTest extends QueryHandlerTestCase
+final class OperatingCentresTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

@@ -9,20 +9,13 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 
 /**
  * IrhpCandidatePermit Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="irhp_candidate_permit",
- *    indexes={
- *        @ORM\Index(name="fk_irhp_candidate_permits_irhp_permit_applications1_idx",
-     *     columns={"irhp_permit_application_id"}),
- *        @ORM\Index(name="fk_irhp_candidate_permit_irhp_permit_range",
-     *     columns={"irhp_permit_range_id"}),
- *        @ORM\Index(name="fk_irhp_candidate_permit_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_irhp_candidate_permit_last_modified_by_user_id",
-     *     columns={"last_modified_by"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_candidate_permit')]
+#[ORM\Index(name: 'fk_irhp_candidate_permits_irhp_permit_applications1_idx', columns: ['irhp_permit_application_id'])]
+#[ORM\Index(name: 'fk_irhp_candidate_permit_irhp_permit_range', columns: ['irhp_permit_range_id'])]
+#[ORM\Index(name: 'fk_irhp_candidate_permit_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_irhp_candidate_permit_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Entity]
 class IrhpCandidatePermit extends AbstractIrhpCandidatePermit implements DeletableInterface
 {
     /**
@@ -34,8 +27,8 @@ class IrhpCandidatePermit extends AbstractIrhpCandidatePermit implements Deletab
     public static function createNew(
         IrhpPermitApplication $irhpPermitApplication,
         RefData $requestedEmissionsCategory,
-        float $intensityOfUse = null,
-        float $applicationScore = null
+        ?float $intensityOfUse = null,
+        ?float $applicationScore = null
     ) {
         $irhpCandidatePermit = new self();
         $irhpCandidatePermit->irhpPermitApplication = $irhpPermitApplication;

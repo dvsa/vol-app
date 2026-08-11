@@ -19,7 +19,7 @@ use Dvsa\Olcs\Api\Entity\Cases\Cases as CasesEntity;
 /**
  * Update AnnualTestHistory Test
  */
-class UpdateAnnualTestHistoryTest extends AbstractCommandHandlerTestCase
+final class UpdateAnnualTestHistoryTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

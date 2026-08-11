@@ -40,7 +40,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\MocksUserRepositoryTrait;
 /**
  * @see UpdateVariationCompletion
  */
-class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
+final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
 {
     use MocksServicesTrait;
     use MocksAbstractCommandHandlerServicesTrait;
@@ -50,13 +50,13 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
     use MocksLicenceOperatingCentreRepositoryTrait;
     use MocksUserRepositoryTrait;
 
-    protected const VALIDATION_MESSAGES = ['A VALIDATION MESSAGE KEY' => 'A VALIDATION MESSAGE VALUE'];
-    protected const NO_VALIDATION_MESSAGES = [];
-    protected const AN_ID = 1;
-    protected const ID_PROPERTY = 'id';
-    protected const SECTION_PROPERTY = 'section';
-    protected const A_NUMBER_OF_VEHICLES = 7;
-    protected const DEFAULT_TOT_AUTH_VEHICLES = null;
+    protected const array VALIDATION_MESSAGES = ['A VALIDATION MESSAGE KEY' => 'A VALIDATION MESSAGE VALUE'];
+    protected const array NO_VALIDATION_MESSAGES = [];
+    protected const int AN_ID = 1;
+    protected const string ID_PROPERTY = 'id';
+    protected const string SECTION_PROPERTY = 'section';
+    protected const int A_NUMBER_OF_VEHICLES = 7;
+    protected const null DEFAULT_TOT_AUTH_VEHICLES = null;
 
     /**
      * @var  UpdateOperatingCentreHelper
@@ -96,771 +96,769 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         return self::$refDataCache[$id];
     }
 
-    public static function handleCommandProvider(): array
+    public static function handleCommandProvider(): \Iterator
     {
-        return [
-            'Changed Type Of Licence and Vehicle Type' => [
-                'typeOfLicence',
-                self::getApplicationState1(),
-                self::getLicenceState2(),
-                [
-                    'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'TypeOfLicence' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                []
+        yield 'Changed Type Of Licence and Vehicle Type' => [
+            'typeOfLicence',
+            self::getApplicationState1(),
+            self::getLicenceState2(),
+            [
+                'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Change Vehicle Type only' => [
-                'typeOfLicence',
-                self::getApplicationState2(RefData::APP_VEHICLE_TYPE_LGV),
-                self::getLicenceState2(),
-                [
-                    'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'TypeOfLicence' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                []
+            [
+                'TypeOfLicence' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
             ],
-            'Change Vehicle Type to something which requires Operating Centre' => [
-                'typeOfLicence',
-                self::getApplicationState2(RefData::APP_VEHICLE_TYPE_MIXED),
-                self::getLicenceState2(RefData::APP_VEHICLE_TYPE_LGV),
-                [
-                    'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'OperatingCentres' => UpdateVariationCompletion::STATUS_UPDATED,
-                ],
-                [
-                    'TypeOfLicence' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                ],
-                'N',
-                []
+            'N',
+            []
+        ];
+        yield 'Change Vehicle Type only' => [
+            'typeOfLicence',
+            self::getApplicationState2(RefData::APP_VEHICLE_TYPE_LGV),
+            self::getLicenceState2(),
+            [
+                'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Change Vehicle Type to something which can have Trailer' => [
-                'typeOfLicence',
-                self::getApplicationState2(RefData::APP_VEHICLE_TYPE_MIXED),
-                self::getLicenceState2(RefData::APP_VEHICLE_TYPE_LGV),
-                [
-                    'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Safety' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                [
-                    'TypeOfLicence' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Safety' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                ],
-                'N',
-                []
+            [
+                'TypeOfLicence' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
             ],
-            'Unchanged Type Of Licence' => [
-                'typeOfLicence',
-                self::getApplicationState2(),
-                self::getLicenceState2(),
-                [
-                    'TypeOfLicence' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                'Y',
-                []
+            'N',
+            []
+        ];
+        yield 'Change Vehicle Type to something which requires Operating Centre' => [
+            'typeOfLicence',
+            self::getApplicationState2(RefData::APP_VEHICLE_TYPE_MIXED),
+            self::getLicenceState2(RefData::APP_VEHICLE_TYPE_LGV),
+            [
+                'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_UPDATED,
             ],
-            'Changed Transport Managers' => [
-                'transportManagers',
-                self::getApplicationState1(),
-                self::getLicenceState2(),
-                [
-                    'TransportManagers' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'TransportManagers' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                []
+            [
+                'TypeOfLicence' => UpdateVariationCompletion::STATUS_UPDATED,
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
             ],
-            'Unchanged Transport Managers' => [
-                'transportManagers',
-                self::getApplicationState2(),
-                self::getLicenceState2(),
-                [
-                    'TransportManagers' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'TransportManagers' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                'Y',
-                []
+            'N',
+            []
+        ];
+        yield 'Change Vehicle Type to something which can have Trailer' => [
+            'typeOfLicence',
+            self::getApplicationState2(RefData::APP_VEHICLE_TYPE_MIXED),
+            self::getLicenceState2(RefData::APP_VEHICLE_TYPE_LGV),
+            [
+                'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Safety' => UpdateVariationCompletion::STATUS_UNCHANGED,
             ],
-            'Changed Vehicles' => [
-                'vehicles',
-                self::getApplicationState1(),
-                self::getLicenceState2(),
-                [
-                    'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'Vehicles' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                []
+            [
+                'TypeOfLicence' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Safety' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
             ],
-            'Changed Vehicles - totAuthVehicles below activeVehicles count' => [
-                'vehicles',
-                self::getApplicationState1()->updateTotAuthHgvVehicles(1),
-                self::getLicenceState2(),
-                [
-                    'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                [
-                    'Vehicles' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                ],
-                'N',
-                []
+            'N',
+            []
+        ];
+        yield 'Unchanged Type Of Licence' => [
+            'typeOfLicence',
+            self::getApplicationState2(),
+            self::getLicenceState2(),
+            [
+                'TypeOfLicence' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Changed Vehicles - application activeVehicles count below 1' => [
-                'vehicles',
-                self::getApplicationState1(0),
-                self::getLicenceState2(),
-                [
-                    'Vehicles' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                ],
-                [
-                    'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                'N',
-                []
+            [
+                'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Unchanged Vehicles' => [
-                'vehicles',
-                self::getApplicationState2(),
-                self::getLicenceState2(),
-                [
-                    'Vehicles' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                'Y',
-                []
+            'Y',
+            []
+        ];
+        yield 'Changed Transport Managers' => [
+            'transportManagers',
+            self::getApplicationState1(),
+            self::getLicenceState2(),
+            [
+                'TransportManagers' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Changed Conditions Undertakings' => [
-                'conditionsUndertakings',
-                self::getApplicationState1(),
-                self::getLicenceState2(),
-                [
-                    'ConditionsUndertakings' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'ConditionsUndertakings' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                []
+            [
+                'TransportManagers' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
             ],
-            'Unchanged Conditions Undertakings' => [
-                'conditionsUndertakings',
-                self::getApplicationState2(),
-                self::getLicenceState2(),
-                [
-                    'ConditionsUndertakings' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'ConditionsUndertakings' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                'Y',
-                []
+            'N',
+            []
+        ];
+        yield 'Unchanged Transport Managers' => [
+            'transportManagers',
+            self::getApplicationState2(),
+            self::getLicenceState2(),
+            [
+                'TransportManagers' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Changed Undertakings' => [
-                'undertakings',
-                self::getApplicationState1(),
-                self::getLicenceState2(),
-                [
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UNCHANGED
-                ],
-                [
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                'Y',
-                []
+            [
+                'TransportManagers' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Unchanged Undertakings' => [
-                'undertakings',
-                self::getApplicationState3(),
-                self::getLicenceState2(),
-                [
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UNCHANGED
-                ],
-                'N',
-                []
+            'Y',
+            []
+        ];
+        yield 'Changed Vehicles' => [
+            'vehicles',
+            self::getApplicationState1(),
+            self::getLicenceState2(),
+            [
+                'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Changed Business Type' => [
-                'businessType',
-                self::getApplicationState1(),
-                self::getLicenceState1(),
-                [
-                    'BusinessType' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'BusinessType' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                [
-                    'type' => 'foo'
-                ]
+            [
+                'Vehicles' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
             ],
-            'Changed Business Details' => [
-                'businessDetails',
-                self::getApplicationState1(),
-                self::getLicenceState1(),
-                [
-                    'BusinessDetails' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'BusinessDetails' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                [
-                    'hasChanged' => true
-                ]
+            'N',
+            []
+        ];
+        yield 'Changed Vehicles - totAuthVehicles below activeVehicles count' => [
+            'vehicles',
+            self::getApplicationState1()->updateTotAuthHgvVehicles(1),
+            self::getLicenceState2(),
+            [
+                'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
             ],
-            'Changed Business Details - requires attention or updated, mark the section as updated' => [
-                'businessDetails',
-                self::getApplicationState1(),
-                self::getLicenceState1(),
-                [
-                    'BusinessDetails' => UpdateVariationCompletion::STATUS_UPDATED,
-                ],
-                [
-                    'BusinessDetails' => UpdateVariationCompletion::STATUS_UPDATED,
-                ],
-                'Y',
-                []
+            [
+                'Vehicles' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
             ],
-            'Unchanged Business Details' => [
-                'businessDetails',
-                self::getApplicationState1(),
-                self::getLicenceState1(),
-                [
-                    'BusinessDetails' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                [
-                    'BusinessDetails' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                'Y',
-                [
-                    'hasChanged' => false,
-                ]
+            'N',
+            []
+        ];
+        yield 'Changed Vehicles - application activeVehicles count below 1' => [
+            'vehicles',
+            self::getApplicationState1(0),
+            self::getLicenceState2(),
+            [
+                'Vehicles' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
             ],
-            'Changed Addresses' => [
-                'addresses',
-                self::getApplicationState1(),
-                self::getLicenceState1(),
-                [
-                    'Addresses' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'Addresses' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                [
-                    'hasChanged' => true
-                ]
+            [
+                'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
             ],
-            'Changed Addresses - requires attention or updated, mark the section as updated' => [
-                'addresses',
-                self::getApplicationState1(),
-                self::getLicenceState1(),
-                [
-                    'Addresses' => UpdateVariationCompletion::STATUS_UPDATED,
-                ],
-                [
-                    'Addresses' => UpdateVariationCompletion::STATUS_UPDATED,
-                ],
-                'Y',
-                []
+            'N',
+            []
+        ];
+        yield 'Unchanged Vehicles' => [
+            'vehicles',
+            self::getApplicationState2(),
+            self::getLicenceState2(),
+            [
+                'Vehicles' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Unchanged Addresses' => [
-                'addresses',
-                self::getApplicationState1(),
-                self::getLicenceState1(),
-                [
-                    'Addresses' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                [
-                    'Addresses' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                'Y',
-                [
-                    'hasChanged' => false,
-                ]
+            [
+                'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Changed People' => [
-                'people',
-                self::getApplicationState6('U'),
-                self::getLicenceState1(),
-                [
-                    'People' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'People' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'FinancialHistory' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                ],
-                'N',
-                []
+            'Y',
+            []
+        ];
+        yield 'Changed Conditions Undertakings' => [
+            'conditionsUndertakings',
+            self::getApplicationState1(),
+            self::getLicenceState2(),
+            [
+                'ConditionsUndertakings' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Changed People 1' => [
-                'people',
-                self::getApplicationState6('D'),
-                self::getLicenceState1(),
-                [
-                    'People' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'People' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                ],
-                'N',
-                []
+            [
+                'ConditionsUndertakings' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
             ],
-            'Changed People - requires attention or updated, mark the section as updated' => [
-                'people',
-                self::getApplicationState6('U'),
-                self::getLicenceState1(),
-                [
-                    'People' => UpdateVariationCompletion::STATUS_UPDATED,
-                ],
-                [
-                    'People' => UpdateVariationCompletion::STATUS_UPDATED,
-                ],
-                0,
-                []
+            'N',
+            []
+        ];
+        yield 'Unchanged Conditions Undertakings' => [
+            'conditionsUndertakings',
+            self::getApplicationState2(),
+            self::getLicenceState2(),
+            [
+                'ConditionsUndertakings' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Unchanged People' => [
-                'people',
-                self::getApplicationState6(),
-                self::getLicenceState1(),
-                [
-                    'People' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                ],
-                [
-                    'People' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                'N',
-                []
+            [
+                'ConditionsUndertakings' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Changed Financial Evidence' => [
-                'financialEvidence',
-                self::getApplicationState1(),
-                self::getLicenceState1(),
-                [
-                    'FinancialEvidence' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'FinancialEvidence' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                []
+            'Y',
+            []
+        ];
+        yield 'Changed Undertakings' => [
+            'undertakings',
+            self::getApplicationState1(),
+            self::getLicenceState2(),
+            [
+                'Undertakings' => UpdateVariationCompletion::STATUS_UNCHANGED
             ],
-            'Changed Discs' => [
-                'discs',
-                self::getApplicationState1(),
-                self::getLicenceState1(),
-                [
-                    'Discs' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'Discs' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                []
+            [
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Changed Discs - totAuthVehicles less than psvDiscsNotCeasedCount' => [
-                'discs',
-                self::getApplicationState1()->updateTotAuthHgvVehicles(1),
-                self::getLicenceState1(),
-                [
-                    'Discs' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                [
-                    'Discs' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                ],
-                'N',
-                []
+            'Y',
+            []
+        ];
+        yield 'Unchanged Undertakings' => [
+            'undertakings',
+            self::getApplicationState3(),
+            self::getLicenceState2(),
+            [
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Changed Community Licences' => [
-                'communityLicences',
-                self::getApplicationState1(),
-                self::getLicenceState1(),
-                [
-                    'CommunityLicences' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'CommunityLicences' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                []
+            [
+                'Undertakings' => UpdateVariationCompletion::STATUS_UNCHANGED
             ],
-            'Changed Community Licences - totAuthVehicles less than comLic' => [
-                'communityLicences',
-                self::getApplicationState1()->updateTotAuthHgvVehicles(1),
-                self::getLicenceState1(),
-                [
-                    'CommunityLicences' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                [
-                    'CommunityLicences' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                ],
-                'N',
-                []
+            'N',
+            []
+        ];
+        yield 'Changed Business Type' => [
+            'businessType',
+            self::getApplicationState1(),
+            self::getLicenceState1(),
+            [
+                'BusinessType' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Changed Safety' => [
-                'safety',
-                self::getApplicationState1(),
-                self::getLicenceState1(),
-                [
-                    'Safety' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'Safety' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                [
-                    'hasChanged' => true
-                ]
+            [
+                'BusinessType' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
             ],
-            'Unchanged Safety' => [
-                'safety',
-                self::getApplicationState1(),
-                self::getLicenceState1(),
-                [
-                    'Safety' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                [
-                    'Safety' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                'Y',
-                [
-                    'hasChanged' => false,
-                ]
+            'N',
+            [
+                'type' => 'foo'
+            ]
+        ];
+        yield 'Changed Business Details' => [
+            'businessDetails',
+            self::getApplicationState1(),
+            self::getLicenceState1(),
+            [
+                'BusinessDetails' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Changed Operating Centres 1' => [
-                'operatingCentres',
-                self::getApplicationState1(),
-                self::getLicenceState1(),
-                [
-                    'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED
-                ],
-                [
-                    'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                'N',
-                []
+            [
+                'BusinessDetails' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
             ],
-            'Changed Operating Centres 2' => [
-                'operatingCentres',
-                self::getApplicationState2(),
-                self::getLicenceState1(),
-                [
-                    'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'FinancialEvidence' => UpdateVariationCompletion::STATUS_UNCHANGED
-                ],
-                [
-                    'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'FinancialEvidence' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                []
+            'N',
+            [
+                'hasChanged' => true
+            ]
+        ];
+        yield 'Changed Business Details - requires attention or updated, mark the section as updated' => [
+            'businessDetails',
+            self::getApplicationState1(),
+            self::getLicenceState1(),
+            [
+                'BusinessDetails' => UpdateVariationCompletion::STATUS_UPDATED,
             ],
-            'Changed Operating Centres 3' => [
-                'operatingCentres',
-                self::getApplicationState4(),
-                self::getLicenceState3(),
-                [
-                    'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Discs' =>  UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                [
-                    'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'Discs' =>  UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                ],
-                'N',
-                []
+            [
+                'BusinessDetails' => UpdateVariationCompletion::STATUS_UPDATED,
             ],
-            'Changed Operating Centres 4' => [
-                'operatingCentres',
-                self::getApplicationState4(),
-                self::getLicenceState4(),
-                [
-                    'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
-                ],
-                [
-                    'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                'N',
-                []
+            'Y',
+            []
+        ];
+        yield 'Unchanged Business Details' => [
+            'businessDetails',
+            self::getApplicationState1(),
+            self::getLicenceState1(),
+            [
+                'BusinessDetails' => UpdateVariationCompletion::STATUS_UNCHANGED,
             ],
-            'Unchanged Operating Centres' => [
-                'operatingCentres',
-                self::getApplicationState2(),
-                self::getLicenceState2(),
-                [
-                    'OperatingCentres' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                'Y',
-                []
+            [
+                'BusinessDetails' => UpdateVariationCompletion::STATUS_UNCHANGED,
             ],
-            'Unchanged Operating Centres - hasActuallyUpdatedOperatingCentres' => [
-                'operatingCentres',
-                self::getApplicationState2(),
-                self::getLicenceState1(),
-                [
-                    'OperatingCentres' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                [
-                    'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                ],
-                'N',
-                []
+            'Y',
+            [
+                'hasChanged' => false,
+            ]
+        ];
+        yield 'Changed Addresses' => [
+            'addresses',
+            self::getApplicationState1(),
+            self::getLicenceState1(),
+            [
+                'Addresses' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Goods - totAuthVehicles has dropped below the number of vehicles added' => [
-                'operatingCentres',
-                self::getApplicationState2()->updateTotAuthHgvVehicles(0),
-                self::getLicenceState1(),
-                [
-                    'OperatingCentres' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                [
-                    'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'Vehicles' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                ],
-                'Y',
-                []
+            [
+                'Addresses' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
             ],
-            'Changed Financial History' => [
-                'financialHistory',
-                self::getApplicationState1(),
-                self::getLicenceState1(),
-                [
-                    'FinancialHistory' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'FinancialHistory' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                []
+            'N',
+            [
+                'hasChanged' => true
+            ]
+        ];
+        yield 'Changed Addresses - requires attention or updated, mark the section as updated' => [
+            'addresses',
+            self::getApplicationState1(),
+            self::getLicenceState1(),
+            [
+                'Addresses' => UpdateVariationCompletion::STATUS_UPDATED,
             ],
-            'Unchanged Financial History' => [
-                'financialHistory',
-                self::getApplicationState2(),
-                self::getLicenceState2(),
-                [
-                    'FinancialHistory' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'FinancialHistory' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                'Y',
-                []
+            [
+                'Addresses' => UpdateVariationCompletion::STATUS_UPDATED,
             ],
-            'Changed Convictions Penalties 1' => [
-                'convictionsPenalties',
-                self::getApplicationState1(),
-                self::getLicenceState1(),
-                [
-                    'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                []
+            'Y',
+            []
+        ];
+        yield 'Unchanged Addresses' => [
+            'addresses',
+            self::getApplicationState1(),
+            self::getLicenceState1(),
+            [
+                'Addresses' => UpdateVariationCompletion::STATUS_UNCHANGED,
             ],
-            'Changed Convictions Penalties 2' => [
-                'convictionsPenalties',
-                self::getApplicationState2(),
-                self::getLicenceState1(),
-                [
-                    'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                []
+            [
+                'Addresses' => UpdateVariationCompletion::STATUS_UNCHANGED,
             ],
-            'Unchanged Convictions Penalties' => [
-                'convictionsPenalties',
-                self::getApplicationState3(),
-                self::getLicenceState2(),
-                [
-                    'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                [
-                    'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
-                ],
-                'N',
-                []
+            'Y',
+            [
+                'hasChanged' => false,
+            ]
+        ];
+        yield 'Changed People' => [
+            'people',
+            self::getApplicationState6('U'),
+            self::getLicenceState1(),
+            [
+                'People' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Licence Upgrade' => [
-                'typeOfLicence',
-                self::getApplicationState1(),
-                self::getLicenceState3(),
-                [
-                    'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Addresses' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'TransportManagers' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'FinancialHistory' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'FinancialEvidence' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                [
-                    'TypeOfLicence' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'Addresses' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'TransportManagers' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'FinancialHistory' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'FinancialEvidence' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
-                    'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
-                ],
-                'N',
-                []
+            [
+                'People' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'FinancialHistory' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
             ],
-            'Declarations Internal unchanged' => [
-                'declarationsInternal',
-                self::getApplicationState3(),
-                self::getLicenceState2(),
-                [
-                    'DeclarationsInternal' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                [
-                    'DeclarationsInternal' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                0,
-                []
+            'N',
+            []
+        ];
+        yield 'Changed People 1' => [
+            'people',
+            self::getApplicationState6('D'),
+            self::getLicenceState1(),
+            [
+                'People' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
-            'Declarations Internal authSignature set' => [
-                'declarationsInternal',
-                self::getApplicationState5(),
-                self::getLicenceState2(),
-                [
-                    'DeclarationsInternal' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                [
-                    'DeclarationsInternal' => UpdateVariationCompletion::STATUS_UPDATED,
-                ],
-                1,
-                []
+            [
+                'People' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
             ],
-            'Financial Evidence upload later is unchanged' => [
-                'financialEvidence',
-                self::getApplicationState1()->setFinancialEvidenceUploaded('2'),
-                self::getLicenceState1(),
-                [
-                    'FinancialEvidence' => UpdateVariationCompletion::STATUS_UPDATED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
-                ],
-                [
-                    'FinancialEvidence' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                    'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
-                ],
-                'Y',
-                [],
+            'N',
+            []
+        ];
+        yield 'Changed People - requires attention or updated, mark the section as updated' => [
+            'people',
+            self::getApplicationState6('U'),
+            self::getLicenceState1(),
+            [
+                'People' => UpdateVariationCompletion::STATUS_UPDATED,
             ],
-            'PSV Documentary Evidence Small upload later is unchanged' => [
-                'psvDocumentaryEvidenceSmall',
-                self::getApplicationState1()->setSmallVehicleEvidenceUploaded('2'),
-                self::getLicenceState1(),
-                [
-                    'PsvDocumentaryEvidenceSmall' => UpdateVariationCompletion::STATUS_UPDATED,
-                ],
-                [
-                    'PsvDocumentaryEvidenceSmall' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                'Y',
-                [],
+            [
+                'People' => UpdateVariationCompletion::STATUS_UPDATED,
             ],
-            'PSV Documentary Evidence Large upload later is unchanged' => [
-                'psvDocumentaryEvidenceLarge',
-                self::getApplicationState1()->setOccupationEvidenceUploaded('2'),
-                self::getLicenceState1(),
-                [
-                    'PsvDocumentaryEvidenceLarge' => UpdateVariationCompletion::STATUS_UPDATED,
-                ],
-                [
-                    'PsvDocumentaryEvidenceLarge' => UpdateVariationCompletion::STATUS_UNCHANGED,
-                ],
-                'Y',
-                [],
+            0,
+            []
+        ];
+        yield 'Unchanged People' => [
+            'people',
+            self::getApplicationState6(),
+            self::getLicenceState1(),
+            [
+                'People' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
             ],
+            [
+                'People' => UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            'N',
+            []
+        ];
+        yield 'Changed Financial Evidence' => [
+            'financialEvidence',
+            self::getApplicationState1(),
+            self::getLicenceState1(),
+            [
+                'FinancialEvidence' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
+            ],
+            [
+                'FinancialEvidence' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
+            ],
+            'N',
+            []
+        ];
+        yield 'Changed Discs' => [
+            'discs',
+            self::getApplicationState1(),
+            self::getLicenceState1(),
+            [
+                'Discs' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
+            ],
+            [
+                'Discs' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
+            ],
+            'N',
+            []
+        ];
+        yield 'Changed Discs - totAuthVehicles less than psvDiscsNotCeasedCount' => [
+            'discs',
+            self::getApplicationState1()->updateTotAuthHgvVehicles(1),
+            self::getLicenceState1(),
+            [
+                'Discs' => UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            [
+                'Discs' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+            ],
+            'N',
+            []
+        ];
+        yield 'Changed Community Licences' => [
+            'communityLicences',
+            self::getApplicationState1(),
+            self::getLicenceState1(),
+            [
+                'CommunityLicences' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
+            ],
+            [
+                'CommunityLicences' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
+            ],
+            'N',
+            []
+        ];
+        yield 'Changed Community Licences - totAuthVehicles less than comLic' => [
+            'communityLicences',
+            self::getApplicationState1()->updateTotAuthHgvVehicles(1),
+            self::getLicenceState1(),
+            [
+                'CommunityLicences' => UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            [
+                'CommunityLicences' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+            ],
+            'N',
+            []
+        ];
+        yield 'Changed Safety' => [
+            'safety',
+            self::getApplicationState1(),
+            self::getLicenceState1(),
+            [
+                'Safety' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
+            ],
+            [
+                'Safety' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
+            ],
+            'N',
+            [
+                'hasChanged' => true
+            ]
+        ];
+        yield 'Unchanged Safety' => [
+            'safety',
+            self::getApplicationState1(),
+            self::getLicenceState1(),
+            [
+                'Safety' => UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            [
+                'Safety' => UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            'Y',
+            [
+                'hasChanged' => false,
+            ]
+        ];
+        yield 'Changed Operating Centres 1' => [
+            'operatingCentres',
+            self::getApplicationState1(),
+            self::getLicenceState1(),
+            [
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED
+            ],
+            [
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            'N',
+            []
+        ];
+        yield 'Changed Operating Centres 2' => [
+            'operatingCentres',
+            self::getApplicationState2(),
+            self::getLicenceState1(),
+            [
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
+                'FinancialEvidence' => UpdateVariationCompletion::STATUS_UNCHANGED
+            ],
+            [
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'FinancialEvidence' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
+            ],
+            'N',
+            []
+        ];
+        yield 'Changed Operating Centres 3' => [
+            'operatingCentres',
+            self::getApplicationState4(),
+            self::getLicenceState3(),
+            [
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Discs' =>  UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            [
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Discs' =>  UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+            ],
+            'N',
+            []
+        ];
+        yield 'Changed Operating Centres 4' => [
+            'operatingCentres',
+            self::getApplicationState4(),
+            self::getLicenceState4(),
+            [
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
+            ],
+            [
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            'N',
+            []
+        ];
+        yield 'Unchanged Operating Centres' => [
+            'operatingCentres',
+            self::getApplicationState2(),
+            self::getLicenceState2(),
+            [
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
+            ],
+            [
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
+            ],
+            'Y',
+            []
+        ];
+        yield 'Unchanged Operating Centres - hasActuallyUpdatedOperatingCentres' => [
+            'operatingCentres',
+            self::getApplicationState2(),
+            self::getLicenceState1(),
+            [
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            [
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+            ],
+            'N',
+            []
+        ];
+        yield 'Goods - totAuthVehicles has dropped below the number of vehicles added' => [
+            'operatingCentres',
+            self::getApplicationState2()->updateTotAuthHgvVehicles(0),
+            self::getLicenceState1(),
+            [
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            [
+                'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Vehicles' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+            ],
+            'Y',
+            []
+        ];
+        yield 'Changed Financial History' => [
+            'financialHistory',
+            self::getApplicationState1(),
+            self::getLicenceState1(),
+            [
+                'FinancialHistory' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
+            ],
+            [
+                'FinancialHistory' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
+            ],
+            'N',
+            []
+        ];
+        yield 'Unchanged Financial History' => [
+            'financialHistory',
+            self::getApplicationState2(),
+            self::getLicenceState2(),
+            [
+                'FinancialHistory' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
+            ],
+            [
+                'FinancialHistory' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
+            ],
+            'Y',
+            []
+        ];
+        yield 'Changed Convictions Penalties 1' => [
+            'convictionsPenalties',
+            self::getApplicationState1(),
+            self::getLicenceState1(),
+            [
+                'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
+            ],
+            [
+                'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
+            ],
+            'N',
+            []
+        ];
+        yield 'Changed Convictions Penalties 2' => [
+            'convictionsPenalties',
+            self::getApplicationState2(),
+            self::getLicenceState1(),
+            [
+                'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
+            ],
+            [
+                'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
+            ],
+            'N',
+            []
+        ];
+        yield 'Unchanged Convictions Penalties' => [
+            'convictionsPenalties',
+            self::getApplicationState3(),
+            self::getLicenceState2(),
+            [
+                'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
+            ],
+            [
+                'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
+            ],
+            'N',
+            []
+        ];
+        yield 'Licence Upgrade' => [
+            'typeOfLicence',
+            self::getApplicationState1(),
+            self::getLicenceState3(),
+            [
+                'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Addresses' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'TransportManagers' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'FinancialHistory' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'FinancialEvidence' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            [
+                'TypeOfLicence' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'Addresses' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'TransportManagers' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'FinancialHistory' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'FinancialEvidence' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
+                'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION
+            ],
+            'N',
+            []
+        ];
+        yield 'Declarations Internal unchanged' => [
+            'declarationsInternal',
+            self::getApplicationState3(),
+            self::getLicenceState2(),
+            [
+                'DeclarationsInternal' => UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            [
+                'DeclarationsInternal' => UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            0,
+            []
+        ];
+        yield 'Declarations Internal authSignature set' => [
+            'declarationsInternal',
+            self::getApplicationState5(),
+            self::getLicenceState2(),
+            [
+                'DeclarationsInternal' => UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            [
+                'DeclarationsInternal' => UpdateVariationCompletion::STATUS_UPDATED,
+            ],
+            1,
+            []
+        ];
+        yield 'Financial Evidence upload later is unchanged' => [
+            'financialEvidence',
+            self::getApplicationState1()->setFinancialEvidenceUploaded('2'),
+            self::getLicenceState1(),
+            [
+                'FinancialEvidence' => UpdateVariationCompletion::STATUS_UPDATED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
+            ],
+            [
+                'FinancialEvidence' => UpdateVariationCompletion::STATUS_UNCHANGED,
+                'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
+            ],
+            'Y',
+            [],
+        ];
+        yield 'PSV Documentary Evidence Small upload later is unchanged' => [
+            'psvDocumentaryEvidenceSmall',
+            self::getApplicationState1()->setSmallVehicleEvidenceUploaded('2'),
+            self::getLicenceState1(),
+            [
+                'PsvDocumentaryEvidenceSmall' => UpdateVariationCompletion::STATUS_UPDATED,
+            ],
+            [
+                'PsvDocumentaryEvidenceSmall' => UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            'Y',
+            [],
+        ];
+        yield 'PSV Documentary Evidence Large upload later is unchanged' => [
+            'psvDocumentaryEvidenceLarge',
+            self::getApplicationState1()->setOccupationEvidenceUploaded('2'),
+            self::getLicenceState1(),
+            [
+                'PsvDocumentaryEvidenceLarge' => UpdateVariationCompletion::STATUS_UPDATED,
+            ],
+            [
+                'PsvDocumentaryEvidenceLarge' => UpdateVariationCompletion::STATUS_UNCHANGED,
+            ],
+            'Y',
+            [],
         ];
     }
 
@@ -1215,12 +1213,10 @@ class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public static function dpMarksFinancialEvidenceSectionAsRequiringAttentionIfApplicationAmountDoesntExceedLicenceAmount(): array
+    public static function dpMarksFinancialEvidenceSectionAsRequiringAttentionIfApplicationAmountDoesntExceedLicenceAmount(): \Iterator
     {
-        return [
-            [2000],
-            [1999],
-        ];
+        yield [2000];
+        yield [1999];
     }
 
     #[\Override]

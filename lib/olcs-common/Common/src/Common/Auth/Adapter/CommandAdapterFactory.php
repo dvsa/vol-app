@@ -18,7 +18,7 @@ class CommandAdapterFactory implements FactoryInterface
      * @param array|null $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CommandAdapter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CommandAdapter
     {
         $commandSender = $container->get('CommandSender');
         return new CommandAdapter($commandSender);

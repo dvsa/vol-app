@@ -19,13 +19,14 @@ use Olcs\Listener\RouteParams;
 use Common\RefData;
 use Laminas\View\Model\ViewModel;
 
-class LicenceFurnitureTest extends TestCase
+final class LicenceFurnitureTest extends TestCase
 {
     /**
      * @var LicenceFurniture
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new LicenceFurniture();

@@ -20,7 +20,7 @@ class ProcessAuthResponseFactory implements FactoryInterface
      * @return TransactioningCommandHandler
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransactioningCommandHandler
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TransactioningCommandHandler
     {
         $govUkAccountService = $container->get(GovUkAccountService::class);
 

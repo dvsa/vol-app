@@ -184,7 +184,7 @@ final class ProcessInspectionRequestEmail extends AbstractCommandHandler
         $this->result->addMessage($message);
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $this->setMailbox($container->get('ImapService'));
         return parent::__invoke($container, $requestedName, $options);

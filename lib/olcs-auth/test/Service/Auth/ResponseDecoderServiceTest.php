@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Response Decoder Service Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
+declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Auth\Service\Auth;
 
@@ -19,7 +15,7 @@ use Laminas\Http\Response;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ResponseDecoderServiceTest extends MockeryTestCase
+final class ResponseDecoderServiceTest extends MockeryTestCase
 {
     public function testDecodeFailed(): void
     {

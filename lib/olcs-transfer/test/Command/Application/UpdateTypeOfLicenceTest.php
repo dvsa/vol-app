@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\UpdateTypeOfLicence;
@@ -8,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Update Type Of Licence test
  */
-class UpdateTypeOfLicenceTest extends \PHPUnit\Framework\TestCase
+final class UpdateTypeOfLicenceTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

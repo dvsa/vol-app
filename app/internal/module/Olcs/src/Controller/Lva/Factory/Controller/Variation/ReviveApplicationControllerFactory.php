@@ -22,7 +22,7 @@ class ReviveApplicationControllerFactory implements FactoryInterface
      * @return ReviveApplicationController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ReviveApplicationController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ReviveApplicationController
     {
 
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

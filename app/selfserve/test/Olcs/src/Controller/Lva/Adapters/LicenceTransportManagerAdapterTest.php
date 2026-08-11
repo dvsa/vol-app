@@ -20,17 +20,16 @@ use Laminas\ServiceManager\ServiceManager;
  * @author Mat Evans <mat.evans@valtech.co.uk>
  * @author Dmitry Golubev <dmitrij.golubev@valtech.co.uk>
  */
-class LicenceTransportManagerAdapterTest extends MockeryTestCase
+final class LicenceTransportManagerAdapterTest extends MockeryTestCase
 {
-    public const LICENCE_ID = 612;
+    public const int LICENCE_ID = 612;
 
     /** @var  LicenceTransportManagerAdapter|\Mockery\MockInterface */
     protected $sut;
     /** @var  VariationLvaService|\Mockery\MockInterface */
     protected $mockLvaVariationSrv;
 
-    protected $mockContainer;
-
+    #[\Override]
     public function setUp(): void
     {
         /** @var TransferAnnotationBuilder $mockAnnotationBuilder */
@@ -42,14 +41,14 @@ class LicenceTransportManagerAdapterTest extends MockeryTestCase
 
         $this->mockLvaVariationSrv = m::mock(VariationLvaService::class);
 
-        $this->mockContainer = m::mock(ContainerInterface::class);
+        $mockContainer = m::mock(ContainerInterface::class);
 
         $this->sut = new LicenceTransportManagerAdapter(
             $mockAnnotationBuilder,
             $mockQuerySrv,
             $mockCommandSrv,
             $this->mockLvaVariationSrv,
-            $this->mockContainer
+            $mockContainer
         );
     }
 

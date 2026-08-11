@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa;
 
 use Common\Service\Qa\TextFactory;
@@ -16,7 +18,7 @@ use Laminas\Form\Form;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class TextFieldsetPopulatorTest extends MockeryTestCase
+final class TextFieldsetPopulatorTest extends MockeryTestCase
 {
     private $text;
 

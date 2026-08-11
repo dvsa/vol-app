@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * IrfoStockControl Mapper Test
  */
-class IrfoStockControlTest extends MockeryTestCase
+final class IrfoStockControlTest extends MockeryTestCase
 {
     /**
      *
@@ -25,30 +25,28 @@ class IrfoStockControlTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
+            [],
+            ['fields' => []]
+        ];
+        // edit
+        yield [
             [
-                [],
-                ['fields' => []]
+                'id' => 987,
+                'version' => 1,
+                'status' => [
+                    'id' => 200,
+                ],
             ],
-            // edit
             [
-                [
+                'fields' => [
                     'id' => 987,
                     'version' => 1,
-                    'status' => [
-                        'id' => 200,
-                    ],
+                    'status' => 200,
                 ],
-                [
-                    'fields' => [
-                        'id' => 987,
-                        'version' => 1,
-                        'status' => 200,
-                    ],
-                ]
             ]
         ];
     }
@@ -64,19 +62,17 @@ class IrfoStockControlTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
 
-    public static function mapFromFormDataProvider(): array
+    public static function mapFromFormDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'fields' => [
-                        'description' => 'p1',
-                    ],
-                ],
-                [
+                'fields' => [
                     'description' => 'p1',
-                ]
+                ],
             ],
+            [
+                'description' => 'p1',
+            ]
         ];
     }
 

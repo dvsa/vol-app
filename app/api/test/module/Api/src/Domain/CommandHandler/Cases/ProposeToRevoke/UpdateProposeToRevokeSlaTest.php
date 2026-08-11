@@ -18,7 +18,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Update ProposeToRevoke Test
  */
-class UpdateProposeToRevokeSlaTest extends AbstractCommandHandlerTestCase
+final class UpdateProposeToRevokeSlaTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

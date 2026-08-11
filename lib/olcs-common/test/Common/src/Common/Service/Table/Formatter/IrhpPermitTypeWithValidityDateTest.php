@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\RefData;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * Irhp Permit Type With Validity Date test
  */
-class IrhpPermitTypeWithValidityDateTest extends MockeryTestCase
+final class IrhpPermitTypeWithValidityDateTest extends MockeryTestCase
 {
     protected $translator;
 
@@ -25,9 +27,7 @@ class IrhpPermitTypeWithValidityDateTest extends MockeryTestCase
         $this->sut = new IrhpPermitTypeWithValidityDate(new Date(), $this->translator);
     }
 
-    /**
-     * @dataProvider scenariosProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('scenariosProvider')]
     public function testFormat($row, $expectedOutput): void
     {
         $column = ['name' => 'typeDescription'];
@@ -44,97 +44,95 @@ class IrhpPermitTypeWithValidityDateTest extends MockeryTestCase
     }
 
     /**
-     * @return ((int|string)[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(int | string)> | string)>>
      *
      * @psalm-return array{'ECMT Annual - without validity date': list{array{typeId: 1, typeDescription: 'Annual ECMT>'}, 'Annual ECMT&gt;'}, 'ECMT Annual - with validity date': list{array{typeId: 1, typeDescription: 'Annual ECMT>', stockValidTo: '2019-12-31'}, 'Annual ECMT&gt; 2019'}, 'ECMT Short Term - without validity date': list{array{typeId: 2, typeDescription: 'Short-term ECMT>'}, 'Short-term ECMT&gt;'}, 'ECMT Short Term - with validity date 2019': list{array{typeId: 2, typeDescription: 'Short-term ECMT>', stockValidTo: '2019-12-31'}, 'Short-term ECMT&gt; 2019'}, 'ECMT Short Term - with validity date 2020': list{array{typeId: 2, typeDescription: 'Short-term ECMT>', stockValidTo: '2020-12-31', periodNameKey: 'imATranslationKey'}, 'Short-term ECMT&gt; _TRNSLT_imATranslationKey'}, 'IRHP Bilateral - without validity date': list{array{typeId: 4, typeDescription: 'Annual Bilateral>'}, 'Annual Bilateral&gt;'}, 'IRHP Bilateral - with validity date': list{array{typeId: 4, typeDescription: 'Annual Bilateral>', stockValidTo: '2019-12-31'}, 'Annual Bilateral&gt;'}, 'IRHP Multilateral - without validity date': list{array{typeId: 5, typeDescription: 'Annual Multilateral>'}, 'Annual Multilateral&gt;'}, 'IRHP Multilateral - with validity date': list{array{typeId: 5, typeDescription: 'Annual Multilateral>', stockValidTo: '2019-12-31'}, 'Annual Multilateral&gt;'}, 'ECMT International Removal - without validity date': list{array{typeId: 3, typeDescription: 'ECMT International Removal>'}, 'ECMT International Removal&gt;'}, 'ECMT International Removal - with validity date': list{array{typeId: 3, typeDescription: 'ECMT International Removal>', stockValidTo: '2019-12-31'}, 'ECMT International Removal&gt;'}}
      */
-    public function scenariosProvider(): array
+    public static function scenariosProvider(): \Iterator
     {
-        return [
-            'ECMT Annual - without validity date' => [
-                [
-                    'typeId' => RefData::ECMT_PERMIT_TYPE_ID,
-                    'typeDescription' => 'Annual ECMT>',
-                ],
-                'Annual ECMT&gt;',
+        yield 'ECMT Annual - without validity date' => [
+            [
+                'typeId' => RefData::ECMT_PERMIT_TYPE_ID,
+                'typeDescription' => 'Annual ECMT>',
             ],
-            'ECMT Annual - with validity date' => [
-                [
-                    'typeId' => RefData::ECMT_PERMIT_TYPE_ID,
-                    'typeDescription' => 'Annual ECMT>',
-                    'stockValidTo' => '2019-12-31',
-                ],
-                'Annual ECMT&gt; 2019',
+            'Annual ECMT&gt;',
+        ];
+        yield 'ECMT Annual - with validity date' => [
+            [
+                'typeId' => RefData::ECMT_PERMIT_TYPE_ID,
+                'typeDescription' => 'Annual ECMT>',
+                'stockValidTo' => '2019-12-31',
             ],
-            'ECMT Short Term - without validity date' => [
-                [
-                    'typeId' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
-                    'typeDescription' => 'Short-term ECMT>',
-                ],
-                'Short-term ECMT&gt;',
+            'Annual ECMT&gt; 2019',
+        ];
+        yield 'ECMT Short Term - without validity date' => [
+            [
+                'typeId' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+                'typeDescription' => 'Short-term ECMT>',
             ],
-            'ECMT Short Term - with validity date 2019' => [
-                [
-                    'typeId' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
-                    'typeDescription' => 'Short-term ECMT>',
-                    'stockValidTo' => '2019-12-31',
-                ],
-                'Short-term ECMT&gt; 2019',
+            'Short-term ECMT&gt;',
+        ];
+        yield 'ECMT Short Term - with validity date 2019' => [
+            [
+                'typeId' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+                'typeDescription' => 'Short-term ECMT>',
+                'stockValidTo' => '2019-12-31',
             ],
-            'ECMT Short Term - with validity date 2020' => [
-                [
-                    'typeId' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
-                    'typeDescription' => 'Short-term ECMT>',
-                    'stockValidTo' => '2020-12-31',
-                    'periodNameKey' => 'imATranslationKey'
-                ],
-                'Short-term ECMT&gt; _TRNSLT_imATranslationKey',
+            'Short-term ECMT&gt; 2019',
+        ];
+        yield 'ECMT Short Term - with validity date 2020' => [
+            [
+                'typeId' => RefData::ECMT_SHORT_TERM_PERMIT_TYPE_ID,
+                'typeDescription' => 'Short-term ECMT>',
+                'stockValidTo' => '2020-12-31',
+                'periodNameKey' => 'imATranslationKey'
             ],
-            'IRHP Bilateral - without validity date' => [
-                [
-                    'typeId' => RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
-                    'typeDescription' => 'Annual Bilateral>',
-                ],
-                'Annual Bilateral&gt;',
+            'Short-term ECMT&gt; _TRNSLT_imATranslationKey',
+        ];
+        yield 'IRHP Bilateral - without validity date' => [
+            [
+                'typeId' => RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
+                'typeDescription' => 'Annual Bilateral>',
             ],
-            'IRHP Bilateral - with validity date' => [
-                [
-                    'typeId' => RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
-                    'typeDescription' => 'Annual Bilateral>',
-                    'stockValidTo' => '2019-12-31',
-                ],
-                'Annual Bilateral&gt;',
+            'Annual Bilateral&gt;',
+        ];
+        yield 'IRHP Bilateral - with validity date' => [
+            [
+                'typeId' => RefData::IRHP_BILATERAL_PERMIT_TYPE_ID,
+                'typeDescription' => 'Annual Bilateral>',
+                'stockValidTo' => '2019-12-31',
             ],
-            'IRHP Multilateral - without validity date' => [
-                [
-                    'typeId' => RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
-                    'typeDescription' => 'Annual Multilateral>',
-                ],
-                'Annual Multilateral&gt;',
+            'Annual Bilateral&gt;',
+        ];
+        yield 'IRHP Multilateral - without validity date' => [
+            [
+                'typeId' => RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
+                'typeDescription' => 'Annual Multilateral>',
             ],
-            'IRHP Multilateral - with validity date' => [
-                [
-                    'typeId' => RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
-                    'typeDescription' => 'Annual Multilateral>',
-                    'stockValidTo' => '2019-12-31',
-                ],
-                'Annual Multilateral&gt;',
+            'Annual Multilateral&gt;',
+        ];
+        yield 'IRHP Multilateral - with validity date' => [
+            [
+                'typeId' => RefData::IRHP_MULTILATERAL_PERMIT_TYPE_ID,
+                'typeDescription' => 'Annual Multilateral>',
+                'stockValidTo' => '2019-12-31',
             ],
-            'ECMT International Removal - without validity date' => [
-                [
-                    'typeId' => RefData::ECMT_REMOVAL_PERMIT_TYPE_ID,
-                    'typeDescription' => 'ECMT International Removal>',
-                ],
-                'ECMT International Removal&gt;',
+            'Annual Multilateral&gt;',
+        ];
+        yield 'ECMT International Removal - without validity date' => [
+            [
+                'typeId' => RefData::ECMT_REMOVAL_PERMIT_TYPE_ID,
+                'typeDescription' => 'ECMT International Removal>',
             ],
-            'ECMT International Removal - with validity date' => [
-                [
-                    'typeId' => RefData::ECMT_REMOVAL_PERMIT_TYPE_ID,
-                    'typeDescription' => 'ECMT International Removal>',
-                    'stockValidTo' => '2019-12-31',
-                ],
-                'ECMT International Removal&gt;',
+            'ECMT International Removal&gt;',
+        ];
+        yield 'ECMT International Removal - with validity date' => [
+            [
+                'typeId' => RefData::ECMT_REMOVAL_PERMIT_TYPE_ID,
+                'typeDescription' => 'ECMT International Removal>',
+                'stockValidTo' => '2019-12-31',
             ],
+            'ECMT International Removal&gt;',
         ];
     }
 }

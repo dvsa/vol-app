@@ -27,7 +27,7 @@ use Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking as ConditionUndertakingEntit
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class DeleteConditionUndertakingS4Test extends AbstractCommandHandlerTestCase
+final class DeleteConditionUndertakingS4Test extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

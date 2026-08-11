@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Rbac\Role;
 
 use Common\Rbac\Role\RoleProviderFactory;
@@ -9,7 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Mockery as m;
 use LmcRbacMvc\Role\RoleProviderInterface;
 
-class RoleProviderFactoryTest extends TestCase
+final class RoleProviderFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {

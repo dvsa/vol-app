@@ -23,6 +23,7 @@ composer.lock
 Common/config/language/key-analysis/reports
 Common/config/language/import/translationKeyImport.sql
 .phpunit.result.cache
+.phpunit.cache
 
 # Non-dist files for the static analysis.
 # This allows developers to set a different (more strict) static analysis locally.

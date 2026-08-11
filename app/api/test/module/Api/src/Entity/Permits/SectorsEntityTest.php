@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Permits\Sectors as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class SectorsEntityTest extends EntityTester
+final class SectorsEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

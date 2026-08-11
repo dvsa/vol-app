@@ -12,7 +12,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class DecisionsNoFurtherActionControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): DecisionsNoFurtherActionController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): DecisionsNoFurtherActionController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         assert($translationHelper instanceof TranslationHelperService);

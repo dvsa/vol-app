@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OlcsTest\Logging\Log\Processor;
 
 use DateTimeImmutable;
@@ -8,7 +10,7 @@ use Monolog\LogRecord;
 use Olcs\Logging\Log\Processor\HidePassword;
 use PHPUnit\Framework\TestCase;
 
-class HidePasswordTest extends TestCase
+final class HidePasswordTest extends TestCase
 {
     public function testProcessRedactsPasswordsInContext(): void
     {

@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Entity\IrhpInterface;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractUpdateDefinedValueTestCase;
 
-class TerminateTest extends AbstractUpdateDefinedValueTestCase
+final class TerminateTest extends AbstractUpdateDefinedValueTestCase
 {
     protected $repoServiceName = 'IrhpApplication';
     protected $entityMethodName = 'terminate';

@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
  *
  * Initially auto-generated but won't be overridden
  */
-class SlaTargetDateEntityTest extends EntityTester
+final class SlaTargetDateEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -41,26 +41,24 @@ class SlaTargetDateEntityTest extends EntityTester
             $actual = $sut->getSubmission();
         }
 
-        static::assertSame($entity, $actual);
-        static::assertEquals($agreedDate, $sut->getAgreedDate());
-        static::assertEquals($underDelegation, $sut->getUnderDelegation());
+        $this->assertSame($entity, $actual);
+        $this->assertEquals($agreedDate, $sut->getAgreedDate());
+        $this->assertEquals($underDelegation, $sut->getUnderDelegation());
     }
 
-    public static function dpTestConstruct(): array
+    public static function dpTestConstruct(): \Iterator
     {
-        return [
-            [
-                'entity' => m::mock(\Dvsa\Olcs\Api\Entity\Doc\Document::class),
-                'expect' => 'DOC',
-            ],
-            [
-                'entity' => m::mock(\Dvsa\Olcs\Api\Entity\Pi\Pi::class),
-                'expect' => 'PI',
-            ],
-            [
-                'entity' => m::mock(\Dvsa\Olcs\Api\Entity\Submission\Submission::class),
-                'expect' => 'SUBMISSION',
-            ],
+        yield [
+            'entity' => m::mock(\Dvsa\Olcs\Api\Entity\Doc\Document::class),
+            'expect' => 'DOC',
+        ];
+        yield [
+            'entity' => m::mock(\Dvsa\Olcs\Api\Entity\Pi\Pi::class),
+            'expect' => 'PI',
+        ];
+        yield [
+            'entity' => m::mock(\Dvsa\Olcs\Api\Entity\Submission\Submission::class),
+            'expect' => 'SUBMISSION',
         ];
     }
 

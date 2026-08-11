@@ -19,20 +19,17 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class RadioAnswerSummaryProviderTest extends MockeryTestCase
+final class RadioAnswerSummaryProviderTest extends MockeryTestCase
 {
     private $radioOption2;
-
-    private $applicationStepEntity;
 
     private $qaContext;
 
     private $element;
 
-    private $optionListGenerator;
-
     private $radioAnswerSummaryProvider;
 
+    #[\Override]
     public function setUp(): void
     {
         $decodedOptionSourceSource = [
@@ -61,15 +58,15 @@ class RadioAnswerSummaryProviderTest extends MockeryTestCase
 
         $radioOptions = [$radioOption1, $this->radioOption2, $radioOption3];
 
-        $this->applicationStepEntity = m::mock(ApplicationStepEntity::class);
-        $this->applicationStepEntity->shouldReceive('getDecodedOptionSource')
+        $applicationStepEntity = m::mock(ApplicationStepEntity::class);
+        $applicationStepEntity->shouldReceive('getDecodedOptionSource')
             ->withNoArgs()
             ->andReturn($decodedOptionSource);
 
         $this->qaContext = m::mock(QaContext::class);
         $this->qaContext->shouldReceive('getApplicationStepEntity')
             ->withNoArgs()
-            ->andReturn($this->applicationStepEntity);
+            ->andReturn($applicationStepEntity);
 
         $this->element = m::mock(ElementInterface::class);
 
@@ -78,12 +75,12 @@ class RadioAnswerSummaryProviderTest extends MockeryTestCase
             ->withNoArgs()
             ->andReturn($radioOptions);
 
-        $this->optionListGenerator = m::mock(OptionListGenerator::class);
-        $this->optionListGenerator->shouldReceive('generate')
+        $optionListGenerator = m::mock(OptionListGenerator::class);
+        $optionListGenerator->shouldReceive('generate')
             ->with($decodedOptionSourceSource)
             ->andReturn($optionList);
 
-        $this->radioAnswerSummaryProvider = new RadioAnswerSummaryProvider($this->optionListGenerator);
+        $this->radioAnswerSummaryProvider = new RadioAnswerSummaryProvider($optionListGenerator);
     }
 
     public function testGetTemplateName(): void
@@ -135,11 +132,9 @@ class RadioAnswerSummaryProviderTest extends MockeryTestCase
         $this->radioAnswerSummaryProvider->getTemplateVariables($this->qaContext, $this->element, $isSnapshot);
     }
 
-    public static function dpSnapshot(): array
+    public static function dpSnapshot(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 }

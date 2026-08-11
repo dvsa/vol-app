@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class IntJourneysTest extends MockeryTestCase
+final class IntJourneysTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTrueFalse')]
     public function testGetRepresentation(mixed $showNiWarning): void
@@ -41,11 +41,9 @@ class IntJourneysTest extends MockeryTestCase
         );
     }
 
-    public static function dpTrueFalse(): array
+    public static function dpTrueFalse(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 }

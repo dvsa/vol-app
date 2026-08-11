@@ -4,6 +4,8 @@
  * UsernameTest
  */
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\Username;
@@ -12,18 +14,17 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * Username Test
  */
-class UsernameTest extends MockeryTestCase
+final class UsernameTest extends MockeryTestCase
 {
     private $validator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->validator = new Username();
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testValidator($input, $isValid)
     {
         $outcome = $this->validator->isValid($input);
@@ -31,25 +32,23 @@ class UsernameTest extends MockeryTestCase
         $this->assertEquals($isValid, $outcome);
     }
 
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            ['0123456789', true],
-            ['abcdefghijklmnoprstuvwxyz', true],
-            ['ABCDEFGHIJKLMNOPRSTUVWXYZ', true],
-            ['#$%\'+-/=?^_.@`|~",:;<>', true],
-            ['a¬b', false],
-            ['a!b', false],
-            ['a£b', false],
-            ['a&b', false],
-            ['a*b', false],
-            ['a(b', false],
-            ['a)b', false],
-            ['a b', false],
-            ['0', false],
-            ['01', true],
-            ['0123456789012345678901234567890123456789', true],
-            ['01234567890123456789012345678901234567890', false],
-        ];
+        yield ['0123456789', true];
+        yield ['abcdefghijklmnoprstuvwxyz', true];
+        yield ['ABCDEFGHIJKLMNOPRSTUVWXYZ', true];
+        yield ['#$%\'+-/=?^_.@`|~",:;<>', true];
+        yield ['a¬b', false];
+        yield ['a!b', false];
+        yield ['a£b', false];
+        yield ['a&b', false];
+        yield ['a*b', false];
+        yield ['a(b', false];
+        yield ['a)b', false];
+        yield ['a b', false];
+        yield ['0', false];
+        yield ['01', true];
+        yield ['0123456789012345678901234567890123456789', true];
+        yield ['01234567890123456789012345678901234567890', false];
     }
 }

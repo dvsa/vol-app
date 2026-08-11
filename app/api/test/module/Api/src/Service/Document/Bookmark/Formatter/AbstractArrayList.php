@@ -28,29 +28,27 @@ class AbstractArrayList extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function dpTestFormat(): array
+    public static function dpTestFormat(): \Iterator
     {
-        return [
+        yield [
+            [],
+            ''
+        ];
+        yield [
             [
-                [],
-                ''
-            ],
-            [
-                [
-                    0 => [
-                        static::ARRAY_FIELD => 3
-                    ],
-                    1 => [
-                        static::ARRAY_FIELD => 'abc'
-                    ],
-                    2 => [
-                        static::ARRAY_FIELD => '2'
-                    ]
+                0 => [
+                    static::ARRAY_FIELD => 3
                 ],
-                static::EXPECTED_OUTPUT
+                1 => [
+                    static::ARRAY_FIELD => 'abc'
+                ],
+                2 => [
+                    static::ARRAY_FIELD => '2'
+                ]
             ],
+            static::EXPECTED_OUTPUT
         ];
     }
 }

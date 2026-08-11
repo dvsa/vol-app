@@ -25,7 +25,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CancelApplicationTest extends AbstractCommandHandlerTestCase
+final class CancelApplicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

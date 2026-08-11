@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper;
 
 use Common\Form\View\Helper\FormRadioHorizontal;
@@ -8,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Laminas\Form\ElementInterface;
 use Laminas\View\Renderer\RendererInterface;
 
-class FormRadioHorizontalTest extends TestCase
+final class FormRadioHorizontalTest extends TestCase
 {
     /**
      * @var FormRadioHorizontal
@@ -33,6 +35,6 @@ class FormRadioHorizontalTest extends TestCase
 
         $this->sut->setView($mockView);
 
-        self::assertEquals($returnValue, $this->sut->__invoke($mockElement));
+        $this->assertEquals($returnValue, $this->sut->__invoke($mockElement));
     }
 }

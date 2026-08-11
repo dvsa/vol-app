@@ -18,7 +18,7 @@ class EmissionsStandardsGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): EmissionsStandardsGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): EmissionsStandardsGenerator
     {
         return new EmissionsStandardsGenerator(
             $container->get('QaBilateralEmissionsStandardsElementFactory')

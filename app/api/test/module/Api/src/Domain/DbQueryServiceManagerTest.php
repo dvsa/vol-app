@@ -11,10 +11,11 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\Olcs\Api\Domain\DbQueryServiceManager;
 
-class DbQueryServiceManagerTest extends MockeryTestCase
+final class DbQueryServiceManagerTest extends MockeryTestCase
 {
     private DbQueryServiceManager $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $container = m::mock(ContainerInterface::class);

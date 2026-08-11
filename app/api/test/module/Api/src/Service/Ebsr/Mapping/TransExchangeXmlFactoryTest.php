@@ -14,7 +14,7 @@ use Psr\Container\ContainerInterface;
  * Class TransExchangeXmlFactoryTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\Mapping
  */
-class TransExchangeXmlFactoryTest extends TestCase
+final class TransExchangeXmlFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {
@@ -63,6 +63,6 @@ XML;
             'routeDescription must NOT be an array'
         );
 
-        $this->assertEquals('Darlington - Stockton - Middlesbrough', $result['routeDescription']);
+        $this->assertSame('Darlington - Stockton - Middlesbrough', $result['routeDescription']);
     }
 }

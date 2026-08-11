@@ -6,6 +6,8 @@
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper;
 
 use Common\View\Helper\Address;
@@ -15,7 +17,7 @@ use Common\View\Helper\Address;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class AddressTest extends \PHPUnit\Framework\TestCase
+final class AddressTest extends \PHPUnit\Framework\TestCase
 {
     public $viewHelper;
     /**
@@ -29,8 +31,8 @@ class AddressTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test invoke
-     * @dataProvider addressDataProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('addressDataProvider')]
     public function testInvokeDefaultFields($input, $expected): void
     {
         if (!empty($input['fields'])) {
@@ -43,58 +45,56 @@ class AddressTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return (((string|string[])[]|null)[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(array<(array<string> | string)> | null)> | string)>>
      *
      * @psalm-return list{list{array{address: array{addressLine1: 'a1', addressLine2: 'a2', addressLine3: 'a3', town: 't', postcode: 'pc', countryCode: array{id: 'cc'}}}, 'a1, a2, a3, t, pc, cc'}, list{array{address: array{addressLine1: 'a1', addressLine2: 'a2', addressLine3: 'a3', town: 't', postcode: 'pc'}, fields: null}, 'a1, a2, a3, t, pc'}, list{array{address: array{addressLine1: 'a1', addressLine2: 'a2', addressLine3: 'a3', town: 't', postcode: 'pc', countryCode: array{id: 'cc'}}, fields: list{'addressLine1', 'addressLine3', 'postcode', 'countryCode'}}, 'a1, a3, pc, cc'}}
      */
-    public function addressDataProvider(): array
+    public static function addressDataProvider(): \Iterator
     {
-        return [
-            [ // include countryCode
-                [
-                    'address' => [
-                        'addressLine1' => 'a1',
-                        'addressLine2' => 'a2',
-                        'addressLine3' => 'a3',
-                        'town' => 't',
-                        'postcode' => 'pc',
-                        'countryCode' => ['id' => 'cc']
-                    ]
+        yield [ // include countryCode
+            [
+                'address' => [
+                    'addressLine1' => 'a1',
+                    'addressLine2' => 'a2',
+                    'addressLine3' => 'a3',
+                    'town' => 't',
+                    'postcode' => 'pc',
+                    'countryCode' => ['id' => 'cc']
+                ]
+            ],
+            'a1, a2, a3, t, pc, cc'
+        ];
+        yield [ // no country code
+            [
+                'address' => [
+                    'addressLine1' => 'a1',
+                    'addressLine2' => 'a2',
+                    'addressLine3' => 'a3',
+                    'town' => 't',
+                    'postcode' => 'pc'
                 ],
-                'a1, a2, a3, t, pc, cc'
-            ],
-            [ // no country code
-                [
-                    'address' => [
-                        'addressLine1' => 'a1',
-                        'addressLine2' => 'a2',
-                        'addressLine3' => 'a3',
-                        'town' => 't',
-                        'postcode' => 'pc'
-                    ],
-                    'fields' => null
-                 ],
-                'a1, a2, a3, t, pc'
-            ],
-            [ // include select fields
-                [
-                    'address' => [
-                        'addressLine1' => 'a1',
-                        'addressLine2' => 'a2',
-                        'addressLine3' => 'a3',
-                        'town' => 't',
-                        'postcode' => 'pc',
-                        'countryCode' => ['id' => 'cc']
-                    ],
-                    'fields' => [
-                        'addressLine1',
-                        'addressLine3',
-                        'postcode',
-                        'countryCode'
-                    ]
+                'fields' => null
+             ],
+            'a1, a2, a3, t, pc'
+        ];
+        yield [ // include select fields
+            [
+                'address' => [
+                    'addressLine1' => 'a1',
+                    'addressLine2' => 'a2',
+                    'addressLine3' => 'a3',
+                    'town' => 't',
+                    'postcode' => 'pc',
+                    'countryCode' => ['id' => 'cc']
                 ],
-                'a1, a3, pc, cc'
+                'fields' => [
+                    'addressLine1',
+                    'addressLine3',
+                    'postcode',
+                    'countryCode'
+                ]
             ],
+            'a1, a3, pc, cc'
         ];
     }
 }

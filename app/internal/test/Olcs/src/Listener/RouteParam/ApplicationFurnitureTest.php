@@ -20,7 +20,7 @@ use Laminas\Router\RouteStackInterface;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
 
-class ApplicationFurnitureTest extends TestCase
+final class ApplicationFurnitureTest extends TestCase
 {
     /**
      * @var ApplicationFurniture
@@ -29,14 +29,14 @@ class ApplicationFurnitureTest extends TestCase
 
     protected $mockViewHelperManager;
     protected $mockQuerySender;
-    protected $mockCommandSender;
     protected $mockRouter;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockViewHelperManager = m::mock(HelperPluginManager::class);
         $this->mockQuerySender = m::mock(QuerySender::class);
-        $this->mockCommandSender = m::mock(CommandSender::class);
+        $mockCommandSender = m::mock(CommandSender::class);
         $this->mockRouter = m::mock(RouteStackInterface::class);
 
         $this->sut = new ApplicationFurniture();
@@ -46,7 +46,7 @@ class ApplicationFurnitureTest extends TestCase
         $sl->shouldReceive('get')->with('ViewHelperManager')->andReturn($this->mockViewHelperManager);
         $sl->shouldReceive('get')->with('QuerySender')->andReturn($this->mockQuerySender);
         $sl->shouldReceive('get')->with('Router')->andReturn($this->mockRouter);
-        $sl->shouldReceive('get')->with('CommandSender')->andReturn($this->mockCommandSender);
+        $sl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);
 
         $this->sut->__invoke($sl, ApplicationFurniture::class);
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\FieldsetModifier;
 
 use Common\Service\Qa\FieldsetModifier\Fieldsets;
@@ -14,7 +16,7 @@ use Laminas\Form\Fieldset;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class RoadworthinessMakeAndModelFieldsetModifierTest extends MockeryTestCase
+final class RoadworthinessMakeAndModelFieldsetModifierTest extends MockeryTestCase
 {
     private $fieldset;
 
@@ -28,9 +30,7 @@ class RoadworthinessMakeAndModelFieldsetModifierTest extends MockeryTestCase
         $this->roadworthinessMakeAndModelFieldsetModifier = new RoadworthinessMakeAndModelFieldsetModifier();
     }
 
-    /**
-     * @dataProvider dpShouldModify
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpShouldModify')]
     public function testShouldModify($fieldsetName, $expectedShouldModify): void
     {
         $this->fieldset->shouldReceive('getName')
@@ -44,18 +44,16 @@ class RoadworthinessMakeAndModelFieldsetModifierTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string)>>
      *
      * @psalm-return list{list{'fieldset40', true}, list{'fieldset47', true}, list{'fieldset39', false}, list{'fieldset48', false}}
      */
-    public function dpShouldModify(): array
+    public static function dpShouldModify(): \Iterator
     {
-        return [
-            [Fieldsets::ROADWORTHINESS_VEHICLE_MAKE_AND_MODEL, true],
-            [Fieldsets::ROADWORTHINESS_TRAILER_MAKE_AND_MODEL, true],
-            ['fieldset39', false],
-            ['fieldset48', false],
-        ];
+        yield [Fieldsets::ROADWORTHINESS_VEHICLE_MAKE_AND_MODEL, true];
+        yield [Fieldsets::ROADWORTHINESS_TRAILER_MAKE_AND_MODEL, true];
+        yield ['fieldset39', false];
+        yield ['fieldset48', false];
     }
 
     public function testModify(): void

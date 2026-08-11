@@ -25,7 +25,7 @@ use Dvsa\Olcs\Transfer\Query\Application\OperatingCentres as Qry;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VariationOperatingCentreHelperTest extends MockeryTestCase
+final class VariationOperatingCentreHelperTest extends MockeryTestCase
 {
     /**
      * @var VariationOperatingCentreHelper
@@ -42,6 +42,7 @@ class VariationOperatingCentreHelperTest extends MockeryTestCase
      */
     protected $locRepo;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->aocRepo = m::mock();
@@ -94,379 +95,377 @@ class VariationOperatingCentreHelperTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getListDataForApplication($application, $query));
     }
 
-    public static function ocProvider(): array
+    public static function ocProvider(): \Iterator
     {
-        return [
-            'noOfVehiclesRequired' => [
-                // aoc data
+        yield 'noOfVehiclesRequired' => [
+            // aoc data
+            [
                 [
-                    [
-                        'id' => 321,
-                        'action' => 'U',
-                        'operatingCentre' => [
-                            'id' => 123
-                        ],
-                        'noOfVehiclesRequired' => 2
-                    ]
-                ],
-                // loc data
-                [
-                    [
-                        'id' => 654,
-                        'operatingCentre' => [
-                            'id' => 123
-                        ],
-                        'noOfVehiclesRequired' => 1
+                    'id' => 321,
+                    'action' => 'U',
+                    'operatingCentre' => [
+                        'id' => 123
                     ],
-                    [
-                        'id' => 655,
-                        'operatingCentre' => [
-                            'id' => 999
-                        ],
-                        'noOfVehiclesRequired' => 3
-                    ]
-                ],
-                // expected
-                [
-                    [
-                        'id' => 'L654',
-                        'operatingCentre' => [
-                            'id' => 123
-                        ],
-                        'source' => 'L',
-                        'action' => 'C',
-                        'sort' => 1,
-                        'noOfVehiclesRequired' => 1
-                    ],
-                    [
-                        'id' => 'A321',
-                        'action' => 'U',
-                        'operatingCentre' => [
-                            'id' => 123
-                        ],
-                        'source' => 'A',
-                        'sort' => 2,
-                        'noOfVehiclesRequired' => 2
-                    ],
-                    [
-                        'id' => 'L655',
-                        'operatingCentre' => [
-                            'id' => 999
-                        ],
-                        'source' => 'L',
-                        'action' => 'E',
-                        'sort' => 3,
-                        'noOfVehiclesRequired' => 3
-                    ]
-                ],
-                // query params
-                [
-                    'sort' => 'noOfVehiclesRequired',
-                    'order' => 'ASC'
+                    'noOfVehiclesRequired' => 2
                 ]
             ],
-            'createdOn' => [
-                // aoc data
+            // loc data
+            [
                 [
-                    [
-                        'id' => 321,
-                        'action' => 'U',
-                        'operatingCentre' => [
-                            'id' => 123
-                        ],
-                        'createdOn' => '2015-01-01'
-                    ]
-                ],
-                // loc data
-                [
-                    [
-                        'id' => 654,
-                        'operatingCentre' => [
-                            'id' => 123
-                        ],
-                        'createdOn' => '2016-01-01'
+                    'id' => 654,
+                    'operatingCentre' => [
+                        'id' => 123
                     ],
-                    [
-                        'id' => 655,
-                        'operatingCentre' => [
-                            'id' => 999
-                        ],
-                        'createdOn' => '2017-01-01'
-                    ]
+                    'noOfVehiclesRequired' => 1
                 ],
-                // expected
                 [
-                    [
-                        'id' => 'L655',
-                        'operatingCentre' => [
-                            'id' => 999
-                        ],
-                        'source' => 'L',
-                        'action' => 'E',
-                        'sort' => '2017-01-01',
-                        'createdOn' => '2017-01-01'
+                    'id' => 655,
+                    'operatingCentre' => [
+                        'id' => 999
                     ],
-                    [
-                        'id' => 'L654',
-                        'operatingCentre' => [
-                            'id' => 123
-                        ],
-                        'source' => 'L',
-                        'action' => 'C',
-                        'sort' => '2016-01-01',
-                        'createdOn' => '2016-01-01'
-                    ],
-                    [
-                        'id' => 'A321',
-                        'action' => 'U',
-                        'operatingCentre' => [
-                            'id' => 123
-                        ],
-                        'source' => 'A',
-                        'sort' => '2015-01-01',
-                        'createdOn' => '2015-01-01'
-                    ]
-                ],
-                // query params
-                [
-                    'sort' => 'createdOn',
-                    'order' => 'DESC'
+                    'noOfVehiclesRequired' => 3
                 ]
             ],
-            'address' => [
-                // aoc data
+            // expected
+            [
                 [
-                    [
-                        'id' => 321,
-                        'action' => 'U',
-                        'operatingCentre' => [
-                            'id' => 123,
-                            'address' => [
-                                'addressLine1' => 'aaa',
-                                'addressLine2' => '',
-                                'addressLine3' => '',
-                                'addressLine4' => '',
-                                'town' => ''
-                            ]
-                        ],
-                    ]
+                    'id' => 'L654',
+                    'operatingCentre' => [
+                        'id' => 123
+                    ],
+                    'source' => 'L',
+                    'action' => 'C',
+                    'sort' => 1,
+                    'noOfVehiclesRequired' => 1
                 ],
-                // loc data
                 [
-                    [
-                        'id' => 654,
-                        'operatingCentre' => [
-                            'id' => 123,
-                            'address' => [
-                                'addressLine1' => 'ccc',
-                                'addressLine2' => '',
-                                'addressLine3' => '',
-                                'addressLine4' => '',
-                                'town' => ''
-                            ]
-                        ],
+                    'id' => 'A321',
+                    'action' => 'U',
+                    'operatingCentre' => [
+                        'id' => 123
                     ],
-                    [
-                        'id' => 655,
-                        'operatingCentre' => [
-                            'id' => 999,
-                            'address' => [
-                                'addressLine1' => 'bbb',
-                                'addressLine2' => '',
-                                'addressLine3' => '',
-                                'addressLine4' => '',
-                                'town' => ''
-                            ]
-                        ],
-                    ]
+                    'source' => 'A',
+                    'sort' => 2,
+                    'noOfVehiclesRequired' => 2
                 ],
-                // expected
                 [
-                    [
-                        'id' => 'A321',
-                        'action' => 'U',
-                        'operatingCentre' => [
-                            'id' => 123,
-                            'address' => [
-                                'addressLine1' => 'aaa',
-                                'addressLine2' => '',
-                                'addressLine3' => '',
-                                'addressLine4' => '',
-                                'town' => ''
-                            ]
-                        ],
-                        'source' => 'A',
-                        'sort' => 'aaa',
+                    'id' => 'L655',
+                    'operatingCentre' => [
+                        'id' => 999
                     ],
-                    [
-                        'id' => 'L655',
-                        'operatingCentre' => [
-                            'id' => 999,
-                            'address' => [
-                                'addressLine1' => 'bbb',
-                                'addressLine2' => '',
-                                'addressLine3' => '',
-                                'addressLine4' => '',
-                                'town' => ''
-                            ]
-                        ],
-                        'source' => 'L',
-                        'action' => 'E',
-                        'sort' => 'bbb',
-                    ],
-                    [
-                        'id' => 'L654',
-                        'operatingCentre' => [
-                            'id' => 123,
-                            'address' => [
-                                'addressLine1' => 'ccc',
-                                'addressLine2' => '',
-                                'addressLine3' => '',
-                                'addressLine4' => '',
-                                'town' => ''
-                            ]
-                        ],
-                        'source' => 'L',
-                        'action' => 'C',
-                        'sort' => 'ccc',
-                    ],
-                ],
-                // query params
-                [
-                    'sort' => 'adr',
-                    'order' => 'ASC'
+                    'source' => 'L',
+                    'action' => 'E',
+                    'sort' => 3,
+                    'noOfVehiclesRequired' => 3
                 ]
             ],
-            'lastModifiedOn' => [
-                // aoc data
+            // query params
+            [
+                'sort' => 'noOfVehiclesRequired',
+                'order' => 'ASC'
+            ]
+        ];
+        yield 'createdOn' => [
+            // aoc data
+            [
                 [
-                    [
-                        'id' => 321,
-                        'action' => 'U',
-                        'operatingCentre' => [
-                            'id' => 123
-                        ],
-                        'lastModifiedOn' => '2015-01-01'
-                    ]
-                ],
-                // loc data
-                [
-                    [
-                        'id' => 654,
-                        'operatingCentre' => [
-                            'id' => 123
-                        ],
-                        'lastModifiedOn' => '2016-01-01'
+                    'id' => 321,
+                    'action' => 'U',
+                    'operatingCentre' => [
+                        'id' => 123
                     ],
-                    [
-                        'id' => 655,
-                        'operatingCentre' => [
-                            'id' => 999
-                        ],
-                        'lastModifiedOn' => '2017-01-01'
-                    ]
-                ],
-                // expected
-                [
-                    [
-                        'id' => 'L655',
-                        'operatingCentre' => [
-                            'id' => 999
-                        ],
-                        'source' => 'L',
-                        'action' => 'E',
-                        'sort' => '2017-01-01',
-                        'lastModifiedOn' => '2017-01-01'
-                    ],
-                    [
-                        'id' => 'L654',
-                        'operatingCentre' => [
-                            'id' => 123
-                        ],
-                        'source' => 'L',
-                        'action' => 'C',
-                        'sort' => '2016-01-01',
-                        'lastModifiedOn' => '2016-01-01'
-                    ],
-                    [
-                        'id' => 'A321',
-                        'action' => 'U',
-                        'operatingCentre' => [
-                            'id' => 123
-                        ],
-                        'source' => 'A',
-                        'sort' => '2015-01-01',
-                        'lastModifiedOn' => '2015-01-01'
-                    ]
-                ],
-                // query params
-                [
-                    'sort' => 'lastModifiedOn',
-                    'order' => 'DESC'
+                    'createdOn' => '2015-01-01'
                 ]
             ],
-            'default' => [
-                // aoc data
+            // loc data
+            [
                 [
-                    [
-                        'id' => 321,
-                        'action' => 'U',
-                        'operatingCentre' => [
-                            'id' => 123
-                        ],
-                    ]
-                ],
-                // loc data
-                [
-                    [
-                        'id' => 654,
-                        'operatingCentre' => [
-                            'id' => 123
-                        ],
+                    'id' => 654,
+                    'operatingCentre' => [
+                        'id' => 123
                     ],
-                    [
-                        'id' => 655,
-                        'operatingCentre' => [
-                            'id' => 999
-                        ],
-                    ]
+                    'createdOn' => '2016-01-01'
                 ],
-                // expected
                 [
-                    [
-                        'id' => 'L654',
-                        'operatingCentre' => [
-                            'id' => 123
-                        ],
-                        'source' => 'L',
-                        'action' => 'C',
-                        'sort' => 123
+                    'id' => 655,
+                    'operatingCentre' => [
+                        'id' => 999
                     ],
-                    [
-                        'id' => 'A321',
-                        'action' => 'U',
-                        'operatingCentre' => [
-                            'id' => 123
-                        ],
-                        'source' => 'A',
-                        'sort' => 123
-                    ],
-                    [
-                        'id' => 'L655',
-                        'operatingCentre' => [
-                            'id' => 999
-                        ],
-                        'source' => 'L',
-                        'action' => 'E',
-                        'sort' => 999
-                    ]
-                ],
-                // query params
-                [
-                    'sort' => 'foo',
-                    'order' => 'ASC'
+                    'createdOn' => '2017-01-01'
                 ]
             ],
+            // expected
+            [
+                [
+                    'id' => 'L655',
+                    'operatingCentre' => [
+                        'id' => 999
+                    ],
+                    'source' => 'L',
+                    'action' => 'E',
+                    'sort' => '2017-01-01',
+                    'createdOn' => '2017-01-01'
+                ],
+                [
+                    'id' => 'L654',
+                    'operatingCentre' => [
+                        'id' => 123
+                    ],
+                    'source' => 'L',
+                    'action' => 'C',
+                    'sort' => '2016-01-01',
+                    'createdOn' => '2016-01-01'
+                ],
+                [
+                    'id' => 'A321',
+                    'action' => 'U',
+                    'operatingCentre' => [
+                        'id' => 123
+                    ],
+                    'source' => 'A',
+                    'sort' => '2015-01-01',
+                    'createdOn' => '2015-01-01'
+                ]
+            ],
+            // query params
+            [
+                'sort' => 'createdOn',
+                'order' => 'DESC'
+            ]
+        ];
+        yield 'address' => [
+            // aoc data
+            [
+                [
+                    'id' => 321,
+                    'action' => 'U',
+                    'operatingCentre' => [
+                        'id' => 123,
+                        'address' => [
+                            'addressLine1' => 'aaa',
+                            'addressLine2' => '',
+                            'addressLine3' => '',
+                            'addressLine4' => '',
+                            'town' => ''
+                        ]
+                    ],
+                ]
+            ],
+            // loc data
+            [
+                [
+                    'id' => 654,
+                    'operatingCentre' => [
+                        'id' => 123,
+                        'address' => [
+                            'addressLine1' => 'ccc',
+                            'addressLine2' => '',
+                            'addressLine3' => '',
+                            'addressLine4' => '',
+                            'town' => ''
+                        ]
+                    ],
+                ],
+                [
+                    'id' => 655,
+                    'operatingCentre' => [
+                        'id' => 999,
+                        'address' => [
+                            'addressLine1' => 'bbb',
+                            'addressLine2' => '',
+                            'addressLine3' => '',
+                            'addressLine4' => '',
+                            'town' => ''
+                        ]
+                    ],
+                ]
+            ],
+            // expected
+            [
+                [
+                    'id' => 'A321',
+                    'action' => 'U',
+                    'operatingCentre' => [
+                        'id' => 123,
+                        'address' => [
+                            'addressLine1' => 'aaa',
+                            'addressLine2' => '',
+                            'addressLine3' => '',
+                            'addressLine4' => '',
+                            'town' => ''
+                        ]
+                    ],
+                    'source' => 'A',
+                    'sort' => 'aaa',
+                ],
+                [
+                    'id' => 'L655',
+                    'operatingCentre' => [
+                        'id' => 999,
+                        'address' => [
+                            'addressLine1' => 'bbb',
+                            'addressLine2' => '',
+                            'addressLine3' => '',
+                            'addressLine4' => '',
+                            'town' => ''
+                        ]
+                    ],
+                    'source' => 'L',
+                    'action' => 'E',
+                    'sort' => 'bbb',
+                ],
+                [
+                    'id' => 'L654',
+                    'operatingCentre' => [
+                        'id' => 123,
+                        'address' => [
+                            'addressLine1' => 'ccc',
+                            'addressLine2' => '',
+                            'addressLine3' => '',
+                            'addressLine4' => '',
+                            'town' => ''
+                        ]
+                    ],
+                    'source' => 'L',
+                    'action' => 'C',
+                    'sort' => 'ccc',
+                ],
+            ],
+            // query params
+            [
+                'sort' => 'adr',
+                'order' => 'ASC'
+            ]
+        ];
+        yield 'lastModifiedOn' => [
+            // aoc data
+            [
+                [
+                    'id' => 321,
+                    'action' => 'U',
+                    'operatingCentre' => [
+                        'id' => 123
+                    ],
+                    'lastModifiedOn' => '2015-01-01'
+                ]
+            ],
+            // loc data
+            [
+                [
+                    'id' => 654,
+                    'operatingCentre' => [
+                        'id' => 123
+                    ],
+                    'lastModifiedOn' => '2016-01-01'
+                ],
+                [
+                    'id' => 655,
+                    'operatingCentre' => [
+                        'id' => 999
+                    ],
+                    'lastModifiedOn' => '2017-01-01'
+                ]
+            ],
+            // expected
+            [
+                [
+                    'id' => 'L655',
+                    'operatingCentre' => [
+                        'id' => 999
+                    ],
+                    'source' => 'L',
+                    'action' => 'E',
+                    'sort' => '2017-01-01',
+                    'lastModifiedOn' => '2017-01-01'
+                ],
+                [
+                    'id' => 'L654',
+                    'operatingCentre' => [
+                        'id' => 123
+                    ],
+                    'source' => 'L',
+                    'action' => 'C',
+                    'sort' => '2016-01-01',
+                    'lastModifiedOn' => '2016-01-01'
+                ],
+                [
+                    'id' => 'A321',
+                    'action' => 'U',
+                    'operatingCentre' => [
+                        'id' => 123
+                    ],
+                    'source' => 'A',
+                    'sort' => '2015-01-01',
+                    'lastModifiedOn' => '2015-01-01'
+                ]
+            ],
+            // query params
+            [
+                'sort' => 'lastModifiedOn',
+                'order' => 'DESC'
+            ]
+        ];
+        yield 'default' => [
+            // aoc data
+            [
+                [
+                    'id' => 321,
+                    'action' => 'U',
+                    'operatingCentre' => [
+                        'id' => 123
+                    ],
+                ]
+            ],
+            // loc data
+            [
+                [
+                    'id' => 654,
+                    'operatingCentre' => [
+                        'id' => 123
+                    ],
+                ],
+                [
+                    'id' => 655,
+                    'operatingCentre' => [
+                        'id' => 999
+                    ],
+                ]
+            ],
+            // expected
+            [
+                [
+                    'id' => 'L654',
+                    'operatingCentre' => [
+                        'id' => 123
+                    ],
+                    'source' => 'L',
+                    'action' => 'C',
+                    'sort' => 123
+                ],
+                [
+                    'id' => 'A321',
+                    'action' => 'U',
+                    'operatingCentre' => [
+                        'id' => 123
+                    ],
+                    'source' => 'A',
+                    'sort' => 123
+                ],
+                [
+                    'id' => 'L655',
+                    'operatingCentre' => [
+                        'id' => 999
+                    ],
+                    'source' => 'L',
+                    'action' => 'E',
+                    'sort' => 999
+                ]
+            ],
+            // query params
+            [
+                'sort' => 'foo',
+                'order' => 'ASC'
+            ]
         ];
     }
 }

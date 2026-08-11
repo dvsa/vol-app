@@ -29,7 +29,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class CreateOverpaymentFeeTest extends AbstractCommandHandlerTestCase
+final class CreateOverpaymentFeeTest extends AbstractCommandHandlerTestCase
 {
     protected $mockFeesHelperService;
 

@@ -18,7 +18,7 @@ class EmissionsCategoriesGrantabilityCheckerFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): EmissionsCategoriesGrantabilityChecker
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): EmissionsCategoriesGrantabilityChecker
     {
         return new EmissionsCategoriesGrantabilityChecker(
             $container->get('PermitsAvailabilityEmissionsCategoryAvailabilityCounter')

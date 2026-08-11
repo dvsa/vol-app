@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Lva;
 
 use Common\Data\Mapper\Lva\TypeOfLicence;
@@ -15,7 +17,7 @@ use Common\Data\Mapper\Lva\TypeOfLicence;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TypeOfLicenceTest extends \PHPUnit\Framework\TestCase
+final class TypeOfLicenceTest extends \PHPUnit\Framework\TestCase
 {
     public function testMapFromResult(): void
     {

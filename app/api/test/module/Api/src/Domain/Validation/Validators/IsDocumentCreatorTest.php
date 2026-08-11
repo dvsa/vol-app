@@ -10,7 +10,7 @@ use Dvsa\Olcs\Api\Entity\Doc\Document;
 use Dvsa\Olcs\Api\Entity\User\User;
 use Mockery as m;
 
-class IsDocumentCreatorTest extends AbstractValidatorsTestCase
+final class IsDocumentCreatorTest extends AbstractValidatorsTestCase
 {
     /**
      * @var IsDocumentCreator

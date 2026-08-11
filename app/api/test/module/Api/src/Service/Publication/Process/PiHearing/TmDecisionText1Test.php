@@ -14,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class TmDecisionText1Test
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class TmDecisionText1Test extends MockeryTestCase
+final class TmDecisionText1Test extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\Group('publicationFilter
 Test the TmDecisionText1 filter')]

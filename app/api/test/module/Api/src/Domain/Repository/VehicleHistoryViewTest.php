@@ -20,8 +20,9 @@ use Dvsa\Olcs\Api\Domain\Repository\VehicleHistoryView as VehicleHistoryViewRepo
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VehicleHistoryViewTest extends RepositoryTestCase
+final class VehicleHistoryViewTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(VehicleHistoryViewRepo::class);

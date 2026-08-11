@@ -8,7 +8,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Service\Cookie\Preferences;
 use RuntimeException;
 
-class PreferencesTest extends MockeryTestCase
+final class PreferencesTest extends MockeryTestCase
 {
     public function testReturnDefaultPreferencesOnEmptyInput(): void
     {
@@ -35,43 +35,41 @@ class PreferencesTest extends MockeryTestCase
     }
 
     /**
-     * @return ((string|true)[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(string | true)> | string)>>
      *
      * @psalm-return list{list{'Preference analytics is not present', array{settings: true, key87: 'foo'}}, list{'Preference settings is not present', array{analytics: true, key99: 'bar'}}, list{'Preference analytics is non-bool value', array{analytics: 'tree', settings: true, key87: 'foo'}}, list{'Preference settings is non-bool value', array{analytics: true, settings: 'cat', key99: 'bar'}}}
      */
-    public static function dpExceptionOnInvalidOrMissingKey(): array
+    public static function dpExceptionOnInvalidOrMissingKey(): \Iterator
     {
-        return [
+        yield [
+            'Preference analytics is not present',
             [
-                'Preference analytics is not present',
-                [
-                    Preferences::KEY_SETTINGS => true,
-                    'key87' => 'foo'
-                ]
-            ],
+                Preferences::KEY_SETTINGS => true,
+                'key87' => 'foo'
+            ]
+        ];
+        yield [
+            'Preference settings is not present',
             [
-                'Preference settings is not present',
-                [
-                    Preferences::KEY_ANALYTICS => true,
-                    'key99' => 'bar'
-                ]
-            ],
+                Preferences::KEY_ANALYTICS => true,
+                'key99' => 'bar'
+            ]
+        ];
+        yield [
+            'Preference analytics is non-bool value',
             [
-                'Preference analytics is non-bool value',
-                [
-                    Preferences::KEY_ANALYTICS => 'tree',
-                    Preferences::KEY_SETTINGS => true,
-                    'key87' => 'foo'
-                ]
-            ],
+                Preferences::KEY_ANALYTICS => 'tree',
+                Preferences::KEY_SETTINGS => true,
+                'key87' => 'foo'
+            ]
+        ];
+        yield [
+            'Preference settings is non-bool value',
             [
-                'Preference settings is non-bool value',
-                [
-                    Preferences::KEY_ANALYTICS => true,
-                    Preferences::KEY_SETTINGS => 'cat',
-                    'key99' => 'bar'
-                ]
-            ],
+                Preferences::KEY_ANALYTICS => true,
+                Preferences::KEY_SETTINGS => 'cat',
+                'key99' => 'bar'
+            ]
         ];
     }
 
@@ -87,37 +85,35 @@ class PreferencesTest extends MockeryTestCase
     }
 
     /**
-     * @return bool[][][]
+     * @return \Iterator<(int | string), array<array<bool>>>
      *
      * @psalm-return list{list{array{analytics: true, settings: true}}, list{array{analytics: true, settings: false}}, list{array{analytics: false, settings: true}}, list{array{analytics: false, settings: false}}}
      */
-    public static function dpValidInput(): array
+    public static function dpValidInput(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    Preferences::KEY_ANALYTICS => true,
-                    Preferences::KEY_SETTINGS => true,
-                ]
-            ],
+                Preferences::KEY_ANALYTICS => true,
+                Preferences::KEY_SETTINGS => true,
+            ]
+        ];
+        yield [
             [
-                [
-                    Preferences::KEY_ANALYTICS => true,
-                    Preferences::KEY_SETTINGS => false,
-                ]
-            ],
+                Preferences::KEY_ANALYTICS => true,
+                Preferences::KEY_SETTINGS => false,
+            ]
+        ];
+        yield [
             [
-                [
-                    Preferences::KEY_ANALYTICS => false,
-                    Preferences::KEY_SETTINGS => true,
-                ]
-            ],
+                Preferences::KEY_ANALYTICS => false,
+                Preferences::KEY_SETTINGS => true,
+            ]
+        ];
+        yield [
             [
-                [
-                    Preferences::KEY_ANALYTICS => false,
-                    Preferences::KEY_SETTINGS => false,
-                ]
-            ],
+                Preferences::KEY_ANALYTICS => false,
+                Preferences::KEY_SETTINGS => false,
+            ]
         ];
     }
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Service\Data\SectionConfig;
@@ -13,7 +15,7 @@ use Laminas\Router\Http\Segment;
  *
  * @package CommonTest\Service\Data
  */
-class SectionConfigTest extends MockeryTestCase
+final class SectionConfigTest extends MockeryTestCase
 {
     public function testGetAllRoutes(): void
     {
@@ -28,79 +30,76 @@ class SectionConfigTest extends MockeryTestCase
 
         $actual = $sut->getAllRoutes();
 
-        static::assertEquals(
-            [
-                'lva-application' => [
-                    'type' => 'segment',
-                    'options' => [
-                        'route' => '/application/:application[/]',
-                        'constraints' => [
-                            'application' => '[0-9]+',
-                        ],
-                        'defaults' => [
-                            'controller' => 'LvaApplication',
-                            'action' => 'index',
-                        ],
+        $this->assertEquals([
+            'lva-application' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/application/:application[/]',
+                    'constraints' => [
+                        'application' => '[0-9]+',
                     ],
-                    'may_terminate' => true,
-                    'child_routes' => [] +
-                        $this->getTestChildRoute('unit_test_route', 'application') +
-                        $this->getTestChildRoute('unit_second_route', 'application'),
-                ],
-                'lva-licence' => [
-                    'type' => 'segment',
-                    'options' => [
-                        'route' => '/licence/:licence[/]',
-                        'constraints' => [
-                            'licence' => '[0-9]+',
-                        ],
-                        'defaults' => [
-                            'controller' => 'LvaLicence',
-                            'action' => 'index',
-                        ],
+                    'defaults' => [
+                        'controller' => 'LvaApplication',
+                        'action' => 'index',
                     ],
-                    'may_terminate' => true,
-                    'child_routes' => [] +
-                        $this->getTestChildRoute('unit_test_route', 'licence') +
-                        $this->getTestChildRoute('unit_second_route', 'licence'),
                 ],
-                'lva-variation' => [
-                    'type' => 'segment',
-                    'options' => [
-                        'route' => '/variation/:application[/]',
-                        'constraints' => [
-                            'application' => '[0-9]+',
-                        ],
-                        'defaults' => [
-                            'controller' => 'LvaVariation',
-                            'action' => 'index',
-                        ],
-                    ],
-                    'may_terminate' => true,
-                    'child_routes' => [] +
-                        $this->getTestChildRoute('unit_test_route', 'variation') +
-                        $this->getTestChildRoute('unit_second_route', 'variation'),
-                ],
-                'lva-director_change' => [
-                    'type' => 'segment',
-                    'options' => [
-                        'route' => '/director-change/:application[/]',
-                        'constraints' => [
-                            'application' => '[0-9]+',
-                        ],
-                        'defaults' => [
-                            'controller' => 'LvaDirectorChange',
-                            'action' => 'index',
-                        ],
-                    ],
-                    'may_terminate' => true,
-                    'child_routes' => [] +
-                        $this->getTestChildRoute('unit_test_route', 'director_change') +
-                        $this->getTestChildRoute('unit_second_route', 'director_change'),
-                ],
+                'may_terminate' => true,
+                'child_routes' => [] +
+                    $this->getTestChildRoute('unit_test_route', 'application') +
+                    $this->getTestChildRoute('unit_second_route', 'application'),
             ],
-            $actual
-        );
+            'lva-licence' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/licence/:licence[/]',
+                    'constraints' => [
+                        'licence' => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'LvaLicence',
+                        'action' => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes' => [] +
+                    $this->getTestChildRoute('unit_test_route', 'licence') +
+                    $this->getTestChildRoute('unit_second_route', 'licence'),
+            ],
+            'lva-variation' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/variation/:application[/]',
+                    'constraints' => [
+                        'application' => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'LvaVariation',
+                        'action' => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes' => [] +
+                    $this->getTestChildRoute('unit_test_route', 'variation') +
+                    $this->getTestChildRoute('unit_second_route', 'variation'),
+            ],
+            'lva-director_change' => [
+                'type' => 'segment',
+                'options' => [
+                    'route' => '/director-change/:application[/]',
+                    'constraints' => [
+                        'application' => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => 'LvaDirectorChange',
+                        'action' => 'index',
+                    ],
+                ],
+                'may_terminate' => true,
+                'child_routes' => [] +
+                    $this->getTestChildRoute('unit_test_route', 'director_change') +
+                    $this->getTestChildRoute('unit_second_route', 'director_change'),
+            ],
+        ], $actual);
     }
 
     /**

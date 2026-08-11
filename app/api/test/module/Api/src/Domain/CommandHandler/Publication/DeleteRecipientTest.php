@@ -18,7 +18,7 @@ use Dvsa\Olcs\Transfer\Command\Publication\DeleteRecipient as Cmd;
 /**
  * Class DeleteRecipientTest
  */
-class DeleteRecipientTest extends AbstractCommandHandlerTestCase
+final class DeleteRecipientTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

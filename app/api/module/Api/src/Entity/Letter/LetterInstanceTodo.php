@@ -8,10 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * LetterInstanceTodo Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="letter_instance_todo")
  */
+#[ORM\Table(name: 'letter_instance_todo')]
+#[ORM\Entity]
 class LetterInstanceTodo extends AbstractLetterInstanceTodo
 {
 }

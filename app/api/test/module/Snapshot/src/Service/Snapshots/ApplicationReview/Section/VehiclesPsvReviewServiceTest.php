@@ -22,13 +22,14 @@ use Laminas\I18n\Translator\TranslatorInterface;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VehiclesPsvReviewServiceTest extends MockeryTestCase
+final class VehiclesPsvReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 
     /** @var TranslatorInterface */
     protected $mockTranslator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);
@@ -52,233 +53,231 @@ class VehiclesPsvReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->getConfigFromData($data, $mainItems));
     }
 
-    public static function providerGetConfigFromData(): array
+    public static function providerGetConfigFromData(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    ['foo' => 'bar']
-                ],
-                [
-                    'isVariation' => false,
-                    'hasEnteredReg' => 'N'
-                ],
-                [
-                    ['foo' => 'bar']
-                ]
+                ['foo' => 'bar']
             ],
             [
-                [
-                    ['foo' => 'bar']
-                ],
-                [
-                    'isVariation' => false,
-                    'hasEnteredReg' => 'Y',
-                    'licenceVehicles' => [
-                        [
-                            'vehicle' => [
-                                'vrm' => 'SM10QWE',
-                                'makeModel' => 'Foo Bar',
-                            ]
-                        ],
-                        [
-                            'vehicle' => [
-                                'vrm' => 'SM11QWE',
-                                'makeModel' => 'Foo Bar',
-                            ]
-                        ],
-                        [
-                            'vehicle' => [
-                                'vrm' => 'ME10QWE',
-                                'makeModel' => '',
-                            ]
-                        ],
-                        [
-                            'vehicle' => [
-                                'vrm' => 'ME11QWE',
-                                'makeModel' => '',
-                            ]
-                        ],
-                        [
-                            'vehicle' => [
-                                'vrm' => 'LG10QWE',
-                                'makeModel' => '',
-                            ]
-                        ],
-                        [
-                            'vehicle' => [
-                                'vrm' => 'LG11QWE',
-                                'makeModel' => '',
-                            ]
-                        ]
-                    ]
-                ],
-                [
-                    ['foo' => 'bar'],
+                'isVariation' => false,
+                'hasEnteredReg' => 'N'
+            ],
+            [
+                ['foo' => 'bar']
+            ]
+        ];
+        yield [
+            [
+                ['foo' => 'bar']
+            ],
+            [
+                'isVariation' => false,
+                'hasEnteredReg' => 'Y',
+                'licenceVehicles' => [
                     [
-                        'header' => 'application-review-vehicles-psv-title',
-                        'multiItems' => [
-                            [
-                                [
-                                    'label' => 'application-review-vehicles-vrm',
-                                    'value' => 'SM10QWE'
-                                ],
-                                [
-                                    'label' => 'application-review-vehicles-make',
-                                    'value' => 'Foo Bar'
-                                ]
-                            ],
-                            [
-                                [
-                                    'label' => 'application-review-vehicles-vrm',
-                                    'value' => 'SM11QWE'
-                                ],
-                                [
-                                    'label' => 'application-review-vehicles-make',
-                                    'value' => 'Foo Bar'
-                                ]
-                            ],
-                            [
-                                [
-                                    'label' => 'application-review-vehicles-vrm',
-                                    'value' => 'ME10QWE'
-                                ],
-                                [
-                                    'label' => 'application-review-vehicles-make',
-                                    'value' => ''
-                                ]
-                            ],
-                            [
-                                [
-                                    'label' => 'application-review-vehicles-vrm',
-                                    'value' => 'ME11QWE'
-                                ],
-                                [
-                                    'label' => 'application-review-vehicles-make',
-                                    'value' => ''
-                                ]
-                            ],
-                            [
-                                [
-                                    'label' => 'application-review-vehicles-vrm',
-                                    'value' => 'LG10QWE'
-                                ],
-                                [
-                                    'label' => 'application-review-vehicles-make',
-                                    'value' => ''
-                                ]
-                            ],
-                            [
-                                [
-                                    'label' => 'application-review-vehicles-vrm',
-                                    'value' => 'LG11QWE'
-                                ],
-                                [
-                                    'label' => 'application-review-vehicles-make',
-                                    'value' => ''
-                                ]
-                            ]
+                        'vehicle' => [
+                            'vrm' => 'SM10QWE',
+                            'makeModel' => 'Foo Bar',
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'SM11QWE',
+                            'makeModel' => 'Foo Bar',
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'ME10QWE',
+                            'makeModel' => '',
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'ME11QWE',
+                            'makeModel' => '',
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'LG10QWE',
+                            'makeModel' => '',
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'LG11QWE',
+                            'makeModel' => '',
                         ]
                     ]
                 ]
             ],
             [
+                ['foo' => 'bar'],
                 [
-                    ['foo' => 'bar']
-                ],
-                [
-                    'isVariation' => false,
-                    'hasEnteredReg' => 'Y',
-                    'licenceVehicles' => [
+                    'header' => 'application-review-vehicles-psv-title',
+                    'multiItems' => [
                         [
-                            'vehicle' => [
-                                'vrm' => 'SM10QWE',
-                                'makeModel' => 'Foo Bar',
+                            [
+                                'label' => 'application-review-vehicles-vrm',
+                                'value' => 'SM10QWE'
+                            ],
+                            [
+                                'label' => 'application-review-vehicles-make',
+                                'value' => 'Foo Bar'
                             ]
                         ],
                         [
-                            'vehicle' => [
-                                'vrm' => 'SM11QWE',
-                                'makeModel' => 'Foo Bar',
+                            [
+                                'label' => 'application-review-vehicles-vrm',
+                                'value' => 'SM11QWE'
+                            ],
+                            [
+                                'label' => 'application-review-vehicles-make',
+                                'value' => 'Foo Bar'
+                            ]
+                        ],
+                        [
+                            [
+                                'label' => 'application-review-vehicles-vrm',
+                                'value' => 'ME10QWE'
+                            ],
+                            [
+                                'label' => 'application-review-vehicles-make',
+                                'value' => ''
+                            ]
+                        ],
+                        [
+                            [
+                                'label' => 'application-review-vehicles-vrm',
+                                'value' => 'ME11QWE'
+                            ],
+                            [
+                                'label' => 'application-review-vehicles-make',
+                                'value' => ''
+                            ]
+                        ],
+                        [
+                            [
+                                'label' => 'application-review-vehicles-vrm',
+                                'value' => 'LG10QWE'
+                            ],
+                            [
+                                'label' => 'application-review-vehicles-make',
+                                'value' => ''
+                            ]
+                        ],
+                        [
+                            [
+                                'label' => 'application-review-vehicles-vrm',
+                                'value' => 'LG11QWE'
+                            ],
+                            [
+                                'label' => 'application-review-vehicles-make',
+                                'value' => ''
                             ]
                         ]
                     ]
-                ],
-                [
-                    ['foo' => 'bar'],
+                ]
+            ]
+        ];
+        yield [
+            [
+                ['foo' => 'bar']
+            ],
+            [
+                'isVariation' => false,
+                'hasEnteredReg' => 'Y',
+                'licenceVehicles' => [
                     [
-                        'header' => 'application-review-vehicles-psv-title',
-                        'multiItems' => [
-                            [
-                                [
-                                    'label' => 'application-review-vehicles-vrm',
-                                    'value' => 'SM10QWE'
-                                ],
-                                [
-                                    'label' => 'application-review-vehicles-make',
-                                    'value' => 'Foo Bar'
-                                ]
-                            ],
-                            [
-                                [
-                                    'label' => 'application-review-vehicles-vrm',
-                                    'value' => 'SM11QWE'
-                                ],
-                                [
-                                    'label' => 'application-review-vehicles-make',
-                                    'value' => 'Foo Bar'
-                                ]
-                            ]
+                        'vehicle' => [
+                            'vrm' => 'SM10QWE',
+                            'makeModel' => 'Foo Bar',
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'SM11QWE',
+                            'makeModel' => 'Foo Bar',
                         ]
                     ]
                 ]
             ],
             [
+                ['foo' => 'bar'],
                 [
-                    ['foo' => 'bar']
-                ],
-                [
-                    'isVariation' => false,
-                    'hasEnteredReg' => 'Y',
-                    'licenceVehicles' => [
+                    'header' => 'application-review-vehicles-psv-title',
+                    'multiItems' => [
                         [
-                            'vehicle' => [
-                                'vrm' => 'LG10QWE',
-                                'makeModel' => 'ABC',
+                            [
+                                'label' => 'application-review-vehicles-vrm',
+                                'value' => 'SM10QWE'
+                            ],
+                            [
+                                'label' => 'application-review-vehicles-make',
+                                'value' => 'Foo Bar'
                             ]
                         ],
                         [
-                            'vehicle' => [
-                                'vrm' => 'LG11QWE',
-                                'makeModel' => 'XYZ',
+                            [
+                                'label' => 'application-review-vehicles-vrm',
+                                'value' => 'SM11QWE'
+                            ],
+                            [
+                                'label' => 'application-review-vehicles-make',
+                                'value' => 'Foo Bar'
                             ]
                         ]
                     ]
-                ],
-                [
-                    ['foo' => 'bar'],
+                ]
+            ]
+        ];
+        yield [
+            [
+                ['foo' => 'bar']
+            ],
+            [
+                'isVariation' => false,
+                'hasEnteredReg' => 'Y',
+                'licenceVehicles' => [
                     [
-                        'header' => 'application-review-vehicles-psv-title',
-                        'multiItems' => [
+                        'vehicle' => [
+                            'vrm' => 'LG10QWE',
+                            'makeModel' => 'ABC',
+                        ]
+                    ],
+                    [
+                        'vehicle' => [
+                            'vrm' => 'LG11QWE',
+                            'makeModel' => 'XYZ',
+                        ]
+                    ]
+                ]
+            ],
+            [
+                ['foo' => 'bar'],
+                [
+                    'header' => 'application-review-vehicles-psv-title',
+                    'multiItems' => [
+                        [
                             [
-                                [
-                                    'label' => 'application-review-vehicles-vrm',
-                                    'value' => 'LG10QWE'
-                                ],
-                                [
-                                    'label' => 'application-review-vehicles-make',
-                                    'value' => 'ABC'
-                                ]
+                                'label' => 'application-review-vehicles-vrm',
+                                'value' => 'LG10QWE'
                             ],
                             [
-                                [
-                                    'label' => 'application-review-vehicles-vrm',
-                                    'value' => 'LG11QWE'
-                                ],
-                                [
-                                    'label' => 'application-review-vehicles-make',
-                                    'value' => 'XYZ'
-                                ]
+                                'label' => 'application-review-vehicles-make',
+                                'value' => 'ABC'
+                            ]
+                        ],
+                        [
+                            [
+                                'label' => 'application-review-vehicles-vrm',
+                                'value' => 'LG11QWE'
+                            ],
+                            [
+                                'label' => 'application-review-vehicles-make',
+                                'value' => 'XYZ'
                             ]
                         ]
                     ]

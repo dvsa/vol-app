@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Validator;
 
 use Common\Validator\OneOf;
@@ -7,7 +9,7 @@ use Common\Validator\OneOf;
 /**
  * Class OneOfTest test
  */
-class OneOfTest extends \PHPUnit\Framework\TestCase
+final class OneOfTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test setOptions
@@ -31,11 +33,11 @@ class OneOfTest extends \PHPUnit\Framework\TestCase
     /**
      * Test is valid
      *
-     * @dataProvider provideIsValid
      * @param bool  $expected expected result
      * @param array $options  options
      * @param array $context  context
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIsValid')]
     public function testIsValid($expected, $options, $context): void
     {
         $sut = new OneOf();
@@ -46,18 +48,16 @@ class OneOfTest extends \PHPUnit\Framework\TestCase
     /**
      * Provider isValid
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provideIsValid()
+    public static function provideIsValid(): \Iterator
     {
-        return [
-            [true, ['fields' => ['test1', 'test2']], ['test1' => 'notempty']],
-            [true, ['fields' => ['test1', 'test2']], ['test2' => 'notempty']],
-            [true, ['fields' => ['test1', 'test2']], ['test1' => 'notempty', 'test2' => 'notempty']],
-            [false, ['fields' => ['test1', 'test2']], ['test1' => '', 'test2' => '']],
-            [false, ['fields' => ['test1', 'test2'], 'allowZero' => true], []],
-            [true, ['fields' => ['test1', 'test2'], 'allowZero' => true], ['test1' => '0']],
-            [false, ['fields' => ['test1', 'test2'], 'allowZero' => false], ['test1' => '0']],
-        ];
+        yield [true, ['fields' => ['test1', 'test2']], ['test1' => 'notempty']];
+        yield [true, ['fields' => ['test1', 'test2']], ['test2' => 'notempty']];
+        yield [true, ['fields' => ['test1', 'test2']], ['test1' => 'notempty', 'test2' => 'notempty']];
+        yield [false, ['fields' => ['test1', 'test2']], ['test1' => '', 'test2' => '']];
+        yield [false, ['fields' => ['test1', 'test2'], 'allowZero' => true], []];
+        yield [true, ['fields' => ['test1', 'test2'], 'allowZero' => true], ['test1' => '0']];
+        yield [false, ['fields' => ['test1', 'test2'], 'allowZero' => false], ['test1' => '0']];
     }
 }

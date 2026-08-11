@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper;
 
 use Common\Form\View\Helper;
@@ -18,10 +20,8 @@ use Laminas\View\HelperPluginManager;
 use Laminas\View\Renderer\PhpRenderer;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers \Common\Form\View\Helper\Form
- */
-class FormTest extends TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\View\Helper\Form::class)]
+final class FormTest extends TestCase
 {
     public $docType;
     /** @var \Laminas\Form\Form */

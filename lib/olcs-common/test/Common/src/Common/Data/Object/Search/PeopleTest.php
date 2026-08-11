@@ -1,20 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Data\Object\Search;
 
 use Common\Data\Object\Search\People;
 
-/**
- * @covers \Common\Data\Object\Search\SearchAbstract
- * @covers \Common\Data\Object\Search\People
- */
-class PeopleTest extends SearchAbstractTest
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Data\Object\Search\SearchAbstract::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Data\Object\Search\People::class)]
+final class PeopleTest extends SearchAbstractTest
 {
     protected $class = People::class;
 
-    /**
-     * @dataProvider dataProviderTestDisqualifiedFormatter
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestDisqualifiedFormatter')]
     public function testDisqualifiedFormatter($expected, $row): void
     {
         $columns = $this->sut->getColumns();
@@ -35,15 +33,13 @@ class PeopleTest extends SearchAbstractTest
     }
 
     /**
-     * @return (string|string[])[][]
+     * @return \Iterator<(int | string), array<(array<string> | string)>>
      *
      * @psalm-return list{list{'Yes', array{foundAs: 'XX', disqualified: 'Yes'}}, list{'No', array{foundAs: 'XX', disqualified: 'No'}}}
      */
-    public function dataProviderTestDisqualifiedFormatter(): array
+    public static function dataProviderTestDisqualifiedFormatter(): \Iterator
     {
-        return [
-            ['Yes', ['foundAs' => 'XX', 'disqualified' => 'Yes']],
-            ['No', ['foundAs' => 'XX', 'disqualified' => 'No']],
-        ];
+        yield ['Yes', ['foundAs' => 'XX', 'disqualified' => 'Yes']];
+        yield ['No', ['foundAs' => 'XX', 'disqualified' => 'No']];
     }
 }

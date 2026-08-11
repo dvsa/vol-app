@@ -31,32 +31,28 @@ use LmcRbacMvc\Service\AuthorizationService;
  * @author Rob Caiger <rob@clocal.co.uk>
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class OverviewControllerTest extends AbstractLvaControllerTestCase
+final class OverviewControllerTest extends AbstractLvaControllerTestCase
 {
-    protected $mockNiTextTranslationUtil;
-    protected $mockAuthService;
     protected $mockLicenceOverviewHelper;
     protected $mockFormHelper;
-    protected $mockNavigation;
-    protected $mockFlashMessenger;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->mockNiTextTranslationUtil = m::mock(NiTextTranslation::class);
-        $this->mockAuthService = m::mock(AuthorizationService::class);
+        $mockNiTextTranslationUtil = m::mock(NiTextTranslation::class);
+        $mockAuthService = m::mock(AuthorizationService::class);
         $this->mockLicenceOverviewHelper = m::mock(LicenceOverviewHelperService::class);
         $this->mockFormHelper = m::mock(FormHelperService::class);
-        $this->mockNavigation = m::mock('navigation');
-        $this->mockFlashMessenger = m::mock(FlashMessengerHelperService::class);
+        $mockNavigation = m::mock('navigation');
+        $mockFlashMessenger = m::mock(FlashMessengerHelperService::class);
         $this->mockController(OverviewController::class, [
-           $this->mockNiTextTranslationUtil,
-            $this->mockAuthService,
+           $mockNiTextTranslationUtil,
+            $mockAuthService,
             $this->mockLicenceOverviewHelper,
             $this->mockFormHelper,
-            $this->mockNavigation,
-            $this->mockFlashMessenger
+            $mockNavigation,
+            $mockFlashMessenger
         ]);
     }
 
@@ -125,7 +121,7 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
         }
     }
 
-    public static function indexProvider(): array
+    public static function indexProvider(): \Iterator
     {
         $valueOptions = [
             'trafficAreas' => [
@@ -133,72 +129,69 @@ class OverviewControllerTest extends AbstractLvaControllerTestCase
                 'B' => 'Traffic area B',
             ],
         ];
-
-        return [
-            'valid goods licence' => [
-                [
-                    'id'           => 123,
-                    'version'      => 1,
-                    'translateToWelsh' => 'Y',
-                    'reviewDate'   => '2016-05-04',
-                    'expiryDate'   => '2017-06-05',
-                    'status'       => ['id' => RefData::LICENCE_STATUS_VALID],
-                    'organisation' => [
-                        'id' => 72,
-                        'licences' => [
-                            ['id' => 210],
-                            ['id' => 208],
-                            ['id' => 203],
-                        ],
-                        'leadTcArea' => ['id' => 'B', 'isWales' => true],
+        yield 'valid goods licence' => [
+            [
+                'id'           => 123,
+                'version'      => 1,
+                'translateToWelsh' => 'Y',
+                'reviewDate'   => '2016-05-04',
+                'expiryDate'   => '2017-06-05',
+                'status'       => ['id' => RefData::LICENCE_STATUS_VALID],
+                'organisation' => [
+                    'id' => 72,
+                    'licences' => [
+                        ['id' => 210],
+                        ['id' => 208],
+                        ['id' => 203],
                     ],
-                    'trafficArea' => ['id' => 'B', 'isWales' => true],
-                    'valueOptions' => $valueOptions,
+                    'leadTcArea' => ['id' => 'B', 'isWales' => true],
                 ],
-                false,
+                'trafficArea' => ['id' => 'B', 'isWales' => true],
+                'valueOptions' => $valueOptions,
             ],
-            'surrendered psv licence' => [
-                [
-                    'id'           => 123,
-                    'version'      => 1,
-                    'translateToWelsh' => 'Y',
-                    'reviewDate'   => '2016-05-04',
-                    'expiryDate'   => '2017-06-05',
-                    'status'       => ['id' => RefData::LICENCE_STATUS_SURRENDERED],
-                    'organisation' => [
-                        'id' => 72,
-                        'licences' => [
-                            ['id' => 210],
-                            ['id' => 208],
-                            ['id' => 203],
-                        ],
-                        'leadTcArea' => ['id' => 'B', 'isWales' => true],
+            false,
+        ];
+        yield 'surrendered psv licence' => [
+            [
+                'id'           => 123,
+                'version'      => 1,
+                'translateToWelsh' => 'Y',
+                'reviewDate'   => '2016-05-04',
+                'expiryDate'   => '2017-06-05',
+                'status'       => ['id' => RefData::LICENCE_STATUS_SURRENDERED],
+                'organisation' => [
+                    'id' => 72,
+                    'licences' => [
+                        ['id' => 210],
+                        ['id' => 208],
+                        ['id' => 203],
                     ],
-                    'trafficArea' => ['id' => 'B', 'isWales' => true],
-                    'valueOptions' => $valueOptions,
+                    'leadTcArea' => ['id' => 'B', 'isWales' => true],
                 ],
-                true,
+                'trafficArea' => ['id' => 'B', 'isWales' => true],
+                'valueOptions' => $valueOptions,
             ],
-            'special restricted psv licence' => [
-                [
-                    'id'           => 123,
-                    'version'      => 1,
-                    'translateToWelsh' => 'Y',
-                    'reviewDate'   => '2016-05-04',
-                    'expiryDate'   => '2017-06-05',
-                    'status'       => ['id' => RefData::LICENCE_STATUS_VALID],
-                    'organisation' => [
-                        'id' => 72,
-                        'licences' => [
-                            ['id' => 210],
-                        ],
-                        'leadTcArea' => ['id' => 'B', 'isWales' => true],
+            true,
+        ];
+        yield 'special restricted psv licence' => [
+            [
+                'id'           => 123,
+                'version'      => 1,
+                'translateToWelsh' => 'Y',
+                'reviewDate'   => '2016-05-04',
+                'expiryDate'   => '2017-06-05',
+                'status'       => ['id' => RefData::LICENCE_STATUS_VALID],
+                'organisation' => [
+                    'id' => 72,
+                    'licences' => [
+                        ['id' => 210],
                     ],
-                    'trafficArea' => ['id' => 'B', 'isWales' => true],
-                    'valueOptions' => $valueOptions,
+                    'leadTcArea' => ['id' => 'B', 'isWales' => true],
                 ],
-                false,
+                'trafficArea' => ['id' => 'B', 'isWales' => true],
+                'valueOptions' => $valueOptions,
             ],
+            false,
         ];
     }
 

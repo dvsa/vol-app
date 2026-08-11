@@ -11,7 +11,7 @@ use Dvsa\Olcs\Cli\Domain\Query\CommunityLic\CommunityLicencesForActivationList;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CommunityLicencesForActivationListTest extends \PHPUnit\Framework\TestCase
+final class CommunityLicencesForActivationListTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {
@@ -19,6 +19,6 @@ class CommunityLicencesForActivationListTest extends \PHPUnit\Framework\TestCase
             'date' => 'foo'
         ];
         $command = CommunityLicencesForActivationList::create($params);
-        $this->assertEquals($command->getDate(), 'foo');
+        $this->assertEquals('foo', $command->getDate());
     }
 }

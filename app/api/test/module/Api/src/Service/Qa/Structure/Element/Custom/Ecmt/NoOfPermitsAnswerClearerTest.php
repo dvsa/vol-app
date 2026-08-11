@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsAnswerClearerTest extends MockeryTestCase
+final class NoOfPermitsAnswerClearerTest extends MockeryTestCase
 {
     public function testClear(): void
     {

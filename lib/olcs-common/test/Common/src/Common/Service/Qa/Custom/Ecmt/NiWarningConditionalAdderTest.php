@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Ecmt;
 
 use Common\Service\Qa\Custom\Common\WarningAdder;
@@ -13,7 +15,7 @@ use Laminas\Form\Fieldset;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NiWarningConditionalAdderTest extends MockeryTestCase
+final class NiWarningConditionalAdderTest extends MockeryTestCase
 {
     private $fieldset;
 

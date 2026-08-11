@@ -21,7 +21,7 @@ use Mockery as m;
 /**
  * @see ForgotPassword
  */
-class ForgotPasswordTest extends AbstractCommandHandlerTestCase
+final class ForgotPasswordTest extends AbstractCommandHandlerTestCase
 {
     private string $username = 'username';
     private string $realm = 'realm';

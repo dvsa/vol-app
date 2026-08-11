@@ -6,14 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * QuestionText Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="question_text",
- *    indexes={
- *        @ORM\Index(name="fk_question_text_questions_idx", columns={"question_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'question_text')]
+#[ORM\Index(name: 'fk_question_text_questions_idx', columns: ['question_id'])]
+#[ORM\Entity]
 class QuestionText extends AbstractQuestionText
 {
     /**

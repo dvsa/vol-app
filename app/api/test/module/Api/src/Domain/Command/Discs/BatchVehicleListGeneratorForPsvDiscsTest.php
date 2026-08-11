@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Discs\BatchVehicleListGeneratorForPsvDiscs;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class BatchVehicleListGeneratorForPsvDiscsTest extends \PHPUnit\Framework\TestCase
+final class BatchVehicleListGeneratorForPsvDiscsTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

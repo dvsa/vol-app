@@ -15,7 +15,7 @@ use Mockery as m;
  *
  * Initially auto-generated but won't be overridden
  */
-class IrhpPermitSectorQuotaEntityTest extends EntityTester
+final class IrhpPermitSectorQuotaEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -30,9 +30,9 @@ class IrhpPermitSectorQuotaEntityTest extends EntityTester
         $stock = m::mock(IrhpPermitStock::class);
         $entity = $this->createEntity($sector, $stock);
 
-        self::assertInstanceOf(Entity::class, $entity);
-        self::assertEquals($sector, $entity->getSector());
-        self::assertEquals($stock, $entity->getIrhpPermitStock());
+        $this->assertInstanceOf(Entity::class, $entity);
+        $this->assertEquals($sector, $entity->getSector());
+        $this->assertEquals($stock, $entity->getIrhpPermitStock());
     }
 
     public function testUpdate(): void

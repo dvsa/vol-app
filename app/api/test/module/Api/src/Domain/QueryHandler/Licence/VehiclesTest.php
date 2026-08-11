@@ -20,7 +20,7 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * Vehicles Test
  */
-class VehiclesTest extends QueryHandlerTestCase
+final class VehiclesTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

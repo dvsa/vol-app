@@ -29,10 +29,12 @@ class DiscList extends AbstractDiscList
     public const LAST_ROW_HEIGHT = 359;
 
     /**
-     * Default line spacing (twips, 240 = 12pt) used by the pinned-layout
-     * snippet. Only consulted when GOODS_DISC_PINNED_LAYOUT is enabled.
+     * Default line spacing (twips) used by the pinned-layout snippet. Only
+     * consulted when GOODS_DISC_PINNED_LAYOUT is enabled. 248 matches the
+     * legacy renderer's auto leading for the disc text, so the in-disc line
+     * positions are unchanged from the known-good GV246 output.
      */
-    public const DEFAULT_LINE_SPACING = 240;
+    public const DEFAULT_LINE_SPACING = 248;
 
     /**
      * Bookmark variable prefix
@@ -159,7 +161,16 @@ class DiscList extends AbstractDiscList
     private function isPinnedLayout(): bool
     {
         $repo = $this->getRepoManager()?->get('SystemParameter');
-        return $repo?->fetchValue(SystemParameter::GOODS_DISC_PINNED_LAYOUT) === '1';
+        return $repo?->fetchIsEnabled(SystemParameter::GOODS_DISC_PINNED_LAYOUT) ?? false;
+    }
+
+    /**
+     * Pinned layout: hard page break after every 3 row snippets (6 discs).
+     */
+    #[\Override]
+    protected function snippetsPerPage(): int
+    {
+        return $this->isPinnedLayout() ? self::PER_PAGE / self::PER_ROW : 0;
     }
 
     /**
@@ -169,8 +180,8 @@ class DiscList extends AbstractDiscList
     private function resolveLineSpacing(): string
     {
         $repo = $this->getRepoManager()?->get('SystemParameter');
-        $value = $repo?->fetchValue(SystemParameter::GOODS_DISC_LINE_SPACING);
-        return is_numeric($value) ? (string)(int)$value : (string)self::DEFAULT_LINE_SPACING;
+        return (string)($repo?->fetchNumericValue(SystemParameter::GOODS_DISC_LINE_SPACING, self::DEFAULT_LINE_SPACING)
+            ?? self::DEFAULT_LINE_SPACING);
     }
 
     /*
@@ -208,11 +219,9 @@ class DiscList extends AbstractDiscList
         $key = $isLast
             ? SystemParameter::GOODS_DISC_LAST_ROW_HEIGHT
             : SystemParameter::GOODS_DISC_ROW_HEIGHT;
-        $value = $repo?->fetchValue($key);
-        if (is_numeric($value)) {
-            return (int)$value;
-        }
-        return $isLast ? self::LAST_ROW_HEIGHT : self::ROW_HEIGHT;
+        $default = $isLast ? self::LAST_ROW_HEIGHT : self::ROW_HEIGHT;
+
+        return $repo?->fetchNumericValue($key, $default) ?? $default;
     }
 
     #[\Override]

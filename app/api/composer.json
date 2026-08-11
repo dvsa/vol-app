@@ -25,7 +25,7 @@
     }
   ],
   "require": {
-    "php": "~8.3.0",
+    "php": "~8.4.0",
     "ext-intl": "*",
     "ext-json": "*",
     "ext-curl": "*",
@@ -35,7 +35,6 @@
     "aws/aws-sdk-php": "^3.385",
     "beberlei/doctrineextensions": "^1.5",
     "caseyamcl/guzzle_retry_middleware": "^2.13",
-    "doctrine/doctrine-orm-module": "^6.3",
     "doctrine/orm": "^2.20",
     "dvsa/authentication-cognito": "^3.3",
     "dvsa/laminas-config-cloud-parameters": "^2.1",
@@ -48,7 +47,6 @@
     "olcs/olcs-transfer": "*",
     "olcs/olcs-utils": "*",
     "oro/doctrine-extensions": "^2",
-    "phprtflite/phprtflite": "~1.3.3",
     "phpseclib/phpseclib": "^3.0.47",
     "qandidate/toggle": "^2.0",
     "ramsey/uuid": "^3.9",
@@ -78,7 +76,11 @@
     "firebase/php-jwt": "^7.0",
     "alphagov/notifications-php-client": "^7.0",
     "league/commonmark": "^2.7",
-    "php-http/guzzle7-adapter": "^1.1"
+    "php-http/guzzle7-adapter": "^1.1",
+    "roave/psr-container-doctrine": "^4.2",
+    "psr/cache": "^3.0",
+    "symfony/cache": "^6.4",
+    "laminas/laminas-authentication": "^2.19"
   },
   "autoload": {
     "psr-4": {
@@ -107,6 +109,7 @@
       "Dvsa\\OlcsTest\\Cpms\\": "test/module/Cpms/src",
       "Dvsa\\OlcsTest\\Db\\": "test/module/Olcs/Db/src",
       "Dvsa\\OlcsTest\\": "test/src",
+      "Dvsa\\OlcsTest\\Integration\\": "test/integration/src",
       "Dvsa\\OlcsTest\\Address\\": "test/module/Address/src",
       "Dvsa\\OlcsTest\\Api\\": "test/module/Api/src",
       "Dvsa\\OlcsTest\\Cli\\": "test/module/Cli/src",
@@ -128,6 +131,7 @@
   },
   "scripts": {
     "test": "vendor/bin/phpunit",
+    "test:integration": "vendor/bin/phpunit -c phpunit-integration.xml",
     "phpcs": "vendor/bin/phpcs -d memory_limit=512M",
     "psalm": "vendor/bin/psalm",
     "phpstan": "vendor/bin/phpstan --memory-limit=1G",
@@ -139,13 +143,12 @@
     ]
   },
   "require-dev": {
-    "phpunit/phpunit": "^12.5",
+    "phpunit/phpunit": "^13.0",
     "mockery/mockery": "^1.6",
     "mikey179/vfsstream": "^1.6",
     "dvsa/authentication-ldap": "^3.1",
     "rector/rector": "^2.3",
-    "squizlabs/php_codesniffer": "^3.7",
-    "dvsa/coding-standards": "^2.0",
+    "dvsa/coding-standards": "^2.1",
     "phpstan/phpstan": "^2.0",
     "phpstan/phpstan-doctrine": "^2.0",
     "vimeo/psalm": "^6.0"

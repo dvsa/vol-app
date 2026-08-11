@@ -13,7 +13,7 @@ use LmcRbacMvc\Identity\IdentityProviderInterface;
 /**
  * @see ValidateController
  */
-class ValidateControllerTest extends MockeryTestCase
+final class ValidateControllerTest extends MockeryTestCase
 {
     public function testIndexAction(): void
     {
@@ -23,6 +23,6 @@ class ValidateControllerTest extends MockeryTestCase
 
         $sut = new ValidateController($identityProvider);
 
-        static::assertEquals($returnedArray, $sut->indexAction()->getVariables());
+        $this->assertEquals($returnedArray, $sut->indexAction()->getVariables());
     }
 }

@@ -13,13 +13,14 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class PublishValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+final class PublishValidationServiceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @var \Dvsa\Olcs\Api\Service\Lva\Variation\PublishValidationService
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new PublishValidationService();

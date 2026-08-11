@@ -10,7 +10,7 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessBusRegWithId::class)]
-class CanAccessBusRegWithIdTest extends AbstractHandlerTestCase
+final class CanAccessBusRegWithIdTest extends AbstractHandlerTestCase
 {
     /** @var CanAccessBusRegWithId */
     protected $sut;
@@ -36,11 +36,9 @@ class CanAccessBusRegWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

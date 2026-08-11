@@ -4,6 +4,8 @@
  * IrhpPermitApplicationRefLink Test
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService as UrlHelper;
@@ -11,7 +13,7 @@ use Common\Service\Table\Formatter\IrhpPermitApplicationRefLink;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class IrhpPermitApplicationRefLinkTest extends MockeryTestCase
+final class IrhpPermitApplicationRefLinkTest extends MockeryTestCase
 {
     protected $urlHelper;
 
@@ -27,10 +29,10 @@ class IrhpPermitApplicationRefLinkTest extends MockeryTestCase
     /**
      * Test the format method
      *
-     * @group Formatters
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $expected): void
     {
         $this->urlHelper->shouldReceive('fromRoute')
@@ -50,28 +52,26 @@ class IrhpPermitApplicationRefLinkTest extends MockeryTestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'with value' => [
-                [
-                    'irhpPermitApplication' => [
-                        'relatedApplication' => [
-                            'applicationRef' => 'app ref>',
-                            'licence' => [
-                                'id' => 100
-                            ]
+        yield 'with value' => [
+            [
+                'irhpPermitApplication' => [
+                    'relatedApplication' => [
+                        'applicationRef' => 'app ref>',
+                        'licence' => [
+                            'id' => 100
                         ]
                     ]
-                ],
-                '<a class="govuk-link" href="url">app ref&gt;</a>',
+                ]
             ],
-            'empty value' => [
-                null,
-                ''
-            ]
+            '<a class="govuk-link" href="url">app ref&gt;</a>',
+        ];
+        yield 'empty value' => [
+            null,
+            ''
         ];
     }
 }

@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Document;
 
 use Dvsa\Olcs\Transfer\Command\Document\PrintLetter;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Command\Document\PrintLetter
- */
-class PrintLetterTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\Document\PrintLetter::class)]
+final class PrintLetterTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
@@ -19,8 +19,8 @@ class PrintLetterTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals('unit_id', $command->getId());
-        static::assertEquals('unit_method', $command->getMethod());
-        static::assertEquals(true, $command->getForceCorrespondence());
+        $this->assertEquals('unit_id', $command->getId());
+        $this->assertEquals('unit_method', $command->getMethod());
+        $this->assertEquals(true, $command->getForceCorrespondence());
     }
 }

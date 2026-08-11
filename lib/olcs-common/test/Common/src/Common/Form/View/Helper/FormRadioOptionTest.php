@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper;
 
 use Laminas\Form\View\Helper\FormLabel;
@@ -12,7 +14,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Laminas\Form\Element\Radio;
 use Psr\Container\ContainerInterface;
 
-class FormRadioOptionTest extends TestCase
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+final class FormRadioOptionTest extends TestCase
 {
     public function testInvokeNull(): void
     {

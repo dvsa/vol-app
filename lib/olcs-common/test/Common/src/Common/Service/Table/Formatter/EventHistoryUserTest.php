@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\EventHistoryUser;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class EventHistoryUserTest extends MockeryTestCase
+final class EventHistoryUserTest extends MockeryTestCase
 {
     protected $translator;
 
@@ -33,9 +35,8 @@ class EventHistoryUserTest extends MockeryTestCase
 
     /**
      * Test the format method
-     *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $expectedOutput): void
     {
         if (isset($data['user']['team'])) {
@@ -52,101 +53,99 @@ class EventHistoryUserTest extends MockeryTestCase
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'external with name' => [
-                [
-                    'user' => [
-                        'contactDetails' => [
-                            'person' => [
-                                'forename' => 'Foo',
-                                'familyName' => 'Bar'
-                            ]
+        yield 'external with name' => [
+            [
+                'user' => [
+                    'contactDetails' => [
+                        'person' => [
+                            'forename' => 'Foo',
+                            'familyName' => 'Bar'
+                        ]
+                    ]
+                ],
+                'changeMadeBy' => null,
+            ],
+            'Foo Bar',
+        ];
+        yield 'internal with name' => [
+            [
+                'user' => [
+                    'contactDetails' => [
+                        'person' => [
+                            'forename' => 'Foo',
+                            'familyName' => 'Bar'
                         ]
                     ],
-                    'changeMadeBy' => null,
+                    'team' => 'some team'
                 ],
-                'Foo Bar',
+                'changeMadeBy' => null,
             ],
-            'internal with name' => [
-                [
-                    'user' => [
-                        'contactDetails' => [
-                            'person' => [
-                                'forename' => 'Foo',
-                                'familyName' => 'Bar'
-                            ]
-                        ],
-                        'team' => 'some team'
+            'Foo Bar (internal)',
+        ];
+        yield 'external with no name' => [
+            [
+                'user' => [
+                    'loginId' => 'cake'
+                ],
+                'changeMadeBy' => null,
+            ],
+            'cake',
+        ];
+        yield 'internal with no name' => [
+            [
+                'user' => [
+                    'loginId' => 'cake',
+                    'team' => 'some team'
+                ],
+                'changeMadeBy' => null,
+            ],
+            'cake (internal)',
+        ];
+        yield 'internal with error' => [
+            [
+                'user' => [
+                    'contactDetails' => [
+                        'person' => 'something wrong here'
                     ],
-                    'changeMadeBy' => null,
+                    'team' => 'some team',
+                    'loginId' => 'cake'
                 ],
-                'Foo Bar (internal)',
+                'changeMadeBy' => null,
             ],
-            'external with no name' => [
-                [
-                    'user' => [
-                        'loginId' => 'cake'
-                    ],
-                    'changeMadeBy' => null,
+            'cake (internal)',
+        ];
+        yield 'external with change made by' => [
+            [
+                'user' => [
+                    'contactDetails' => [
+                        'person' => [
+                            'forename' => 'Foo',
+                            'familyName' => 'Bar'
+                        ]
+                    ]
                 ],
-                'cake',
+                'changeMadeBy' => 'Name Surname',
             ],
-            'internal with no name' => [
-                [
-                    'user' => [
-                        'loginId' => 'cake',
-                        'team' => 'some team'
-                    ],
-                    'changeMadeBy' => null,
-                ],
-                'cake (internal)',
-            ],
-            'internal with error' => [
-                [
-                    'user' => [
-                        'contactDetails' => [
-                            'person' => 'something wrong here'
-                        ],
-                        'team' => 'some team',
-                        'loginId' => 'cake'
-                    ],
-                    'changeMadeBy' => null,
-                ],
-                'cake (internal)',
-            ],
-            'external with change made by' => [
-                [
-                    'user' => [
-                        'contactDetails' => [
-                            'person' => [
-                                'forename' => 'Foo',
-                                'familyName' => 'Bar'
-                            ]
+            'Name Surname',
+        ];
+        yield 'internal with change made by' => [
+            [
+                'user' => [
+                    'contactDetails' => [
+                        'person' => [
+                            'forename' => 'Foo',
+                            'familyName' => 'Bar'
                         ]
                     ],
-                    'changeMadeBy' => 'Name Surname',
+                    'team' => 'some team'
                 ],
-                'Name Surname',
+                'changeMadeBy' => 'Name Surname',
             ],
-            'internal with change made by' => [
-                [
-                    'user' => [
-                        'contactDetails' => [
-                            'person' => [
-                                'forename' => 'Foo',
-                                'familyName' => 'Bar'
-                            ]
-                        ],
-                        'team' => 'some team'
-                    ],
-                    'changeMadeBy' => 'Name Surname',
-                ],
-                'Name Surname (internal)',
-            ],
+            'Name Surname (internal)',
         ];
     }
 }

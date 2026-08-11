@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * Recipient Mapper Test
  */
-class RecipientTest extends MockeryTestCase
+final class RecipientTest extends MockeryTestCase
 {
     /**
      *
@@ -25,26 +25,24 @@ class RecipientTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
+            [],
+            ['fields' => []]
+        ];
+        // edit
+        yield [
             [
-                [],
-                ['fields' => []]
+                'id' => 987,
+                'organisation' => ['id' => 100],
             ],
-            // edit
             [
-                [
+                'fields' => [
                     'id' => 987,
-                    'organisation' => ['id' => 100],
+                    'organisation' => 100,
                 ],
-                [
-                    'fields' => [
-                        'id' => 987,
-                        'organisation' => 100,
-                    ],
-                ]
             ]
         ];
     }

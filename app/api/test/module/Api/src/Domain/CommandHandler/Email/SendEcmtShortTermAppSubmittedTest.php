@@ -15,7 +15,7 @@ use Mockery as m;
 /**
  * Test the short term permit app submitted email
  */
-class SendEcmtShortTermAppSubmittedTest extends AbstractPermitTestCase
+final class SendEcmtShortTermAppSubmittedTest extends AbstractPermitTestCase
 {
     public $orgEmails;
     public $contactDetails;
@@ -122,11 +122,9 @@ class SendEcmtShortTermAppSubmittedTest extends AbstractPermitTestCase
         $this->assertSame($this->subject, $message->getSubject());
     }
 
-    public static function dpTranslateToWelshLocaleMappings(): array
+    public static function dpTranslateToWelshLocaleMappings(): \Iterator
     {
-        return [
-            ['Y', 'cy_GB'],
-            ['N', 'en_GB'],
-        ];
+        yield ['Y', 'cy_GB'];
+        yield ['N', 'en_GB'];
     }
 }

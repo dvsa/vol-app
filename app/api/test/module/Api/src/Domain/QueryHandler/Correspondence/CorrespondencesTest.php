@@ -13,9 +13,9 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Correspondence\Correspondences::class)]
-class CorrespondencesTest extends QueryHandlerTestCase
+final class CorrespondencesTest extends QueryHandlerTestCase
 {
-    public const ORG_ID = 9999;
+    public const int ORG_ID = 9999;
 
     public function setUp(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Custom;
 
 use Common\Form\Elements\Custom\EcmtNoOfPermitsElement;
@@ -14,7 +16,7 @@ use Laminas\Validator\StringLength;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EcmtNoOfPermitsElementTest extends MockeryTestCase
+final class EcmtNoOfPermitsElementTest extends MockeryTestCase
 {
     public function testGetInputSpecification(): void
     {

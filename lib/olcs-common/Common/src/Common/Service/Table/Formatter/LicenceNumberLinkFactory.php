@@ -13,7 +13,7 @@ class LicenceNumberLinkFactory implements FactoryInterface
      * @return LicenceNumberLink
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $urlHelper = $container->get('Helper\Url');
         return new LicenceNumberLink($urlHelper);

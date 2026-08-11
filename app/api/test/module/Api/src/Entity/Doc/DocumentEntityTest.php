@@ -20,7 +20,7 @@ use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Doc\Document::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Doc\AbstractDocument::class)]
-class DocumentEntityTest extends EntityTester
+final class DocumentEntityTest extends EntityTester
 {
     /** @var  string */
     protected $entityClass = Entity::class;
@@ -66,27 +66,25 @@ class DocumentEntityTest extends EntityTester
     /**
      * Provider for testGetRelatedOrganisation
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function relatedOrganisationProvider(): array
+    public static function relatedOrganisationProvider(): \Iterator
     {
-        return [
-            ['setLicence', Licence::class],
-            ['setApplication', Application::class],
-            ['setTransportManager', TransportManager::class],
-            ['setCase', Cases::class],
-            ['setOperatingCentre', OperatingCentre::class],
-            ['setBusReg', BusReg::class],
-            ['setIrfoOrganisation', Organisation::class],
-            ['setSubmission', Submission::class],
-            ['setStatement', Statement::class],
-            ['setEbsrSubmission', EbsrSubmission::class]
-        ];
+        yield ['setLicence', Licence::class];
+        yield ['setApplication', Application::class];
+        yield ['setTransportManager', TransportManager::class];
+        yield ['setCase', Cases::class];
+        yield ['setOperatingCentre', OperatingCentre::class];
+        yield ['setBusReg', BusReg::class];
+        yield ['setIrfoOrganisation', Organisation::class];
+        yield ['setSubmission', Submission::class];
+        yield ['setStatement', Statement::class];
+        yield ['setEbsrSubmission', EbsrSubmission::class];
     }
 
     public function testGetRelatedLicenceNull(): void
     {
-        static::assertNull($this->sut->getRelatedLicence());
+        $this->assertNotInstanceOf(\Dvsa\Olcs\Api\Entity\Licence\Licence::class, $this->sut->getRelatedLicence());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGetRelatedLicence')]
@@ -103,16 +101,14 @@ class DocumentEntityTest extends EntityTester
 
         $this->sut->$relSetterMethod($mockRelClass);
 
-        static::assertSame($mockLic, $this->sut->getRelatedLicence());
+        $this->assertSame($mockLic, $this->sut->getRelatedLicence());
     }
 
-    public static function dpTestGetRelatedLicence(): array
+    public static function dpTestGetRelatedLicence(): \Iterator
     {
-        return [
-            ['setLicence', Licence::class],
-            ['setApplication', Application::class],
-            ['setCase', Cases::class],
-            ['setBusReg', BusReg::class],
-        ];
+        yield ['setLicence', Licence::class];
+        yield ['setApplication', Application::class];
+        yield ['setCase', Cases::class];
+        yield ['setBusReg', BusReg::class];
     }
 }

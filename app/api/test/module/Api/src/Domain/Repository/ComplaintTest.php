@@ -24,8 +24,9 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class ComplaintTest extends RepositoryTestCase
+final class ComplaintTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(ComplaintRepo::class);

@@ -13,7 +13,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class PenaltyControllerFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): PenaltyController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): PenaltyController
     {
         $translationHelper = $container->get(TranslationHelperService::class);
         assert($translationHelper instanceof TranslationHelperService);

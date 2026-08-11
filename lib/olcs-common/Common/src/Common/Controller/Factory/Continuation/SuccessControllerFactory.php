@@ -17,7 +17,7 @@ class SuccessControllerFactory implements FactoryInterface
      * @param array|null $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SuccessController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SuccessController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

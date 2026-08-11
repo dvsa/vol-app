@@ -12,7 +12,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use Dvsa\Olcs\Transfer\Query\Address\GetAddress as Qry;
 use Mockery as m;
 
-class GetAddressTest extends QueryHandlerTestCase
+final class GetAddressTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

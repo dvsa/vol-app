@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class MarkDuplicateVrmsForLicenceTest extends AbstractDbQueryTestCase
+final class MarkDuplicateVrmsForLicenceTest extends AbstractDbQueryTestCase
 {
     protected $tableNameMap = [
         LicenceVehicle::class => 'licence_vehicle',
@@ -73,29 +73,27 @@ class MarkDuplicateVrmsForLicenceTest extends AbstractDbQueryTestCase
         ]
     ];
 
-    public static function paramProvider(): array
+    public static function paramProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'vrms' => ['vrm1', 'vrm2'],
-                    'licence' => 402
+                'vrms' => ['vrm1', 'vrm2'],
+                'licence' => 402
+            ],
+            [],
+            [
+                'goodsOrPsv' => \Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'licenceStatuses' => [
+                    \Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_CURTAILED,
+                    \Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_VALID,
+                    \Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_SUSPENDED,
                 ],
-                [],
-                [
-                    'goodsOrPsv' => \Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    'licenceStatuses' => [
-                        \Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_CURTAILED,
-                        \Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_VALID,
-                        \Dvsa\Olcs\Api\Entity\Licence\Licence::LICENCE_STATUS_SUSPENDED,
-                    ],
-                    'vrms' => ['vrm1', 'vrm2'],
-                    'licence' => 402,
-                ],
-                [
-                    'vrms' => \Doctrine\DBAL\Connection::PARAM_STR_ARRAY,
-                    'licenceStatuses' => \Doctrine\DBAL\Connection::PARAM_STR_ARRAY
-                ]
+                'vrms' => ['vrm1', 'vrm2'],
+                'licence' => 402,
+            ],
+            [
+                'vrms' => \Doctrine\DBAL\Connection::PARAM_STR_ARRAY,
+                'licenceStatuses' => \Doctrine\DBAL\Connection::PARAM_STR_ARRAY
             ]
         ];
     }

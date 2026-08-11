@@ -11,7 +11,7 @@ use Mockery as m;
 use CommonTest\Common\Service\Data\AbstractDataServiceTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
-class IrfoPsvAuthTypeTest extends AbstractDataServiceTestCase
+final class IrfoPsvAuthTypeTest extends AbstractDataServiceTestCase
 {
     private IrfoPsvAuthType $sut;
 
@@ -35,12 +35,10 @@ class IrfoPsvAuthTypeTest extends AbstractDataServiceTestCase
         $this->assertEquals($expected, $this->sut->fetchListOptions(''));
     }
 
-    public static function provideFetchListOptions(): array
+    public static function provideFetchListOptions(): \Iterator
     {
-        return [
-            [self::SINGLE_SOURCE, self::SINGLE_EXPECTED],
-            [false, []]
-        ];
+        yield [self::SINGLE_SOURCE, self::SINGLE_EXPECTED];
+        yield [false, []];
     }
 
     public function testFetchListData(): void

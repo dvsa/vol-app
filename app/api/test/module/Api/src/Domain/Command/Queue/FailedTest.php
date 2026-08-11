@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Domain\Command\Queue\Failed;
 use Dvsa\Olcs\Api\Entity\Queue\Queue as QueueEntity;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Command\Queue\Failed::class)]
-class FailedTest extends \PHPUnit\Framework\TestCase
+final class FailedTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {
@@ -23,7 +23,7 @@ class FailedTest extends \PHPUnit\Framework\TestCase
         );
 
         $this->assertSame($item, $command->getItem());
-        static::assertSame($lastErr, $command->getLastError());
+        $this->assertSame($lastErr, $command->getLastError());
         $this->assertEquals(
             [
                 'item' => $item,

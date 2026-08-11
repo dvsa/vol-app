@@ -24,7 +24,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class InterimTest extends QueryHandlerTestCase
+final class InterimTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -62,44 +62,42 @@ class InterimTest extends QueryHandlerTestCase
         $this->assertEquals($canUpdatedInterim, $data['canUpdateInterim']);
     }
 
-    public static function handlerQueryProvider(): array
+    public static function handlerQueryProvider(): \Iterator
     {
-        return [
-            [
-                ApplicationEntity::INTERIM_STATUS_REQUESTED,
-                true,
-                false,
-                false,
-                true
-            ],
-            [
-                ApplicationEntity::INTERIM_STATUS_INFORCE,
-                false,
-                true,
-                true,
-                true
-            ],
-            [
-                ApplicationEntity::INTERIM_STATUS_REFUSED,
-                false,
-                false,
-                true,
-                false
-            ],
-            [
-                ApplicationEntity::INTERIM_STATUS_REVOKED,
-                false,
-                false,
-                true,
-                false
-            ],
-            [
-                ApplicationEntity::INTERIM_STATUS_GRANTED,
-                false,
-                false,
-                true,
-                true
-            ]
+        yield [
+            ApplicationEntity::INTERIM_STATUS_REQUESTED,
+            true,
+            false,
+            false,
+            true
+        ];
+        yield [
+            ApplicationEntity::INTERIM_STATUS_INFORCE,
+            false,
+            true,
+            true,
+            true
+        ];
+        yield [
+            ApplicationEntity::INTERIM_STATUS_REFUSED,
+            false,
+            false,
+            true,
+            false
+        ];
+        yield [
+            ApplicationEntity::INTERIM_STATUS_REVOKED,
+            false,
+            false,
+            true,
+            false
+        ];
+        yield [
+            ApplicationEntity::INTERIM_STATUS_GRANTED,
+            false,
+            false,
+            true,
+            true
         ];
     }
 }

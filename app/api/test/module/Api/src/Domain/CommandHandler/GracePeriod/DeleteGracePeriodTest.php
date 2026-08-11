@@ -25,7 +25,7 @@ use Dvsa\Olcs\Transfer\Command\GracePeriod\DeleteGracePeriod as Cmd;
  *
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class DeleteGracePeriodTest extends AbstractCommandHandlerTestCase
+final class DeleteGracePeriodTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -10,11 +10,16 @@
          failOnRisky="true"
          failOnIncomplete="true"
          failOnSkipped="true"
+         failOnPhpunitDeprecation="true"
+         failOnPhpunitNotice="true"
+         failOnPhpunitWarning="true"
          displayDetailsOnTestsThatTriggerDeprecations="true"
          displayDetailsOnTestsThatTriggerNotices="true"
          displayDetailsOnTestsThatTriggerWarnings="true"
          displayDetailsOnIncompleteTests="true"
          displayDetailsOnSkippedTests="true"
+         displayDetailsOnPhpunitDeprecations="true"
+         displayDetailsOnPhpunitNotices="true"
 >
   <php>
     <ini name="date.timezone" value="UTC"/>
@@ -61,4 +66,17 @@
       <directory>./test/module/Queue</directory>
     </testsuite>
   </testsuites>
+  <!--
+    failOnDeprecation applies to first-party code only. ignoreIndirectDeprecations
+    stops PHP 8.4 deprecations raised inside third-party vendor/ packages from failing
+    the suite — currently league/flysystem v1 (EOL, v1->v3 is a breaking upgrade),
+    symfony/lock (held on 6.1 by laminas-cache's psr/cache ^1 constraint) and
+    setono/html-element v1 (no newer stable release). None are fixable without
+    out-of-scope major upgrades. Deprecations in module/ still fail the build.
+  -->
+  <source ignoreIndirectDeprecations="true">
+    <include>
+      <directory>module</directory>
+    </include>
+  </source>
 </phpunit>

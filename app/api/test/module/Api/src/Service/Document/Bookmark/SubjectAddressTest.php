@@ -9,13 +9,13 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\SubjectAddress;
 /**
  * Subject Address test
  */
-class SubjectAddressTest extends \PHPUnit\Framework\TestCase
+final class SubjectAddressTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
         $bookmark = new SubjectAddress();
 
-        $this->assertTrue(is_null($bookmark->getQuery([])));
+        $this->assertNull($bookmark->getQuery([]));
 
         $query = $bookmark->getQuery(['opposition' => 123]);
 
@@ -31,28 +31,26 @@ class SubjectAddressTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($expected, $bookmark->render());
     }
 
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
-            // no results
+        // no results
+        yield [
+            [],
+            ''
+        ];
+        // opposer with contact address
+        yield [
             [
-                [],
-                ''
-            ],
-            // opposer with contact address
-            [
-                [
-                    'opposer' => [
-                        'contactDetails' => [
-                            'address' => [
-                                'addressLine1' => 'Line 1',
-                                'addressLine2' => 'Line 2'
-                            ]
+                'opposer' => [
+                    'contactDetails' => [
+                        'address' => [
+                            'addressLine1' => 'Line 1',
+                            'addressLine2' => 'Line 2'
                         ]
                     ]
-                ],
-                "Line 1\nLine 2"
+                ]
             ],
+            "Line 1\nLine 2"
         ];
     }
 }

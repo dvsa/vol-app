@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\DiscsIssued;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class DiscsIssuedTest extends \PHPUnit\Framework\TestCase
+final class DiscsIssuedTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

@@ -7,19 +7,13 @@ use Laminas\Filter\Word\UnderscoreToCamelCase;
 
 /**
  * ApplicationCompletion Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="application_completion",
- *    indexes={
- *        @ORM\Index(name="ix_application_completion_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_application_completion_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_application_completion_application_id", columns={"application_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_application_completion_application_id", columns={"application_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'application_completion')]
+#[ORM\Index(name: 'ix_application_completion_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_application_completion_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_application_completion_application_id', columns: ['application_id'])]
+#[ORM\UniqueConstraint(name: 'uk_application_completion_application_id', columns: ['application_id'])]
+#[ORM\Entity]
 class ApplicationCompletion extends AbstractApplicationCompletion
 {
     public const STATUS_NOT_STARTED = 0;

@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Email\Transport\Factory;
 use Dvsa\Olcs\Email\Transport\Factory\GovUkNotifyTransportFactoryFactory;
 use PHPUnit\Framework\TestCase;
 
-class GovUkNotifyTransportFactoryFactoryTest extends TestCase
+final class GovUkNotifyTransportFactoryFactoryTest extends TestCase
 {
     public function testResolveGuzzleOptionsUsesConfiguredProxy(): void
     {

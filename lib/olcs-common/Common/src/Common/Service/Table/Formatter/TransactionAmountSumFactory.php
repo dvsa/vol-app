@@ -17,7 +17,7 @@ class TransactionAmountSumFactory implements FactoryInterface
      * @throws NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $formatterPluginManager = $container->get(FormatterPluginManager::class);
         $moneyFormatter = $formatterPluginManager->get(Money::class);

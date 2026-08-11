@@ -21,23 +21,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irhp_permit_range",
- *    indexes={
- *        @ORM\Index(name="fk_irhp_permit_range_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_irhp_permit_range_emissions_category_ref_data_id", columns={"emissions_category"}),
- *        @ORM\Index(name="fk_irhp_permit_range_journey_ref_data_id", columns={"journey"}),
- *        @ORM\Index(name="fk_irhp_permit_range_last_modified_by_user_id", columns={"last_modified_by"}),
- *        @ORM\Index(name="fk_irhp_permit_stock_ranges_irhp_permit_stocks1_idx", columns={"irhp_permit_stock_id"}),
- *        @ORM\Index(name="uniqueRange", columns={"irhp_permit_stock_id", "prefix", "from_no", "to_no"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uniqueRange", columns={"irhp_permit_stock_id", "prefix", "from_no", "to_no"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_permit_range')]
+#[ORM\Index(name: 'fk_irhp_permit_range_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_irhp_permit_range_emissions_category_ref_data_id', columns: ['emissions_category'])]
+#[ORM\Index(name: 'fk_irhp_permit_range_journey_ref_data_id', columns: ['journey'])]
+#[ORM\Index(name: 'fk_irhp_permit_range_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'fk_irhp_permit_stock_ranges_irhp_permit_stocks1_idx', columns: ['irhp_permit_stock_id'])]
+#[ORM\UniqueConstraint(name: 'uniqueRange', columns: ['irhp_permit_stock_id', 'prefix', 'from_no', 'to_no'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -50,179 +43,152 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * IrhpPermitStock
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_permit_stock_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irhp_permit_stock_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock::class, inversedBy: 'irhpPermitRanges', fetch: 'LAZY')]
     protected $irhpPermitStock;
 
     /**
      * EmissionsCategory
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="emissions_category", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'emissions_category', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $emissionsCategory;
 
     /**
      * Journey
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="journey", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'journey', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $journey;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Prefix
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="prefix", length=45, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'prefix', length: 45, nullable: true)]
     protected $prefix;
 
     /**
      * From no
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="from_no", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'from_no', nullable: true, options: ['unsigned' => true])]
     protected $fromNo;
 
     /**
      * To no
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="to_no", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'to_no', nullable: true, options: ['unsigned' => true])]
     protected $toNo;
 
     /**
      * Cabotage
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="cabotage", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'cabotage', nullable: true)]
     protected $cabotage;
 
     /**
      * Ss reserve
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="ss_reserve", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'ss_reserve', nullable: true)]
     protected $ssReserve;
 
     /**
      * Lost replacement
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="lost_replacement", nullable=true)
      */
+    #[ORM\Column(type: 'boolean', name: 'lost_replacement', nullable: true)]
     protected $lostReplacement;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * IrhpPermitRangeAttributes
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", inversedBy="irhpPermitRanges", fetch="LAZY")
-     * @ORM\JoinTable(name="irhp_permit_range_attribute",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="irhp_permit_range_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="irhp_permit_range_attribute_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'irhp_permit_range_attribute')]
+    #[ORM\JoinColumn(name: 'irhp_permit_range_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'irhp_permit_range_attribute_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $irhpPermitRangeAttributes;
 
     /**
      * Countrys
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\Country", inversedBy="irhpPermitStockRanges", fetch="LAZY")
-     * @ORM\JoinTable(name="irhp_permit_range_country",
-     *     joinColumns={
-     *         @ORM\JoinColumn(name="irhp_permit_stock_range_id", referencedColumnName="id")
-     *     },
-     *     inverseJoinColumns={
-     *         @ORM\JoinColumn(name="country_id", referencedColumnName="id")
-     *     }
-     * )
      */
+    #[ORM\JoinTable(name: 'irhp_permit_range_country')]
+    #[ORM\JoinColumn(name: 'irhp_permit_stock_range_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'country_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Country::class, inversedBy: 'irhpPermitStockRanges', fetch: 'LAZY')]
     protected $countrys;
 
     /**
      * IrhpCandidatePermits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit", mappedBy="irhpPermitRange")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit::class, mappedBy: 'irhpPermitRange')]
     protected $irhpCandidatePermits;
 
     /**
      * IrhpPermits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermit", mappedBy="irhpPermitRange")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit::class, mappedBy: 'irhpPermitRange')]
     protected $irhpPermits;
 
     /**
@@ -250,7 +216,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param int $id new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setId($id)
     {
@@ -274,7 +240,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock $irhpPermitStock new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setIrhpPermitStock($irhpPermitStock)
     {
@@ -298,7 +264,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $emissionsCategory new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setEmissionsCategory($emissionsCategory)
     {
@@ -322,7 +288,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $journey new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setJourney($journey)
     {
@@ -346,7 +312,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -370,7 +336,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -394,7 +360,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param string $prefix new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setPrefix($prefix)
     {
@@ -418,7 +384,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param int $fromNo new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setFromNo($fromNo)
     {
@@ -442,7 +408,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param int $toNo new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setToNo($toNo)
     {
@@ -466,7 +432,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param bool $cabotage new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setCabotage($cabotage)
     {
@@ -490,7 +456,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param bool $ssReserve new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setSsReserve($ssReserve)
     {
@@ -514,7 +480,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param bool $lostReplacement new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setLostReplacement($lostReplacement)
     {
@@ -538,7 +504,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param int $version new value being set
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setVersion($version)
     {
@@ -562,7 +528,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRangeAttributes collection being set as the value
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setIrhpPermitRangeAttributes($irhpPermitRangeAttributes)
     {
@@ -586,7 +552,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermitRangeAttributes collection being added
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function addIrhpPermitRangeAttributes($irhpPermitRangeAttributes)
     {
@@ -609,7 +575,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermitRangeAttributes collection being removed
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function removeIrhpPermitRangeAttributes($irhpPermitRangeAttributes)
     {
@@ -625,7 +591,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being set as the value
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setCountrys($countrys)
     {
@@ -649,7 +615,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $countrys collection being added
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function addCountrys($countrys)
     {
@@ -672,7 +638,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $countrys collection being removed
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function removeCountrys($countrys)
     {
@@ -688,7 +654,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpCandidatePermits collection being set as the value
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setIrhpCandidatePermits($irhpCandidatePermits)
     {
@@ -712,7 +678,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpCandidatePermits collection being added
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function addIrhpCandidatePermits($irhpCandidatePermits)
     {
@@ -735,7 +701,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpCandidatePermits collection being removed
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function removeIrhpCandidatePermits($irhpCandidatePermits)
     {
@@ -751,7 +717,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermits collection being set as the value
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function setIrhpPermits($irhpPermits)
     {
@@ -775,7 +741,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $irhpPermits collection being added
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function addIrhpPermits($irhpPermits)
     {
@@ -798,7 +764,7 @@ abstract class AbstractIrhpPermitRange implements BundleSerializableInterface, J
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $irhpPermits collection being removed
      *
-     * @return IrhpPermitRange
+     * @return static
      */
     public function removeIrhpPermits($irhpPermits)
     {

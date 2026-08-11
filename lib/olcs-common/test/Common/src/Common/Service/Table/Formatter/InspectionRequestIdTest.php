@@ -6,6 +6,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -20,7 +22,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class InspectionRequestIdTest extends MockeryTestCase
+final class InspectionRequestIdTest extends MockeryTestCase
 {
     protected $urlHelper;
 
@@ -48,8 +50,6 @@ class InspectionRequestIdTest extends MockeryTestCase
     /**
      * Test formatter
      *
-     * @group inspectionRequestIdFormatter
-     * @dataProvider formatProvider
      *
      * @param array $data
      * @param string $expectedRouteName
@@ -57,6 +57,8 @@ class InspectionRequestIdTest extends MockeryTestCase
      * @param string $expectedUrl
      * @param string $expectedOutput
      */
+    #[\PHPUnit\Framework\Attributes\Group('inspectionRequestIdFormatter')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('formatProvider')]
     public function testFormat(
         $data,
         $expectedRouteName,
@@ -90,43 +92,41 @@ class InspectionRequestIdTest extends MockeryTestCase
     }
 
     /**
-     * @return (((false|int)[]|int|null|string)[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(array<(int | false)> | int | string | null)> | string)>>
      *
      * @psalm-return array{'licence inspection request': list{array{id: 1, licence: array{id: 2}, application: null}, 'licence/processing/inspection-request', array{action: 'edit', licence: 2, id: 1}, 'url1', '<a href="url1" class="govuk-link js-modal-ajax">1</a>'}, 'application inspection request': list{array{id: 1, licence: array{id: 2}, application: array{id: 3, isVariation: false}}, 'lva-application/processing/inspection-request', array{action: 'edit', application: 3, id: 1}, 'url2', '<a href="url2" class="govuk-link js-modal-ajax">1</a>'}}
      */
-    public function formatProvider(): array
+    public static function formatProvider(): \Iterator
     {
-        return [
-            'licence inspection request' => [
-                [
-                    'id' => 1,
-                    'licence' => ['id' => 2],
-                    'application' => null,
-                ],
-                'licence/processing/inspection-request',
-                [
-                    'action' => 'edit',
-                    'licence' => 2,
-                    'id' => 1,
-                ],
-                'url1',
-                '<a href="url1" class="govuk-link js-modal-ajax">1</a>'
+        yield 'licence inspection request' => [
+            [
+                'id' => 1,
+                'licence' => ['id' => 2],
+                'application' => null,
             ],
-            'application inspection request' => [
-                [
-                    'id' => 1,
-                    'licence' => ['id' => 2],
-                    'application' => ['id' => 3, 'isVariation' => false]
-                ],
-                'lva-application/processing/inspection-request',
-                [
-                    'action' => 'edit',
-                    'application' => 3,
-                    'id' => 1,
-                ],
-                'url2',
-                '<a href="url2" class="govuk-link js-modal-ajax">1</a>'
-            ]
+            'licence/processing/inspection-request',
+            [
+                'action' => 'edit',
+                'licence' => 2,
+                'id' => 1,
+            ],
+            'url1',
+            '<a href="url1" class="govuk-link js-modal-ajax">1</a>'
+        ];
+        yield 'application inspection request' => [
+            [
+                'id' => 1,
+                'licence' => ['id' => 2],
+                'application' => ['id' => 3, 'isVariation' => false]
+            ],
+            'lva-application/processing/inspection-request',
+            [
+                'action' => 'edit',
+                'application' => 3,
+                'id' => 1,
+            ],
+            'url2',
+            '<a href="url2" class="govuk-link js-modal-ajax">1</a>'
         ];
     }
 }

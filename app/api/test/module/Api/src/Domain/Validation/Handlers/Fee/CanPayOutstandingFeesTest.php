@@ -9,10 +9,8 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Fee\CanPayOutstandingFees;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Validation\Handlers\Fee\CanPayOutstandingFees
- */
-class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Handlers\Fee\CanPayOutstandingFees::class)]
+final class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanPayOutstandingFees
@@ -114,7 +112,7 @@ class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
         $this->setIsValid('canAccessFee', [56], true);
         $this->setIsValid('canAccessFee', [76], true);
 
-        $this->assertSame(false, $this->sut->isValid($dto));
+        $this->assertFalse($this->sut->isValid($dto));
     }
 
     public function testIsValidNoContext(): void
@@ -126,14 +124,12 @@ class CanPayOutstandingFeesTest extends AbstractHandlerTestCase
         $dto->shouldReceive('getIrhpApplication')->andReturn(null);
         $dto->shouldReceive('getFeeIds')->andReturn(null);
 
-        $this->assertSame(false, $this->sut->isValid($dto));
+        $this->assertFalse($this->sut->isValid($dto));
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

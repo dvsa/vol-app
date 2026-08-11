@@ -13,7 +13,7 @@ class FlashMessengerHelperServiceFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FlashMessengerHelperService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): FlashMessengerHelperService
     {
         return new FlashMessengerHelperService(
             $container->get('ControllerPluginManager')->get('FlashMessenger')

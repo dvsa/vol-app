@@ -13,8 +13,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class TransportManagersTest extends MockeryTestCase
+final class TransportManagersTest extends MockeryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
     }

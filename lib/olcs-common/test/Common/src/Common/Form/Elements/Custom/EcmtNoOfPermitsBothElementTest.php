@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Custom;
 
 use Common\Filter\NotPopulatedStringToZero;
@@ -14,11 +16,9 @@ use Mockery as m;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EcmtNoOfPermitsBothElementTest extends MockeryTestCase
+final class EcmtNoOfPermitsBothElementTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpGetInputSpecification
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpGetInputSpecification')]
     public function testGetInputSpecification($emissionsCategory, $skipAvailabilityValidation, $expectAvailabilityValidator): void
     {
         $permitsRemaining = 55;
@@ -114,7 +114,7 @@ class EcmtNoOfPermitsBothElementTest extends MockeryTestCase
      *
      * @psalm-return list{list{'euro5', false, true}, list{'euro5', true, false}, list{'euro6', false, true}, list{'euro6', true, false}}
      */
-    public function dpGetInputSpecification(): array
+    public static function dpGetInputSpecification(): array
     {
         return [
             ['euro5', false, true],

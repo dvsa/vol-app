@@ -21,22 +21,15 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="publication_police_data",
- *    indexes={
- *        @ORM\Index(name="ix_publication_police_data_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_publication_police_data_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_publication_police_data_person_id", columns={"person_id"}),
- *        @ORM\Index(name="ix_publication_police_data_publication_link_id", columns={"publication_link_id"}),
- *        @ORM\Index(name="uk_publication_police_data_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_publication_police_data_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'publication_police_data')]
+#[ORM\Index(name: 'ix_publication_police_data_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_publication_police_data_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_publication_police_data_person_id', columns: ['person_id'])]
+#[ORM\Index(name: 'ix_publication_police_data_publication_link_id', columns: ['publication_link_id'])]
+#[ORM\UniqueConstraint(name: 'uk_publication_police_data_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractPublicationPoliceData implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -49,108 +42,97 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to publication_link
      *
      * @var \Dvsa\Olcs\Api\Entity\Publication\PublicationLink
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Publication\PublicationLink", fetch="LAZY")
-     * @ORM\JoinColumn(name="publication_link_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'publication_link_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationLink::class, inversedBy: 'policeDatas', fetch: 'LAZY')]
     protected $publicationLink;
 
     /**
      * Foreign Key to person
      *
      * @var \Dvsa\Olcs\Api\Entity\Person\Person
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Person\Person", fetch="LAZY")
-     * @ORM\JoinColumn(name="person_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, fetch: 'LAZY')]
     protected $person;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Forename
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="forename", length=35, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'forename', length: 35, nullable: true)]
     protected $forename;
 
     /**
      * Family name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="family_name", length=35, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'family_name', length: 35, nullable: true)]
     protected $familyName;
 
     /**
      * If null, police report will replace with not given.
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="birth_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'birth_date', nullable: true)]
     protected $birthDate;
 
     /**
      * Legacy DOB. Was stred as varchar and format was not consistand
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_dob", length=20, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_dob', length: 20, nullable: true)]
     protected $olbsDob;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
@@ -174,7 +156,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param int $id new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setId($id)
     {
@@ -198,7 +180,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Publication\PublicationLink $publicationLink new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setPublicationLink($publicationLink)
     {
@@ -222,7 +204,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\Person\Person $person new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setPerson($person)
     {
@@ -246,7 +228,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -270,7 +252,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -294,7 +276,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param string $forename new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setForename($forename)
     {
@@ -318,7 +300,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param string $familyName new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setFamilyName($familyName)
     {
@@ -342,7 +324,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param \DateTime $birthDate new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setBirthDate($birthDate)
     {
@@ -372,7 +354,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param string $olbsDob new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setOlbsDob($olbsDob)
     {
@@ -396,7 +378,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param int $version new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setVersion($version)
     {
@@ -420,7 +402,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
      *
      * @param int $olbsKey new value being set
      *
-     * @return PublicationPoliceData
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

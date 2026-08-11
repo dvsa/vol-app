@@ -10,11 +10,12 @@ use Dvsa\Olcs\Api\Entity;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\CorrespondenceInbox::class)]
-class CorrespondenceInboxTest extends RepositoryTestCase
+final class CorrespondenceInboxTest extends RepositoryTestCase
 {
     /** @var  Repository\CorrespondenceInbox */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repository\CorrespondenceInbox::class);
@@ -67,7 +68,7 @@ class CorrespondenceInboxTest extends RepositoryTestCase
 
         $qb->shouldReceive('getQuery')->once()->andReturn($mockQry);
 
-        static::assertEquals('EXPECT', $this->sut->getAllRequiringPrint($minDate, $maxDate));
+        $this->assertEquals('EXPECT', $this->sut->getAllRequiringPrint($minDate, $maxDate));
     }
 
     public function testGetAllRequiringReminder(): void
@@ -126,7 +127,7 @@ class CorrespondenceInboxTest extends RepositoryTestCase
 
         $qb->shouldReceive('getQuery')->once()->andReturn($mockQry);
 
-        static::assertEquals('EXPECT', $this->sut->getAllRequiringReminder($minDate, $maxDate));
+        $this->assertEquals('EXPECT', $this->sut->getAllRequiringReminder($minDate, $maxDate));
     }
 
     public function testFetchByDocumentId(): void

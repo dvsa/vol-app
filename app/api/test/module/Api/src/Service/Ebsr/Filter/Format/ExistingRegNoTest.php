@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase as TestCase;
  * Class ExistingRegNoTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\Filter\Format
  */
-class ExistingRegNoTest extends TestCase
+final class ExistingRegNoTest extends TestCase
 {
     /**
      * Tests filter

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\User;
 
 use Dvsa\Olcs\Transfer\Command\User\UpdateUser;
@@ -9,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Pay Outstanding Fees test
  */
-class UpdateUserTest extends TestCase
+final class UpdateUserTest extends TestCase
 {
     use CommandTest;
 

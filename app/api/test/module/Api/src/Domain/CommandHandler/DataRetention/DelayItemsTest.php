@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * Class DelayItemsTest
  */
-class DelayItemsTest extends AbstractCommandHandlerTestCase
+final class DelayItemsTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Controller\Lva;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;

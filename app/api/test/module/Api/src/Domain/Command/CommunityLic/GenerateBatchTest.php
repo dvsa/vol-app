@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\CommunityLic\GenerateBatch;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class GenerateBatchTest extends \PHPUnit\Framework\TestCase
+final class GenerateBatchTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

@@ -19,7 +19,7 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class GrantabilityCheckerTest extends MockeryTestCase
+final class GrantabilityCheckerTest extends MockeryTestCase
 {
     private $irhpApplication;
 
@@ -29,6 +29,7 @@ class GrantabilityCheckerTest extends MockeryTestCase
 
     private $grantabilityChecker;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpApplication = m::mock(IrhpApplication::class);
@@ -85,12 +86,10 @@ class GrantabilityCheckerTest extends MockeryTestCase
         );
     }
 
-    public static function dpTrueFalse(): array
+    public static function dpTrueFalse(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpExceptionUnsupportedBusinessProcess')]
@@ -106,13 +105,11 @@ class GrantabilityCheckerTest extends MockeryTestCase
         $this->grantabilityChecker->isGrantable($this->irhpApplication);
     }
 
-    public static function dpExceptionUnsupportedBusinessProcess(): array
+    public static function dpExceptionUnsupportedBusinessProcess(): \Iterator
     {
-        return [
-            [RefData::BUSINESS_PROCESS_AG],
-            [RefData::BUSINESS_PROCESS_APG],
-            [RefData::BUSINESS_PROCESS_APSG],
-        ];
+        yield [RefData::BUSINESS_PROCESS_AG];
+        yield [RefData::BUSINESS_PROCESS_APG];
+        yield [RefData::BUSINESS_PROCESS_APSG];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpExceptionUnsupportedAllocationMode')]
@@ -131,11 +128,9 @@ class GrantabilityCheckerTest extends MockeryTestCase
         $this->grantabilityChecker->isGrantable($this->irhpApplication);
     }
 
-    public static function dpExceptionUnsupportedAllocationMode(): array
+    public static function dpExceptionUnsupportedAllocationMode(): \Iterator
     {
-        return [
-            [IrhpPermitStock::ALLOCATION_MODE_STANDARD],
-            [IrhpPermitStock::ALLOCATION_MODE_STANDARD_WITH_EXPIRY],
-        ];
+        yield [IrhpPermitStock::ALLOCATION_MODE_STANDARD];
+        yield [IrhpPermitStock::ALLOCATION_MODE_STANDARD_WITH_EXPIRY];
     }
 }

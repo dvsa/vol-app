@@ -33,7 +33,7 @@ use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
+final class CreateForResponsibilitiesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

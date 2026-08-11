@@ -14,7 +14,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\Query\BaseAbstractDbQueryTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CreatePsvDiscsTest extends BaseAbstractDbQueryTestCase
+final class CreatePsvDiscsTest extends BaseAbstractDbQueryTestCase
 {
     protected $tableNameMap = [
         PsvDisc::class => 'psv_disc'

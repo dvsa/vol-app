@@ -18,7 +18,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class ConditionUndertakingTest
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ConditionUndertakingTest extends MockeryTestCase
+final class ConditionUndertakingTest extends MockeryTestCase
 {
     /**
      * @param $action
@@ -103,16 +103,13 @@ Test the application condition undertakings filter')]
     /**
      * Provider for testProvide
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function provideTestProvider(): array
+    public static function provideTestProvider(): \Iterator
     {
         $sut = new ConditionUndertakingContext(m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class));
-
-        return [
-            ['A', $sut::COND_NEW],
-            ['D', $sut::COND_REMOVE],
-            ['ZZZ', $sut::COND_NEW]
-        ];
+        yield ['A', $sut::COND_NEW];
+        yield ['D', $sut::COND_REMOVE];
+        yield ['ZZZ', $sut::COND_NEW];
     }
 }

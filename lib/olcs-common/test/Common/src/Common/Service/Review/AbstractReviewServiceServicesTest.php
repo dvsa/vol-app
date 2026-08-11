@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Review;
 
 use Common\Service\Helper\TranslationHelperService;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.ku>
  */
-class AbstractReviewServiceServicesTest extends MockeryTestCase
+final class AbstractReviewServiceServicesTest extends MockeryTestCase
 {
     public function testGetTranslationHelper(): void
     {

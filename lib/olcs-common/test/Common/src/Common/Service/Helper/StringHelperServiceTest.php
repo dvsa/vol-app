@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Helper;
 
 use Common\Service\Helper\StringHelperService;
@@ -15,7 +17,7 @@ use Common\Service\Helper\StringHelperService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class StringHelperServiceTest extends \PHPUnit\Framework\TestCase
+final class StringHelperServiceTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Holds the SUT
@@ -33,50 +35,44 @@ class StringHelperServiceTest extends \PHPUnit\Framework\TestCase
         $this->sut = new StringHelperService();
     }
 
-    /**
-     * @dataProvider provider
-     * @group helper_service
-     * @group string_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('string_helper_service')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testDashToCamel($dash, $camel): void
     {
         $this->assertEquals($camel, $this->sut->dashToCamel($dash));
     }
 
-    /**
-     * @dataProvider provider
-     * @group helper_service
-     * @group string_helper_service
-     */
+    #[\PHPUnit\Framework\Attributes\Group('helper_service')]
+    #[\PHPUnit\Framework\Attributes\Group('string_helper_service')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testCamelToDash($dash, $camel): void
     {
         $this->assertEquals($dash, $this->sut->camelToDash($camel));
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return list{list{'this-that', 'ThisThat'}, list{'foo-bar-baz', 'FooBarBaz'}, list{'foo', 'Foo'}, list{'foo cake this-that', 'Foo cake thisThat'}}
      */
-    public function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [
-                'this-that',
-                'ThisThat'
-            ],
-            [
-                'foo-bar-baz',
-                'FooBarBaz'
-            ],
-            [
-                'foo',
-                'Foo'
-            ],
-            [
-                'foo cake this-that',
-                'Foo cake thisThat'
-            ]
+        yield [
+            'this-that',
+            'ThisThat'
+        ];
+        yield [
+            'foo-bar-baz',
+            'FooBarBaz'
+        ];
+        yield [
+            'foo',
+            'Foo'
+        ];
+        yield [
+            'foo cake this-that',
+            'Foo cake thisThat'
         ];
     }
 }

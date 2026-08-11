@@ -9,7 +9,7 @@ use Laminas\ServiceManager\Factory\FactoryInterface;
 class GetPlaceholderFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): \Closure
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): \Closure
     {
         $viewHelperManager = $container->get('ViewHelperManager');
         $placeholder = $viewHelperManager->get('placeholder');

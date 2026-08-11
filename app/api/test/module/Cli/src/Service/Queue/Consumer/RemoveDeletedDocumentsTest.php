@@ -9,7 +9,7 @@ use Dvsa\Olcs\Cli\Service\Queue\Consumer\RemoveDeleteDocuments;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\RemoveDeleteDocuments::class)]
-class RemoveDeletedDocumentsTest extends AbstractConsumerTestCase
+final class RemoveDeletedDocumentsTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = RemoveDeleteDocuments::class;
 

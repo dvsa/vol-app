@@ -28,7 +28,7 @@ class ShortNoticeInputFactory implements FactoryInterface
      * @throws NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Input
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Input
     {
         $inputName = 'short_notice';
         $service = new Input($inputName);

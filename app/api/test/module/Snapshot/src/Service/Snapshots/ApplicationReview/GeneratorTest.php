@@ -20,7 +20,7 @@ use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\View\Model\ViewModel;
 use Laminas\View\Renderer\PhpRenderer;
 
-class GeneratorTest extends MockeryTestCase
+final class GeneratorTest extends MockeryTestCase
 {
     public $sm;
     /**
@@ -53,6 +53,7 @@ class GeneratorTest extends MockeryTestCase
      */
     protected $niTranslation;
 
+    #[\Override]
     public function setUp(): void
     {
         $sm = m::mock(ServiceManager::class);

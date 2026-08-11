@@ -14,7 +14,7 @@ use Laminas\Form\Form;
 use Laminas\Http\Request;
 use Common\Service\Helper\FormHelperService;
 
-class CommonOperatingCentreTest extends MockeryTestCase
+final class CommonOperatingCentreTest extends MockeryTestCase
 {
     protected $form;
 

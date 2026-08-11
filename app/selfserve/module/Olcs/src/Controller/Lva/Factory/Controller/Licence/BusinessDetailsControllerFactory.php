@@ -25,7 +25,7 @@ class BusinessDetailsControllerFactory implements FactoryInterface
      * @return BusinessDetailsController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): BusinessDetailsController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): BusinessDetailsController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

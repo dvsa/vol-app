@@ -19,7 +19,7 @@ use Laminas\EventManager\EventManagerInterface;
 use Laminas\View\HelperPluginManager;
 use Laminas\View\Model\ViewModel;
 
-class TransportManagerFurnitureTest extends TestCase
+final class TransportManagerFurnitureTest extends TestCase
 {
     /**
      * @var TransportManagerFurniture
@@ -28,13 +28,13 @@ class TransportManagerFurnitureTest extends TestCase
 
     protected $mockViewHelperManager;
     protected $mockQuerySender;
-    protected $mockCommandSender;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockViewHelperManager = m::mock(HelperPluginManager::class);
         $this->mockQuerySender = m::mock(QuerySender::class);
-        $this->mockCommandSender = m::mock(CommandSender::class);
+        $mockCommandSender = m::mock(CommandSender::class);
 
         $this->sut = new TransportManagerFurniture();
 
@@ -42,7 +42,7 @@ class TransportManagerFurnitureTest extends TestCase
 
         $sl->shouldReceive('get')->with('ViewHelperManager')->andReturn($this->mockViewHelperManager);
         $sl->shouldReceive('get')->with('QuerySender')->andReturn($this->mockQuerySender);
-        $sl->shouldReceive('get')->with('CommandSender')->andReturn($this->mockCommandSender);
+        $sl->shouldReceive('get')->with('CommandSender')->andReturn($mockCommandSender);
 
         $this->sut->__invoke($sl, TransportManagerFurniture::class);
     }

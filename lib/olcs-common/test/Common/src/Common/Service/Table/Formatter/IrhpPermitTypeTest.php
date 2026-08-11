@@ -4,50 +4,50 @@
  * Irhp Permit Type Test
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Table\Formatter\IrhpPermitType;
 
-class IrhpPermitTypeTest extends \PHPUnit\Framework\TestCase
+final class IrhpPermitTypeTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the format method
      *
-     * @group Formatters
      *
-     * @dataProvider provider
      */
+    #[\PHPUnit\Framework\Attributes\Group('Formatters')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testFormat($data, $expected): void
     {
-        $this->assertEquals($expected, (new IrhpPermitType())->format($data));
+        $this->assertEquals($expected, new IrhpPermitType()->format($data));
     }
 
     /**
      * Data provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function provider()
+    public static function provider(): \Iterator
     {
-        return [
-            'IRHP app' => [
-                [
-                    'irhpPermitType' => [
-                        'name' => [
-                            'description' => 'IRHP type'
-                        ],
+        yield 'IRHP app' => [
+            [
+                'irhpPermitType' => [
+                    'name' => [
+                        'description' => 'IRHP type'
                     ],
                 ],
-                'IRHP type',
             ],
-            'ECMT app' => [
-                [
-                    'permitType' => [
-                        'description' => 'ECMT type'
-                    ],
+            'IRHP type',
+        ];
+        yield 'ECMT app' => [
+            [
+                'permitType' => [
+                    'description' => 'ECMT type'
                 ],
-                'ECMT type',
             ],
+            'ECMT type',
         ];
     }
 }

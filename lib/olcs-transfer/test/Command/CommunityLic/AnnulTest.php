@@ -1,14 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\CommunityLic;
 
 use Dvsa\Olcs\Transfer\Command\CommunityLic\Annul;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers \Dvsa\Olcs\Transfer\Command\CommunityLic\Annul
- */
-class AnnulTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Transfer\Command\CommunityLic\Annul::class)]
+final class AnnulTest extends MockeryTestCase
 {
     public function testStructure()
     {

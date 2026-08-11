@@ -52,13 +52,14 @@ function handleFatal()
         ob_clean();
     }
 
+    // VOL-2515: the raw message is never echoed to the client — for uncaught
+    // exceptions it embeds the stack trace and internal paths/hostnames. Full
+    // detail still reaches the logs via Monolog's fatal handler and PHP's
+    // error log.
     echo json_encode(
         [
             'messages' => [
-                'An unexpected fatal error occurred' => [
-                    $error['message'],
-                    $error['file'] . ': ' . $error['line']
-                ]
+                'An unexpected fatal error occurred' => []
             ]
         ]
     );

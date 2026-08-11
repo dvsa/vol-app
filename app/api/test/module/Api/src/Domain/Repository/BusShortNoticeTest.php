@@ -20,8 +20,9 @@ use Doctrine\ORM\EntityRepository;
 /**
  * Short notice repo test
  */
-class BusShortNoticeTest extends RepositoryTestCase
+final class BusShortNoticeTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

@@ -13,7 +13,7 @@ class DocumentDescriptionFactory implements FactoryInterface
      * @return DocumentDescription
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $translator = $container->get('translator');
         $urlHelper = $container->get('Helper\Url');

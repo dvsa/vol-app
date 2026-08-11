@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\Application\Application as EntityApplication;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class UpdateTaxiPhvTest extends AbstractCommandHandlerTestCase
+final class UpdateTaxiPhvTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -65,7 +65,7 @@ class UpdateTaxiPhvTest extends AbstractCommandHandlerTestCase
                 'id' => 210,
                 'trafficArea' => 'TA',
             ],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('UPDATE')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('UPDATE')
         );
 
         $this->expectedSideEffect(
@@ -74,13 +74,13 @@ class UpdateTaxiPhvTest extends AbstractCommandHandlerTestCase
                 'id' => 323,
                 'section' => 'taxiPhv',
             ],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('UPDATE_COMPLETION')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('UPDATE_COMPLETION')
         );
 
         $response = $this->sut->handleCommand($command);
 
-        static::assertSame([], $response->getIds());
-        static::assertSame(['UPDATE', 'UPDATE_COMPLETION'], $response->getMessages());
+        $this->assertSame([], $response->getIds());
+        $this->assertSame(['UPDATE', 'UPDATE_COMPLETION'], $response->getMessages());
     }
 
     public function testHandleCommandValidationError(): void

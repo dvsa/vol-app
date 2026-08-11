@@ -12,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  * Class InputTest
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\InputFilter
  */
-class InputTest extends TestCase
+final class InputTest extends TestCase
 {
     public function testGetValue(): void
     {

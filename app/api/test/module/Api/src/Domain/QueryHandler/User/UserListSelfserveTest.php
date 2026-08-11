@@ -25,7 +25,7 @@ use ReflectionClass;
 /**
  * UserListSelfserveTest
  */
-class UserListSelfserveTest extends QueryHandlerTestCase
+final class UserListSelfserveTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

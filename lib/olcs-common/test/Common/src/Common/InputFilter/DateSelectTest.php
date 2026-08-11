@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\InputFilter;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
@@ -8,11 +10,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  * DateSelectTest
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DateSelectTest extends TestCase
+final class DateSelectTest extends TestCase
 {
-    /**
-     * @dataProvider dataProviderTestGetValue
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderTestGetValue')]
     public function testGetRawValue($value, $expected): void
     {
         $sut = new \Common\InputFilter\DateSelect();
@@ -22,19 +22,17 @@ class DateSelectTest extends TestCase
     }
 
     /**
-     * @return ((int|string)[]|null|string)[][]
+     * @return \Iterator<(int | string), array<(array<(int | string)> | string | null)>>
      *
      * @psalm-return list{list{'foo', 'foo'}, list{null, null}, list{array{month: 2, year: 3}, array{month: 2, year: 3}}, list{array{day: 1, month: 2, year: 3}, array{day: 1, month: 2, year: 3}}, list{array{day: '', month: '', year: ''}, null}}
      */
-    public function dataProviderTestGetValue(): array
+    public static function dataProviderTestGetValue(): \Iterator
     {
-        return [
-            // value, expected
-            ['foo', 'foo'],
-            [null, null],
-            [['month' => 2, 'year' => 3], ['month' => 2, 'year' => 3]],
-            [['day' => 1, 'month' => 2, 'year' => 3], ['day' => 1, 'month' => 2, 'year' => 3]],
-            [['day' => '', 'month' => '', 'year' => ''], null],
-        ];
+        // value, expected
+        yield ['foo', 'foo'];
+        yield [null, null];
+        yield [['month' => 2, 'year' => 3], ['month' => 2, 'year' => 3]];
+        yield [['day' => 1, 'month' => 2, 'year' => 3], ['day' => 1, 'month' => 2, 'year' => 3]];
+        yield [['day' => '', 'month' => '', 'year' => ''], null];
     }
 }

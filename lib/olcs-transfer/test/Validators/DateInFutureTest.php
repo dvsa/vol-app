@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\DateInFuture;
@@ -9,11 +11,9 @@ use Mockery as m;
 /**
  * Class DateNotInFutureTest
  */
-class DateInFutureTest extends MockeryTestCase
+final class DateInFutureTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testIsValid($expected, $value, $options)
     {
         $sut = m::mock(DateInFuture::class)->makePartial()->shouldAllowMockingProtectedMethods();
@@ -28,18 +28,16 @@ class DateInFutureTest extends MockeryTestCase
         $this->assertSame($expected, $sut->isValid($value));
     }
 
-    public function dataProvider()
+    public static function dataProvider(): \Iterator
     {
-        return [
-            [true, '2017-01-01 10:10:10', ['use_time' => true, 'include_today' => true, 'allow_empty' => false]],
-            [true, '2016-06-21', ['use_time' => false, 'include_today' => true, 'allow_empty' => false]],
-            [true, '2016-06-22', ['use_time' => false, 'include_today' => true, 'allow_empty' => false]],
-            [false, '2016-06-21', ['use_time' => false, 'include_today' => false, 'allow_empty' => false]],
-            [false, '', ['use_time' => false, 'include_today' => true, 'allow_empty' => false]],
-            [true, '', ['use_time' => false, 'include_today' => true, 'allow_empty' => true]],
-            [true, '2016-06-22', ['use_time' => false, 'include_today' => true, 'allow_empty' => true]],
-            [false, '2015-06-22', ['use_time' => false, 'include_today' => true, 'allow_empty' => false]],
-        ];
+        yield [true, '2017-01-01 10:10:10', ['use_time' => true, 'include_today' => true, 'allow_empty' => false]];
+        yield [true, '2016-06-21', ['use_time' => false, 'include_today' => true, 'allow_empty' => false]];
+        yield [true, '2016-06-22', ['use_time' => false, 'include_today' => true, 'allow_empty' => false]];
+        yield [false, '2016-06-21', ['use_time' => false, 'include_today' => false, 'allow_empty' => false]];
+        yield [false, '', ['use_time' => false, 'include_today' => true, 'allow_empty' => false]];
+        yield [true, '', ['use_time' => false, 'include_today' => true, 'allow_empty' => true]];
+        yield [true, '2016-06-22', ['use_time' => false, 'include_today' => true, 'allow_empty' => true]];
+        yield [false, '2015-06-22', ['use_time' => false, 'include_today' => true, 'allow_empty' => false]];
     }
 
     public function testIsValidNoMock()

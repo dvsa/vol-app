@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Types;
 
 use Common\Form\Elements\Types\FileUploadList;
@@ -10,7 +12,8 @@ use Common\Service\Helper\UrlHelperService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class FileUploadListTest extends \PHPUnit\Framework\TestCase
+#[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
+final class FileUploadListTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test the element configuration
@@ -61,9 +64,9 @@ class FileUploadListTest extends \PHPUnit\Framework\TestCase
         ];
 
         $mockUrl = $this->createPartialMock(UrlHelperService::class, ['fromRoute']);
-        $mockUrl->expects($this->any())
+        $mockUrl
             ->method('fromRoute')
-            ->will($this->returnValue('url'));
+            ->willReturn('url');
 
         $element = new FileUploadList();
         $element->setOption('preview_images', true);

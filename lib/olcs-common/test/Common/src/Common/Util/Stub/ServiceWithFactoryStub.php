@@ -17,7 +17,7 @@ class ServiceWithFactoryStub implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ServiceWithFactoryStub
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ServiceWithFactoryStub
     {
         return $this;
     }

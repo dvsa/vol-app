@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Validators;
 
 use Common\Form\Elements\Validators\VehicleSafetyTachographAnalyserContractorValidator;
@@ -15,7 +17,7 @@ use Common\Form\Elements\Validators\VehicleSafetyTachographAnalyserContractorVal
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class VehicleSafetyTachographAnalyserContractorValidatorTest extends \PHPUnit\Framework\TestCase
+final class VehicleSafetyTachographAnalyserContractorValidatorTest extends \PHPUnit\Framework\TestCase
 {
     public $validator;
     /**
@@ -29,9 +31,8 @@ class VehicleSafetyTachographAnalyserContractorValidatorTest extends \PHPUnit\Fr
 
     /**
      * Test isValid
-     *
-     * @dataProvider providerIsValid
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerIsValid')]
     public function testIsValid($value, $context, $expected): void
     {
         $this->assertEquals($expected, $this->validator->isValid($value, $context));
@@ -40,36 +41,34 @@ class VehicleSafetyTachographAnalyserContractorValidatorTest extends \PHPUnit\Fr
     /**
      * Provider for isValid
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function providerIsValid()
+    public static function providerIsValid(): \Iterator
     {
-        return [
-            [
-                null,
-                ['tachographIns' => '', 'tachographInsName' => ''],
-                true
-            ],
-            [
-                null,
-                ['tachographIns' => 'tach_internal', 'tachographInsName' => ''],
-                true
-            ],
-            [
-                null,
-                ['tachographIns' => 'tach_internal', 'tachographInsName' => 'abc'],
-                true
-            ],
-            [
-                null,
-                ['tachographIns' => 'tach_external', 'tachographInsName' => ''],
-                false
-            ],
-            [
-                null,
-                ['tachographIns' => 'tach_external', 'tachographInsName' => 'abc'],
-                true
-            ]
+        yield [
+            null,
+            ['tachographIns' => '', 'tachographInsName' => ''],
+            true
+        ];
+        yield [
+            null,
+            ['tachographIns' => 'tach_internal', 'tachographInsName' => ''],
+            true
+        ];
+        yield [
+            null,
+            ['tachographIns' => 'tach_internal', 'tachographInsName' => 'abc'],
+            true
+        ];
+        yield [
+            null,
+            ['tachographIns' => 'tach_external', 'tachographInsName' => ''],
+            false
+        ];
+        yield [
+            null,
+            ['tachographIns' => 'tach_external', 'tachographInsName' => 'abc'],
+            true
         ];
     }
 }

@@ -10,7 +10,7 @@ use Dvsa\Olcs\Cli\Domain\Command\Permits\UploadScoringResult;
  * Upload scoring result test
  *
  */
-class UploadScoringResultTest extends \PHPUnit\Framework\TestCase
+final class UploadScoringResultTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {
@@ -21,7 +21,7 @@ class UploadScoringResultTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        static::assertEquals('TEST', $sut->getCsvContent());
-        static::assertEquals('TEST DESCRIPTION', $sut->getFileDescription());
+        $this->assertEquals('TEST', $sut->getCsvContent());
+        $this->assertEquals('TEST DESCRIPTION', $sut->getFileDescription());
     }
 }

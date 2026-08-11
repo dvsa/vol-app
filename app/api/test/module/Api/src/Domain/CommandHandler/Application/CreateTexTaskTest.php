@@ -16,7 +16,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CreateTexTaskTest extends AbstractCommandHandlerTestCase
+final class CreateTexTaskTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -78,9 +78,9 @@ class CreateTexTaskTest extends AbstractCommandHandlerTestCase
                 'description' => 'OOO Time Expired',
                 'licence' => 426,
                 'application' => 32,
-                'actionDate' => (new \DateTime('2015-09-10'))->format(\DateTime::W3C),
+                'actionDate' => new \DateTime('2015-09-10')->format(\DateTime::W3C),
             ],
-            (new Result())->addMessage('RESULT')
+            new Result()->addMessage('RESULT')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -124,9 +124,9 @@ class CreateTexTaskTest extends AbstractCommandHandlerTestCase
                 'description' => 'OOO Time Expired',
                 'licence' => 426,
                 'application' => 32,
-                'actionDate' => (new DateTime())->format(\DateTime::W3C),
+                'actionDate' => new DateTime()->format(\DateTime::W3C),
             ],
-            (new Result())->addMessage('RESULT')
+            new Result()->addMessage('RESULT')
         );
 
         $result = $this->sut->handleCommand($command);
@@ -181,11 +181,11 @@ class CreateTexTaskTest extends AbstractCommandHandlerTestCase
                 'description' => 'OOO Time Expired',
                 'licence' => 426,
                 'application' => 32,
-                'actionDate' => (new DateTime())->format(\DateTime::W3C),
+                'actionDate' => new DateTime()->format(\DateTime::W3C),
                 'assignedToUser' => 53,
                 'assignedToTeam' => 55,
             ],
-            (new Result())->addMessage('RESULT')
+            new Result()->addMessage('RESULT')
         );
 
         $result = $this->sut->handleCommand($command);

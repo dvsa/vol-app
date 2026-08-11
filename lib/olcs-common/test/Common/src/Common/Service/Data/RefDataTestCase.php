@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Preference\Language as LanguagePreference;
@@ -21,9 +23,7 @@ class RefDataTestCase extends AbstractListDataServiceTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->languagePreferenceService = m::mock(LanguagePreference::class);
-
         $this->refDataServices = new RefDataServices(
             $this->abstractListDataServiceServices,
             $this->languagePreferenceService

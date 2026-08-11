@@ -24,7 +24,7 @@ class VrmFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Vrm
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Vrm
     {
         $service = new Vrm();
         $service->setVrmFilter($container->get(FilterPluginManager::class)->get(TransferVrmFilter::class));

@@ -13,7 +13,7 @@ class ApplicationOperatingCentreFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ApplicationOperatingCentre
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ApplicationOperatingCentre
     {
         return new ApplicationOperatingCentre(
             $container->get('DataServiceManager')->get(AbstractDataServiceServices::class),

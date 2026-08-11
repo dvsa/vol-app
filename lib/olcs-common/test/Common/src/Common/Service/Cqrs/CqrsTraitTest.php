@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Cqrs;
 
 use Common\Service\Cqrs\Response;
@@ -9,11 +11,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 use Laminas\Http\Response as HttpResponse;
 
-class CqrsTraitTest extends MockeryTestCase
+final class CqrsTraitTest extends MockeryTestCase
 {
-    /** @var  m\MockInterface */
-    private $mockHttpResp;
-
     /** @var  m\MockInterface */
     private $mockCqrsResp;
 
@@ -26,10 +25,10 @@ class CqrsTraitTest extends MockeryTestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->mockHttpResp = m::mock(HttpResponse::class);
+        $mockHttpResp = m::mock(HttpResponse::class);
 
         $this->mockCqrsResp = m::mock(Response::class);
-        $this->mockCqrsResp->shouldReceive('getHttpResponse')->andReturn($this->mockHttpResp);
+        $this->mockCqrsResp->shouldReceive('getHttpResponse')->andReturn($mockHttpResp);
 
         $this->mockFlashMsngr = m::mock(FlashMessengerHelperService::class);
 

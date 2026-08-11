@@ -43,15 +43,15 @@ final class UploadCsv extends AbstractCommandHandler
 
         if (!empty($csvContent)) {
             //use this to get our header row
-            fputcsv($fh, array_keys($csvContent[0]));
+            fputcsv($fh, array_keys($csvContent[0]), ',', '"', '\\');
 
             //create rows
             foreach ($csvContent as $dataRow) {
-                fputcsv($fh, $dataRow);
+                fputcsv($fh, $dataRow, ',', '"', '\\');
             }
         } else {
             //  no results, create empty file
-            fputcsv($fh, ['No Results']);
+            fputcsv($fh, ['No Results'], ',', '"', '\\');
             $this->result->addMessage(self::EMPTY_MSG);
         }
 

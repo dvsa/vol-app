@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Bilateral;
 
 use Common\Form\QaForm;
@@ -12,11 +14,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class PermitUsageIsValidHandlerTest extends MockeryTestCase
+final class PermitUsageIsValidHandlerTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValid')]
     public function testIsValid($storedAnswerValue, $qaElementValue, $warningVisibleValue, $expectedIsValid): void
     {
         $questionFieldsetData = [
@@ -47,19 +47,17 @@ class PermitUsageIsValidHandlerTest extends MockeryTestCase
     }
 
     /**
-     * @return (bool|null|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string | null)>>
      *
      * @psalm-return list{list{null, 'journey_multiple', false, true}, list{null, 'journey_multiple', true, true}, list{'journey_multiple', 'journey_multiple', false, true}, list{'journey_multiple', 'journey_multiple', true, true}, list{'journey_single', 'journey_multiple', true, true}, list{'journey_single', 'journey_multiple', false, false}}
      */
-    public function dpIsValid(): array
+    public static function dpIsValid(): \Iterator
     {
-        return [
-            [null, 'journey_multiple', false, true],
-            [null, 'journey_multiple', true, true],
-            ['journey_multiple', 'journey_multiple', false, true],
-            ['journey_multiple', 'journey_multiple', true, true],
-            ['journey_single', 'journey_multiple', true, true],
-            ['journey_single', 'journey_multiple', false, false],
-        ];
+        yield [null, 'journey_multiple', false, true];
+        yield [null, 'journey_multiple', true, true];
+        yield ['journey_multiple', 'journey_multiple', false, true];
+        yield ['journey_multiple', 'journey_multiple', true, true];
+        yield ['journey_single', 'journey_multiple', true, true];
+        yield ['journey_single', 'journey_multiple', false, false];
     }
 }

@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class IrfoCountryEntityTest extends EntityTester
+final class IrfoCountryEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

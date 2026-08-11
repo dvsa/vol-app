@@ -20,13 +20,14 @@ use Olcs\Logging\Log\Logger;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class StandardTest extends MockeryTestCase
+final class StandardTest extends MockeryTestCase
 {
     /**
      * @var Standard
      */
     private $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new Standard();

@@ -24,7 +24,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Update TxcInbox PDF Test
  */
-class UpdateTxcInboxPdfTest extends AbstractCommandHandlerTestCase
+final class UpdateTxcInboxPdfTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -93,15 +93,13 @@ class UpdateTxcInboxPdfTest extends AbstractCommandHandlerTestCase
     /**
      * data provider for handleCommand
      */
-    public static function handleCommandProvider(): array
+    public static function handleCommandProvider(): \Iterator
     {
-        return [
-            ['Pdf', 'setPdfDocument'],
-            ['pdf', 'setPdfDocument'],
-            ['pDF', 'setPdfDocument'],
-            ['Route', 'setRouteDocument'],
-            ['route', 'setRouteDocument'],
-            ['rOUTE', 'setRouteDocument']
-        ];
+        yield ['Pdf', 'setPdfDocument'];
+        yield ['pdf', 'setPdfDocument'];
+        yield ['pDF', 'setPdfDocument'];
+        yield ['Route', 'setRouteDocument'];
+        yield ['route', 'setRouteDocument'];
+        yield ['rOUTE', 'setRouteDocument'];
     }
 }

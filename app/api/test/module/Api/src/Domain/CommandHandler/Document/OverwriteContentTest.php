@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Command\Document\OverwriteContent as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class OverwriteContentTest extends AbstractCommandHandlerTestCase
+final class OverwriteContentTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

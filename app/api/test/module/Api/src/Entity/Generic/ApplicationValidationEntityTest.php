@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Generic\ApplicationValidation as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class ApplicationValidationEntityTest extends EntityTester
+final class ApplicationValidationEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

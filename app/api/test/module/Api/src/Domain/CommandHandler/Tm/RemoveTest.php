@@ -24,7 +24,7 @@ use Mockery as m;
  * @package Dvsa\OlcsTest\Api\Domain\CommandHandler\TransportManager
  * @author Joshua Curtis <josh.curtis@valtech.co.uk>
  */
-class RemoveTest extends AbstractCommandHandlerTestCase
+final class RemoveTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
 use Dvsa\Olcs\Api\Entity\User\Permission;
 use Mockery as m;
 
-class CanConfirmSurrenderTest extends AbstractValidatorsTestCase
+final class CanConfirmSurrenderTest extends AbstractValidatorsTestCase
 {
     protected $sut;
 
@@ -49,21 +49,19 @@ class CanConfirmSurrenderTest extends AbstractValidatorsTestCase
         $this->assertSame($expected, $this->sut->isValid($entityId));
     }
 
-    public static function surrenderStates(): array
+    public static function surrenderStates(): \Iterator
     {
-        return [
-            'signed surrender' => [
-                Surrender::SURRENDER_STATUS_SIGNED,
-                true
-            ],
-            'submitted surrender' => [
-                Surrender::SURRENDER_STATUS_SUBMITTED,
-                false
-            ],
-            'surrender incomplete' => [
-                Surrender::SURRENDER_DOC_STATUS_DESTROYED,
-                false
-            ]
+        yield 'signed surrender' => [
+            Surrender::SURRENDER_STATUS_SIGNED,
+            true
+        ];
+        yield 'submitted surrender' => [
+            Surrender::SURRENDER_STATUS_SUBMITTED,
+            false
+        ];
+        yield 'surrender incomplete' => [
+            Surrender::SURRENDER_DOC_STATUS_DESTROYED,
+            false
         ];
     }
 }

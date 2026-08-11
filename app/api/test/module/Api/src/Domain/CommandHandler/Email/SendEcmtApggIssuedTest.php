@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
 /**
  * Test the ECMT Annual APGG issued email
  */
-class SendEcmtApggIssuedTest extends AbstractEcmtAnnualPermitTestCase
+final class SendEcmtApggIssuedTest extends AbstractEcmtAnnualPermitTestCase
 {
     protected $commandClass = SendEcmtApggIssuedCmd::class;
     protected $commandHandlerClass = SendEcmtApggIssuedHandler::class;

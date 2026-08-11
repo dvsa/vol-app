@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Bilateral;
 
 use Common\Service\Qa\Custom\Bilateral\StandardYesNoValueOptionsGenerator;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StandardYesNoValueOptionsGeneratorTest extends MockeryTestCase
+final class StandardYesNoValueOptionsGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

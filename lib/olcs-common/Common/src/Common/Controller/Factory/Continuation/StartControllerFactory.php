@@ -17,7 +17,7 @@ class StartControllerFactory implements FactoryInterface
      * @param array|null $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): StartController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): StartController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

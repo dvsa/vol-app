@@ -14,7 +14,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CreateContinuationSeparatorSheetTest extends AbstractCommandHandlerTestCase
+final class CreateContinuationSeparatorSheetTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

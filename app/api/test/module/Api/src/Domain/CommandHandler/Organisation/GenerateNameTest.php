@@ -16,17 +16,14 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Organisation\GenerateName::class)]
-class GenerateNameTest extends AbstractCommandHandlerTestCase
+final class GenerateNameTest extends AbstractCommandHandlerTestCase
 {
-    public const PERSON_ID = 8001;
-    public const APP_ID = 9001;
-    public const ORG_ID = 7001;
+    public const int PERSON_ID = 8001;
+    public const int APP_ID = 9001;
+    public const int ORG_ID = 7001;
 
     /** @var  GenerateName */
     protected $sut;
-
-    /** @var  m\MockInterface */
-    private $mockAppRepo;
     /** @var  Repository\Organisation | m\MockInterface */
     private $mockOrgRepo;
 
@@ -48,8 +45,8 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
             ->setId(self::APP_ID);
 
         //  mock Repos
-        $this->mockAppRepo = $this->mockRepo('Application', Repository\Application::class);
-        $this->mockAppRepo->shouldReceive('fetchById')->with(self::APP_ID)->andReturn($this->mockApp);
+        $mockAppRepo = $this->mockRepo('Application', Repository\Application::class);
+        $mockAppRepo->shouldReceive('fetchById')->with(self::APP_ID)->andReturn($this->mockApp);
 
         $this->mockOrgRepo = $this->mockRepo('Organisation', Repository\Organisation::class);
         $this->mockOrgRepo->shouldReceive('fetchById')->with(self::ORG_ID)->andReturn($this->mockOrg);
@@ -82,7 +79,7 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
 
         $actual = $this->sut->handleCommand($cmd);
 
-        static::assertEquals(['Unable to generate name'], $actual->getMessages());
+        $this->assertEquals(['Unable to generate name'], $actual->getMessages());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerateName')]
@@ -98,7 +95,7 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('save')
             ->andReturnUsing(
                 function (Entity\Organisation\Organisation $org) use ($expect) {
-                    static::assertEquals($expect, $org->getName());
+                    $this->assertEquals($expect, $org->getName());
                 }
             );
 
@@ -106,40 +103,38 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($cmd);
     }
 
-    public static function dpTestGenerateName(): array
+    public static function dpTestGenerateName(): \Iterator
     {
-        return [
-            'ST' => [
-                'type' => Entity\Organisation\Organisation::ORG_TYPE_SOLE_TRADER,
-                'orgPersons' => [
-                    self::getMockOrgPerson('unit_Fist', 'unit_Last'),
-                ],
-                'expect' => 'unit_Fist unit_Last',
+        yield 'ST' => [
+            'type' => Entity\Organisation\Organisation::ORG_TYPE_SOLE_TRADER,
+            'orgPersons' => [
+                self::getMockOrgPerson('unit_Fist', 'unit_Last'),
             ],
-            'Partner x 1' => [
-                'type' => Entity\Organisation\Organisation::ORG_TYPE_PARTNERSHIP,
-                'orgPersons' => [
-                    self::getMockOrgPerson('unit_Fist', 'unit_Last'),
-                ],
-                'expect' => 'unit_Fist unit_Last',
+            'expect' => 'unit_Fist unit_Last',
+        ];
+        yield 'Partner x 1' => [
+            'type' => Entity\Organisation\Organisation::ORG_TYPE_PARTNERSHIP,
+            'orgPersons' => [
+                self::getMockOrgPerson('unit_Fist', 'unit_Last'),
             ],
-            'Partner x 2' => [
-                'type' => Entity\Organisation\Organisation::ORG_TYPE_PARTNERSHIP,
-                'orgPersons' => [
-                    self::getMockOrgPerson('unit_Fist', 'unit_Last'),
-                    self::getMockOrgPerson('unit_Fist2', 'unit_Last2'),
-                ],
-                'expect' => 'unit_Fist unit_Last & unit_Fist2 unit_Last2',
+            'expect' => 'unit_Fist unit_Last',
+        ];
+        yield 'Partner x 2' => [
+            'type' => Entity\Organisation\Organisation::ORG_TYPE_PARTNERSHIP,
+            'orgPersons' => [
+                self::getMockOrgPerson('unit_Fist', 'unit_Last'),
+                self::getMockOrgPerson('unit_Fist2', 'unit_Last2'),
             ],
-            'Partner > 2' => [
-                'type' => Entity\Organisation\Organisation::ORG_TYPE_PARTNERSHIP,
-                'orgPersons' => [
-                    self::getMockOrgPerson('unit_Fist', 'unit_Last'),
-                    self::getMockOrgPerson('unit_Fist2', 'unit_Last2'),
-                    self::getMockOrgPerson('unit_Fist3', 'unit_Last3'),
-                ],
-                'expect' => 'unit_Fist unit_Last & Partners',
+            'expect' => 'unit_Fist unit_Last & unit_Fist2 unit_Last2',
+        ];
+        yield 'Partner > 2' => [
+            'type' => Entity\Organisation\Organisation::ORG_TYPE_PARTNERSHIP,
+            'orgPersons' => [
+                self::getMockOrgPerson('unit_Fist', 'unit_Last'),
+                self::getMockOrgPerson('unit_Fist2', 'unit_Last2'),
+                self::getMockOrgPerson('unit_Fist3', 'unit_Last3'),
             ],
+            'expect' => 'unit_Fist unit_Last & Partners',
         ];
     }
 
@@ -174,29 +169,27 @@ class GenerateNameTest extends AbstractCommandHandlerTestCase
             ->shouldReceive('save')
             ->andReturnUsing(
                 function (Entity\Organisation\Organisation $org) {
-                    static::assertEquals('unit_First unit_Last', $org->getName());
+                    $this->assertEquals('unit_First unit_Last', $org->getName());
                 }
             );
 
         $this->expectedSideEffect(ClearForOrganisation::class, ['id' => self::ORG_ID], new Result());
         $actual = $this->sut->handleCommand($cmd);
 
-        static::assertEquals(['Name succesfully generated'], $actual->getMessages());
+        $this->assertEquals(['Name succesfully generated'], $actual->getMessages());
     }
 
-    public static function dpTestHandleOk(): array
+    public static function dpTestHandleOk(): \Iterator
     {
-        return [
-            [
-                'cmdData' => [
-                    'organisation' => self::ORG_ID,
-                    'application' => self::APP_ID,
-                ],
+        yield [
+            'cmdData' => [
+                'organisation' => self::ORG_ID,
+                'application' => self::APP_ID,
             ],
-            [
-                'cmdData' => [
-                    'organisation' => self::ORG_ID,
-                ],
+        ];
+        yield [
+            'cmdData' => [
+                'organisation' => self::ORG_ID,
             ],
         ];
     }
