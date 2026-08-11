@@ -13,7 +13,7 @@ class VenueFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Venue
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Venue
     {
         return new Venue(
             $container->get('DataServiceManager')->get(AbstractDataServiceServices::class),

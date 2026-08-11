@@ -10,13 +10,12 @@ use PHPUnit\Framework\TestCase;
 /**
  * ExternalConversationStatus test
  */
-class ExternalConversationStatusTest extends TestCase
+final class ExternalConversationStatusTest extends TestCase
 {
     /**
      * Test messaging conversation status formatter
-     *
-     * @dataProvider statusProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('statusProvider')]
     public function testFormat($row, $expected): void
     {
         $formatter = new ExternalConversationStatus();
@@ -24,27 +23,25 @@ class ExternalConversationStatusTest extends TestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function statusProvider(): array
+    public static function statusProvider(): \Iterator
     {
-        return [
-            'new_message' => [
-                ['userContextStatus' => 'NEW_MESSAGE'],
-                '<strong class="govuk-tag govuk-tag--red">New message</strong>',
-            ],
-            'open' => [
-                ['userContextStatus' => 'OPEN'],
-                '<strong class="govuk-tag govuk-tag--blue">Open</strong>',
-            ],
-            'closed' => [
-                ['userContextStatus' => 'CLOSED'],
-                '<strong class="govuk-tag govuk-tag--grey">Closed</strong>',
-            ],
-            'default' => [
-                ['userContextStatus' => 'DEFAULT_OTHER_STATUS'],
-                '<strong class="govuk-tag govuk-tag--green">Default other status</strong>',
-            ],
+        yield 'new_message' => [
+            ['userContextStatus' => 'NEW_MESSAGE'],
+            '<strong class="govuk-tag govuk-tag--red">New message</strong>',
+        ];
+        yield 'open' => [
+            ['userContextStatus' => 'OPEN'],
+            '<strong class="govuk-tag govuk-tag--blue">Open</strong>',
+        ];
+        yield 'closed' => [
+            ['userContextStatus' => 'CLOSED'],
+            '<strong class="govuk-tag govuk-tag--grey">Closed</strong>',
+        ];
+        yield 'default' => [
+            ['userContextStatus' => 'DEFAULT_OTHER_STATUS'],
+            '<strong class="govuk-tag govuk-tag--green">Default other status</strong>',
         ];
     }
 }

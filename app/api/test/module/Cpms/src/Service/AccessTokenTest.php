@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Cpms\Service;
 use Dvsa\Olcs\Cpms\Authenticate\AccessToken;
 use PHPUnit\Framework\TestCase;
 
-class AccessTokenTest extends TestCase
+final class AccessTokenTest extends TestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('isExpiredDataProvider')]
     #[\PHPUnit\Framework\Attributes\Test]
@@ -21,7 +21,7 @@ class AccessTokenTest extends TestCase
             "Bearer"
         );
 
-        $this->assertEquals($isExpired, $accessToken->isExpired());
+        $this->assertSame($isExpired, $accessToken->isExpired());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -39,19 +39,17 @@ class AccessTokenTest extends TestCase
     }
 
 
-    public static function isExpiredDataProvider(): array
+    public static function isExpiredDataProvider(): \Iterator
     {
-        return [
-            'has expired' => [
-                'issuedAt' => time() - 300,
-                'expiresIn' => 240,
-                'isExpired' => true
-            ],
-            "hasn't expired" => [
-                'issuedAt' => time(),
-                'expiresIn' => 3600,
-                'isExpired' => false
-            ]
+        yield 'has expired' => [
+            'issuedAt' => time() - 300,
+            'expiresIn' => 240,
+            'isExpired' => true
+        ];
+        yield "hasn't expired" => [
+            'issuedAt' => time(),
+            'expiresIn' => 3600,
+            'isExpired' => false
         ];
     }
 }

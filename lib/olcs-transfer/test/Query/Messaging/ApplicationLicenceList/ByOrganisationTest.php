@@ -9,7 +9,7 @@ use Dvsa\OlcsTest\Transfer\DtoWithoutOptionalFieldsTest;
 use Dvsa\OlcsTest\Transfer\Query\QueryTest;
 use Laminas\Stdlib\ArraySerializableInterface;
 
-class ByOrganisationTest extends \PHPUnit\Framework\TestCase
+final class ByOrganisationTest extends \PHPUnit\Framework\TestCase
 {
     use QueryTest, DtoWithoutOptionalFieldsTest {
         DtoWithoutOptionalFieldsTest::testDefaultValues insteadof QueryTest;

@@ -10,7 +10,7 @@ use Olcs\Service\Data\SubmissionLegislation;
  * Class SubmissionLegislationTest
  * @package OlcsTest\Service\Data
  */
-class SubmissionLegislationTest extends AbstractPublicInquiryDataTestCase
+final class SubmissionLegislationTest extends AbstractPublicInquiryDataTestCase
 {
     private $reasons = [
         ['id' => 12, 'description' => 'Description 1', 'isProposeToRevoke' => 'Y'],

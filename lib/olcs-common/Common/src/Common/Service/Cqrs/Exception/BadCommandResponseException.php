@@ -24,7 +24,7 @@ class BadCommandResponseException extends Exception
     /**
      * @param Throwable|null $previous
      */
-    public function __construct(string $message, CommandInterface $command, Response $response, Throwable $previous = null)
+    public function __construct(string $message, CommandInterface $command, Response $response, ?Throwable $previous = null)
     {
         parent::__construct($message, 0, $previous);
         $this->command = $command;

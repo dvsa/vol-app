@@ -16,8 +16,9 @@ use Mockery as m;
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class OrganisationReadAuditTest extends AbstractReadAuditTestCase
+final class OrganisationReadAuditTest extends AbstractReadAuditTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(OrganisationReadAudit::class, true);

@@ -11,7 +11,7 @@ use Olcs\Service\WebDav\RedisLockBackend;
 use Sabre\DAV\Locks\LockInfo;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(RedisLockBackend::class)]
-class RedisLockBackendTest extends MockeryTestCase
+final class RedisLockBackendTest extends MockeryTestCase
 {
     private \Redis&MockInterface $redis;
     private RedisLockBackend $sut;

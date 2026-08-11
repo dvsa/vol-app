@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\IrhpApplication\ReviveFromUnsuccessful;
 use Dvsa\Olcs\Api\Domain\Repository\IrhpApplication as IrhpApplicationRepo;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
 
-class ReviveFromUnsuccessfulTest extends AbstractReviveFromUnsuccessfulTestCase
+final class ReviveFromUnsuccessfulTest extends AbstractReviveFromUnsuccessfulTestCase
 {
     protected $applicationRepoServiceName = 'IrhpApplication';
     protected $applicationRepoClass = IrhpApplicationRepo::class;

@@ -22,7 +22,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ReadCaseTest extends QueryHandlerTestCase
+final class ReadCaseTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

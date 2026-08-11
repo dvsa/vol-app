@@ -18,10 +18,9 @@ use Doctrine\Common\Collections\Collection;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\Table(name="printer")
  */
+#[ORM\Table(name: 'printer')]
+#[ORM\MappedSuperclass]
 abstract class AbstractPrinter implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -32,47 +31,42 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Printer tray
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="printer_tray", length=45, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'printer_tray', length: 45, nullable: true)]
     protected $printerTray;
 
     /**
      * Printer name
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="printer_name", length=45, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'printer_name', length: 45, nullable: true)]
     protected $printerName;
 
     /**
      * Description
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
 
     /**
      * TeamPrinters
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\PrintScan\TeamPrinter", mappedBy="printer")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\PrintScan\TeamPrinter::class, mappedBy: 'printer')]
     protected $teamPrinters;
 
     /**
@@ -97,7 +91,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
      *
      * @param int $id new value being set
      *
-     * @return Printer
+     * @return static
      */
     public function setId($id)
     {
@@ -121,7 +115,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
      *
      * @param string $printerTray new value being set
      *
-     * @return Printer
+     * @return static
      */
     public function setPrinterTray($printerTray)
     {
@@ -145,7 +139,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
      *
      * @param string $printerName new value being set
      *
-     * @return Printer
+     * @return static
      */
     public function setPrinterName($printerName)
     {
@@ -169,7 +163,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
      *
      * @param string $description new value being set
      *
-     * @return Printer
+     * @return static
      */
     public function setDescription($description)
     {
@@ -193,7 +187,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $teamPrinters collection being set as the value
      *
-     * @return Printer
+     * @return static
      */
     public function setTeamPrinters($teamPrinters)
     {
@@ -217,7 +211,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $teamPrinters collection being added
      *
-     * @return Printer
+     * @return static
      */
     public function addTeamPrinters($teamPrinters)
     {
@@ -240,7 +234,7 @@ abstract class AbstractPrinter implements BundleSerializableInterface, JsonSeria
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $teamPrinters collection being removed
      *
-     * @return Printer
+     * @return static
      */
     public function removeTeamPrinters($teamPrinters)
     {

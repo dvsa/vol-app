@@ -15,26 +15,19 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 /**
  * DocumentToDeleteTest
  */
-class DocumentToDeleteTest extends RepositoryTestCase
+final class DocumentToDeleteTest extends RepositoryTestCase
 {
-    /**
-     * @var (\Doctrine\ORM\QueryBuilder & \Mockery\MockInterface)
-     */
-    public $mockDqb;
-    /**
-     * @var (\Dvsa\Olcs\Transfer\Query\QueryInterface & \Mockery\MockInterface)
-     */
-    public $mockQi;
     /**
      * @var DocumentToDelete
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(DocumentToDelete::class);
-        $this->mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $this->mockQi = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
+        $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $mockQi = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
     }
 
     /**
@@ -55,7 +48,7 @@ class DocumentToDeleteTest extends RepositoryTestCase
     {
         /** @var QueryBuilder $qb */
         $mockQb = $this->createMockQb('{{QUERY}}');
-        $now = (new DateTime())->format("Y-m-d H:i:s");
+        $now = new DateTime()->format("Y-m-d H:i:s");
 
         $this->mockCreateQueryBuilder($mockQb);
         $mockQb->shouldReceive('getQuery->getResult')->with()->once()->andReturn(['FOO']);
@@ -68,7 +61,7 @@ class DocumentToDeleteTest extends RepositoryTestCase
             ' AND (m.processAfterDate IS NULL OR m.processAfterDate <= [[' . $now . ']])' .
             ' LIMIT 77';
 
-        static::assertEquals($expected, $this->query);
+        $this->assertEquals($expected, $this->query);
     }
 
     public function testFetchListOfDocumentToDeleteIncludingPostponed(): void
@@ -91,6 +84,6 @@ class DocumentToDeleteTest extends RepositoryTestCase
             ' AND m.documentStoreId != [[]]' .
             ' LIMIT 77';
 
-        static::assertEquals($expected, $this->query);
+        $this->assertEquals($expected, $this->query);
     }
 }

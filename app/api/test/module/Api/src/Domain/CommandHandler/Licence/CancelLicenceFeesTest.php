@@ -27,7 +27,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CancelLicenceFeesTest extends AbstractCommandHandlerTestCase
+final class CancelLicenceFeesTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -123,12 +123,12 @@ class CancelLicenceFeesTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             CancelFeeCmd::class,
             ['id' => 123],
-            (new Result())->addMessage('Fee 123 cancelled successfully')
+            new Result()->addMessage('Fee 123 cancelled successfully')
         );
         $this->expectedSideEffect(
             CancelFeeCmd::class,
             ['id' => 124],
-            (new Result())->addMessage('Fee 124 cancelled successfully')
+            new Result()->addMessage('Fee 124 cancelled successfully')
         );
 
         $result = $this->sut->handleCommand($command);

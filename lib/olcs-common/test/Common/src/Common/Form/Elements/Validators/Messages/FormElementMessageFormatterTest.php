@@ -21,71 +21,69 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * @see FormElementMessageFormatter
  */
-class FormElementMessageFormatterTest extends MockeryTestCase
+final class FormElementMessageFormatterTest extends MockeryTestCase
 {
     use MocksServicesTrait;
     use MocksTranslatorsTrait;
 
-    protected const VALIDATOR_MANAGER = 'ValidatorManager';
+    protected const string VALIDATOR_MANAGER = 'ValidatorManager';
 
-    protected const ELEM_TYPE = 'ELEMENT TYPE';
+    protected const string ELEM_TYPE = 'ELEMENT TYPE';
 
-    protected const ELEM_TYPE_WITH_NO_TRANSLATION = 'ELEMENT TYPE WITH NO TRANSLATION';
+    protected const string ELEM_TYPE_WITH_NO_TRANSLATION = 'ELEMENT TYPE WITH NO TRANSLATION';
 
-    protected const MISSING_ELEM_TYPE_REPLACEMENT = 'default';
+    protected const string MISSING_ELEM_TYPE_REPLACEMENT = 'default';
 
-    protected const LABEL_PLACEHOLDER = '{{fieldLabel}}';
+    protected const string LABEL_PLACEHOLDER = '{{fieldLabel}}';
 
-    protected const LABEL_WITH_HTML = '<strong>LABEL WITH HTML</strong>';
+    protected const string LABEL_WITH_HTML = '<strong>LABEL WITH HTML</strong>';
 
-    protected const LABEL_WITH_NO_CONTENT = '';
+    protected const string LABEL_WITH_NO_CONTENT = '';
 
-    protected const LABEL = 'LABEL WITH CONTENT';
+    protected const string LABEL = 'LABEL WITH CONTENT';
 
-    protected const LABEL_WITH_TRAILING_WHITESPACE = 'LABEL WITH TRAILING WHITESPACE    ';
+    protected const string LABEL_WITH_TRAILING_WHITESPACE = 'LABEL WITH TRAILING WHITESPACE    ';
 
-    protected const REPLACEMENT_MESSAGE_WITH_LABEL_PLACEHOLDER = 'REPLACEMENT MESSAGE WITH FIELD LABEL: "{{fieldLabel}}"';
+    protected const string REPLACEMENT_MESSAGE_WITH_LABEL_PLACEHOLDER = 'REPLACEMENT MESSAGE WITH FIELD LABEL: "{{fieldLabel}}"';
 
-    protected const REPLACEMENT_MESSAGE_WITHOUT_PLACEHOLDER = 'REPLACEMENT MESSAGE WITHOUT PLACEHOLDER';
+    protected const string REPLACEMENT_MESSAGE_WITHOUT_PLACEHOLDER = 'REPLACEMENT MESSAGE WITHOUT PLACEHOLDER';
 
-    protected const MESSAGE_KEY = 'MESSAGE KEY';
+    protected const string MESSAGE_KEY = 'MESSAGE KEY';
 
-    protected const DEFAULT_MESSAGE = 'DEFAULT MESSAGE';
+    protected const string DEFAULT_MESSAGE = 'DEFAULT MESSAGE';
 
-    protected const DEFAULT_MESSAGE_TRANSLATED = 'DEFAULT MESSAGE TRANSLATED';
+    protected const string DEFAULT_MESSAGE_TRANSLATED = 'DEFAULT MESSAGE TRANSLATED';
 
-    protected const MESSAGE_WITHOUT_PLACEHOLDER = 'MESSAGE WITHOUT PLACEHOLDER';
+    protected const string MESSAGE_WITHOUT_PLACEHOLDER = 'MESSAGE WITHOUT PLACEHOLDER';
 
-    protected const MESSAGE_WITHOUT_PLACEHOLDER_TRANSLATED = 'MESSAGE WITHOUT PLACEHOLDER TRANSLATED';
+    protected const string MESSAGE_WITHOUT_PLACEHOLDER_TRANSLATED = 'MESSAGE WITHOUT PLACEHOLDER TRANSLATED';
 
-    protected const MESSAGE_WITH_LABEL_PLACEHOLDER = 'CUSTOM MESSAGE WITH FIELD LABEL: "{{fieldLabel}}"';
+    protected const string MESSAGE_WITH_LABEL_PLACEHOLDER = 'CUSTOM MESSAGE WITH FIELD LABEL: "{{fieldLabel}}"';
 
-    protected const MESSAGE_WITH_LABEL_PLACEHOLDER_REPLACED_WITH_EMPTY_LABEL = 'CUSTOM MESSAGE WITH FIELD LABEL: ""';
+    protected const string MESSAGE_WITH_LABEL_PLACEHOLDER_REPLACED_WITH_EMPTY_LABEL = 'CUSTOM MESSAGE WITH FIELD LABEL: ""';
 
-    protected const MESSAGE_WITH_LABEL_PLACEHOLDER_REPLACED_WITH_NON_EMPTY_LABEL = 'CUSTOM MESSAGE WITH FIELD LABEL: "LABEL WITH CONTENT"';
+    protected const string MESSAGE_WITH_LABEL_PLACEHOLDER_REPLACED_WITH_NON_EMPTY_LABEL = 'CUSTOM MESSAGE WITH FIELD LABEL: "LABEL WITH CONTENT"';
 
-    protected const MESSAGE_WITH_LABEL_PLACEHOLDER_REPLACED_WITH_TRIMMED_LABEL_WITH_TRAILING_WHITESPACE = 'CUSTOM MESSAGE WITH FIELD LABEL: "LABEL WITH TRAILING WHITESPACE"';
+    protected const string MESSAGE_WITH_LABEL_PLACEHOLDER_REPLACED_WITH_TRIMMED_LABEL_WITH_TRAILING_WHITESPACE = 'CUSTOM MESSAGE WITH FIELD LABEL: "LABEL WITH TRAILING WHITESPACE"';
 
-    protected const DEFAULT_REPLACEMENT_WHERE_ELEMENT_TYPE_DOES_NOT_HAVE_ITS_OWN_TRANSLATION = 'validation.element.default.MESSAGE KEY';
+    protected const string DEFAULT_REPLACEMENT_WHERE_ELEMENT_TYPE_DOES_NOT_HAVE_ITS_OWN_TRANSLATION = 'validation.element.default.MESSAGE KEY';
 
-    protected const SHORT_LABEL = 'SHORT LABEL';
+    protected const string SHORT_LABEL = 'SHORT LABEL';
 
-    protected const FORMATTED_SHORT_LABEL_WITH_DEFAULT_MESSAGE = 'SHORT LABEL: DEFAULT MESSAGE';
+    protected const string FORMATTED_SHORT_LABEL_WITH_DEFAULT_MESSAGE = 'SHORT LABEL: DEFAULT MESSAGE';
 
-    protected const UNTRANSLATED_MESSAGE = 'UNTRANSLATED MESSAGE';
+    protected const string UNTRANSLATED_MESSAGE = 'UNTRANSLATED MESSAGE';
 
-    protected const TRANSLATED_MESSAGE = 'TRANSLATED MESSAGE';
+    protected const string TRANSLATED_MESSAGE = 'TRANSLATED MESSAGE';
 
-    protected const FORMATTED_SHORT_LABEL_WITH_TRANSLATED_MESSAGE = 'SHORT LABEL: TRANSLATED MESSAGE';
+    protected const string FORMATTED_SHORT_LABEL_WITH_TRANSLATED_MESSAGE = 'SHORT LABEL: TRANSLATED MESSAGE';
 
     /**
      * @var FormElementMessageFormatter|null
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function getReplacementForIsCallable(): void
     {
         // Setup
@@ -95,9 +93,7 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $this->assertIsCallable(fn(string $messageKey) => $this->sut->getReplacementFor($messageKey));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function enableReplacementOfMessageIsCallable(): void
     {
         // Setup
@@ -109,10 +105,8 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         });
     }
 
-    /**
-     * @test
-     * @depends enableReplacementOfMessageIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('enableReplacementOfMessageIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function enableReplacementOfMessageSetsDefaultMessageProviderForMessagesWithKey(): void
     {
         // Setup
@@ -126,10 +120,8 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $this->assertSame($defaultMessageProvider, $this->sut->getReplacementFor(static::MESSAGE_KEY));
     }
 
-    /**
-     * @test
-     * @depends enableReplacementOfMessageIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('enableReplacementOfMessageIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function enableReplacementOfMessageEncapsulatesTextReplacementsIsCallable(): void
     {
         // Setup
@@ -143,10 +135,8 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $this->assertIsCallable($provider);
     }
 
-    /**
-     * @test
-     * @depends enableReplacementOfMessageEncapsulatesTextReplacementsIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('enableReplacementOfMessageEncapsulatesTextReplacementsIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function enableReplacementOfMessageEncapsulatesTextReplacementsIsCallableThatReturnsOriginalText(): void
     {
         // Setup
@@ -160,9 +150,7 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $this->assertEquals(static::DEFAULT_MESSAGE, call_user_func($provider));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageIsCallable(): void
     {
         // Setup
@@ -172,10 +160,8 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $this->assertIsCallable(fn(\Laminas\Form\ElementInterface $element, string $message, $messageKey = null): string => $this->sut->formatElementMessage($element, $message, $messageKey));
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageReturnsString(): void
     {
         // Setup
@@ -189,10 +175,8 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $this->assertIsString($formattedMessage);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageReturnsString
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageReturnsString')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageAcceptsNullElementLabels(): void
     {
         // Setup
@@ -206,10 +190,8 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $this->assertIsString($formattedMessage);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageReplacesFieldLabelPlaceholderInCustomMessage(): void
     {
         // Setup
@@ -220,13 +202,11 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $formattedMessage = $this->sut->formatElementMessage($element, static::MESSAGE_WITH_LABEL_PLACEHOLDER, static::MESSAGE_KEY);
 
         // Assert
-        $this->assertEquals(static::MESSAGE_WITH_LABEL_PLACEHOLDER_REPLACED_WITH_NON_EMPTY_LABEL, $formattedMessage);
+        $this->assertSame(static::MESSAGE_WITH_LABEL_PLACEHOLDER_REPLACED_WITH_NON_EMPTY_LABEL, $formattedMessage);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageReplacesFieldLabelPlaceholderInCustomMessage
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageReplacesFieldLabelPlaceholderInCustomMessage')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageReplacesFieldLabelPlaceholderInCustomMessageWithEmptyStringWhenLabelEmpty(): void
     {
         // Setup
@@ -237,13 +217,11 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $formattedMessage = $this->sut->formatElementMessage($element, static::MESSAGE_WITH_LABEL_PLACEHOLDER, static::MESSAGE_KEY);
 
         // Assert
-        $this->assertEquals(static::MESSAGE_WITH_LABEL_PLACEHOLDER_REPLACED_WITH_EMPTY_LABEL, $formattedMessage);
+        $this->assertSame(static::MESSAGE_WITH_LABEL_PLACEHOLDER_REPLACED_WITH_EMPTY_LABEL, $formattedMessage);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageReplacesFieldLabelPlaceholderInCustomMessage
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageReplacesFieldLabelPlaceholderInCustomMessage')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageReplacesFieldLabelPlaceholderInCustomMessageAsTrimmed(): void
     {
         //setup
@@ -255,17 +233,15 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $formattedMessage = $this->sut->formatElementMessage($element, static::MESSAGE_WITH_LABEL_PLACEHOLDER, static::MESSAGE_KEY);
 
         //Assert
-        $this->assertEquals(static::MESSAGE_WITH_LABEL_PLACEHOLDER_REPLACED_WITH_TRIMMED_LABEL_WITH_TRAILING_WHITESPACE, $formattedMessage);
+        $this->assertSame(static::MESSAGE_WITH_LABEL_PLACEHOLDER_REPLACED_WITH_TRIMMED_LABEL_WITH_TRAILING_WHITESPACE, $formattedMessage);
     }
 
-    /**
-     * @test
-     * @testdox Replaces the field label placeholder with a label that is only translated once. It is important that the
-     * replacement message is not translated a second time before having any variables replaced. This is because, at the
-     * time of writing this, there is an issue with the MissingTranslationProcessor which will change the placeholder
-     * prefix/suffix curly braces so that they no longer get correctly replaced.
-     * @depends formatElementMessageReplacesFieldLabelPlaceholderInCustomMessage
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageReplacesFieldLabelPlaceholderInCustomMessage')]
+    #[\PHPUnit\Framework\Attributes\TestDox('Replaces the field label placeholder with a label that is only translated once. It is important that the
+replacement message is not translated a second time before having any variables replaced. This is because, at the
+time of writing this, there is an issue with the MissingTranslationProcessor which will change the placeholder
+prefix/suffix curly braces so that they no longer get correctly replaced.')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageReplacesVariablesBeforeTranslating(): void
     {
         // Setup
@@ -280,10 +256,8 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $this->translator()->shouldNotHaveReceived('translate', [static::REPLACEMENT_MESSAGE_WITHOUT_PLACEHOLDER]);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageReplacesDefaultMessageWhenElementTypeIsSet(): void
     {
         // Setup
@@ -295,13 +269,11 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $formattedMessage = $this->sut->formatElementMessage($element, static::DEFAULT_MESSAGE, static::MESSAGE_KEY);
 
         // Assert
-        $this->assertEquals(static::REPLACEMENT_MESSAGE_WITHOUT_PLACEHOLDER, $formattedMessage);
+        $this->assertSame(static::REPLACEMENT_MESSAGE_WITHOUT_PLACEHOLDER, $formattedMessage);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageReplacesDefaultMessageWhenElementTypeIsSet
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageReplacesDefaultMessageWhenElementTypeIsSet')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageReplacesDefaultMessageWhenDefaultMessageIsTranslated(): void
     {
         // Setup
@@ -314,13 +286,11 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $formattedMessage = $this->sut->formatElementMessage($element, static::DEFAULT_MESSAGE_TRANSLATED, static::MESSAGE_KEY);
 
         // Assert
-        $this->assertEquals(static::REPLACEMENT_MESSAGE_WITHOUT_PLACEHOLDER, $formattedMessage);
+        $this->assertSame(static::REPLACEMENT_MESSAGE_WITHOUT_PLACEHOLDER, $formattedMessage);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageReplacesDefaultMessageWhenElementTypeIsSet
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageReplacesDefaultMessageWhenElementTypeIsSet')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageReplacesDefaultMessageIfElementTypeIsNotSet(): void
     {
         // Setup
@@ -339,10 +309,8 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $this->assertStringContainsString(static::REPLACEMENT_MESSAGE_WITHOUT_PLACEHOLDER, $formattedMessage);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageReplacesDefaultMessageWhenElementTypeIsSet
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageReplacesDefaultMessageWhenElementTypeIsSet')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageReplacesDefaultMessageIfElementTypeHasNoTranslation(): void
     {
         // Setup
@@ -358,13 +326,11 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $formattedMessage = $this->sut->formatElementMessage($element, static::DEFAULT_MESSAGE, static::MESSAGE_KEY);
 
         // Assert
-        $this->assertEquals(static::REPLACEMENT_MESSAGE_WITHOUT_PLACEHOLDER, $formattedMessage);
+        $this->assertSame(static::REPLACEMENT_MESSAGE_WITHOUT_PLACEHOLDER, $formattedMessage);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageReplacesDefaultMessageIfElementTypeIsNotSet
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageReplacesDefaultMessageIfElementTypeIsNotSet')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageUsesOriginalMessageWhenCustomValidationMessageUsed(): void
     {
         // Setup
@@ -376,13 +342,11 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $formattedMessage = $this->sut->formatElementMessage($element, static::MESSAGE_WITHOUT_PLACEHOLDER, static::MESSAGE_KEY);
 
         // Assert
-        $this->assertEquals(static::MESSAGE_WITHOUT_PLACEHOLDER, $formattedMessage);
+        $this->assertSame(static::MESSAGE_WITHOUT_PLACEHOLDER, $formattedMessage);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageUsesOriginalMessageWhenCustomValidationMessageUsed
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageUsesOriginalMessageWhenCustomValidationMessageUsed')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageTranslatesCustomMessages(): void
     {
         // Setup
@@ -397,13 +361,11 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $formattedMessage = $this->sut->formatElementMessage($element, static::MESSAGE_WITHOUT_PLACEHOLDER, static::MESSAGE_KEY);
 
         // Assert
-        $this->assertEquals(static::MESSAGE_WITHOUT_PLACEHOLDER_TRANSLATED, $formattedMessage);
+        $this->assertSame(static::MESSAGE_WITHOUT_PLACEHOLDER_TRANSLATED, $formattedMessage);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageReplacesDefaultMessageIfElementTypeIsNotSet
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageReplacesDefaultMessageIfElementTypeIsNotSet')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageUsesOriginalMessageWhenReplacementIsNotEnabledForAMessageKey(): void
     {
         // Setup
@@ -414,13 +376,11 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $formattedMessage = $this->sut->formatElementMessage($element, static::MESSAGE_WITHOUT_PLACEHOLDER, static::MESSAGE_KEY);
 
         // Assert
-        $this->assertEquals(static::MESSAGE_WITHOUT_PLACEHOLDER, $formattedMessage);
+        $this->assertSame(static::MESSAGE_WITHOUT_PLACEHOLDER, $formattedMessage);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageReplacesDefaultMessageIfElementTypeIsNotSet
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageReplacesDefaultMessageIfElementTypeIsNotSet')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageUsesOriginalMessageWhenReplacementEnabledForMessageButNoTranslationIsAvailable(): void
     {
         // Setup
@@ -432,13 +392,11 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $formattedMessage = $this->sut->formatElementMessage($element, static::DEFAULT_MESSAGE, static::MESSAGE_KEY);
 
         // Assert
-        $this->assertEquals(static::DEFAULT_MESSAGE, $formattedMessage);
+        $this->assertSame(static::DEFAULT_MESSAGE, $formattedMessage);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageReplacesDefaultMessageIfElementTypeIsNotSet
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageReplacesDefaultMessageIfElementTypeIsNotSet')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageDoesNotUseReplacementMessageContainingLabelPlaceholderIfElementLabelIsEmpty(): void
     {
         // Setup
@@ -450,13 +408,11 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $formattedMessage = $this->sut->formatElementMessage($element, static::DEFAULT_MESSAGE, static::MESSAGE_KEY);
 
         // Assert
-        $this->assertEquals(static::DEFAULT_MESSAGE, $formattedMessage);
+        $this->assertSame(static::DEFAULT_MESSAGE, $formattedMessage);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageReplacesDefaultMessageIfElementTypeIsNotSet
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageReplacesDefaultMessageIfElementTypeIsNotSet')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageDoesNotUseReplacementMessageContainingLabelPlaceholderIfElementLabelContainsHtml(): void
     {
         // Setup
@@ -468,13 +424,11 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $formattedMessage = $this->sut->formatElementMessage($element, static::DEFAULT_MESSAGE, static::MESSAGE_KEY);
 
         // Assert
-        $this->assertEquals(static::DEFAULT_MESSAGE, $formattedMessage);
+        $this->assertSame(static::DEFAULT_MESSAGE, $formattedMessage);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageDoesNotUseReplacementMessageContainingLabelPlaceholderIfElementLabelContainsHtml
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageDoesNotUseReplacementMessageContainingLabelPlaceholderIfElementLabelContainsHtml')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageDoesNotUseReplacementMessageContainingLabelPlaceholderIfElementLabelContainsHtmlAfterBeingTranslated(): void
     {
         // Setup
@@ -487,13 +441,11 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $formattedMessage = $this->sut->formatElementMessage($element, static::DEFAULT_MESSAGE, static::MESSAGE_KEY);
 
         // Assert
-        $this->assertEquals(static::DEFAULT_MESSAGE, $formattedMessage);
+        $this->assertSame(static::DEFAULT_MESSAGE, $formattedMessage);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageReturnsString
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageReturnsString')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageReturnsShortLabel(): void
     {
         // Setup
@@ -504,13 +456,11 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $formattedMessage = $this->sut->formatElementMessage($element, static::DEFAULT_MESSAGE, static::MESSAGE_KEY);
 
         // Assert
-        $this->assertEquals(static::FORMATTED_SHORT_LABEL_WITH_DEFAULT_MESSAGE, $formattedMessage);
+        $this->assertSame(static::FORMATTED_SHORT_LABEL_WITH_DEFAULT_MESSAGE, $formattedMessage);
     }
 
-    /**
-     * @test
-     * @depends formatElementMessageReturnsShortLabel
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('formatElementMessageReturnsShortLabel')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function formatElementMessageReturnsShortLabelWithTranslatedMessage(): void
     {
         // Setup
@@ -522,7 +472,7 @@ class FormElementMessageFormatterTest extends MockeryTestCase
         $formattedMessage = $this->sut->formatElementMessage($element, static::UNTRANSLATED_MESSAGE, static::MESSAGE_KEY);
 
         // Assert
-        $this->assertEquals(static::FORMATTED_SHORT_LABEL_WITH_TRANSLATED_MESSAGE, $formattedMessage);
+        $this->assertSame(static::FORMATTED_SHORT_LABEL_WITH_TRANSLATED_MESSAGE, $formattedMessage);
     }
 
     protected function enableReplacementOfMessage(string $messageKey, string $messageDefault): object
@@ -539,7 +489,7 @@ class FormElementMessageFormatterTest extends MockeryTestCase
      *
      * @param string|null $type
      */
-    protected function replacementMessageMatching(string $messageKey, string $type = null): Matcher
+    protected function replacementMessageMatching(string $messageKey, ?string $type = null): Matcher
     {
         if (null === $type) {
             $type = '.+';
@@ -556,7 +506,7 @@ class FormElementMessageFormatterTest extends MockeryTestCase
 
     protected function setUpSut(ContainerInterface $serviceLocator): FormElementMessageFormatter
     {
-        return (new FormElementMessageFormatterFactory())->__invoke($serviceLocator, FormElementMessageFormatter::class);
+        return new FormElementMessageFormatterFactory()->__invoke($serviceLocator, FormElementMessageFormatter::class);
     }
 
     /**

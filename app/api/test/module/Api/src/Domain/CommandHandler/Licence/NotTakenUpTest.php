@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
  * @package Dvsa\OlcsTest\Api\Domain\CommandHandler\Licence
  * @author Josh Curtis <josh.curtis@valtech.co.uk>
  */
-class NotTakenUpTest extends AbstractCommandHandlerTestCase
+final class NotTakenUpTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

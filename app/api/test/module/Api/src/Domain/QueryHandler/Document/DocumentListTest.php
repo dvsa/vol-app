@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use Doctrine\ORM\Query;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Document\DocumentList::class)]
-class DocumentListTest extends QueryHandlerTestCase
+final class DocumentListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -38,11 +38,11 @@ class DocumentListTest extends QueryHandlerTestCase
             ->shouldReceive('fetchCount')->once()->with($query)->andReturn(888)
             ->shouldReceive('hasRows')->once()->andReturnUsing(
                 function (Qry $query) {
-                    static::assertNull($query->getCategory());
-                    static::assertEquals([], $query->getDocumentSubCategory());
-                    static::assertNull($query->getIsExternal());
-                    static::assertNull($query->getShowDocs());
-                    static::assertNull($query->getFormat());
+                    $this->assertNull($query->getCategory());
+                    $this->assertEquals([], $query->getDocumentSubCategory());
+                    $this->assertNull($query->getIsExternal());
+                    $this->assertNull($query->getShowDocs());
+                    $this->assertNull($query->getFormat());
 
                     return true;
                 }
@@ -75,11 +75,11 @@ class DocumentListTest extends QueryHandlerTestCase
             ->shouldReceive('fetchCount')->once()->with($query)->andReturn(888)
             ->shouldReceive('hasRows')->once()->andReturnUsing(
                 function (Qry $query) {
-                    static::assertNull($query->getCategory());
-                    static::assertEquals([], $query->getDocumentSubCategory());
-                    static::assertNull($query->getIsExternal());
-                    static::assertNull($query->getShowDocs());
-                    static::assertNull($query->getFormat());
+                    $this->assertNull($query->getCategory());
+                    $this->assertEquals([], $query->getDocumentSubCategory());
+                    $this->assertNull($query->getIsExternal());
+                    $this->assertNull($query->getShowDocs());
+                    $this->assertNull($query->getFormat());
 
                     return true;
                 }

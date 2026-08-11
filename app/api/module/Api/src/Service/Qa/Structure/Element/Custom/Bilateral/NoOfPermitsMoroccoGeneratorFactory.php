@@ -18,7 +18,7 @@ class NoOfPermitsMoroccoGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): NoOfPermitsMoroccoGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): NoOfPermitsMoroccoGenerator
     {
         return new NoOfPermitsMoroccoGenerator(
             $container->get('QaBilateralNoOfPermitsMoroccoElementFactory')

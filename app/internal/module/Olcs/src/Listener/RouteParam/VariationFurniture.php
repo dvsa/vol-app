@@ -96,7 +96,7 @@ class VariationFurniture implements ListenerAggregateInterface, FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): VariationFurniture
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): VariationFurniture
     {
         $this->setViewHelperManager($container->get('ViewHelperManager'));
         $this->setQuerySender($container->get('QuerySender'));

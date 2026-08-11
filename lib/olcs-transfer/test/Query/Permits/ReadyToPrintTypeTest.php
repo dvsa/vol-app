@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Permits;
 
 use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintType;
@@ -7,11 +9,11 @@ use Dvsa\Olcs\Transfer\Query\Permits\ReadyToPrintType;
 /**
  * ReadyToPrintType Test
  */
-class ReadyToPrintTypeTest extends \PHPUnit\Framework\TestCase
+final class ReadyToPrintTypeTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {
         $sut = ReadyToPrintType::create([]);
-        static::assertEquals([], $sut->getArrayCopy());
+        $this->assertEquals([], $sut->getArrayCopy());
     }
 }

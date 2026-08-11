@@ -25,7 +25,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DeletePeopleTest extends AbstractCommandHandlerTestCase
+final class DeletePeopleTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -84,13 +84,13 @@ class DeletePeopleTest extends AbstractCommandHandlerTestCase
         $this->expectedSideEffect(
             \Dvsa\Olcs\Transfer\Command\OrganisationPerson\DeleteList::class,
             ['ids' => [179]],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('179 DELETED')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('179 DELETED')
         );
 
         $this->expectedSideEffect(
             \Dvsa\Olcs\Transfer\Command\OrganisationPerson\DeleteList::class,
             ['ids' => [1234]],
-            (new \Dvsa\Olcs\Api\Domain\Command\Result())->addMessage('1234 DELETED')
+            new \Dvsa\Olcs\Api\Domain\Command\Result()->addMessage('1234 DELETED')
         );
 
         $this->expectedSideEffect(
@@ -132,7 +132,7 @@ class DeletePeopleTest extends AbstractCommandHandlerTestCase
             new \Dvsa\Olcs\Api\Entity\Person\Person()
         );
         $appOrgPerson1->setId(179);
-        $appOrgPerson1->setPerson((new \Dvsa\Olcs\Api\Entity\Person\Person())->setId(79));
+        $appOrgPerson1->setPerson(new \Dvsa\Olcs\Api\Entity\Person\Person()->setId(79));
         $appOrgPerson1->setAction(\Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson::ACTION_ADD);
 
         $this->repoMap['ApplicationOrganisationPerson']->shouldReceive('fetchForApplicationAndPerson')
@@ -201,7 +201,7 @@ class DeletePeopleTest extends AbstractCommandHandlerTestCase
             new \Dvsa\Olcs\Api\Entity\Person\Person()
         );
         $appOrgPerson1->setId(179);
-        $appOrgPerson1->setPerson((new \Dvsa\Olcs\Api\Entity\Person\Person())->setId(79));
+        $appOrgPerson1->setPerson(new \Dvsa\Olcs\Api\Entity\Person\Person()->setId(79));
         $appOrgPerson1->setAction(\Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson::ACTION_DELETE);
 
         $this->repoMap['ApplicationOrganisationPerson']->shouldReceive('fetchForApplicationAndPerson')

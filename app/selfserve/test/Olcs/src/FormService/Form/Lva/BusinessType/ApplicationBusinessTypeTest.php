@@ -14,7 +14,7 @@ use Laminas\Form\Element;
 use OlcsTest\FormService\Form\Lva\Traits\ButtonsAlterations;
 use LmcRbacMvc\Service\AuthorizationService;
 
-class ApplicationBusinessTypeTest extends MockeryTestCase
+final class ApplicationBusinessTypeTest extends MockeryTestCase
 {
     use ButtonsAlterations;
 
@@ -29,16 +29,15 @@ class ApplicationBusinessTypeTest extends MockeryTestCase
 
     private $guidanceHelper;
 
-    private $authService;
-
+    #[\Override]
     public function setUp(): void
     {
         $this->fsm = m::mock(\Common\FormService\FormServiceManager::class)->makePartial();
         $this->fh = m::mock(FormHelperService::class)->makePartial();
-        $this->authService = m::mock(AuthorizationService::class);
+        $authService = m::mock(AuthorizationService::class);
         $this->guidanceHelper = m::mock(\Common\Service\Helper\GuidanceHelperService::class);
 
-        $this->sut = new ApplicationBusinessType($this->fh, $this->authService, $this->guidanceHelper, $this->fsm);
+        $this->sut = new ApplicationBusinessType($this->fh, $authService, $this->guidanceHelper, $this->fsm);
     }
 
     public function testGetFormWithoutInforceLicencesOrWithNoSubmittedLicenceApplication(): void

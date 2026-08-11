@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Bilateral;
 
 use Common\Form\QaForm;
@@ -14,11 +16,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StandardAndCabotageIsValidHandlerTest extends MockeryTestCase
+final class StandardAndCabotageIsValidHandlerTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValid')]
     public function testIsValid($storedAnswerValue, $submittedAnswerValue, $warningVisibleValue, $expectedIsValid): void
     {
         $questionFieldsetData = [
@@ -56,49 +56,47 @@ class StandardAndCabotageIsValidHandlerTest extends MockeryTestCase
 
 
     /**
-     * @return (bool|null|string)[][]
+     * @return \Iterator<(int | string), array<(bool | string | null)>>
      *
      * @psalm-return array{'stored answer is null, valid answer selected': list{null, 'qanda.bilaterals.cabotage.answer.cabotage-only', 'none', true}, 'submitted answer is invalid': list{'qanda.bilaterals.cabotage.answer.standard-and-cabotage', '', 'none', true}, 'stored answer equals submitted answer, warning not visible': list{'qanda.bilaterals.cabotage.answer.standard-and-cabotage', 'qanda.bilaterals.cabotage.answer.standard-and-cabotage', 'none', true}, 'stored answer equals submitted answer, warning visible': list{'qanda.bilaterals.cabotage.answer.standard-and-cabotage', 'qanda.bilaterals.cabotage.answer.standard-and-cabotage', 'qanda.bilaterals.cabotage.answer.standard-only', true}, 'stored answer different to submitted answer, warning not visible': list{'qanda.bilaterals.cabotage.answer.standard-and-cabotage', 'qanda.bilaterals.cabotage.answer.standard-only', 'none', false}, 'stored answer different to submitted answer, warning visible': list{'qanda.bilaterals.cabotage.answer.standard-and-cabotage', 'qanda.bilaterals.cabotage.answer.standard-only', 'qanda.bilaterals.cabotage.answer.standard-only', true}}
      */
-    public function dpIsValid(): array
+    public static function dpIsValid(): \Iterator
     {
-        return [
-            'stored answer is null, valid answer selected' => [
-                null,
-                StandardAndCabotageFieldsetPopulator::ANSWER_CABOTAGE_ONLY,
-                'none',
-                true
-            ],
-            'submitted answer is invalid' => [
-                StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_AND_CABOTAGE,
-                '',
-                'none',
-                true
-            ],
-            'stored answer equals submitted answer, warning not visible' => [
-                StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_AND_CABOTAGE,
-                StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_AND_CABOTAGE,
-                'none',
-                true
-            ],
-            'stored answer equals submitted answer, warning visible' => [
-                StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_AND_CABOTAGE,
-                StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_AND_CABOTAGE,
-                StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_ONLY,
-                true
-            ],
-            'stored answer different to submitted answer, warning not visible' => [
-                StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_AND_CABOTAGE,
-                StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_ONLY,
-                'none',
-                false
-            ],
-            'stored answer different to submitted answer, warning visible' => [
-                StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_AND_CABOTAGE,
-                StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_ONLY,
-                StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_ONLY,
-                true
-            ],
+        yield 'stored answer is null, valid answer selected' => [
+            null,
+            StandardAndCabotageFieldsetPopulator::ANSWER_CABOTAGE_ONLY,
+            'none',
+            true
+        ];
+        yield 'submitted answer is invalid' => [
+            StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_AND_CABOTAGE,
+            '',
+            'none',
+            true
+        ];
+        yield 'stored answer equals submitted answer, warning not visible' => [
+            StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_AND_CABOTAGE,
+            StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_AND_CABOTAGE,
+            'none',
+            true
+        ];
+        yield 'stored answer equals submitted answer, warning visible' => [
+            StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_AND_CABOTAGE,
+            StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_AND_CABOTAGE,
+            StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_ONLY,
+            true
+        ];
+        yield 'stored answer different to submitted answer, warning not visible' => [
+            StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_AND_CABOTAGE,
+            StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_ONLY,
+            'none',
+            false
+        ];
+        yield 'stored answer different to submitted answer, warning visible' => [
+            StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_AND_CABOTAGE,
+            StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_ONLY,
+            StandardAndCabotageFieldsetPopulator::ANSWER_STANDARD_ONLY,
+            true
         ];
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Ecmt;
 
 use Common\Service\Qa\Custom\Ecmt\RestrictedCountriesFieldsetPopulator;
@@ -17,11 +19,9 @@ use Laminas\Form\Form;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class RestrictedCountriesFieldsetPopulatorTest extends MockeryTestCase
+final class RestrictedCountriesFieldsetPopulatorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestPopulate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestPopulate')]
     public function testPopulate($options, $expectedValueOptions, $expectedSetValue): void
     {
         $fieldsetName = 'fieldset12';
@@ -90,75 +90,73 @@ class RestrictedCountriesFieldsetPopulatorTest extends MockeryTestCase
     }
 
     /**
-     * @return ((((bool|string)[]|bool|string)[]|bool|null|string)[]|null|string)[][]
+     * @return \Iterator<(int | string), array<(array<(array<(array<(bool | string)> | bool | string)> | bool | string | null)> | string | null)>>
      *
      * @psalm-return list{array{options: array{yesNo: null, questionKey: 'question.key', countries: array<never, never>}, expectedValueOptions: array<never, never>, expectedSetValue: null}, array{options: array{yesNo: false, questionKey: 'question.key', countries: array<never, never>}, expectedValueOptions: array<never, never>, expectedSetValue: 'N'}, array{options: array{yesNo: true, questionKey: 'question.key', countries: list{array{code: 'GR', labelTranslationKey: 'Greece', checked: true}, array{code: 'HU', labelTranslationKey: 'Hungary', checked: false}, array{code: 'IT', labelTranslationKey: 'Italy', checked: true}}}, expectedValueOptions: list{array{value: 'GR', label: 'Greece', selected: true, attributes: array{id: 'RestrictedCountriesList'}}, array{value: 'HU', label: 'Hungary', selected: false}, array{value: 'IT', label: 'Italy', selected: true}}, expectedSetValue: 'Y'}}
      */
-    public function dpTestPopulate(): array
+    public static function dpTestPopulate(): \Iterator
     {
-        return [
-            [
-                'options' => [
-                    'yesNo' => null,
-                    'questionKey' => 'question.key',
-                    'countries' => [],
-                ],
-                'expectedValueOptions' => [],
-                'expectedSetValue' => null,
+        yield [
+            'options' => [
+                'yesNo' => null,
+                'questionKey' => 'question.key',
+                'countries' => [],
             ],
-            [
-                'options' => [
-                    'yesNo' => false,
-                    'questionKey' => 'question.key',
-                    'countries' => [],
-                ],
-                'expectedValueOptions' => [],
-                'expectedSetValue' => 'N',
+            'expectedValueOptions' => [],
+            'expectedSetValue' => null,
+        ];
+        yield [
+            'options' => [
+                'yesNo' => false,
+                'questionKey' => 'question.key',
+                'countries' => [],
             ],
-            [
-                'options' => [
-                    'yesNo' => true,
-                    'questionKey' => 'question.key',
-                    'countries' => [
-                        [
-                            'code' => 'GR',
-                            'labelTranslationKey' => 'Greece',
-                            'checked' => true
-                        ],
-                        [
-                            'code' => 'HU',
-                            'labelTranslationKey' => 'Hungary',
-                            'checked' => false
-                        ],
-                        [
-                            'code' => 'IT',
-                            'labelTranslationKey' => 'Italy',
-                            'checked' => true
-                        ],
-                    ],
-                ],
-                'expectedValueOptions' => [
+            'expectedValueOptions' => [],
+            'expectedSetValue' => 'N',
+        ];
+        yield [
+            'options' => [
+                'yesNo' => true,
+                'questionKey' => 'question.key',
+                'countries' => [
                     [
-                        'value' => 'GR',
-                        'label' => 'Greece',
-                        'selected' => true,
-                        'attributes' => [
-                            'id' => 'RestrictedCountriesList',
-                        ],
+                        'code' => 'GR',
+                        'labelTranslationKey' => 'Greece',
+                        'checked' => true
                     ],
                     [
-                        'value' => 'HU',
-                        'label' => 'Hungary',
-                        'selected' => false
+                        'code' => 'HU',
+                        'labelTranslationKey' => 'Hungary',
+                        'checked' => false
                     ],
                     [
-                        'value' => 'IT',
-                        'label' => 'Italy',
-                        'selected' => true
+                        'code' => 'IT',
+                        'labelTranslationKey' => 'Italy',
+                        'checked' => true
                     ],
                 ],
-                'expectedSetValue' => 'Y',
             ],
+            'expectedValueOptions' => [
+                [
+                    'value' => 'GR',
+                    'label' => 'Greece',
+                    'selected' => true,
+                    'attributes' => [
+                        'id' => 'RestrictedCountriesList',
+                    ],
+                ],
+                [
+                    'value' => 'HU',
+                    'label' => 'Hungary',
+                    'selected' => false
+                ],
+                [
+                    'value' => 'IT',
+                    'label' => 'Italy',
+                    'selected' => true
+                ],
+            ],
+            'expectedSetValue' => 'Y',
         ];
     }
 }

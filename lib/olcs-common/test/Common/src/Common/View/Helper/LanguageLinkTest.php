@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper;
 
 use Common\Preference\Language;
@@ -8,15 +10,13 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\View\Helper\LanguageLink;
 
-class LanguageLinkTest extends MockeryTestCase
+final class LanguageLinkTest extends MockeryTestCase
 {
     public $languagePref;
     /**
      * @var LanguageLink
      */
     protected $viewHelper;
-
-    protected $sm;
 
     #[\Override]
     protected function setUp(): void
@@ -26,7 +26,7 @@ class LanguageLinkTest extends MockeryTestCase
 
         $this->viewHelper = new LanguageLink($languagePref);
 
-        $this->sm = new ServiceManager();
+        $sm = new ServiceManager();
     }
 
     public function testInvoke(): void

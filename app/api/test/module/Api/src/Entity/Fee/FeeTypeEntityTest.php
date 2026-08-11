@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
  *
  * Initially auto-generated but won't be overridden
  */
-class FeeTypeEntityTest extends EntityTester
+final class FeeTypeEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -57,23 +57,21 @@ class FeeTypeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->getCalculatedBundleValues());
     }
 
-    public static function bundleDataProvider(): array
+    public static function bundleDataProvider(): \Iterator
     {
-        return [
+        yield [
+            '10.00',
+            null,
             [
-                '10.00',
-                null,
-                [
-                    'displayValue' => '10.00',
-                ]
-            ],
+                'displayValue' => '10.00',
+            ]
+        ];
+        yield [
+            null,
+            '50.00',
             [
-                null,
-                '50.00',
-                [
-                    'displayValue' => '50.00',
-                ]
-            ],
+                'displayValue' => '50.00',
+            ]
         ];
     }
 
@@ -89,15 +87,13 @@ class FeeTypeEntityTest extends EntityTester
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function countryCodeProvider(): array
+    public static function countryCodeProvider(): \Iterator
     {
-        return [
-            ['Y', 'NI'],
-            ['N', 'GB'],
-            [null, 'GB'],
-        ];
+        yield ['Y', 'NI'];
+        yield ['N', 'GB'];
+        yield [null, 'GB'];
     }
 
     public function testIsShowQuantity(): void

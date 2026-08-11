@@ -74,7 +74,7 @@ abstract class AbstractSubmissionSectionTestCase extends MockeryTestCase
         }
     }
 
-    abstract public static function sectionTestProvider(): array;
+    abstract public static function sectionTestProvider(): iterable;
 
     /**
      * Return a case attached to an application

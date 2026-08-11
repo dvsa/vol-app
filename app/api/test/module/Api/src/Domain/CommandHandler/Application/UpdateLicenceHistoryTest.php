@@ -26,7 +26,7 @@ use Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class UpdateLicenceHistoryTest extends AbstractCommandHandlerTestCase
+final class UpdateLicenceHistoryTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

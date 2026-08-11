@@ -20,8 +20,9 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CommunityLicTest extends RepositoryTestCase
+final class CommunityLicTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(CommunityLicRepo::class);

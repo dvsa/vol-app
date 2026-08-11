@@ -2,6 +2,8 @@
 
 namespace Dvsa\Olcs\Api\Entity\Traits;
 
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * SoftDeletable Trait
  */
@@ -11,9 +13,8 @@ trait SoftDeletableTrait
      * Deleted date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="deleted_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'deleted_date', nullable: true)]
     protected $deletedDate;
 
     /**
@@ -44,5 +45,15 @@ trait SoftDeletableTrait
         }
 
         return $this->deletedDate;
+    }
+
+    /**
+     * Check whether the record is soft-deleted
+     *
+     * @return bool
+     */
+    public function isDeleted()
+    {
+        return $this->deletedDate !== null;
     }
 }

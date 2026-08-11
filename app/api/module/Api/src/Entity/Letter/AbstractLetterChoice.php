@@ -21,20 +21,13 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="letter_choice",
- *    indexes={
- *        @ORM\Index(name="ix_letter_choice_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_letter_choice_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="uk_letter_choice_key", columns={"choice_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_letter_choice_key", columns={"choice_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'letter_choice')]
+#[ORM\Index(name: 'ix_letter_choice_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_choice_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\UniqueConstraint(name: 'uk_letter_choice_key', columns: ['choice_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLetterChoice implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -47,97 +40,87 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Business identifier e.g. time_limited_interim
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="choice_key", length=100, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'choice_key', length: 100, nullable: false)]
     protected $choiceKey = '';
 
     /**
      * Display label for the modal
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="label", length=255, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'label', length: 255, nullable: false)]
     protected $label = '';
 
     /**
      * UI grouping label
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="group_label", length=255, nullable=false, options={"default": "Other letter choices"})
      */
+    #[ORM\Column(type: 'string', name: 'group_label', length: 255, nullable: false, options: ['default' => 'Other letter choices'])]
     protected $groupLabel = 'Other letter choices';
 
     /**
      * checkbox or radio
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="input_type", length=20, nullable=false, options={"default": "checkbox"})
      */
+    #[ORM\Column(type: 'string', name: 'input_type', length: 20, nullable: false, options: ['default' => 'checkbox'])]
     protected $inputType = 'checkbox';
 
     /**
      * Display order
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="display_order", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'integer', name: 'display_order', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $displayOrder = 0;
 
     /**
      * Is active
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_active", nullable=false, options={"default": 1})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_active', nullable: false, options: ['default' => 1])]
     protected $isActive = 1;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -161,7 +144,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param int $id new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setId($id)
     {
@@ -185,7 +168,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -209,7 +192,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -233,7 +216,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param string $choiceKey new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setChoiceKey($choiceKey)
     {
@@ -257,7 +240,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param string $label new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setLabel($label)
     {
@@ -281,7 +264,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param string $groupLabel new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setGroupLabel($groupLabel)
     {
@@ -305,7 +288,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param string $inputType new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setInputType($inputType)
     {
@@ -329,7 +312,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param int $displayOrder new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setDisplayOrder($displayOrder)
     {
@@ -353,7 +336,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param bool $isActive new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setIsActive($isActive)
     {
@@ -377,7 +360,7 @@ abstract class AbstractLetterChoice implements BundleSerializableInterface, Json
      *
      * @param int $version new value being set
      *
-     * @return LetterChoice
+     * @return static
      */
     public function setVersion($version)
     {

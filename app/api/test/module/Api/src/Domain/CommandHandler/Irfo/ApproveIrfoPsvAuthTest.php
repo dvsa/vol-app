@@ -22,7 +22,7 @@ use Mockery as m;
 /**
  * Approve Irfo Psv Auth Test
  */
-class ApproveIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
+final class ApproveIrfoPsvAuthTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Common\Form\Elements\InputFilters\SingleCheckbox;
@@ -16,7 +18,7 @@ use Laminas\Form\ElementInterface;
 use Laminas\Form\Fieldset;
 use Laminas\Http\Request;
 
-class FinancialHistoryTest extends MockeryTestCase
+final class FinancialHistoryTest extends MockeryTestCase
 {
     public $translator;
     /** @var  FinancialHistory */
@@ -25,15 +27,12 @@ class FinancialHistoryTest extends MockeryTestCase
     /** @var FormHelperService|m\Mock */
     protected $formHelper;
 
-    /** @var FormServiceManager|m\Mock */
-    protected $fsm;
-
     #[\Override]
     protected function setUp(): void
     {
         $this->formHelper = m::mock(FormHelperService::class);
         $this->translator = m::mock(TranslationHelperService::class);
-        $this->fsm = m::mock(FormServiceManager::class)->makePartial();
+        $fsm = m::mock(FormServiceManager::class)->makePartial();
 
         $this->sut = new FinancialHistory($this->formHelper, $this->translator);
     }
@@ -55,10 +54,9 @@ class FinancialHistoryTest extends MockeryTestCase
     }
 
     /**
-     * @dataProvider lvaDataProvider
-     *
      * @param $lva
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('lvaDataProvider')]
     public function testGetFormWithNiFlagSetToY($lva): void
     {
         /** @var Request|m\Mock $request */
@@ -97,22 +95,20 @@ class FinancialHistoryTest extends MockeryTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function lvaDataProvider()
+    public static function lvaDataProvider(): \Iterator
     {
-        return [
-            ['variation'],
-            ['application'],
-        ];
+        yield ['variation'];
+        yield ['application'];
     }
 
     /**
-     * @dataProvider provideDirectorChangeWordingVariations
      *
      * @param string $organisationType one of RefData::ORG_TYPE_*
      * @param string $personDescription the type of person ("Person", "Director", "Partner")
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideDirectorChangeWordingVariations')]
     public function testGetFormForDirectorChange($organisationType, $personDescription): void
     {
         /** @var Request|m\Mock $request */
@@ -152,20 +148,18 @@ class FinancialHistoryTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return list{list{'org_t_rc', 'director'}, list{'org_t_st', 'person'}, list{'org_t_llp', 'partner'}, list{'org_t_p', 'partner'}, list{'org_t_pa', 'person'}, list{'org_t_ir', 'person'}, list{'anything-else', 'person'}}
      */
-    public function provideDirectorChangeWordingVariations(): array
+    public static function provideDirectorChangeWordingVariations(): \Iterator
     {
-        return [
-            [RefData::ORG_TYPE_REGISTERED_COMPANY, 'director'],
-            [RefData::ORG_TYPE_SOLE_TRADER, 'person'],
-            [RefData::ORG_TYPE_LLP, 'partner'],
-            [RefData::ORG_TYPE_PARTNERSHIP, 'partner'],
-            [RefData::ORG_TYPE_OTHER, 'person'],
-            [RefData::ORG_TYPE_IRFO, 'person'],
-            ['anything-else', 'person'],
-        ];
+        yield [RefData::ORG_TYPE_REGISTERED_COMPANY, 'director'];
+        yield [RefData::ORG_TYPE_SOLE_TRADER, 'person'];
+        yield [RefData::ORG_TYPE_LLP, 'partner'];
+        yield [RefData::ORG_TYPE_PARTNERSHIP, 'partner'];
+        yield [RefData::ORG_TYPE_OTHER, 'person'];
+        yield [RefData::ORG_TYPE_IRFO, 'person'];
+        yield ['anything-else', 'person'];
     }
 }

@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * Complaint Mapper Test
  */
-class ComplaintTest extends MockeryTestCase
+final class ComplaintTest extends MockeryTestCase
 {
     /**
      *
@@ -25,79 +25,77 @@ class ComplaintTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // add
+        // add
+        yield [
             [
-                [
+                'case' => 24,
+                'complainantContactDetails' => [
+                    'person' => [
+                        'forename' => 'Joe',
+                        'familyName' => 'Smith'
+                    ]
+                ],
+                'someEntity' => [
+                    'id' => 44
+                ]
+            ],
+            [
+                'fields' => [
                     'case' => 24,
+                    'complainantForename' => 'Joe',
+                    'complainantFamilyName' => 'Smith',
+                    'someEntity' => 44,
                     'complainantContactDetails' => [
                         'person' => [
                             'forename' => 'Joe',
                             'familyName' => 'Smith'
                         ]
                     ],
-                    'someEntity' => [
-                        'id' => 44
+                ],
+                'base' => [
+                    'case' => 24
+                ]
+            ]
+        ];
+        // edit
+        yield [
+            [
+                'id' => 99,
+                'version' => 3,
+                'case' => 24,
+                'complainantContactDetails' => [
+                    'person' => [
+                        'forename' => 'Joe',
+                        'familyName' => 'Smith'
                     ]
                 ],
-                [
-                    'fields' => [
-                        'case' => 24,
-                        'complainantForename' => 'Joe',
-                        'complainantFamilyName' => 'Smith',
-                        'someEntity' => 44,
-                        'complainantContactDetails' => [
-                            'person' => [
-                                'forename' => 'Joe',
-                                'familyName' => 'Smith'
-                            ]
-                        ],
-                    ],
-                    'base' => [
-                        'case' => 24
-                    ]
+                'someEntity' => [
+                    'id' => 44
                 ]
             ],
-            // edit
             [
-                [
+                'fields' => [
                     'id' => 99,
                     'version' => 3,
                     'case' => 24,
+                    'complainantForename' => 'Joe',
+                    'complainantFamilyName' => 'Smith',
+                    'someEntity' => 44,
                     'complainantContactDetails' => [
                         'person' => [
                             'forename' => 'Joe',
                             'familyName' => 'Smith'
                         ]
                     ],
-                    'someEntity' => [
-                        'id' => 44
-                    ]
                 ],
-                [
-                    'fields' => [
-                        'id' => 99,
-                        'version' => 3,
-                        'case' => 24,
-                        'complainantForename' => 'Joe',
-                        'complainantFamilyName' => 'Smith',
-                        'someEntity' => 44,
-                        'complainantContactDetails' => [
-                            'person' => [
-                                'forename' => 'Joe',
-                                'familyName' => 'Smith'
-                            ]
-                        ],
-                    ],
-                    'base' => [
-                        'case' => 24,
-                        'id' => 99,
-                        'version' => 3,
-                    ]
+                'base' => [
+                    'case' => 24,
+                    'id' => 99,
+                    'version' => 3,
                 ]
-            ],
+            ]
         ];
     }
 

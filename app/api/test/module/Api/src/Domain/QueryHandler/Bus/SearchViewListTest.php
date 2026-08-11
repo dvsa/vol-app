@@ -17,7 +17,7 @@ use Mockery as m;
 /**
  * SearchViewList Test
  */
-class SearchViewListTest extends QueryHandlerTestCase
+final class SearchViewListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -61,7 +61,7 @@ class SearchViewListTest extends QueryHandlerTestCase
             ->andReturn(count($result));
 
         $this->assertEquals(
-            ['result' => (new ResultList($result, []))->serialize(), 'count' => count($result)],
+            ['result' => new ResultList($result, [])->serialize(), 'count' => count($result)],
             $this->sut->handleQuery($listQuery)
         );
     }

@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Command\Licence\EnqueueContinuationNotSought;
  *
  * @author Alex Peshkov <alex.peshkov@vltech.co.uk>
  */
-class EnqueueContinuationNotSoughtTest extends \PHPUnit\Framework\TestCase
+final class EnqueueContinuationNotSoughtTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

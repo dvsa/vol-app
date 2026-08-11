@@ -27,7 +27,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData as RefDataEntity;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class CreateOppositionTest extends AbstractCommandHandlerTestCase
+final class CreateOppositionTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

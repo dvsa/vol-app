@@ -14,7 +14,7 @@ use Mockery as m;
 /**
  * ByLicenceRoute Test
  */
-class ByLicenceRouteTest extends QueryHandlerTestCase
+final class ByLicenceRouteTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

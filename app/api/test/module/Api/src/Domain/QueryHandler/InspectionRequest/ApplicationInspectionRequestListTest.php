@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Application as ApplicationRepo;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class ApplicationInspectionRequestListTest extends QueryHandlerTestCase
+final class ApplicationInspectionRequestListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

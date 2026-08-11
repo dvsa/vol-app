@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\System\Language as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class LanguageEntityTest extends EntityTester
+final class LanguageEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

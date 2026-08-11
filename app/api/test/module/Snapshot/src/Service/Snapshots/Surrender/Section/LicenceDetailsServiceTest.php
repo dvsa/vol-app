@@ -15,11 +15,12 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\I18n\Translator\TranslatorInterface;
 
-class LicenceDetailsServiceTest extends MockeryTestCase
+final class LicenceDetailsServiceTest extends MockeryTestCase
 {
     /** @var LicenceDetailsService review service */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class);

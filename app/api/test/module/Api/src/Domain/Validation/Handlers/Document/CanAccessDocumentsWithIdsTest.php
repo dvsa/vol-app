@@ -9,7 +9,7 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Document\CanAccessDocumentsWithIds;
 
-class CanAccessDocumentsWithIdsTest extends AbstractHandlerTestCase
+final class CanAccessDocumentsWithIdsTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessDocumentsWithIdsTest
@@ -36,7 +36,7 @@ class CanAccessDocumentsWithIdsTest extends AbstractHandlerTestCase
         $this->setIsValid('canAccessDocument', [77], true);
         $this->setIsValid('canAccessDocument', [78], true);
 
-        $this->assertSame(true, $this->sut->isValid($dto));
+        $this->assertTrue($this->sut->isValid($dto));
     }
 
     /**
@@ -52,6 +52,6 @@ class CanAccessDocumentsWithIdsTest extends AbstractHandlerTestCase
         $this->setIsValid('canAccessDocument', [77], false);
         $this->setIsValid('canAccessDocument', [78], true);
 
-        $this->assertSame(false, $this->sut->isValid($dto));
+        $this->assertFalse($this->sut->isValid($dto));
     }
 }

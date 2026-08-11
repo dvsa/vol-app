@@ -27,7 +27,7 @@ use Dvsa\Olcs\Api\Domain\Command\Application\UpdateApplicationCompletion as Upda
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class CreatePreviousConvictionTest extends AbstractCommandHandlerTestCase
+final class CreatePreviousConvictionTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

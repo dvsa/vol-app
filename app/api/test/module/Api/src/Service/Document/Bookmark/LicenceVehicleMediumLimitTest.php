@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\LicenceVehicleMediumLimit;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class LicenceVehicleMediumLimitTest extends \PHPUnit\Framework\TestCase
+final class LicenceVehicleMediumLimitTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {

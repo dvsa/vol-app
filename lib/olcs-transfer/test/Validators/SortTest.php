@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Validators;
 
 use Dvsa\Olcs\Transfer\Validators\Sort;
 
-class SortTest extends \PHPUnit\Framework\TestCase
+final class SortTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 
@@ -13,26 +15,22 @@ class SortTest extends \PHPUnit\Framework\TestCase
         $this->sut = new Sort();
     }
 
-    /**
-     * @dataProvider dataProviderIsValid
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dataProviderIsValid')]
     public function testIsValid($value, $expected)
     {
         $this->assertEquals($expected, $this->sut->isValid($value));
     }
 
-    public function dataProviderIsValid()
+    public static function dataProviderIsValid(): \Iterator
     {
-        return [
-            ['field', true],
-            ['table.field', true],
-            ['field_name', true],
-            ['table.field-name', true],
-            ['table_name.field-name', true],
-            ['table.name; SELECT something FROM table', false],
-            ['any invalid character (', false],
-            ['""', false],
-            ['SELECT *', false]
-        ];
+        yield ['field', true];
+        yield ['table.field', true];
+        yield ['field_name', true];
+        yield ['table.field-name', true];
+        yield ['table_name.field-name', true];
+        yield ['table.name; SELECT something FROM table', false];
+        yield ['any invalid character (', false];
+        yield ['""', false];
+        yield ['SELECT *', false];
     }
 }

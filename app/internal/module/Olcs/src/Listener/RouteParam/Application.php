@@ -391,7 +391,7 @@ class Application implements ListenerAggregateInterface, FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): Application
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): Application
     {
         $this->setAnnotationBuilder($container->get('TransferAnnotationBuilder'));
         $this->setQueryService($container->get('QueryService'));

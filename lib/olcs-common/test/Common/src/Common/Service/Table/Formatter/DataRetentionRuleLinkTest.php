@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -10,7 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 /**
  * DataRetentionRule Link test
  */
-class DataRetentionRuleLinkTest extends TestCase
+final class DataRetentionRuleLinkTest extends TestCase
 {
     protected $urlHelper;
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Common;
 
 use Common\Form\Annotation\CustomAnnotationBuilder;
@@ -12,7 +14,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Form\Factory as FormFactory;
 use Laminas\Form\InputFilterProviderFieldset;
 
-class FileUploadFieldsetGeneratorTest extends MockeryTestCase
+final class FileUploadFieldsetGeneratorTest extends MockeryTestCase
 {
     public function testGenerate(): void
     {

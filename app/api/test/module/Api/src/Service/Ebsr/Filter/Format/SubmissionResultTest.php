@@ -13,7 +13,7 @@ use Mockery as m;
  * @package Dvsa\OlcsTest\Api\Service\Ebsr\Filter\Format
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class SubmissionResultTest extends \PHPUnit\Framework\TestCase
+final class SubmissionResultTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Tests filter
@@ -52,9 +52,9 @@ class SubmissionResultTest extends \PHPUnit\Framework\TestCase
     /**
      * Data provider for testFilter
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function provideFilter(): array
+    public static function provideFilter(): \Iterator
     {
         $submissionDate = '2015-12-25 00:00:00';
         $submissionDateTime = new \DateTime($submissionDate);
@@ -104,10 +104,7 @@ class SubmissionResultTest extends \PHPUnit\Framework\TestCase
             'startDate' => $formattedEffectiveDateTime,
             'hasBusData' => true
         ];
-
-        return [
-            [$submissionDate, [], $blankExpectedData],
-            [$submissionDateTime, $populatedInputData, $populatedExpectedData]
-        ];
+        yield [$submissionDate, [], $blankExpectedData];
+        yield [$submissionDateTime, $populatedInputData, $populatedExpectedData];
     }
 }

@@ -12,7 +12,7 @@ class SearchBusRegSelfserveFactory implements FactoryInterface
      * @param  array|null         $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SearchBusRegSelfserve
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SearchBusRegSelfserve
     {
         $urlHelper = $container->get('Helper\Url');
         $translator = $container->get('translator');

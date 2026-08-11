@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\InterimTrailers;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class InterimTrailersTest extends \PHPUnit\Framework\TestCase
+final class InterimTrailersTest extends \PHPUnit\Framework\TestCase
 {
     public function testRenderWithNoValueAppliesDefault(): void
     {

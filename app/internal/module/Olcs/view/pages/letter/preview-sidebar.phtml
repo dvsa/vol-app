@@ -24,6 +24,9 @@
             <label class="govuk-label govuk-checkboxes__label"
                    for="section-<?= $this->escapeHtmlAttr($section['id']) ?>">
                 <?= $this->escapeHtml($section['name']) ?>
+                <?php if (!empty($section['inputPending'])): ?>
+                <strong class="govuk-tag govuk-tag--red">Input required</strong>
+                <?php endif; ?>
             </label>
         </div>
         <?php endforeach; ?>
@@ -46,6 +49,9 @@
             <label class="govuk-label govuk-checkboxes__label"
                    for="letter-section-<?= $this->escapeHtmlAttr($instanceSection['id']) ?>">
                 <?= $this->escapeHtml($instanceSection['name']) ?>
+                <?php if (!empty($instanceSection['inputPending'])): ?>
+                <strong class="govuk-tag govuk-tag--red">Input required</strong>
+                <?php endif; ?>
             </label>
         </div>
         <?php endforeach; ?>

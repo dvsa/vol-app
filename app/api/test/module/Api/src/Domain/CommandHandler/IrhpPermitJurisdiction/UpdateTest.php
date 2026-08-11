@@ -16,7 +16,7 @@ use Dvsa\Olcs\Transfer\Command\IrhpPermitJurisdiction\Update as UpdateCmd;
  *
  * @author Scott Callaway <scott.callaway@capgemini.com>
  */
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -84,6 +84,6 @@ class UpdateTest extends AbstractCommandHandlerTestCase
             'messages' => ['Irhp Permit Jurisdiction Quota updated'],
         ];
 
-        self::assertEquals($expected, $result->toArray());
+        $this->assertEquals($expected, $result->toArray());
     }
 }

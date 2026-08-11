@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Common\FormService\Form\Lva\ConvictionsPenalties;
@@ -15,12 +17,8 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class PsvDiscsTest extends AbstractLvaFormServiceTestCase
+final class PsvDiscsTest extends AbstractLvaFormServiceTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $authService;
     protected $classToTest = PsvDiscs::class;
 
     protected $formName = 'Lva\PsvDiscs';
@@ -28,8 +26,8 @@ class PsvDiscsTest extends AbstractLvaFormServiceTestCase
     #[\Override]
     protected function setUp(): void
     {
-        $this->authService = m::mock(AuthorizationService::class);
-        $this->classArgs = [$this->authService];
+        $authService = m::mock(AuthorizationService::class);
+        $this->classArgs = [$authService];
         parent::setUp();
     }
 }

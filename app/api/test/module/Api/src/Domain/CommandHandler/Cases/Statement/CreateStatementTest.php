@@ -31,7 +31,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class CreateStatementTest extends AbstractCommandHandlerTestCase
+final class CreateStatementTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

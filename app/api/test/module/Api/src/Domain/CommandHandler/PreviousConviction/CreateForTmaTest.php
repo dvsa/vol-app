@@ -23,7 +23,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CreateForTmaTest extends AbstractCommandHandlerTestCase
+final class CreateForTmaTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

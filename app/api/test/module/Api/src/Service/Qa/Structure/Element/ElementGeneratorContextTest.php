@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class ElementGeneratorContextTest extends MockeryTestCase
+final class ElementGeneratorContextTest extends MockeryTestCase
 {
     private $validatorList;
 
@@ -29,6 +29,7 @@ class ElementGeneratorContextTest extends MockeryTestCase
 
     private $qaContext;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->validatorList = m::mock(ValidatorList::class);
@@ -135,12 +136,10 @@ class ElementGeneratorContextTest extends MockeryTestCase
         );
     }
 
-    public static function dpIsSelfservePageContainer(): array
+    public static function dpIsSelfservePageContainer(): \Iterator
     {
-        return [
-            [ElementContainer::FORM_FRAGMENT, false],
-            [ElementContainer::SELFSERVE_PAGE, true],
-            [ElementContainer::ANSWERS_SUMMARY, false],
-        ];
+        yield [ElementContainer::FORM_FRAGMENT, false];
+        yield [ElementContainer::SELFSERVE_PAGE, true];
+        yield [ElementContainer::ANSWERS_SUMMARY, false];
     }
 }

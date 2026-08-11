@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Service\Document\Bookmark\BrNumDays as BrNumDays;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class BrNumDaysTest extends \PHPUnit\Framework\TestCase
+final class BrNumDaysTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -41,14 +41,12 @@ class BrNumDaysTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function renderDataProvider(): array
+    public static function renderDataProvider(): \Iterator
     {
-        return [
-            [BusRegEntity::STATUS_REGISTERED, 42],
-            [BusRegEntity::STATUS_VAR, 42],
-            [BusRegEntity::STATUS_CANCEL, 90],
-        ];
+        yield [BusRegEntity::STATUS_REGISTERED, 42];
+        yield [BusRegEntity::STATUS_VAR, 42];
+        yield [BusRegEntity::STATUS_CANCEL, 90];
     }
 }

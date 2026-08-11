@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Utils\Translation;
 
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
@@ -8,13 +10,8 @@ use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-class NiTextTranslationTest extends TestCase
+final class NiTextTranslationTest extends TestCase
 {
-    /**
-     * @var NiTextTranslation
-     */
-    protected $sut;
-
     /**
      * @var Translator|MockObject
      */
@@ -26,9 +23,7 @@ class NiTextTranslationTest extends TestCase
         $this->translator->method('getLocale')->willReturn('en_GB');
     }
 
-    /**
-     * @dataProvider niFlagProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('niFlagProvider')]
     public function testSetLocaleForNiFlag($niFlag, $expected, $expectedFallback)
     {
         $this->translator->expects($niFlag === 'N' ? $this->never() : $this->once())->method('setLocale')->with($expected);
@@ -37,30 +32,30 @@ class NiTextTranslationTest extends TestCase
         $this->getService()->setLocaleForNiFlag($niFlag);
     }
 
-    public function niFlagProvider()
+    public static function niFlagProvider(): \Iterator
     {
-        return [
-            [
-                'N',
-                'en_GB',
-                null
-            ],
-            [
-                'Y',
-                'en_NI',
-                'en_GB'
-            ]
+        yield [
+            'N',
+            'en_GB',
+            null
+        ];
+        yield [
+            'Y',
+            'en_NI',
+            'en_GB'
         ];
     }
 
     protected function getService(): NiTextTranslation
     {
-        $serviceManager = $this->createMock(ServiceManager::class);
+        $serviceManager = $this->createStub(ServiceManager::class);
         $serviceManager->method('get')->willReturnMap([
             ['translator', $this->translator]
         ]);
 
-        $serviceManager->method('has')->with('getPlaceholder')->willReturn(true);
+        $serviceManager->method('has')->willReturnMap([
+            ['getPlaceholder', true],
+        ]);
 
         $niTextTranslation = new NiTextTranslation();
         $niTextTranslation->__invoke($serviceManager, NiTextTranslation::class);

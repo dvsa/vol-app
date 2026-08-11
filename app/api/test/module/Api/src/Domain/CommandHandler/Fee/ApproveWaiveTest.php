@@ -30,7 +30,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class ApproveWaiveTest extends AbstractCommandHandlerTestCase
+final class ApproveWaiveTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

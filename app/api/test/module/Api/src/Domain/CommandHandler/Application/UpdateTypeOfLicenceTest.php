@@ -34,7 +34,7 @@ use Mockery as m;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
+final class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -340,215 +340,213 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function requireReset(): array
+    public static function requireReset(): \Iterator
     {
-        return [
-            'niFlag changed' => [
-                self::getCommand(
-                    'Y',
-                    Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    Licence::LICENCE_CATEGORY_GOODS_VEHICLE
-                ),
-                [
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    Licence::LICENCE_CATEGORY_PSV
-                ],
-                [
-                    'id' => 111,
-                    'niFlag' => 'Y',
-                    'operatorType' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                    'confirm' => false
-                ],
+        yield 'niFlag changed' => [
+            self::getCommand(
+                'Y',
+                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                Licence::LICENCE_CATEGORY_GOODS_VEHICLE
+            ),
+            [
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                Licence::LICENCE_CATEGORY_PSV
             ],
-            'operatorType changed' => [
-                self::getCommand(
-                    'Y',
-                    Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    null,
-                    true
-                ),
-                [
-                    'Y',
-                    Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    Licence::LICENCE_CATEGORY_PSV
-                ],
-                [
-                    'id' => 111,
-                    'niFlag' => 'Y',
-                    'operatorType' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                    'confirm' => true
-                ]
+            [
+                'id' => 111,
+                'niFlag' => 'Y',
+                'operatorType' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+                'confirm' => false
             ],
-            'to SR' => [
-                self::getCommand('N', Licence::LICENCE_TYPE_SPECIAL_RESTRICTED, Licence::LICENCE_CATEGORY_PSV),
-                [
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    Licence::LICENCE_CATEGORY_PSV
-                ],
-                [
-                    'id' => 111,
-                    'niFlag' => 'N',
-                    'operatorType' => Licence::LICENCE_CATEGORY_PSV,
-                    'licenceType' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
-                    'confirm' => false
-                ]
+        ];
+        yield 'operatorType changed' => [
+            self::getCommand(
+                'Y',
+                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                null,
+                true
+            ),
+            [
+                'Y',
+                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                Licence::LICENCE_CATEGORY_PSV
             ],
-            'from SR' => [
-                self::getCommand('N', Licence::LICENCE_TYPE_STANDARD_NATIONAL, Licence::LICENCE_CATEGORY_PSV),
-                [
-                    'N',
-                    Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                    Licence::LICENCE_CATEGORY_PSV
-                ],
-                [
-                    'id' => 111,
-                    'niFlag' => 'N',
-                    'operatorType' => Licence::LICENCE_CATEGORY_PSV,
-                    'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
-                    'confirm' => false
-                ]
+            [
+                'id' => 111,
+                'niFlag' => 'Y',
+                'operatorType' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+                'confirm' => true
+            ]
+        ];
+        yield 'to SR' => [
+            self::getCommand('N', Licence::LICENCE_TYPE_SPECIAL_RESTRICTED, Licence::LICENCE_CATEGORY_PSV),
+            [
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                Licence::LICENCE_CATEGORY_PSV
             ],
-            'from LGV to mixed' => [
-                self::getCommand(
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    RefData::APP_VEHICLE_TYPE_LGV
-                ),
-                [
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    RefData::APP_VEHICLE_TYPE_MIXED
-                ],
-                [
-                    'id' => 111,
-                    'niFlag' => 'N',
-                    'operatorType' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    'licenceType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                    'confirm' => false
-                ]
+            [
+                'id' => 111,
+                'niFlag' => 'N',
+                'operatorType' => Licence::LICENCE_CATEGORY_PSV,
+                'licenceType' => Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
+                'confirm' => false
+            ]
+        ];
+        yield 'from SR' => [
+            self::getCommand('N', Licence::LICENCE_TYPE_STANDARD_NATIONAL, Licence::LICENCE_CATEGORY_PSV),
+            [
+                'N',
+                Licence::LICENCE_TYPE_SPECIAL_RESTRICTED,
+                Licence::LICENCE_CATEGORY_PSV
             ],
-            'from mixed to LGV' => [
-                self::getCommand(
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    RefData::APP_VEHICLE_TYPE_MIXED
-                ),
-                [
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    RefData::APP_VEHICLE_TYPE_LGV
-                ],
-                [
-                    'id' => 111,
-                    'niFlag' => 'N',
-                    'operatorType' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    'licenceType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                    'confirm' => false
-                ]
+            [
+                'id' => 111,
+                'niFlag' => 'N',
+                'operatorType' => Licence::LICENCE_CATEGORY_PSV,
+                'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_PSV,
+                'confirm' => false
+            ]
+        ];
+        yield 'from LGV to mixed' => [
+            self::getCommand(
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::APP_VEHICLE_TYPE_LGV
+            ),
+            [
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::APP_VEHICLE_TYPE_MIXED
             ],
-            'from standard international lgv to standard national' => [
-                self::getCommand(
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    null
-                ),
-                [
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    RefData::APP_VEHICLE_TYPE_LGV
-                ],
-                [
-                    'id' => 111,
-                    'niFlag' => 'N',
-                    'operatorType' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                    'confirm' => false
-                ]
+            [
+                'id' => 111,
+                'niFlag' => 'N',
+                'operatorType' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'licenceType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+                'confirm' => false
+            ]
+        ];
+        yield 'from mixed to LGV' => [
+            self::getCommand(
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::APP_VEHICLE_TYPE_MIXED
+            ),
+            [
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::APP_VEHICLE_TYPE_LGV
             ],
-            'from standard international mixed to standard national' => [
-                self::getCommand(
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    null
-                ),
-                [
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    RefData::APP_VEHICLE_TYPE_MIXED
-                ],
-                [
-                    'id' => 111,
-                    'niFlag' => 'N',
-                    'operatorType' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
-                    'confirm' => false
-                ]
+            [
+                'id' => 111,
+                'niFlag' => 'N',
+                'operatorType' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'licenceType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
+                'confirm' => false
+            ]
+        ];
+        yield 'from standard international lgv to standard national' => [
+            self::getCommand(
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                null
+            ),
+            [
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::APP_VEHICLE_TYPE_LGV
             ],
-            'from standard national to standard international lgv' => [
-                self::getCommand(
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    RefData::APP_VEHICLE_TYPE_LGV
-                ),
-                [
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    RefData::APP_VEHICLE_TYPE_HGV
-                ],
-                [
-                    'id' => 111,
-                    'niFlag' => 'N',
-                    'operatorType' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    'licenceType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
-                    'confirm' => false
-                ]
+            [
+                'id' => 111,
+                'niFlag' => 'N',
+                'operatorType' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+                'confirm' => false
+            ]
+        ];
+        yield 'from standard international mixed to standard national' => [
+            self::getCommand(
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                null
+            ),
+            [
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::APP_VEHICLE_TYPE_MIXED
             ],
-            'from standard national to standard international mixed' => [
-                self::getCommand(
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    RefData::APP_VEHICLE_TYPE_MIXED
-                ),
-                [
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    RefData::APP_VEHICLE_TYPE_HGV
-                ],
-                [
-                    'id' => 111,
-                    'niFlag' => 'N',
-                    'operatorType' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    'licenceType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
-                    'confirm' => false
-                ]
+            [
+                'id' => 111,
+                'niFlag' => 'N',
+                'operatorType' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'licenceType' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_HGV,
+                'confirm' => false
+            ]
+        ];
+        yield 'from standard national to standard international lgv' => [
+            self::getCommand(
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::APP_VEHICLE_TYPE_LGV
+            ),
+            [
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::APP_VEHICLE_TYPE_HGV
             ],
+            [
+                'id' => 111,
+                'niFlag' => 'N',
+                'operatorType' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'licenceType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_LGV,
+                'confirm' => false
+            ]
+        ];
+        yield 'from standard national to standard international mixed' => [
+            self::getCommand(
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::APP_VEHICLE_TYPE_MIXED
+            ),
+            [
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                RefData::APP_VEHICLE_TYPE_HGV
+            ],
+            [
+                'id' => 111,
+                'niFlag' => 'N',
+                'operatorType' => Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                'licenceType' => Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+                'vehicleType' => RefData::APP_VEHICLE_TYPE_MIXED,
+                'confirm' => false
+            ]
         ];
     }
 
@@ -695,69 +693,67 @@ class UpdateTypeOfLicenceTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function dpHandleCommandWithAllowedUpdateGb(): array
+    public static function dpHandleCommandWithAllowedUpdateGb(): \Iterator
     {
-        return [
-            'goods standard international' => [
-                self::getCommand(
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                    Licence::LICENCE_CATEGORY_PSV,
-                    null,
-                    false,
-                    0
-                ),
-                [
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    Licence::LICENCE_CATEGORY_PSV
-                ],
+        yield 'goods standard international' => [
+            self::getCommand(
                 'N',
-                Licence::LICENCE_CATEGORY_PSV,
                 Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
-                RefData::APP_VEHICLE_TYPE_PSV,
-                0
-            ],
-            'derive goods vehicle type for non standard international' => [
-                self::getCommand(
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                    null,
-                    false,
-                    0
-                ),
-                [
-                    'N',
-                    Licence::LICENCE_TYPE_RESTRICTED,
-                    Licence::LICENCE_CATEGORY_GOODS_VEHICLE
-                ],
-                'N',
-                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                RefData::APP_VEHICLE_TYPE_HGV,
-                0
-            ],
-            'derive goods vehicle type for non standard international' => [
-                self::getCommand(
-                    'N',
-                    Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    Licence::LICENCE_CATEGORY_PSV,
-                    null,
-                    false,
-                    0
-                ),
-                [
-                    'N',
-                    Licence::LICENCE_TYPE_RESTRICTED,
-                    Licence::LICENCE_CATEGORY_PSV
-                ],
-                'N',
                 Licence::LICENCE_CATEGORY_PSV,
-                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                RefData::APP_VEHICLE_TYPE_PSV,
+                null,
+                false,
                 0
+            ),
+            [
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                Licence::LICENCE_CATEGORY_PSV
             ],
+            'N',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_INTERNATIONAL,
+            RefData::APP_VEHICLE_TYPE_PSV,
+            0
+        ];
+        yield 'derive goods vehicle type for non standard international' => [
+            self::getCommand(
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+                null,
+                false,
+                0
+            ),
+            [
+                'N',
+                Licence::LICENCE_TYPE_RESTRICTED,
+                Licence::LICENCE_CATEGORY_GOODS_VEHICLE
+            ],
+            'N',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            RefData::APP_VEHICLE_TYPE_HGV,
+            0
+        ];
+        yield 'derive psv vehicle type for non standard international' => [
+            self::getCommand(
+                'N',
+                Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+                Licence::LICENCE_CATEGORY_PSV,
+                null,
+                false,
+                0
+            ),
+            [
+                'N',
+                Licence::LICENCE_TYPE_RESTRICTED,
+                Licence::LICENCE_CATEGORY_PSV
+            ],
+            'N',
+            Licence::LICENCE_CATEGORY_PSV,
+            Licence::LICENCE_TYPE_STANDARD_NATIONAL,
+            RefData::APP_VEHICLE_TYPE_PSV,
+            0
         ];
     }
 }

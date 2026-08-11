@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Common\Service\Helper\FormHelperService;
@@ -13,24 +15,16 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ApplicationTest extends MockeryTestCase
+final class ApplicationTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $formHelper;
-    /**
-     * @var \Mockery\LegacyMockInterface
-     */
-    public $authService;
     protected $sut;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->formHelper = m::mock(FormHelperService::class);
-        $this->authService = m::mock(AuthorizationService::class);
-        $this->sut = new Application($this->formHelper, $this->authService);
+        $formHelper = m::mock(FormHelperService::class);
+        $authService = m::mock(AuthorizationService::class);
+        $this->sut = new Application($formHelper, $authService);
     }
 
     /**

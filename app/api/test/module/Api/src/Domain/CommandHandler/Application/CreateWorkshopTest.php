@@ -26,7 +26,7 @@ use Dvsa\Olcs\Transfer\Command\Workshop\CreateWorkshop as WorkshopCreateWorkshop
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CreateWorkshopTest extends AbstractCommandHandlerTestCase
+final class CreateWorkshopTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -197,7 +197,7 @@ class Email implements FactoryInterface
     }
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $config = $container->get('config');
         if (empty($config['mail'])) {

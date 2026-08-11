@@ -22,22 +22,18 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="transport_manager",
- *    indexes={
- *        @ORM\Index(name="ix_transport_manager_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_transport_manager_home_cd_id", columns={"home_cd_id"}),
- *        @ORM\Index(name="ix_transport_manager_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_transport_manager_merge_to_transport_manager_id", columns={"merge_to_transport_manager_id"}),
- *        @ORM\Index(name="ix_transport_manager_tm_status", columns={"tm_status"}),
- *        @ORM\Index(name="ix_transport_manager_tm_type", columns={"tm_type"}),
- *        @ORM\Index(name="ix_transport_manager_work_cd_id", columns={"work_cd_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'transport_manager')]
+#[ORM\Index(name: 'ix_transport_manager_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_transport_manager_home_cd_id', columns: ['home_cd_id'])]
+#[ORM\Index(name: 'ix_transport_manager_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_transport_manager_merge_to_transport_manager_id', columns: ['merge_to_transport_manager_id'])]
+#[ORM\Index(name: 'ix_transport_manager_tm_status', columns: ['tm_status'])]
+#[ORM\Index(name: 'ix_transport_manager_tm_type', columns: ['tm_type'])]
+#[ORM\Index(name: 'ix_transport_manager_work_cd_id', columns: ['work_cd_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractTransportManager implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -51,246 +47,220 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Current,Disqualified,Active,Disabled
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="tm_status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'tm_status', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $tmStatus;
 
     /**
      * Internal to organisation, external or both when multi orgs.
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="tm_type", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'tm_type', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $tmType;
 
     /**
      * Home contact details FK
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
-     * @ORM\JoinColumn(name="home_cd_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'home_cd_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY')]
     protected $homeCd;
 
     /**
      * Work contact details FK
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
-     * @ORM\JoinColumn(name="work_cd_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'work_cd_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY')]
     protected $workCd;
 
     /**
      * MergeToTransportManager
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="merge_to_transport_manager_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'merge_to_transport_manager_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
     protected $mergeToTransportManager;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * FK to case where TM became disqualified
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="disqualification_tm_case_id", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'disqualification_tm_case_id', nullable: true, options: ['unsigned' => true])]
     protected $disqualificationTmCaseId;
 
     /**
      * Removed date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="removed_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'removed_date', nullable: true)]
     protected $removedDate;
 
     /**
      * Last licence date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="date", name="last_licence_date", nullable=true)
      */
+    #[ORM\Column(type: 'date', name: 'last_licence_date', nullable: true)]
     protected $lastLicenceDate;
 
     /**
      * Family name recognised by nysiis - cross Europe name resolution
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="nysiis_family_name", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'nysiis_family_name', length: 100, nullable: true)]
     protected $nysiisFamilyName;
 
     /**
      * First name recognised by nysiis - cross Europe name resolution
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="nysiis_forename", length=100, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'nysiis_forename', length: 100, nullable: true)]
     protected $nysiisForename;
 
     /**
      * Merge details
      *
      * @var array
-     *
-     * @ORM\Column(type="json", name="merge_details", nullable=true)
      */
+    #[ORM\Column(type: 'json', name: 'merge_details', nullable: true)]
     protected $mergeDetails;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Olbs key
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
      * Cases
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, mappedBy: 'transportManager')]
     protected $cases;
 
     /**
      * Documents
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\Document", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'transportManager')]
     protected $documents;
 
     /**
      * OtherLicences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence::class, mappedBy: 'transportManager')]
     protected $otherLicences;
 
     /**
      * PreviousConvictions
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Application\PreviousConviction", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\PreviousConviction::class, mappedBy: 'transportManager')]
     protected $previousConvictions;
 
     /**
      * Employments
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TmEmployment", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TmEmployment::class, mappedBy: 'transportManager')]
     protected $employments;
 
     /**
      * Qualifications
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TmQualification", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TmQualification::class, mappedBy: 'transportManager')]
     protected $qualifications;
 
     /**
      * TmApplications
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication::class, mappedBy: 'transportManager')]
     protected $tmApplications;
 
     /**
      * TmLicences
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence::class, mappedBy: 'transportManager')]
     protected $tmLicences;
 
     /**
      * ReadAudits
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManagerReadAudit", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerReadAudit::class, mappedBy: 'transportManager')]
     protected $readAudits;
 
     /**
      * Users
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\User\User", mappedBy="transportManager")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, mappedBy: 'transportManager')]
     protected $users;
 
     /**
@@ -324,7 +294,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param int $id new value being set
      *
-     * @return TransportManager
+     * @return static
      */
     public function setId($id)
     {
@@ -348,7 +318,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $tmStatus new value being set
      *
-     * @return TransportManager
+     * @return static
      */
     public function setTmStatus($tmStatus)
     {
@@ -372,7 +342,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $tmType new value being set
      *
-     * @return TransportManager
+     * @return static
      */
     public function setTmType($tmType)
     {
@@ -396,7 +366,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $homeCd new value being set
      *
-     * @return TransportManager
+     * @return static
      */
     public function setHomeCd($homeCd)
     {
@@ -420,7 +390,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $workCd new value being set
      *
-     * @return TransportManager
+     * @return static
      */
     public function setWorkCd($workCd)
     {
@@ -444,7 +414,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $mergeToTransportManager new value being set
      *
-     * @return TransportManager
+     * @return static
      */
     public function setMergeToTransportManager($mergeToTransportManager)
     {
@@ -468,7 +438,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return TransportManager
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -492,7 +462,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return TransportManager
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -516,7 +486,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param int $disqualificationTmCaseId new value being set
      *
-     * @return TransportManager
+     * @return static
      */
     public function setDisqualificationTmCaseId($disqualificationTmCaseId)
     {
@@ -540,7 +510,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \DateTime $removedDate new value being set
      *
-     * @return TransportManager
+     * @return static
      */
     public function setRemovedDate($removedDate)
     {
@@ -570,7 +540,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \DateTime $lastLicenceDate new value being set
      *
-     * @return TransportManager
+     * @return static
      */
     public function setLastLicenceDate($lastLicenceDate)
     {
@@ -600,7 +570,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param string $nysiisFamilyName new value being set
      *
-     * @return TransportManager
+     * @return static
      */
     public function setNysiisFamilyName($nysiisFamilyName)
     {
@@ -624,7 +594,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param string $nysiisForename new value being set
      *
-     * @return TransportManager
+     * @return static
      */
     public function setNysiisForename($nysiisForename)
     {
@@ -648,7 +618,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param array $mergeDetails new value being set
      *
-     * @return TransportManager
+     * @return static
      */
     public function setMergeDetails($mergeDetails)
     {
@@ -672,7 +642,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param int $version new value being set
      *
-     * @return TransportManager
+     * @return static
      */
     public function setVersion($version)
     {
@@ -696,7 +666,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param int $olbsKey new value being set
      *
-     * @return TransportManager
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -720,7 +690,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $cases collection being set as the value
      *
-     * @return TransportManager
+     * @return static
      */
     public function setCases($cases)
     {
@@ -744,7 +714,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $cases collection being added
      *
-     * @return TransportManager
+     * @return static
      */
     public function addCases($cases)
     {
@@ -767,7 +737,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $cases collection being removed
      *
-     * @return TransportManager
+     * @return static
      */
     public function removeCases($cases)
     {
@@ -783,7 +753,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being set as the value
      *
-     * @return TransportManager
+     * @return static
      */
     public function setDocuments($documents)
     {
@@ -807,7 +777,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $documents collection being added
      *
-     * @return TransportManager
+     * @return static
      */
     public function addDocuments($documents)
     {
@@ -830,7 +800,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $documents collection being removed
      *
-     * @return TransportManager
+     * @return static
      */
     public function removeDocuments($documents)
     {
@@ -846,7 +816,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $otherLicences collection being set as the value
      *
-     * @return TransportManager
+     * @return static
      */
     public function setOtherLicences($otherLicences)
     {
@@ -870,7 +840,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $otherLicences collection being added
      *
-     * @return TransportManager
+     * @return static
      */
     public function addOtherLicences($otherLicences)
     {
@@ -893,7 +863,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $otherLicences collection being removed
      *
-     * @return TransportManager
+     * @return static
      */
     public function removeOtherLicences($otherLicences)
     {
@@ -909,7 +879,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $previousConvictions collection being set as the value
      *
-     * @return TransportManager
+     * @return static
      */
     public function setPreviousConvictions($previousConvictions)
     {
@@ -933,7 +903,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $previousConvictions collection being added
      *
-     * @return TransportManager
+     * @return static
      */
     public function addPreviousConvictions($previousConvictions)
     {
@@ -956,7 +926,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $previousConvictions collection being removed
      *
-     * @return TransportManager
+     * @return static
      */
     public function removePreviousConvictions($previousConvictions)
     {
@@ -972,7 +942,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $employments collection being set as the value
      *
-     * @return TransportManager
+     * @return static
      */
     public function setEmployments($employments)
     {
@@ -996,7 +966,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $employments collection being added
      *
-     * @return TransportManager
+     * @return static
      */
     public function addEmployments($employments)
     {
@@ -1019,7 +989,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $employments collection being removed
      *
-     * @return TransportManager
+     * @return static
      */
     public function removeEmployments($employments)
     {
@@ -1035,7 +1005,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $qualifications collection being set as the value
      *
-     * @return TransportManager
+     * @return static
      */
     public function setQualifications($qualifications)
     {
@@ -1059,7 +1029,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $qualifications collection being added
      *
-     * @return TransportManager
+     * @return static
      */
     public function addQualifications($qualifications)
     {
@@ -1082,7 +1052,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $qualifications collection being removed
      *
-     * @return TransportManager
+     * @return static
      */
     public function removeQualifications($qualifications)
     {
@@ -1098,7 +1068,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tmApplications collection being set as the value
      *
-     * @return TransportManager
+     * @return static
      */
     public function setTmApplications($tmApplications)
     {
@@ -1122,7 +1092,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tmApplications collection being added
      *
-     * @return TransportManager
+     * @return static
      */
     public function addTmApplications($tmApplications)
     {
@@ -1145,7 +1115,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tmApplications collection being removed
      *
-     * @return TransportManager
+     * @return static
      */
     public function removeTmApplications($tmApplications)
     {
@@ -1161,7 +1131,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tmLicences collection being set as the value
      *
-     * @return TransportManager
+     * @return static
      */
     public function setTmLicences($tmLicences)
     {
@@ -1185,7 +1155,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $tmLicences collection being added
      *
-     * @return TransportManager
+     * @return static
      */
     public function addTmLicences($tmLicences)
     {
@@ -1208,7 +1178,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $tmLicences collection being removed
      *
-     * @return TransportManager
+     * @return static
      */
     public function removeTmLicences($tmLicences)
     {
@@ -1224,7 +1194,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $readAudits collection being set as the value
      *
-     * @return TransportManager
+     * @return static
      */
     public function setReadAudits($readAudits)
     {
@@ -1248,7 +1218,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $readAudits collection being added
      *
-     * @return TransportManager
+     * @return static
      */
     public function addReadAudits($readAudits)
     {
@@ -1271,7 +1241,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $readAudits collection being removed
      *
-     * @return TransportManager
+     * @return static
      */
     public function removeReadAudits($readAudits)
     {
@@ -1287,7 +1257,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $users collection being set as the value
      *
-     * @return TransportManager
+     * @return static
      */
     public function setUsers($users)
     {
@@ -1311,7 +1281,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $users collection being added
      *
-     * @return TransportManager
+     * @return static
      */
     public function addUsers($users)
     {
@@ -1334,7 +1304,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $users collection being removed
      *
-     * @return TransportManager
+     * @return static
      */
     public function removeUsers($users)
     {

@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Api\Service\Nr\Mapping;
 use Dvsa\Olcs\Api\Service\Nr\Mapping\ComplianceEpisodeXml;
 use Olcs\XmlTools\Filter\MapXmlFile;
 
-class ComplianceEpisodeXmlTest extends \PHPUnit\Framework\TestCase
+final class ComplianceEpisodeXmlTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * loads in erru test templates from /module/Api/data/nr/ folder, tests correct data retrieval/mapping
@@ -109,10 +109,8 @@ class ComplianceEpisodeXmlTest extends \PHPUnit\Framework\TestCase
     /**
      * data provider for testXmlMapping
      */
-    public static function dpTemplate(): array
+    public static function dpTemplate(): \Iterator
     {
-        return [
-            ['notifyCheckResultTemplate.xml'],
-        ];
+        yield ['notifyCheckResultTemplate.xml'];
     }
 }

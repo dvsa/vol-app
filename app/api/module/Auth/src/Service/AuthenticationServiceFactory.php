@@ -23,7 +23,7 @@ class AuthenticationServiceFactory implements FactoryInterface
      * @return AuthenticationService
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): AuthenticationService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): AuthenticationService
     {
         return new AuthenticationService(new NonPersistent());
     }

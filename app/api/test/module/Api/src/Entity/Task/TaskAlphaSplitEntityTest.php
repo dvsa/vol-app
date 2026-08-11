@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Entity\Task\TaskAlphaSplit as Entity;
  *
  * Initially auto-generated but won't be overridden
  */
-class TaskAlphaSplitEntityTest extends EntityTester
+final class TaskAlphaSplitEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

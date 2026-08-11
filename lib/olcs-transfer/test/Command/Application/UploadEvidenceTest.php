@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Application;
 
 use Dvsa\Olcs\Transfer\Command\Application\UploadEvidence;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Application\UploadEvidence;
 /**
  * Upload Evidence test
  */
-class UploadEvidenceTest extends \PHPUnit\Framework\TestCase
+final class UploadEvidenceTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

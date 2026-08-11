@@ -16,7 +16,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class DeleteApplicationTest extends AbstractCommandHandlerTestCase
+final class DeleteApplicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -59,7 +59,7 @@ class DeleteApplicationTest extends AbstractCommandHandlerTestCase
 
         $application = m::mock(Application::class)->makePartial();
         $application->setIsVariation(true);
-        $application->setStatus((new RefData())->setId($status));
+        $application->setStatus(new RefData()->setId($status));
 
         $this->repoMap['Application']->shouldReceive('fetchUsingId')->with($command)->once()->andReturn($application);
 
@@ -68,17 +68,15 @@ class DeleteApplicationTest extends AbstractCommandHandlerTestCase
         $this->sut->handleCommand($command);
     }
 
-    public static function dpTestHandleCommandWrongStatus(): array
+    public static function dpTestHandleCommandWrongStatus(): \Iterator
     {
-        return [
-            [Application::APPLICATION_STATUS_CURTAILED],
-            [Application::APPLICATION_STATUS_GRANTED],
-            [Application::APPLICATION_STATUS_NOT_TAKEN_UP],
-            [Application::APPLICATION_STATUS_REFUSED],
-            [Application::APPLICATION_STATUS_UNDER_CONSIDERATION],
-            [Application::APPLICATION_STATUS_VALID],
-            [Application::APPLICATION_STATUS_WITHDRAWN],
-        ];
+        yield [Application::APPLICATION_STATUS_CURTAILED];
+        yield [Application::APPLICATION_STATUS_GRANTED];
+        yield [Application::APPLICATION_STATUS_NOT_TAKEN_UP];
+        yield [Application::APPLICATION_STATUS_REFUSED];
+        yield [Application::APPLICATION_STATUS_UNDER_CONSIDERATION];
+        yield [Application::APPLICATION_STATUS_VALID];
+        yield [Application::APPLICATION_STATUS_WITHDRAWN];
     }
     public function testHandleCommand(): void
     {
@@ -90,7 +88,7 @@ class DeleteApplicationTest extends AbstractCommandHandlerTestCase
         $application = m::mock(Application::class)->makePartial();
         $application->setId($data['id']);
         $application->setIsVariation(true);
-        $application->setStatus((new RefData())->setId(Application::APPLICATION_STATUS_NOT_SUBMITTED));
+        $application->setStatus(new RefData()->setId(Application::APPLICATION_STATUS_NOT_SUBMITTED));
 
         $this->repoMap['Application']->shouldReceive('fetchUsingId')->with($command)->once()->andReturn($application);
 

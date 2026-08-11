@@ -10,7 +10,7 @@ use Dvsa\Olcs\Transfer\Query\Category\GetList as Qry;
 use CommonTest\Common\Service\Data\AbstractListDataServiceTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Service\Data\DocumentCategory::class)]
-class DocumentCategoryTest extends AbstractListDataServiceTestCase
+final class DocumentCategoryTest extends AbstractListDataServiceTestCase
 {
     /** @var DocumentCategory */
     private $sut;

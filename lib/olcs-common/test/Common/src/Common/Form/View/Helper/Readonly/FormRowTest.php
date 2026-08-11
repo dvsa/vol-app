@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper\Readonly;
 
 use Common\Form\Elements;
@@ -8,12 +10,10 @@ use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Form\Element as LaminasElement;
 
-/**
- * @covers \Common\Form\View\Helper\Readonly\FormRow
- */
-class FormRowTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\View\Helper\Readonly\FormRow::class)]
+final class FormRowTest extends MockeryTestCase
 {
-    public const STANDARD_RENDER_RESULT = 'STANDARD-RENDER-RESULT';
+    public const string STANDARD_RENDER_RESULT = 'STANDARD-RENDER-RESULT';
 
     #[\Override]
     protected function tearDown(): void
@@ -22,9 +22,7 @@ class FormRowTest extends MockeryTestCase
         parent::tearDown();
     }
 
-    /**
-     * @dataProvider provideTestInvoke
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideTestInvoke')]
     public function testInvoke($element, $expected): void
     {
         $mockHtmlHelper = m::mock(\Laminas\View\Helper\EscapeHtml::class);
@@ -73,7 +71,7 @@ class FormRowTest extends MockeryTestCase
      *
      * @psalm-return array{0: array{element: null, expected: null}, 1: list{m\LegacyMockInterface&m\MockInterface&\Laminas\Form\ElementInterface, ''}, 2: list{m\MockInterface, ''}, text: array{element: m\LegacyMockInterface&m\MockInterface&\Laminas\Form\ElementInterface, expect: '<li class="definition-list__item readonly"><dt>@_Label_@</dt><dd>_Value_</dd></li>'}, select: array{element: m\LegacyMockInterface&m\MockInterface&LaminasElement\Select, expect: '<li class="definition-list__item readonly"><dt>@_Label_@</dt><dd>_Value_</dd></li>'}, 3: list{m\LegacyMockInterface&m\MockInterface&Elements\Types\Table, '<table></table>'}, htmlTranslated: array{element: m\LegacyMockInterface&m\MockInterface&Elements\Types\HtmlTranslated, expect: '<li class="definition-list__item readonly"><dt>@@</dt><dd>STANDARD-RENDER-RESULT</dd></li>'}, htmlTranslatedNoLabel: array{element: mixed, expect: '<li class="definition-list__item readonly">STANDARD-RENDER-RESULT</li>'}, 4: array{element: m\LegacyMockInterface&m\MockInterface&LaminasElement\Csrf, expected: 'STANDARD-RENDER-RESULT'}, 5: array{element: mixed, expected: 'STANDARD-RENDER-RESULT'}, 6: array{element: mixed, expected: ''}, 7: array{element: m\LegacyMockInterface&m\MockInterface&Elements\Types\AttachFilesButton, expected: ''}}
      */
-    public function provideTestInvoke(): array
+    public static function provideTestInvoke(): array
     {
         //need tests for Select, TextArea
         $mockHidden = m::mock(\Laminas\Form\ElementInterface::class);
@@ -147,16 +145,16 @@ class FormRowTest extends MockeryTestCase
             [$mockRemoveIfReadOnly, ''],
             'text' => [
                 'element' => $mockText,
-                'expect' => '<li class="definition-list__item readonly"><dt>@_Label_@</dt><dd>_Value_</dd></li>',
+                'expected' => '<li class="definition-list__item readonly"><dt>@_Label_@</dt><dd>_Value_</dd></li>',
             ],
             'select' => [
                 'element' => $mockSelect,
-                'expect' => '<li class="definition-list__item readonly"><dt>@_Label_@</dt><dd>_Value_</dd></li>',
+                'expected' => '<li class="definition-list__item readonly"><dt>@_Label_@</dt><dd>_Value_</dd></li>',
             ],
             [$mockTable, '<table></table>'],
             'htmlTranslated' => [
                 'element' => $mockHtmlTranslated,
-                'expect' => '<li class="definition-list__item readonly"><dt>@@</dt><dd>' . self::STANDARD_RENDER_RESULT . '</dd></li>',
+                'expected' => '<li class="definition-list__item readonly"><dt>@@</dt><dd>' . self::STANDARD_RENDER_RESULT . '</dd></li>',
             ],
             'htmlTranslatedNoLabel' => [
                 'element' => m::mock(\Common\Form\Elements\Types\HtmlTranslated::class)
@@ -166,7 +164,7 @@ class FormRowTest extends MockeryTestCase
                         ->shouldReceive('getLabel')->andReturn(null)
                         ->shouldReceive('getLabelOption')->andReturnNull()
                         ->getMock(),
-                'expect' => '<li class="definition-list__item readonly">STANDARD-RENDER-RESULT</li>',
+                'expected' => '<li class="definition-list__item readonly">STANDARD-RENDER-RESULT</li>',
             ],
             [
                 'element' => m::mock(LaminasElement\Csrf::class),

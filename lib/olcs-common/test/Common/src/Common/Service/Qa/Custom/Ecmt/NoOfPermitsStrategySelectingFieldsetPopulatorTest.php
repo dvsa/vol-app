@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Ecmt;
 
 use Common\Service\Qa\Custom\Ecmt\NoOfPermitsStrategySelectingFieldsetPopulator;
@@ -14,7 +16,7 @@ use Laminas\Form\Form;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class NoOfPermitsStrategySelectingFieldsetPopulatorTest extends MockeryTestCase
+final class NoOfPermitsStrategySelectingFieldsetPopulatorTest extends MockeryTestCase
 {
     private $form;
 

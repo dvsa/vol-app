@@ -17,7 +17,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
 use Psr\Container\ContainerInterface;
 
-class CommandHandlerManagerTest extends MockeryTestCase
+final class CommandHandlerManagerTest extends MockeryTestCase
 {
     /**
      * @var CommandHandlerManager
@@ -26,6 +26,7 @@ class CommandHandlerManagerTest extends MockeryTestCase
 
     private $vhm;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->vhm = m::mock(ValidationHandlerManager::class)->makePartial();

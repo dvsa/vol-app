@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Lva\TransportManager\Sections;
 
 use Common\Data\Mapper\Lva\TransportManager\Sections\AdditionalInformation;
@@ -7,17 +9,15 @@ use Common\Service\Helper\TranslationHelperService;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-class AdditionalInformationTest extends MockeryTestCase
+final class AdditionalInformationTest extends MockeryTestCase
 {
-    private $mockTranslator;
-
     private $sut;
 
     #[\Override]
     protected function setUp(): void
     {
-        $this->mockTranslator = m::mock(TranslationHelperService::class);
-        $this->sut = new AdditionalInformation($this->mockTranslator);
+        $mockTranslator = m::mock(TranslationHelperService::class);
+        $this->sut = new AdditionalInformation($mockTranslator);
     }
 
     public function testObjectPopulated(): void

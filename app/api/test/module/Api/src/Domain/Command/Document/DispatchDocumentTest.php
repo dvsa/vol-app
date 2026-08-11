@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Document\DispatchDocument;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class DispatchDocumentTest extends \PHPUnit\Framework\TestCase
+final class DispatchDocumentTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

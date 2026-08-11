@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper;
 
 use Common\Form\QaForm;
@@ -14,7 +16,7 @@ use Laminas\Form\Fieldset;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class QaFormTest extends MockeryTestCase
+final class QaFormTest extends MockeryTestCase
 {
     public function testSetData(): void
     {
@@ -109,9 +111,7 @@ class QaFormTest extends MockeryTestCase
         $this->assertFalse($qaForm->isValid());
     }
 
-    /**
-     * @dataProvider dpIsValidParentReturnsTrueWithHandler
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpIsValidParentReturnsTrueWithHandler')]
     public function testIsValidParentReturnsTrueWithHandler($isValidHandlerResponse): void
     {
         $formControlType = 'form_control_type';
@@ -141,16 +141,14 @@ class QaFormTest extends MockeryTestCase
     }
 
     /**
-     * @return bool[][]
+     * @return \Iterator<(int | string), array<bool>>
      *
      * @psalm-return list{list{true}, list{false}}
      */
-    public function dpIsValidParentReturnsTrueWithHandler(): array
+    public static function dpIsValidParentReturnsTrueWithHandler(): \Iterator
     {
-        return [
-            [true],
-            [false]
-        ];
+        yield [true];
+        yield [false];
     }
 
     public function testIsValidParentReturnsTrueWithoutHandler(): void

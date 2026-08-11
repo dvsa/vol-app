@@ -45,7 +45,7 @@ final class TemplateSource extends AbstractQueryByIdHandler
     }
 
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $config = $container->get('config');
         $dsn = $config['email']['notify_test']['dsn'] ?? null;

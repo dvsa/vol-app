@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Entity\Doc\DocTemplate as DocTemplateEntity;
 /**
  * Create Next Publication Test
  */
-class CreateNextPublicationTest extends AbstractCommandHandlerTestCase
+final class CreateNextPublicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

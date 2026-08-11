@@ -38,14 +38,14 @@ final class UploadScoringResult extends ScoringCommandHandler
         $fh = fopen('php://temp', 'w');
 
         if (!empty(($csvContent))) {
-            fputcsv($fh, array_keys($csvContent[0])); //row of headers
+            fputcsv($fh, array_keys($csvContent[0]), ',', '"', '\\'); //row of headers
 
             foreach ($csvContent as $dataRow) { //insert content
-                fputcsv($fh, $dataRow);
+                fputcsv($fh, $dataRow, ',', '"', '\\');
             }
         } else {
             //  no results, still need to put something inside .csv file so it is generated
-            fputcsv($fh, ['No Results']);
+            fputcsv($fh, ['No Results'], ',', '"', '\\');
             $result->addMessage('No scoring results passed. Creating empty report file');
         }
 

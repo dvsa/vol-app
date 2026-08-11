@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Translator;
 
 use Common\Service\Cqrs\Query\CachingQueryService;
@@ -9,7 +11,7 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class TranslationLoaderFactoryTest extends MockeryTestCase
+final class TranslationLoaderFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {
@@ -21,6 +23,6 @@ class TranslationLoaderFactoryTest extends MockeryTestCase
         $sut = new TranslationLoaderFactory();
         $service = $sut->__invoke($parentSl, TranslationLoader::class);
 
-        self::assertInstanceOf(TranslationLoader::class, $service);
+        $this->assertInstanceOf(TranslationLoader::class, $service);
     }
 }

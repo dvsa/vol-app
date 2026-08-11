@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion as ApplicationComplet
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateTaxiPhvStatusTest extends AbstractUpdateStatusTestCase
+final class UpdateTaxiPhvStatusTest extends AbstractUpdateStatusTestCase
 {
     protected $section = 'TaxiPhv';
 

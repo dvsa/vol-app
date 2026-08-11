@@ -10,41 +10,37 @@ use InvalidArgumentException;
 use Common\Form\Element\Attribute\ClassList;
 use Mockery;
 
-/**
- * @covers \Common\Form\Element\Button
- */
-class ButtonTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\Element\Button::class)]
+final class ButtonTest extends MockeryTestCase
 {
-    protected const TYPE_ATTRIBUTE = 'type';
+    protected const string TYPE_ATTRIBUTE = 'type';
 
-    protected const A_BUTTON_NAME = 'A BUTTON NAME';
+    protected const string A_BUTTON_NAME = 'A BUTTON NAME';
 
-    protected const A_BUTTON_LABEL = 'A BUTTON LABEL';
+    protected const string A_BUTTON_LABEL = 'A BUTTON LABEL';
 
-    protected const CLASS_ATTRIBUTE = 'class';
+    protected const string CLASS_ATTRIBUTE = 'class';
 
-    protected const AN_INVALID_BUTTON_TYPE = 'AN INVALID BUTTON TYPE';
+    protected const string AN_INVALID_BUTTON_TYPE = 'AN INVALID BUTTON TYPE';
 
-    protected const INVALID_BUTTON_TYPE_MESSAGE = 'Invalid type';
+    protected const string INVALID_BUTTON_TYPE_MESSAGE = 'Invalid type';
 
-    protected const EMPTY_ARRAY = [];
+    protected const array EMPTY_ARRAY = [];
 
-    protected const AN_INVALID_BUTTON_SIZE = 'AN INVALID BUTTON SIZE';
+    protected const string AN_INVALID_BUTTON_SIZE = 'AN INVALID BUTTON SIZE';
 
-    protected const INVALID_BUTTON_SIZE_MESSAGE = 'Invalid button size';
+    protected const string INVALID_BUTTON_SIZE_MESSAGE = 'Invalid button size';
 
-    protected const AN_INVALID_THEME = 'AN INVALID THEME';
+    protected const string AN_INVALID_THEME = 'AN INVALID THEME';
 
-    protected const INVALID_BUTTON_THEME_MESSAGE = 'Invalid button theme';
+    protected const string INVALID_BUTTON_THEME_MESSAGE = 'Invalid button theme';
 
     /**
      * @var Button|null
      */
     protected $sut;
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructSetsTypeAttributeToButton(): void
     {
         // Setup
@@ -54,9 +50,7 @@ class ButtonTest extends MockeryTestCase
         $this->assertEquals(Button::BUTTON, $this->sut->getAttribute(static::TYPE_ATTRIBUTE));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructSetsClassToClassList(): void
     {
         // Setup
@@ -66,9 +60,7 @@ class ButtonTest extends MockeryTestCase
         $this->assertInstanceOf(ClassList::class, $this->sut->getAttribute(static::CLASS_ATTRIBUTE));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructSetsName(): void
     {
         // Setup
@@ -78,9 +70,7 @@ class ButtonTest extends MockeryTestCase
         $this->assertEquals(static::A_BUTTON_NAME, $this->sut->getName());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructSetsLabel(): void
     {
         // Setup
@@ -90,9 +80,7 @@ class ButtonTest extends MockeryTestCase
         $this->assertEquals(static::A_BUTTON_LABEL, $this->sut->getLabel());
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructSetsSizeToLarge(): void
     {
         // Setup
@@ -102,9 +90,7 @@ class ButtonTest extends MockeryTestCase
         $this->assertTrue($this->sut->getAttribute('class')->has(Button::LARGE));
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setAttributeIsCallable(): void
     {
         // Setup
@@ -114,10 +100,8 @@ class ButtonTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'setAttribute']);
     }
 
-    /**
-     * @test
-     * @depends setAttributeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setAttributeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setAttributeThrowsExceptionIfButtonTypeIsInvalid(): void
     {
         // Setup
@@ -131,20 +115,16 @@ class ButtonTest extends MockeryTestCase
         $this->sut->setAttribute(static::TYPE_ATTRIBUTE, static::AN_INVALID_BUTTON_TYPE);
     }
 
-    public function validButtonTypesDataProvider(): array
+    public static function validButtonTypesDataProvider(): \Iterator
     {
-        return [
-            'type button' => [Button::BUTTON],
-            'type submit' => [Button::SUBMIT],
-            'type reset' => [Button::RESET],
-        ];
+        yield 'type button' => [Button::BUTTON];
+        yield 'type submit' => [Button::SUBMIT];
+        yield 'type reset' => [Button::RESET];
     }
 
-    /**
-     * @test
-     * @depends setAttributeIsCallable
-     * @dataProvider validButtonTypesDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setAttributeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('validButtonTypesDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setAttributeAcceptsValidButtonTypes(string $buttonType): void
     {
         // Setup
@@ -157,18 +137,16 @@ class ButtonTest extends MockeryTestCase
         $this->assertTrue(true);
     }
 
-    protected const A_CLASS = 'A_CLASS';
+    protected const string A_CLASS = 'A_CLASS';
 
-    protected const B_CLASS = 'B_CLASS';
+    protected const string B_CLASS = 'B_CLASS';
 
-    protected const AB_STRING_CLASS_LIST = self::A_CLASS . ' ' . self::B_CLASS;
+    protected const string AB_STRING_CLASS_LIST = self::A_CLASS . ' ' . self::B_CLASS;
 
-    protected const AB_ARRAY_CLASS_LIST = [self::A_CLASS, self::B_CLASS];
+    protected const array AB_ARRAY_CLASS_LIST = [self::A_CLASS, self::B_CLASS];
 
-    /**
-     * @test
-     * @depends setAttributeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setAttributeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setAttributeConvertsClassValuesToClassListsWhenSettingAStringClassList(): void
     {
         // Setup
@@ -183,10 +161,8 @@ class ButtonTest extends MockeryTestCase
         $this->assertEquals(ClassList::fromString(static::AB_STRING_CLASS_LIST), $result);
     }
 
-    /**
-     * @test
-     * @depends setAttributeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setAttributeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setAttributeConvertsClassValuesToClassListsWhenSettingAnArrayClassList(): void
     {
         // Setup
@@ -201,10 +177,8 @@ class ButtonTest extends MockeryTestCase
         $this->assertEquals(new ClassList(static::AB_ARRAY_CLASS_LIST), $result);
     }
 
-    /**
-     * @test
-     * @depends setAttributeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setAttributeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setAttributeKeepsClassListsWhenSettingAClassList(): void
     {
         // Setup
@@ -218,9 +192,7 @@ class ButtonTest extends MockeryTestCase
         $this->assertSame($classList, $result);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setSizeIsCallable(): void
     {
         // Setup
@@ -230,10 +202,8 @@ class ButtonTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'setSize']);
     }
 
-    /**
-     * @test
-     * @depends setSizeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setSizeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setSizeThrowsExceptionIfSizeValueIsInvalid(): void
     {
         // Setup
@@ -247,18 +217,14 @@ class ButtonTest extends MockeryTestCase
         $this->sut->setSize(static::AN_INVALID_BUTTON_SIZE);
     }
 
-    public function validButtonSizeDataProvider(): array
+    public static function validButtonSizeDataProvider(): \Iterator
     {
-        return [
-            'large size' => [Button::LARGE],
-        ];
+        yield 'large size' => [Button::LARGE];
     }
 
-    /**
-     * @test
-     * @depends setSizeIsCallable
-     * @dataProvider validButtonSizeDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setSizeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('validButtonSizeDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setSizeAcceptsValidSizes(string $val): void
     {
         // Setup
@@ -271,10 +237,8 @@ class ButtonTest extends MockeryTestCase
         $this->assertTrue(true);
     }
 
-    /**
-     * @test
-     * @depends setSizeAcceptsValidSizes
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setSizeAcceptsValidSizes')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setSizeSetsSizeAsClass(): void
     {
         // Setup
@@ -287,10 +251,8 @@ class ButtonTest extends MockeryTestCase
         $this->assertTrue($this->sut->getAttribute('class')->has(Button::LARGE));
     }
 
-    /**
-     * @test
-     * @depends setSizeAcceptsValidSizes
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setSizeAcceptsValidSizes')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setSizeRemovesAnyExistingSizeClassesFromClassList(): void
     {
         // Setup
@@ -305,9 +267,7 @@ class ButtonTest extends MockeryTestCase
         $this->sut->setSize(Button::LARGE);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setThemeIsCallable(): void
     {
         // Setup
@@ -317,9 +277,7 @@ class ButtonTest extends MockeryTestCase
         $this->assertIsCallable([$this->sut, 'setTheme']);
     }
 
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setThemeThrowsExceptionIfThemeIsInvalid(): void
     {
         // Setup
@@ -334,21 +292,17 @@ class ButtonTest extends MockeryTestCase
     }
 
     /**
-     * @return array[]
+     * @return \Iterator<(int | string), array<mixed>>
      */
-    public function validThemesDataProvider(): array
+    public static function validThemesDataProvider(): \Iterator
     {
-        return [
-            'primary theme' => [Button::PRIMARY],
-            'tertiary theme' => [Button::TERTIARY],
-        ];
+        yield 'primary theme' => [Button::PRIMARY];
+        yield 'tertiary theme' => [Button::TERTIARY];
     }
 
-    /**
-     * @test
-     * @depends setThemeIsCallable
-     * @dataProvider validThemesDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setThemeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('validThemesDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setThemeAcceptsValidThemes(string $theme): void
     {
         // Setup
@@ -361,10 +315,8 @@ class ButtonTest extends MockeryTestCase
         $this->assertTrue($this->sut->getAttribute('class')->has($theme));
     }
 
-    /**
-     * @test
-     * @depends setThemeIsCallable
-     */
+    #[\PHPUnit\Framework\Attributes\Depends('setThemeIsCallable')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function setThemeRemovesAnyExistingThemes(): void
     {
         // Setup

@@ -16,13 +16,14 @@ use Olcs\Listener\RouteParam\OrganisationFurniture;
 use Olcs\Listener\RouteParams;
 use Laminas\View\Model\ViewModel;
 
-class OrganisationFurnitureTest extends MockeryTestCase
+final class OrganisationFurnitureTest extends MockeryTestCase
 {
     /**
      * @var OrganisationFurniture
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new OrganisationFurniture();

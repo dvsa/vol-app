@@ -31,7 +31,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DeleteDocumentTest extends AbstractCommandHandlerTestCase
+final class DeleteDocumentTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

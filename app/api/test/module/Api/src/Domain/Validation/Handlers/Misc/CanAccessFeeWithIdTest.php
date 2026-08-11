@@ -15,7 +15,7 @@ use Dvsa\Olcs\Transfer\Query\Fee\Fee as FeeQuery;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
+final class CanAccessFeeWithIdTest extends AbstractHandlerTestCase
 {
     protected $sut;
 

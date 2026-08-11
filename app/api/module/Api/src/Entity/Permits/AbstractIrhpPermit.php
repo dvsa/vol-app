@@ -21,21 +21,17 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @ORM\Table(name="irhp_permit",
- *    indexes={
- *        @ORM\Index(name="fk_irhp_permit_created_by_user_id", columns={"created_by"}),
- *        @ORM\Index(name="fk_irhp_permit_last_modified_by_user_id", columns={"last_modified_by"}),
- *        @ORM\Index(name="fk_irhp_permit_replaces_id_irhp_permit_id", columns={"replaces_id"}),
- *        @ORM\Index(name="fk_irhp_permit_status_ref_data_id", columns={"status"}),
- *        @ORM\Index(name="fk_irhp_permits_irhp_candidate_permit1_idx", columns={"irhp_candidate_permit_id"}),
- *        @ORM\Index(name="fk_irhp_permits_irhp_permit_application1_idx", columns={"irhp_permit_application_id"}),
- *        @ORM\Index(name="fk_irhp_permits_irhp_permit_range_idx", columns={"irhp_permit_range_id"})
- *    }
- * )
  */
+#[ORM\Table(name: 'irhp_permit')]
+#[ORM\Index(name: 'fk_irhp_permit_created_by_user_id', columns: ['created_by'])]
+#[ORM\Index(name: 'fk_irhp_permit_last_modified_by_user_id', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'fk_irhp_permit_replaces_id_irhp_permit_id', columns: ['replaces_id'])]
+#[ORM\Index(name: 'fk_irhp_permit_status_ref_data_id', columns: ['status'])]
+#[ORM\Index(name: 'fk_irhp_permits_irhp_candidate_permit1_idx', columns: ['irhp_candidate_permit_id'])]
+#[ORM\Index(name: 'fk_irhp_permits_irhp_permit_application1_idx', columns: ['irhp_permit_application_id'])]
+#[ORM\Index(name: 'fk_irhp_permits_irhp_permit_range_idx', columns: ['irhp_permit_range_id'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -48,129 +44,116 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Replaces
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermit", fetch="LAZY")
-     * @ORM\JoinColumn(name="replaces_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'replaces_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit::class, fetch: 'LAZY')]
     protected $replaces;
 
     /**
      * IrhpPermitRange
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_permit_range_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irhp_permit_range_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange::class, inversedBy: 'irhpPermits', fetch: 'LAZY')]
     protected $irhpPermitRange;
 
     /**
      * IrhpPermitApplication
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_permit_application_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, inversedBy: 'irhpPermits', fetch: 'LAZY')]
     protected $irhpPermitApplication;
 
     /**
      * IrhpCandidatePermit
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_candidate_permit_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irhp_candidate_permit_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit::class, inversedBy: 'irhpPermits', fetch: 'LAZY')]
     protected $irhpCandidatePermit;
 
     /**
      * Status
      *
      * @var \Dvsa\Olcs\Api\Entity\System\RefData
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\RefData", fetch="LAZY")
-     * @ORM\JoinColumn(name="status", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
     protected $status;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Permit number
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="permit_number", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'permit_number', nullable: true, options: ['unsigned' => true])]
     protected $permitNumber;
 
     /**
      * Issue date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="issue_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'issue_date', nullable: true)]
     protected $issueDate;
 
     /**
      * Expiry date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="expiry_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'expiry_date', nullable: true)]
     protected $expiryDate;
 
     /**
      * Permit properties
      *
      * @var string
-     *
-     * @ORM\Column(type="text", name="permit_properties", nullable=true)
      */
+    #[ORM\Column(type: 'text', name: 'permit_properties', nullable: true)]
     protected $permitProperties;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
@@ -194,7 +177,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param int $id new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setId($id)
     {
@@ -218,7 +201,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermit $replaces new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setReplaces($replaces)
     {
@@ -242,7 +225,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange $irhpPermitRange new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setIrhpPermitRange($irhpPermitRange)
     {
@@ -266,7 +249,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication $irhpPermitApplication new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setIrhpPermitApplication($irhpPermitApplication)
     {
@@ -290,7 +273,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpCandidatePermit $irhpCandidatePermit new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setIrhpCandidatePermit($irhpCandidatePermit)
     {
@@ -314,7 +297,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\System\RefData $status new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setStatus($status)
     {
@@ -338,7 +321,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -362,7 +345,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -386,7 +369,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param int $permitNumber new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setPermitNumber($permitNumber)
     {
@@ -410,7 +393,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $issueDate new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setIssueDate($issueDate)
     {
@@ -440,7 +423,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param \DateTime $expiryDate new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setExpiryDate($expiryDate)
     {
@@ -470,7 +453,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param string $permitProperties new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setPermitProperties($permitProperties)
     {
@@ -494,7 +477,7 @@ abstract class AbstractIrhpPermit implements BundleSerializableInterface, JsonSe
      *
      * @param int $version new value being set
      *
-     * @return IrhpPermit
+     * @return static
      */
     public function setVersion($version)
     {

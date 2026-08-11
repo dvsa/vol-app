@@ -13,7 +13,7 @@ class Radio extends ErrorOverrideRadio
     /** @var UniqidGenerator */
     protected $idGenerator;
 
-    public function __construct($name = null, $options = [], UniqidGenerator $idGenerator = null)
+    public function __construct($name = null, $options = [], ?UniqidGenerator $idGenerator = null)
     {
         $this->idGenerator = $idGenerator ?? new UniqidGenerator();
         parent::__construct($name, $options);

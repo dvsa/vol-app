@@ -4,6 +4,8 @@
  * Hide If Closed Radio Formatter Test
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -11,46 +13,43 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 /**
  * Hide If Closed Radio Formatter Test
  */
-class HideIfClosedRadioTest extends MockeryTestCase
+final class HideIfClosedRadioTest extends MockeryTestCase
 {
     /**
      * Test formatter
-     *
-     * @dataProvider formatProvider
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('formatProvider')]
     public function testFormat($data, $expected): void
     {
-        $this->assertEquals($expected, (new \Common\Service\Table\Formatter\HideIfClosedRadio())->format($data));
+        $this->assertEquals($expected, new \Common\Service\Table\Formatter\HideIfClosedRadio()->format($data));
     }
 
     /**
-     * @return ((int|string)[]|string)[][]
+     * @return \Iterator<(int | string), array<(array<(int | string)> | string)>>
      *
      * @psalm-return list{list{array{closedDate: '2015-03-24', id: 1}, ''}, list{array{closedDate: '', id: 1}, '<input type="radio" value="1" name="id">'}, list{array{id: 1}, '<input type="radio" value="1" name="id">'}}
      */
-    public function formatProvider(): array
+    public static function formatProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'closedDate' => '2015-03-24',
-                    'id' => 1
-                ],
-                ''
+                'closedDate' => '2015-03-24',
+                'id' => 1
             ],
+            ''
+        ];
+        yield [
             [
-                [
-                    'closedDate' => '',
-                    'id' => 1
-                ],
-                '<input type="radio" value="1" name="id">'
+                'closedDate' => '',
+                'id' => 1
             ],
+            '<input type="radio" value="1" name="id">'
+        ];
+        yield [
             [
-                [
-                    'id' => 1
-                ],
-                '<input type="radio" value="1" name="id">'
+                'id' => 1
             ],
+            '<input type="radio" value="1" name="id">'
         ];
     }
 }

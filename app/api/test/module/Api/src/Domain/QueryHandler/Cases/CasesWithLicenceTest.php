@@ -17,7 +17,7 @@ use Mockery as m;
 /**
  * CasesWithLicence test
  */
-class CasesWithLicenceTest extends QueryHandlerTestCase
+final class CasesWithLicenceTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

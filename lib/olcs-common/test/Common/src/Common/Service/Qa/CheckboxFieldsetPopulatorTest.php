@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa;
 
 use Common\Form\Elements\InputFilters\SingleCheckbox;
@@ -16,11 +18,9 @@ use Laminas\Form\Form;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class CheckboxFieldsetPopulatorTest extends MockeryTestCase
+final class CheckboxFieldsetPopulatorTest extends MockeryTestCase
 {
-    /**
-     * @dataProvider dpTestPopulate
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestPopulate')]
     public function testPopulate($checked): void
     {
         $notCheckedMessageOptions = [
@@ -102,15 +102,13 @@ class CheckboxFieldsetPopulatorTest extends MockeryTestCase
     }
 
     /**
-     * @return bool[][]
+     * @return \Iterator<(int | string), array<bool>>
      *
      * @psalm-return list{list{true}, list{false}}
      */
-    public function dpTestPopulate(): array
+    public static function dpTestPopulate(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 }

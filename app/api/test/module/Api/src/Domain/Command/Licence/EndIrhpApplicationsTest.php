@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * EndIrhpApplications test
  */
-class EndIrhpApplicationsTest extends TestCase
+final class EndIrhpApplicationsTest extends TestCase
 {
     public function testStructure(): void
     {
@@ -25,14 +25,11 @@ class EndIrhpApplicationsTest extends TestCase
             ]
         );
 
-        static::assertEquals($id, $sut->getId());
-        static::assertEquals($reason, $sut->getReason());
-        static::assertEquals(
-            [
-                'id' => $id,
-                'reason' => $reason,
-            ],
-            $sut->getArrayCopy()
-        );
+        $this->assertEquals($id, $sut->getId());
+        $this->assertEquals($reason, $sut->getReason());
+        $this->assertEquals([
+            'id' => $id,
+            'reason' => $reason,
+        ], $sut->getArrayCopy());
     }
 }

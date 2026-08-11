@@ -34,7 +34,7 @@ use Dvsa\Olcs\Api\Domain\Command\InspectionRequest\SendInspectionRequest as Send
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateFromGrantTest extends AbstractCommandHandlerTestCase
+final class CreateFromGrantTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

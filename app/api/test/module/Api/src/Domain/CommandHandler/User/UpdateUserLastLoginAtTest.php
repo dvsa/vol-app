@@ -13,9 +13,9 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\User\UpdateUserLastLoginAt as Sut;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
-class UpdateUserLastLoginAtTest extends AbstractCommandHandlerTestCase
+final class UpdateUserLastLoginAtTest extends AbstractCommandHandlerTestCase
 {
-    public const USER_ID = 123456;
+    public const int USER_ID = 123456;
 
     /** @var UpdateUserLastLoginAt|m\Mock sut */
     protected $sut;

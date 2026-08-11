@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Entity\Application\Application as Entity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class InterimConditionsUndertakingsTest extends QueryHandlerTestCase
+final class InterimConditionsUndertakingsTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

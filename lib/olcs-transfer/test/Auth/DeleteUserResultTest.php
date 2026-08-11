@@ -8,11 +8,9 @@ use Dvsa\Olcs\Transfer\Result\Auth\DeleteUserResult;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 
-class DeleteUserResultTest extends TestCase
+final class DeleteUserResultTest extends TestCase
 {
-    /**
-     * @test
-     */
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructThrowsInvalidArgumentExceptionWhenCodeIsNotValid()
     {
         $this->expectException(InvalidArgumentException::class);
@@ -21,50 +19,47 @@ class DeleteUserResultTest extends TestCase
         new DeleteUserResult(999);
     }
 
-    /**
-     * @test
-     * @dataProvider validCodeDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('codeDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function constructCreatesInstanceWhenCodeIsValid(int $code)
     {
         $this->assertInstanceOf(DeleteUserResult::class, new DeleteUserResult($code));
     }
 
-    /**
-     * @test
-     * @dataProvider validCodeDataProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('validCodeDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function isValidReturnsExpectedResponse(int $code, bool $isValid)
     {
         $result = new DeleteUserResult($code);
         $this->assertSame($isValid, $result->isValid());
     }
 
-    public function validCodeDataProvider()
+    public static function validCodeDataProvider(): \Iterator
     {
-        return [
-            'Success' => [DeleteUserResult::SUCCESS, true],
-            'Failure' => [DeleteUserResult::FAILURE, false],
-            'Failure user not found' => [DeleteUserResult::FAILURE_USER_NOT_FOUND, false],
-        ];
+        yield 'Success' => [DeleteUserResult::SUCCESS, true];
+        yield 'Failure' => [DeleteUserResult::FAILURE, false];
+        yield 'Failure user not found' => [DeleteUserResult::FAILURE_USER_NOT_FOUND, false];
     }
 
-    /**
-     * @test
-     * @dataProvider notPresentCodeDataProvider
-     */
+    public static function codeDataProvider(): \Iterator
+    {
+        foreach (self::validCodeDataProvider() as $name => [$code, $isValid]) {
+            yield $name => [$code];
+        }
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('notPresentCodeDataProvider')]
+    #[\PHPUnit\Framework\Attributes\Test]
     public function notPresentReturnsExpectedResponse(int $code, bool $isValid)
     {
         $result = new DeleteUserResult($code);
         $this->assertSame($isValid, $result->isUserNotPresent());
     }
 
-    public function notPresentCodeDataProvider()
+    public static function notPresentCodeDataProvider(): \Iterator
     {
-        return [
-            'Success' => [DeleteUserResult::SUCCESS, false],
-            'Failure' => [DeleteUserResult::FAILURE, false],
-            'Failure user not found' => [DeleteUserResult::FAILURE_USER_NOT_FOUND, true],
-        ];
+        yield 'Success' => [DeleteUserResult::SUCCESS, false];
+        yield 'Failure' => [DeleteUserResult::FAILURE, false];
+        yield 'Failure user not found' => [DeleteUserResult::FAILURE_USER_NOT_FOUND, true];
     }
 }

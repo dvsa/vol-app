@@ -6,23 +6,21 @@ namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
 
 use Dvsa\Olcs\Api\Service\Submission\Sections\CaseOutline;
 
-class CaseOutlineTest extends AbstractSubmissionSectionTestCase
+final class CaseOutlineTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = CaseOutline::class;
 
     /**
      * Filter provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
         $case = static::getCase();
 
         $expectedResult = ['data' => ['text' => 'case description']];
 
-        return [
-            [$case, $expectedResult],
-        ];
+        yield [$case, $expectedResult];
     }
 }

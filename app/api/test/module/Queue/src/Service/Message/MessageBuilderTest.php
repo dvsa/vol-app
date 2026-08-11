@@ -9,7 +9,7 @@ use Dvsa\Olcs\Queue\Service\Message\CompaniesHouse\ProcessInsolvency;
 use Dvsa\Olcs\Queue\Service\Message\MessageBuilder;
 use PHPUnit\Framework\TestCase;
 
-class MessageBuilderTest extends TestCase
+final class MessageBuilderTest extends TestCase
 {
     protected $sut;
 

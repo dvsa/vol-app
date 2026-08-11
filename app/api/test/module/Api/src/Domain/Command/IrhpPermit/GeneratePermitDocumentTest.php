@@ -9,7 +9,7 @@ use Dvsa\Olcs\Api\Domain\Command\IrhpPermit\GeneratePermitDocument;
 /**
  * Generate Permit Document Test
  */
-class GeneratePermitDocumentTest extends \PHPUnit\Framework\TestCase
+final class GeneratePermitDocumentTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

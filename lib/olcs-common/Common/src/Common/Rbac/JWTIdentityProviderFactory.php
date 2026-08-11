@@ -22,7 +22,7 @@ class JWTIdentityProviderFactory implements FactoryInterface
      * @throws Exception
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): JWTIdentityProvider
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): JWTIdentityProvider
     {
         $sessionName = $container->get('config')['auth']['session_name'] ?? '';
         if (empty($sessionName)) {

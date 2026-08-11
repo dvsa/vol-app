@@ -37,12 +37,18 @@ BEGIN
 
     WHILE(@rowcount = 10000) DO
     
-        DELETE d FROM disqualification d
-        LEFT JOIN person p ON d.person_id = p.id
-        LEFT JOIN organisation o ON d.organisation_id = o.id
-        WHERE (d.person_id IS NOT NULL AND p.id IS NULL)
-           OR (d.organisation_id IS NOT NULL AND o.id IS NULL)
-        LIMIT 10000;
+        DELETE FROM disqualification
+        WHERE id IN (
+            SELECT id FROM (
+                SELECT d.id
+                FROM disqualification d
+                LEFT JOIN person p ON d.person_id = p.id
+                LEFT JOIN organisation o ON d.organisation_id = o.id
+                WHERE (d.person_id IS NOT NULL AND p.id IS NULL)
+                   OR (d.organisation_id IS NOT NULL AND o.id IS NULL)
+                LIMIT 10000
+            ) AS batch
+        );
   
         SET @rowcount := row_count();
         SET @total_deleted := @total_deleted + @rowcount;

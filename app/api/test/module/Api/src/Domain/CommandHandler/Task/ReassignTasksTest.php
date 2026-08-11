@@ -14,15 +14,15 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\Task\ReassignTasks::class)]
-class ReassignTasksTest extends AbstractCommandHandlerTestCase
+final class ReassignTasksTest extends AbstractCommandHandlerTestCase
 {
-    public const TASK_ID_1 = 9990;
-    public const TASK_ID_2 = 9991;
+    public const int TASK_ID_1 = 9990;
+    public const int TASK_ID_2 = 9991;
 
-    public const TEAM_ID_1 = 7001;
-    public const TEAM_ID_2 = 7002;
+    public const int TEAM_ID_1 = 7001;
+    public const int TEAM_ID_2 = 7002;
 
-    public const USER_ID = 6001;
+    public const int USER_ID = 6001;
 
     /** @var ReassignTasks */
     protected $sut;

@@ -20,7 +20,7 @@ class MissingTranslationDelegatorFactory implements DelegatorFactoryInterface
      * {@inheritdoc}
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, callable $callback, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, callable $callback, ?array $options = null)
     {
         $translator = $callback();
 

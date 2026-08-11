@@ -8,18 +8,16 @@ use Common\Data\Object\Search\PeopleSelfserve;
 use DateTime;
 use DateTimeInterface;
 
-class PeopleSelfserveTest extends SearchAbstractTest
+final class PeopleSelfserveTest extends SearchAbstractTest
 {
     protected $class = PeopleSelfserve::class;
 
-    private const NAME_COLUMN_INDEX = 3;
-    private const BASE_TEST_DATA = [
+    private const int NAME_COLUMN_INDEX = 3;
+    private const array BASE_TEST_DATA = [
         'personFullname' => 'Bob Smith',
     ];
 
-    /**
-     * @dataProvider provideNameFormattingCases
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideNameFormattingCases')]
     public function testNameFormatterAppendsSuffixBasedOnRemovalStatus(
         array $additionalData,
         bool $expectRemovedSuffix
@@ -35,27 +33,25 @@ class PeopleSelfserveTest extends SearchAbstractTest
         $this->assertSame($expectedName, $formattedName);
     }
 
-    public static function provideNameFormattingCases(): array
+    public static function provideNameFormattingCases(): \Iterator
     {
-        return [
-            'should not append suffix when removal date is empty string' => [
-                'additionalData' => ['dateRemoved' => ''],
-                'expectRemovedSuffix' => false,
+        yield 'should not append suffix when removal date is empty string' => [
+            'additionalData' => ['dateRemoved' => ''],
+            'expectRemovedSuffix' => false,
+        ];
+        yield 'should not append suffix when removal date is null' => [
+            'additionalData' => ['dateRemoved' => null],
+            'expectRemovedSuffix' => false,
+        ];
+        yield 'should not append suffix when removal date is not provided' => [
+            'additionalData' => [],
+            'expectRemovedSuffix' => false,
+        ];
+        yield 'should append suffix when removal date is set' => [
+            'additionalData' => [
+                'dateRemoved' => new DateTime()->format(DateTimeInterface::ATOM),
             ],
-            'should not append suffix when removal date is null' => [
-                'additionalData' => ['dateRemoved' => null],
-                'expectRemovedSuffix' => false,
-            ],
-            'should not append suffix when removal date is not provided' => [
-                'additionalData' => [],
-                'expectRemovedSuffix' => false,
-            ],
-            'should append suffix when removal date is set' => [
-                'additionalData' => [
-                    'dateRemoved' => (new DateTime())->format(DateTimeInterface::ATOM),
-                ],
-                'expectRemovedSuffix' => true,
-            ]
+            'expectRemovedSuffix' => true,
         ];
     }
 }

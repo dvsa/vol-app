@@ -22,7 +22,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Application as ApplicationRepo;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class PublicationLinkListTest extends QueryHandlerTestCase
+final class PublicationLinkListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa\Custom\Common;
 
 use Common\Form\QaForm;
@@ -16,11 +18,11 @@ use Laminas\Form\Fieldset;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class IsValidBasedWarningAdderTest extends MockeryTestCase
+final class IsValidBasedWarningAdderTest extends MockeryTestCase
 {
-    public const WARNING_KEY = 'warning.key';
+    public const string WARNING_KEY = 'warning.key';
 
-    public const PRIORITY = 25;
+    public const int PRIORITY = 25;
 
     private $qaForm;
 

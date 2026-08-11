@@ -15,7 +15,7 @@ class AuthenticationService extends LaminasAuthenticationService implements Auth
      * @return Result
      */
     #[\Override]
-    public function authenticate(AdapterInterface $adapter = null): Result
+    public function authenticate(?AdapterInterface $adapter = null): Result
     {
         return parent::authenticate($adapter);
     }

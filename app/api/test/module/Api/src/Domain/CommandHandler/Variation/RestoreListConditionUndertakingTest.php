@@ -15,7 +15,7 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class RestoreListConditionUndertakingTest extends AbstractCommandHandlerTestCase
+final class RestoreListConditionUndertakingTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -16,10 +16,11 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class CheckboxAnswerSummaryProviderTest extends MockeryTestCase
+final class CheckboxAnswerSummaryProviderTest extends MockeryTestCase
 {
     private $checkboxAnswerSummaryProvider;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->checkboxAnswerSummaryProvider = new CheckboxAnswerSummaryProvider();
@@ -59,11 +60,9 @@ class CheckboxAnswerSummaryProviderTest extends MockeryTestCase
         );
     }
 
-    public static function dpGetTemplateVariables(): array
+    public static function dpGetTemplateVariables(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 }

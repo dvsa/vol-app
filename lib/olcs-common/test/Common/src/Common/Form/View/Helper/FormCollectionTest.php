@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\View\Helper;
 
 use Common\Form\Elements\Types\FileUploadList;
@@ -26,10 +28,8 @@ use Laminas\View\Renderer\JsonRenderer;
 use Laminas\View\Renderer\PhpRenderer;
 use Psr\Container\ContainerInterface;
 
-/**
- * @covers \Common\Form\View\Helper\FormCollection
- */
-class FormCollectionTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\View\Helper\FormCollection::class)]
+final class FormCollectionTest extends MockeryTestCase
 {
     /** @var  \Laminas\Form\FieldsetInterface | \Laminas\Form\ElementInterface */
     protected $element;
@@ -65,7 +65,7 @@ class FormCollectionTest extends MockeryTestCase
 
         $viewHelper = new FormCollectionViewHelper();
         $viewHelper->setView($view);
-        $viewHelper($this->element, 'formCollection');
+        $viewHelper($this->element, true);
 
         $this->expectOutputString('');
     }
@@ -81,7 +81,7 @@ class FormCollectionTest extends MockeryTestCase
 
         $this->element->setOption('hint-position', 'below');
 
-        echo $viewHelper($this->element, 'formCollection');
+        echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
             '/^<fieldset name="test" class="class" data-group="test"><legend>(.*)<\/legend>'
@@ -98,7 +98,7 @@ class FormCollectionTest extends MockeryTestCase
 
         $viewHelper = $this->prepareViewHelper();
 
-        echo $viewHelper($this->element, 'formCollection');
+        echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
             '/^<fieldset name="test" class="class" data-group="test"><legend>(.*)<\/legend><p class="hint">(.*)<\/p>'
@@ -115,7 +115,7 @@ class FormCollectionTest extends MockeryTestCase
 
         $viewHelper = $this->prepareViewHelper();
 
-        echo $viewHelper($this->element, 'formCollection');
+        echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
             '/^<fieldset name="test" class="class" data-group="test"><legend>(.*)<\/legend><p class="hint">(.*)<\/p>'
@@ -132,7 +132,7 @@ class FormCollectionTest extends MockeryTestCase
 
         $viewHelper = $this->prepareViewHelper();
 
-        echo $viewHelper($this->element, 'formCollection');
+        echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
             '/^<fieldset name="postcode" data-group="postcode">'
@@ -152,7 +152,7 @@ class FormCollectionTest extends MockeryTestCase
 
         $viewHelper = $this->prepareViewHelper();
 
-        echo $viewHelper($this->element, 'formCollection');
+        echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
             '/^<div class="validation-wrapper"><ul><li>(.*)<\/li><\/ul>'
@@ -228,14 +228,14 @@ class FormCollectionTest extends MockeryTestCase
         $sut->setView($mockView);
 
         $markup = $sut($mockFieldset);  //  invoke
-        $this->assertEquals('<ul class="definition-list readonly">element</ul>', $markup);
+        $this->assertSame('<ul class="definition-list readonly">element</ul>', $markup);
     }
 
     public function testRenderForFileUploadListElementNotItems(): void
     {
         $viewHelper = $this->prepareViewHelper();
 
-        static::assertEquals('', $viewHelper(new FileUploadList('files'), 'formCollection'));
+        $this->assertEquals('', $viewHelper(new FileUploadList('files'), true));
     }
 
     public function testRenderForFileUploadListElement(): void
@@ -265,18 +265,15 @@ class FormCollectionTest extends MockeryTestCase
             );
         $viewHelper->setView($mockView);
 
-        $actual = $viewHelper($this->element, 'formCollection');
+        $actual = $viewHelper($this->element, true);
 
-        static::assertEquals(
-            '<div class="help__text">' .
-            '<h3 class="file__heading">_TRANSL_common.file-upload.table.col.FileName</h3>' .
-            '<ul name="files" title="unit_attr1" data-group="files">' .
-            '<p class="hint">_TRANSL_@unit_hint@</p>' .
-            '<li name="file1" data-group="file1"></li>' .
-            '</ul>' .
-            '</div>',
-            $actual
-        );
+        $this->assertEquals('<div class="help__text">' .
+        '<h3 class="file__heading">_TRANSL_common.file-upload.table.col.FileName</h3>' .
+        '<ul name="files" title="unit_attr1" data-group="files">' .
+        '<p class="hint">_TRANSL_@unit_hint@</p>' .
+        '<li name="file1" data-group="file1"></li>' .
+        '</ul>' .
+        '</div>', $actual);
     }
 
     /**
@@ -288,7 +285,7 @@ class FormCollectionTest extends MockeryTestCase
 
         $viewHelper = $this->prepareViewHelper();
 
-        echo $viewHelper($this->element, 'formCollection');
+        echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex('/^<li name="files" data-group="files"><\/li>$/');
     }
@@ -311,7 +308,7 @@ class FormCollectionTest extends MockeryTestCase
 
         $viewHelper = $this->prepareViewHelper();
 
-        echo $viewHelper($this->element, 'formCollection');
+        echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
             '/^<div class="validation-wrapper"><ul><li>(.*)<\/li><\/ul>'
@@ -378,7 +375,7 @@ class FormCollectionTest extends MockeryTestCase
         $this->element->setOption('hint-position', 'below');
         $this->element->setOption('hintClass', 'form-hint');
 
-        echo $viewHelper($this->element, 'formCollection');
+        echo $viewHelper($this->element, true);
 
         $this->expectOutputRegex(
             '/^<fieldset name="test" class="class" data-group="test"><legend>(.*)<\/legend>'

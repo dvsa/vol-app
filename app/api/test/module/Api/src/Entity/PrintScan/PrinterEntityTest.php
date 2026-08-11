@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Entity\User\Team as TeamEntity;
  *
  * Initially auto-generated but won't be overridden
  */
-class PrinterEntityTest extends EntityTester
+final class PrinterEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

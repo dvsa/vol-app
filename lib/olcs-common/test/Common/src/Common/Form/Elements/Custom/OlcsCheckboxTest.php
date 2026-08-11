@@ -6,6 +6,8 @@
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Custom;
 
 use Common\Form\Elements\Custom\OlcsCheckbox;
@@ -16,7 +18,7 @@ use Laminas\Validator as LaminasValidator;
  *
  * @author Shaun Lizzio <shaun.lizzio@valtech.co.uk>
  */
-class OlcsCheckboxTest extends \PHPUnit\Framework\TestCase
+final class OlcsCheckboxTest extends \PHPUnit\Framework\TestCase
 {
     /**+
      * Holds the element

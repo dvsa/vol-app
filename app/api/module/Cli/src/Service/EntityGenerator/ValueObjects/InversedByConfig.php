@@ -16,7 +16,8 @@ readonly class InversedByConfig
         public string|null $indexBy = null,
         public bool $orphanRemoval = false,
         public array $orderBy = [],
-        public string|null $fetch = null
+        public string|null $fetch = null,
+        public bool $generateInverse = true
     ) {
     }
 
@@ -32,7 +33,8 @@ readonly class InversedByConfig
             indexBy: $config['indexBy'] ?? null,
             orphanRemoval: self::toBool($config['orphanRemoval'] ?? false),
             orderBy: $config['orderBy'] ?? [],
-            fetch: $config['fetch'] ?? null
+            fetch: $config['fetch'] ?? null,
+            generateInverse: self::toBool($config['generateInverse'] ?? true)
         );
     }
 

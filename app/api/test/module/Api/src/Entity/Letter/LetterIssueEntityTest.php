@@ -16,7 +16,7 @@ use Dvsa\OlcsTest\Api\Entity\Abstracts\EntityTester;
  *
  * Initially auto-generated but won't be overridden
  */
-class LetterIssueEntityTest extends EntityTester
+final class LetterIssueEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

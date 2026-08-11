@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence;
  *
  * Initially auto-generated but won't be overridden
  */
-class WorkshopEntityTest extends EntityTester
+final class WorkshopEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

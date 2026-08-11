@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class SelfservePageTest extends MockeryTestCase
+final class SelfservePageTest extends MockeryTestCase
 {
     private $title;
 
@@ -31,6 +31,7 @@ class SelfservePageTest extends MockeryTestCase
 
     private $selfservePage;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->title = 'title';

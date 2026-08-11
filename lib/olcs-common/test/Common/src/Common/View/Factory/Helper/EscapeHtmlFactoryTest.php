@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Factory\Helper;
 
 use Common\View\Factory\Helper\EscapeHtmlFactory;
@@ -9,7 +11,7 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-class EscapeHtmlFactoryTest extends TestCase
+final class EscapeHtmlFactoryTest extends TestCase
 {
     public function testInvoke(): void
     {
@@ -24,9 +26,6 @@ class EscapeHtmlFactoryTest extends TestCase
                 }
             );
 
-        static::assertInstanceOf(
-            EscapeHtml::class,
-            (new EscapeHtmlFactory())->__invoke($container, EscapeHtml::class)
-        );
+        $this->assertInstanceOf(EscapeHtml::class, new EscapeHtmlFactory()->__invoke($container, EscapeHtml::class));
     }
 }

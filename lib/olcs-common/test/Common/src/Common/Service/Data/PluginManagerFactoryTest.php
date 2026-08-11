@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Service\Data\PluginManager;
@@ -8,7 +10,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\Service\Data\PluginManagerFactory;
 use Mockery as m;
 
-class PluginManagerFactoryTest extends MockeryTestCase
+final class PluginManagerFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

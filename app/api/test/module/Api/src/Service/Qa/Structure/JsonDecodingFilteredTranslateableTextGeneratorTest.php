@@ -15,12 +15,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class JsonDecodingFilteredTranslateableTextGeneratorTest extends MockeryTestCase
+final class JsonDecodingFilteredTranslateableTextGeneratorTest extends MockeryTestCase
 {
     private $filteredTranslateableTextGenerator;
 
     private $jsonDecodingFilteredTranslateableTextGenerator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->filteredTranslateableTextGenerator = m::mock(FilteredTranslateableTextGenerator::class);

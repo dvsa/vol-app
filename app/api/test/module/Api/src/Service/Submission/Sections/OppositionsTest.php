@@ -8,16 +8,16 @@ namespace Dvsa\OlcsTest\Api\Service\Submission\Sections;
  * Class OppositionsTest
  * @author Shaun Lizzio <shaun@valtech.co.uk>
  */
-class OppositionsTest extends AbstractSubmissionSectionTestCase
+final class OppositionsTest extends AbstractSubmissionSectionTestCase
 {
     protected $submissionSection = \Dvsa\Olcs\Api\Service\Submission\Sections\Oppositions::class;
 
     /**
      * Filter provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function sectionTestProvider(): array
+    public static function sectionTestProvider(): \Iterator
     {
         $case = static::getCase();
 
@@ -98,8 +98,6 @@ class OppositionsTest extends AbstractSubmissionSectionTestCase
             ]
         ];
 
-        return [
-            [$case, $expectedResult],
-        ];
+        yield [$case, $expectedResult];
     }
 }

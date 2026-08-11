@@ -34,9 +34,9 @@ use Mockery as m;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EndIrhpPermitsTest extends AbstractCommandHandlerTestCase
+final class EndIrhpPermitsTest extends AbstractCommandHandlerTestCase
 {
-    public const LICENCE_ID = 52;
+    public const int LICENCE_ID = 52;
 
     private $licence;
 
@@ -286,21 +286,19 @@ class EndIrhpPermitsTest extends AbstractCommandHandlerTestCase
         );
     }
 
-    public static function dpHandleCommandWithTaskCreation(): array
+    public static function dpHandleCommandWithTaskCreation(): \Iterator
     {
-        return [
-            [
-                EndIrhpApplicationsAndPermits::CONTEXT_SURRENDER,
-                'Permits terminated after licence surrendered',
-            ],
-            [
-                EndIrhpApplicationsAndPermits::CONTEXT_REVOKE,
-                'Permits terminated after licence revoked',
-            ],
-            [
-                EndIrhpApplicationsAndPermits::CONTEXT_CNS,
-                'Permits terminated after CNS processing of licence',
-            ],
+        yield [
+            EndIrhpApplicationsAndPermits::CONTEXT_SURRENDER,
+            'Permits terminated after licence surrendered',
+        ];
+        yield [
+            EndIrhpApplicationsAndPermits::CONTEXT_REVOKE,
+            'Permits terminated after licence revoked',
+        ];
+        yield [
+            EndIrhpApplicationsAndPermits::CONTEXT_CNS,
+            'Permits terminated after CNS processing of licence',
         ];
     }
 

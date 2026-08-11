@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Controller\Util;
 
 use Common\Util\MultiResponseHelper;
@@ -9,7 +11,7 @@ use Laminas\Http\Response;
  * Class MultiResponseHelperTest
  * @package CommonTest\Controller\Util
  */
-class MultiResponseHelperTest extends \PHPUnit\Framework\TestCase
+final class MultiResponseHelperTest extends \PHPUnit\Framework\TestCase
 {
     public function testHandleResponse(): void
     {
@@ -34,7 +36,7 @@ class MultiResponseHelperTest extends \PHPUnit\Framework\TestCase
 
         $data = $sut->handleResponse();
 
-        $this->assertEquals(['resp1' => 'some data', 'resp2' => 'some more data'], $data);
+        $this->assertSame(['resp1' => 'some data', 'resp2' => 'some more data'], $data);
     }
 
     public function testHandleNone207Response(): void

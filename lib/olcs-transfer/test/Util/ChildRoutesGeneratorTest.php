@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Util;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\Olcs\Transfer\Util\ChildRoutesGenerator;
 
-class ChildRoutesGeneratorTest extends MockeryTestCase
+final class ChildRoutesGeneratorTest extends MockeryTestCase
 {
     public function testGetUpdatedRoutes()
     {

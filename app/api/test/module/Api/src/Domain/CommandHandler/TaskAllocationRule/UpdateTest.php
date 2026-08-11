@@ -14,7 +14,7 @@ use Dvsa\Olcs\Transfer\Command\TaskAllocationRule\Update as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
     /**
      * Set up
@@ -111,15 +111,13 @@ class UpdateTest extends AbstractCommandHandlerTestCase
     /**
      * MLH provider
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function mlhProvider(): array
+    public static function mlhProvider(): \Iterator
     {
-        return [
-            ['lcat_gv', 'Y', true],
-            ['lcat_gv', 'N', false],
-            ['lcat_psv', 'na', null],
-        ];
+        yield ['lcat_gv', 'Y', true];
+        yield ['lcat_gv', 'N', false];
+        yield ['lcat_psv', 'na', null];
     }
 
     /**
@@ -146,10 +144,10 @@ class UpdateTest extends AbstractCommandHandlerTestCase
             function (\Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule $tar) {
                 $this->assertSame($this->references[CategoryEntity::class][1], $tar->getCategory());
                 $this->assertSame($this->references[TeamEntity::class][2], $tar->getTeam());
-                $this->assertSame(null, $tar->getUser());
-                $this->assertSame(null, $tar->getGoodsOrPsv());
-                $this->assertSame(null, $tar->getIsMlh());
-                $this->assertSame(null, $tar->getTrafficArea());
+                $this->assertNull($tar->getUser());
+                $this->assertNull($tar->getGoodsOrPsv());
+                $this->assertNull($tar->getIsMlh());
+                $this->assertNull($tar->getTrafficArea());
                 $tar->setId(1304);
             }
         );

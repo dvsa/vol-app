@@ -10,7 +10,7 @@ use Psr\Container\ContainerInterface;
 class SetDefaultTrafficAreaAndEnforcementAreaFactory implements FactoryInterface
 {
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransactioningCommandHandler
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TransactioningCommandHandler
     {
         $instance = new SetDefaultTrafficAreaAndEnforcementArea(
             $container->get(AddressHelperService::class)

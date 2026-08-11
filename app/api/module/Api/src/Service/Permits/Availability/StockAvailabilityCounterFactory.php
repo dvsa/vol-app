@@ -18,7 +18,7 @@ class StockAvailabilityCounterFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): StockAvailabilityCounter
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): StockAvailabilityCounter
     {
         return new StockAvailabilityCounter(
             $container->get('PermitsAvailabilityEmissionsCategoryAvailabilityCounter')

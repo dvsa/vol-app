@@ -40,7 +40,7 @@ use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 /**
  * Assign Submission Test
  */
-class AssignSubmissionTest extends AbstractCommandHandlerTestCase
+final class AssignSubmissionTest extends AbstractCommandHandlerTestCase
 {
     public $submissionConfig = [
         'submissions' => [
@@ -615,12 +615,10 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function informationCompleteDateDataProvider(): array
+    public static function informationCompleteDateDataProvider(): \Iterator
     {
-        return [
-            ['2017-01-31'],
-            ['2018-01-01'],
-        ];
+        yield ['2017-01-31'];
+        yield ['2018-01-01'];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('informationCompleteDateDataProvider')]
@@ -844,11 +842,9 @@ class AssignSubmissionTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function assignToTcDataProvider(): array
+    public static function assignToTcDataProvider(): \Iterator
     {
-        return [
-            [0, 1],
-            [1, 0],
-        ];
+        yield [0, 1];
+        yield [1, 0];
     }
 }

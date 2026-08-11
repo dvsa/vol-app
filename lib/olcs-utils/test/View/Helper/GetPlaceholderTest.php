@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Utils\View\Helper;
 
 use Dvsa\Olcs\Utils\View\Helper\GetPlaceholder;
@@ -7,20 +9,16 @@ use Laminas\ServiceManager\ServiceManager;
 use Laminas\View\Model\ViewModel;
 use PHPUnit\Framework\TestCase;
 
-class GetPlaceholderTest extends TestCase
+final class GetPlaceholderTest extends TestCase
 {
     protected $container;
 
-    protected $sut;
-
     public function setUp(): void
     {
-        $this->container = $this->getMockBuilder(\stdClass::class)->addMethods(['getValue'])->getMock();
+        $this->container = $this->createStub(\Laminas\View\Helper\Placeholder\Container::class);
     }
 
-    /**
-     * @dataProvider asStringProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('asStringProvider')]
     public function testAsString($value, $expected)
     {
         $this->container->method('getValue')->willReturn($value);
@@ -28,9 +26,7 @@ class GetPlaceholderTest extends TestCase
         $this->assertEquals($expected, $this->getService()->asString());
     }
 
-    /**
-     * @dataProvider asViewProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('asViewProvider')]
     public function testAsView($value, $expected)
     {
         $this->container->method('getValue')->willReturn($value);
@@ -38,9 +34,7 @@ class GetPlaceholderTest extends TestCase
         $this->assertEquals($expected, $this->getService()->asView());
     }
 
-    /**
-     * @dataProvider asObjectProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('asObjectProvider')]
     public function testAsObject($value, $expected)
     {
         $this->container->method('getValue')->willReturn($value);
@@ -48,9 +42,7 @@ class GetPlaceholderTest extends TestCase
         $this->assertEquals($expected, $this->getService()->asObject());
     }
 
-    /**
-     * @dataProvider asBoolProvider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('asBoolProvider')]
     public function testAsBool($value, $expected)
     {
         $this->container->method('getValue')->willReturn($value);
@@ -58,99 +50,89 @@ class GetPlaceholderTest extends TestCase
         $this->assertEquals($expected, $this->getService()->asBool());
     }
 
-    public function asStringProvider()
+    public static function asStringProvider(): \Iterator
     {
-        return [
+        yield [
+            ['foo'],
+            'foo'
+        ];
+        yield [
+            'foo',
+            'foo'
+        ];
+        yield [
             [
-                ['foo'],
-                'foo'
+                ['foo']
             ],
-            [
-                'foo',
-                'foo'
-            ],
-            [
-                [
-                    ['foo']
-                ],
-                null
-            ]
+            null
         ];
     }
 
-    public function asViewProvider()
+    public static function asViewProvider(): \Iterator
     {
         $view = new ViewModel();
-
-        return [
+        yield [
+            [$view],
+            $view
+        ];
+        yield [
+            $view,
+            $view
+        ];
+        yield [
             [
-                [$view],
-                $view
+                [$view]
             ],
-            [
-                $view,
-                $view
-            ],
-            [
-                [
-                    [$view]
-                ],
-                null
-            ],
-            [
-                'foo',
-                null
-            ]
+            null
+        ];
+        yield [
+            'foo',
+            null
         ];
     }
 
-    public function asObjectProvider()
+    public static function asObjectProvider(): \Iterator
     {
         $class = new \stdClass();
-
-        return [
+        yield [
+            [$class],
+            $class
+        ];
+        yield [
+            $class,
+            $class
+        ];
+        yield [
             [
-                [$class],
-                $class
+                [$class]
             ],
-            [
-                $class,
-                $class
-            ],
-            [
-                [
-                    [$class]
-                ],
-                null
-            ],
-            [
-                'foo',
-                null
-            ]
+            null
+        ];
+        yield [
+            'foo',
+            null
         ];
     }
 
-    public function asBoolProvider()
+    public static function asBoolProvider(): \Iterator
     {
-        return [
+        yield [
+            [true],
+            true
+        ];
+        yield [
+            true,
+            true
+        ];
+        yield [
             [
-                [true],
-                true
+                [true]
             ],
-            [
-                true,
-                true
-            ],
-            [
-                [
-                    [true]
-                ],
-                null
-            ],
-            [
-                'foo',
-                null
-            ]
+            null
+        ];
+        yield [
+            'foo',
+            null
         ];
     }
 

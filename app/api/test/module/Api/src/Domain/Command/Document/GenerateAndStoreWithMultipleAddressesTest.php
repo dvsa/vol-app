@@ -7,7 +7,7 @@ namespace Dvsa\OlcsTest\Api\Domain\Command\Document;
 use Dvsa\Olcs\Api\Domain\Command\Document\GenerateAndStoreWithMultipleAddresses;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class GenerateAndStoreWithMultipleAddressesTest extends MockeryTestCase
+final class GenerateAndStoreWithMultipleAddressesTest extends MockeryTestCase
 {
     public function testStructure(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Qa;
 
 use Common\Service\Qa\DataTransformer\ApplicationStepsPostDataTransformer;
@@ -13,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ApplicationStepsPostDataTransformerTest extends MockeryTestCase
+final class ApplicationStepsPostDataTransformerTest extends MockeryTestCase
 {
     public function testGetTransformed(): void
     {

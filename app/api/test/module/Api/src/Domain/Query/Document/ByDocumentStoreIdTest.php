@@ -10,7 +10,7 @@ namespace Dvsa\OlcsTest\Api\Domain\Query\Document;
 
 use Dvsa\Olcs\Api\Domain\Query\Document\ByDocumentStoreId;
 
-class ByDocumentStoreIdTest extends \PHPUnit\Framework\TestCase
+final class ByDocumentStoreIdTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

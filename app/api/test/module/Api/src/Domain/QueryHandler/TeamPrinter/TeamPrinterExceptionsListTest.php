@@ -22,7 +22,7 @@ use Mockery as m;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class TeamPrinterExceptionsListTest extends QueryHandlerTestCase
+final class TeamPrinterExceptionsListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

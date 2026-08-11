@@ -35,7 +35,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\Result as QueryResult;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class SendInspectionRequestTest extends AbstractCommandHandlerTestCase
+final class SendInspectionRequestTest extends AbstractCommandHandlerTestCase
 {
     private $stubLicenceData = [
         'id' => 77,

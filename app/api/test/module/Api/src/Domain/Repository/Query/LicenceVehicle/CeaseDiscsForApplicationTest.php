@@ -13,7 +13,7 @@ use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
 /**
  * Cease Discs For Application Test
  */
-class CeaseDiscsForApplicationTest extends AbstractDbQueryTestCase
+final class CeaseDiscsForApplicationTest extends AbstractDbQueryTestCase
 {
     protected $tableNameMap = [
         GoodsDisc::class => 'goods_disc',
@@ -56,19 +56,17 @@ class CeaseDiscsForApplicationTest extends AbstractDbQueryTestCase
         ]
     ];
 
-    public static function paramProvider(): array
+    public static function paramProvider(): \Iterator
     {
         $today = new DateTime();
 
-        return [
+        yield [
+            [],
+            [],
             [
-                [],
-                [],
-                [
-                    'ceasedDate' => $today->format('Y-m-d H:i:s')
-                ],
-                []
-            ]
+                'ceasedDate' => $today->format('Y-m-d H:i:s')
+            ],
+            []
         ];
     }
 

@@ -19,7 +19,7 @@ use Olcs\FormService\Form\Lva\Undertakings;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class UndertakingsTest extends AbstractLvaFormServiceTestCase
+final class UndertakingsTest extends AbstractLvaFormServiceTestCase
 {
     protected $classToTest = Undertakings::class;
 

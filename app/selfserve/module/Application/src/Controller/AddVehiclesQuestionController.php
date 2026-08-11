@@ -175,7 +175,7 @@ class AddVehiclesQuestionController
      * @param array|null $input
      * @return AddVehiclesQuestionForm
      */
-    protected function newForm(array $input = null): AddVehiclesQuestionForm
+    protected function newForm(?array $input = null): AddVehiclesQuestionForm
     {
         $instance = new AddVehiclesQuestionForm('add_vehicles_question_form');
         if (null !== $input) {

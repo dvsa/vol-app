@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\ApplicationCompletion\UpdateOperatingCentresSta
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class UpdateOperatingCentresStatusTest extends \PHPUnit\Framework\TestCase
+final class UpdateOperatingCentresStatusTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

@@ -11,10 +11,10 @@ use Dvsa\Olcs\Api\Domain\DocumentGeneratorAwareInterface;
 use Dvsa\Olcs\Api\Domain\DocumentGeneratorAwareTrait;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
-use Dvsa\Olcs\Api\Entity\Letter\MasterTemplate;
 use Dvsa\Olcs\Api\Service\ConvertToPdf\ConvertHtmlToPdfInterface;
 use Dvsa\Olcs\Api\Service\Document\NamingServiceAwareInterface;
 use Dvsa\Olcs\Api\Service\Letter\LetterPreviewService;
+use Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolver;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\PrepareToSend as Cmd;
 use Olcs\Logging\Log\Logger;
@@ -37,9 +37,11 @@ final class PrepareToSend extends AbstractCommandHandler implements
 
     protected $repoServiceName = 'LetterInstance';
 
-    protected $extraRepos = ['Document', 'MasterTemplate'];
+    protected $extraRepos = ['Document'];
 
     private LetterPreviewService $previewService;
+
+    private MasterTemplateResolver $masterTemplateResolver;
 
     private ConvertHtmlToPdfInterface $convertHtmlToPdf;
 
@@ -58,8 +60,11 @@ final class PrepareToSend extends AbstractCommandHandler implements
             throw new ValidationException(['Letter instance must be in DRAFT or READY status']);
         }
 
-        // Get master template for rendering
-        $masterTemplate = $this->getMasterTemplate($letterInstance);
+        // VOL-7402: content flagged "requires input" must be edited before sending
+        $this->assertRequiredInputProvided($letterInstance);
+
+        // VOL-7305: pick the right MasterTemplate row for this letter's region (GB/NI/...)
+        $masterTemplate = $this->masterTemplateResolver->resolve($letterInstance);
 
         // Render preview HTML
         $previewHtml = $this->previewService->renderPreview($letterInstance, $masterTemplate, excludePdfAppendices: true);
@@ -119,7 +124,7 @@ final class PrepareToSend extends AbstractCommandHandler implements
 
         // Generate filename using NamingService
         $letterType = $letterInstance->getLetterType();
-        $description = $letterType ? $letterType->getName() : 'Letter';
+        $description = $this->buildDocumentDescription($letterInstance);
         $category = $letterType ? $letterType->getCategory() : null;
         $subCategory = $letterType ? $letterType->getSubCategory() : null;
 
@@ -206,33 +211,64 @@ final class PrepareToSend extends AbstractCommandHandler implements
     }
 
     /**
-     * Get the master template to use for rendering
+     * VOL-7402: block sending while any issue or section flagged "requires input"
+     * still carries its default content. The flag exists precisely so a caseworker
+     * must replace boilerplate (deadlines, amounts, names) before the letter goes out.
+     *
+     * @throws ValidationException listing every offending heading
      */
-    private function getMasterTemplate(LetterInstanceEntity $letterInstance): ?MasterTemplate
+    private function assertRequiredInputProvided(LetterInstanceEntity $letterInstance): void
+    {
+        $pending = [];
+
+        foreach ($letterInstance->getLetterInstanceIssues() as $issue) {
+            if ($issue->requiresInput() && !$issue->hasBeenEdited()) {
+                $pending[] = $issue->getHeading() ?: 'Issue';
+            }
+        }
+
+        foreach ($letterInstance->getLetterInstanceSections() as $section) {
+            if ($section->requiresInput() && !$section->hasBeenEdited()) {
+                $pending[] = $section->getLetterSectionVersion()?->getName() ?: 'Section';
+            }
+        }
+
+        if (!empty($pending)) {
+            throw new ValidationException([
+                'requiresInput' => [sprintf(
+                    'This letter cannot be sent yet. Edit the following before sending: %s',
+                    implode(', ', $pending)
+                )],
+            ]);
+        }
+    }
+
+    /**
+     * Letter type name plus any selected radio ("pick one") choice labels.
+     *
+     * VOL-7308: variants like first/final request are letter *choices* within a
+     * single letter type, so the type name alone can't distinguish the documents
+     * in Docs & attachments. Checkbox choices are content add-ons, not variants,
+     * and are deliberately left out.
+     */
+    private function buildDocumentDescription(LetterInstanceEntity $letterInstance): string
     {
         $letterType = $letterInstance->getLetterType();
-        if ($letterType !== null && $letterType->getMasterTemplate() !== null) {
-            return $letterType->getMasterTemplate();
-        }
+        $description = $letterType ? $letterType->getName() : 'Letter';
 
-        try {
-            $repo = $this->getRepo('MasterTemplate');
-            $result = $repo->fetchList(
-                \Dvsa\Olcs\Transfer\Query\Letter\MasterTemplate\GetList::create([
-                    'isDefault' => true,
-                    'locale' => MasterTemplate::LOCALE_EN_GB,
-                    'limit' => 1,
-                ])
-            );
-
-            if (count($result) > 0) {
-                return $result[0];
+        $variantLabels = [];
+        foreach ($letterInstance->getLetterInstanceChoices() as $instanceChoice) {
+            $choice = $instanceChoice->getLetterChoice();
+            if ($choice !== null && $choice->getInputType() === 'radio' && $choice->getLabel() !== '') {
+                $variantLabels[] = $choice->getLabel();
             }
-        } catch (\Exception $e) {
-            Logger::warn('PrepareToSend: Failed to fetch default master template: ' . $e->getMessage());
         }
 
-        return null;
+        if (!empty($variantLabels)) {
+            $description .= ' - ' . implode(', ', $variantLabels);
+        }
+
+        return $description;
     }
 
     /**
@@ -265,9 +301,10 @@ final class PrepareToSend extends AbstractCommandHandler implements
      * Factory method for dependency injection
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): mixed
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): mixed
     {
         $this->previewService = $container->get(LetterPreviewService::class);
+        $this->masterTemplateResolver = $container->get(MasterTemplateResolver::class);
         $this->convertHtmlToPdf = $container->get('ConvertToPdf');
         $this->contentStore = $container->get('ContentStore');
         return parent::__invoke($container, $requestedName, $options);

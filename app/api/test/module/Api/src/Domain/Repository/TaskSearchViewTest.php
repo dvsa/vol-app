@@ -11,8 +11,9 @@ use Dvsa\Olcs\Utils\Constants\FilterOptions;
 use Mockery as m;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\TaskSearchView::class)]
-class TaskSearchViewTest extends RepositoryTestCase
+final class TaskSearchViewTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(TaskSearchViewRepo::class, true);

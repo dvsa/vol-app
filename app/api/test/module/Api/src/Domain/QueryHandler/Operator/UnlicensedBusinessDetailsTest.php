@@ -21,7 +21,7 @@ use Mockery as m;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class UnlicensedBusinessDetailsTest extends QueryHandlerTestCase
+final class UnlicensedBusinessDetailsTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

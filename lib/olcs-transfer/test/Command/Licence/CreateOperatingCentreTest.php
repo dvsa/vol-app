@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Licence;
 
 use DateTime;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\Licence\CreateOperatingCentre;
 use Dvsa\OlcsTest\Transfer\Command\CommandTest;
 use PHPUnit\Framework\TestCase;
 
-class CreateOperatingCentreTest extends TestCase
+final class CreateOperatingCentreTest extends TestCase
 {
     use CommandTest;
 

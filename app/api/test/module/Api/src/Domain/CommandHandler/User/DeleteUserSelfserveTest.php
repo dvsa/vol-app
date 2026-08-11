@@ -19,11 +19,11 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
-class DeleteUserSelfserveTest extends AbstractCommandHandlerTestCase
+final class DeleteUserSelfserveTest extends AbstractCommandHandlerTestCase
 {
-    public const USER_ID = 8888;
-    public const LOGIN_ID = 'usr8888';
-    public const ADMIN_USER_ID = 8880;
+    public const int USER_ID = 8888;
+    public const string LOGIN_ID = 'usr8888';
+    public const int ADMIN_USER_ID = 8880;
 
     /** @var  DeleteUserSelfserve */
     protected $sut;
@@ -47,7 +47,7 @@ class DeleteUserSelfserveTest extends AbstractCommandHandlerTestCase
             AuthorizationService::class => $this->mockAuth,
         ];
 
-        $adminUserEntity = (new UserEntity(9999, UserEntity::USER_TYPE_OPERATOR))
+        $adminUserEntity = new UserEntity(9999, UserEntity::USER_TYPE_OPERATOR)
             ->setId(self::ADMIN_USER_ID);
         $this->mockAuth->shouldReceive('getIdentity->getUser')->once()->andReturn($adminUserEntity);
 

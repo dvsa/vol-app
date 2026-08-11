@@ -19,7 +19,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ApplicationFeesClearerTest extends MockeryTestCase
+final class ApplicationFeesClearerTest extends MockeryTestCase
 {
     public function testRemove(): void
     {

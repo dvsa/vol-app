@@ -6,6 +6,8 @@
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\InputFilters;
 
 use Common\Form\Elements\InputFilters;
@@ -15,7 +17,7 @@ use Common\Form\Elements\InputFilters;
  *
  * @author Nick Payne <nick.payne@valtech.co.uk>
  */
-class TextRequiredTest extends \PHPUnit\Framework\TestCase
+final class TextRequiredTest extends \PHPUnit\Framework\TestCase
 {
     public $filter;
     /**

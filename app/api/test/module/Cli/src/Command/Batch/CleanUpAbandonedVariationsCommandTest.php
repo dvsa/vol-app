@@ -8,7 +8,7 @@ use Dvsa\Olcs\Cli\Command\Batch\CleanUpAbandonedVariationsCommand;
 use Dvsa\Olcs\Cli\Domain\Command\CleanUpAbandonedVariations;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class CleanUpAbandonedVariationsCommandTest extends AbstractBatchCommandCases
+final class CleanUpAbandonedVariationsCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

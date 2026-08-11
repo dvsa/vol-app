@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Controller\Lva\Adapters;
 
 use Common\Controller\Lva\Adapters\VariationConditionsUndertakingsAdapter;
@@ -8,7 +10,7 @@ use Psr\Container\ContainerInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class VariationConditionsUndertakingsAdapterTest extends MockeryTestCase
+final class VariationConditionsUndertakingsAdapterTest extends MockeryTestCase
 {
     protected $sut;
 

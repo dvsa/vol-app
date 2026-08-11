@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Cli\Service\Queue\Consumer;
 
-use Doctrine\ORM\Internal\Hydration\IterableResult;
 use Dvsa\Olcs\Api\Domain\CommandHandlerManager;
 use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Entity;
@@ -15,10 +14,8 @@ use Dvsa\Olcs\Transfer\Command as TransferCmd;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-/**
- * @covers Dvsa\Olcs\Cli\Service\Queue\Consumer\CpidOrganisationExport
- */
-class CpidOrganisationExportTest extends AbstractConsumerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\CpidOrganisationExport::class)]
+final class CpidOrganisationExportTest extends AbstractConsumerTestCase
 {
     protected $queueEntity = null;
 
@@ -30,7 +27,7 @@ class CpidOrganisationExportTest extends AbstractConsumerTestCase
         $user = new Entity\User\User('pid', 'type');
         $user->setId(1);
 
-        $this->queueEntity = (new Queue())
+        $this->queueEntity = new Queue()
             ->setType(new RefData(Queue::TYPE_CPID_EXPORT_CSV))
             ->setStatus(new RefData(Queue::STATUS_QUEUED))
             ->setCreatedBy($user)
@@ -42,12 +39,10 @@ class CpidOrganisationExportTest extends AbstractConsumerTestCase
         $this->organisationRepo->shouldReceive('fetchAllByStatusForCpidExport')
             ->with('unit_Status')
             ->andReturn(
-                m::mock(IterableResult::class)
-                    ->makePartial()
-                    ->shouldReceive('next')
-                    ->twice()
-                    ->andReturn([$row], false)
-                    ->getMock()
+                // Query::toIterable() yields each row directly (no [0 => ...] wrapper)
+                (static function () use ($row): \Generator {
+                    yield $row;
+                })()
             );
 
         parent::setUp();
@@ -85,7 +80,7 @@ class CpidOrganisationExportTest extends AbstractConsumerTestCase
                 ->once()
                 ->andReturnUsing(
                     function (TransferCmd\Document\Upload $cmd) {
-                        static::assertEquals(base64_encode("A1,B1,C1\n"), $cmd->getContent());
+                        $this->assertEquals(base64_encode("A1,B1,C1\n"), $cmd->getContent());
                     }
                 );
 
@@ -97,21 +92,16 @@ class CpidOrganisationExportTest extends AbstractConsumerTestCase
                 ->andReturn($expectResult);
         }
 
-        static::assertEquals(
-            $this->sut->processMessage($this->queueEntity),
-            $expectResult
-        );
+        $this->assertEquals($this->sut->processMessage($this->queueEntity), $expectResult);
     }
 
-    public static function dpTestMessageProvider(): array
+    public static function dpTestMessageProvider(): \Iterator
     {
-        return [
-            [
-                'shouldThrowException' => false,
-            ],
-            [
-                'shouldThrowException' => true,
-            ],
+        yield [
+            'shouldThrowException' => false,
+        ];
+        yield [
+            'shouldThrowException' => true,
         ];
     }
 }

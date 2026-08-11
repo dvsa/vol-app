@@ -16,7 +16,7 @@ use RuntimeException;
  *
  * Initially auto-generated but won't be overridden
  */
-class IrhpPermitTypeEntityTest extends EntityTester
+final class IrhpPermitTypeEntityTest extends EntityTester
 {
     /**
      * Define the entity to test
@@ -30,6 +30,7 @@ class IrhpPermitTypeEntityTest extends EntityTester
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = m::mock(Entity::class)->makePartial();
@@ -88,17 +89,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isEcmtAnnual());
     }
 
-    public static function dpIsEcmtAnnual(): array
+    public static function dpIsEcmtAnnual(): \Iterator
     {
-        return [
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT, true],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, false],
-        ];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT, true];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsEcmtShortTerm')]
@@ -109,17 +108,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isEcmtShortTerm());
     }
 
-    public static function dpIsEcmtShortTerm(): array
+    public static function dpIsEcmtShortTerm(): \Iterator
     {
-        return [
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, true],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, false],
-        ];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, true];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsEcmtRemoval')]
@@ -130,17 +127,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isEcmtRemoval());
     }
 
-    public static function dpIsEcmtRemoval(): array
+    public static function dpIsEcmtRemoval(): \Iterator
     {
-        return [
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, true],
-            [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, false],
-        ];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, true];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsBilateral')]
@@ -151,17 +146,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isBilateral());
     }
 
-    public static function dpIsBilateral(): array
+    public static function dpIsBilateral(): \Iterator
     {
-        return [
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, true],
-            [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, false],
-        ];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, true];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsMultilateral')]
@@ -172,17 +165,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isMultilateral());
     }
 
-    public static function dpIsMultilateral(): array
+    public static function dpIsMultilateral(): \Iterator
     {
-        return [
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, true],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, false],
-        ];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, true];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsMultiStock')]
@@ -193,17 +184,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isMultiStock());
     }
 
-    public static function dpIsMultiStock(): array
+    public static function dpIsMultiStock(): \Iterator
     {
-        return [
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, true],
-            [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, true],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, false],
-        ];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, true];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, true];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsApplicationPathEnabled')]
@@ -214,17 +203,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isApplicationPathEnabled());
     }
 
-    public static function dpIsApplicationPathEnabled(): array
+    public static function dpIsApplicationPathEnabled(): \Iterator
     {
-        return [
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT, true],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, true],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, true],
-            [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, true],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, true],
-        ];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT, true];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, true];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, true];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, true];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerateExpiryDate')]
@@ -256,19 +243,17 @@ class IrhpPermitTypeEntityTest extends EntityTester
         );
     }
 
-    public static function dpGenerateExpiryDate(): array
+    public static function dpGenerateExpiryDate(): \Iterator
     {
-        return [
-            [true, false, false, '2019-04-15', '2020-04-14'],
-            [true, false, false, '2019-05-01', '2020-04-30'],
-            [true, false, false, '2019-01-01', '2019-12-31'],
-            [false, true, false, '2019-04-15', '2019-07-15'],
-            [false, true, false, '2019-12-01', '2020-03-01'],
-            [false, true, false, '2019-12-31', '2020-03-31'],
-            [false, false, true, '2019-04-15', '2019-05-15'],
-            [false, false, true, '2019-12-01', '2019-12-31'],
-            [false, false, true, '2019-12-31', '2020-01-30'],
-        ];
+        yield [true, false, false, '2019-04-15', '2020-04-14'];
+        yield [true, false, false, '2019-05-01', '2020-04-30'];
+        yield [true, false, false, '2019-01-01', '2019-12-31'];
+        yield [false, true, false, '2019-04-15', '2019-07-15'];
+        yield [false, true, false, '2019-12-01', '2020-03-01'];
+        yield [false, true, false, '2019-12-31', '2020-03-31'];
+        yield [false, false, true, '2019-04-15', '2019-05-15'];
+        yield [false, false, true, '2019-12-01', '2019-12-31'];
+        yield [false, false, true, '2019-12-31', '2020-01-30'];
     }
 
     public function testGenerateExpiryDateException(): void
@@ -295,17 +280,15 @@ class IrhpPermitTypeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isCertificateOfRoadworthiness());
     }
 
-    public static function dpIsCertificateOfRoadworthiness(): array
+    public static function dpIsCertificateOfRoadworthiness(): \Iterator
     {
-        return [
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, true],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, true],
-        ];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, true];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpUsesMultiStockLicenceBehaviour')]
@@ -333,18 +316,16 @@ class IrhpPermitTypeEntityTest extends EntityTester
         );
     }
 
-    public static function dpUsesMultiStockLicenceBehaviour(): array
+    public static function dpUsesMultiStockLicenceBehaviour(): \Iterator
     {
-        return [
-            [false, false, false, false],
-            [false, false, true, true],
-            [false, true, false, true],
-            [false, true, true, true],
-            [true, false, false, true],
-            [true, false, true, true],
-            [true, true, false, true],
-            [true, true, true, true],
-        ];
+        yield [false, false, false, false];
+        yield [false, false, true, true];
+        yield [false, true, false, true];
+        yield [false, true, true, true];
+        yield [true, false, false, true];
+        yield [true, false, true, true];
+        yield [true, true, false, true];
+        yield [true, true, true, true];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsConstrainedCountriesType')]
@@ -355,16 +336,14 @@ class IrhpPermitTypeEntityTest extends EntityTester
         $this->assertEquals($expected, $this->sut->isConstrainedCountriesType());
     }
 
-    public static function dpIsConstrainedCountriesType(): array
+    public static function dpIsConstrainedCountriesType(): \Iterator
     {
-        return [
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT, true],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, true],
-            [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, false],
-            [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, false],
-        ];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT, true];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_SHORT_TERM, true];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_ECMT_REMOVAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_BILATERAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_MULTILATERAL, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_VEHICLE, false];
+        yield [Entity::IRHP_PERMIT_TYPE_ID_CERT_ROADWORTHINESS_TRAILER, false];
     }
 }

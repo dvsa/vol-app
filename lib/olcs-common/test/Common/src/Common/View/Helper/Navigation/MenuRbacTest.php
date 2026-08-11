@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper\Navigation;
 
 use Common\View\Helper\Navigation\MenuRbac;
@@ -8,10 +10,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Navigation\AbstractContainer;
 use Laminas\Navigation\Page\AbstractPage;
 
-/**
- * @covers \Common\View\Helper\Navigation\MenuRbac
- */
-class MenuRbacTest extends MockeryTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Common\View\Helper\Navigation\MenuRbac::class)]
+final class MenuRbacTest extends MockeryTestCase
 {
     public function testFilter(): void
     {
@@ -38,10 +38,10 @@ class MenuRbacTest extends MockeryTestCase
         $sut->setContainer($mockCntr);
 
         $actual = $sut();
-        static::assertSame($sut, $actual);
+        $this->assertSame($sut, $actual);
 
         $pages = $actual->getContainer()->getPages();
-        static::assertCount(1, $actual->getContainer()->getPages());
-        static::assertSame($mockPage2, current($pages));
+        $this->assertCount(1, $actual->getContainer()->getPages());
+        $this->assertSame($mockPage2, current($pages));
     }
 }

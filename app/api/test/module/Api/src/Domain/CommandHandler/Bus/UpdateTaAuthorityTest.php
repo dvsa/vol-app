@@ -22,7 +22,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Update TaAuthorityTest
  */
-class UpdateTaAuthorityTest extends AbstractCommandHandlerTestCase
+final class UpdateTaAuthorityTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

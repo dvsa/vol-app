@@ -29,7 +29,7 @@ use Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic as CommunityLicEntity;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CreateOfficeCopyTest extends AbstractCommandHandlerTestCase
+final class CreateOfficeCopyTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

@@ -1,10 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Lva;
 
 use Common\Data\Mapper\Lva\FinancialHistory;
 
-class FinancialHistoryTest extends \PHPUnit\Framework\TestCase
+final class FinancialHistoryTest extends \PHPUnit\Framework\TestCase
 {
     public function testMapFromResult(): void
     {

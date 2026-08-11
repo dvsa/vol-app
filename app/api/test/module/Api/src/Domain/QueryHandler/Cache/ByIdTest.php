@@ -19,7 +19,7 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @see Handler
  */
-class ByIdTest extends QueryHandlerTestCase
+final class ByIdTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {
@@ -79,12 +79,10 @@ class ByIdTest extends QueryHandlerTestCase
         $this->assertEquals($cacheValue, $this->sut->handleQuery($query));
     }
 
-    public static function shouldRegenProvider(): array
+    public static function shouldRegenProvider(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
     public function testHandleQueryCacheExists(): void

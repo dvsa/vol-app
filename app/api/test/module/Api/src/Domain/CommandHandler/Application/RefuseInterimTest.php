@@ -19,7 +19,7 @@ use Dvsa\Olcs\Transfer\Command\Application\RefuseInterim as Cmd;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class RefuseInterimTest extends AbstractCommandHandlerTestCase
+final class RefuseInterimTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

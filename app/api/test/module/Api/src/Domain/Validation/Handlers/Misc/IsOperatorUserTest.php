@@ -10,7 +10,7 @@ use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\IsOperatorUser;
 
-class IsOperatorUserTest extends AbstractHandlerTestCase
+final class IsOperatorUserTest extends AbstractHandlerTestCase
 {
     /**
      * @var isOperatorUser

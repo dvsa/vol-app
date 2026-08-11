@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Translator;
 
 use Common\Service\Cqrs\Query\CachingQueryService;
@@ -15,7 +17,7 @@ use Olcs\Logging\Log\Logger;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class TranslationLoaderTest extends MockeryTestCase
+final class TranslationLoaderTest extends MockeryTestCase
 {
     #[\Override]
     protected function setUp(): void
@@ -47,8 +49,8 @@ class TranslationLoaderTest extends MockeryTestCase
         $loader = new TranslationLoader($mockCache);
         $textDomain = $loader->load($locale, $textDomain);
 
-        self::assertInstanceOf(TextDomain::class, $textDomain);
-        self::assertSame($actualMessages, $textDomain->getArrayCopy());
+        $this->assertInstanceOf(TextDomain::class, $textDomain);
+        $this->assertSame($actualMessages, $textDomain->getArrayCopy());
     }
 
     /**
@@ -87,7 +89,7 @@ class TranslationLoaderTest extends MockeryTestCase
             ->andReturn($replacements);
 
         $loader = new TranslationLoader($mockCache);
-        self::assertSame($replacements, $loader->loadReplacements());
+        $this->assertSame($replacements, $loader->loadReplacements());
     }
 
     /**
@@ -103,7 +105,7 @@ class TranslationLoaderTest extends MockeryTestCase
             ->andThrow(new \Exception());
 
         $loader = new TranslationLoader($mockCache);
-        self::assertSame([], $loader->loadReplacements());
+        $this->assertSame([], $loader->loadReplacements());
     }
 
     public static function setupLogger(): void

@@ -6,6 +6,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Validators;
 
 use Common\Form\Elements\Validators\InspectionRequestDueDate;
@@ -15,7 +17,7 @@ use Common\Form\Elements\Validators\InspectionRequestDueDate;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class InspectionRequestDueDateValidatorTest extends \PHPUnit\Framework\TestCase
+final class InspectionRequestDueDateValidatorTest extends \PHPUnit\Framework\TestCase
 {
     public $validator;
     /**
@@ -29,10 +31,9 @@ class InspectionRequestDueDateValidatorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Test isValid
-     *
-     * @group inspectionRequestDueDateValidator
-     * @dataProvider providerIsValid
      */
+    #[\PHPUnit\Framework\Attributes\Group('inspectionRequestDueDateValidator')]
+    #[\PHPUnit\Framework\Attributes\DataProvider('providerIsValid')]
     public function testIsValid($value, $context, $expected): void
     {
         $this->assertEquals($expected, $this->validator->isValid($value, $context));
@@ -41,44 +42,42 @@ class InspectionRequestDueDateValidatorTest extends \PHPUnit\Framework\TestCase
     /**
      * Provider for isValid
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public function providerIsValid()
+    public static function providerIsValid(): \Iterator
     {
-        return [
+        yield [
+            '2015-01-01',
             [
-                '2015-01-01',
-                [
-                    'requestDate' => [
-                        'year' => '2014',
-                        'month' => '01',
-                        'day' => '01'
-                    ]
-                ],
-                true
+                'requestDate' => [
+                    'year' => '2014',
+                    'month' => '01',
+                    'day' => '01'
+                ]
             ],
+            true
+        ];
+        yield [
+            '2015-02-01',
             [
-                '2015-02-01',
-                [
-                    'requestDate' => [
-                        'year' => '2015',
-                        'month' => '01',
-                        'day' => '01'
-                    ]
-                ],
-                true
+                'requestDate' => [
+                    'year' => '2015',
+                    'month' => '01',
+                    'day' => '01'
+                ]
             ],
+            true
+        ];
+        yield [
+            '2014-01-01',
             [
-                '2014-01-01',
-                [
-                    'requestDate' => [
-                        'year' => '2015',
-                        'month' => '01',
-                        'day' => '01'
-                    ]
-                ],
-                false
+                'requestDate' => [
+                    'year' => '2015',
+                    'month' => '01',
+                    'day' => '01'
+                ]
             ],
+            false
         ];
     }
 }

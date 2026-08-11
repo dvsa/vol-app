@@ -6,6 +6,8 @@
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Helper;
 
 use Common\Service\Helper\ComplaintsHelperService;
@@ -15,7 +17,7 @@ use Common\Service\Helper\ComplaintsHelperService;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class ComplaintsHelperServiceTest extends \PHPUnit\Framework\TestCase
+final class ComplaintsHelperServiceTest extends \PHPUnit\Framework\TestCase
 {
     public $helper;
     /**

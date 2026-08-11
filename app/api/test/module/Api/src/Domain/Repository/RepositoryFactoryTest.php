@@ -15,10 +15,11 @@ use Dvsa\Olcs\Api\Domain\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Repository\Application;
 use Dvsa\Olcs\Api\Domain\Repository\Category;
 
-class RepositoryFactoryTest extends MockeryTestCase
+final class RepositoryFactoryTest extends MockeryTestCase
 {
     protected RepositoryFactory $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new RepositoryFactory();

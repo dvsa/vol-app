@@ -193,7 +193,7 @@ class Organisation extends AbstractRepository
      *
      * @param string $status Status
      *
-     * @return \Doctrine\ORM\Internal\Hydration\IterableResult
+     * @return iterable<array<string, mixed>>
      */
     public function fetchAllByStatusForCpidExport($status = null)
     {

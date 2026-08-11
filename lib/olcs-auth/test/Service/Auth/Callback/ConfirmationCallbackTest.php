@@ -1,10 +1,6 @@
 <?php
 
-/**
- * Confirmation Callback Test
- *
- * @author Rob Caiger <rob@clocal.co.uk>
- */
+declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Auth\Service\Auth\Callback;
 
@@ -15,7 +11,7 @@ use Dvsa\Olcs\Auth\Service\Auth\Callback\ConfirmationCallback;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ConfirmationCallbackTest extends \PHPUnit\Framework\TestCase
+final class ConfirmationCallbackTest extends \PHPUnit\Framework\TestCase
 {
     public function testCallback(): void
     {

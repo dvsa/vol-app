@@ -22,7 +22,7 @@ class SubmitControllerFactory implements FactoryInterface
      * @return SubmitController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SubmitController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SubmitController
     {
 
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);

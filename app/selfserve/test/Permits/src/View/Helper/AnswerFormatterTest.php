@@ -14,7 +14,7 @@ use Laminas\View\Renderer\RendererInterface;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
+final class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
 {
     /** @var AnswerFormatter */
     private $sut;
@@ -22,6 +22,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
     /** @var RendererInterface|m\MockInterface */
     private $view;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->view = m::mock(RendererInterface::class);
@@ -66,7 +67,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
             'escaped and translated yes' . AnswerFormatter::SEPARATOR .
             'escaped and translated no';
 
-        self::assertEquals($expected, $this->sut->__invoke($input));
+        $this->assertEquals($expected, $this->sut->__invoke($input));
     }
 
     public function testInvokeBooleanNoEscape(): void
@@ -98,7 +99,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
             'translated yes' . AnswerFormatter::SEPARATOR .
             'translated no';
 
-        self::assertEquals($expected, $this->sut->__invoke($input));
+        $this->assertEquals($expected, $this->sut->__invoke($input));
     }
 
     public function testInvokeInteger(): void
@@ -113,7 +114,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
 
         $output = '1' . AnswerFormatter::SEPARATOR . '0' . AnswerFormatter::SEPARATOR . '999';
 
-        self::assertEquals($output, $this->sut->__invoke($input));
+        $this->assertEquals($output, $this->sut->__invoke($input));
     }
 
     /**
@@ -127,7 +128,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
             'answer' => 1,
         ];
 
-        self::assertEquals(1, $this->sut->__invoke($input));
+        $this->assertEquals(1, $this->sut->__invoke($input));
     }
 
     /**
@@ -162,7 +163,7 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
             'escaped and translated 0' . AnswerFormatter::SEPARATOR .
             'escaped and translated text';
 
-        self::assertEquals($expected, $this->sut->__invoke($input));
+        $this->assertEquals($expected, $this->sut->__invoke($input));
     }
 
     /**
@@ -193,19 +194,17 @@ class AnswerFormatterTest extends m\Adapter\Phpunit\MockeryTestCase
             'translated 0' . AnswerFormatter::SEPARATOR .
             'translated text';
 
-        self::assertEquals($expected, $this->sut->__invoke($input));
+        $this->assertEquals($expected, $this->sut->__invoke($input));
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return list{list{'question_type_string'}, list{'question_type_custom'}}
      */
-    public static function dpInvokeOther(): array
+    public static function dpInvokeOther(): \Iterator
     {
-        return [
-            [RefData::QUESTION_TYPE_STRING],
-            [RefData::QUESTION_TYPE_CUSTOM],
-        ];
+        yield [RefData::QUESTION_TYPE_STRING];
+        yield [RefData::QUESTION_TYPE_CUSTOM];
     }
 }

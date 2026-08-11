@@ -24,13 +24,14 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class NamingServiceTest extends MockeryTestCase
+final class NamingServiceTest extends MockeryTestCase
 {
     /**
      * @var NamingService
      */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $config = [

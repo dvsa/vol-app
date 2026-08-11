@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\Service\Data;
 
 use Common\Exception\DataServiceException;
@@ -11,7 +13,7 @@ use Dvsa\Olcs\Transfer\Query\ContactDetail\CountryList as Qry;
  * Class Country Test
  * @package CommonTest\Service
  */
-class CountryTest extends AbstractDataServiceTestCase
+final class CountryTest extends AbstractDataServiceTestCase
 {
     /** @var Country */
     private $sut;
@@ -20,23 +22,22 @@ class CountryTest extends AbstractDataServiceTestCase
     protected function setUp(): void
     {
         parent::setUp();
-
         $this->sut = new Country($this->abstractDataServiceServices);
     }
 
     public function testFormatData(): void
     {
-        $source = $this->getSingleSource();
-        $expected = $this->getSingleExpected();
+        $source = self::getSingleSource();
+        $expected = self::getSingleExpected();
 
         $this->assertEquals($expected, $this->sut->formatData($source));
     }
 
     /**
-     * @dataProvider provideFetchListOptions
      * @param $input
      * @param $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFetchListOptions')]
     public function testFetchListOptions($input, $category, $expected): void
     {
         $this->sut->setData('Country', $input);
@@ -45,39 +46,37 @@ class CountryTest extends AbstractDataServiceTestCase
     }
 
     /**
-     * @return (array|false|string)[][]
+     * @return \Iterator<(int | string), array<(array<mixed> | string | false)>>
      *
      * @psalm-return list{list{array, '', array}, list{false, '', array<never, never>}, list{array, 'isMemberState', array{'val-1': 'Value 1', 'val-2': 'Value 2', 'val-3': 'Value 3'}}, list{array, 'ecmtConstraint', array{'val-2': 'Value 2', 'val-5': 'Value 5'}}, list{array, 'isPermitState', array{'val-3': 'Value 3', 'val-6': 'Value 6'}}}
      */
-    public function provideFetchListOptions(): array
+    public static function provideFetchListOptions(): \Iterator
     {
-        return [
-            [$this->getSingleSource(), '', $this->getSingleExpected()],
-            [false, '', []],
+        yield [self::getSingleSource(), '', self::getSingleExpected()];
+        yield [false, '', []];
+        yield [
+            self::getSingleSource(),
+            'isMemberState',
             [
-                $this->getSingleSource(),
-                'isMemberState',
-                [
-                    'val-1' => 'Value 1',
-                    'val-2' => 'Value 2',
-                    'val-3' => 'Value 3',
-                ],
+                'val-1' => 'Value 1',
+                'val-2' => 'Value 2',
+                'val-3' => 'Value 3',
             ],
+        ];
+        yield [
+            self::getSingleSource(),
+            'ecmtConstraint',
             [
-                $this->getSingleSource(),
-                'ecmtConstraint',
-                [
-                    'val-2' => 'Value 2',
-                    'val-5' => 'Value 5',
-                ],
+                'val-2' => 'Value 2',
+                'val-5' => 'Value 5',
             ],
+        ];
+        yield [
+            self::getSingleSource(),
+            'isPermitState',
             [
-                $this->getSingleSource(),
-                'isPermitState',
-                [
-                    'val-3' => 'Value 3',
-                    'val-6' => 'Value 6',
-                ],
+                'val-3' => 'Value 3',
+                'val-6' => 'Value 6',
             ],
         ];
     }
@@ -139,7 +138,7 @@ class CountryTest extends AbstractDataServiceTestCase
     /**
      * @return array
      */
-    protected function getSingleExpected()
+    protected static function getSingleExpected()
     {
         return [
             'val-1' => 'Value 1',
@@ -154,7 +153,7 @@ class CountryTest extends AbstractDataServiceTestCase
     /**
      * @return array
      */
-    protected function getSingleSource()
+    protected static function getSingleSource()
     {
         return [
             [

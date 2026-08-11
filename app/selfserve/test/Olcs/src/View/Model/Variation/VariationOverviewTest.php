@@ -17,7 +17,7 @@ use Olcs\View\Model\Variation\VariationOverview;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class VariationOverviewTest extends \PHPUnit\Framework\TestCase
+final class VariationOverviewTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * Test constructor with set variables
@@ -34,10 +34,10 @@ class VariationOverviewTest extends \PHPUnit\Framework\TestCase
             'targetCompletionDate' => '2014-01-01'
         ];
         $overview = new VariationOverview($data);
-        $this->assertEquals($overview->applicationId, 1);
-        $this->assertEquals($overview->createdOn, '01 January 2014');
-        $this->assertEquals($overview->status, 'status');
-        $this->assertEquals($overview->receivedDate, '2014-01-01');
-        $this->assertEquals($overview->completionDate, '2014-01-01');
+        $this->assertEquals(1, $overview->applicationId);
+        $this->assertEquals('01 January 2014', $overview->createdOn);
+        $this->assertEquals('status', $overview->status);
+        $this->assertEquals('2014-01-01', $overview->receivedDate);
+        $this->assertEquals('2014-01-01', $overview->completionDate);
     }
 }

@@ -27,7 +27,7 @@ class HistoryControllerFactory implements FactoryInterface
      * @return OperatorProcessingTasksController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): HistoryController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): HistoryController
     {
         $scriptFactory = $container->get(ScriptFactory::class);
         $formHelper = $container->get(FormHelperService::class);

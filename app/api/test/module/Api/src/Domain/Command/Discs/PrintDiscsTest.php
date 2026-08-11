@@ -17,7 +17,7 @@ use Dvsa\Olcs\Api\Domain\Command\Discs\PrintDiscs;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class PrintDiscsTest extends \PHPUnit\Framework\TestCase
+final class PrintDiscsTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

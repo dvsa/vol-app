@@ -35,7 +35,7 @@ use Dvsa\Olcs\Api\Entity\Person\Person as PersonEntity;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class UpdateStatementTest extends AbstractCommandHandlerTestCase
+final class UpdateStatementTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

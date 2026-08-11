@@ -14,7 +14,7 @@ use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Domain\CommandHandler\DataDvaNiExport::class)]
-class DataDvaNiExportTest extends AbstractCommandHandlerTestCase
+final class DataDvaNiExportTest extends AbstractCommandHandlerTestCase
 {
     public $mockDbalResult;
     /**
@@ -137,9 +137,6 @@ class DataDvaNiExportTest extends AbstractCommandHandlerTestCase
             'Creating CSV file: '  . $expectCsvFile .
             'Uploaded file to S3: ' . $expectTgzFile;
 
-        static::assertEquals(
-            $expectMsg,
-            implode('', $actual->toArray()['messages'])
-        );
+        $this->assertSame($expectMsg, implode('', $actual->toArray()['messages']));
     }
 }

@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Entity\System\Replacement as ReplacementEntity;
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-class ByIdTest extends AbstractQueryByIdHandlerTestCase
+final class ByIdTest extends AbstractQueryByIdHandlerTestCase
 {
     protected $sutClass = ReplacementByIdHandler::class;
     protected $sutRepo = 'Replacement';

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\Cases\Pi;
 
 use Dvsa\Olcs\Transfer\Command\Cases\Pi\UpdateHearing;
 use Dvsa\OlcsTest\Transfer\Command\CommandTest;
 
-class UpdateHearingTest extends \PHPUnit\Framework\TestCase
+final class UpdateHearingTest extends \PHPUnit\Framework\TestCase
 {
     use CommandTest;
 

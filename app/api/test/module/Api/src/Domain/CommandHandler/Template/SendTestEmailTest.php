@@ -16,7 +16,7 @@ use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use Symfony\Component\Mime\Email as SymfonyEmail;
 
-class SendTestEmailTest extends AbstractCommandHandlerTestCase
+final class SendTestEmailTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -127,18 +127,18 @@ class SendTestEmailTest extends AbstractCommandHandlerTestCase
 
         $result = $this->sut->handleCommand($command);
 
-        $this->assertNotNull($sentEmail);
+        $this->assertInstanceOf(\Symfony\Component\Mime\Email::class, $sentEmail);
         $this->assertSame('Hi Andy', $sentEmail->getTextBody());
-        $this->assertStringContainsString('[TEST] Greeting', $sentEmail->getSubject());
+        $this->assertStringContainsString('[TEST] Greeting', (string) $sentEmail->getSubject());
         $this->assertSame('user@example.com', $sentEmail->getTo()[0]->getAddress());
 
         $header = $sentEmail->getHeaders()->get(GovUkNotifyTransport::PAYLOAD_HEADER);
-        $this->assertNotNull($header, 'Notify payload header must be set so the transport can use it');
+        $this->assertInstanceOf(\Symfony\Component\Mime\Header\HeaderInterface::class, $header, 'Notify payload header must be set so the transport can use it');
         $payload = json_decode($header->getBodyAsString(), true);
         $this->assertSame('uuid-en', $payload['templateKey']);
         $this->assertSame('Hi Andy', $payload['markdownBody']);
         $this->assertSame('en_GB', $payload['locale']);
 
-        $this->assertStringContainsString('Test email sent to user@example.com', $result->getMessages()[0]);
+        $this->assertStringContainsString('Test email sent to user@example.com', (string) $result->getMessages()[0]);
     }
 }

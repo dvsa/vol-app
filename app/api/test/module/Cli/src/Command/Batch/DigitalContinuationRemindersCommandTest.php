@@ -8,7 +8,7 @@ use Dvsa\Olcs\Cli\Command\Batch\DigitalContinuationRemindersCommand;
 use Dvsa\Olcs\Api\Domain\Command\ContinuationDetail\DigitalSendReminders;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class DigitalContinuationRemindersCommandTest extends AbstractBatchCommandCases
+final class DigitalContinuationRemindersCommandTest extends AbstractBatchCommandCases
 {
     protected function getCommandClass(): string
     {

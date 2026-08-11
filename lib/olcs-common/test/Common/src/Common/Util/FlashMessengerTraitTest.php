@@ -8,137 +8,104 @@ use Common\Util\FlashMessengerTrait;
 use Laminas\Mvc\Plugin\FlashMessenger\FlashMessenger as FlashMessengerPlugin;
 use Mockery as m;
 
-class FlashMessengerTraitTest extends m\Adapter\Phpunit\MockeryTestCase
+final class FlashMessengerTraitTest extends m\Adapter\Phpunit\MockeryTestCase
 {
-    private $sut;
-
-    #[\Override]
-    protected function setUp(): void
+    /**
+     * Host the trait in an anonymous class whose getFlashMessenger() returns the
+     * supplied flash messenger, so the trait's add*Message() methods can be exercised.
+     */
+    private function sutWithFlashMessenger(object $flashMessenger): object
     {
-        $this->sut = $this->getMockForTrait(
-            FlashMessengerTrait::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            [
-                'getFlashMessenger'
-            ]
-        );
+        return new class ($flashMessenger) {
+            use FlashMessengerTrait;
+
+            public function __construct(private readonly object $flashMessenger)
+            {
+            }
+
+            public function getFlashMessenger()
+            {
+                return $this->flashMessenger;
+            }
+        };
     }
 
-    /**
-     * @group util
-     * @group flash_messenger_trait
-     */
+    #[\PHPUnit\Framework\Attributes\Group('util')]
+    #[\PHPUnit\Framework\Attributes\Group('flash_messenger_trait')]
     public function testGetFlashMessenger(): void
     {
-        $this->sut = $this->getMockForTrait(
-            FlashMessengerTrait::class,
-            [],
-            '',
-            true,
-            true,
-            true,
-            [
-                'plugin'
-            ]
-        );
+        $pluginManager = m::mock(FlashMessengerPlugin::class);
 
-        $pluginManager = $this->createPartialMock(FlashMessengerPlugin::class, ['getNamespace']);
+        $sut = new class ($pluginManager) {
+            use FlashMessengerTrait;
 
-        $this->sut->expects($this->once())
-            ->method('plugin')
-            ->will($this->returnValue($pluginManager));
+            public int $pluginCalls = 0;
 
-        $this->sut->getFlashMessenger();
+            public function __construct(private readonly object $pluginManager)
+            {
+            }
+
+            public function plugin($name = null, ?array $options = null)
+            {
+                $this->pluginCalls++;
+                return $this->pluginManager;
+            }
+        };
+
+        $this->assertSame($pluginManager, $sut->getFlashMessenger());
+        $this->assertSame(1, $sut->pluginCalls);
     }
 
-    /**
-     * @group util
-     * @group flash_messenger_trait
-     */
+    #[\PHPUnit\Framework\Attributes\Group('util')]
+    #[\PHPUnit\Framework\Attributes\Group('flash_messenger_trait')]
     public function testAddInfoMessage(): void
     {
         $message = 'foo';
 
-        $chainMock = $this->createPartialMock(FlashMessengerPlugin::class, ['addInfoMessage']);
-        $chainMock->expects($this->once())
-            ->method('addInfoMessage')
-            ->with($message);
+        $chainMock = m::mock(FlashMessengerPlugin::class);
+        $chainMock->expects('addInfoMessage')->with($message);
 
-        $this->sut->expects($this->once())
-            ->method('getFlashMessenger')
-            ->will($this->returnValue($chainMock));
-
-        $this->sut->addInfoMessage($message);
+        $this->sutWithFlashMessenger($chainMock)->addInfoMessage($message);
     }
 
-    /**
-     * @group util
-     * @group flash_messenger_trait
-     */
+    #[\PHPUnit\Framework\Attributes\Group('util')]
+    #[\PHPUnit\Framework\Attributes\Group('flash_messenger_trait')]
     public function testAddErrorMessage(): void
     {
         $message = 'foo';
 
-        $chainMock = $this->createPartialMock(FlashMessengerPlugin::class, ['addErrorMessage']);
-        $chainMock->expects($this->once())
-            ->method('addErrorMessage')
-            ->with($message);
+        $chainMock = m::mock(FlashMessengerPlugin::class);
+        $chainMock->expects('addErrorMessage')->with($message);
 
-        $this->sut->expects($this->once())
-            ->method('getFlashMessenger')
-            ->will($this->returnValue($chainMock));
-
-        $this->sut->addErrorMessage($message);
+        $this->sutWithFlashMessenger($chainMock)->addErrorMessage($message);
     }
 
-    /**
-     * @group util
-     * @group flash_messenger_trait
-     */
+    #[\PHPUnit\Framework\Attributes\Group('util')]
+    #[\PHPUnit\Framework\Attributes\Group('flash_messenger_trait')]
     public function testAddSuccessMessage(): void
     {
         $message = 'foo';
 
-        $chainMock = $this->createPartialMock(FlashMessengerPlugin::class, ['addSuccessMessage']);
-        $chainMock->expects($this->once())
-            ->method('addSuccessMessage')
-            ->with($message);
+        $chainMock = m::mock(FlashMessengerPlugin::class);
+        $chainMock->expects('addSuccessMessage')->with($message);
 
-        $this->sut->expects($this->once())
-            ->method('getFlashMessenger')
-            ->will($this->returnValue($chainMock));
-
-        $this->sut->addSuccessMessage($message);
+        $this->sutWithFlashMessenger($chainMock)->addSuccessMessage($message);
     }
 
-    /**
-     * @group util
-     * @group flash_messenger_trait
-     */
+    #[\PHPUnit\Framework\Attributes\Group('util')]
+    #[\PHPUnit\Framework\Attributes\Group('flash_messenger_trait')]
     public function testAddWarningMessage(): void
     {
         $message = 'foo';
 
-        $chainMock = $this->createPartialMock(FlashMessengerPlugin::class, ['addWarningMessage']);
-        $chainMock->expects($this->once())
-            ->method('addWarningMessage')
-            ->with($message);
+        $chainMock = m::mock(FlashMessengerPlugin::class);
+        $chainMock->expects('addWarningMessage')->with($message);
 
-        $this->sut->expects($this->once())
-            ->method('getFlashMessenger')
-            ->will($this->returnValue($chainMock));
-
-        $this->sut->addWarningMessage($message);
+        $this->sutWithFlashMessenger($chainMock)->addWarningMessage($message);
     }
 
-    /**
-     * @group util
-     * @group flash_messenger_trait
-     */
+    #[\PHPUnit\Framework\Attributes\Group('util')]
+    #[\PHPUnit\Framework\Attributes\Group('flash_messenger_trait')]
     public function testAddMessage(): void
     {
         $message = 'foo';
@@ -149,10 +116,6 @@ class FlashMessengerTraitTest extends m\Adapter\Phpunit\MockeryTestCase
         $chainMock->expects('addMessage')->with($message)->andReturnSelf();
         $chainMock->expects('setNamespace')->with('default')->andReturnSelf();
 
-        $this->sut->expects($this->once())
-            ->method('getFlashMessenger')
-            ->will($this->returnValue($chainMock));
-
-        $this->sut->addMessage($message, $namespace);
+        $this->sutWithFlashMessenger($chainMock)->addMessage($message, $namespace);
     }
 }

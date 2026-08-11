@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\IrhpApplication\UpdateDeclaration;
 use Dvsa\Olcs\Api\Domain\Repository\IrhpApplication as IrhpApplicationRepo;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCallEntityMethodTestCase;
 
-class UpdateDeclarationTest extends AbstractCallEntityMethodTestCase
+final class UpdateDeclarationTest extends AbstractCallEntityMethodTestCase
 {
     protected $repoServiceName = 'IrhpApplication';
     protected $entityMethodName = 'makeDeclaration';

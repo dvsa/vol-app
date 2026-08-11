@@ -16,7 +16,7 @@ class ResetPasswordControllerFactory implements FactoryInterface
      * @param array|null $options
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): ResetPasswordController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): ResetPasswordController
     {
         /** @var FormHelperService $formHelperService */
         $formHelperService = $container->get('Helper\Form');

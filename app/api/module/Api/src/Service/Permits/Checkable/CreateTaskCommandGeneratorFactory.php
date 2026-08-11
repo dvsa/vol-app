@@ -18,7 +18,7 @@ class CreateTaskCommandGeneratorFactory implements FactoryInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): CreateTaskCommandGenerator
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): CreateTaskCommandGenerator
     {
         return new CreateTaskCommandGenerator(
             $container->get('PermitsCheckableCreateTaskCommandFactory')

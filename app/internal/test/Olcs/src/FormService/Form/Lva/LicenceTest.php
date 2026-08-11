@@ -17,17 +17,16 @@ use LmcRbacMvc\Service\AuthorizationService;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class LicenceTest extends MockeryTestCase
+final class LicenceTest extends MockeryTestCase
 {
     protected $sut;
 
-    protected $formHelper;
-
+    #[\Override]
     public function setUp(): void
     {
-        $this->formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
+        $formHelper = m::mock(\Common\Service\Helper\FormHelperService::class);
 
-        $this->sut = new Licence($this->formHelper, m::mock(AuthorizationService::class));
+        $this->sut = new Licence($formHelper, m::mock(AuthorizationService::class));
     }
 
     public function testAlterForm(): void

@@ -6,6 +6,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -20,14 +22,10 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class FeeIdUrlTest extends MockeryTestCase
+final class FeeIdUrlTest extends MockeryTestCase
 {
     public $mockRouteMatch;
     protected $urlHelper;
-
-    protected $router;
-
-    protected $request;
 
     protected $sut;
 
@@ -35,13 +33,13 @@ class FeeIdUrlTest extends MockeryTestCase
     protected function setUp(): void
     {
         $this->urlHelper = m::mock(UrlHelperService::class);
-        $this->router = m::mock(TreeRouteStack::class);
-        $this->request = m::mock(Request::class);
-        $this->sut = new FeeIdUrl($this->router, $this->request, $this->urlHelper);
+        $router = m::mock(TreeRouteStack::class);
+        $request = m::mock(Request::class);
+        $this->sut = new FeeIdUrl($router, $request, $this->urlHelper);
 
         $this->mockRouteMatch = m::mock(\Laminas\Router\RouteMatch::class);
 
-        $this->request
+        $request
             ->shouldReceive('getQuery')
             ->andReturn(
                 m::mock()
@@ -53,9 +51,9 @@ class FeeIdUrlTest extends MockeryTestCase
             ->once()
             ->getMock();
 
-        $this->router
+        $router
             ->shouldReceive('match')
-            ->with($this->request)
+            ->with($request)
             ->andReturn($this->mockRouteMatch)
             ->getMock();
     }

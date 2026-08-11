@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\TransportManagerApplication;
 
 use Dvsa\Olcs\Transfer\Command\TransportManagerApplication\Submit;
 use Dvsa\OlcsTest\Transfer\Command\CommandTest;
 
-class SubmitTest extends \PHPUnit\Framework\TestCase
+final class SubmitTest extends \PHPUnit\Framework\TestCase
 {
     use CommandTest;
 

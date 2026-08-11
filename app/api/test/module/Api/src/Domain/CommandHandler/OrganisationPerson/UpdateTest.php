@@ -17,12 +17,12 @@ use Mockery as m;
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\OrganisationPerson\Update::class)]
-class UpdateTest extends AbstractCommandHandlerTestCase
+final class UpdateTest extends AbstractCommandHandlerTestCase
 {
-    public const ORG_ID = 9001;
-    public const PERSON_ID = 8001;
-    public const ORG_PERSON_ID = 7001;
-    public const VERSION = 666;
+    public const int ORG_ID = 9001;
+    public const int PERSON_ID = 8001;
+    public const int ORG_PERSON_ID = 7001;
+    public const int VERSION = 666;
 
     /** @var  CommandHandler\OrganisationPerson\Create */
     protected $sut;

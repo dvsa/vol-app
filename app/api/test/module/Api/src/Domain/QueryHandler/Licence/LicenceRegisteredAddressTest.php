@@ -18,7 +18,7 @@ use Dvsa\Olcs\Transfer\Query\Licence\LicenceRegisteredAddress as Qry;
 /**
  * LicenceRegisteredAddress Test
  */
-class LicenceRegisteredAddressTest extends QueryHandlerTestCase
+final class LicenceRegisteredAddressTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

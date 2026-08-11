@@ -27,10 +27,8 @@ use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Exception\ValidationException;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\CommandHandler\TransportManagerApplication\UpdateDetails::class)]
-class UpdateDetailsTest extends AbstractCommandHandlerTestCase
+final class UpdateDetailsTest extends AbstractCommandHandlerTestCase
 {
-    protected $loggedInUser;
-
     /** @var  CommandHandler\TransportManagerApplication\UpdateDetails */
     protected $sut;
 
@@ -370,17 +368,15 @@ class UpdateDetailsTest extends AbstractCommandHandlerTestCase
         return $commands;
     }
 
-    public static function dpHandleCommandWithLgvAcquiredRightsReferenceNumber(): array
+    public static function dpHandleCommandWithLgvAcquiredRightsReferenceNumber(): \Iterator
     {
-        return [
-            'NI' => [
-                'isNi' => true,
-                'expectedQualificationType' => TmQualification::QUALIFICATION_TYPE_NILGVAR,
-            ],
-            'non-NI' => [
-                'isNi' => false,
-                'expectedQualificationType' => TmQualification::QUALIFICATION_TYPE_LGVAR,
-            ],
+        yield 'NI' => [
+            'isNi' => true,
+            'expectedQualificationType' => TmQualification::QUALIFICATION_TYPE_NILGVAR,
+        ];
+        yield 'non-NI' => [
+            'isNi' => false,
+            'expectedQualificationType' => TmQualification::QUALIFICATION_TYPE_LGVAR,
         ];
     }
 

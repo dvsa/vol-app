@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\View\Helper;
 
 use Mockery as m;
@@ -7,7 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Common\View\Helper\Date;
 use Laminas\I18n\View\Helper\Translate;
 
-class DateTest extends MockeryTestCase
+final class DateTest extends MockeryTestCase
 {
     /**
      * @var Date
@@ -29,9 +31,7 @@ class DateTest extends MockeryTestCase
         $this->sut = new Date($mockTranslator);
     }
 
-    /**
-     * @dataProvider provider
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
     public function testInvoke($timestamp, $format, $altIfNull, $expected): void
     {
         $sut = $this->sut;
@@ -42,37 +42,35 @@ class DateTest extends MockeryTestCase
     /**
      * Data provider
      *
-     * @return (false|int|null|string)[][]
+     * @return \Iterator<(int | string), array<(int | string | false | null)>>
      *
      * @psalm-return list{list{false|int, 'd/m/Y', 'Unknown', '20/03/2010'}, list{false|int, 'Y', 'Unknown', '2010'}, list{null, 'd/m/Y', 'Unknown', 'Unknown-translated'}, list{null, 'd/m/Y', 'N/a', 'N/a-translated'}}
      */
-    public function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [
-                strtotime('2010-03-20'),
-                'd/m/Y',
-                'Unknown',
-                '20/03/2010'
-            ],
-            [
-                strtotime('2010-03-20'),
-                'Y',
-                'Unknown',
-                '2010'
-            ],
-            [
-                null,
-                'd/m/Y',
-                'Unknown',
-                'Unknown-translated'
-            ],
-            [
-                null,
-                'd/m/Y',
-                'N/a',
-                'N/a-translated'
-            ]
+        yield [
+            strtotime('2010-03-20'),
+            'd/m/Y',
+            'Unknown',
+            '20/03/2010'
+        ];
+        yield [
+            strtotime('2010-03-20'),
+            'Y',
+            'Unknown',
+            '2010'
+        ];
+        yield [
+            null,
+            'd/m/Y',
+            'Unknown',
+            'Unknown-translated'
+        ];
+        yield [
+            null,
+            'd/m/Y',
+            'N/a',
+            'N/a-translated'
         ];
     }
 }

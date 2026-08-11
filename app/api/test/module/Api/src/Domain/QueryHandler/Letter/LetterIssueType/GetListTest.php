@@ -15,7 +15,7 @@ use Mockery as m;
  * Get List of Letter Issue Types Test
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\QueryHandler\Letter\LetterIssueType\GetList::class)]
-class GetListTest extends QueryHandlerTestCase
+final class GetListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

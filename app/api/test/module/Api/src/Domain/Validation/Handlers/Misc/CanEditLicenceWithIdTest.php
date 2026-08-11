@@ -14,7 +14,7 @@ use Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanEditLicenceWithId;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CanEditLicenceWithIdTest extends AbstractHandlerTestCase
+final class CanEditLicenceWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessLicenceWithId
@@ -40,11 +40,9 @@ class CanEditLicenceWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function provider(): array
+    public static function provider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

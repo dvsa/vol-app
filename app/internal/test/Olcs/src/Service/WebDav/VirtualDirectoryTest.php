@@ -12,14 +12,14 @@ use Sabre\DAV\Exception\NotFound;
 use Sabre\DAV\INode;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(VirtualDirectory::class)]
-class VirtualDirectoryTest extends MockeryTestCase
+final class VirtualDirectoryTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\Test]
     public function getNameReturnsTheName(): void
     {
         $sut = new VirtualDirectory('test-directory');
 
-        $this->assertEquals('test-directory', $sut->getName());
+        $this->assertSame('test-directory', $sut->getName());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]

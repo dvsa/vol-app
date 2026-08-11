@@ -11,7 +11,7 @@ use Dvsa\Olcs\Cli\Domain\Query\CommunityLic\CommunityLicencesForSuspensionList;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class CommunityLicencesForSuspensionListTest extends \PHPUnit\Framework\TestCase
+final class CommunityLicencesForSuspensionListTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {
@@ -19,6 +19,6 @@ class CommunityLicencesForSuspensionListTest extends \PHPUnit\Framework\TestCase
             'date' => 'foo'
         ];
         $command = CommunityLicencesForSuspensionList::create($params);
-        $this->assertEquals($command->getDate(), 'foo');
+        $this->assertEquals('foo', $command->getDate());
     }
 }

@@ -21,8 +21,9 @@ use Dvsa\Olcs\Api\Domain\Repository\TrafficArea as TrafficAreaRepo;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class TrafficAreaTest extends RepositoryTestCase
+final class TrafficAreaTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(TrafficAreaRepo::class);

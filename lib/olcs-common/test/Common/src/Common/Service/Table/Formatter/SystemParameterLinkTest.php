@@ -6,6 +6,8 @@
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
@@ -18,7 +20,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class SystemParameterLinkTest extends TestCase
+final class SystemParameterLinkTest extends TestCase
 {
     protected $urlHelper;
 

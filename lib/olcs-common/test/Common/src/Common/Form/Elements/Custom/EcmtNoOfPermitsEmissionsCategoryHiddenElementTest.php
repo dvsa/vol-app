@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Custom;
 
 use Common\Form\Elements\Custom\EcmtNoOfPermitsEmissionsCategoryHiddenElement;
@@ -13,7 +15,7 @@ use Laminas\Validator\Identical;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EcmtNoOfPermitsEmissionsCategoryHiddenElementTest extends MockeryTestCase
+final class EcmtNoOfPermitsEmissionsCategoryHiddenElementTest extends MockeryTestCase
 {
     public function testGetInputSpecification(): void
     {

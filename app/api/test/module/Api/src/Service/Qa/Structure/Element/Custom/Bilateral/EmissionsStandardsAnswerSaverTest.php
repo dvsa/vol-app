@@ -15,7 +15,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class EmissionsStandardsAnswerSaverTest extends MockeryTestCase
+final class EmissionsStandardsAnswerSaverTest extends MockeryTestCase
 {
     public function testSave(): void
     {

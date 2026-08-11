@@ -12,7 +12,7 @@ use Mockery as m;
 /**
  * @see GenerateReportConsumer
  */
-class GenerateReportTest extends AbstractConsumerTestCase
+final class GenerateReportTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = GenerateReportConsumer::class;
 

@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Domain\Command\Result;
 /**
  * Update Service Register Test
  */
-class UpdateServiceRegisterTest extends AbstractCommandHandlerTestCase
+final class UpdateServiceRegisterTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

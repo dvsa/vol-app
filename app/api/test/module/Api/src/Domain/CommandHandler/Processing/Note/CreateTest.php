@@ -19,7 +19,7 @@ use Dvsa\Olcs\Api\Entity;
 /**
  * Create Note Test
  */
-class CreateTest extends AbstractCommandHandlerTestCase
+final class CreateTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var CreateCommandHandler
@@ -149,124 +149,122 @@ class CreateTest extends AbstractCommandHandlerTestCase
         }
     }
 
-    public static function dpTestHandleCommand(): array
+    public static function dpTestHandleCommand(): \Iterator
     {
-        return [
-            [
-                'data' => [
-                    'comment' => 'my comment',
-                    'priority' => 'Y',
-                    'application' => 50,
-                ],
-                'expected' => [
-                    'comment' => 'my comment',
-                    'priority' => 'Y',
-                    'type' => NoteEntity::NOTE_TYPE_APPLICATION,
-                    'application' => 50,
-                ],
+        yield [
+            'data' => [
+                'comment' => 'my comment',
+                'priority' => 'Y',
+                'application' => 50,
             ],
-            [
-                'data' => [
-                    'comment' => 'my comment',
-                    'priority' => 'Y',
-                    'busReg' => 51,
-                ],
-                'expected' => [
-                    'comment' => 'my comment',
-                    'priority' => 'Y',
-                    'type' => NoteEntity::NOTE_TYPE_BUS,
-                    'busReg' => 51,
-                ],
+            'expected' => [
+                'comment' => 'my comment',
+                'priority' => 'Y',
+                'type' => NoteEntity::NOTE_TYPE_APPLICATION,
+                'application' => 50,
             ],
-            [
-                'data' => [
-                    'comment' => 'my comment',
-                    'priority' => 'Y',
-                    'case' => 52,
-                ],
-                'expected' => [
-                    'comment' => 'my comment',
-                    'priority' => 'Y',
-                    'type' => NoteEntity::NOTE_TYPE_CASE,
-                    'case' => 52,
-                ],
+        ];
+        yield [
+            'data' => [
+                'comment' => 'my comment',
+                'priority' => 'Y',
+                'busReg' => 51,
             ],
-            [
-                'data' => [
-                    'comment' => 'my comment',
-                    'priority' => 'Y',
-                    'licence' => 53,
-                ],
-                'expected' => [
-                    'comment' => 'my comment',
-                    'priority' => 'Y',
-                    'type' => NoteEntity::NOTE_TYPE_LICENCE,
-                    'licence' => 53,
-                ],
+            'expected' => [
+                'comment' => 'my comment',
+                'priority' => 'Y',
+                'type' => NoteEntity::NOTE_TYPE_BUS,
+                'busReg' => 51,
             ],
-            [
-                'data' => [
-                    'comment' => 'my comment',
-                    'priority' => 'Y',
-                    'organisation' => 54,
-                ],
-                'expected' => [
-                    'comment' => 'my comment',
-                    'priority' => 'Y',
-                    'type' => NoteEntity::NOTE_TYPE_ORGANISATION,
-                    'organisation' => 54,
-                ],
+        ];
+        yield [
+            'data' => [
+                'comment' => 'my comment',
+                'priority' => 'Y',
+                'case' => 52,
             ],
-            [
-                'data' => [
-                    'comment' => 'my comment',
-                    'priority' => 'Y',
-                    'transportManager' => 55,
-                ],
-                'expected' => [
-                    'comment' => 'my comment',
-                    'priority' => 'Y',
-                    'type' => NoteEntity::NOTE_TYPE_TRANSPORT_MANAGER,
-                    'transportManager' => 55,
-                ],
+            'expected' => [
+                'comment' => 'my comment',
+                'priority' => 'Y',
+                'type' => NoteEntity::NOTE_TYPE_CASE,
+                'case' => 52,
             ],
-            [
-                'data' => [
-                    'comment' => 'my comment',
-                    'priority' => 'Y',
-                    'irhpApplication' => 56,
-                ],
-                'expected' => [
-                    'comment' => 'my comment',
-                    'priority' => 'Y',
-                    'type' => NoteEntity::NOTE_TYPE_PERMIT,
-                    'irhpApplication' => 56,
-                ],
+        ];
+        yield [
+            'data' => [
+                'comment' => 'my comment',
+                'priority' => 'Y',
+                'licence' => 53,
             ],
-            [
-                'data' => [
-                    'comment' => 'my comment',
-                    'priority' => 'N',
-                    'application' => 50,
-                    'busReg' => 51,
-                    'case' => 52,
-                    'licence' => 53,
-                    'organisation' => 54,
-                    'transportManager' => 55,
-                    'irhpApplication' => 56,
-                ],
-                'expected' => [
-                    'comment' => 'my comment',
-                    'priority' => 'N',
-                    'type' => NoteEntity::NOTE_TYPE_PERMIT,
-                    'application' => 50,
-                    'busReg' => 51,
-                    'case' => 52,
-                    'licence' => 53,
-                    'organisation' => 54,
-                    'transportManager' => 55,
-                    'irhpApplication' => 56,
-                ],
+            'expected' => [
+                'comment' => 'my comment',
+                'priority' => 'Y',
+                'type' => NoteEntity::NOTE_TYPE_LICENCE,
+                'licence' => 53,
+            ],
+        ];
+        yield [
+            'data' => [
+                'comment' => 'my comment',
+                'priority' => 'Y',
+                'organisation' => 54,
+            ],
+            'expected' => [
+                'comment' => 'my comment',
+                'priority' => 'Y',
+                'type' => NoteEntity::NOTE_TYPE_ORGANISATION,
+                'organisation' => 54,
+            ],
+        ];
+        yield [
+            'data' => [
+                'comment' => 'my comment',
+                'priority' => 'Y',
+                'transportManager' => 55,
+            ],
+            'expected' => [
+                'comment' => 'my comment',
+                'priority' => 'Y',
+                'type' => NoteEntity::NOTE_TYPE_TRANSPORT_MANAGER,
+                'transportManager' => 55,
+            ],
+        ];
+        yield [
+            'data' => [
+                'comment' => 'my comment',
+                'priority' => 'Y',
+                'irhpApplication' => 56,
+            ],
+            'expected' => [
+                'comment' => 'my comment',
+                'priority' => 'Y',
+                'type' => NoteEntity::NOTE_TYPE_PERMIT,
+                'irhpApplication' => 56,
+            ],
+        ];
+        yield [
+            'data' => [
+                'comment' => 'my comment',
+                'priority' => 'N',
+                'application' => 50,
+                'busReg' => 51,
+                'case' => 52,
+                'licence' => 53,
+                'organisation' => 54,
+                'transportManager' => 55,
+                'irhpApplication' => 56,
+            ],
+            'expected' => [
+                'comment' => 'my comment',
+                'priority' => 'N',
+                'type' => NoteEntity::NOTE_TYPE_PERMIT,
+                'application' => 50,
+                'busReg' => 51,
+                'case' => 52,
+                'licence' => 53,
+                'organisation' => 54,
+                'transportManager' => 55,
+                'irhpApplication' => 56,
             ],
         ];
     }

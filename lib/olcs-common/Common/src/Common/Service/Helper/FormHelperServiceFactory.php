@@ -14,7 +14,7 @@ class FormHelperServiceFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): FormHelperService
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): FormHelperService
     {
         return new FormHelperService(
             $container->get('FormAnnotationBuilder'),

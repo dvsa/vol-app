@@ -12,7 +12,7 @@ use Laminas\Form\Form;
 /**
  * DelayItems Mapper Test
  */
-class DelayItemsTest extends MockeryTestCase
+final class DelayItemsTest extends MockeryTestCase
 {
     public function testMapFromErrors(): void
     {

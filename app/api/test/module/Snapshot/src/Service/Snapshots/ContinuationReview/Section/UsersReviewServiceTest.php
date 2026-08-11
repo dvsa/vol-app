@@ -14,11 +14,12 @@ use Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Laminas\I18n\Translator\TranslatorInterface;
 
-class UsersReviewServiceTest extends MockeryTestCase
+final class UsersReviewServiceTest extends MockeryTestCase
 {
     /** @var UsersReviewService review service */
     protected $sut;
 
+    #[\Override]
     public function setUp(): void
     {
         $mockTranslator = m::mock(TranslatorInterface::class)

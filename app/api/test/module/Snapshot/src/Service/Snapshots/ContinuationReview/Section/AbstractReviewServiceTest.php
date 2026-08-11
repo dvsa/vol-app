@@ -10,13 +10,14 @@ use Dvsa\Olcs\Snapshot\Service\Snapshots\ContinuationReview\Section\AbstractRevi
 use Dvsa\OlcsTest\Snapshot\Service\Snapshots\ContinuationReview\Section\Stub\AbstractReviewServiceStub;
 use Laminas\I18n\Translator\TranslatorInterface;
 
-class AbstractReviewServiceTest extends MockeryTestCase
+final class AbstractReviewServiceTest extends MockeryTestCase
 {
     private $sut;
 
     /** @var TranslatorInterface */
     protected $mockTranslator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockTranslator = m::mock(TranslatorInterface::class);
@@ -47,11 +48,9 @@ class AbstractReviewServiceTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->formatDate($date));
     }
 
-    public static function formatDateDataProvider(): array
+    public static function formatDateDataProvider(): \Iterator
     {
-        return [
-            ['15 Aug 2005', '2005-08-15T15:52:01+00:00'],
-            ['01 Aug 2017', '2017-08-01T15:52:00+05:00'],
-        ];
+        yield ['15 Aug 2005', '2005-08-15T15:52:01+00:00'];
+        yield ['01 Aug 2017', '2017-08-01T15:52:00+05:00'];
     }
 }

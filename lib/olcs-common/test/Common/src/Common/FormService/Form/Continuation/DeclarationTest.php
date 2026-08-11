@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Common\FormService\Form\Lva;
 
 use Common\FormService\FormServiceManager;
@@ -16,7 +18,7 @@ use Common\Service\Helper\FormHelperService;
 /**
  * Licence checklist form service test
  */
-class DeclarationTest extends MockeryTestCase
+final class DeclarationTest extends MockeryTestCase
 {
     public $translator;
     public $scriptFactory;

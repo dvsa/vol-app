@@ -30,7 +30,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @author Dan Eggleston <dan@stolenegg.com>
  */
-class OverviewTest extends QueryHandlerTestCase
+final class OverviewTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

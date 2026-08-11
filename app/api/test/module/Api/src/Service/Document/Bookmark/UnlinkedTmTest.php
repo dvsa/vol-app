@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\UnlinkedTm;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Document\Bookmark\UnlinkedTm::class)]
-class UnlinkedTmTest extends \PHPUnit\Framework\TestCase
+final class UnlinkedTmTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -18,69 +18,67 @@ class UnlinkedTmTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(\Dvsa\Olcs\Transfer\Query\QueryInterface::class, $query);
     }
 
-    public static function dpRenderValidDataProvider(): array
+    public static function dpRenderValidDataProvider(): \Iterator
     {
-        return [
+        yield [
+            "Testy McTest",
             [
-                "Testy McTest",
-                [
-                    'tmLicences' => [
-                        0 => [
-                            'transportManager' => [
-                                'homeCd' => [
-                                    'person' => [
-                                        'forename' => 'Testy',
-                                        'familyName' => 'McTest',
-                                    ],
+                'tmLicences' => [
+                    0 => [
+                        'transportManager' => [
+                            'homeCd' => [
+                                'person' => [
+                                    'forename' => 'Testy',
+                                    'familyName' => 'McTest',
                                 ],
                             ],
                         ],
                     ],
                 ],
             ],
+        ];
+        yield [
+            "Lorem Ipsum\nTesty McTest",
             [
-                "Lorem Ipsum\nTesty McTest",
-                [
-                    'tmLicences' => [
-                        0 => [
-                            'transportManager' => [
-                                'homeCd' => [
-                                    'person' => [
-                                        'forename' => 'Lorem',
-                                        'familyName' => 'Ipsum',
-                                    ],
+                'tmLicences' => [
+                    0 => [
+                        'transportManager' => [
+                            'homeCd' => [
+                                'person' => [
+                                    'forename' => 'Lorem',
+                                    'familyName' => 'Ipsum',
                                 ],
                             ],
                         ],
-                        1 => [
-                            'transportManager' => [
-                                'homeCd' => [
-                                    'person' => [
-                                        'forename' => 'Testy',
-                                        'familyName' => 'McTest',
-                                    ],
+                    ],
+                    1 => [
+                        'transportManager' => [
+                            'homeCd' => [
+                                'person' => [
+                                    'forename' => 'Testy',
+                                    'familyName' => 'McTest',
                                 ],
                             ],
                         ],
                     ],
                 ],
             ],
+        ];
+        yield [
+            UnlinkedTm::TM_NA,
             [
-                UnlinkedTm::TM_NA,
-                [
-                    'tmLicences' => [],
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_RESTRICTED,
-                    ],
+                'tmLicences' => [],
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_RESTRICTED,
                 ],
             ],
+        ];
+        yield [
+            UnlinkedTm::TM_BE_NOMINATED,
             [
-                UnlinkedTm::TM_BE_NOMINATED,
-                [
-                    'tmLicences' => [],
-                    'licenceType' => [
-                        'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
-                    ],
+                'tmLicences' => [],
+                'licenceType' => [
+                    'id' => Licence::LICENCE_TYPE_STANDARD_NATIONAL,
                 ],
             ],
         ];

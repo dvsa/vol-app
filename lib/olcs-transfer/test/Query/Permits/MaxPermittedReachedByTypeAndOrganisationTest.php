@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Query\Permits;
 
 use Dvsa\Olcs\Transfer\Query\Permits\MaxPermittedReachedByTypeAndOrganisation;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Query\Permits\MaxPermittedReachedByTypeAndOrganisation;
 /**
  * Max permitted reached by type and organisation test
  */
-class MaxPermittedReachedByTypeAndOrganisationTest extends \PHPUnit\Framework\TestCase
+final class MaxPermittedReachedByTypeAndOrganisationTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

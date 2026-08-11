@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\LicenceVehicle;
 
 use Dvsa\Olcs\Transfer\Command\LicenceVehicle\CreateUnlicensedOperatorLicenceVehicle;
@@ -7,7 +9,7 @@ use Dvsa\Olcs\Transfer\Command\LicenceVehicle\CreateUnlicensedOperatorLicenceVeh
 /**
  * CreateUnlicensedOperatorLicenceVehicle test
  */
-class CreateUnlicensedOperatorLicenceVehicleTest extends \PHPUnit\Framework\TestCase
+final class CreateUnlicensedOperatorLicenceVehicleTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure()
     {

@@ -20,7 +20,7 @@ use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 use Dvsa\Olcs\Api\Domain\Repository\TransportManagerApplication as TmApplicationRepo;
 use Dvsa\Olcs\Api\Domain\Repository\TransportManagerLicence as TmLicenceRepo;
 
-class CreateSubmissionTest extends AbstractCommandHandlerTestCase
+final class CreateSubmissionTest extends AbstractCommandHandlerTestCase
 {
     public $submissionConfig = [
         'submissions' => [

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Types;
 
 use Common\Form\Elements\Types\PostcodeSearch;
@@ -9,7 +11,7 @@ use Laminas\Form\Element\Text;
 /**
  * PostcodeTest
  */
-class PostcodeTest extends \PHPUnit\Framework\TestCase
+final class PostcodeTest extends \PHPUnit\Framework\TestCase
 {
     public function testConstructorPostcodeElement(): void
     {

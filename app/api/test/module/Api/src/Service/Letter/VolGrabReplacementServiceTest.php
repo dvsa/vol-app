@@ -21,7 +21,7 @@ use Olcs\Logging\Log\Logger;
 /**
  * VolGrabReplacementService Test
  */
-class VolGrabReplacementServiceTest extends MockeryTestCase
+final class VolGrabReplacementServiceTest extends MockeryTestCase
 {
     private VolGrabReplacementService $service;
     private $mockBookmarkFactory;
@@ -29,6 +29,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
     private $mockDateService;
     private $mockTranslator;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->mockBookmarkFactory = m::mock(BookmarkFactory::class);
@@ -47,6 +48,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         Logger::setLogger(new \Psr\Log\NullLogger());
     }
 
+    #[\Override]
     public function tearDown(): void
     {
         m::close();
@@ -56,7 +58,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
     {
         $result = $this->service->replaceGrabs('', []);
 
-        $this->assertEquals('', $result);
+        $this->assertSame('', $result);
     }
 
     public function testReplaceGrabsReturnsOriginalJsonWhenNoTokensFound(): void
@@ -91,8 +93,8 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $result = $this->service->replaceGrabs($json, ['user' => 1]);
         $decoded = json_decode($result, true);
 
-        $this->assertStringContainsString('11/11/2025', $decoded['blocks'][0]['data']['text']);
-        $this->assertStringNotContainsString('[[TODAYS_DATE]]', $decoded['blocks'][0]['data']['text']);
+        $this->assertStringContainsString('11/11/2025', (string) $decoded['blocks'][0]['data']['text']);
+        $this->assertStringNotContainsString('[[TODAYS_DATE]]', (string) $decoded['blocks'][0]['data']['text']);
     }
 
     public function testReplaceGrabsSuccessfullyReplacesDynamicBookmark(): void
@@ -133,8 +135,8 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $result = $this->service->replaceGrabs($json, ['licence' => 7, 'user' => 1]);
         $decoded = json_decode($result, true);
 
-        $this->assertStringContainsString('Test Company Ltd', $decoded['blocks'][0]['data']['text']);
-        $this->assertStringNotContainsString('[[OP_NAME]]', $decoded['blocks'][0]['data']['text']);
+        $this->assertStringContainsString('Test Company Ltd', (string) $decoded['blocks'][0]['data']['text']);
+        $this->assertStringNotContainsString('[[OP_NAME]]', (string) $decoded['blocks'][0]['data']['text']);
     }
 
     public function testReplaceGrabsInjectsTranslatorInterfaceIntoBookmark(): void
@@ -179,8 +181,8 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $result = $this->service->replaceGrabs($json, []);
         $decoded = json_decode($result, true);
 
-        // Unknown token should remain in place
-        $this->assertStringContainsString('[[UNKNOWN_TOKEN]]', $decoded['blocks'][0]['data']['text']);
+        // Unresolvable token is stripped so it can't leak into a sent letter
+        $this->assertStringNotContainsString('UNKNOWN_TOKEN', (string) $decoded['blocks'][0]['data']['text']);
     }
 
     public function testReplaceGrabsHandlesQueryExecutionException(): void
@@ -215,8 +217,8 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $result = $this->service->replaceGrabs($json, ['licence' => 999]);
         $decoded = json_decode($result, true);
 
-        // Token should remain since query failed
-        $this->assertStringContainsString('[[OP_NAME]]', $decoded['blocks'][0]['data']['text']);
+        // Failed-query token is stripped so it can't leak into a sent letter
+        $this->assertStringNotContainsString('OP_NAME', (string) $decoded['blocks'][0]['data']['text']);
     }
 
     public function testReplaceGrabsHandlesRenderException(): void
@@ -243,8 +245,8 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $result = $this->service->replaceGrabs($json, []);
         $decoded = json_decode($result, true);
 
-        // Token should remain since rendering failed
-        $this->assertStringContainsString('[[TEST_TOKEN]]', $decoded['blocks'][0]['data']['text']);
+        // Failed-render token is stripped so it can't leak into a sent letter
+        $this->assertStringNotContainsString('TEST_TOKEN', (string) $decoded['blocks'][0]['data']['text']);
     }
 
     public function testReplaceGrabsHandlesTopLevelException(): void
@@ -255,7 +257,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         // Should catch exception and return original content
         $result = $this->service->replaceGrabs($invalidJson, []);
 
-        $this->assertEquals($invalidJson, $result);
+        $this->assertSame($invalidJson, $result);
     }
 
     public function testReplaceGrabsHandlesMultipleTokensWithMixedSuccess(): void
@@ -287,9 +289,9 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $result = $this->service->replaceGrabs($json, []);
         $decoded = json_decode($result, true);
 
-        // Good token replaced, bad token remains
-        $this->assertStringContainsString('SUCCESS', $decoded['blocks'][0]['data']['text']);
-        $this->assertStringContainsString('[[BAD_TOKEN]]', $decoded['blocks'][0]['data']['text']);
+        // Good token replaced, unresolvable token stripped
+        $this->assertStringContainsString('SUCCESS', (string) $decoded['blocks'][0]['data']['text']);
+        $this->assertStringNotContainsString('BAD_TOKEN', (string) $decoded['blocks'][0]['data']['text']);
     }
 
     public function testReplaceGrabsSkipsStaticBookmarksInQueryExecution(): void
@@ -325,7 +327,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
     {
         $result = $this->service->replaceGrabsInHtml('', []);
 
-        $this->assertEquals('', $result);
+        $this->assertSame('', $result);
     }
 
     public function testReplaceGrabsInHtmlReturnsOriginalHtmlWhenNoTokensFound(): void
@@ -334,7 +336,7 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
 
         $result = $this->service->replaceGrabsInHtml($html, ['licence' => 7]);
 
-        $this->assertEquals($html, $result);
+        $this->assertSame($html, $result);
     }
 
     public function testReplaceGrabsInHtmlSuccessfullyReplacesStaticBookmark(): void
@@ -420,7 +422,8 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
 
         $result = $this->service->replaceGrabsInHtml($html, []);
 
-        $this->assertStringContainsString('[[UNKNOWN_TOKEN]]', $result);
+        // Unresolvable token is stripped so it can't leak into a sent letter
+        $this->assertStringNotContainsString('UNKNOWN_TOKEN', $result);
     }
 
     public function testReplaceGrabsInHtmlHandlesMultipleTokens(): void
@@ -506,5 +509,39 @@ class VolGrabReplacementServiceTest extends MockeryTestCase
         $result = $this->service->replaceGrabsInHtml($html, []);
 
         $this->assertStringContainsString('Line 1<br>' . "\n" . 'Line 2<br>' . "\n" . 'Line 3', $result);
+    }
+
+    public function testReplaceGrabsStripsUnresolvableTokensInsteadOfLeakingThem(): void
+    {
+        // A token no bookmark can serve (unknown class, or a dynamic bookmark whose
+        // query produced nothing, e.g. CASEWORKER_NAME with no user in context) must
+        // not appear as literal [[TOKEN]] text in the letter sent to an operator.
+        $json = json_encode([
+            'blocks' => [
+                ['type' => 'paragraph', 'data' => ['text' => 'Signed: [[NO_SUCH_GRAB]]']],
+            ],
+        ]);
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('NO_SUCH_GRAB')
+            ->andThrow(new \InvalidArgumentException('Unknown bookmark'));
+
+        $result = $this->service->replaceGrabs($json, []);
+
+        $this->assertStringNotContainsString('NO_SUCH_GRAB', $result);
+        $this->assertStringContainsString('Signed: ', $result);
+    }
+
+    public function testReplaceGrabsInHtmlStripsUnresolvableTokens(): void
+    {
+        $html = '<p>Signed: [[NO_SUCH_GRAB]]</p>';
+
+        $this->mockBookmarkFactory->shouldReceive('locate')
+            ->with('NO_SUCH_GRAB')
+            ->andThrow(new \InvalidArgumentException('Unknown bookmark'));
+
+        $result = $this->service->replaceGrabsInHtml($html, []);
+
+        $this->assertStringNotContainsString('NO_SUCH_GRAB', $result);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Lva\TransportManager\Sections;
 
 use Common\Data\Mapper\Lva\TransportManager\Sections\Details;
@@ -8,7 +10,7 @@ use Common\Service\Helper\TranslationHelperService;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
 
-class DetailsTest extends MockeryTestCase
+final class DetailsTest extends MockeryTestCase
 {
     private $sut;
 
@@ -255,27 +257,23 @@ class DetailsTest extends MockeryTestCase
     }
 
     /**
-     * @return string[][]
+     * @return \Iterator<(int | string), array<string>>
      *
      * @psalm-return array{'with LGV AR ref number': array{lgvAcquiredRightsReferenceNumber: 'ABC1234', expected: 'ABC1234'}, 'without LGV AR ref number': array{lgvAcquiredRightsReferenceNumber: '', expected: 'lva-tmverify-details-checkanswer-lgvAcquiredRightsReferenceNumberNotProvided'}}
      */
-    public function dpLgvOnlyApplication(): array
+    public static function dpLgvOnlyApplication(): \Iterator
     {
-        return [
-            'with LGV AR ref number' => [
-                'lgvAcquiredRightsReferenceNumber' => 'ABC1234',
-                'expected' => 'ABC1234',
-            ],
-            'without LGV AR ref number' => [
-                'lgvAcquiredRightsReferenceNumber' => '',
-                'expected' => 'lva-tmverify-details-checkanswer-lgvAcquiredRightsReferenceNumberNotProvided',
-            ],
+        yield 'with LGV AR ref number' => [
+            'lgvAcquiredRightsReferenceNumber' => 'ABC1234',
+            'expected' => 'ABC1234',
+        ];
+        yield 'without LGV AR ref number' => [
+            'lgvAcquiredRightsReferenceNumber' => '',
+            'expected' => 'lva-tmverify-details-checkanswer-lgvAcquiredRightsReferenceNumberNotProvided',
         ];
     }
 
-    /**
-     * @dataProvider dpLgvOnlyApplication
-     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpLgvOnlyApplication')]
     public function testLgvOnlyApplication($lgvAcquiredRightsReferenceNumber, $expected): void
     {
         $this->mockTranslator->shouldReceive(

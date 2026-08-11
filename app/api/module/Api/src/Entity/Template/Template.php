@@ -7,19 +7,13 @@ use RuntimeException;
 
 /**
  * Template Entity
- *
- * @ORM\Entity
- * @ORM\Table(name="template",
- *    indexes={
- *        @ORM\Index(name="ix_template_template_test_data_id", columns={"template_test_data_id"}),
- *        @ORM\Index(name="ix_template_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_template_last_modified_by", columns={"last_modified_by"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="unique_name", columns={"locale","format","name"})
- *    }
- * )
  */
+#[ORM\Table(name: 'template')]
+#[ORM\Index(name: 'ix_template_template_test_data_id', columns: ['template_test_data_id'])]
+#[ORM\Index(name: 'ix_template_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_template_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\UniqueConstraint(name: 'unique_name', columns: ['locale', 'format', 'name'])]
+#[ORM\Entity]
 class Template extends AbstractTemplate
 {
     public const BULK_GOODS_EMAIL_SUBJECT_LINE = 'Important information about your goods vehicle licence';

@@ -24,9 +24,10 @@ use Doctrine\DBAL\Connection;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class PsvDiscTest extends RepositoryTestCase
+final class PsvDiscTest extends RepositoryTestCase
 {
     public $activeStatuses;
+    #[\Override]
     public function setUp(): void
     {
         $this->activeStatuses = [
@@ -274,7 +275,7 @@ class PsvDiscTest extends RepositoryTestCase
 
         $expectedQuery = '{QUERY} SELECT count(psv) AND psv.licence = [[' . $licenceId . ']] AND psv.ceasedDate IS NULL GROUP BY psv.licence LIMIT 1';
 
-        self::assertEquals($expectedQuery, $this->query);
+        $this->assertEquals($expectedQuery, $this->query);
     }
 
     public function testCountForLicenceNoResult(): void

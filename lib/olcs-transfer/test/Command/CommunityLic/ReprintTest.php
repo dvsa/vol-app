@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Transfer\Command\CommunityLic;
 
 use Dvsa\Olcs\Transfer\Command\CommunityLic\Reprint;
@@ -7,7 +9,7 @@ use Dvsa\OlcsTest\Transfer\Command\CommandTest;
 use PHPUnit\Framework\TestCase;
 use Laminas\Stdlib\ArraySerializableInterface;
 
-class ReprintTest extends TestCase
+final class ReprintTest extends TestCase
 {
     use CommandTest;
 

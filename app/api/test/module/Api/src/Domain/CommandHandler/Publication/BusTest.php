@@ -31,7 +31,7 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\UnpublishedBusReg as UnpublishedBusRegQr
 /**
  * BusTest
  */
-class BusTest extends AbstractCommandHandlerTestCase
+final class BusTest extends AbstractCommandHandlerTestCase
 {
     //variables to hold traffic area entity references
     protected $ta1;
@@ -271,17 +271,15 @@ class BusTest extends AbstractCommandHandlerTestCase
     }
 
     /**
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function handleCommandCreateProvider(): array
+    public static function handleCommandCreateProvider(): \Iterator
     {
-        return [
-            [BusRegEntity::STATUS_NEW, 'Y'],
-            [BusRegEntity::STATUS_NEW, 'N'],
-            [BusRegEntity::STATUS_VAR, 'Y'],
-            [BusRegEntity::STATUS_VAR, 'N'],
-            [BusRegEntity::STATUS_CANCEL, 'Y'],
-            [BusRegEntity::STATUS_CANCEL, 'N']
-        ];
+        yield [BusRegEntity::STATUS_NEW, 'Y'];
+        yield [BusRegEntity::STATUS_NEW, 'N'];
+        yield [BusRegEntity::STATUS_VAR, 'Y'];
+        yield [BusRegEntity::STATUS_VAR, 'N'];
+        yield [BusRegEntity::STATUS_CANCEL, 'Y'];
+        yield [BusRegEntity::STATUS_CANCEL, 'N'];
     }
 }

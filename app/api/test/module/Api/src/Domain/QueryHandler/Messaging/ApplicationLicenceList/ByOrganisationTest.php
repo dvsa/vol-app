@@ -17,7 +17,7 @@ use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use LmcRbacMvc\Service\AuthorizationService;
 use Mockery as m;
 
-class ByOrganisationTest extends QueryHandlerTestCase
+final class ByOrganisationTest extends QueryHandlerTestCase
 {
     /**
      * @var ByOrganisation

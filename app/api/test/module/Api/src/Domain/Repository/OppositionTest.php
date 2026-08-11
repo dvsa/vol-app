@@ -24,8 +24,9 @@ use Doctrine\ORM\EntityRepository;
  *
  * @author Shaun Lizzio <shaun@lizzio.co.uk>
  */
-class OppositionTest extends RepositoryTestCase
+final class OppositionTest extends RepositoryTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(Repo::class);

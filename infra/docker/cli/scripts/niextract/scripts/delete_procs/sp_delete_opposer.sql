@@ -35,12 +35,16 @@ BEGIN
 
     WHILE(@rowcount = 10000) DO
 
-
-
-        DELETE o FROM opposer o
-        LEFT JOIN opposition op ON o.id = op.opposer_id
-        WHERE op.opposer_id IS NULL
-        LIMIT 10000;
+        DELETE FROM opposer
+        WHERE id IN (
+            SELECT id FROM (
+                SELECT o.id
+                FROM opposer o
+                LEFT JOIN opposition op ON o.id = op.opposer_id
+                WHERE op.opposer_id IS NULL
+                LIMIT 10000
+            ) AS batch
+        );
     
         SET @rowcount := row_count();
         SET @total := @total + @rowcount;

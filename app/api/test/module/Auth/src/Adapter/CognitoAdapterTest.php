@@ -25,7 +25,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * Class CognitoAdapterTest
  * @see CognitoAdapter
  */
-class CognitoAdapterTest extends MockeryTestCase
+final class CognitoAdapterTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\Test]
     public function authenticateReturnsSuccessResultWhenDetailsAreCorrect(): void
@@ -50,11 +50,11 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->authenticate();
 
         // Assert
-        static::assertEquals(Result::SUCCESS, $result->getCode());
-        static::assertArrayHasKey('Token', $result->getIdentity());
-        static::assertArrayHasKey('AccessToken', $result->getIdentity());
-        static::assertArrayHasKey('IdToken', $result->getIdentity());
-        static::assertArrayHasKey('RefreshToken', $result->getIdentity());
+        $this->assertEquals(Result::SUCCESS, $result->getCode());
+        $this->assertArrayHasKey('Token', $result->getIdentity());
+        $this->assertArrayHasKey('AccessToken', $result->getIdentity());
+        $this->assertArrayHasKey('IdToken', $result->getIdentity());
+        $this->assertArrayHasKey('RefreshToken', $result->getIdentity());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -72,7 +72,7 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->authenticate();
 
         // Assert
-        static::assertEquals(Result::FAILURE, $result->getCode());
+        $this->assertEquals(Result::FAILURE, $result->getCode());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('authenticateCognitoIdentityProviderExceptionDataProvider')]
@@ -97,27 +97,25 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->authenticate();
 
         // Assert
-        static::assertEquals($expectedResultCode, $result->getCode());
+        $this->assertEquals($expectedResultCode, $result->getCode());
     }
 
-    public static function authenticateCognitoIdentityProviderExceptionDataProvider(): array
+    public static function authenticateCognitoIdentityProviderExceptionDataProvider(): \Iterator
     {
-        return [
-            'User not found' => [
-                CognitoAdapter::EXCEPTION_USER_NOT_FOUND,
-                'message',
-                Result::FAILURE_IDENTITY_NOT_FOUND
-            ],
-            'Incorrect credentials' => [
-                CognitoAdapter::EXCEPTION_NOT_AUTHORIZED,
-                CognitoAdapter::MESSAGE_INCORRECT_USERNAME_OR_PASSWORD,
-                Result::FAILURE_CREDENTIAL_INVALID
-            ],
-            'User disabled' => [
-                CognitoAdapter::EXCEPTION_NOT_AUTHORIZED,
-                CognitoAdapter::MESSAGE_USER_IS_DISABLED,
-                CognitoAdapter::FAILURE_ACCOUNT_DISABLED
-            ]
+        yield 'User not found' => [
+            CognitoAdapter::EXCEPTION_USER_NOT_FOUND,
+            'message',
+            Result::FAILURE_IDENTITY_NOT_FOUND
+        ];
+        yield 'Incorrect credentials' => [
+            CognitoAdapter::EXCEPTION_NOT_AUTHORIZED,
+            CognitoAdapter::MESSAGE_INCORRECT_USERNAME_OR_PASSWORD,
+            Result::FAILURE_CREDENTIAL_INVALID
+        ];
+        yield 'User disabled' => [
+            CognitoAdapter::EXCEPTION_NOT_AUTHORIZED,
+            CognitoAdapter::MESSAGE_USER_IS_DISABLED,
+            CognitoAdapter::FAILURE_ACCOUNT_DISABLED
         ];
     }
 
@@ -141,7 +139,7 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->authenticate();
 
         // Assert
-        static::assertEquals(CognitoAdapter::SUCCESS_WITH_CHALLENGE, $result->getCode());
+        $this->assertEquals(CognitoAdapter::SUCCESS_WITH_CHALLENGE, $result->getCode());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -170,11 +168,11 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->changeExpiredPassword('newPassword', 'challengeSession', 'username');
 
         // Assert
-        static::assertEquals(Result::SUCCESS, $result->getCode());
-        static::assertArrayHasKey('Token', $result->getIdentity());
-        static::assertArrayHasKey('AccessToken', $result->getIdentity());
-        static::assertArrayHasKey('IdToken', $result->getIdentity());
-        static::assertArrayHasKey('RefreshToken', $result->getIdentity());
+        $this->assertSame(Result::SUCCESS, $result->getCode());
+        $this->assertArrayHasKey('Token', $result->getIdentity());
+        $this->assertArrayHasKey('AccessToken', $result->getIdentity());
+        $this->assertArrayHasKey('IdToken', $result->getIdentity());
+        $this->assertArrayHasKey('RefreshToken', $result->getIdentity());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -196,7 +194,7 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->changeExpiredPassword('newPassword', 'challengeSession', 'username');
 
         // Assert
-        static::assertEquals(ChangeExpiredPasswordResult::FAILURE, $result->getCode());
+        $this->assertSame(ChangeExpiredPasswordResult::FAILURE, $result->getCode());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -222,7 +220,7 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->changeExpiredPassword('newPassword', 'challengeSession', 'username');
 
         // Assert
-        static::assertEquals(CognitoAdapter::SUCCESS_WITH_CHALLENGE, $result->getCode());
+        $this->assertSame(CognitoAdapter::SUCCESS_WITH_CHALLENGE, $result->getCode());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('changedExpiredPasswordClientExceptionDataProvider')]
@@ -248,16 +246,14 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->changeExpiredPassword('newPassword', 'challengeSession', 'username');
 
         // Assert
-        static::assertEquals($expectedResultCode, $result->getCode());
+        $this->assertSame($expectedResultCode, $result->getCode());
     }
 
-    public static function changedExpiredPasswordClientExceptionDataProvider(): array
+    public static function changedExpiredPasswordClientExceptionDataProvider(): \Iterator
     {
-        return [
-            'Invalid Password' => [CognitoAdapter::EXCEPTION_INVALID_PASSWORD, ChangeExpiredPasswordResult::FAILURE_NEW_PASSWORD_INVALID],
-            'Unauthorised' => [CognitoAdapter::EXCEPTION_NOT_AUTHORIZED, ChangeExpiredPasswordResult::FAILURE_NOT_AUTHORIZED],
-            'Generic' => ['generic', ChangeExpiredPasswordResult::FAILURE]
-        ];
+        yield 'Invalid Password' => [CognitoAdapter::EXCEPTION_INVALID_PASSWORD, ChangeExpiredPasswordResult::FAILURE_NEW_PASSWORD_INVALID];
+        yield 'Unauthorised' => [CognitoAdapter::EXCEPTION_NOT_AUTHORIZED, ChangeExpiredPasswordResult::FAILURE_NOT_AUTHORIZED];
+        yield 'Generic' => ['generic', ChangeExpiredPasswordResult::FAILURE];
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -278,8 +274,8 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->changeExpiredPassword('newPassword', 'challengeSession', 'username');
 
         // Assert
-        static::assertInstanceOf(ChangeExpiredPasswordResult::class, $result);
-        static::assertEquals(ChangeExpiredPasswordResult::FAILURE_NEW_PASSWORD_MATCHES_OLD, $result->getCode());
+        $this->assertInstanceOf(ChangeExpiredPasswordResult::class, $result);
+        $this->assertSame(ChangeExpiredPasswordResult::FAILURE_NEW_PASSWORD_MATCHES_OLD, $result->getCode());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -297,8 +293,8 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->changeExpiredPassword('newPassword', 'challengeSession', 'username');
 
         // Assert
-        static::assertInstanceOf(ChangeExpiredPasswordResult::class, $result);
-        static::assertEquals(ChangeExpiredPasswordResult::FAILURE_CLIENT_ERROR, $result->getCode());
+        $this->assertInstanceOf(ChangeExpiredPasswordResult::class, $result);
+        $this->assertSame(ChangeExpiredPasswordResult::FAILURE_CLIENT_ERROR, $result->getCode());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('changedPasswordClientExceptionDataProvider')]
@@ -323,16 +319,14 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->changePassword($identifier, $previousPassword, $newPassword);
 
         // Assert
-        static::assertEquals($expectedResultCode, $result->getCode());
+        $this->assertSame($expectedResultCode, $result->getCode());
     }
 
-    public static function changedPasswordClientExceptionDataProvider(): array
+    public static function changedPasswordClientExceptionDataProvider(): \Iterator
     {
-        return [
-            'Invalid Password' => [CognitoAdapter::EXCEPTION_INVALID_PASSWORD, ChangePasswordResult::FAILURE_NEW_PASSWORD_INVALID],
-            'Unauthorised' => [CognitoAdapter::EXCEPTION_NOT_AUTHORIZED, ChangePasswordResult::FAILURE_NOT_AUTHORIZED],
-            'Generic' => ['generic', ChangePasswordResult::FAILURE]
-        ];
+        yield 'Invalid Password' => [CognitoAdapter::EXCEPTION_INVALID_PASSWORD, ChangePasswordResult::FAILURE_NEW_PASSWORD_INVALID];
+        yield 'Unauthorised' => [CognitoAdapter::EXCEPTION_NOT_AUTHORIZED, ChangePasswordResult::FAILURE_NOT_AUTHORIZED];
+        yield 'Generic' => ['generic', ChangePasswordResult::FAILURE];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('changedPasswordAuthClientExceptionDataProvider')]
@@ -358,7 +352,7 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->changePassword($identifier, $previousPassword, $newPassword);
 
         // Assert
-        static::assertEquals($expectedResultCode, $result->getCode());
+        $this->assertSame($expectedResultCode, $result->getCode());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -376,27 +370,25 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->changePassword($identifier, $previousPassword, $newPassword);
 
         // Assert
-        static::assertEquals(ChangePasswordResult::FAILURE_PASSWORD_REUSE, $result->getCode());
+        $this->assertSame(ChangePasswordResult::FAILURE_PASSWORD_REUSE, $result->getCode());
     }
 
-    public static function changedPasswordAuthClientExceptionDataProvider(): array
+    public static function changedPasswordAuthClientExceptionDataProvider(): \Iterator
     {
-        return [
-            'Invalid previous Password' => [
-                CognitoAdapter::EXCEPTION_NOT_AUTHORIZED,
-                CognitoAdapter::MESSAGE_INCORRECT_USERNAME_OR_PASSWORD,
-                ChangePasswordResult::FAILURE_OLD_PASSWORD_INVALID
-            ],
-            'Client error' => [
-                CognitoAdapter::EXCEPTION_NOT_AUTHORIZED,
-                'Generic error',
-                ChangePasswordResult::FAILURE_CLIENT_ERROR
-            ],
-            'Generic' => [
-                'generic',
-                'Generic error',
-                ChangePasswordResult::FAILURE_CLIENT_ERROR
-            ]
+        yield 'Invalid previous Password' => [
+            CognitoAdapter::EXCEPTION_NOT_AUTHORIZED,
+            CognitoAdapter::MESSAGE_INCORRECT_USERNAME_OR_PASSWORD,
+            ChangePasswordResult::FAILURE_OLD_PASSWORD_INVALID
+        ];
+        yield 'Client error' => [
+            CognitoAdapter::EXCEPTION_NOT_AUTHORIZED,
+            'Generic error',
+            ChangePasswordResult::FAILURE_CLIENT_ERROR
+        ];
+        yield 'Generic' => [
+            'generic',
+            'Generic error',
+            ChangePasswordResult::FAILURE_CLIENT_ERROR
         ];
     }
 
@@ -418,7 +410,7 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->changePassword($identifier, $previousPassword, $newPassword);
 
         // Assert
-        static::assertEquals(ChangePasswordResult::SUCCESS, $result->getCode());
+        $this->assertSame(ChangePasswordResult::SUCCESS, $result->getCode());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -441,7 +433,7 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->changePassword($identifier, $previousPassword, $newPassword);
 
         // Assert
-        static::assertEquals(ChangePasswordResult::SUCCESS, $result->getCode());
+        $this->assertSame(ChangePasswordResult::SUCCESS, $result->getCode());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -481,15 +473,15 @@ class CognitoAdapterTest extends MockeryTestCase
         $identity = $result->getIdentity();
 
         // Assert
-        static::assertEquals(Result::SUCCESS, $result->getCode());
-        static::assertArrayHasKey('Token', $identity);
-        static::assertInstanceOf(AccessTokenInterface::class, $identity['Token']);
-        static::assertArrayHasKey('AccessToken', $identity);
-        static::assertEquals('newAccessToken', $identity['AccessToken']);
-        static::assertArrayHasKey('IdToken', $identity);
-        static::assertEquals('newIdToken', $identity['IdToken']);
-        static::assertArrayHasKey('RefreshToken', $identity);
-        static::assertEquals('newRefreshToken', $identity['RefreshToken']);
+        $this->assertEquals(Result::SUCCESS, $result->getCode());
+        $this->assertArrayHasKey('Token', $identity);
+        $this->assertInstanceOf(AccessTokenInterface::class, $identity['Token']);
+        $this->assertArrayHasKey('AccessToken', $identity);
+        $this->assertEquals('newAccessToken', $identity['AccessToken']);
+        $this->assertArrayHasKey('IdToken', $identity);
+        $this->assertEquals('newIdToken', $identity['IdToken']);
+        $this->assertArrayHasKey('RefreshToken', $identity);
+        $this->assertEquals('newRefreshToken', $identity['RefreshToken']);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -510,7 +502,7 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->refreshToken('refreshToken', 'username');
 
         // Assert
-        static::assertEquals(CognitoAdapter::SUCCESS_WITH_CHALLENGE, $result->getCode());
+        $this->assertEquals(CognitoAdapter::SUCCESS_WITH_CHALLENGE, $result->getCode());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('refreshTokenExceptionDataProvider')]
@@ -527,15 +519,13 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->refreshToken('refreshToken', 'username');
 
         // Assert
-        static::assertEquals(Result::FAILURE, $result->getCode());
+        $this->assertEquals(Result::FAILURE, $result->getCode());
     }
 
-    public static function refreshTokenExceptionDataProvider(): array
+    public static function refreshTokenExceptionDataProvider(): \Iterator
     {
-        return [
-            [InvalidTokenException::class],
-            [ClientException::class]
-        ];
+        yield [InvalidTokenException::class];
+        yield [ClientException::class];
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -560,8 +550,8 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->getUserByIdentifier($username);
 
         // Assert
-        static::assertInstanceOf(ResourceOwnerInterface::class, $result);
-        static::assertEquals($id, $result->getId());
+        $this->assertInstanceOf(ResourceOwnerInterface::class, $result);
+        $this->assertEquals($id, $result->getId());
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -589,7 +579,7 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->registerIfNotPresent($username, $password, $email);
 
         // Assert
-        static::assertFalse($result);
+        $this->assertFalse($result);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -617,7 +607,7 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->registerIfNotPresent($username, $password, $email, $attributes);
 
         // Assert
-        static::assertTrue($result);
+        $this->assertTrue($result);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -666,7 +656,7 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->doesUserExist($username);
 
         // Assert
-        static::assertTrue($result);
+        $this->assertTrue($result);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -688,7 +678,7 @@ class CognitoAdapterTest extends MockeryTestCase
         $result = $sut->doesUserExist($username);
 
         // Assert
-        static::assertFalse($result);
+        $this->assertFalse($result);
     }
 
     #[\PHPUnit\Framework\Attributes\Test]
@@ -725,8 +715,8 @@ class CognitoAdapterTest extends MockeryTestCase
         $deleteUserResult = $sut->deleteUser($identifier);
 
         $this->assertInstanceOf(DeleteUserResult::class, $deleteUserResult);
-        $this->assertEquals(DeleteUserResult::SUCCESS, $deleteUserResult->getCode());
-        $this->assertEquals(DeleteUserResult::MESSAGE_SUCCESS, $deleteUserResult->getMessage());
+        $this->assertSame(DeleteUserResult::SUCCESS, $deleteUserResult->getCode());
+        $this->assertSame(DeleteUserResult::MESSAGE_SUCCESS, $deleteUserResult->getMessage());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpDeleteException')]
@@ -752,19 +742,17 @@ class CognitoAdapterTest extends MockeryTestCase
         $this->assertEquals($expectedMessage, $deleteUserResult->getMessage());
     }
 
-    public static function dpDeleteException(): array
+    public static function dpDeleteException(): \Iterator
     {
-        return [
-            'User not in Cognito' => [
-                'UserNotFoundException',
-                DeleteUserResult::FAILURE_USER_NOT_FOUND,
-                DeleteUserResult::MESSAGE_FAILURE_NOT_FOUND,
-            ],
-            'Any other failure' => [
-                'AnyOtherException',
-                DeleteUserResult::FAILURE,
-                DeleteUserResult::MESSAGE_FAILURE,
-            ],
+        yield 'User not in Cognito' => [
+            'UserNotFoundException',
+            DeleteUserResult::FAILURE_USER_NOT_FOUND,
+            DeleteUserResult::MESSAGE_FAILURE_NOT_FOUND,
+        ];
+        yield 'Any other failure' => [
+            'AnyOtherException',
+            DeleteUserResult::FAILURE,
+            DeleteUserResult::MESSAGE_FAILURE,
         ];
     }
 
@@ -779,13 +767,11 @@ class CognitoAdapterTest extends MockeryTestCase
         $this->assertDoesNotMatchRegularExpression('/[A-Z]+/', $sut->getIdentity());
     }
 
-    public static function dataProviderGetIdentityStrings(): array
+    public static function dataProviderGetIdentityStrings(): \Iterator
     {
-        return [
-            'Lowercase' => ['testing'],
-            'Mixed Case' => ['tEsTiNG'],
-            'Uppercase' => ['TESTING'],
-            'Uppercase With Special Characters' => ['TESTING@"'],
-        ];
+        yield 'Lowercase' => ['testing'];
+        yield 'Mixed Case' => ['tEsTiNG'];
+        yield 'Uppercase' => ['TESTING'];
+        yield 'Uppercase With Special Characters' => ['TESTING@"'];
     }
 }

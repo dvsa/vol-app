@@ -11,7 +11,7 @@ use Dvsa\Olcs\Api\Domain\Command\Bus\Ebsr\ProcessPackFailed;
  *
  * @author Ian Lindsay <ian@hemera-business-services.co.uk>
  */
-class ProcessPackFailedTest extends \PHPUnit\Framework\TestCase
+final class ProcessPackFailedTest extends \PHPUnit\Framework\TestCase
 {
     public function testStructure(): void
     {

@@ -23,7 +23,7 @@ use Dvsa\Olcs\Api\Domain\QueryHandler\ResultList;
  *
  * @author Alex Peshkov <alex.peshkov@valtech.co.uk>
  */
-class GetListTest extends QueryHandlerTestCase
+final class GetListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

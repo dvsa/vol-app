@@ -22,23 +22,16 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="workshop",
- *    indexes={
- *        @ORM\Index(name="ix_workshop_contact_details_id", columns={"contact_details_id"}),
- *        @ORM\Index(name="ix_workshop_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_workshop_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_workshop_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="uk_workshop_olbs_key", columns={"olbs_key"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_workshop_olbs_key", columns={"olbs_key"})
- *    }
- * )
  */
+#[ORM\Table(name: 'workshop')]
+#[ORM\Index(name: 'ix_workshop_contact_details_id', columns: ['contact_details_id'])]
+#[ORM\Index(name: 'ix_workshop_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_workshop_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_workshop_licence_id', columns: ['licence_id'])]
+#[ORM\UniqueConstraint(name: 'uk_workshop_olbs_key', columns: ['olbs_key'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -52,108 +45,97 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'workshops', fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Foreign Key to contact_details
      *
      * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails", fetch="LAZY")
-     * @ORM\JoinColumn(name="contact_details_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'contact_details_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY')]
     protected $contactDetails;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Is garage or workshop.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="is_external", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'is_external', nullable: false, options: ['default' => 0])]
     protected $isExternal = 0;
 
     /**
      * Carries out maintenance.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="maintenance", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'maintenance', nullable: false, options: ['default' => 0])]
     protected $maintenance = 0;
 
     /**
      * Carries out own safety inspections.
      *
      * @var string
-     *
-     * @ORM\Column(type="yesno", name="safety_inspection", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'yesno', name: 'safety_inspection', nullable: false, options: ['default' => 0])]
     protected $safetyInspection = 0;
 
     /**
      * Removed date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="removed_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'removed_date', nullable: true)]
     protected $removedDate;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
@@ -177,7 +159,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param int $id new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setId($id)
     {
@@ -201,7 +183,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -225,7 +207,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails $contactDetails new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setContactDetails($contactDetails)
     {
@@ -249,7 +231,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -273,7 +255,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -297,7 +279,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param string $isExternal new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setIsExternal($isExternal)
     {
@@ -321,7 +303,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param string $maintenance new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setMaintenance($maintenance)
     {
@@ -345,7 +327,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param string $safetyInspection new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setSafetyInspection($safetyInspection)
     {
@@ -369,7 +351,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param \DateTime $removedDate new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setRemovedDate($removedDate)
     {
@@ -399,7 +381,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param int $version new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setVersion($version)
     {
@@ -423,7 +405,7 @@ abstract class AbstractWorkshop implements BundleSerializableInterface, JsonSeri
      *
      * @param int $olbsKey new value being set
      *
-     * @return Workshop
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {

@@ -13,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Container\ContainerInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Service\Letter\SectionRenderer\SectionRendererFactory::class)]
-class SectionRendererFactoryTest extends MockeryTestCase
+final class SectionRendererFactoryTest extends MockeryTestCase
 {
     public function testInvoke(): void
     {

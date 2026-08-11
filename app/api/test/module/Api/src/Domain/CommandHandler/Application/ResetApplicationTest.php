@@ -32,7 +32,7 @@ use Dvsa\Olcs\Api\Entity\Task\Task as TaskEntity;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class ResetApplicationTest extends AbstractCommandHandlerTestCase
+final class ResetApplicationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {
@@ -188,36 +188,34 @@ class ResetApplicationTest extends AbstractCommandHandlerTestCase
         $this->assertEquals($expected, $result->toArray());
     }
 
-    public static function providerWithConfirm(): array
+    public static function providerWithConfirm(): \Iterator
     {
-        return [
+        yield [
+            null,
             [
-                null,
-                [
-                    'organisation' => 222,
-                    'niFlag' => 'N',
-                    'operatorType' => LicenceEntity::LICENCE_CATEGORY_PSV,
-                    'licenceType' => LicenceEntity::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                    'receivedDate' => null
-                ],
-                [
-                    m::mock(\Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre::class),
-                    m::mock(\Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre::class),
-                    m::mock(\Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre::class),
-                ]
+                'organisation' => 222,
+                'niFlag' => 'N',
+                'operatorType' => LicenceEntity::LICENCE_CATEGORY_PSV,
+                'licenceType' => LicenceEntity::LICENCE_TYPE_SPECIAL_RESTRICTED,
+                'receivedDate' => null
             ],
             [
-                new \DateTime('2015-01-01'),
-                [
-                    'organisation' => 222,
-                    'niFlag' => 'N',
-                    'operatorType' => LicenceEntity::LICENCE_CATEGORY_PSV,
-                    'licenceType' => LicenceEntity::LICENCE_TYPE_SPECIAL_RESTRICTED,
-                    'receivedDate' => '2015-01-01'
-                ],
-                [
-                    // No Operating Centres
-                ]
+                m::mock(\Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre::class),
+                m::mock(\Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre::class),
+                m::mock(\Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre::class),
+            ]
+        ];
+        yield [
+            new \DateTime('2015-01-01'),
+            [
+                'organisation' => 222,
+                'niFlag' => 'N',
+                'operatorType' => LicenceEntity::LICENCE_CATEGORY_PSV,
+                'licenceType' => LicenceEntity::LICENCE_TYPE_SPECIAL_RESTRICTED,
+                'receivedDate' => '2015-01-01'
+            ],
+            [
+                // No Operating Centres
             ]
         ];
     }

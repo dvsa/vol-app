@@ -12,7 +12,7 @@ use Laminas\Form\Form;
 /**
  * MyDetails Mapper Test
  */
-class MyDetailsTest extends MockeryTestCase
+final class MyDetailsTest extends MockeryTestCase
 {
     /**
      *
@@ -25,78 +25,76 @@ class MyDetailsTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
-        return [
-            // edit
+        // edit
+        yield [
             [
-                [
-                    'id' => 987,
-                    'version' => 1,
-                    'team' => [
-                        'id' => 111,
-                    ],
-                    'loginId' => 'login id',
-                    'contactDetails' => [
-                        'id' => 555,
-                        'address' => [
-                            'id' => 200,
-                            'version' => 1,
-                            'addressLine1' => 'a1'
-                        ],
-                        'emailAddress' => 'test@test.me',
-                        'phoneContacts' => [
-                            [
-                                'id' => 301,
-                                'version' => 1,
-                                'phoneContactType' => ['id' => 'phone_t_primary'],
-                                'phoneNumber' => 'pn1',
-                            ],
-                            [
-                                'id' => 304,
-                                'version' => 4,
-                                'phoneContactType' => ['id' => 'phone_t_secondary'],
-                                'phoneNumber' => 'pn4',
-                            ],
-                        ],
-                        'person' => [
-                            'id' => 400,
-                            'version' => 1,
-                            'forename' => 'forename'
-                        ],
-                    ],
-                    'translateToWelsh' => 'Y',
+                'id' => 987,
+                'version' => 1,
+                'team' => [
+                    'id' => 111,
                 ],
-                [
-                    'id' => 987,
-                    'version' => 1,
-                    'userDetails' => [
-                        'team' => 111,
-                    ],
-                    'officeAddress' => [
+                'loginId' => 'login id',
+                'contactDetails' => [
+                    'id' => 555,
+                    'address' => [
                         'id' => 200,
                         'version' => 1,
-                        'addressLine1' => 'a1',
+                        'addressLine1' => 'a1'
                     ],
-                    'userContact' => [
-                        'emailAddress' => 'test@test.me',
-                        'emailConfirm' => 'test@test.me',
-                        'phone_primary' => 'pn1',
-                        'phone_primary_id' => 301,
-                        'phone_primary_version' => 1,
-                        'phone_secondary' => 'pn4',
-                        'phone_secondary_id' => 304,
-                        'phone_secondary_version' => 4,
+                    'emailAddress' => 'test@test.me',
+                    'phoneContacts' => [
+                        [
+                            'id' => 301,
+                            'version' => 1,
+                            'phoneContactType' => ['id' => 'phone_t_primary'],
+                            'phoneNumber' => 'pn1',
+                        ],
+                        [
+                            'id' => 304,
+                            'version' => 4,
+                            'phoneContactType' => ['id' => 'phone_t_secondary'],
+                            'phoneNumber' => 'pn4',
+                        ],
                     ],
                     'person' => [
                         'id' => 400,
                         'version' => 1,
                         'forename' => 'forename'
                     ],
-                    'userSettings' => [
-                        'translateToWelsh' => 'Y',
-                    ],
-                ]
+                ],
+                'translateToWelsh' => 'Y',
+            ],
+            [
+                'id' => 987,
+                'version' => 1,
+                'userDetails' => [
+                    'team' => 111,
+                ],
+                'officeAddress' => [
+                    'id' => 200,
+                    'version' => 1,
+                    'addressLine1' => 'a1',
+                ],
+                'userContact' => [
+                    'emailAddress' => 'test@test.me',
+                    'emailConfirm' => 'test@test.me',
+                    'phone_primary' => 'pn1',
+                    'phone_primary_id' => 301,
+                    'phone_primary_version' => 1,
+                    'phone_secondary' => 'pn4',
+                    'phone_secondary_id' => 304,
+                    'phone_secondary_version' => 4,
+                ],
+                'person' => [
+                    'id' => 400,
+                    'version' => 1,
+                    'forename' => 'forename'
+                ],
+                'userSettings' => [
+                    'translateToWelsh' => 'Y',
+                ],
             ]
         ];
     }
@@ -112,75 +110,73 @@ class MyDetailsTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromForm($inData));
     }
 
-    public static function mapFromFormDataProvider(): array
+    public static function mapFromFormDataProvider(): \Iterator
     {
-        return [
+        yield [
             [
-                [
-                    'id' => 987,
+                'id' => 987,
+                'version' => 1,
+                'userDetails' => [
+                    'team' => 111,
+                    'loginId' => 'login id',
+                ],
+                'officeAddress' => [
+                    'id' => 200,
                     'version' => 1,
-                    'userDetails' => [
-                        'team' => 111,
-                        'loginId' => 'login id',
-                    ],
-                    'officeAddress' => [
+                    'addressLine1' => 'a1',
+                ],
+                'userContact' => [
+                    'emailAddress' => 'test@test.me',
+                    'emailConfirm' => 'test@test.me',
+                    'phone_primary' => 'pn1',
+                    'phone_primary_id' => 301,
+                    'phone_primary_version' => 1,
+                    'phone_secondary' => 'pn4',
+                    'phone_secondary_id' => 304,
+                    'phone_secondary_version' => 4,
+                ],
+                'person' => [
+                    'id' => 400,
+                    'version' => 1,
+                    'forename' => 'forename'
+                ],
+                'userSettings' => [
+                    'translateToWelsh' => 'N',
+                ],
+            ],
+            [
+                'id' => 987,
+                'version' => 1,
+                'team' => 111,
+                'contactDetails' => [
+                    'address' => [
                         'id' => 200,
                         'version' => 1,
-                        'addressLine1' => 'a1',
+                        'addressLine1' => 'a1'
                     ],
-                    'userContact' => [
-                        'emailAddress' => 'test@test.me',
-                        'emailConfirm' => 'test@test.me',
-                        'phone_primary' => 'pn1',
-                        'phone_primary_id' => 301,
-                        'phone_primary_version' => 1,
-                        'phone_secondary' => 'pn4',
-                        'phone_secondary_id' => 304,
-                        'phone_secondary_version' => 4,
+                    'emailAddress' => 'test@test.me',
+                    'phoneContacts' => [
+                        [
+                            'id' => 301,
+                            'version' => 1,
+                            'phoneContactType' => 'phone_t_primary',
+                            'phoneNumber' => 'pn1',
+                        ],
+                        [
+                            'id' => 304,
+                            'version' => 4,
+                            'phoneContactType' => 'phone_t_secondary',
+                            'phoneNumber' => 'pn4',
+                        ],
                     ],
                     'person' => [
                         'id' => 400,
                         'version' => 1,
                         'forename' => 'forename'
                     ],
-                    'userSettings' => [
-                        'translateToWelsh' => 'N',
-                    ],
                 ],
-                [
-                    'id' => 987,
-                    'version' => 1,
-                    'team' => 111,
-                    'contactDetails' => [
-                        'address' => [
-                            'id' => 200,
-                            'version' => 1,
-                            'addressLine1' => 'a1'
-                        ],
-                        'emailAddress' => 'test@test.me',
-                        'phoneContacts' => [
-                            [
-                                'id' => 301,
-                                'version' => 1,
-                                'phoneContactType' => 'phone_t_primary',
-                                'phoneNumber' => 'pn1',
-                            ],
-                            [
-                                'id' => 304,
-                                'version' => 4,
-                                'phoneContactType' => 'phone_t_secondary',
-                                'phoneNumber' => 'pn4',
-                            ],
-                        ],
-                        'person' => [
-                            'id' => 400,
-                            'version' => 1,
-                            'forename' => 'forename'
-                        ],
-                    ],
-                    'translateToWelsh' => 'N',
-                ]
-            ],
+                'translateToWelsh' => 'N',
+            ]
         ];
     }
 

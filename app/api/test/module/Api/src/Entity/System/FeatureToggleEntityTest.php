@@ -13,7 +13,7 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
  *
  * Initially auto-generated but won't be overridden
  */
-class FeatureToggleEntityTest extends EntityTester
+final class FeatureToggleEntityTest extends EntityTester
 {
     /**
      * Define the entity to test

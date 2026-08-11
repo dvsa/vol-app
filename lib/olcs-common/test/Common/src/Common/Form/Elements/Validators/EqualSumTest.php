@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Form\Elements\Validators;
 
 use Common\Form\Elements\Validators\EqualSum;
@@ -15,7 +17,7 @@ use Common\Form\Elements\Validators\EqualSum;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class EqualSumTest extends \PHPUnit\Framework\TestCase
+final class EqualSumTest extends \PHPUnit\Framework\TestCase
 {
     protected $sut;
 

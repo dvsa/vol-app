@@ -6,6 +6,8 @@
  * @author Rob Caiger <rob@clocal.co.uk>
  */
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Lva;
 
 use Common\Data\Mapper\Lva\CompanySubsidiary;
@@ -15,7 +17,7 @@ use Common\Data\Mapper\Lva\CompanySubsidiary;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class CompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
+final class CompanySubsidiaryTest extends \PHPUnit\Framework\TestCase
 {
     public function testMapFromResult(): void
     {

@@ -14,12 +14,13 @@ use LmcRbacMvc\Service\AuthorizationService;
 /**
  * Check whether the current user can manage a user via selfserve
  */
-class ManageUserSelfserveTest extends MockeryTestCase
+final class ManageUserSelfserveTest extends MockeryTestCase
 {
     protected Sut $sut;
 
     protected $auth;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->sut = new Sut();
@@ -58,14 +59,12 @@ class ManageUserSelfserveTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->assert($this->auth, $user));
     }
 
-    public static function getAssertForPartnerDataProvider(): array
+    public static function getAssertForPartnerDataProvider(): \Iterator
     {
-        return [
-            [true, User::USER_TYPE_PARTNER, 123, User::USER_TYPE_PARTNER, 123, true],
-            [true, User::USER_TYPE_PARTNER, 123, User::USER_TYPE_PARTNER, 1, false],
-            [true, User::USER_TYPE_LOCAL_AUTHORITY, 123, User::USER_TYPE_PARTNER, 123, false],
-            [false, User::USER_TYPE_PARTNER, 123, User::USER_TYPE_PARTNER, 123, false],
-        ];
+        yield [true, User::USER_TYPE_PARTNER, 123, User::USER_TYPE_PARTNER, 123, true];
+        yield [true, User::USER_TYPE_PARTNER, 123, User::USER_TYPE_PARTNER, 1, false];
+        yield [true, User::USER_TYPE_LOCAL_AUTHORITY, 123, User::USER_TYPE_PARTNER, 123, false];
+        yield [false, User::USER_TYPE_PARTNER, 123, User::USER_TYPE_PARTNER, 123, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getAssertForLocalAuthorityDataProvider')]
@@ -95,14 +94,12 @@ class ManageUserSelfserveTest extends MockeryTestCase
         $this->assertEquals($expected, $this->sut->assert($this->auth, $user));
     }
 
-    public static function getAssertForLocalAuthorityDataProvider(): array
+    public static function getAssertForLocalAuthorityDataProvider(): \Iterator
     {
-        return [
-            [true, User::USER_TYPE_LOCAL_AUTHORITY, 123, User::USER_TYPE_LOCAL_AUTHORITY, 123, true],
-            [true, User::USER_TYPE_LOCAL_AUTHORITY, 123, User::USER_TYPE_LOCAL_AUTHORITY, 1, false],
-            [true, User::USER_TYPE_PARTNER, 123, User::USER_TYPE_LOCAL_AUTHORITY, 123, false],
-            [false, User::USER_TYPE_LOCAL_AUTHORITY, 123, User::USER_TYPE_LOCAL_AUTHORITY, 123, false],
-        ];
+        yield [true, User::USER_TYPE_LOCAL_AUTHORITY, 123, User::USER_TYPE_LOCAL_AUTHORITY, 123, true];
+        yield [true, User::USER_TYPE_LOCAL_AUTHORITY, 123, User::USER_TYPE_LOCAL_AUTHORITY, 1, false];
+        yield [true, User::USER_TYPE_PARTNER, 123, User::USER_TYPE_LOCAL_AUTHORITY, 123, false];
+        yield [false, User::USER_TYPE_LOCAL_AUTHORITY, 123, User::USER_TYPE_LOCAL_AUTHORITY, 123, false];
     }
 
     public function testAssertForOperatorTm(): void
@@ -147,12 +144,10 @@ class ManageUserSelfserveTest extends MockeryTestCase
         $this->assertEquals($canRead, $this->sut->assert($this->auth, $user));
     }
 
-    public static function dpCanRead(): array
+    public static function dpCanRead(): \Iterator
     {
-        return [
-            [true],
-            [false],
-        ];
+        yield [true];
+        yield [false];
     }
 
     public function testAssertForInternal(): void

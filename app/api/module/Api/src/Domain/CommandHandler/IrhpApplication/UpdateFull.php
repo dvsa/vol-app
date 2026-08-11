@@ -146,7 +146,7 @@ final class UpdateFull extends AbstractCommandHandler implements TransactionedIn
         };
     }
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         $fullContainer = $container;
 

@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Domain\Repository\Role as RoleRepo;
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use Dvsa\Olcs\Transfer\Query\User\RoleList as Qry;
 
-class RoleListTest extends QueryHandlerTestCase
+final class RoleListTest extends QueryHandlerTestCase
 {
     public function setUp(): void
     {

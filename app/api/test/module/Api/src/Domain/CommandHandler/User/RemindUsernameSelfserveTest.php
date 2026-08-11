@@ -21,7 +21,7 @@ use Mockery as m;
 /**
  * Remind Username Selfserve Test
  */
-class RemindUsernameSelfserveTest extends AbstractCommandHandlerTestCase
+final class RemindUsernameSelfserveTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

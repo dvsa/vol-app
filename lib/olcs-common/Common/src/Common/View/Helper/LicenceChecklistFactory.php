@@ -13,7 +13,7 @@ class LicenceChecklistFactory implements FactoryInterface
      *
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): LicenceChecklist
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): LicenceChecklist
     {
         $viewHelperManager = $container->get('ViewHelperManager');
         $translator = $viewHelperManager->get('translate');

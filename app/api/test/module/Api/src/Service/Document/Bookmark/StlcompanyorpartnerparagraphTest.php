@@ -12,7 +12,7 @@ use Mockery as m;
 /**
  * StlcompanyorpartnerparagraphTest
  */
-class StlcompanyorpartnerparagraphTest extends \PHPUnit\Framework\TestCase
+final class StlcompanyorpartnerparagraphTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetQuery(): void
     {
@@ -49,12 +49,10 @@ class StlcompanyorpartnerparagraphTest extends \PHPUnit\Framework\TestCase
         $this->assertStringStartsWith('It is important that a partner who can speak and', $bookmark->render());
     }
 
-    public static function dpRenderPartnershipsDataProvider(): array
+    public static function dpRenderPartnershipsDataProvider(): \Iterator
     {
-        return [
-            [Organisation::ORG_TYPE_PARTNERSHIP],
-            [Organisation::ORG_TYPE_LLP],
-        ];
+        yield [Organisation::ORG_TYPE_PARTNERSHIP];
+        yield [Organisation::ORG_TYPE_LLP];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpRenderOthersDataProvider')]
@@ -66,13 +64,11 @@ class StlcompanyorpartnerparagraphTest extends \PHPUnit\Framework\TestCase
         $this->assertNull($bookmark->render());
     }
 
-    public static function dpRenderOthersDataProvider(): array
+    public static function dpRenderOthersDataProvider(): \Iterator
     {
-        return [
-            [Organisation::ORG_TYPE_SOLE_TRADER],
-            [Organisation::ORG_TYPE_IRFO],
-            [Organisation::ORG_TYPE_OTHER],
-            'invalid organisation type' => [0],
-        ];
+        yield [Organisation::ORG_TYPE_SOLE_TRADER];
+        yield [Organisation::ORG_TYPE_IRFO];
+        yield [Organisation::ORG_TYPE_OTHER];
+        yield 'invalid organisation type' => [0];
     }
 }

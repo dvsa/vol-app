@@ -22,7 +22,7 @@ class FormRadioOption extends FormRadio
      *                                             method signature)
      */
     #[\Override]
-    public function __invoke(ElementInterface $element = null, mixed $labelPosition = null)
+    public function __invoke(?ElementInterface $element = null, mixed $labelPosition = null)
     {
         if (!$element instanceof ElementInterface) {
             return $this;

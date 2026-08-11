@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace CommonTest\Data\Mapper\Licence\Surrender;
 
 use Common\Data\Mapper\Licence\Surrender\AddressDetails;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-class AddressesDetailsTest extends MockeryTestCase
+final class AddressesDetailsTest extends MockeryTestCase
 {
     /** @var  array */
     private $apiData;
@@ -165,21 +167,15 @@ class AddressesDetailsTest extends MockeryTestCase
 
     public function testMapFromResult(): void
     {
-        static::assertEquals(
-            $this->formData,
-            AddressDetails::mapFromResult($this->apiData)
-        );
+        $this->assertEquals($this->formData, AddressDetails::mapFromResult($this->apiData));
     }
 
     public function testMapFromResultEmptyApiData(): void
     {
-        static::assertEquals(
-            [],
-            AddressDetails::mapFromResult(
-                [
-                    'correspondenceCd' => null,
-                ]
-            )
-        );
+        $this->assertSame([], AddressDetails::mapFromResult(
+            [
+                'correspondenceCd' => null,
+            ]
+        ));
     }
 }

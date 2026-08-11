@@ -18,7 +18,7 @@ use RuntimeException;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class StockLicenceMaxPermittedCounterTest extends MockeryTestCase
+final class StockLicenceMaxPermittedCounterTest extends MockeryTestCase
 {
     private $irhpPermitType;
 
@@ -30,6 +30,7 @@ class StockLicenceMaxPermittedCounterTest extends MockeryTestCase
 
     private $stockLicenceMaxPermittedCounter;
 
+    #[\Override]
     public function setUp(): void
     {
         $this->irhpPermitType = m::mock(IrhpPermitType::class);

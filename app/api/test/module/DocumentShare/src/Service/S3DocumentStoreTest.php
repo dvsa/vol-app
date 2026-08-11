@@ -18,9 +18,9 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(S3DocumentStore::class)]
-class S3DocumentStoreTest extends MockeryTestCase
+final class S3DocumentStoreTest extends MockeryTestCase
 {
-    private const BUCKET = 'test-bucket';
+    private const string BUCKET = 'test-bucket';
 
     private MockHandler $mockHandler;
 
@@ -37,6 +37,16 @@ class S3DocumentStoreTest extends MockeryTestCase
         $logger = m::mock(LoggerInterface::class)->shouldIgnoreMissing();
 
         return new S3DocumentStore($s3, self::BUCKET, $keyPrefix, $logger);
+    }
+
+    public function testPresignedGetUrlSignsKeyWithPrefixAndTtl(): void
+    {
+        $url = $this->createSut('myprefix')->presignedGetUrl('documents/x.pdf', 300);
+
+        $this->assertStringContainsString(self::BUCKET, $url);
+        $this->assertStringContainsString('myprefix/documents/x.pdf', $url);
+        $this->assertStringContainsString('X-Amz-Signature=', $url);
+        $this->assertStringContainsString('X-Amz-Expires=300', $url);
     }
 
     public function testReadReturnsFileWithContent(): void

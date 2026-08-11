@@ -17,7 +17,7 @@ use Laminas\Http\Response as HttpResponse;
 use Laminas\View\Model\JsonModel;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Mvc\Controller\Plugin\Response::class)]
-class ResponseTest extends MockeryTestCase
+final class ResponseTest extends MockeryTestCase
 {
     /** @var  Plugin\Response */
     protected $sut;
@@ -93,21 +93,19 @@ class ResponseTest extends MockeryTestCase
         $this->assertEquals(HttpResponse::STATUS_CODE_200, $this->response->getStatusCode());
     }
 
-    public static function getSingleResultDataProvider(): array
+    public static function getSingleResultDataProvider(): \Iterator
     {
-        return [
-            // array
-            [
-                ['item']
-            ],
-            // QueryResult
-            [
-                m::mock(QueryResult::class)->shouldReceive('serialize')->andReturn(['item'])->getMock()
-            ],
-            // Entity
-            [
-                m::mock(VenueEntity::class)->shouldReceive('jsonSerialize')->andReturn(['item'])->getMock()
-            ],
+        // array
+        yield [
+            ['item']
+        ];
+        // QueryResult
+        yield [
+            m::mock(QueryResult::class)->shouldReceive('serialize')->andReturn(['item'])->getMock()
+        ];
+        // Entity
+        yield [
+            m::mock(VenueEntity::class)->shouldReceive('jsonSerialize')->andReturn(['item'])->getMock()
         ];
     }
 
@@ -152,9 +150,9 @@ class ResponseTest extends MockeryTestCase
         $output = ob_get_contents();
         ob_end_clean();
 
-        static::assertEquals(false, $actual);
+        $this->assertEquals(false, $actual);
 
-        static::assertEquals($streanContent, $output);
+        $this->assertSame($streanContent, $output);
     }
 
     public function testSuccessfulUpdate(): void

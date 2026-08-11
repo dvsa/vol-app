@@ -12,7 +12,7 @@ use Laminas\Form\FormInterface;
 /**
  * IrfoGvPermit Mapper Test
  */
-class IrfoGvPermitTest extends MockeryTestCase
+final class IrfoGvPermitTest extends MockeryTestCase
 {
     /**
      *
@@ -25,46 +25,43 @@ class IrfoGvPermitTest extends MockeryTestCase
         $this->assertEquals($expected, Sut::mapFromResult($inData));
     }
 
-    public static function mapFromResultDataProvider(): array
+    public static function mapFromResultDataProvider(): \Iterator
     {
         $now = new \DateTime();
-
-        return [
-            // add
+        // add
+        yield [
             [
-                [
-                    'now' => $now,
-                ],
-                [
-                    'fields' => [
-                        'yearRequired' => $now->format('Y'),
-                        'inForceDate' => $now,
-                    ]
-                ]
+                'now' => $now,
             ],
-            // edit
             [
-                [
+                'fields' => [
+                    'yearRequired' => $now->format('Y'),
+                    'inForceDate' => $now,
+                ]
+            ]
+        ];
+        // edit
+        yield [
+            [
+                'id' => 987,
+                'organisation' => ['id' => 100],
+                'yearRequired' => '2010',
+                'irfoPermitStatus' => [
+                    'id' => 'other_status',
+                    'description' => 'other status',
+                ],
+                'createdOn' => '2015-05-05',
+                'inForceDate' => '2015-05-20',
+            ],
+            [
+                'fields' => [
                     'id' => 987,
-                    'organisation' => ['id' => 100],
+                    'organisation' => 100,
                     'yearRequired' => '2010',
-                    'irfoPermitStatus' => [
-                        'id' => 'other_status',
-                        'description' => 'other status',
-                    ],
+                    'irfoPermitStatus' => 'other_status',
                     'createdOn' => '2015-05-05',
                     'inForceDate' => '2015-05-20',
                 ],
-                [
-                    'fields' => [
-                        'id' => 987,
-                        'organisation' => 100,
-                        'yearRequired' => '2010',
-                        'irfoPermitStatus' => 'other_status',
-                        'createdOn' => '2015-05-05',
-                        'inForceDate' => '2015-05-20',
-                    ],
-                ]
             ]
         ];
     }

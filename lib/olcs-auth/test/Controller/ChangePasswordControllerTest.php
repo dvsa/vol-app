@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dvsa\OlcsTest\Auth\Controller;
 
 use Common\Controller\Plugin\Redirect;
@@ -24,7 +26,7 @@ use RuntimeException;
 /**
  * Change Password Controller Test
  */
-class ChangePasswordControllerTest extends MockeryTestCase
+final class ChangePasswordControllerTest extends MockeryTestCase
 {
     /**
      * @var ChangePasswordController
@@ -42,8 +44,6 @@ class ChangePasswordControllerTest extends MockeryTestCase
      */
     private $commandSender;
 
-    private array $config;
-
     protected function setUp(): void
     {
         $this->formHelper = m::mock(FormHelperService::class);
@@ -56,18 +56,18 @@ class ChangePasswordControllerTest extends MockeryTestCase
         $sm->setService('Helper\FlashMessenger', $this->flashMessenger);
         $sm->setService('CommandSender', $this->commandSender);
 
-        $this->config = [
+        $config = [
             'my_account_route' => 'my-account',
             'auth' => [
                 'identity_provider' => JWTIdentityProvider::class
             ]
         ];
-        $sm->setService('Config', $this->config);
+        $sm->setService('Config', $config);
 
         $pm = m::mock(PluginManager::class)->makePartial();
         $pm->setService('redirect', $this->redirect);
 
-        $this->sut = new ChangePasswordController($this->formHelper, $this->flashMessenger, $this->config, $this->commandSender, $this->redirect);
+        $this->sut = new ChangePasswordController($this->formHelper, $this->flashMessenger, $config, $this->commandSender, $this->redirect);
         $this->sut->setPluginManager($pm);
 
         parent::setUp();

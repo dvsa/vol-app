@@ -14,7 +14,7 @@ class EditorJsFactory implements FactoryInterface
      * Create EditorJs form element with HtmlConverter service
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): EditorJs
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): EditorJs
     {
         $htmlConverter = $container->get(\Olcs\Service\EditorJs\HtmlConverter::class);
         return new EditorJs($htmlConverter);

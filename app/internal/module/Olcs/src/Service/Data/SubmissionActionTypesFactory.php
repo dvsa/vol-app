@@ -18,7 +18,7 @@ class SubmissionActionTypesFactory implements FactoryInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): SubmissionActionTypes
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): SubmissionActionTypes
     {
         return new SubmissionActionTypes(
             $container->get(AbstractDataServiceServices::class),

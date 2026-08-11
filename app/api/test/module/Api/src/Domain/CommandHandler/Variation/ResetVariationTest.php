@@ -31,7 +31,7 @@ use Mockery as m;
  *
  * @author Jonathan Thomas <jonathan@opalise.co.uk>
  */
-class ResetVariationTest extends AbstractCommandHandlerTestCase
+final class ResetVariationTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

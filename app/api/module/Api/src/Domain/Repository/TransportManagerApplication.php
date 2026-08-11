@@ -160,7 +160,7 @@ class TransportManagerApplication extends AbstractRepository
      *
      * @return array
      */
-    public function fetchForTransportManager($tmId, array $applicationStatuses = null, $includeDeleted = false)
+    public function fetchForTransportManager($tmId, ?array $applicationStatuses = null, $includeDeleted = false)
     {
         $qb = $this->createQueryBuilder();
 

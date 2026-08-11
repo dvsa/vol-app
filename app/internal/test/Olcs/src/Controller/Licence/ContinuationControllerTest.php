@@ -27,32 +27,28 @@ use Mockery as m;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class ContinuationControllerTest extends AbstractLvaControllerTestCase
+final class ContinuationControllerTest extends AbstractLvaControllerTestCase
 {
     protected $sut;
-    protected $mockScriptFactory;
     protected $mockFormHelper;
-    protected $mockTableFactory;
-    protected $mockViewHelperManager;
-    protected $mockFlashMessengerHelper;
     protected $mockLessThanValidator;
 
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->mockScriptFactory = m::mock(ScriptFactory::class);
+        $mockScriptFactory = m::mock(ScriptFactory::class);
         $this->mockFormHelper = m::mock(FormHelperService::class);
-        $this->mockTableFactory = m::mock(TableFactory::class);
-        $this->mockViewHelperManager = m::mock(HelperPluginManager::class);
-        $this->mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
+        $mockTableFactory = m::mock(TableFactory::class);
+        $mockViewHelperManager = m::mock(HelperPluginManager::class);
+        $mockFlashMessengerHelper = m::mock(FlashMessengerHelperService::class);
         $this->mockLessThanValidator = m::mock(LessThan::class);
         $this->mockController(ContinuationController::class, [
-            $this->mockScriptFactory,
+            $mockScriptFactory,
             $this->mockFormHelper,
-            $this->mockTableFactory,
-            $this->mockViewHelperManager,
-            $this->mockFlashMessengerHelper,
+            $mockTableFactory,
+            $mockViewHelperManager,
+            $mockFlashMessengerHelper,
             $this->mockLessThanValidator,
         ]);
     }
@@ -84,22 +80,20 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $this->sut->alterFormActions($mockForm, false, $continuationDetail);
     }
 
-    public static function dataProviderAlterFormReceived(): array
+    public static function dataProviderAlterFormReceived(): \Iterator
     {
-        return [
-            [true, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE, 'N'],
-            [true, RefData::CONTINUATION_DETAIL_STATUS_COMPLETE, 'N'],
-            [true, RefData::CONTINUATION_DETAIL_STATUS_PREPARED, 'N'],
-            [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTED, 'N'],
-            [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTING, 'N'],
-            [true, RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE, 'N'],
-            [false, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE, 'Y'],
-            [false, RefData::CONTINUATION_DETAIL_STATUS_COMPLETE, 'Y'],
-            [false, RefData::CONTINUATION_DETAIL_STATUS_PREPARED, 'Y'],
-            [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTED, 'Y'],
-            [false, RefData::CONTINUATION_DETAIL_STATUS_PRINTING, 'Y'],
-            [false, RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE, 'Y'],
-        ];
+        yield [true, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE, 'N'];
+        yield [true, RefData::CONTINUATION_DETAIL_STATUS_COMPLETE, 'N'];
+        yield [true, RefData::CONTINUATION_DETAIL_STATUS_PREPARED, 'N'];
+        yield [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTED, 'N'];
+        yield [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTING, 'N'];
+        yield [true, RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE, 'N'];
+        yield [false, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE, 'Y'];
+        yield [false, RefData::CONTINUATION_DETAIL_STATUS_COMPLETE, 'Y'];
+        yield [false, RefData::CONTINUATION_DETAIL_STATUS_PREPARED, 'Y'];
+        yield [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTED, 'Y'];
+        yield [false, RefData::CONTINUATION_DETAIL_STATUS_PRINTING, 'Y'];
+        yield [false, RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE, 'Y'];
     }
 
     /**
@@ -123,21 +117,19 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $this->sut->alterFormReceived($mockForm, $continuationDetail);
     }
 
-    public static function dataProviderAlterFormChecklistStatus(): array
+    public static function dataProviderAlterFormChecklistStatus(): \Iterator
     {
-        return [
-            [true, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE, true],
-            [false, RefData::CONTINUATION_DETAIL_STATUS_COMPLETE, true],
-            [false, RefData::CONTINUATION_DETAIL_STATUS_PREPARED, true],
-            [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTED, true],
-            [false, RefData::CONTINUATION_DETAIL_STATUS_PRINTING, true],
-            [true, RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE, false],
-            [false, RefData::CONTINUATION_DETAIL_STATUS_COMPLETE, false],
-            [false, RefData::CONTINUATION_DETAIL_STATUS_PREPARED, false],
-            [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTED, false],
-            [false, RefData::CONTINUATION_DETAIL_STATUS_PRINTING, false],
-            [true, RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE, false],
-        ];
+        yield [true, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE, true];
+        yield [false, RefData::CONTINUATION_DETAIL_STATUS_COMPLETE, true];
+        yield [false, RefData::CONTINUATION_DETAIL_STATUS_PREPARED, true];
+        yield [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTED, true];
+        yield [false, RefData::CONTINUATION_DETAIL_STATUS_PRINTING, true];
+        yield [true, RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE, false];
+        yield [false, RefData::CONTINUATION_DETAIL_STATUS_COMPLETE, false];
+        yield [false, RefData::CONTINUATION_DETAIL_STATUS_PREPARED, false];
+        yield [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTED, false];
+        yield [false, RefData::CONTINUATION_DETAIL_STATUS_PRINTING, false];
+        yield [true, RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE, false];
     }
 
     /**
@@ -237,18 +229,16 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         $this->sut->alterFormTotalVehicleAuthorisation($mockForm, $continuationDetail);
     }
 
-    public static function dataProviderFormNumberOfDiscs(): array
+    public static function dataProviderFormNumberOfDiscs(): \Iterator
     {
-        return [
-            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_RESTRICTED],
-            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED],
-            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL],
-            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_STANDARD_NATIONAL],
-            [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_RESTRICTED],
-            [false, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED],
-            [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL],
-            [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_STANDARD_NATIONAL],
-        ];
+        yield [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_RESTRICTED];
+        yield [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED];
+        yield [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL];
+        yield [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_STANDARD_NATIONAL];
+        yield [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_RESTRICTED];
+        yield [false, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED];
+        yield [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL];
+        yield [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_STANDARD_NATIONAL];
     }
 
     /**
@@ -329,18 +319,16 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
         );
     }
 
-    public static function dataProviderAlterFormNumberOfCommunityLicences(): array
+    public static function dataProviderAlterFormNumberOfCommunityLicences(): \Iterator
     {
-        return [
-            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_RESTRICTED, 4],
-            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED, 4],
-            [true, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL, 4],
-            [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_STANDARD_NATIONAL, 4],
-            [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_RESTRICTED, 1],
-            [false, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED, 1],
-            [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL, 1],
-            [false, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_STANDARD_NATIONAL, 1],
-        ];
+        yield [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_RESTRICTED, 4];
+        yield [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED, 4];
+        yield [true, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL, 4];
+        yield [false, RefData::LICENCE_CATEGORY_GOODS_VEHICLE, RefData::LICENCE_TYPE_STANDARD_NATIONAL, 4];
+        yield [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_RESTRICTED, 1];
+        yield [false, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_SPECIAL_RESTRICTED, 1];
+        yield [true, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_STANDARD_INTERNATIONAL, 1];
+        yield [false, RefData::LICENCE_CATEGORY_PSV, RefData::LICENCE_TYPE_STANDARD_NATIONAL, 1];
     }
 
     /**
@@ -425,18 +413,16 @@ class ContinuationControllerTest extends AbstractLvaControllerTestCase
     /**
      * Get Continuation Details status and whether the elements should be enabled
      *
-     * @return array
+     * @return \Iterator<(int | string), mixed>
      */
-    public static function dataProviderContinuationDetailStatusElementsEnabled(): array
+    public static function dataProviderContinuationDetailStatusElementsEnabled(): \Iterator
     {
-        return [
-            [true, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE],
-            [false, RefData::CONTINUATION_DETAIL_STATUS_COMPLETE],
-            [false, RefData::CONTINUATION_DETAIL_STATUS_ERROR],
-            [false, RefData::CONTINUATION_DETAIL_STATUS_PREPARED],
-            [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTED],
-            [false, RefData::CONTINUATION_DETAIL_STATUS_PRINTING],
-            [true, RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE],
-        ];
+        yield [true, RefData::CONTINUATION_DETAIL_STATUS_ACCEPTABLE];
+        yield [false, RefData::CONTINUATION_DETAIL_STATUS_COMPLETE];
+        yield [false, RefData::CONTINUATION_DETAIL_STATUS_ERROR];
+        yield [false, RefData::CONTINUATION_DETAIL_STATUS_PREPARED];
+        yield [true, RefData::CONTINUATION_DETAIL_STATUS_PRINTED];
+        yield [false, RefData::CONTINUATION_DETAIL_STATUS_PRINTING];
+        yield [true, RefData::CONTINUATION_DETAIL_STATUS_UNACCEPTABLE];
     }
 }

@@ -31,7 +31,7 @@ class TransportManagersControllerFactory implements FactoryInterface
      * @return TransportManagersController
      */
     #[\Override]
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null): TransportManagersController
+    public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null): TransportManagersController
     {
         $niTextTranslationUtil = $container->get(NiTextTranslation::class);
         $authService = $container->get(AuthorizationService::class);

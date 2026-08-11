@@ -22,38 +22,31 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * Auto-Generated
  * @source OLCS-Entity-Generator-v2
- *
- * @ORM\MappedSuperclass
- * @ORM\HasLifecycleCallbacks
- * @Gedmo\SoftDeleteable(fieldName="deletedDate", timeAware=true)
- * @ORM\Table(name="document",
- *    indexes={
- *        @ORM\Index(name="fk_document_irhp_application_id_irhp_application_id", columns={"irhp_application_id"}),
- *        @ORM\Index(name="uk_document_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"}),
- *        @ORM\Index(name="ix_document_transport_manager_id", columns={"transport_manager_id"}),
- *        @ORM\Index(name="ix_document_traffic_area_id", columns={"traffic_area_id"}),
- *        @ORM\Index(name="ix_document_surrender_id", columns={"surrender_id"}),
- *        @ORM\Index(name="ix_document_submission_id", columns={"submission_id"}),
- *        @ORM\Index(name="ix_document_sub_category_id", columns={"sub_category_id"}),
- *        @ORM\Index(name="ix_document_statement_id", columns={"statement_id"}),
- *        @ORM\Index(name="ix_document_operating_centre_id", columns={"operating_centre_id"}),
- *        @ORM\Index(name="ix_document_licence_id", columns={"licence_id"}),
- *        @ORM\Index(name="ix_document_last_modified_by", columns={"last_modified_by"}),
- *        @ORM\Index(name="ix_document_irfo_organisation_id", columns={"irfo_organisation_id"}),
- *        @ORM\Index(name="ix_document_created_by", columns={"created_by"}),
- *        @ORM\Index(name="ix_document_category_id", columns={"category_id"}),
- *        @ORM\Index(name="ix_document_case_id", columns={"case_id"}),
- *        @ORM\Index(name="ix_document_bus_reg_id", columns={"bus_reg_id"}),
- *        @ORM\Index(name="ix_document_application_id", columns={"application_id"}),
- *        @ORM\Index(name="fk_document_messaging_message_id", columns={"messaging_message_id"}),
- *        @ORM\Index(name="fk_document_messaging_conversation_id", columns={"messaging_conversation_id"}),
- *        @ORM\Index(name="fk_document_continuation_detail_id_continuation_detail_id", columns={"continuation_detail_id"})
- *    },
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="uk_document_olbs_key_olbs_type", columns={"olbs_key", "olbs_type"})
- *    }
- * )
  */
+#[ORM\Table(name: 'document')]
+#[ORM\Index(name: 'fk_document_irhp_application_id_irhp_application_id', columns: ['irhp_application_id'])]
+#[ORM\Index(name: 'ix_document_transport_manager_id', columns: ['transport_manager_id'])]
+#[ORM\Index(name: 'ix_document_traffic_area_id', columns: ['traffic_area_id'])]
+#[ORM\Index(name: 'ix_document_surrender_id', columns: ['surrender_id'])]
+#[ORM\Index(name: 'ix_document_submission_id', columns: ['submission_id'])]
+#[ORM\Index(name: 'ix_document_sub_category_id', columns: ['sub_category_id'])]
+#[ORM\Index(name: 'ix_document_statement_id', columns: ['statement_id'])]
+#[ORM\Index(name: 'ix_document_operating_centre_id', columns: ['operating_centre_id'])]
+#[ORM\Index(name: 'ix_document_licence_id', columns: ['licence_id'])]
+#[ORM\Index(name: 'ix_document_last_modified_by', columns: ['last_modified_by'])]
+#[ORM\Index(name: 'ix_document_irfo_organisation_id', columns: ['irfo_organisation_id'])]
+#[ORM\Index(name: 'ix_document_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_document_category_id', columns: ['category_id'])]
+#[ORM\Index(name: 'ix_document_case_id', columns: ['case_id'])]
+#[ORM\Index(name: 'ix_document_bus_reg_id', columns: ['bus_reg_id'])]
+#[ORM\Index(name: 'ix_document_application_id', columns: ['application_id'])]
+#[ORM\Index(name: 'fk_document_messaging_message_id', columns: ['messaging_message_id'])]
+#[ORM\Index(name: 'fk_document_messaging_conversation_id', columns: ['messaging_conversation_id'])]
+#[ORM\Index(name: 'fk_document_continuation_detail_id_continuation_detail_id', columns: ['continuation_detail_id'])]
+#[ORM\UniqueConstraint(name: 'uk_document_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
+#[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractDocument implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
@@ -67,366 +60,328 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      * Primary key.  Auto incremented if numeric.
      *
      * @var int
-     *
-     * @ORM\Id
-     * @ORM\Column(type="integer", name="id", nullable=false)
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to traffic_area
      *
      * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea", fetch="LAZY")
-     * @ORM\JoinColumn(name="traffic_area_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $trafficArea;
 
     /**
      * Foreign Key to category
      *
      * @var \Dvsa\Olcs\Api\Entity\System\Category
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\Category", fetch="LAZY")
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Category::class, fetch: 'LAZY')]
     protected $category;
 
     /**
      * Foreign Key to sub_category
      *
      * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SubCategory", fetch="LAZY")
-     * @ORM\JoinColumn(name="sub_category_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SubCategory::class, fetch: 'LAZY')]
     protected $subCategory;
 
     /**
      * Foreign Key to licence
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\Licence", fetch="LAZY")
-     * @ORM\JoinColumn(name="licence_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $licence;
 
     /**
      * Foreign Key to application
      *
      * @var \Dvsa\Olcs\Api\Entity\Application\Application
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Application\Application", fetch="LAZY")
-     * @ORM\JoinColumn(name="application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $application;
 
     /**
      * FK to related case (cases table)
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Cases", fetch="LAZY")
-     * @ORM\JoinColumn(name="case_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $case;
 
     /**
      * Foreign Key to transport_manager
      *
      * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Tm\TransportManager", fetch="LAZY")
-     * @ORM\JoinColumn(name="transport_manager_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $transportManager;
 
     /**
      * Foreign key to surrender
      *
      * @var \Dvsa\Olcs\Api\Entity\Surrender
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Surrender", fetch="LAZY")
-     * @ORM\JoinColumn(name="surrender_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'surrender_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Surrender::class, fetch: 'LAZY')]
     protected $surrender;
 
     /**
      * Foreign Key to operating_centre
      *
      * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre", fetch="LAZY")
-     * @ORM\JoinColumn(name="operating_centre_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'operating_centre_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre::class, inversedBy: 'adDocuments', fetch: 'LAZY')]
     protected $operatingCentre;
 
     /**
      * Foreign Key to bus_reg
      *
      * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Bus\BusReg", fetch="LAZY")
-     * @ORM\JoinColumn(name="bus_reg_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $busReg;
 
     /**
      * FK to organisation.  Only populated for international road fright operator organisations
      *
      * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Organisation\Organisation", fetch="LAZY")
-     * @ORM\JoinColumn(name="irfo_organisation_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irfo_organisation_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
     protected $irfoOrganisation;
 
     /**
      * Foreign Key to submission
      *
      * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Submission\Submission", fetch="LAZY")
-     * @ORM\JoinColumn(name="submission_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'submission_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\Submission::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $submission;
 
     /**
      * Foreign Key to statement
      *
      * @var \Dvsa\Olcs\Api\Entity\Cases\Statement
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Cases\Statement", fetch="LAZY")
-     * @ORM\JoinColumn(name="statement_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'statement_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Statement::class, fetch: 'LAZY')]
     protected $statement;
 
     /**
      * ContinuationDetail
      *
      * @var \Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail", fetch="LAZY")
-     * @ORM\JoinColumn(name="continuation_detail_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'continuation_detail_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail::class, fetch: 'LAZY')]
     protected $continuationDetail;
 
     /**
      * IrhpApplication
      *
      * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Permits\IrhpApplication", fetch="LAZY")
-     * @ORM\JoinColumn(name="irhp_application_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $irhpApplication;
 
     /**
      * MessagingConversation
      *
      * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation", fetch="LAZY")
-     * @ORM\JoinColumn(name="messaging_conversation_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'messaging_conversation_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation::class, fetch: 'LAZY')]
     protected $messagingConversation;
 
     /**
      * MessagingMessage
      *
      * @var \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage", fetch="LAZY")
-     * @ORM\JoinColumn(name="messaging_message_id", referencedColumnName="id", nullable=true)
      */
+    #[ORM\JoinColumn(name: 'messaging_message_id', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage::class, inversedBy: 'documents', fetch: 'LAZY')]
     protected $messagingMessage;
 
     /**
      * Created by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="created_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="create")
      */
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
     /**
      * Last modified by
      *
      * @var \Dvsa\Olcs\Api\Entity\User\User
-     *
-     * @ORM\ManyToOne(targetEntity="Dvsa\Olcs\Api\Entity\User\User", fetch="LAZY")
-     * @ORM\JoinColumn(name="last_modified_by", referencedColumnName="id", nullable=true)
-     * @Gedmo\Blameable(on="update")
      */
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
     protected $lastModifiedBy;
 
     /**
      * Depending upon document store used could be filepath or unique id of stored document
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="document_store_id", length=1000, nullable=false)
      */
+    #[ORM\Column(type: 'string', name: 'document_store_id', length: 1000, nullable: false)]
     protected $identifier = '';
 
     /**
      * Brief description of the document.  Sometimes user entered and sometimes set by application based on context of doc creation.
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="description", length=255, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
 
     /**
      * Normally file created date
      *
      * @var \DateTime
-     *
-     * @ORM\Column(type="datetime", name="issued_date", nullable=true)
      */
+    #[ORM\Column(type: 'datetime', name: 'issued_date', nullable: true)]
     protected $issuedDate;
 
     /**
      * filename on disk
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="filename", length=1000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'filename', length: 1000, nullable: true)]
     protected $filename;
 
     /**
      * Metadata
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="metadata", length=4000, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'metadata', length: 4000, nullable: true)]
     protected $metadata;
 
     /**
      * Flag true if doc was created/uploaded by non dvsa self service user
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_external", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_external', nullable: false, options: ['default' => 0])]
     protected $isExternal = 0;
 
     /**
      * Was created by scanning a paper document. Used in search filter as there are many scans and removing them helps.
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_scan", nullable=false, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_scan', nullable: false, options: ['default' => 0])]
     protected $isScan = 0;
 
     /**
      * size in bytes
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="size", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'size', nullable: true, options: ['unsigned' => true])]
     protected $size;
 
     /**
      * Is post submission upload
      *
      * @var bool
-     *
-     * @ORM\Column(type="boolean", name="is_post_submission_upload", nullable=true, options={"default": 0})
      */
+    #[ORM\Column(type: 'boolean', name: 'is_post_submission_upload', nullable: true, options: ['default' => 0])]
     protected $isPostSubmissionUpload = 0;
 
     /**
      * Version
      *
      * @var int
-     *
-     * @ORM\Column(type="smallint", name="version", nullable=false, options={"default": 1})
-     * @ORM\Version
      */
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
+    #[ORM\Version]
     protected $version = 1;
 
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
      * @var int
-     *
-     * @ORM\Column(type="integer", name="olbs_key", nullable=true)
      */
+    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
 
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
      * @var string
-     *
-     * @ORM\Column(type="string", name="olbs_type", length=32, nullable=true)
      */
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;
 
     /**
      * ContinuationDetails
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail", mappedBy="checklistDocument")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail::class, mappedBy: 'checklistDocument')]
     protected $continuationDetails;
 
     /**
      * Templates
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
-     *
-     * @ORM\OneToMany(targetEntity="Dvsa\Olcs\Api\Entity\Doc\DocTemplate", mappedBy="document")
      */
+    #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocTemplate::class, mappedBy: 'document')]
     protected $templates;
 
     /**
      * EbsrSubmission
      *
      * @var \Dvsa\Olcs\Api\Entity\EbsrSubmission
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission", mappedBy="document", cascade={"persist"})
      */
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission::class, mappedBy: 'document', cascade: ['persist'])]
     protected $ebsrSubmission;
 
     /**
      * RequestErru
      *
      * @var \Dvsa\Olcs\Api\Entity\ErruRequest
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\ErruRequest", mappedBy="requestDocument", cascade={"persist"})
      */
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\ErruRequest::class, mappedBy: 'requestDocument', cascade: ['persist'])]
     protected $requestErru;
 
     /**
      * ResponseErru
      *
      * @var \Dvsa\Olcs\Api\Entity\ErruRequest
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\Si\ErruRequest", mappedBy="responseDocument", cascade={"persist"})
      */
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\ErruRequest::class, mappedBy: 'responseDocument', cascade: ['persist'])]
     protected $responseErru;
 
     /**
      * SlaTargetDate
      *
      * @var \Dvsa\Olcs\Api\Entity\SlaTargetDate
-     *
-     * @ORM\OneToOne(targetEntity="Dvsa\Olcs\Api\Entity\System\SlaTargetDate", mappedBy="document", cascade={"persist"})
      */
+    #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SlaTargetDate::class, mappedBy: 'document', cascade: ['persist'])]
     protected $slaTargetDate;
 
     /**
@@ -452,7 +407,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param int $id new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setId($id)
     {
@@ -476,7 +431,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea $trafficArea new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setTrafficArea($trafficArea)
     {
@@ -500,7 +455,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\System\Category $category new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setCategory($category)
     {
@@ -524,7 +479,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\System\SubCategory $subCategory new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setSubCategory($subCategory)
     {
@@ -548,7 +503,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\Licence $licence new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setLicence($licence)
     {
@@ -572,7 +527,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Application\Application $application new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setApplication($application)
     {
@@ -596,7 +551,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Cases $case new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setCase($case)
     {
@@ -620,7 +575,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Tm\TransportManager $transportManager new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setTransportManager($transportManager)
     {
@@ -644,7 +599,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Surrender $surrender new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setSurrender($surrender)
     {
@@ -668,7 +623,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre $operatingCentre new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setOperatingCentre($operatingCentre)
     {
@@ -692,7 +647,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Bus\BusReg $busReg new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setBusReg($busReg)
     {
@@ -716,7 +671,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Organisation\Organisation $irfoOrganisation new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setIrfoOrganisation($irfoOrganisation)
     {
@@ -740,7 +695,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Submission\Submission $submission new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setSubmission($submission)
     {
@@ -764,7 +719,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Cases\Statement $statement new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setStatement($statement)
     {
@@ -788,7 +743,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail $continuationDetail new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setContinuationDetail($continuationDetail)
     {
@@ -812,7 +767,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication $irhpApplication new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setIrhpApplication($irhpApplication)
     {
@@ -836,7 +791,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Messaging\MessagingConversation $messagingConversation new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setMessagingConversation($messagingConversation)
     {
@@ -860,7 +815,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Messaging\MessagingMessage $messagingMessage new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setMessagingMessage($messagingMessage)
     {
@@ -884,7 +839,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $createdBy new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setCreatedBy($createdBy)
     {
@@ -908,7 +863,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\User\User $lastModifiedBy new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setLastModifiedBy($lastModifiedBy)
     {
@@ -932,7 +887,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param string $identifier new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setIdentifier($identifier)
     {
@@ -956,7 +911,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param string $description new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setDescription($description)
     {
@@ -980,7 +935,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \DateTime $issuedDate new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setIssuedDate($issuedDate)
     {
@@ -1010,7 +965,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param string $filename new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setFilename($filename)
     {
@@ -1034,7 +989,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param string $metadata new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setMetadata($metadata)
     {
@@ -1058,7 +1013,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param bool $isExternal new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setIsExternal($isExternal)
     {
@@ -1082,7 +1037,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param bool $isScan new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setIsScan($isScan)
     {
@@ -1106,7 +1061,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param int $size new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setSize($size)
     {
@@ -1130,7 +1085,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param bool $isPostSubmissionUpload new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setIsPostSubmissionUpload($isPostSubmissionUpload)
     {
@@ -1154,7 +1109,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param int $version new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setVersion($version)
     {
@@ -1178,7 +1133,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param int $olbsKey new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setOlbsKey($olbsKey)
     {
@@ -1202,7 +1157,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param string $olbsType new value being set
      *
-     * @return Document
+     * @return static
      */
     public function setOlbsType($olbsType)
     {
@@ -1226,7 +1181,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $continuationDetails collection being set as the value
      *
-     * @return Document
+     * @return static
      */
     public function setContinuationDetails($continuationDetails)
     {
@@ -1250,7 +1205,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $continuationDetails collection being added
      *
-     * @return Document
+     * @return static
      */
     public function addContinuationDetails($continuationDetails)
     {
@@ -1273,7 +1228,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $continuationDetails collection being removed
      *
-     * @return Document
+     * @return static
      */
     public function removeContinuationDetails($continuationDetails)
     {
@@ -1289,7 +1244,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $templates collection being set as the value
      *
-     * @return Document
+     * @return static
      */
     public function setTemplates($templates)
     {
@@ -1313,7 +1268,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection|mixed $templates collection being added
      *
-     * @return Document
+     * @return static
      */
     public function addTemplates($templates)
     {
@@ -1336,7 +1291,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Doctrine\Common\Collections\ArrayCollection $templates collection being removed
      *
-     * @return Document
+     * @return static
      */
     public function removeTemplates($templates)
     {
@@ -1352,7 +1307,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission $ebsrSubmission entity being set as the value
      *
-     * @return Document
+     * @return static
      */
     public function setEbsrSubmission($ebsrSubmission)
     {
@@ -1376,7 +1331,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Si\ErruRequest $requestErru entity being set as the value
      *
-     * @return Document
+     * @return static
      */
     public function setRequestErru($requestErru)
     {
@@ -1400,7 +1355,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\Si\ErruRequest $responseErru entity being set as the value
      *
-     * @return Document
+     * @return static
      */
     public function setResponseErru($responseErru)
     {
@@ -1424,7 +1379,7 @@ abstract class AbstractDocument implements BundleSerializableInterface, JsonSeri
      *
      * @param \Dvsa\Olcs\Api\Entity\System\SlaTargetDate $slaTargetDate entity being set as the value
      *
-     * @return Document
+     * @return static
      */
     public function setSlaTargetDate($slaTargetDate)
     {

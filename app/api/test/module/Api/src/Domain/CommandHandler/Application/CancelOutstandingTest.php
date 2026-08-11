@@ -21,7 +21,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandler\Application\CancelOutstandingFees;
  *
  * @author Mat Evans <mat.evans@valtech.co.uk>
  */
-class CancelOutstandingTest extends AbstractCommandHandlerTestCase
+final class CancelOutstandingTest extends AbstractCommandHandlerTestCase
 {
     public function setUp(): void
     {

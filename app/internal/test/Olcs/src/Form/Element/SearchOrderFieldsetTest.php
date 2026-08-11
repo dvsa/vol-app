@@ -9,7 +9,7 @@ use Olcs\Form\Element\SearchOrderFieldset;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 
-class SearchOrderFieldsetTest extends TestCase
+final class SearchOrderFieldsetTest extends TestCase
 {
     public function testSearchAwareTraitByProxy(): void
     {

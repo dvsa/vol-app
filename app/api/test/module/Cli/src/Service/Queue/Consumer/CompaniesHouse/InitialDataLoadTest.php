@@ -12,7 +12,7 @@ use Olcs\Logging\Log\Logger;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\CompaniesHouse\InitialDataLoad::class)]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Cli\Service\Queue\Consumer\AbstractCommandConsumer::class)]
-class InitialDataLoadTest extends AbstractConsumerTestCase
+final class InitialDataLoadTest extends AbstractConsumerTestCase
 {
     protected $consumerClass = InitialDataLoad::class;
 

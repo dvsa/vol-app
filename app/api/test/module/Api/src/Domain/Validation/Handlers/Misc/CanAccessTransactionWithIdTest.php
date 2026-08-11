@@ -9,10 +9,8 @@ use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\OlcsTest\Api\Domain\Validation\Handlers\AbstractHandlerTestCase;
 use Mockery as m;
 
-/**
- * @covers Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessTransactionWithId
- */
-class CanAccessTransactionWithIdTest extends AbstractHandlerTestCase
+#[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Validation\Handlers\Misc\CanAccessTransactionWithId::class)]
+final class CanAccessTransactionWithIdTest extends AbstractHandlerTestCase
 {
     /**
      * @var CanAccessTransactionWithId
@@ -43,11 +41,9 @@ class CanAccessTransactionWithIdTest extends AbstractHandlerTestCase
         $this->assertSame($expected, $this->sut->isValid($dto));
     }
 
-    public static function dataProvider(): array
+    public static function dataProvider(): \Iterator
     {
-        return [
-            [true, true],
-            [false, false],
-        ];
+        yield [true, true];
+        yield [false, false];
     }
 }

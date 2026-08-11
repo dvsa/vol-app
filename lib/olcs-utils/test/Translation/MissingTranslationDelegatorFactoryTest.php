@@ -13,7 +13,7 @@ use Laminas\I18n\Translator\Translator;
 use Laminas\ServiceManager\ServiceManager;
 use PHPUnit\Framework\TestCase;
 
-class MissingTranslationDelegatorFactoryTest extends TestCase
+final class MissingTranslationDelegatorFactoryTest extends TestCase
 {
     public function testAttachesProcessorToTheUnderlyingTranslator(): void
     {
@@ -26,8 +26,10 @@ class MissingTranslationDelegatorFactoryTest extends TestCase
         $processor = $this->createMock(MissingTranslationProcessor::class);
         $processor->expects($this->once())->method('attach')->with($eventManager);
 
-        $container = $this->createMock(ServiceManager::class);
-        $container->method('get')->with(MissingTranslationProcessor::class)->willReturn($processor);
+        $container = $this->createStub(ServiceManager::class);
+        $container->method('get')->willReturnMap([
+            [MissingTranslationProcessor::class, $processor],
+        ]);
 
         $factory = new MissingTranslationDelegatorFactory();
         $result = $factory($container, Translator::class, fn() => $translator);
@@ -48,8 +50,10 @@ class MissingTranslationDelegatorFactoryTest extends TestCase
         $processor = $this->createMock(MissingTranslationProcessor::class);
         $processor->expects($this->once())->method('attach')->with($eventManager);
 
-        $container = $this->createMock(ServiceManager::class);
-        $container->method('get')->with(MissingTranslationProcessor::class)->willReturn($processor);
+        $container = $this->createStub(ServiceManager::class);
+        $container->method('get')->willReturnMap([
+            [MissingTranslationProcessor::class, $processor],
+        ]);
 
         $factory = new MissingTranslationDelegatorFactory();
         $result = $factory($container, Translator::class, fn() => $delegator);

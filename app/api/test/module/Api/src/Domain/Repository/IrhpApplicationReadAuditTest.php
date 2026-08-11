@@ -14,8 +14,9 @@ use Mockery as m;
  * Irhp Application Read Audit Test
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
-class IrhpApplicationReadAuditTest extends AbstractReadAuditTestCase
+final class IrhpApplicationReadAuditTest extends AbstractReadAuditTestCase
 {
+    #[\Override]
     public function setUp(): void
     {
         $this->setUpSut(IrhpApplicationReadAudit::class, true);
