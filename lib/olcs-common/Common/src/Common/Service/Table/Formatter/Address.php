@@ -2,6 +2,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\Service\Helper\DataHelperService;
 
 class Address implements FormatterPluginManagerInterface
@@ -70,7 +71,9 @@ class Address implements FormatterPluginManagerInterface
      */
     protected static function formatAddress($parts)
     {
-        return implode(', ', $parts);
+        // Address parts are operator free text and this formatter emits no markup of its own, so
+        // escaping here cannot damage anything and covers every caller of the address formatters.
+        return implode(', ', array_map(static fn($part) => Escape::html($part), $parts));
     }
 
     /**

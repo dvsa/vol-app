@@ -8,6 +8,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\Service\Helper\UrlHelperService;
 
 /**
@@ -36,7 +37,8 @@ class PrinterDocumentCategory implements FormatterPluginManagerInterface
         );
 
         $categories = isset($row['subCategory']) ?
-            $row['subCategory']['category']['description'] . ' / ' . $row['subCategory']['subCategoryName'] :
+            Escape::html($row['subCategory']['category']['description']) . ' / ' .
+                Escape::html($row['subCategory']['subCategoryName']) :
             'Default setting';
 
         return '<a href="' . $url . '" class="govuk-link js-modal-ajax">' . $categories . '</a>';

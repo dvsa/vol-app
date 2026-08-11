@@ -23,6 +23,11 @@ on:
       version:
         type: string
         required: false
+      skip-checks:
+        description: "Skip the test and static-analysis jobs and package straight from the ref. Intended for branch stand-ups where CI has already run on the PR."
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   warm-cache:
@@ -59,6 +64,7 @@ jobs:
 
   test:
     name: Test
+    if: ${{ !inputs.skip-checks }}
     needs:
       - warm-cache
     runs-on: ubuntu-latest
@@ -94,6 +100,7 @@ jobs:
 
   static-analysis:
     name: Static analysis
+    if: ${{ !inputs.skip-checks }}
     needs:
       - warm-cache
     runs-on: ubuntu-latest
@@ -133,6 +140,9 @@ jobs:
 
   package:
     name: Package
+    # `needs` cannot be made conditional, so depend on both jobs unconditionally and gate here
+    # instead. With skip-checks they report `skipped`, which `always()` lets through.
+    if: ${{ always() && !cancelled() && (inputs.skip-checks || (needs.test.result == 'success' && needs.static-analysis.result == 'success')) }}
     needs:
       - test
       - static-analysis

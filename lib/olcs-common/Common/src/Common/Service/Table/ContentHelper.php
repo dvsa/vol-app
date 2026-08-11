@@ -149,10 +149,26 @@ class ContentHelper
         $attributes = [];
 
         foreach ($attrs as $name => $value) {
-            $attributes[] = $name .= '="' . $value . '"';
+            $attributes[] = $name .= '="' . self::escapeAttributeValue($value) . '"';
         }
 
         return implode(' ', $attributes);
+    }
+
+    /**
+     * Escape a value for interpolation into a double-quoted HTML attribute.
+     *
+     * Deliberately not Laminas' escapeHtmlAttr: that targets *unquoted* attribute contexts, so it
+     * also encodes spaces and slashes. Every attribute built in the table renderer is quoted, where
+     * the only way out is a quote character — so encoding the HTML special characters is sufficient
+     * and leaves space-separated class lists and URL paths readable.
+     *
+     * @param mixed $value
+     * @return string
+     */
+    public static function escapeAttributeValue($value)
+    {
+        return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     /**
@@ -160,19 +176,59 @@ class ContentHelper
      *
      * @param string $content
      * @param array $vars
+     * @param bool $escapeValues Escape substituted values. Use when $content is a developer-authored
+     *                           template and $vars are row data — the template stays raw, the values
+     *                           do not. Leave false when a value is itself rendered markup, such as
+     *                           the {{content}} of a <td> that a formatter has already produced.
      * @return string
      */
-    public function replaceContent($content, $vars = [])
+    public function replaceContent($content, $vars = [], $escapeValues = false)
     {
         $content = $this->replacePartials($content);
 
         foreach ($vars as $key => $val) {
             if (is_string($val) || is_numeric($val)) {
-                $content = str_replace('{{' . $key . '}}', (string)$val, $content);
+                $replacement = $escapeValues ? self::escapeValue($val) : (string)$val;
+                $content = str_replace('{{' . $key . '}}', $replacement, $content);
             }
         }
 
         return preg_replace('/(\{\{[a-zA-Z0-9\/\[\]]+\}\})/', '', $content);
+    }
+
+    /**
+     * Whether a value has a string form worth rendering.
+     *
+     * Ask this before escaping a bare row value, because escaping converts to string and PHP's
+     * conversion of an array is the literal word "Array" — a cell that should be empty ends up
+     * describing its own contents. A column naming a to-many field holds an array whenever the
+     * collection is empty, so this is ordinary data rather than a corrupt row.
+     *
+     * Rendering nothing is what such a column has always done: the value used to travel as far as
+     * replaceContent(), which substitutes strings and numbers and drops the rest, leaving the
+     * placeholder to be swept away. Escaping at the cell moved the string conversion in front of
+     * that, which is what this restores.
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    public static function hasStringForm($value)
+    {
+        return is_scalar($value) || $value instanceof \Stringable;
+    }
+
+    /**
+     * Escape a row value for interpolation into table markup.
+     *
+     * ENT_QUOTES because a template may interpolate into an attribute as readily as into element
+     * content, and the cell renderer cannot tell which from the placeholder alone.
+     *
+     * @param mixed $value
+     * @return string
+     */
+    public static function escapeValue($value)
+    {
+        return htmlspecialchars((string)$value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
     }
 
     /**

@@ -6,6 +6,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\RefData;
 use Common\Service\Helper\UrlHelperService;
 
@@ -44,9 +45,9 @@ class LicenceNumberLink implements FormatterPluginManagerInterface
         if (in_array($data['licence']['status'], $permittedLicenceStatuses)) {
             $url = $this->urlHelper->fromRoute('lva-licence', ['licence' => $data['licence']['id']]);
 
-            return '<a class="govuk-link" href="' . $url . '">' . $data['licence']['licNo'] . '</a>';
+            return '<a class="govuk-link" href="' . $url . '">' . Escape::html($data['licence']['licNo']) . '</a>';
         }
 
-        return $data['licence']['licNo'];
+        return Escape::html($data['licence']['licNo']);
     }
 }

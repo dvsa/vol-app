@@ -61,5 +61,12 @@ final class VrmTest extends \PHPUnit\Framework\TestCase
             ['action-type' => 'large'],
             '<a class="govuk-link" href="{"child_id":2,"action":"large-edit"}">ABC123</a>'
         ];
+        // The vrm is row data, so it is escaped wherever it lands in the anchor.
+        yield 'hostile vrm' => [
+            ['id' => 2, 'vrm' => '<script>alert(1)</script>'],
+            [],
+            '<a class="govuk-link" href="{"child_id":2,"action":"edit"}">'
+            . '&lt;script&gt;alert(1)&lt;/script&gt;</a>'
+        ];
     }
 }

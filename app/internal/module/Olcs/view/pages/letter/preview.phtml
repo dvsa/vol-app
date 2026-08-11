@@ -23,12 +23,23 @@
     </div>
 </div>
 
+<div id="input-required-error" class="govuk-error-summary" data-module="govuk-error-summary" role="alert" style="display: none;">
+    <h2 class="govuk-error-summary__title">There is a problem</h2>
+    <div class="govuk-error-summary__body">
+        <p class="govuk-body">
+            These sections need your input before the letter can be saved. Select a section, choose
+            &ldquo;Continue to editor&rdquo; and replace the highlighted placeholder text.
+        </p>
+        <ul class="govuk-list govuk-error-summary__list" id="input-required-error-list"></ul>
+    </div>
+</div>
+
 <?php if (!empty($warnings)): ?>
 <div class="govuk-warning-text" style="margin-bottom: 1rem;">
     <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
     <strong class="govuk-warning-text__text">
         <span class="govuk-visually-hidden">Warning</span>
-        The following required sections could not be included in this letter:
+        The following sections could not be included in this letter:
         <ul class="govuk-list govuk-list--bullet" style="margin-top: 0.5rem;">
             <?php foreach ($warnings as $warning): ?>
                 <li><?= $this->escapeHtml($warning) ?></li>

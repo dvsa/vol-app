@@ -14,6 +14,7 @@ use Common\Service\Helper\FileUploadHelperService;
 use Common\Service\Helper\FlashMessengerHelperService;
 use Common\Service\Helper\FormHelperService;
 use Common\Service\Table\TableFactory;
+use Dvsa\Olcs\Transfer\Command\Messaging\Conversation\Create as CreateConversationCommand;
 use Dvsa\Olcs\Transfer\Command\Messaging\Message\Create as CreateMessageCommand;
 use Dvsa\Olcs\Utils\Translation\NiTextTranslation;
 use Laminas\Form\Element\Hidden;
@@ -137,6 +138,7 @@ final class ConversationsControllerTest extends TestCase
 
         $this->mockUser->shouldReceive('getUserData')
                        ->once()
+                       ->withNoArgs()
                        ->andReturn(
                            [
                                'organisationUsers' => [
@@ -313,6 +315,121 @@ final class ConversationsControllerTest extends TestCase
 
         $view = $this->sut->addAction();
         $this->assertInstanceOf(ViewModel::class, $view);
+    }
+
+    /**
+     * A failed create must redisplay the form, not re-enter addAction().
+     *
+     * submitConversation() used to return $this->addAction() on failure. The request is still a
+     * POST carrying the same still-valid data, so addAction() went straight back into
+     * submitConversation(): mutual recursion with no terminating condition. Every cycle re-ran the
+     * uploaded-files query and re-sent the create command, so a single failed submit became an
+     * open-ended flood of API calls that kept running after the gateway had already timed out —
+     * one request able to saturate a worker and hammer the API indefinitely.
+     *
+     * The ->once() expectations are the regression assertion. Under the old code handleCommand and
+     * processFiles are reached again on the second pass and Mockery fails the test.
+     */
+    public function testFailedSubmitRedisplaysTheFormWithoutRecursing(): void
+    {
+        $mockUrl = m::mock(Url::class);
+        $mockUrl->shouldReceive('fromRoute')->once()->with('conversations')->andReturn('/back/route');
+
+        $this->mockUser->shouldReceive('getUserData')
+                       ->once()
+                       ->andReturn([
+                           'organisationUsers' => [
+                               ['organisation' => ['isMessagingFileUploadEnabled' => true]],
+                           ],
+                       ]);
+        $this->sut->shouldReceive('plugin')->with('currentUser')->andReturn($this->mockUser);
+        $this->sut->shouldReceive('plugin')->with('url')->once()->andReturn($mockUrl);
+
+        $this->mockFormHelperService->shouldReceive('createForm')
+                                    ->once()
+                                    ->with(Create::class, true, false)
+                                    ->andReturn($this->mockForm);
+
+        $mockFormElement = m::mock(Hidden::class);
+        $mockFormElement->shouldReceive('setValue')
+                        ->once()
+                        ->with(m::on(static fn($v): bool => is_string($v) && preg_match('/^[0-9a-f]{40}$/', $v) === 1));
+        $mockFormElement->shouldReceive('getAttribute')->once()->with('class')->andReturn('file-upload');
+        $mockFormElement->shouldReceive('setAttribute')->once()->with('class', 'file-upload last');
+
+        $this->mockForm->shouldReceive('get')->once()->with('correlationId')->andReturn($mockFormElement);
+        $this->mockFormActions->shouldReceive('get')->once()->with('file')->andReturn($mockFormElement);
+        $this->mockForm->shouldReceive('get')->once()->with('form-actions')->andReturn($this->mockFormActions);
+        $this->mockForm->shouldReceive('setData')->once()->with([]);
+
+        $mockRequest = m::mock(Request::class);
+        $mockRequest->shouldReceive('isPost')->once()->withNoArgs()->andReturn(true);
+        $mockRequest->shouldReceive('getPost')->once()->withNoArgs()->andReturn([]);
+        $this->sut->shouldReceive('getRequest')->twice()->withNoArgs()->andReturn($mockRequest);
+
+        // Valid, so the controller proceeds to submitConversation() rather than falling through.
+        $this->mockForm->shouldReceive('isValid')->once()->withNoArgs()->andReturn(true);
+
+        $this->sut->shouldReceive('processFiles')
+                  ->once()
+                  ->with(
+                      $this->mockForm,
+                      'form-actions->file',
+                      m::on(function ($listener) {
+                          $rf = new \ReflectionFunction($listener);
+                          return $rf->getClosureThis() === $this->sut && $rf->getName() === 'processFileUpload';
+                      }),
+                      m::on(function ($listener) {
+                          $rf = new \ReflectionFunction($listener);
+                          return $rf->getClosureThis() === $this->sut && $rf->getName() === 'deleteFile';
+                      }),
+                      m::on(function ($listener) {
+                          $rf = new \ReflectionFunction($listener);
+                          return $rf->getClosureThis() === $this->sut && $rf->getName() === 'getUploadedFiles';
+                      }),
+                  )
+                  ->andReturn(false);
+
+        // mapFormDataToCommand() is private, so it runs for real; give it a form payload it can map.
+        $this->mockForm->shouldReceive('getData')
+                       ->once()
+                       ->withNoArgs()
+                       ->andReturn([
+                           'correlationId' => 'abc123',
+                           'form-actions'  => [
+                               'inputs' => [
+                                   'messageSubject' => 'Application query',
+                                   'messageContent' => 'hello',
+                                   'appOrLicNo'     => 'L710',
+                               ],
+                           ],
+                       ]);
+
+        $mockResponse = m::mock(Response::class);
+        $mockResponse->shouldReceive('isOk')->once()->withNoArgs()->andReturn(false);
+        // Asserts the mapped command, not merely that something was dispatched — which
+        // incidentally covers the private mapFormDataToCommand(). 'L710' is a licence
+        // prefix, so it must map to licence 710 and leave application unset.
+        $this->sut->shouldReceive('handleCommand')
+                  ->once()
+                  ->with(m::on(static function ($command): bool {
+                      return $command instanceof CreateConversationCommand
+                          && $command->getMessageSubject() === 'Application query'
+                          && $command->getMessageContent() === 'hello'
+                          && $command->getCorrelationId() === 'abc123'
+                          && $command->getLicence() === '710'
+                          && $command->getApplication() === null;
+                  }))
+                  ->andReturn($mockResponse);
+
+        $this->mockFlashMessengerHelper->shouldReceive('addErrorMessage')
+                                       ->once()
+                                       ->with('There was an server error when submitting your conversation; please try later');
+
+        $view = $this->sut->addAction();
+
+        $this->assertInstanceOf(ViewModel::class, $view);
+        $this->assertSame('messages-new', $view->getTemplate());
     }
 
     public function testReply(): void

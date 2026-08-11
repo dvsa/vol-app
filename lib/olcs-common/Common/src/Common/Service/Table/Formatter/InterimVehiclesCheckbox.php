@@ -8,6 +8,8 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
+
 /**
  * Interim Vehicles Checkbox formatter
  *
@@ -25,7 +27,7 @@ class InterimVehiclesCheckbox implements FormatterPluginManagerInterface
     #[\Override]
     public function format($data, $column = [])
     {
-        $format = '<input type="checkbox" value="' . $data['id'] . '" name="vehicles[id][]" %s>';
+        $format = '<input type="checkbox" value="' . Escape::html($data['id']) . '" name="vehicles[id][]" %s>';
         if (
             isset($data['interimApplication'])
             && isset($data['interimApplication']['id'])

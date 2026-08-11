@@ -34,7 +34,7 @@ return [
                 return '<a href="'
                     . $url
                     . '" class="govuk-link js-modal-ajax">'
-                    . $row['qualificationType']['description']
+                    . \Common\Util\Escape::html($row['qualificationType']['description'])
                     . '</a>';
             },
         ],

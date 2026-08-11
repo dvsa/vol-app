@@ -12,6 +12,7 @@ return [
     CommandHandler\Letter\LetterType\Create::class => IsInternalUser::class,
     CommandHandler\Letter\LetterType\Update::class => IsInternalUser::class,
     CommandHandler\Letter\LetterType\Delete::class => IsInternalUser::class,
+    CommandHandler\Letter\LetterType\PreviewComposition::class => IsInternalUser::class,
 
     // Master Template
     QueryHandler\Letter\MasterTemplate\Get::class => IsInternalUser::class,
@@ -69,6 +70,7 @@ return [
 
     // Letter Instance Section
     CommandHandler\Letter\LetterInstanceSection\UpdateContent::class => IsInternalUser::class,
+    CommandHandler\Letter\LetterInstanceTodo\UpdateContent::class => IsInternalUser::class,
 
     // Letter Instance Appendix
     CommandHandler\Letter\LetterInstanceAppendix\UpdateContent::class => IsInternalUser::class,

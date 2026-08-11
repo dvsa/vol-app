@@ -14,7 +14,7 @@
         } else {
           $sender = $message->getCreatedBy()->getLoginId();
         }
-        echo $sender;
+        echo $this->escapeHtml($sender);
         ?>
       </h2>
       <h2 class="govuk-summary-card__title govuk-summary-card__date">
@@ -27,10 +27,11 @@
     </div>
     <div class="govuk-summary-card__content">
       <p class="govuk-body">
-        <?php echo nl2br($message->getMessagingContent()->getText()); ?>
+        <?php /* Escape first, then nl2br — the reverse escapes the <br /> tags nl2br just inserted. */ ?>
+        <?php echo nl2br($this->escapeHtml($message->getMessagingContent()->getText())); ?>
         <?php if ($message->getCreatedBy()->getTeam() !== null): ?>
           <p class="govuk-caption-m">
-            <?php echo $sender; ?>
+            <?php echo $this->escapeHtml($sender); ?>
             <br/>
             Caseworker Team
           </p>
@@ -53,7 +54,7 @@
                 $createdOn->setTimezone(new \DateTimeZone('Europe/London'));
                 echo sprintf(
                   'Read by %s on %s',
-                  $readBy,
+                  $this->escapeHtml($readBy),
                   $createdOn->format('l j F Y \a\t H:ia')
                 ); ?>
               </em>

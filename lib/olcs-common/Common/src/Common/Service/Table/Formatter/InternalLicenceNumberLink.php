@@ -2,6 +2,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\Service\Helper\UrlHelperService;
 
 /**
@@ -31,6 +32,10 @@ class InternalLicenceNumberLink implements FormatterPluginManagerInterface
         $licenceNo = $data['licence']['licNo'];
         $url = $this->urlHelper->fromRoute('lva-licence', ['licence' => $data['licence']['id']]);
 
-        return '<a class="govuk-link" href="' . $url . '" title="Licence details for ' . $licenceNo . '">' . $licenceNo . '</a>';
+        // Interpolated twice — once into the title attribute, once as the link text.
+        $escapedLicenceNo = Escape::html($licenceNo);
+
+        return '<a class="govuk-link" href="' . $url . '" title="Licence details for ' . $escapedLicenceNo . '">'
+            . $escapedLicenceNo . '</a>';
     }
 }

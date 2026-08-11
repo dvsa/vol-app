@@ -34,7 +34,7 @@ return [
                     ['id' => $row['id'], 'action' => 'edit'],
                     'admin-dashboard/task-allocation-rules'
                 );
-                return '<a class="govuk-link" href="' . $url . '">' . $row['category']['description'] . '</a>';
+                return '<a class="govuk-link" href="' . $url . '">' . \Common\Util\Escape::html($row['category']['description']) . '</a>';
             }
         ],
         [
