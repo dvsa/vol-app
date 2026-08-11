@@ -136,5 +136,4 @@ class ApplicantProfileBuilder
 
         return $description !== '' ? $description : (string)$refData->getId();
     }
-
 }
