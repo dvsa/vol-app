@@ -19,14 +19,4 @@ use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 class Si extends AbstractQuery implements CacheableShortTermQueryInterface
 {
     use Identity;
-
-    /**
-     * @Transfer\Optional
-     */
-    protected ?int $caseId = null;
-
-    public function getCaseId(): ?int
-    {
-        return $this->caseId;
-    }
 }
