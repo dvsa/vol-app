@@ -162,15 +162,6 @@ class PenaltyController extends AbstractInternalController implements CaseContro
         }
 
         return $response->getResult();
-//        $data = $response->getResult();
-//
-//        $routeCaseId = (int) $this->params()->fromRoute('case');
-//        if (empty($data['case']['id']) || (int) $data['case']['id'] !== $routeCaseId) {
-//            $this->flashMessengerHelperService->addErrorMessage('Case does not have a serious infringement with this ID.');
-//            return [];
-//        }
-//
-//        return $data;
     }
 
     /**
