@@ -25,7 +25,7 @@ return [
                     ['action' => 'index', 'busRegId' => $data['id']],
                     'licence/bus-details/service',
                     true
-                ) . '">' . $data['regNo'] . '</a>',
+                ) . '">' . \Common\Util\Escape::html($data['regNo']) . '</a>',
         ],
         [
             'title' => 'Var No.',

@@ -27,10 +27,12 @@ return [
             'type' => 'Action',
             'action' => 'edit',
             'formatter' => static function ($data, $column) {
+                // Type\Action leaves formatted content raw, because a formatter's output may
+                // legitimately be markup. That makes escaping this closure's job.
                 if (in_array($data['action'], ['U', 'D'])) {
-                     return $data['licConditionVariation']['id'];
+                    return \Common\Util\Escape::html($data['licConditionVariation']['id']);
                 }
-                return $data['id'];
+                return \Common\Util\Escape::html($data['id']);
             }
         ],
         [

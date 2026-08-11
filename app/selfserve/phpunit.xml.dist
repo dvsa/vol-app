@@ -23,6 +23,11 @@
 >
   <php>
     <ini name="date.timezone" value="UTC"/>
+    <!-- TableEscapingHarness reads the column config out of an exception trace to work out
+         which row value a formatter rejected. With args stripped it cannot attribute the
+         failure and the table is reported as unrenderable, so pin it rather than inherit
+         whatever the machine's php.ini says. -->
+    <ini name="zend.exception_ignore_args" value="0"/>
     <ini name="memory_limit" value="4G"/>
   </php>
   <testsuites>

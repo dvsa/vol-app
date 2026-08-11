@@ -2,6 +2,7 @@
 
 namespace Common\Service\Section\VehicleSafety\Vehicle\Formatter;
 
+use Common\Service\Helper\UrlHelperService;
 use Psr\Container\ContainerInterface;
 use Laminas\ServiceManager\Factory\FactoryInterface;
 
@@ -15,8 +16,7 @@ class VrmFactory implements FactoryInterface
     #[\Override]
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
-
-        $viewHelperManager = $container->get('ViewHelperManager');
-        return new Vrm($viewHelperManager);
+        $urlHelper = $container->get(UrlHelperService::class);
+        return new Vrm($urlHelper);
     }
 }

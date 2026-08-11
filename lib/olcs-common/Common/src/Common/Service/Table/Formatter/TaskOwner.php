@@ -8,6 +8,8 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
+
 /**
  * Task Owner Formatter
  *
@@ -28,13 +30,13 @@ class TaskOwner implements FormatterPluginManagerInterface
         $owner = '';
 
         if (!empty($data['teamName'])) {
-            $owner = $data['teamName'] . ' ';
+            $owner = Escape::html($data['teamName']) . ' ';
         }
 
         // trim leading/trailing spaces and commas
         $data['ownerName'] = trim($data['ownerName'], ' ,');
 
-        $user = empty($data['ownerName']) ? 'Unassigned' : $data['ownerName'];
+        $user = empty($data['ownerName']) ? 'Unassigned' : Escape::html($data['ownerName']);
 
         return $owner . '(' . $user . ')';
     }

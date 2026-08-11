@@ -94,7 +94,8 @@
   "autoload-dev": {
     "psr-4": {
       "OlcsTest\\": "test/Olcs/src",
-      "PermitsTest\\": "test/Permits/src"
+      "PermitsTest\\": "test/Permits/src",
+      "CommonTest\\": "vendor/olcs/olcs-common/test/Common/src/"
     }
   },
   "minimum-stability": "dev",
