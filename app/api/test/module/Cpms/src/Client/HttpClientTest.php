@@ -75,7 +75,7 @@ final class HttpClientTest extends TestCase
 
     public function testPost(): void
     {
-        $requestBody = ['postRequestBodyKeyExample' => 'postRequestBodyValueExample'];
+        $requestBody = ['postRequestBodyKeyExample' => "postRequestBodyValueExample\u{2019}"];
         $encodedResponseBody = json_encode(['examplePostReponseKey' => 'examplePostResponseValue']);
 
         $this->appendToHandler(200, [], $encodedResponseBody);
@@ -96,7 +96,7 @@ final class HttpClientTest extends TestCase
 
     public function testPut(): void
     {
-        $requestBody = ['putRequestBodyKeyExample' => 'putRequestBodyValueExample'];
+        $requestBody = ['putRequestBodyKeyExample' => "putRequestBodyValueExample\u{2019}"];
         $encodedResponseBody = json_encode(['examplePutReponseKey' => 'examplePutResponseValue']);
 
         $this->appendToHandler(200, [], $encodedResponseBody);
