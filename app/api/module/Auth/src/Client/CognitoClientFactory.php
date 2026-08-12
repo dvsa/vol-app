@@ -23,6 +23,15 @@ class CognitoClientFactory implements FactoryInterface
     public const CONFIG_NBF_LEEWAY = 'nbfLeeway';
     public const CONFIG_HTTP = 'http';
 
+    /**
+     * PSR-6 pool backing the JSON Web Key Set cache.
+     *
+     * Without it the client re-downloads the JWKS from Cognito on every token it decodes, which
+     * is an outbound HTTPS round trip on each authenticated request. Nothing reports that it is
+     * happening, so the cost is invisible until you look for it.
+     */
+    public const JWKS_CACHE_SERVICE = 'jwks-cache';
+
     public const EXCEPTION_MESSAGE_NAMESPACE_MISSING = 'Cognito config missing from awsOptions';
     public const EXCEPTION_MESSAGE_OPTION_MISSING = 'Cognito config requires: clientId, clientSecret, poolId, region and http';
 
@@ -56,7 +65,8 @@ class CognitoClientFactory implements FactoryInterface
             $awsClient,
             $config[static::CONFIG_CLIENT_ID],
             $config[static::CONFIG_CLIENT_SECRET],
-            $config[static::CONFIG_POOL_ID]
+            $config[static::CONFIG_POOL_ID],
+            $container->get(static::JWKS_CACHE_SERVICE)
         );
 
         $httpClient = new HttpClient($config[static::CONFIG_HTTP]);
