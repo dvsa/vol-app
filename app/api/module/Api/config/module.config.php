@@ -1,6 +1,5 @@
 <?php
 
-use Aws\EventBridge\EventBridgeClient;
 use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Api\Domain\Repository\RepositoryFactory;
 use Dvsa\Olcs\Api\Domain\QueryPartial;
@@ -578,7 +577,7 @@ return [
             ApiSrv\AddressHelper\AddressHelperService::class => ApiSrv\AddressHelper\AddressHelperServiceFactory::class,
 
             Aws\S3\S3Client::class => Dvsa\Olcs\Api\Service\S3\S3ClientFactory::class,
-            EventBridgeClient::class => Dvsa\Olcs\AwsSdk\Factories\EventBridgeClientFactory::class,
+            Aws\EventBridge\EventBridgeClient::class => Dvsa\Olcs\AwsSdk\Factories\EventBridgeClientFactory::class,
             'default-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
             'doctrine-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
             'cache.redis.connection'
