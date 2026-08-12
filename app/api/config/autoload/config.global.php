@@ -264,6 +264,22 @@ return [
                 ],
             ],
         ],
+        // CPMS Hybrid Gateway (VOL-7496) — used instead of rest_client domain when the
+        // cpms_hybrid_gateway feature toggle is enabled. The oauth2 block is the standard
+        // Entra client-credentials shape consumed by AccessToken\ProviderFactory.
+        'gateway' => [
+            // Gateway hostname e.g. 'https://gw.accept.dev.cpms.dvsacloud.uk' *Environment specific*
+            'domain' => "%olcs_cpms_gateway_host%",
+            'proxy' => 'http://%shd_proxy%',
+            'oauth2' => [
+                'client_id' => "%olcs_cpms_gateway_client_id%",
+                'client_secret' => "%olcs_cpms_gateway_client_secret%", // secret
+                'token_url' => "%olcs_cpms_gateway_token_url%",
+                'scope' => "%olcs_cpms_gateway_scope%",
+                'proxy' => 'http://%shd_proxy%',
+                'service_name' => 'CPMS Hybrid Gateway',
+            ],
+        ],
     ],
 
     // CPMS service authentication - used by CpmsIdentityProvider service
