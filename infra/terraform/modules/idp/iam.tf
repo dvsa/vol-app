@@ -287,3 +287,145 @@ resource "aws_iam_role_policy" "eventbridge_invoke_extraction" {
   role   = aws_iam_role.eventbridge_invoke_extraction.id
   policy = data.aws_iam_policy_document.eventbridge_invoke_extraction.json
 }
+
+# ============================================================
+# IAM — Lambda execution role (extract-s3-json-field)
+# ============================================================
+resource "aws_iam_role" "extract_s3_json_field_lambda" {
+  name               = "${local.name_prefix}-extract-s3-json-field-lambda"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
+}
+
+data "aws_iam_policy_document" "extract_s3_json_field_lambda" {
+  statement {
+    sid = "CloudWatchLogs"
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents",
+    ]
+    resources = ["${aws_cloudwatch_log_group.extract_s3_json_field.arn}:*"]
+  }
+
+  # Read BDA extraction results from the output bucket.
+  statement {
+    sid     = "S3ReadOutputBucket"
+    actions = ["s3:GetObject"]
+    resources = [
+      aws_s3_bucket.idp_output.arn,
+      "${aws_s3_bucket.idp_output.arn}/*",
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "extract_s3_json_field_lambda" {
+  name   = "${local.name_prefix}-extract-s3-json-field-lambda"
+  role   = aws_iam_role.extract_s3_json_field_lambda.id
+  policy = data.aws_iam_policy_document.extract_s3_json_field_lambda.json
+}
+
+# ============================================================
+# IAM — Step Functions execution role (AI Analysis SM)
+# ============================================================
+resource "aws_iam_role" "ai_analysis_sm" {
+  name               = "${local.name_prefix}-ai-analysis-sm"
+  assume_role_policy = data.aws_iam_policy_document.sfn_assume_role.json
+}
+
+data "aws_iam_policy_document" "ai_analysis_sm" {
+  # Invoke the extract-s3-json-field Lambda.
+  statement {
+    sid     = "InvokeExtractS3JsonFieldLambda"
+    actions = ["lambda:InvokeFunction"]
+    resources = [
+      aws_lambda_function.extract_s3_json_field.arn,
+      "${aws_lambda_function.extract_s3_json_field.arn}:*",
+    ]
+  }
+
+  # Read BDA output so the Lambda can fetch individual JSON fields.
+  statement {
+    sid     = "S3ReadOutputBucket"
+    actions = ["s3:GetObject"]
+    resources = [
+      aws_s3_bucket.idp_output.arn,
+      "${aws_s3_bucket.idp_output.arn}/*",
+    ]
+  }
+
+  # Bedrock Converse API to invoke the managed prompt.
+  # Scoped to * to cover cross-region inference profile fan-out.
+  statement {
+    sid = "BedrockConverse"
+    actions = [
+      "bedrock:InvokeModel",
+      "bedrock:GetPrompt",
+      "bedrock:RenderPrompt",
+    ]
+    resources = ["*"]
+  }
+
+  # Emit DocumentProcessing-AnalysisCompleted / AnalysisFailed events.
+  statement {
+    sid     = "EventBridgePutEvents"
+    actions = ["events:PutEvents"]
+    resources = [
+      "arn:aws:events:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:event-bus/default",
+    ]
+  }
+
+  statement {
+    sid = "CloudWatchLogs"
+    actions = [
+      "logs:CreateLogDelivery",
+      "logs:CreateLogStream",
+      "logs:GetLogDelivery",
+      "logs:UpdateLogDelivery",
+      "logs:DeleteLogDelivery",
+      "logs:ListLogDeliveries",
+      "logs:PutLogEvents",
+      "logs:PutResourcePolicy",
+      "logs:DescribeResourcePolicies",
+      "logs:DescribeLogGroups",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid = "XRayTracing"
+    actions = [
+      "xray:PutTraceSegments",
+      "xray:PutTelemetryRecords",
+      "xray:GetSamplingRules",
+      "xray:GetSamplingTargets",
+    ]
+    resources = ["*"]
+  }
+}
+
+resource "aws_iam_role_policy" "ai_analysis_sm" {
+  name   = "${local.name_prefix}-ai-analysis-sm"
+  role   = aws_iam_role.ai_analysis_sm.id
+  policy = data.aws_iam_policy_document.ai_analysis_sm.json
+}
+
+# ============================================================
+# IAM — EventBridge role (start AI Analysis SM execution)
+# ============================================================
+resource "aws_iam_role" "eventbridge_invoke_ai_analysis" {
+  name               = "${local.name_prefix}-eventbridge-invoke-ai-analysis"
+  assume_role_policy = data.aws_iam_policy_document.eventbridge_assume_role.json
+}
+
+data "aws_iam_policy_document" "eventbridge_invoke_ai_analysis" {
+  statement {
+    sid       = "StartAIAnalysisExecution"
+    actions   = ["states:StartExecution"]
+    resources = [aws_sfn_state_machine.ai_analysis.arn]
+  }
+}
+
+resource "aws_iam_role_policy" "eventbridge_invoke_ai_analysis" {
+  name   = "${local.name_prefix}-eventbridge-invoke-ai-analysis"
+  role   = aws_iam_role.eventbridge_invoke_ai_analysis.id
+  policy = data.aws_iam_policy_document.eventbridge_invoke_ai_analysis.json
+}

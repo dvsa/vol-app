@@ -47,3 +47,18 @@ output "idp_output_bucket_arn" {
   description = "ARN of the BDA output S3 bucket"
   value       = aws_s3_bucket.idp_output.arn
 }
+
+output "ai_analysis_sm_arn" {
+  description = "ARN of the AI Analysis Step Functions state machine"
+  value       = aws_sfn_state_machine.ai_analysis.arn
+}
+
+output "ai_analysis_sm_name" {
+  description = "Name of the AI Analysis Step Functions state machine"
+  value       = aws_sfn_state_machine.ai_analysis.name
+}
+
+output "extract_s3_json_field_lambda_arn" {
+  description = "ARN of the extract-s3-json-field Lambda"
+  value       = aws_lambda_function.extract_s3_json_field.arn
+}

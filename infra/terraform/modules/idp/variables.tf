@@ -84,3 +84,12 @@ variable "classification_max_bytes" {
   description = "Maximum document size in bytes for BDA extraction (default 200 MB)."
   default     = 209715200
 }
+
+# ============================================================
+# AI Analysis SM — Bedrock managed prompt
+# ============================================================
+
+variable "bedrock_prompt_version_arn" {
+  type        = string
+  description = "ARN of the Bedrock managed prompt version to use for AI analysis (e.g. arn:aws:bedrock:{region}:{account}:prompt/{id}:{version}). The prompt is managed and versioned outside Terraform; supply the specific immutable version ARN here."
+}

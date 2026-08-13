@@ -273,3 +273,107 @@ resource "aws_cloudwatch_event_target" "extraction" {
   # classification, confidence, page/size metadata.
   input_path = "$.detail"
 }
+
+# ============================================================
+# Lambda — extract-s3-json-field
+# Plucks individual fields from BDA output JSON files in S3,
+# keeping Step Functions state well within the 256 KB limit.
+# Used by the AI Analysis SM to fetch inference_result and the
+# document markdown without loading the full result.json.
+# ============================================================
+resource "aws_cloudwatch_log_group" "extract_s3_json_field" {
+  name              = "/aws/lambda/${local.name_prefix}-extract-s3-json-field"
+  retention_in_days = 30
+}
+
+data "archive_file" "extract_s3_json_field" {
+  type        = "zip"
+  source_dir  = "${path.module}/lambdas/extract-s3-json-field"
+  output_path = "${path.module}/lambdas/extract-s3-json-field/extract-s3-json-field.zip"
+}
+
+resource "aws_lambda_function" "extract_s3_json_field" {
+  function_name = "${local.name_prefix}-extract-s3-json-field"
+  description   = "Reads a JSON object from S3 and returns either the whole parsed object or a sub-field at a dot-separated path. Used to keep Step Functions state within the 256 KB limit when reading BDA output files."
+  role          = aws_iam_role.extract_s3_json_field_lambda.arn
+
+  # tflint-ignore: aws_lambda_function_invalid_runtime
+  runtime          = "nodejs24.x"
+  handler          = "index.handler"
+  filename         = data.archive_file.extract_s3_json_field.output_path
+  source_code_hash = data.archive_file.extract_s3_json_field.output_base64sha256
+  timeout          = var.lambda_timeout
+  memory_size      = var.lambda_memory_size
+
+  logging_config {
+    log_format = "Text"
+    log_group  = aws_cloudwatch_log_group.extract_s3_json_field.name
+  }
+
+  depends_on = [aws_cloudwatch_log_group.extract_s3_json_field]
+}
+
+# ============================================================
+# CloudWatch — AI Analysis SM Log Group
+# ============================================================
+resource "aws_cloudwatch_log_group" "ai_analysis_sm" {
+  name              = "/aws/vendedlogs/states/${local.name_prefix}-ai-analysis"
+  retention_in_days = 30
+}
+
+# ============================================================
+# Step Functions — AI Analysis State Machine
+# Triggered by DocumentProcessing-Extracted events from the
+# Extraction SM. Fetches BDA output from S3, sends it to a
+# Bedrock managed prompt, then emits DocumentProcessing-AnalysisCompleted
+# or DocumentProcessing-AnalysisFailed on the default event bus.
+# ============================================================
+resource "aws_sfn_state_machine" "ai_analysis" {
+  name     = "${local.name_prefix}-ai-analysis"
+  role_arn = aws_iam_role.ai_analysis_sm.arn
+  type     = "STANDARD"
+
+  definition = templatefile("${path.module}/state-machines/ai-analysis.asl.json", {
+    EXTRACT_S3_JSON_FIELD_LAMBDA_ARN = aws_lambda_function.extract_s3_json_field.arn
+    BEDROCK_PROMPT_VERSION_ARN       = var.bedrock_prompt_version_arn
+  })
+
+  logging_configuration {
+    log_destination        = "${aws_cloudwatch_log_group.ai_analysis_sm.arn}:*"
+    include_execution_data = true
+    level                  = "ALL"
+  }
+
+  tracing_configuration {
+    enabled = true
+  }
+
+  depends_on = [aws_cloudwatch_log_group.ai_analysis_sm]
+}
+
+# ============================================================
+# EventBridge — Trigger AI Analysis SM on extracted documents
+#
+# Listens for DocumentProcessing-Extracted events emitted by
+# the Extraction SM. The input_path passes the full event
+# detail directly as the SM input so all extraction metadata
+# (BDA invocation ARN/ID, output bucket/prefix, applicant
+# profile, classification etc.) is available to the SM.
+# ============================================================
+resource "aws_cloudwatch_event_rule" "extracted" {
+  name        = "${local.name_prefix}-extracted"
+  description = "Trigger AI Analysis SM when a document has been successfully extracted by BDA"
+
+  event_pattern = jsonencode({
+    source      = ["custom.documentProcessing"]
+    detail-type = ["DocumentProcessing-Extracted"]
+  })
+}
+
+resource "aws_cloudwatch_event_target" "ai_analysis" {
+  rule     = aws_cloudwatch_event_rule.extracted.name
+  arn      = aws_sfn_state_machine.ai_analysis.arn
+  role_arn = aws_iam_role.eventbridge_invoke_ai_analysis.arn
+
+  input_path = "$.detail"
+}
