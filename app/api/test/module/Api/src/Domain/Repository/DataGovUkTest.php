@@ -10,6 +10,7 @@ use Doctrine\DBAL\Statement;
 use Dvsa\Olcs\Api\Domain\Repository\DataGovUk;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery as m;
+use Doctrine\DBAL\ParameterType;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Domain\Repository\DataGovUk::class)]
 final class DataGovUkTest extends MockeryTestCase
@@ -55,7 +56,7 @@ final class DataGovUkTest extends MockeryTestCase
         $this->mockStmt
             ->shouldReceive('bindValue')
             ->times(count($areas))
-            ->with(m::anyOf(1, 2, 3), m::pattern('/^areaKey/'), \PDO::PARAM_STR);
+            ->with(m::anyOf(1, 2, 3), m::pattern('/^areaKey/'), ParameterType::STRING);
 
         $this->mockConn
             ->shouldReceive('prepare')
@@ -73,7 +74,7 @@ final class DataGovUkTest extends MockeryTestCase
         $this->mockStmt
             ->shouldReceive('bindValue')
             ->times(count($areas))
-            ->with(m::anyOf(1, 2, 3), m::pattern('/^areaKey/'), \PDO::PARAM_STR);
+            ->with(m::anyOf(1, 2, 3), m::pattern('/^areaKey/'), ParameterType::STRING);
 
         $this->mockConn
             ->shouldReceive('prepare')
@@ -91,7 +92,7 @@ final class DataGovUkTest extends MockeryTestCase
         $this->mockStmt
             ->shouldReceive('bindValue')
             ->times(count($areas))
-            ->with(1, 'areaKey1', \PDO::PARAM_STR);
+            ->with(1, 'areaKey1', ParameterType::STRING);
 
         /** @var Connection $mockConn */
         $this->mockConn

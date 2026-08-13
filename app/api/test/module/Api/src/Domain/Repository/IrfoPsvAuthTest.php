@@ -85,7 +85,7 @@ final class IrfoPsvAuthTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -142,12 +142,12 @@ final class IrfoPsvAuthTest extends RepositoryTestCase
         $expectedQuery = 'BLAH '
             . 'AND m.expiryDate >= [[2016-12-01T00:00:00+00:00]] '
             . 'AND m.expiryDate < [[2017-01-01T00:00:00+00:00]] '
-            . 'AND m.status IN ['
+            . 'AND m.status IN(['
                 . '"' . Entity::STATUS_APPROVED . '",'
                 . '"' . Entity::STATUS_GRANTED . '",'
                 . '"' . Entity::STATUS_PENDING . '",'
                 . '"' . Entity::STATUS_RENEW . '"'
-            . '] '
+            . ']) '
             . 'AND o.isIrfo = [[true]]';
         $this->assertEquals($expectedQuery, $this->query);
     }

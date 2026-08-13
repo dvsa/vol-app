@@ -117,9 +117,9 @@ final class ApplicationTest extends RepositoryTestCase
 
         $this->em->shouldReceive('getReference')
             ->with(RefData::class, $id)
-            ->andReturn('blah');
+            ->andReturn(m::mock(RefData::class));
 
-        $this->assertEquals('blah', $this->sut->getRefdataReference($id));
+        $this->assertInstanceOf(RefData::class, $this->sut->getRefdataReference($id));
     }
 
     public function testGetCategoryReference(): void
@@ -128,9 +128,9 @@ final class ApplicationTest extends RepositoryTestCase
 
         $this->em->shouldReceive('getReference')
             ->with(Category::class, $id)
-            ->andReturn('blah');
+            ->andReturn(m::mock(Category::class));
 
-        $this->assertEquals('blah', $this->sut->getCategoryReference($id));
+        $this->assertInstanceOf(Category::class, $this->sut->getCategoryReference($id));
     }
 
     public function testGetSubCategoryReference(): void
@@ -139,9 +139,9 @@ final class ApplicationTest extends RepositoryTestCase
 
         $this->em->shouldReceive('getReference')
             ->with(SubCategory::class, $id)
-            ->andReturn('blah');
+            ->andReturn(m::mock(SubCategory::class));
 
-        $this->assertEquals('blah', $this->sut->getSubCategoryReference($id));
+        $this->assertInstanceOf(SubCategory::class, $this->sut->getSubCategoryReference($id));
     }
 
     public function testGetReference(): void
@@ -150,9 +150,9 @@ final class ApplicationTest extends RepositoryTestCase
 
         $this->em->shouldReceive('getReference')
             ->with(RefData::class, $id)
-            ->andReturn('blah');
+            ->andReturn(m::mock(RefData::class));
 
-        $this->assertEquals('blah', $this->sut->getReference(RefData::class, $id));
+        $this->assertInstanceOf(RefData::class, $this->sut->getReference(RefData::class, $id));
     }
 
     public function testFetchUsingId(): void
@@ -447,16 +447,15 @@ final class ApplicationTest extends RepositoryTestCase
 
         $this->assertEquals('{{QUERY}} ' .
         'INNER JOIN a.licence l WITH l.organisation = [[' . self::ORG_ID . ']] ' .
-        'AND a.status IN ["unit1","unit2"] ' .
-        'AND (' .
+        'AND a.status IN(["unit1","unit2"]) ' .
+        'AND ' .
         'a.isVariation = 0 ' .
         'OR (' .
-        'l.status IN ["lsts_valid","lsts_suspended","lsts_curtailed"] ' .
+        'l.status IN(["lsts_valid","lsts_suspended","lsts_curtailed"]) ' .
         'AND a.isVariation = 1 ' .
         'AND (' .
         'a.variationType IS NULL ' .
         'OR a.variationType != [[' . Application::VARIATION_TYPE_DIRECTOR_CHANGE . ']]' .
-        ')' .
         ')' .
         ')', $this->query);
     }
@@ -512,38 +511,89 @@ final class ApplicationTest extends RepositoryTestCase
     }
 
     public function testApplyListFilters(): void
-    {
-        $this->setUpSut(Repository\Application::class, true);
+{
+    $this->setUpSut(Repository\Application::class, true);
 
-        $status = 'unit_status';
-        $orgId = 999;
+    $status = 'unit_status';
+    $orgId = 999;
 
-        /** @var QueryBuilder | m\MockInterface $mockQb */
-        $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('l.organisation', ':organisation')->once()->andReturn('EXPR1');
-        $mockQb->shouldReceive('setParameter')->with('organisation', $orgId)->once();
-        $mockQb->shouldReceive('andWhere')->with('EXPR1')->once()->andReturnSelf();
+    /** @var QueryBuilder | m\MockInterface $mockQb */
+    $mockQb = m::mock(QueryBuilder::class);
 
-        $mockQb->shouldReceive('andWhere')->with('EXPR2')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('a.status', ':STATUS')->once()->andReturn('EXPR2');
-        $mockQb->shouldReceive('setParameter')->with('STATUS', $status)->once();
+    $expr1 = $this->mockExprEq('l.organisation', ':organisation');
+    $mockQb->shouldReceive('expr->eq')
+        ->with('l.organisation', ':organisation')
+        ->once()
+        ->andReturn($expr1);
+    $mockQb->shouldReceive('setParameter')
+        ->with('organisation', $orgId)
+        ->once();
+    $mockQb->shouldReceive('andWhere')
+        ->with($expr1)
+        ->once()
+        ->andReturnSelf();
 
-        $mockQb->shouldReceive('andWhere')->with('EXPR3')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->orX')->with('EXPR4', 'EXPR5')->andReturn('EXPR3');
-        $mockQb->shouldReceive('expr->eq')->with('a.isVariation', ':isVariation')->once()->andReturn('EXPR4');
-        $mockQb->shouldReceive('expr->neq')->with('COALESCE(IDENTITY(a.variationType), \'\')', ':variationType')->once()->andReturn('EXPR5');
-        $mockQb->shouldReceive('setParameter')->with('isVariation', false)->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('variationType', Application::VARIATION_TYPE_DIRECTOR_CHANGE);
+    $expr2 = $this->mockExprEq('a.status', ':STATUS');
+    $mockQb->shouldReceive('expr->eq')
+        ->with('a.status', ':STATUS')
+        ->once()
+        ->andReturn($expr2);
+    $mockQb->shouldReceive('andWhere')
+        ->with($expr2)
+        ->once()
+        ->andReturnSelf();
+    $mockQb->shouldReceive('setParameter')
+        ->with('STATUS', $status)
+        ->once();
 
-        $mockQuery = TransferQry\Application\GetList::create(
-            [
-                'organisation' => $orgId,
-                'status' => $status,
-            ]
+    $expr4 = $this->mockExprEq('a.isVariation', ':isVariation');
+    $mockQb->shouldReceive('expr->eq')
+        ->with('a.isVariation', ':isVariation')
+        ->once()
+        ->andReturn($expr4);
+
+    $expr5 = $this->mockExprNeq(
+        'COALESCE(IDENTITY(a.variationType), \'\')',
+        ':variationType'
+    );
+    $mockQb->shouldReceive('expr->neq')
+        ->with(
+            'COALESCE(IDENTITY(a.variationType), \'\')',
+            ':variationType'
+        )
+        ->once()
+        ->andReturn($expr5);
+
+    $expr3 = $this->mockOrX();
+    $mockQb->shouldReceive('expr->orX')
+        ->with($expr4, $expr5)
+        ->andReturn($expr3);
+
+    $mockQb->shouldReceive('andWhere')
+        ->with($expr3)
+        ->once()
+        ->andReturnSelf();
+
+    $mockQb->shouldReceive('setParameter')
+        ->with('isVariation', false)
+        ->once()
+        ->andReturnSelf();
+
+    $mockQb->shouldReceive('setParameter')
+        ->with(
+            'variationType',
+            Application::VARIATION_TYPE_DIRECTOR_CHANGE
         );
 
-        $this->sut->applyListFilters($mockQb, $mockQuery);
-    }
+    $mockQuery = TransferQry\Application\GetList::create(
+        [
+            'organisation' => $orgId,
+            'status' => $status,
+        ]
+    );
+
+    $this->sut->applyListFilters($mockQb, $mockQuery);
+}
 
     public function testFetchWithTmLicences(): void
     {
@@ -571,20 +621,23 @@ final class ApplicationTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('f.feeType', 'ft')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('f.feeStatus', 'fs')->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('a.status', ':appStatus')->once()->andReturn('EXPR1');
+        $expr1 = $this->mockExprEq('a.status', ':appStatus');
+        $mockQb->shouldReceive('expr->eq')->with('a.status', ':appStatus')->once()->andReturn($expr1);
         $mockQb->shouldReceive('setParameter')
             ->with('appStatus', Application::APPLICATION_STATUS_GRANTED)->once()->andReturn();
-        $mockQb->shouldReceive('andWhere')->with('EXPR1')->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('f.feeStatus', ':feeStatus')->once()->andReturn('EXPR2');
+        $expr2 = $this->mockExprEq('f.feeStatus', ':feeStatus');
+        $mockQb->shouldReceive('expr->eq')->with('f.feeStatus', ':feeStatus')->once()->andReturn($expr2);
         $mockQb->shouldReceive('setParameter')
             ->with('feeStatus', FeeEntity::STATUS_OUTSTANDING)->once()->andReturn();
-        $mockQb->shouldReceive('andWhere')->with('EXPR2')->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->in')->with('ft.feeType', ':feeType')->once()->andReturn('EXPR3');
+        $expr3 = $this->mockExprIn('ft.feeType', ':feeType');
+        $mockQb->shouldReceive('expr->in')->with('ft.feeType', ':feeType')->once()->andReturn($expr3);
         $mockQb->shouldReceive('setParameter')
             ->with('feeType', [FeeTypeEntity::FEE_TYPE_GRANT, FeeTypeEntity::FEE_TYPE_GRANTVAR])->once()->andReturn();
-        $mockQb->shouldReceive('andWhere')->with('EXPR3')->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($expr3)->once()->andReturnSelf();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);
         $this->assertEquals(['RESULT'], $this->sut->fetchForNtu());
@@ -595,24 +648,28 @@ final class ApplicationTest extends RepositoryTestCase
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('a')->once()->andReturn($mockQb);
 
-        $mockQb->shouldReceive('expr->eq')->with('a.isVariation', ':isVariation')->once()->andReturn('EXPR1');
+        $expr1 = $this->mockExprEq('a.isVariation', ':isVariation');
+        $mockQb->shouldReceive('expr->eq')->with('a.isVariation', ':isVariation')->once()->andReturn($expr1);
         $mockQb->shouldReceive('setParameter')->with('isVariation', 1)->once()->andReturn();
-        $mockQb->shouldReceive('andWhere')->with('EXPR1')->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('a.variationType', ':variationType')->once()->andReturn('EXPR2');
+        $expr2 = $this->mockExprEq('a.variationType', ':variationType');
+        $mockQb->shouldReceive('expr->eq')->with('a.variationType', ':variationType')->once()->andReturn($expr2);
         $mockQb->shouldReceive('setParameter')
             ->with('variationType', Application::VARIATION_TYPE_DIRECTOR_CHANGE)->once()->andReturn();
-        $mockQb->shouldReceive('andWhere')->with('EXPR2')->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('a.status', ':status')->once()->andReturn('EXPR3');
+        $expr3 = $this->mockExprEq('a.status', ':status');
+        $mockQb->shouldReceive('expr->eq')->with('a.status', ':status')->once()->andReturn($expr3);
         $mockQb->shouldReceive('setParameter')
             ->with('status', Application::APPLICATION_STATUS_NOT_SUBMITTED)->once()->andReturn();
-        $mockQb->shouldReceive('andWhere')->with('EXPR3')->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($expr3)->once()->andReturnSelf();
 
         $olderThanDate = date('Y-m-d H:i:s', strtotime('- 4 hours'));
-        $mockQb->shouldReceive('expr->lt')->with('a.createdOn', ':olderThanDate')->once()->andReturn('EXPR4');
+        $expr4 = $this->mockExprLt('a.createdOn', ':olderThanDate');
+        $mockQb->shouldReceive('expr->lt')->with('a.createdOn', ':olderThanDate')->once()->andReturn($expr4);
         $mockQb->shouldReceive('setParameter')->with('olderThanDate', $olderThanDate)->once()->andReturn();
-        $mockQb->shouldReceive('andWhere')->with('EXPR4')->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($expr4)->once()->andReturnSelf();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);
 

@@ -32,7 +32,7 @@ final class ByIdsTest extends QueryPartialTestCase
     {
         $ids = [111, 222];
 
-        $expr = m::mock();
+        $expr = m::mock(\Doctrine\ORM\Query\Expr\Func::class);
 
         $this->qb->shouldReceive('getRootAliases')
             ->andReturn(['a'])

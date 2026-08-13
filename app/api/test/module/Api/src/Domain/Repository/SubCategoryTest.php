@@ -95,7 +95,7 @@ final class SubCategoryTest extends RepositoryTestCase
             'expect' => 'QUERY ' .
                 'SELECT DISTINCT m ' .
                 'INNER JOIN ' . Entity\Doc\DocTemplate::class . ' dct ' .
-                'WITH (dct.category = m.category AND dct.subCategory = m.id) ' .
+                'WITH dct.category = m.category AND dct.subCategory = m.id ' .
                 'INNER JOIN ' . Entity\Doc\Document::class . ' dc WITH dc.id = dct.document ' .
                 'AND m.isTask = [[false]] ' .
                 'AND m.isDoc = [[true]] ' .

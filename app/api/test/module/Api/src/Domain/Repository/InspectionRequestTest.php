@@ -181,8 +181,9 @@ final class InspectionRequestTest extends RepositoryTestCase
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
 
-        $qb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn('licence');
-        $qb->shouldReceive('andWhere')->with('licence')->once()->andReturnSelf();
+        $licence = $this->mockExprEq('m.licence', ':licence');
+        $qb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn($licence);
+        $qb->shouldReceive('andWhere')->with($licence)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('licence', $licenceId)->once()->andReturnSelf();
 
         $this->queryBuilder->shouldReceive('modifyQuery')
@@ -235,8 +236,9 @@ final class InspectionRequestTest extends RepositoryTestCase
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
 
-        $qb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn('licence');
-        $qb->shouldReceive('andWhere')->with('licence')->once()->andReturnSelf();
+        $licence = $this->mockExprEq('m.licence', ':licence');
+        $qb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn($licence);
+        $qb->shouldReceive('andWhere')->with($licence)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('licence', $licenceId)->once()->andReturnSelf();
 
         $this->assertNull($this->sut->applyListFilters($qb, $query));
