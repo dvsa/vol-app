@@ -27,16 +27,22 @@ final class RefDataTest extends RepositoryTestCase
         $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
         $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockDqb->shouldReceive('expr->eq')->with('m.refDataCategoryId', ':category')->once()
-            ->andReturn('EXPR');
-        $mockDqb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('m.refDataCategoryId', ':category');
+        $mockDqb->shouldReceive('expr->eq')
+            ->with('m.refDataCategoryId', ':category')
+            ->once()
+            ->andReturn($expr);
+        $mockDqb->shouldReceive('andWhere')
+            ->with($expr)
+            ->once()
+            ->andReturnSelf();
         $mockDqb->shouldReceive('setParameter')->with('category', 'cat')->once()->andReturnSelf();
         $mockDqb->shouldReceive('orderBy')->with('m.displayOrder')->once()->andReturnSelf();
         $mockDqb->shouldReceive('addOrderBy')->with('m.description')->once()->andReturnSelf();
 
         $mockDqb->shouldReceive('getQuery')
             ->andReturn(
-                m::mock()
+                m::mock(\Doctrine\ORM\Query::class)
                 ->shouldReceive('setHint')
                 ->with(
                     \Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER,

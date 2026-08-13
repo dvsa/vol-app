@@ -35,8 +35,9 @@ final class OtherLicenceTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('ol.transportManager', ':tmId')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('ol.transportManager', ':tmId');
+        $mockQb->shouldReceive('expr->eq')->with('ol.transportManager', ':tmId')->once()->andReturn($expr);
+        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('tmId', 834)->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
@@ -53,8 +54,9 @@ final class OtherLicenceTest extends RepositoryTestCase
         $mockQ = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
         $mockQ->shouldReceive('getTransportManager')->with()->twice()->andReturn(33);
 
-        $mockQb->shouldReceive('expr->eq')->with('ol.transportManager', ':tmId')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('ol.transportManager', ':tmId');
+        $mockQb->shouldReceive('expr->eq')->with('ol.transportManager', ':tmId')->once()->andReturn($expr);
+        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('tmId', 33)->once();
 
         $this->sut->applyListFilters($mockQb, $mockQ);
@@ -68,8 +70,9 @@ final class OtherLicenceTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('withRefdata')->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('ol.transportManagerApplication', ':id')->once()->andReturn('tma');
-        $mockQb->shouldReceive('andWhere')->with('tma')->once()->andReturnSelf();
+        $tma = $this->mockExprEq('ol.transportManagerApplication', ':id');
+        $mockQb->shouldReceive('expr->eq')->with('ol.transportManagerApplication', ':id')->once()->andReturn($tma);
+        $mockQb->shouldReceive('andWhere')->with($tma)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('id', 1)->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);
@@ -84,8 +87,9 @@ final class OtherLicenceTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('withRefdata')->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('ol.transportManagerLicence', ':id')->once()->andReturn('tml');
-        $mockQb->shouldReceive('andWhere')->with('tml')->once()->andReturnSelf();
+        $tml = $this->mockExprEq('ol.transportManagerLicence', ':id');
+        $mockQb->shouldReceive('expr->eq')->with('ol.transportManagerLicence', ':id')->once()->andReturn($tml);
+        $mockQb->shouldReceive('andWhere')->with($tml)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('id', 1)->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);

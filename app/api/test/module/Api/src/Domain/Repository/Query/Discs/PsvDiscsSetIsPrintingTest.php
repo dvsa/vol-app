@@ -47,9 +47,9 @@ final class PsvDiscsSetIsPrintingTest extends AbstractDbQueryTestCase
     {
         yield [
             ['isPrinting' => 1, 'ids' => [1,2]],
-            ['isPrinting' => \PDO::PARAM_INT, 'ids' => Connection::PARAM_INT_ARRAY],
+            ['isPrinting' => \PDO::PARAM_INT, 'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER],
             ['isPrinting' => 1, 'ids' => [1,2]],
-            ['isPrinting' => \PDO::PARAM_INT, 'ids' => Connection::PARAM_INT_ARRAY]
+            ['isPrinting' => \PDO::PARAM_INT, 'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
         ];
     }
 

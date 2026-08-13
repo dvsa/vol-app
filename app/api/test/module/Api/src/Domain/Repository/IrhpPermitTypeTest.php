@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
+use Doctrine\ORM\Query;
+
 use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitType;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermit as IrhpPermitEntity;
 use Mockery as m;
@@ -29,7 +31,7 @@ final class IrhpPermitTypeTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -56,7 +58,7 @@ final class IrhpPermitTypeTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -69,12 +71,12 @@ final class IrhpPermitTypeTest extends RepositoryTestCase
             . 'INNER JOIN ipt.irhpPermitStocks ips '
             . 'INNER JOIN ips.irhpPermitRanges ipr '
             . 'INNER JOIN ipr.irhpPermits ip '
-            . 'AND ip.status IN [[['
+            . 'AND ip.status IN([[['
                 . '"' . IrhpPermitEntity::STATUS_PENDING . '",'
                 . '"' . IrhpPermitEntity::STATUS_AWAITING_PRINTING . '",'
                 . '"' . IrhpPermitEntity::STATUS_PRINTING . '",'
                 . '"' . IrhpPermitEntity::STATUS_ERROR . '"'
-            . ']]] '
+            . ']]]) '
             . 'ORDER BY rd.description ASC';
 
         $this->assertEquals($expectedQuery, $this->query);

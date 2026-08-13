@@ -26,9 +26,17 @@ final class DataRetentionRuleTest extends RepositoryTestCase
     {
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('expr->eq')->with('m.isEnabled', 1)->once()->andReturn('expr1');
-        $qb->shouldReceive('expr->isNull')->with('m.deletedDate')->once()->andReturn('expr1');
-        $qb->shouldReceive('andWhere')->with('expr1')->twice()->andReturnSelf();
+        $expr1 = $this->mockExprEq('m.isEnabled', 1);
+        $qb->shouldReceive('expr->eq')->with('m.isEnabled', 1)->once()->andReturn($expr1);
+
+        $expr2 = 'm.deletedDate IS NULL';
+        $qb->shouldReceive('expr->isNull')
+            ->with('m.deletedDate')
+            ->once()
+            ->andReturn($expr2);
+
+        $qb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
+        $qb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
         $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn(['RESULT']);
 
         $this->mockCreateQueryBuilder($qb);
@@ -69,11 +77,22 @@ final class DataRetentionRuleTest extends RepositoryTestCase
 
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('expr->eq')->with('m.isEnabled', 1)->once()->andReturn('expr1');
-        $qb->shouldReceive('expr->eq')->with('m.actionType', ':actionType')->once()->andReturn('expr1');
-        $qb->shouldReceive('expr->isNull')->with('m.deletedDate')->once()->andReturn('expr1');
-        $qb->shouldReceive('andWhere')->with('expr1')->times(3)->andReturnSelf();
-        $qb->shouldReceive('setParameter')->with('actionType', 'Review')->once()->andReturn('expr1');
+        $expr1 = $this->mockExprEq('m.isEnabled', 1);
+        $qb->shouldReceive('expr->eq')->with('m.isEnabled', 1)->once()->andReturn($expr1);
+
+        $expr2 = $this->mockExprEq('m.actionType', ':actionType');
+        $qb->shouldReceive('expr->eq')->with('m.actionType', ':actionType')->once()->andReturn($expr2);
+
+        $expr3 = 'm.deletedDate IS NULL';
+        $qb->shouldReceive('expr->isNull')
+            ->with('m.deletedDate')
+            ->once()
+            ->andReturn($expr3);
+
+        $qb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
+        $qb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
+        $qb->shouldReceive('andWhere')->with($expr3)->once()->andReturnSelf();
+        $qb->shouldReceive('setParameter')->with('actionType', 'Review')->once()->andReturnSelf();
         $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn(['RESULT']);
 
         $this->mockCreateQueryBuilder($qb);

@@ -27,7 +27,7 @@ final class TeamTest extends RepositoryTestCase
         $queryData = ['trafficAreas' => $trafficAreas];
         $query = TeamListByTrafficArea::create($queryData);
 
-        $expression = 'expr';
+        $expression = m::mock(\Doctrine\ORM\Query\Expr\Func::class);
         $queryBuilder = m::mock(QueryBuilder::class);
         $queryBuilder->expects('expr->in')->with('m.trafficArea', ':byTrafficAreas')->andReturn($expression);
         $queryBuilder->expects('setParameter')->with('byTrafficAreas', $trafficAreas);
@@ -48,8 +48,9 @@ final class TeamTest extends RepositoryTestCase
             ->once()
             ->andReturn($mockQb);
 
-        $mockQb->shouldReceive('expr->eq')->with('m.name', ':name')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('m.name', ':name');
+        $mockQb->shouldReceive('expr->eq')->with('m.name', ':name')->once()->andReturn($expr);
+        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('name', $name)->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->andReturn(['result']);

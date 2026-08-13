@@ -43,8 +43,9 @@ final class ComplaintTest extends RepositoryTestCase
 
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('expr->eq')->with('m.isCompliance', ':byIsCompliance')->once()->andReturn('EXPR');
-        $qb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('m.isCompliance', ':byIsCompliance');
+        $qb->shouldReceive('expr->eq')->with('m.isCompliance', ':byIsCompliance')->once()->andReturn($expr);
+        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('byIsCompliance', false)->once()->andReturnSelf();
         $qb->shouldReceive('getQuery->getResult')->with(Query::HYDRATE_OBJECT)->andReturn($results);
 
@@ -101,8 +102,9 @@ final class ComplaintTest extends RepositoryTestCase
         $query->shouldReceive('getLicence')->with()->andReturn(null);
         $query->shouldReceive('getApplication')->with()->andReturn(null);
 
-        $qb->shouldReceive('expr->eq')->with('m.case', ':byCase')->once()->andReturn('EXPR');
-        $qb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('m.case', ':byCase');
+        $qb->shouldReceive('expr->eq')->with('m.case', ':byCase')->once()->andReturn($expr);
+        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('byCase', 213)->once()->andReturnSelf();
 
         $sut->applyListFilters($qb, $query);
@@ -121,8 +123,9 @@ final class ComplaintTest extends RepositoryTestCase
         $query->shouldReceive('getLicence')->with()->andReturn(null);
         $query->shouldReceive('getApplication')->with()->andReturn(null);
 
-        $qb->shouldReceive('expr->eq')->with('m.isCompliance', ':isCompliance')->once()->andReturn('EXPR');
-        $qb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('m.isCompliance', ':isCompliance');
+        $qb->shouldReceive('expr->eq')->with('m.isCompliance', ':isCompliance')->once()->andReturn($expr);
+        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('isCompliance', 324)->once()->andReturnSelf();
 
         $sut->applyListFilters($qb, $query);
@@ -141,8 +144,9 @@ final class ComplaintTest extends RepositoryTestCase
         $query->shouldReceive('getLicence')->with()->andReturn(33);
         $query->shouldReceive('getApplication')->with()->andReturn(null);
 
-        $qb->shouldReceive('expr->eq')->with('ca.licence', ':licence')->once()->andReturn('EXPR');
-        $qb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('ca.licence', ':licence');
+        $qb->shouldReceive('expr->eq')->with('ca.licence', ':licence')->once()->andReturn($expr);
+        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('licence', 33)->once()->andReturnSelf();
 
         $mockQb = m::mock(\Dvsa\Olcs\Api\Domain\QueryBuilder::class);
@@ -165,8 +169,9 @@ final class ComplaintTest extends RepositoryTestCase
         $query->shouldReceive('getLicence')->with()->andReturn(null);
         $query->shouldReceive('getApplication')->with()->andReturn(133);
 
-        $qb->shouldReceive('expr->eq')->with('ca.application', ':application')->once()->andReturn('EXPR');
-        $qb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('ca.application', ':application');
+        $qb->shouldReceive('expr->eq')->with('ca.application', ':application')->once()->andReturn($expr);
+        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('application', 133)->once()->andReturnSelf();
 
         $mockQb = m::mock(\Dvsa\Olcs\Api\Domain\QueryBuilder::class);

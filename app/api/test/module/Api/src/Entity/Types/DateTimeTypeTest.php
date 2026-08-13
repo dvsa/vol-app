@@ -24,7 +24,6 @@ final class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
         $this->sut = DateTimeType::getType('datetime');
 
         $this->mockPlatform = m::mock(AbstractPlatform::class);
-        $this->mockPlatform->shouldReceive('getDateTimeFormatString')->andReturn('d-m-Y H:i:s');
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpConvertToPhpValue')]
@@ -63,9 +62,15 @@ final class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
     public static function dpConvertToDatabaseValue(): \Iterator
     {
         yield [null, null];
-        yield [new \DateTime('2016-06-03 15:43', new \DateTimeZone('UTC')), '03-06-2016 15:43:00'];
-        yield [new \DateTime('2016-06-03 15:43', new \DateTimeZone('Europe/London')), '03-06-2016 14:43:00'];
-        yield ['2016-06-03 13:03:55+0100', '03-06-2016 12:03:55'];
-        yield ['2016-06-03 13:03:55', '03-06-2016 13:03:55'];
+        yield [
+            new \DateTime('2016-06-03 15:43', new \DateTimeZone('UTC')),
+            '2016-06-03 15:43:00'
+        ];
+        yield [
+            new \DateTime('2016-06-03 15:43', new \DateTimeZone('Europe/London')),
+            '2016-06-03 14:43:00'
+        ];
+        yield ['2016-06-03 13:03:55+0100', '2016-06-03 12:03:55'];
+        yield ['2016-06-03 13:03:55', '2016-06-03 13:03:55'];
     }
 }

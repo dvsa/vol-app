@@ -64,7 +64,8 @@ final class CasesTest extends RepositoryTestCase
             ->getMock();
 
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.transportManager', ':byTransportManager')->once()->andReturnSelf();
+        $expr = new \Doctrine\ORM\Query\Expr();
+        $mockQb->shouldReceive('expr')->andReturn($expr);
         $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('byTransportManager', $transportManager)->once()->andReturnSelf();
 
@@ -84,7 +85,8 @@ final class CasesTest extends RepositoryTestCase
             ->getMock();
 
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':byLicence')->once()->andReturnSelf();
+        $expr = new \Doctrine\ORM\Query\Expr();
+        $mockQb->shouldReceive('expr')->andReturn($expr);
         $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('byLicence', $licence)->once()->andReturnSelf();
 
@@ -123,7 +125,7 @@ final class CasesTest extends RepositoryTestCase
             ' AND m.closedDate IS NULL' .
             ' AND a.status = [[unit_AppStatus]]' .
             ' AND l.status = [[unit_LicStatus]]' .
-            ' AND ta.id IN [[["unit_TA"]]]';
+            ' AND ta.id IN([[["unit_TA"]]])';
 
         $this->assertEquals($expected, $this->query);
     }
@@ -152,7 +154,7 @@ final class CasesTest extends RepositoryTestCase
         $expected = '{{QUERY}}' .
             ' SELECT CONCAT(ct.description, m.id) as HIDDEN caseType' .
             ' AND m.closedDate IS NULL' .
-            ' AND (ta.id IS NULL OR ta.id IN [[{"1":"A","2":"B"}]])';
+            ' AND ta.id IS NULL OR ta.id IN([[{"1":"A","2":"B"}]])';
 
         $this->assertEquals($expected, $this->query);
     }
@@ -312,7 +314,7 @@ final class CasesTest extends RepositoryTestCase
             ->shouldReceive('with')->with('caseType', 'ct')->times(2)->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -337,7 +339,7 @@ final class CasesTest extends RepositoryTestCase
             ->shouldReceive('with')->with('application', 'a')->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn([$this->createStub(CasesEntity::class), $this->createStub(CasesEntity::class)])
                 ->getMock()

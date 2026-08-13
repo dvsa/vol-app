@@ -29,12 +29,13 @@ final class CommunityLicWithdrawalReasonTest extends RepositoryTestCase
     public function testFetchByWithdrawalIds(): void
     {
         $ids = [1];
-        $mockQb = m::mock();
+        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $foo = $this->mockExprIn('m.communityLicWithdrawal', ':communityLicWithdrawal');
         $mockQb->shouldReceive('expr->in')
             ->with('m.communityLicWithdrawal', ':communityLicWithdrawal')
             ->once()
-            ->andReturn('foo');
-        $mockQb->shouldReceive('andWhere')->with('foo')->once()->andReturnSelf();
+            ->andReturn($foo);
+        $mockQb->shouldReceive('andWhere')->with($foo)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('communityLicWithdrawal', $ids)->once()->andReturnSelf();
 
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($mockQb);

@@ -27,16 +27,21 @@ final class CommunityLicWithdrawalTest extends RepositoryTestCase
     }
 
     public function testFetchByCommunityLicIds(): void
-    {
-        $ids = [1];
-        $mockQb = m::mock();
-        $mockQb->shouldReceive('expr->in')->with('m.communityLic', ':communityLic')->once()->andReturn('foo');
-        $mockQb->shouldReceive('andWhere')->with('foo')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('communityLic', $ids)->once()->andReturnSelf();
+{
+    $ids = [1];
+    $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($mockQb);
-        $mockQb->shouldReceive('getQuery->execute')->once()->andReturn('result');
+    $foo = $this->mockExprIn('m.communityLic', ':communityLic');
+    $mockQb->shouldReceive('expr->in')
+        ->with('m.communityLic', ':communityLic')
+        ->once()
+        ->andReturn($foo);
+    $mockQb->shouldReceive('andWhere')->with($foo)->once()->andReturnSelf();
+    $mockQb->shouldReceive('setParameter')->with('communityLic', $ids)->once()->andReturnSelf();
 
-        $this->assertEquals('result', $this->sut->fetchByCommunityLicIds($ids));
-    }
+    $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($mockQb);
+    $mockQb->shouldReceive('getQuery->execute')->once()->andReturn('result');
+
+    $this->assertEquals('result', $this->sut->fetchByCommunityLicIds($ids));
+}
 }

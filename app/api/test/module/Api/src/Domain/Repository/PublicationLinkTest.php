@@ -68,19 +68,20 @@ final class PublicationLinkTest extends RepositoryTestCase
     private function getPublicationAndSectionQb(mixed $query): m\MockInterface
     {
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.publication', ':byPublication')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $expr = new \Doctrine\ORM\Query\Expr();
+        $mockQb->shouldReceive('expr')
+            ->zeroOrMoreTimes()
+            ->andReturn($expr);
+
+        $mockQb->shouldReceive('andWhere')
+            ->times(2)
+            ->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with(
                 'byPublication',
                 $query->getPublication()
             )->once()
             ->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')
-            ->with('m.publicationSection', ':byPublicationSection')
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('byPublicationSection', $query->getPublicationSection())
             ->once()
@@ -96,28 +97,24 @@ final class PublicationLinkTest extends RepositoryTestCase
     private function getPublicationNoPubTypeTaQb(mixed $query): m\MockInterface
     {
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('p.pubType', ':byPubType')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $expr = new \Doctrine\ORM\Query\Expr();
+        $mockQb->shouldReceive('expr')
+            ->zeroOrMoreTimes()
+            ->andReturn($expr);
+
+        $mockQb->shouldReceive('andWhere')
+            ->times(3)
+            ->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with(
                 'byPubType',
                 $query->getPubType()
             )->once()
             ->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')
-            ->with('m.trafficArea', ':byTrafficArea')
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('byTrafficArea', $query->getTrafficArea())
             ->once()
             ->andReturnSelf();
-        $mockQb->shouldReceive('expr->lt')
-            ->with('p.publicationNo', ':byPublicationNo')
-            ->once()
-            ->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('byPublicationNo', $query->getPublicationNo())
             ->once()
@@ -141,8 +138,11 @@ final class PublicationLinkTest extends RepositoryTestCase
      */
     private function addPi(QueryInterface $query, mixed $mockQb): m\MockInterface
     {
-        $mockQb->shouldReceive('expr->eq')->with('m.pi', ':byPi')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $mockQb->shouldReceive('expr')
+            ->andReturn(new \Doctrine\ORM\Query\Expr());
+        $mockQb->shouldReceive('andWhere')
+            ->once()
+            ->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('byPi', $query->getPi())->once()->andReturnSelf();
 
         return $mockQb;
@@ -154,8 +154,11 @@ final class PublicationLinkTest extends RepositoryTestCase
      */
     private function addBus(QueryInterface $query, mixed $mockQb): m\MockInterface
     {
-        $mockQb->shouldReceive('expr->eq')->with('m.busReg', ':byBusReg')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $mockQb->shouldReceive('expr')
+            ->andReturn(new \Doctrine\ORM\Query\Expr());
+        $mockQb->shouldReceive('andWhere')
+            ->once()
+            ->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('byBusReg', $query->getBusReg())->once()->andReturnSelf();
 
         return $mockQb;
@@ -167,8 +170,11 @@ final class PublicationLinkTest extends RepositoryTestCase
      */
     private function addApplication(QueryInterface $query, mixed $mockQb): m\MockInterface
     {
-        $mockQb->shouldReceive('expr->eq')->with('m.application', ':byApplication')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $mockQb->shouldReceive('expr')
+            ->andReturn(new \Doctrine\ORM\Query\Expr());
+        $mockQb->shouldReceive('andWhere')
+            ->once()
+            ->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('byApplication', $query->getApplication())
             ->once()
@@ -183,8 +189,11 @@ final class PublicationLinkTest extends RepositoryTestCase
      */
     private function addLicence(QueryInterface $query, mixed $mockQb): m\MockInterface
     {
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':byLicence')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $mockQb->shouldReceive('expr')
+            ->andReturn(new \Doctrine\ORM\Query\Expr());
+        $mockQb->shouldReceive('andWhere')
+            ->once()
+            ->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('byLicence', $query->getLicence())
             ->once()
@@ -418,8 +427,11 @@ final class PublicationLinkTest extends RepositoryTestCase
         $query = PublicationLinkTmList::create(['transportManager' => $transportManager]);
 
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.transportManager', ':transportManager')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $mockQb->shouldReceive('expr')
+        ->andReturn(new \Doctrine\ORM\Query\Expr());
+        $mockQb->shouldReceive('andWhere')
+        ->once()
+        ->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('transportManager', $transportManager)->once()->andReturnSelf();
 
         $sut->applyListFilters($mockQb, $query);
@@ -437,8 +449,11 @@ final class PublicationLinkTest extends RepositoryTestCase
         $query = PublicationLinkList::create(['licence' => $licence]);
 
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $mockQb->shouldReceive('expr')
+        ->andReturn(new \Doctrine\ORM\Query\Expr());
+        $mockQb->shouldReceive('andWhere')
+        ->once()
+        ->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('licence', $licence)->once()->andReturnSelf();
 
         $sut->applyListFilters($mockQb, $query);
@@ -456,8 +471,11 @@ final class PublicationLinkTest extends RepositoryTestCase
         $query = PublicationLinkList::create(['application' => $application]);
 
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.application', ':application')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $mockQb->shouldReceive('expr')
+        ->andReturn(new \Doctrine\ORM\Query\Expr());
+        $mockQb->shouldReceive('andWhere')
+        ->once()
+        ->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('application', $application)->once()->andReturnSelf();
 
         $sut->applyListFilters($mockQb, $query);

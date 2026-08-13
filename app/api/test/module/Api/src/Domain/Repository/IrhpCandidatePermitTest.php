@@ -129,7 +129,7 @@ final class IrhpCandidatePermitTest extends RepositoryTestCase
         $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
 
         $expectedQuery = 'BLAH '
-            . 'AND ia.status IN [[["' . RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION . '"]]] '
+            . 'AND ia.status IN([[["' . RefData::PERMIT_APP_STATUS_UNDER_CONSIDERATION . '"]]]) '
             . 'AND ipa.irhpApplication = [[' . self::IRHP_APPLICATION_ID . ']]';
         $this->assertEquals($expectedQuery, $this->query);
     }

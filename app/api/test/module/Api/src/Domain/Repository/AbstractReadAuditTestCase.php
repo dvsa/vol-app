@@ -41,7 +41,7 @@ abstract class AbstractReadAuditTestCase extends RepositoryTestCase
 
     protected function commonTestDeleteOlderThan(mixed $entityClass): void
     {
-        $query = m::mock()
+        $query = m::mock(\Doctrine\ORM\Query::class)
             ->shouldReceive('setParameter')
             ->once()
             ->with('oldestDate', '2015-01-01')

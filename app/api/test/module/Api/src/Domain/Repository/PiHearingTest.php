@@ -35,7 +35,7 @@ final class PiHearingTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULT'])
                 ->getMock()
@@ -147,7 +147,7 @@ final class PiHearingTest extends RepositoryTestCase
         $expectedQuery = 'BLAH '
             . 'AND m.hearingDate >= [[2016-02-01T00:00:00+00:00]] '
             . 'AND m.hearingDate <= [[2016-02-10T23:59:59+00:00]] '
-            . 'AND v.trafficArea IN ["B"]';
+            . 'AND v.trafficArea IN(["B"])';
         $this->assertEquals($expectedQuery, $this->query);
     }
 
@@ -187,7 +187,7 @@ final class PiHearingTest extends RepositoryTestCase
         $expectedQuery = 'BLAH '
             . 'AND m.hearingDate >= [[2016-02-01T00:00:00+00:00]] '
             . 'AND m.hearingDate <= [[2016-02-10T23:59:59+00:00]] '
-            . 'AND (m.venue IS NULL OR v.trafficArea IN ["B"])';
+            . 'AND m.venue IS NULL OR v.trafficArea IN(["B"])';
         $this->assertEquals($expectedQuery, $this->query);
     }
 }

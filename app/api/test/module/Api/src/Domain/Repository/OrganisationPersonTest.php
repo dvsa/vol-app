@@ -36,7 +36,7 @@ final class OrganisationPersonTest extends RepositoryTestCase
 
         $this->mockCreateQueryBuilder($mockQb);
 
-        $mockQuery = m::mock();
+        $mockQuery = m::mock(\Doctrine\ORM\Query::class);
 
         $mockQuery->shouldReceive('execute')
             ->once()
@@ -63,7 +63,7 @@ final class OrganisationPersonTest extends RepositoryTestCase
             ->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -81,7 +81,7 @@ final class OrganisationPersonTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(AbstractQuery::class)->shouldReceive('getSingleScalarResult')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('getSingleScalarResult')
                 ->andReturn('RESULT')
                 ->getMock()
         );
@@ -104,7 +104,7 @@ final class OrganisationPersonTest extends RepositoryTestCase
             ->shouldReceive('with')->with('p.title')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -128,7 +128,7 @@ final class OrganisationPersonTest extends RepositoryTestCase
             ->shouldReceive('with')->with('p.title')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()

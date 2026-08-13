@@ -179,7 +179,7 @@ final class InternationalGoodsReportTest extends AbstractDbQueryTestCase
                 'licStatusTerminated' => LicenceEntity::LICENCE_STATUS_TERMINATED
             ],
             [
-                'licenceStatuses' => DoctrineConnection::PARAM_STR_ARRAY,
+                'licenceStatuses' => \Doctrine\DBAL\ArrayParameterType::STRING,
                 'goodsOrPsv' => \PDO::PARAM_STR,
                 'licenceType' => \PDO::PARAM_STR,
                 'rdLicStatus' => \PDO::PARAM_STR,

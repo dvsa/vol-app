@@ -33,7 +33,7 @@ final class TxcInboxTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -58,7 +58,7 @@ final class TxcInboxTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('busReg', 'b')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -87,7 +87,7 @@ final class TxcInboxTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('busReg', 'b')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -116,7 +116,7 @@ final class TxcInboxTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('busReg', 'b')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -160,7 +160,7 @@ final class TxcInboxTest extends RepositoryTestCase
 
         // organisation clause
         $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
+            ->andReturn(new \Doctrine\ORM\Query\Expr())
             ->shouldReceive('eq')
             ->with('m.localAuthority', ':localAuthority')
             ->andReturnSelf()
@@ -172,7 +172,7 @@ final class TxcInboxTest extends RepositoryTestCase
 
         // status clause
         $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
+            ->andReturn(new \Doctrine\ORM\Query\Expr())
             ->shouldReceive('eq')
             ->with('b.status', ':status')
             ->andReturnSelf()
@@ -184,7 +184,7 @@ final class TxcInboxTest extends RepositoryTestCase
 
         // subType clause
         $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
+            ->andReturn(new \Doctrine\ORM\Query\Expr())
             ->shouldReceive('eq')
             ->with('e.ebsrSubmissionType', ':ebsrSubmissionType')
             ->andReturnSelf()
@@ -196,7 +196,7 @@ final class TxcInboxTest extends RepositoryTestCase
 
         // fileRead clause
         $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
+            ->andReturn(new \Doctrine\ORM\Query\Expr())
             ->shouldReceive('eq')
             ->with('m.fileRead', '0')
             ->andReturnSelf()
@@ -219,7 +219,7 @@ final class TxcInboxTest extends RepositoryTestCase
         $qb->shouldReceive('where')->with('m.routeDocument = :documentId')->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -239,14 +239,14 @@ final class TxcInboxTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
         );
         $this->assertEquals(['RESULTS'], $this->sut->fetchByIdsForLocalAuthority([2], 4));
 
-        $expectedQuery = 'BLAH AND m.localAuthority = [[4]] AND m.id IN [2]';
+        $expectedQuery = 'BLAH AND m.localAuthority = [[4]] AND m.id IN([2])';
         $this->assertEquals($expectedQuery, $this->query);
     }
 

@@ -3,7 +3,7 @@
 namespace Dvsa\Olcs\Api\Entity\Types;
 
 use Doctrine\DBAL\Types\Exception\InvalidFormat;
-use Doctrine\DBAL\Types\DateType as DoctrineDateType;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 
@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-class DateType extends DoctrineDateType
+class DateType extends Type
 {
     /**
      * Convert to PHP Value
@@ -71,5 +71,13 @@ class DateType extends DoctrineDateType
 
         return ($value !== null)
             ? $value->format('Y-m-d') : null;
+    }
+
+    #[\Override]
+    public function getSQLDeclaration(
+        array $column,
+        AbstractPlatform $platform
+    ): string {
+        return $platform->getDateTypeDeclarationSQL($column);
     }
 }

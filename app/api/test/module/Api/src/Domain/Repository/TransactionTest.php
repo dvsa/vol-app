@@ -39,7 +39,7 @@ final class TransactionTest extends RepositoryTestCase
             ->once()
             ->andReturn($results);
 
-        $where = m::mock();
+        $where = m::mock(\Doctrine\ORM\Query\Expr\Comparison::class);
         $qb->shouldReceive('expr->eq')
             ->with('t.reference', ':reference')
             ->andReturn($where);
@@ -88,8 +88,13 @@ final class TransactionTest extends RepositoryTestCase
         $this->em->shouldReceive('getReference')
             ->andReturnUsing(
                 function ($refData, $input) {
-                    unset($refData); // unused
-                    return $input;
+                    unset($refData);
+
+                    $reference = m::mock(\Dvsa\Olcs\Api\Entity\System\RefData::class);
+                    $reference->shouldReceive('getId')
+                        ->andReturn($input);
+
+                    return $reference;
                 }
             );
 
@@ -102,7 +107,7 @@ final class TransactionTest extends RepositoryTestCase
         $expectedQry = '{QUERY}'
             . ' AND t.type = [[trt_payment]]'
             . ' AND t.status = [[pay_s_os]]'
-            . ' AND t.paymentMethod IN [[["fpm_card_online","fpm_card_offline"]]]'
+            . ' AND t.paymentMethod IN([[["fpm_card_online","fpm_card_offline"]]])'
             . ' AND t.createdOn < [[' . $expectedDateTime . ']]';
 
         $this->assertEquals(['RESULTS'], $this->sut->fetchOutstandingCardPayments(60));

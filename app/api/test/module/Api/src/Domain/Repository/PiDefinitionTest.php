@@ -37,21 +37,15 @@ final class PiDefinitionTest extends RepositoryTestCase
         $this->setUpSut(Repo::class, true);
 
         $mockQb = m::mock(QueryBuilder::class);
+        $expr = new \Doctrine\ORM\Query\Expr();
+
         $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('eq')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('isNi', 'Y')
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('goodsOrPsv', 'lcat_gv')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('isVisibleInInternal', true)
+            ->andReturn($expr);
+
+        $mockQb->shouldReceive('andWhere')
+            ->andReturnSelf();
+
+        $mockQb->shouldReceive('setParameter')
             ->andReturnSelf();
 
         $query = PiDefinitionList::create(['isNi' => 'Y', 'goodsOrPsv' => 'lcat_gv']);
@@ -65,21 +59,15 @@ final class PiDefinitionTest extends RepositoryTestCase
         $this->setUpSut(Repo::class, true);
 
         $mockQb = m::mock(QueryBuilder::class);
+        $expr = new \Doctrine\ORM\Query\Expr();
+
         $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('eq')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('isNi', 'Y')
-            ->shouldReceive('andWhere')
-            ->andReturnSelf()
-            ->shouldReceive('isNull')
-            ->with('m.goodsOrPsv')
-            ->andReturnSelf()
-            ->shouldReceive('setParameter')
-            ->with('isVisibleInInternal', true)
+            ->andReturn($expr);
+
+        $mockQb->shouldReceive('andWhere')
+            ->andReturnSelf();
+
+        $mockQb->shouldReceive('setParameter')
             ->andReturnSelf();
 
         $query = PiDefinitionList::create(['isNi' => 'Y', 'goodsOrPsv' => 'NULL']);

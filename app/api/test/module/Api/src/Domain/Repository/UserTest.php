@@ -69,6 +69,14 @@ final class UserTest extends RepositoryTestCase
         $sut = m::mock(Repo::class);
 
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $expr = new \Doctrine\ORM\Query\Expr();
+        $mockQb->shouldReceive('expr')
+            ->zeroOrMoreTimes()
+            ->andReturn($expr);
+
+        $mockQb->shouldReceive('andWhere')
+            ->times(4)
+            ->andReturnSelf();
         $query = \Dvsa\Olcs\Api\Domain\Query\User\UserListSelfserve::create(
             [
                 'localAuthority' => 11,
@@ -78,14 +86,8 @@ final class UserTest extends RepositoryTestCase
             ]
         );
 
-        $mockQb->shouldReceive('andWhere')->with('localAuthority')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('u.localAuthority', ':localAuthority')->once()
-            ->andReturn('localAuthority');
         $mockQb->shouldReceive('setParameter')->with('localAuthority', 11)->once();
 
-        $mockQb->shouldReceive('andWhere')->with('partnerContactDetails')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('u.partnerContactDetails', ':partnerContactDetails')->once()
-            ->andReturn('partnerContactDetails');
         $mockQb->shouldReceive('setParameter')->with('partnerContactDetails', 22)->once();
 
         $mockQb->shouldReceive('join')
@@ -93,13 +95,9 @@ final class UserTest extends RepositoryTestCase
             ->once();
         $mockQb->shouldReceive('setParameter')->with('organisation', 43)->once();
 
-        $mockQb->shouldReceive('andWhere')->with('lastLoggedInFrom')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->gte')->with('u.lastLoginAt', ':lastLoggedInFrom')->once()
-            ->andReturn('lastLoggedInFrom');
         $mockQb->shouldReceive('setParameter')->with('lastLoggedInFrom', '2015-01-01')->once();
 
-        $mockQb->shouldReceive('expr->neq')->with('u.id', ':systemUser')->once()->andReturn('systemUser');
-        $mockQb->shouldReceive('andWhere')->with('systemUser')->once()->andReturnSelf();
+        $systemuser = $this->mockExprNeq('u.id', ':systemUser');
         $mockQb->shouldReceive('setParameter')->with('systemUser', IdentityProviderInterface::SYSTEM_USER)->once();
 
         $sut->applyListFilters($mockQb, $query);
@@ -113,6 +111,20 @@ final class UserTest extends RepositoryTestCase
         $sut = m::mock(Repo::class);
 
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $expr = new \Doctrine\ORM\Query\Expr();
+        $mockQb->shouldReceive('expr')
+            ->zeroOrMoreTimes()
+            ->andReturn($expr);
+
+        $mockQb->shouldReceive('andWhere')
+        ->with(
+            m::on(
+                static fn ($condition): bool =>
+                    $condition !== 'r.role IN (:roles)'
+            )
+        )
+        ->times(3)
+        ->andReturnSelf();
         $query = \Dvsa\Olcs\Transfer\Query\User\UserList::create(
             [
                 'organisation' => 43,
@@ -127,15 +139,9 @@ final class UserTest extends RepositoryTestCase
             ->once();
         $mockQb->shouldReceive('setParameter')->with('organisation', 43)->once();
 
-        $mockQb->shouldReceive('andWhere')->with('team')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('u.team', ':team')->once()
-            ->andReturn('team');
         $mockQb->shouldReceive('setParameter')->with('team', 112)->once();
-        $mockQb->shouldReceive('expr->isNotNull')->with('u.team')->andReturn('isInternal')->once();
-        $mockQb->shouldReceive('andWhere')->with('isInternal')->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->neq')->with('u.id', ':systemUser')->once()->andReturn('systemUser');
-        $mockQb->shouldReceive('andWhere')->with('systemUser')->once()->andReturnSelf();
+        $systemuser = $this->mockExprNeq('u.id', ':systemUser');
         $mockQb->shouldReceive('setParameter')->with('systemUser', IdentityProviderInterface::SYSTEM_USER)->once();
 
         $mockQb->shouldReceive('leftJoin')->with('u.roles', 'r')->once();
@@ -150,6 +156,14 @@ final class UserTest extends RepositoryTestCase
         $sut = m::mock(Repo::class);
 
         $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $expr = new \Doctrine\ORM\Query\Expr();
+        $mockQb->shouldReceive('expr')
+            ->zeroOrMoreTimes()
+            ->andReturn($expr);
+
+        $mockQb->shouldReceive('andWhere')
+            ->times(5)
+            ->andReturnSelf();
         $trafficAreas = ['A', 'B'];
 
         $query = UserListInternalByTrafficArea::create(
@@ -161,22 +175,12 @@ final class UserTest extends RepositoryTestCase
             ]
         );
 
-        $mockQb->shouldReceive('andWhere')->with('team')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('u.team', ':team')->once()
-            ->andReturn('team');
         $mockQb->shouldReceive('setParameter')->with('team', 112)->once();
-        $mockQb->shouldReceive('expr->isNotNull')->with('u.team')->andReturn('isInternal')->once();
-        $mockQb->shouldReceive('andWhere')->with('isInternal')->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->neq')->with('u.id', ':systemUser')->once()->andReturn('systemUser');
-        $mockQb->shouldReceive('andWhere')->with('systemUser')->once()->andReturnSelf();
+        $systemuser = $this->mockExprNeq('u.id', ':systemUser');
         $mockQb->shouldReceive('setParameter')->with('systemUser', IdentityProviderInterface::SYSTEM_USER)->once();
 
         $trafficAreaExpr = 'trafficAreaExpr';
-        $mockQb->expects('expr->in')
-            ->with('t.trafficArea', ':trafficAreas')
-            ->andReturn($trafficAreaExpr);
-        $mockQb->expects('andWhere')->with($trafficAreaExpr)->andReturnSelf();
         $mockQb->expects('setParameter')->with('trafficAreas', $trafficAreas);
 
         $em = m::mock(EntityManager::class);
@@ -323,7 +327,7 @@ final class UserTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -344,8 +348,9 @@ final class UserTest extends RepositoryTestCase
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('u')->once()->andReturn($mockQb);
 
         $mockQb->shouldReceive('select')->with('count(u.id)')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('u.team', ':team')->once()->andReturn('expr');
-        $mockQb->shouldReceive('andWhere')->with('expr')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('u.team', ':team');
+        $mockQb->shouldReceive('expr->eq')->with('u.team', ':team')->once()->andReturn($expr);
+        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('team', 1)->once()->andReturnSelf();
         $mockQb->shouldReceive('getQuery->getSingleScalarResult')->once()->andReturn('result');
 
