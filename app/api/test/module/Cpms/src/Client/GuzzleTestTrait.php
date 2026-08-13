@@ -7,6 +7,7 @@ namespace Dvsa\OlcsTest\Cpms\Client;
 use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Middleware;
 use GuzzleHttp\Psr7\Response;
 
 trait GuzzleTestTrait
@@ -26,7 +27,7 @@ trait GuzzleTestTrait
         $this->mockHandler = new MockHandler();
         $handler = HandlerStack::create($this->mockHandler);
         if ($history !== null) {
-            $handler->push(\GuzzleHttp\Middleware::history($history));
+            $handler->push(Middleware::history($history));
         }
         $client = new Client(['handler' => $handler]);
         return $client;

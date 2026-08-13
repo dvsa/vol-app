@@ -33,26 +33,9 @@ final class ApiServiceFactoryTest extends TestCase
 
     public function testCreateApiServiceWithGatewayTokenProviderAndProxy(): void
     {
-        $config = [
-            'cpms_api' => [
-                'rest_client' => [
-                    'options' => [
-                        'version' => 2,
-                        'domain' => 'gw.cpms.domain',
-                        'grant_type' => 'client_credentials',
-                        'timeout' => 15.0,
-                        'headers' => [
-                            'Accept' => 'application/json',
-                        ],
-                        'proxy' => 'http://proxy.local:3128',
-                    ],
-                ],
-            ],
-            'cpms_credentials' => [
-                'client_id' => 'a-client-id',
-                'client_secret' => 'a-client-secret',
-            ],
-        ];
+        $config = self::legacyConfig();
+        $config['cpms_api']['rest_client']['options']['domain'] = 'gw.cpms.domain';
+        $config['cpms_api']['rest_client']['options']['proxy'] = 'http://proxy.local:3128';
 
         $tokenProvider = m::mock(GatewayTokenProviderInterface::class);
 

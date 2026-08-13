@@ -26,6 +26,12 @@ class ApiServiceFactory implements FactoryInterface
         $toggleService = $container->get(ToggleService::class);
 
         if ($toggleService->isEnabled(FeatureToggle::CPMS_HYBRID_GATEWAY)) {
+            if (empty($config['cpms_api']['gateway'])) {
+                throw new \RuntimeException(
+                    'CPMS hybrid gateway toggle is enabled but cpms_api.gateway config is missing'
+                );
+            }
+
             $gatewayConfig = $config['cpms_api']['gateway'];
             $config['cpms_api']['rest_client']['options']['domain'] = $gatewayConfig['domain'];
             $config['cpms_api']['rest_client']['options']['proxy'] = $gatewayConfig['proxy'] ?? null;

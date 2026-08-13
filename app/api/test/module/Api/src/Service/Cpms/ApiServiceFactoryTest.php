@@ -60,6 +60,17 @@ final class ApiServiceFactoryTest extends TestCase
         $this->assertSame('http://proxy.local:3128', $apiService->getOptions()->getProxy());
     }
 
+    public function testInvokeToggleOnWithoutGatewayConfigThrows(): void
+    {
+        $mockSl = $this->mockContainer(self::baseConfig(), toggleEnabled: true);
+
+        $sut = new ApiServiceFactory();
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('cpms_api.gateway config is missing');
+        $sut->__invoke($mockSl, ApiService::class);
+    }
+
     private function mockContainer(array $config, bool $toggleEnabled): m\MockInterface
     {
         $mockAuth = m::mock(AuthorizationService::class);
