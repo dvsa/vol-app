@@ -76,9 +76,15 @@ final class ContactDetailsTest extends RepositoryTestCase
         $sut = m::mock(Repo::class)->makePartial()->shouldAllowMockingProtectedMethods();
 
         $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockDqb->shouldReceive('expr->eq')->with('m.contactType', ':contactType')->once()
-            ->andReturn('EXPR');
-        $mockDqb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('m.contactType', ':contactType');
+        $mockDqb->shouldReceive('expr->eq')
+            ->with('m.contactType', ':contactType')
+            ->once()
+            ->andReturn($expr);
+        $mockDqb->shouldReceive('andWhere')
+            ->with($expr)
+            ->once()
+            ->andReturnSelf();
         $mockDqb->shouldReceive('setParameter')->with('contactType', 'ct_partner')->once();
 
         $params = [

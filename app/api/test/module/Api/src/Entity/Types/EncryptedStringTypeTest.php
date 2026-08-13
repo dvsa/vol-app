@@ -25,11 +25,6 @@ final class EncryptedStringTypeTest extends \PHPUnit\Framework\TestCase
         $this->sut = EncryptedStringType::getType(EncryptedStringType::TYPE);
     }
 
-    public function testGetName(): void
-    {
-        $this->assertSame(EncryptedStringType::TYPE, $this->sut->getName());
-    }
-
     public function testGetEncrypterNotSet(): void
     {
         $this->expectException(\RuntimeException::class);

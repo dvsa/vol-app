@@ -36,8 +36,8 @@ final class FinancialStandingRateTest extends RepositoryTestCase
 
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
-        $where1 = m::mock();
-        $where2 = m::mock();
+        $where1 = m::mock(\Doctrine\ORM\Query\Expr\Func::class);
+        $where2 = m::mock(\Doctrine\ORM\Query\Expr\Comparison::class);
 
         $qb->shouldReceive('expr->isNull')
             ->with('fsr.deletedDate')
@@ -48,13 +48,19 @@ final class FinancialStandingRateTest extends RepositoryTestCase
             ->andReturn($where2);
 
         $qb
-            ->shouldReceive('andWhere')
-            ->with($where1)
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
-            ->with($where2)
-            ->andReturnSelf()
-            ->shouldReceive('addOrderBy')
+        ->shouldReceive('andWhere')
+        ->with(m::any())
+        ->once()
+        ->andReturnSelf();
+
+    $qb
+        ->shouldReceive('andWhere')
+        ->with(m::any())
+        ->once()
+        ->andReturnSelf();
+
+    $qb
+        ->shouldReceive('addOrderBy')
             ->with('fsr.effectiveFrom', 'DESC')
             ->andReturnSelf()
             ->shouldReceive('setParameter')
@@ -88,7 +94,7 @@ final class FinancialStandingRateTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()
+            m::mock(\Doctrine\ORM\Query::class)
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()

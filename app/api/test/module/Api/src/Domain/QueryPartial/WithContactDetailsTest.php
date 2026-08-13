@@ -34,7 +34,7 @@ final class WithContactDetailsTest extends QueryPartialTestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('dataProvider')]
     public function testModifyQuery(mixed $expectedDql, mixed $arguments): void
     {
-        $entityMetadata = m::mock();
+        $entityMetadata = m::mock(\Doctrine\ORM\Mapping\ClassMetadata::class);
         $entityMetadata->associationMappings = [
             'property1' => ['targetEntity' => 'Foo'],
         ];

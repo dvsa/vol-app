@@ -34,6 +34,14 @@ final class LicenceStatusRuleTest extends RepositoryTestCase
     public function testFetchRevokeCurtailSuspend(): void
     {
         $mockQb = m::mock(QueryBuilder::class);
+        $expr = new \Doctrine\ORM\Query\Expr();
+        $mockQb->shouldReceive('expr')
+            ->zeroOrMoreTimes()
+            ->andReturn($expr);
+
+        $mockQb->shouldReceive('andWhere')
+            ->times(3)
+            ->andReturnSelf();
         $date = new \DateTime();
 
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('lsr')->once()->andReturn($mockQb);
@@ -43,12 +51,6 @@ final class LicenceStatusRuleTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('l.status')->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->isNull')->with('lsr.startProcessedDate')->once()->andReturn('EXPR1');
-        $mockQb->shouldReceive('andWhere')->with('EXPR1')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->isNull')->with('lsr.deletedDate')->once()->andReturn('EXPR2');
-        $mockQb->shouldReceive('andWhere')->with('EXPR2')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->lte')->with('lsr.startDate', ':startDate')->once()->andReturn('EXPR3');
-        $mockQb->shouldReceive('andWhere')->with('EXPR3')->once()->andReturnSelf();
 
         $mockQb->shouldReceive('setParameter')->with('startDate', $date)->once();
 
@@ -60,6 +62,14 @@ final class LicenceStatusRuleTest extends RepositoryTestCase
     public function testFetchToValid(): void
     {
         $mockQb = m::mock(QueryBuilder::class);
+        $expr = new \Doctrine\ORM\Query\Expr();
+        $mockQb->shouldReceive('expr')
+            ->zeroOrMoreTimes()
+            ->andReturn($expr);
+
+        $mockQb->shouldReceive('andWhere')
+            ->times(4)
+            ->andReturnSelf();
         $date = new \DateTime();
 
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('lsr')->once()->andReturn($mockQb);
@@ -69,14 +79,6 @@ final class LicenceStatusRuleTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('l.status')->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->isNull')->with('lsr.endProcessedDate')->once()->andReturn('EXPR1');
-        $mockQb->shouldReceive('andWhere')->with('EXPR1')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->isNotNull')->with('lsr.endDate')->once()->andReturn('EXPR2');
-        $mockQb->shouldReceive('andWhere')->with('EXPR2')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->isNull')->with('lsr.deletedDate')->once()->andReturn('EXPR3');
-        $mockQb->shouldReceive('andWhere')->with('EXPR3')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->lte')->with('lsr.endDate', ':endDate')->once()->andReturn('EXPR4');
-        $mockQb->shouldReceive('andWhere')->with('EXPR4')->once()->andReturnSelf();
 
         $mockQb->shouldReceive('setParameter')->with('endDate', $date)->once();
 

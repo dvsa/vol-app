@@ -55,8 +55,9 @@ final class TmEmploymentTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('contactDetails', 'cd')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('cd.address')->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('te.transportManager', ':tmId')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('te.transportManager', ':tmId');
+        $mockQb->shouldReceive('expr->eq')->with('te.transportManager', ':tmId')->once()->andReturn($expr);
+        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('tmId', 534)->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
@@ -87,8 +88,9 @@ final class TmEmploymentTest extends RepositoryTestCase
 
         $mockQi->shouldReceive('getTransportManager')->with()->once()->andReturn(12);
 
-        $mockQb->shouldReceive('expr->eq')->with('te.transportManager', ':transportManager')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('te.transportManager', ':transportManager');
+        $mockQb->shouldReceive('expr->eq')->with('te.transportManager', ':transportManager')->once()->andReturn($expr);
+        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('transportManager', 12)->once();
 
         $this->sut->applyListFilters($mockQb, $mockQi);

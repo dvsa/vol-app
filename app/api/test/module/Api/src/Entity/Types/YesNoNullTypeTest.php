@@ -80,12 +80,4 @@ final class YesNoNullTypeTest extends \PHPUnit\Framework\TestCase
         yield ['no', 0];
         yield [null, null];
     }
-
-    /**
-     * test getName
-     */
-    public function testGetName(): void
-    {
-        $this->assertEquals('yesnonull', $this->type->getName());
-    }
 }

@@ -3,7 +3,7 @@
 namespace Dvsa\Olcs\Api\Entity\Types;
 
 use Doctrine\DBAL\Types\Exception\InvalidFormat;
-use Doctrine\DBAL\Types\DateTimeType as DoctrineDateTimeType;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 
@@ -12,7 +12,7 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
  *
  * Make sure all times are stored in the DB as UTC
  */
-class DateTimeType extends DoctrineDateTimeType
+class DateTimeType extends Type
 {
     /**
      * Converts a value from its database representation to its PHP representation
@@ -107,5 +107,13 @@ class DateTimeType extends DoctrineDateTimeType
     private function getApplicationTimeZone()
     {
         return new \DateTimeZone(date_default_timezone_get());
+    }
+
+    #[\Override]
+    public function getSQLDeclaration(
+        array $column,
+        AbstractPlatform $platform
+    ): string {
+        return $platform->getDateTimeTypeDeclarationSQL($column);
     }
 }

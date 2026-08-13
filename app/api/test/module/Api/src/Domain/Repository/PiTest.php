@@ -42,8 +42,9 @@ final class PiTest extends RepositoryTestCase
 
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
-        $qb->shouldReceive('expr->eq')->with('m.case', ':byId')->once()->andReturn('EXPR');
-        $qb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('m.case', ':byId');
+        $qb->shouldReceive('expr->eq')->with('m.case', ':byId')->once()->andReturn($expr);
+        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('byId', 24)->once()->andReturnSelf();
         $qb->shouldReceive('getQuery->getResult')->with(Query::HYDRATE_OBJECT)->andReturn($results);
 
