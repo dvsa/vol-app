@@ -50,6 +50,7 @@ return [
             'orm_default' => [
                 'connection' => 'orm_default',
                 'configuration' => 'orm_default',
+                'event_manager' => 'orm_default',
             ],
         ],
         'cache' => [

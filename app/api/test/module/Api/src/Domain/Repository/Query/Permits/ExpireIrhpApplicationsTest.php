@@ -82,8 +82,8 @@ final class ExpireIrhpApplicationsTest extends AbstractDbQueryTestCase
                 'currentUserId' => 1,
             ],
             [
-                'permitValidStatuses' => Connection::PARAM_STR_ARRAY,
-                'certificatePermitTypes' => Connection::PARAM_INT_ARRAY,
+                'permitValidStatuses' => \Doctrine\DBAL\ArrayParameterType::STRING,
+                'certificatePermitTypes' => \Doctrine\DBAL\ArrayParameterType::INTEGER,
             ]
         ];
     }

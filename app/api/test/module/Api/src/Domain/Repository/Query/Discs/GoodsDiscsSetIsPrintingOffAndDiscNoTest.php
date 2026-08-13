@@ -55,7 +55,7 @@ final class GoodsDiscsSetIsPrintingOffAndDiscNoTest extends AbstractDbQueryTestC
         $today = new DateTime();
         yield [
             ['ids' => [1,2], 'startNumber' => 1],
-            ['ids' => Connection::PARAM_INT_ARRAY, 'startNumber' => \PDO::PARAM_INT],
+            ['ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER, 'startNumber' => \PDO::PARAM_INT],
             [
                 'issuedDate' => $today->format('Y-m-d H:i:s'),
                 'ids' => [1,2],
@@ -63,7 +63,7 @@ final class GoodsDiscsSetIsPrintingOffAndDiscNoTest extends AbstractDbQueryTestC
             ],
             [
                 'issuedDate' => \PDO::PARAM_STR,
-                'ids' => Connection::PARAM_INT_ARRAY,
+                'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER,
                 'startNumber' => \PDO::PARAM_INT]
         ];
     }

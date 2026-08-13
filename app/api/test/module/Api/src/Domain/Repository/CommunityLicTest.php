@@ -32,18 +32,24 @@ final class CommunityLicTest extends RepositoryTestCase
     {
         $licenceId = 1;
         $issueNo = 0;
-        $mockQb = m::mock();
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn('foo');
-        $mockQb->shouldReceive('andWhere')->with('foo')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('m.issueNo', ':issueNo')->once()->andReturn('bar');
-        $mockQb->shouldReceive('andWhere')->with('bar')->once()->andReturnSelf();
+        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $foo = $this->mockExprEq('m.licence', ':licence');
+        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn($foo);
+        $mockQb->shouldReceive('andWhere')->with($foo)->once()->andReturnSelf();
+        $bar = $this->mockExprEq('m.issueNo', ':issueNo');
+        $mockQb->shouldReceive('expr->eq')->with('m.issueNo', ':issueNo')->once()->andReturn($bar);
+        $mockQb->shouldReceive('andWhere')->with($bar)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('licence', $licenceId)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('issueNo', $issueNo)->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('m.status', ':pending')->once()->andReturn('pending');
-        $mockQb->shouldReceive('expr->eq')->with('m.status', ':active')->once()->andReturn('active');
-        $mockQb->shouldReceive('expr->eq')->with('m.status', ':withdrawn')->once()->andReturn('withdrawn');
-        $mockQb->shouldReceive('expr->eq')->with('m.status', ':suspended')->once()->andReturn('suspended');
+        $pending = $this->mockExprEq('m.status', ':pending');
+        $mockQb->shouldReceive('expr->eq')->with('m.status', ':pending')->once()->andReturn($pending);
+        $active = $this->mockExprEq('m.status', ':active');
+        $mockQb->shouldReceive('expr->eq')->with('m.status', ':active')->once()->andReturn($active);
+        $withdrawn = $this->mockExprEq('m.status', ':withdrawn');
+        $mockQb->shouldReceive('expr->eq')->with('m.status', ':withdrawn')->once()->andReturn($withdrawn);
+        $suspended = $this->mockExprEq('m.status', ':suspended');
+        $mockQb->shouldReceive('expr->eq')->with('m.status', ':suspended')->once()->andReturn($suspended);
         $mockQb->shouldReceive('setParameter')
             ->with('pending', CommunityLicEntity::STATUS_PENDING)
             ->once()
@@ -60,11 +66,12 @@ final class CommunityLicTest extends RepositoryTestCase
             ->with('suspended', CommunityLicEntity::STATUS_SUSPENDED)
             ->once()
             ->andReturnSelf();
+        $statuses = $this->mockOrX();
         $mockQb->shouldReceive('expr->orX')
-            ->with('pending', 'active', 'withdrawn', 'suspended')
+            ->with($pending, $active, $withdrawn, $suspended)
             ->once()
-            ->andReturn('statuses');
-        $mockQb->shouldReceive('andWhere')->with('statuses')->once()->andReturnSelf();
+            ->andReturn($statuses);
+        $mockQb->shouldReceive('andWhere')->with($statuses)->once()->andReturnSelf();
 
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($mockQb);
         $mockQb->shouldReceive('getQuery->getOneOrNullResult')
@@ -78,26 +85,31 @@ final class CommunityLicTest extends RepositoryTestCase
     {
         $licenceId = 1;
         $issueNo = 0;
-        $mockQb = m::mock();
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn('foo');
-        $mockQb->shouldReceive('andWhere')->with('foo')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->neq')->with('m.issueNo', ':issueNo')->once()->andReturn('bar');
-        $mockQb->shouldReceive('andWhere')->with('bar')->once()->andReturnSelf();
+        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $foo = $this->mockExprEq('m.licence', ':licence');
+        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn($foo);
+        $mockQb->shouldReceive('andWhere')->with($foo)->once()->andReturnSelf();
+        $bar = $this->mockExprNeq('m.issueNo', ':issueNo');
+        $mockQb->shouldReceive('expr->neq')->with('m.issueNo', ':issueNo')->once()->andReturn($bar);
+        $mockQb->shouldReceive('andWhere')->with($bar)->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('m.status', ':pending')->once()->andReturn('statuspending');
-        $mockQb->shouldReceive('expr->eq')->with('m.status', ':active')->once()->andReturn('statusactive');
-        $mockQb->shouldReceive('expr->eq')->with('m.status', ':withdrawn')->once()->andReturn('statuswithdrawn');
-        $mockQb->shouldReceive('expr->eq')->with('m.status', ':suspended')->once()->andReturn('statussuspended');
+        $statuspending = $this->mockExprEq('m.status', ':pending');
+        $mockQb->shouldReceive('expr->eq')->with('m.status', ':pending')->once()->andReturn($statuspending);
+        $statusactive = $this->mockExprEq('m.status', ':active');
+        $mockQb->shouldReceive('expr->eq')->with('m.status', ':active')->once()->andReturn($statusactive);
+        $statuswithdrawn = $this->mockExprEq('m.status', ':withdrawn');
+        $mockQb->shouldReceive('expr->eq')->with('m.status', ':withdrawn')->once()->andReturn($statuswithdrawn);
+        $statussuspended = $this->mockExprEq('m.status', ':suspended');
+        $mockQb->shouldReceive('expr->eq')->with('m.status', ':suspended')->once()->andReturn($statussuspended);
+        $statuses = $this->mockOrX();
         $mockQb->shouldReceive('expr->orX')
-            ->with(
-                'statuspending',
-                'statusactive',
-                'statuswithdrawn',
-                'statussuspended'
-            )
+            ->with($statuspending,
+                $statusactive,
+                $statuswithdrawn,
+                $statussuspended)
             ->once()
-            ->andReturn('statuses');
-        $mockQb->shouldReceive('andWhere')->with('statuses')->once()->andReturnSelf();
+            ->andReturn($statuses);
+        $mockQb->shouldReceive('andWhere')->with($statuses)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('licence', $licenceId)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('issueNo', $issueNo)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
@@ -116,16 +128,22 @@ final class CommunityLicTest extends RepositoryTestCase
     }
 
     public function testFetchLicencesById(): void
-    {
-        $mockQb = m::mock();
-        $mockQb->shouldReceive('expr->in')->with('m.id', ':ids')->once()->andReturn('id');
-        $mockQb->shouldReceive('andWhere')->with('id')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('ids', [1])->once()->andReturnSelf();
+{
+    $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
 
-        $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($mockQb);
-        $mockQb->shouldReceive('getQuery->execute')->once()->andReturn('result');
-        $this->assertEquals('result', $this->sut->fetchLicencesByIds([1]));
-    }
+    $id = $this->mockExprIn('m.id', ':ids');
+    $mockQb->shouldReceive('expr->in')
+        ->with('m.id', ':ids')
+        ->once()
+        ->andReturn($id);
+    $mockQb->shouldReceive('andWhere')->with($id)->once()->andReturnSelf();
+    $mockQb->shouldReceive('setParameter')->with('ids', [1])->once()->andReturnSelf();
+
+    $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($mockQb);
+    $mockQb->shouldReceive('getQuery->execute')->once()->andReturn('result');
+
+    $this->assertEquals('result', $this->sut->fetchLicencesByIds([1]));
+}
 
     public function testApplyListFilters(): void
     {
@@ -153,8 +171,9 @@ final class CommunityLicTest extends RepositoryTestCase
         $mockQb->shouldReceive('expr->orX->addMultiple')->with($conditions)->once()->andReturnSelf();
         $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('status0', 'active')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn('licence');
-        $mockQb->shouldReceive('andWhere')->with('licence')->once()->andReturnSelf();
+        $licence = $this->mockExprEq('m.licence', ':licence');
+        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn($licence);
+        $mockQb->shouldReceive('andWhere')->with($licence)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('licence', $licenceId)->once()->andReturnSelf();
 
         $sut->applyListFilters($mockQb, $mockQuery);
@@ -180,20 +199,26 @@ final class CommunityLicTest extends RepositoryTestCase
 
     public function testFetchForSuspension(): void
     {
-        $mockQb = m::mock();
+        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $mockQb->shouldReceive('innerJoin')->with('m.communityLicSuspensions', 's')->andReturnSelf();
         $mockQb->shouldReceive('innerJoin')->with('s.communityLicSuspensionReasons', 'sr')->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('m.status', ':status')->once()->andReturn('status');
-        $mockQb->shouldReceive('expr->lte')->with('s.startDate', ':startDate')->once()->andReturn('startDate');
-        $mockQb->shouldReceive('andWhere')->with('status')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->with('startDate')->once()->andReturnSelf();
+        $status = $this->mockExprEq('m.status', ':status');
+        $mockQb->shouldReceive('expr->eq')->with('m.status', ':status')->once()->andReturn($status);
+        $startdate = $this->mockExprLte('s.startDate', ':startDate');
+        $mockQb->shouldReceive('expr->lte')->with('s.startDate', ':startDate')->once()->andReturn($startdate);
+        $mockQb->shouldReceive('andWhere')->with($status)->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($startdate)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('status', CommunityLicEntity::STATUS_ACTIVE)->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('startDate', 'foo')->andReturnSelf();
-        $mockQb->shouldReceive('expr->gt')->with('s.endDate', ':endDate')->once()->andReturn('endDateGt');
+        $enddategt = $this->mockExprGt('s.endDate', ':endDate');
+        $mockQb->shouldReceive('expr->gt')->with('s.endDate', ':endDate')->once()->andReturn($enddategt);
         $mockQb->shouldReceive('expr->isNull')->with('s.endDate')->once()->andReturn('endDateNull');
-        $mockQb->shouldReceive('expr->orX')->with('endDateNull', 'endDateGt')->once()->andReturn('orExpr');
-        $mockQb->shouldReceive('andWhere')->with('orExpr')->once()->andReturnSelf();
+        $orexpr = $this->mockOrX();
+        $mockQb->shouldReceive('expr->orX')
+            ->with('endDateNull', $enddategt)->once()
+            ->andReturn($orexpr);
+        $mockQb->shouldReceive('andWhere')->with($orexpr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('endDate', 'foo')->andReturnSelf();
 
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($mockQb);
@@ -203,14 +228,16 @@ final class CommunityLicTest extends RepositoryTestCase
 
     public function testFetchForActivation(): void
     {
-        $mockQb = m::mock();
+        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $mockQb->shouldReceive('innerJoin')->with('m.communityLicSuspensions', 's')->andReturnSelf();
         $mockQb->shouldReceive('innerJoin')->with('s.communityLicSuspensionReasons', 'sr')->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('m.status', ':status')->once()->andReturn('status');
-        $mockQb->shouldReceive('expr->lte')->with('s.endDate', ':endDate')->once()->andReturn('endDate');
-        $mockQb->shouldReceive('andWhere')->with('status')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->with('endDate')->once()->andReturnSelf();
+        $status = $this->mockExprEq('m.status', ':status');
+        $mockQb->shouldReceive('expr->eq')->with('m.status', ':status')->once()->andReturn($status);
+        $enddate = $this->mockExprLte('s.endDate', ':endDate');
+        $mockQb->shouldReceive('expr->lte')->with('s.endDate', ':endDate')->once()->andReturn($enddate);
+        $mockQb->shouldReceive('andWhere')->with($status)->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($enddate)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('status', CommunityLicEntity::STATUS_SUSPENDED)->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('endDate', 'foo')->andReturnSelf();
 
@@ -344,7 +371,7 @@ final class CommunityLicTest extends RepositoryTestCase
         $serviceManager = $this->setUpServiceManager();
         $queryBuilder = $this->resolveMockService($serviceManager, QueryBuilder::class);
         $sut = $this->setUpRepository($serviceManager, CommunityLicRepo::class);
-        $query = m::mock()->shouldIgnoreMissing();
+        $query = m::mock(\Doctrine\ORM\Query::class)->shouldIgnoreMissing();
         $query->shouldReceive('getSingleScalarResult')->andReturn($expectedCount = 997);
         $queryBuilder->shouldReceive('getQuery')->andReturn($query);
 

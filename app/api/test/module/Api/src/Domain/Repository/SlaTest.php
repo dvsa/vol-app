@@ -38,7 +38,7 @@ final class SlaTest extends RepositoryTestCase
 
         $result = $this->sut->fetchByCategories($categories);
 
-        $this->assertEquals('QUERY AND m.category IN [[["foo","bar"]]]', $this->query);
+        $this->assertEquals('QUERY AND m.category IN([[["foo","bar"]]])', $this->query);
 
         $this->assertEquals('foobar', $result);
     }

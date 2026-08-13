@@ -17,6 +17,12 @@ use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\ORM\Query\Expr\Comparison;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr\Andx;
+use Doctrine\ORM\Query\Expr\Orx;
+use Doctrine\ORM\Query\Expr\Func;
 
 /**
  * Goods Disc test
@@ -50,21 +56,38 @@ final class GoodsDiscTest extends RepositoryTestCase
         $licenceType = 'ltyp_r';
 
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 1)->once()->andReturn('condition1');
-        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 1)->once()->andReturn('condition2');
-        $mockQb->shouldReceive('expr->eq')
-            ->with('lvalt.id', ':applicationLicenceType')->once()->andReturn('condition3');
-        $mockQb->shouldReceive('expr->andX')
-            ->with('condition1', 'condition2', 'condition3')->once()->andReturn('conditionAndX1');
-        $mockQb->shouldReceive('setMaxResults')->with(1)->once()->andReturn('condition4');
-        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 1)->once()->andReturn('condition5');
-        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 0)->once()->andReturn('condition6');
-        $mockQb->shouldReceive('expr->eq')->with('lvllt.id', ':licenceLicenceType')->once()->andReturn('condition7');
-        $mockQb->shouldReceive('expr->andX')
-            ->with('condition5', 'condition6', 'condition7')->once()->andReturn('conditionAndX2');
+        $condition1 = m::mock(Comparison::class);
+        $condition2 = m::mock(Comparison::class);
+        $condition3 = m::mock(Comparison::class);
 
-        $mockQb->shouldReceive('expr->orX')->with('conditionAndX1', 'conditionAndX2')->once()->andReturn('and');
-        $mockQb->shouldReceive('andWhere')->with('and')->once()->andReturnSelf();
+        $condition5 = m::mock(Comparison::class);
+        $condition6 = m::mock(Comparison::class);
+        $condition7 = m::mock(Comparison::class);
+        $conditionAndX1 = m::mock(Andx::class);
+        $conditionAndX2 = m::mock(Andx::class);
+        $orCondition = m::mock(Orx::class);
+
+        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 1)->once()->andReturn($condition1);
+        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 1)->once()->andReturn($condition2);
+        $mockQb->shouldReceive('expr->eq')
+            ->with('lvalt.id', ':applicationLicenceType')->once()->andReturn($condition3);
+        $mockQb->shouldReceive('expr->andX')
+            ->with($condition1, $condition2, $condition3)->once()->andReturn($conditionAndX1);
+        $mockQb->shouldReceive('setMaxResults')
+            ->with(1)
+            ->once()
+            ->andReturnSelf();
+        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 1)->once()->andReturn($condition5);
+        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 0)->once()->andReturn($condition6);
+        $mockQb->shouldReceive('expr->eq')->with('lvllt.id', ':licenceLicenceType')->once()->andReturn($condition7);
+        $mockQb->shouldReceive('expr->andX')
+            ->with($condition5, $condition6, $condition7)->once()->andReturn($conditionAndX2);
+
+        $mockQb->shouldReceive('expr->orX')
+            ->with($conditionAndX1, $conditionAndX2)
+            ->once()
+            ->andReturn($orCondition);
+        $mockQb->shouldReceive('andWhere')->with($orCondition)->once()->andReturnSelf();
 
         $mockQb->shouldReceive('expr->isNull')->with('gd.ceasedDate')->once()->andReturn('noCeasedDateCond');
         $mockQb->shouldReceive('expr->isNull')->with('gd.issuedDate')->once()->andReturn('noIssuedDateCond');
@@ -83,8 +106,17 @@ final class GoodsDiscTest extends RepositoryTestCase
             ->once()
             ->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->in')->with('lvl.status', ':activeStatuses')->once()->andReturn('activeStatuses');
-        $mockQb->shouldReceive('andWhere')->with('activeStatuses')->once()->andReturnSelf();
+        $activeStatusesCondition = m::mock(Func::class);
+
+        $mockQb->shouldReceive('expr->in')
+            ->with('lvl.status', ':activeStatuses')
+            ->once()
+            ->andReturn($activeStatusesCondition);
+
+        $mockQb->shouldReceive('andWhere')
+            ->with($activeStatusesCondition)
+            ->once()
+            ->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('activeStatuses', $this->activeStatuses)
             ->once()
@@ -115,30 +147,54 @@ final class GoodsDiscTest extends RepositoryTestCase
         $licenceType = 'ltyp_r';
 
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 0)->once()->andReturn('condition1');
-        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 1)->once()->andReturn('condition2');
-        $mockQb->shouldReceive('expr->eq')
-            ->with('lvagp.id', ':operatorType')->once()->andReturn('condition3');
-        $mockQb->shouldReceive('expr->eq')
-            ->with('lvalt.id', ':applicationLicenceType')->once()->andReturn('condition4');
-        $mockQb->shouldReceive('setMaxResults')->with(1)->once()->andReturn('conditionAnd4');
-        $mockQb->shouldReceive('expr->andX')
-            ->with('condition1', 'condition2', 'condition3', 'condition4')
-            ->once()
-            ->andReturn('conditionAndX1');
+        $condition1 = m::mock(Comparison::class);
+        $condition2 = m::mock(Comparison::class);
+        $condition3 = m::mock(Comparison::class);
+        $condition4 = m::mock(Comparison::class);
+        $condition5 = m::mock(Comparison::class);
+        $condition6 = m::mock(Comparison::class);
+        $condition7 = m::mock(Comparison::class);
+        $condition8 = m::mock(Comparison::class);
+        $condition9 = m::mock(Comparison::class);
 
-        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 0)->once()->andReturn('condition6');
-        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 0)->once()->andReturn('condition7');
-        $mockQb->shouldReceive('expr->eq')
-            ->with('lvlgp.id', ':operatorType1')->once()->andReturn('condition8');
-        $mockQb->shouldReceive('expr->eq')->with('lvllt.id', ':licenceLicenceType')->once()->andReturn('condition9');
-        $mockQb->shouldReceive('expr->andX')
-            ->with('condition6', 'condition7', 'condition8', 'condition9')
-            ->once()
-            ->andReturn('conditionAndX2');
+        $conditionAndX1 = m::mock(Andx::class);
+        $conditionAndX2 = m::mock(Andx::class);
+        $orCondition = m::mock(Orx::class);
 
-        $mockQb->shouldReceive('expr->orX')->with('conditionAndX1', 'conditionAndX2')->once()->andReturn('and');
-        $mockQb->shouldReceive('andWhere')->with('and')->once()->andReturnSelf();
+        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 0)->once()->andReturn($condition1);
+        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 1)->once()->andReturn($condition2);
+        $mockQb->shouldReceive('expr->eq')
+            ->with('lvagp.id', ':operatorType')->once()->andReturn( $condition3);
+        $mockQb->shouldReceive('expr->eq')
+            ->with('lvalt.id', ':applicationLicenceType')->once()->andReturn( $condition4);
+        $mockQb->shouldReceive('setMaxResults')
+            ->with(1)
+            ->once()
+            ->andReturnSelf();
+        $mockQb->shouldReceive('expr->andX')
+            ->with( $condition1, $condition2, $condition3, $condition4)
+            ->once()
+            ->andReturn($conditionAndX1);
+
+        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 0)->once()->andReturn($condition6);
+        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 0)->once()->andReturn($condition7);
+        $mockQb->shouldReceive('expr->eq')
+            ->with('lvlgp.id', ':operatorType1')->once()->andReturn($condition8);
+        $mockQb->shouldReceive('expr->eq')->with('lvllt.id', ':licenceLicenceType')->once()->andReturn($condition9);
+        $mockQb->shouldReceive('expr->andX')
+            ->with($condition6, $condition7, $condition8, $condition9)
+            ->once()
+            ->andReturn($conditionAndX2);
+
+       $mockQb->shouldReceive('expr->orX')
+            ->with($conditionAndX1, $conditionAndX2)
+            ->once()
+            ->andReturn($orCondition);
+
+        $mockQb->shouldReceive('andWhere')
+            ->with($orCondition)
+            ->once()
+            ->andReturnSelf();
 
         $mockQb->shouldReceive('expr->isNull')->with('gd.ceasedDate')->once()->andReturn('noCeasedDateCond');
         $mockQb->shouldReceive('expr->isNull')->with('gd.issuedDate')->once()->andReturn('noIssuedDateCond');
@@ -164,8 +220,18 @@ final class GoodsDiscTest extends RepositoryTestCase
             ->once()
             ->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->in')->with('lvl.status', ':activeStatuses')->once()->andReturn('activeStatuses');
-        $mockQb->shouldReceive('andWhere')->with('activeStatuses')->once()->andReturnSelf();
+        $activeStatusesCondition = m::mock(Func::class);
+
+        $mockQb->shouldReceive('expr->in')
+            ->with('lvl.status', ':activeStatuses')
+            ->once()
+            ->andReturn($activeStatusesCondition);
+
+        $mockQb->shouldReceive('andWhere')
+            ->with($activeStatusesCondition)
+            ->once()
+            ->andReturnSelf();
+
         $mockQb->shouldReceive('setParameter')
             ->with('activeStatuses', $this->activeStatuses)
             ->once()
@@ -220,7 +286,7 @@ final class GoodsDiscTest extends RepositoryTestCase
         $this->expectQueryWithData(
             'Discs\GoodsDiscsSetIsPrinting',
             ['isPrinting' => 1, 'ids' => [1, 2]],
-            ['isPrinting' => \PDO::PARAM_INT, 'ids' => Connection::PARAM_INT_ARRAY]
+            ['isPrinting' => \PDO::PARAM_INT, 'ids' => ArrayParameterType::INTEGER]
         );
 
         $this->sut->setIsPrintingOn([1, 2]);
@@ -285,29 +351,50 @@ final class GoodsDiscTest extends RepositoryTestCase
         $licenceType = 'ltyp_r';
 
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 0)->once()->andReturn('condition1');
-        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 1)->once()->andReturn('condition2');
-        $mockQb->shouldReceive('expr->eq')
-            ->with('lvagp.id', ':operatorType')->once()->andReturn('condition3');
-        $mockQb->shouldReceive('expr->eq')
-            ->with('lvalt.id', ':applicationLicenceType')->once()->andReturn('condition4');
-        $mockQb->shouldReceive('expr->andX')
-            ->with('condition1', 'condition2', 'condition3', 'condition4')
-            ->once()
-            ->andReturn('conditionAndX1');
+        $condition1 = m::mock(Comparison::class);
+        $condition2 = m::mock(Comparison::class);
+        $condition3 = m::mock(Comparison::class);
+        $condition4 = m::mock(Comparison::class);
+        $condition5 = m::mock(Comparison::class);
+        $condition6 = m::mock(Comparison::class);
+        $condition7 = m::mock(Comparison::class);
+        $condition8 = m::mock(Comparison::class);
+        $condition9 = m::mock(Comparison::class);
 
-        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 0)->once()->andReturn('condition6');
-        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 0)->once()->andReturn('condition7');
-        $mockQb->shouldReceive('expr->eq')
-            ->with('lvlgp.id', ':operatorType1')->once()->andReturn('condition8');
-        $mockQb->shouldReceive('expr->eq')->with('lvllt.id', ':licenceLicenceType')->once()->andReturn('condition9');
-        $mockQb->shouldReceive('expr->andX')
-            ->with('condition6', 'condition7', 'condition8', 'condition9')
-            ->once()
-            ->andReturn('conditionAndX2');
+        $conditionAndX1 = m::mock(Andx::class);
+        $conditionAndX2 = m::mock(Andx::class);
+        $orCondition = m::mock(Orx::class);
 
-        $mockQb->shouldReceive('expr->orX')->with('conditionAndX1', 'conditionAndX2')->once()->andReturn('and');
-        $mockQb->shouldReceive('andWhere')->with('and')->once()->andReturnSelf();
+        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 0)->once()->andReturn($condition1);
+        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 1)->once()->andReturn($condition2);
+        $mockQb->shouldReceive('expr->eq')
+            ->with('lvagp.id', ':operatorType')->once()->andReturn($condition3);
+        $mockQb->shouldReceive('expr->eq')
+            ->with('lvalt.id', ':applicationLicenceType')->once()->andReturn($condition4);
+        $mockQb->shouldReceive('expr->andX')
+            ->with($condition1, $condition2, $condition3, $condition4)
+            ->once()
+            ->andReturn($conditionAndX1);
+
+        $mockQb->shouldReceive('expr->eq')->with('lvlta.isNi', 0)->once()->andReturn($condition6);
+        $mockQb->shouldReceive('expr->eq')->with('gd.isInterim', 0)->once()->andReturn($condition7);
+        $mockQb->shouldReceive('expr->eq')
+            ->with('lvlgp.id', ':operatorType1')->once()->andReturn($condition8);
+        $mockQb->shouldReceive('expr->eq')->with('lvllt.id', ':licenceLicenceType')->once()->andReturn($condition9);
+        $mockQb->shouldReceive('expr->andX')
+            ->with($condition6, $condition7, $condition8, $condition9)
+            ->once()
+            ->andReturn($conditionAndX2);
+
+        $mockQb->shouldReceive('expr->orX')
+            ->with($conditionAndX1, $conditionAndX2)
+            ->once()
+            ->andReturn($orCondition);
+
+        $mockQb->shouldReceive('andWhere')
+            ->with($orCondition)
+            ->once()
+            ->andReturnSelf();
 
         $mockQb->shouldReceive('expr->isNull')->with('gd.ceasedDate')->once()->andReturn('noCeasedDateCond');
         $mockQb->shouldReceive('expr->isNull')->with('gd.issuedDate')->once()->andReturn('noIssuedDateCond');
@@ -333,12 +420,21 @@ final class GoodsDiscTest extends RepositoryTestCase
             ->once()
             ->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->in')->with('lvl.status', ':activeStatuses')->once()->andReturn('activeStatuses');
-        $mockQb->shouldReceive('andWhere')->with('activeStatuses')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')
-            ->with('activeStatuses', $this->activeStatuses)
+        $activeStatusesCondition = m::mock(Func::class);
+
+        $mockQb->shouldReceive('expr->in')
+            ->with('lvl.status', ':activeStatuses')
+            ->once()
+            ->andReturn($activeStatusesCondition);
+
+        $mockQb->shouldReceive('andWhere')
+            ->with($activeStatusesCondition)
             ->once()
             ->andReturnSelf();
+                $mockQb->shouldReceive('setParameter')
+                    ->with('activeStatuses', $this->activeStatuses)
+                    ->once()
+                    ->andReturnSelf();
 
         $mockQb->shouldReceive('leftJoin')->with('gd.licenceVehicle', 'lv')->once()->andReturnSelf();
         $mockQb->shouldReceive('leftJoin')->with('lv.licence', 'lvl')->once()->andReturnSelf();
@@ -404,11 +500,13 @@ final class GoodsDiscTest extends RepositoryTestCase
         $qb = $this->createMockQb();
         $exception = new NoResultException();
 
+        $query = m::mock(Query::class);
+
         $qb->shouldReceive('getQuery')
             ->once()
-            ->andReturn($qb)
-            ->getMock();
-        $qb->shouldReceive('getSingleScalarResult')
+            ->andReturn($query);
+
+        $query->shouldReceive('getSingleScalarResult')
             ->once()
             ->andThrow($exception);
 
@@ -424,11 +522,13 @@ final class GoodsDiscTest extends RepositoryTestCase
         $qb = $this->createMockQb();
 
         $ex = new \Exception('testException');
+        $query = m::mock(Query::class);
+
         $qb->shouldReceive('getQuery')
             ->once()
-            ->andReturn($qb)
-            ->getMock();
-        $qb->shouldReceive('getSingleScalarResult')
+            ->andReturn($query);
+
+        $query->shouldReceive('getSingleScalarResult')
             ->once()
             ->andThrow($ex);
 

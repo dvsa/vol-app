@@ -50,8 +50,9 @@ final class TransportManagerApplicationTest extends RepositoryTestCase
             ->once()
             ->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('tma.application', ':applicationId')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('tma.application', ':applicationId');
+        $mockQb->shouldReceive('expr->eq')->with('tma.application', ':applicationId')->once()->andReturn($expr);
+        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('applicationId', self::APP_ID)->once();
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
 
@@ -144,8 +145,9 @@ final class TransportManagerApplicationTest extends RepositoryTestCase
         $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
         $mockDqb->shouldReceive('join')->with('tma.transportManager', 'tm')->once();
         $mockDqb->shouldReceive('join')->with('tm.users', 'u')->once();
-        $mockDqb->shouldReceive('expr->eq')->with('u.id', ':user')->once()->andReturn('EXPR');
-        $mockDqb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('u.id', ':user');
+        $mockDqb->shouldReceive('expr->eq')->with('u.id', ':user')->once()->andReturn($expr);
+        $mockDqb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $mockDqb->shouldReceive('setParameter')->with('user', 73)->once();
 
         $query = \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList::create(['user' => 73]);
@@ -158,8 +160,9 @@ final class TransportManagerApplicationTest extends RepositoryTestCase
     public function testApplyListFiltersApplication(): void
     {
         $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockDqb->shouldReceive('expr->eq')->with('tma.application', ':application')->once()->andReturn('EXPR');
-        $mockDqb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('tma.application', ':application');
+        $mockDqb->shouldReceive('expr->eq')->with('tma.application', ':application')->once()->andReturn($expr);
+        $mockDqb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $mockDqb->shouldReceive('setParameter')->with('application', 73)->once();
 
         $query = \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList::create(['application' => 73]);
@@ -172,9 +175,15 @@ final class TransportManagerApplicationTest extends RepositoryTestCase
     public function testApplyListFiltersTransportManager(): void
     {
         $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockDqb->shouldReceive('expr->eq')->with('tma.transportManager', ':transportManager')->once()
-            ->andReturn('EXPR');
-        $mockDqb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('tma.transportManager', ':transportManager');
+        $mockDqb->shouldReceive('expr->eq')
+            ->with('tma.transportManager', ':transportManager')
+            ->once()
+            ->andReturn($expr);
+        $mockDqb->shouldReceive('andWhere')
+            ->with($expr)
+            ->once()
+            ->andReturnSelf();
         $mockDqb->shouldReceive('setParameter')->with('transportManager', 73)->once();
 
         $query = \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList::create(['transportManager' => 73]);
@@ -187,8 +196,9 @@ final class TransportManagerApplicationTest extends RepositoryTestCase
     public function testApplyListFiltersAppStatuses(): void
     {
         $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $mockDqb->shouldReceive('expr->in')->with('a.status', ':appStatuses')->once()->andReturn('EXPR');
-        $mockDqb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprIn('a.status', ':appStatuses');
+        $mockDqb->shouldReceive('expr->in')->with('a.status', ':appStatuses')->once()->andReturn($expr);
+        $mockDqb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $mockDqb->shouldReceive('setParameter')->with('appStatuses', ['st1', 'st2'])->once();
 
         $query = \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList::create(
@@ -211,17 +221,20 @@ final class TransportManagerApplicationTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('transportManager', 'tm')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('tmApplicationStatus', 'tmast')->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('tma.transportManager', ':transportManager')->once()->andReturn('tm');
-        $mockQb->shouldReceive('where')->with('tm')->once()->andReturnSelf();
+        $tm = $this->mockExprEq('tma.transportManager', ':transportManager');
+        $mockQb->shouldReceive('expr->eq')->with('tma.transportManager', ':transportManager')->once()->andReturn($tm);
+        $mockQb->shouldReceive('where')->with($tm)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('transportManager', 1)->once();
 
-        $mockQb->shouldReceive('expr->neq')->with('tma.action', ':action')->once()->andReturn('ac');
-        $mockQb->shouldReceive('andWhere')->with('ac')->once()->andReturnSelf();
+        $ac = $this->mockExprNeq('tma.action', ':action');
+        $mockQb->shouldReceive('expr->neq')->with('tma.action', ':action')->once()->andReturn($ac);
+        $mockQb->shouldReceive('andWhere')->with($ac)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('action', 'D')->once();
 
         $statuses = ['s0', 's1'];
-        $mockQb->shouldReceive('expr->in')->with('a.status', $statuses)->once()->andReturn('IN_STATUS');
-        $mockQb->shouldReceive('andWhere')->with('IN_STATUS')->once()->andReturnSelf();
+        $in_status = $this->mockExprIn('a.status', $statuses);
+        $mockQb->shouldReceive('expr->in')->with('a.status', $statuses)->once()->andReturn($in_status);
+        $mockQb->shouldReceive('andWhere')->with($in_status)->once()->andReturnSelf();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);
 
@@ -234,16 +247,19 @@ final class TransportManagerApplicationTest extends RepositoryTestCase
 
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tma')->once()->andReturn($mockQb);
 
-        $mockQb->shouldReceive('expr->eq')->with('tma.transportManager', ':tmId')->once()->andReturn('EXPR1');
-        $mockQb->shouldReceive('andWhere')->with('EXPR1')->once()->andReturnSelf();
+        $expr1 = $this->mockExprEq('tma.transportManager', ':tmId');
+        $mockQb->shouldReceive('expr->eq')->with('tma.transportManager', ':tmId')->once()->andReturn($expr1);
+        $mockQb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('tmId', 1)->once();
 
-        $mockQb->shouldReceive('expr->eq')->with('tma.application', ':applicationId')->once()->andReturn('EXPR2');
-        $mockQb->shouldReceive('andWhere')->with('EXPR2')->once()->andReturnSelf();
+        $expr2 = $this->mockExprEq('tma.application', ':applicationId');
+        $mockQb->shouldReceive('expr->eq')->with('tma.application', ':applicationId')->once()->andReturn($expr2);
+        $mockQb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('applicationId', 2)->once();
 
-        $mockQb->shouldReceive('expr->neq')->with('tma.action', ':action')->once()->andReturn('EXPR3');
-        $mockQb->shouldReceive('andWhere')->with('EXPR3')->once()->andReturnSelf();
+        $expr3 = $this->mockExprNeq('tma.action', ':action');
+        $mockQb->shouldReceive('expr->neq')->with('tma.action', ':action')->once()->andReturn($expr3);
+        $mockQb->shouldReceive('andWhere')->with($expr3)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('action', 'D')->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
@@ -278,11 +294,13 @@ final class TransportManagerApplicationTest extends RepositoryTestCase
         $mockDqb->shouldReceive('join')->with('l.organisation', 'o')->once();
         $mockDqb->shouldReceive('join')->with('o.organisationUsers', 'ou')->once();
         $mockDqb->shouldReceive('join')->with('ou.user', 'ouu')->once();
-        $mockDqb->shouldReceive('expr->eq')->with('u.id', ':user')->once()->andReturn('EXPR');
-        $mockDqb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('u.id', ':user');
+        $mockDqb->shouldReceive('expr->eq')->with('u.id', ':user')->once()->andReturn($expr);
+        $mockDqb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $mockDqb->shouldReceive('setParameter')->with('user', 73)->once();
-        $mockDqb->shouldReceive('expr->eq')->with('ouu.id', ':orgUsersUser')->once()->andReturn('EXPR1');
-        $mockDqb->shouldReceive('andWhere')->with('EXPR1')->once()->andReturnSelf();
+        $expr1 = $this->mockExprEq('ouu.id', ':orgUsersUser');
+        $mockDqb->shouldReceive('expr->eq')->with('ouu.id', ':orgUsersUser')->once()->andReturn($expr1);
+        $mockDqb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
         $mockDqb->shouldReceive('setParameter')->with('orgUsersUser', 73)->once();
 
         $query = \Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetList::create(

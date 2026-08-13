@@ -303,12 +303,12 @@ final class IrhpPermitTest extends RepositoryTestCase
 
         $expectedQuery = 'BLAH '
             . 'INNER JOIN ipa.irhpApplication ia '
-            . 'AND m.status IN [[['
+            . 'AND m.status IN([[['
                 . '"' . IrhpPermitEntity::STATUS_PENDING . '",'
                 . '"' . IrhpPermitEntity::STATUS_AWAITING_PRINTING . '",'
                 . '"' . IrhpPermitEntity::STATUS_PRINTING . '",'
                 . '"' . IrhpPermitEntity::STATUS_ERROR . '"'
-            . ']]]';
+            . ']]])';
         $this->assertEquals($expectedQuery, $this->query);
     }
 
@@ -334,12 +334,12 @@ final class IrhpPermitTest extends RepositoryTestCase
             . 'INNER JOIN m.irhpPermitRange ipr '
             . 'INNER JOIN ipr.irhpPermitStock ips '
             . 'AND ips.id = [[100]] '
-            . 'AND m.status IN [[['
+            . 'AND m.status IN([[['
                 . '"' . IrhpPermitEntity::STATUS_PENDING . '",'
                 . '"' . IrhpPermitEntity::STATUS_AWAITING_PRINTING . '",'
                 . '"' . IrhpPermitEntity::STATUS_PRINTING . '",'
                 . '"' . IrhpPermitEntity::STATUS_ERROR . '"'
-            . ']]]';
+            . ']]])';
         $this->assertEquals($expectedQuery, $this->query);
     }
 
@@ -373,12 +373,12 @@ final class IrhpPermitTest extends RepositoryTestCase
             . 'AND ips.id = [[100]] '
             . 'AND ipr.journey = [[' . $expectedJourney . ']] '
             . 'AND ipr.cabotage = [[' . $expectedCabotage . ']] '
-            . 'AND m.status IN [[['
+            . 'AND m.status IN([[['
                 . '"' . IrhpPermitEntity::STATUS_PENDING . '",'
                 . '"' . IrhpPermitEntity::STATUS_AWAITING_PRINTING . '",'
                 . '"' . IrhpPermitEntity::STATUS_PRINTING . '",'
                 . '"' . IrhpPermitEntity::STATUS_ERROR . '"'
-            . ']]]';
+            . ']]])';
         $this->assertEquals($expectedQuery, $this->query);
     }
 
@@ -424,7 +424,7 @@ final class IrhpPermitTest extends RepositoryTestCase
         $this->assertEquals(['RESULTS'], $this->sut->fetchList($query));
 
         $expectedQuery = 'BLAH '
-            . 'AND m.id IN [[[1,2,3]]] '
+            . 'AND m.id IN([[[1,2,3]]]) '
             . 'ORDER BY m.permitNumber ASC';
         $this->assertEquals($expectedQuery, $this->query);
     }
@@ -504,7 +504,7 @@ final class IrhpPermitTest extends RepositoryTestCase
             . 'INNER JOIN ipr.irhpPermitStock ips '
             . 'LEFT JOIN ips.country ipc '
             . 'AND ia.licence = [[7]] '
-            . 'AND m.status IN [[["' . implode('","', $expectedStatuses) . '"]]] '
+            . 'AND m.status IN([[["' . implode('","', $expectedStatuses) . '"]]]) '
             . 'AND ips.irhpPermitType = [[' . IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_BILATERAL . ']] '
             . 'ORDER BY ipc.countryDesc ASC '
             . 'ORDER BY m.expiryDate ASC '

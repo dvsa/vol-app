@@ -7,6 +7,7 @@ namespace Dvsa\Olcs\Api\Domain\Repository;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
 use PDO;
+use Doctrine\DBAL\ParameterType;
 
 /**
  * Contains methods to get data from DB to export for data.gov.uk
@@ -58,7 +59,7 @@ class DataGovUk
         );
 
         foreach ($areaNames as $idx => $name) {
-            $stmt->bindValue($idx + 1, $name, PDO::PARAM_STR);
+            $stmt->bindValue($idx + 1, $name, ParameterType::STRING);
         }
 
         return $stmt->executeQuery();
@@ -92,7 +93,7 @@ class DataGovUk
         );
 
         foreach ($areaCodes as $idx => $code) {
-            $stmt->bindValue($idx + 1, $code, PDO::PARAM_STR);
+            $stmt->bindValue($idx + 1, $code, ParameterType::STRING);
         }
 
         return $stmt->executeQuery();
