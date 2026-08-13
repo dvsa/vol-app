@@ -29,7 +29,7 @@ final class NoteTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -47,7 +47,7 @@ final class NoteTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -60,24 +60,32 @@ final class NoteTest extends RepositoryTestCase
 
     public function testFetchForOverview(): void
     {
-        $qb = m::mock(QueryBuilder::class);
-        $this->mockCreateQueryBuilder($qb);
+        $qb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $this->em
+            ->shouldReceive('getRepository->createQueryBuilder')
+            ->with('n')
+            ->once()
+            ->andReturn($qb);
 
-        $qb->shouldReceive('expr->eq')->with('n.application', ':applicationId')->once()->andReturn('cond1');
-        $qb->shouldReceive('expr->eq')->with('n.licence', ':licenceId')->once()->andReturn('cond2');
-        $qb->shouldReceive('expr->eq')->with('n.noteType', ':noteTypeId')->once()->andReturn('cond3');
-        $qb->shouldReceive('expr->eq')->with('n.transportManager', ':tmId')->once()->andReturn('cond4');
+        $cond1 = $this->mockExprEq('n.application', ':applicationId');
+        $qb->shouldReceive('expr->eq')->with('n.application', ':applicationId')->once()->andReturn($cond1);
+        $cond2 = $this->mockExprEq('n.licence', ':licenceId');
+        $qb->shouldReceive('expr->eq')->with('n.licence', ':licenceId')->once()->andReturn($cond2);
+        $cond3 = $this->mockExprEq('n.noteType', ':noteTypeId');
+        $qb->shouldReceive('expr->eq')->with('n.noteType', ':noteTypeId')->once()->andReturn($cond3);
+        $cond4 = $this->mockExprEq('n.transportManager', ':tmId');
+        $qb->shouldReceive('expr->eq')->with('n.transportManager', ':tmId')->once()->andReturn($cond4);
 
-        $qb->shouldReceive('andWhere')->with('cond1')->once()->andReturnSelf();
+        $qb->shouldReceive('andWhere')->with($cond1)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('applicationId', 1)->once()->andReturnSelf();
 
-        $qb->shouldReceive('andWhere')->with('cond2')->once()->andReturnSelf();
+        $qb->shouldReceive('andWhere')->with($cond2)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('licenceId', 7)->once()->andReturnSelf();
 
-        $qb->shouldReceive('andWhere')->with('cond3')->once()->andReturnSelf();
+        $qb->shouldReceive('andWhere')->with($cond3)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('noteTypeId', NoteEntity::NOTE_TYPE_CASE)->once()->andReturnSelf();
 
-        $qb->shouldReceive('andWhere')->with('cond4')->once()->andReturnSelf();
+        $qb->shouldReceive('andWhere')->with($cond4)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('tmId', 2)->once()->andReturnSelf();
 
         $qb->shouldReceive('orderBy')->with('n.priority', 'DESC')->once()->andReturnSelf();

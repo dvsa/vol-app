@@ -44,7 +44,7 @@ final class ApplicationOrganisationPersonTest extends RepositoryTestCase
             ->shouldReceive('with')->with('p.title')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -68,7 +68,7 @@ final class ApplicationOrganisationPersonTest extends RepositoryTestCase
             ->shouldReceive('with')->with('p.title')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -93,7 +93,7 @@ final class ApplicationOrganisationPersonTest extends RepositoryTestCase
             ->shouldReceive('with')->with('p.title')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn([])
                 ->getMock()
@@ -117,7 +117,7 @@ final class ApplicationOrganisationPersonTest extends RepositoryTestCase
             ->shouldReceive('with')->with('p.title')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -142,7 +142,7 @@ final class ApplicationOrganisationPersonTest extends RepositoryTestCase
             ->shouldReceive('with')->with('p.title')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn([])
                 ->getMock()

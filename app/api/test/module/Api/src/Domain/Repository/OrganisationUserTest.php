@@ -32,7 +32,7 @@ final class OrganisationUserTest extends RepositoryTestCase
         $qb = m::mock(QueryBuilder::class);
         $qb->shouldReceive('getQuery')
             ->andReturn(
-                m::mock()
+                m::mock(\Doctrine\ORM\Query::class)
                     ->shouldReceive('execute')
                     ->once()
                     ->shouldReceive('getResult')
@@ -42,17 +42,10 @@ final class OrganisationUserTest extends RepositoryTestCase
             )
             ->once()
             ->shouldReceive('expr')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('eq')
-                    ->with('m.user', $userId)
-                    ->andReturn('wherecond')
-                    ->once()
-                    ->getMock()
-            )
+            ->andReturn(new \Doctrine\ORM\Query\Expr())
             ->once()
             ->shouldReceive('andWhere')
-            ->with('wherecond')
+            ->with(m::type(\Doctrine\ORM\Query\Expr\Comparison::class))
             ->once()
             ->getMock();
 

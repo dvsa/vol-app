@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
+use Doctrine\ORM\Query;
+
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
 use Doctrine\ORM\Query\Expr;
@@ -303,7 +305,7 @@ final class IrhpPermitRangeTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn($results)
                 ->getMock()
@@ -314,12 +316,12 @@ final class IrhpPermitRangeTest extends RepositoryTestCase
             . 'SELECT rd.id as journey, m.cabotage DISTINCT '
             . 'INNER JOIN m.irhpPermits ip '
             . 'INNER JOIN m.journey rd '
-            . 'AND ip.status IN [[['
+            . 'AND ip.status IN([[['
                 . '"' . IrhpPermitEntity::STATUS_PENDING . '",'
                 . '"' . IrhpPermitEntity::STATUS_AWAITING_PRINTING . '",'
                 . '"' . IrhpPermitEntity::STATUS_PRINTING . '",'
                 . '"' . IrhpPermitEntity::STATUS_ERROR . '"'
-            . ']]] '
+            . ']]]) '
             . 'AND m.irhpPermitStock = [[100]] '
             . 'ORDER BY rd.id ASC '
             . 'ORDER BY m.cabotage ASC';
@@ -341,7 +343,7 @@ final class IrhpPermitRangeTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn($results)
                 ->getMock()
@@ -381,7 +383,7 @@ final class IrhpPermitRangeTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn($results)
                 ->getMock()

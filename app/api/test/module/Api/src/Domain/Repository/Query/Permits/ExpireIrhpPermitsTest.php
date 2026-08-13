@@ -81,7 +81,7 @@ final class ExpireIrhpPermitsTest extends AbstractDbQueryTestCase
                 'currentUserId' => 1,
             ],
             [
-                'validStatuses' => Connection::PARAM_STR_ARRAY,
+                'validStatuses' => \Doctrine\DBAL\ArrayParameterType::STRING,
             ]
         ];
     }

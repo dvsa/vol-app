@@ -13,7 +13,7 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Discs;
 use Dvsa\Olcs\Api\Domain\Repository\Query\Discs\GoodsDiscsSetIsPrinting;
 use Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc;
 use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
-use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ArrayParameterType;
 
 /**
  * Goods Discs Set Is Printing Test
@@ -47,9 +47,9 @@ final class GoodsDiscsSetIsPrintingTest extends AbstractDbQueryTestCase
     {
         yield [
             ['isPrinting' => 1, 'ids' => [1,2]],
-            ['isPrinting' => \PDO::PARAM_INT, 'ids' => Connection::PARAM_INT_ARRAY],
+            ['isPrinting' => \PDO::PARAM_INT, 'ids' => ArrayParameterType::INTEGER],
             ['isPrinting' => 1, 'ids' => [1,2]],
-            ['isPrinting' => \PDO::PARAM_INT, 'ids' => Connection::PARAM_INT_ARRAY]
+            ['isPrinting' => \PDO::PARAM_INT, 'ids' => ArrayParameterType::INTEGER]
         ];
     }
 

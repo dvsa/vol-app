@@ -76,10 +76,9 @@ final class SlaTargetDateTest extends RepositoryTestCase
 
         $mockQb = m::mock(QueryBuilder::class);
         $mockQb->shouldReceive('expr')
-            ->andReturnSelf()
-            ->shouldReceive('eq')
-            ->andReturnSelf()
-            ->shouldReceive('andWhere')
+            ->andReturn(new \Doctrine\ORM\Query\Expr());
+
+        $mockQb->shouldReceive('andWhere')
             ->andReturnSelf()
             ->shouldReceive('setParameter')
             ->with('byDocument', 100)
