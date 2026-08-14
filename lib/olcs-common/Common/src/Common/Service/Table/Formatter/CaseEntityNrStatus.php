@@ -2,6 +2,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\Service\Helper\UrlHelperService;
 
 /**
@@ -39,7 +40,7 @@ class CaseEntityNrStatus implements FormatterPluginManagerInterface
             return sprintf(
                 self::URL_TEMPLATE,
                 $this->urlHelper->fromRoute('transport-manager', ['transportManager' => $tmId]),
-                $tmId
+                Escape::html($tmId)
             );
         }
 
@@ -49,10 +50,10 @@ class CaseEntityNrStatus implements FormatterPluginManagerInterface
         $licLink = sprintf(
             self::URL_TEMPLATE,
             $this->urlHelper->fromRoute('lva-licence', ['licence' => $lic['id']]),
-            $lic['licNo']
+            Escape::html($lic['licNo'])
         );
 
-        $licStatus = $lic['status']['description'];
+        $licStatus = Escape::html($lic['status']['description']);
 
         if (
             $typeId === \Common\RefData::CASE_TYPE_LICENCE
@@ -72,10 +73,10 @@ class CaseEntityNrStatus implements FormatterPluginManagerInterface
         $appLink = sprintf(
             self::URL_TEMPLATE,
             $this->urlHelper->fromRoute('lva-application', ['application' => $appId]),
-            $appId
+            Escape::html($appId)
         );
 
-        $appStatus = $app['status']['description'];
+        $appStatus = Escape::html($app['status']['description']);
 
         return sprintf(self::TEMPLATE_APP, $licLink, $licStatus, $appLink, $appStatus);
     }

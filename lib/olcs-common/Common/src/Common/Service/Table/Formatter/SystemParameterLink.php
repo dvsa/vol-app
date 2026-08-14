@@ -9,6 +9,7 @@
 namespace Common\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
+use Common\Util\Escape;
 
 /**
  * System parameter link formatter
@@ -38,6 +39,6 @@ class SystemParameterLink implements FormatterPluginManagerInterface
             ['action' => 'edit', 'sp' => $data['id']]
         );
 
-        return '<a href="' . $url . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>';
+        return '<a href="' . $url . '" class="govuk-link js-modal-ajax">' . Escape::html($data['id']) . '</a>';
     }
 }

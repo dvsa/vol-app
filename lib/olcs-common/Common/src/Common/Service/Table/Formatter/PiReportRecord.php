@@ -6,6 +6,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\Service\Helper\UrlHelperService;
 
 /**
@@ -37,8 +38,8 @@ class PiReportRecord implements FormatterPluginManagerInterface
                         'licence' => $data['pi']['case']['licence']['id']
                     ]
                 ),
-                $data['pi']['case']['licence']['licNo'],
-                $data['pi']['case']['licence']['status']['description']
+                Escape::html($data['pi']['case']['licence']['licNo']),
+                Escape::html($data['pi']['case']['licence']['status']['description'])
             );
         }
         if (!empty($data['pi']['case']['transportManager'])) {
@@ -50,8 +51,8 @@ class PiReportRecord implements FormatterPluginManagerInterface
                         'transportManager' => $data['pi']['case']['transportManager']['id']
                     ]
                 ),
-                $data['pi']['case']['transportManager']['id'],
-                $data['pi']['case']['transportManager']['tmStatus']['description']
+                Escape::html($data['pi']['case']['transportManager']['id']),
+                Escape::html($data['pi']['case']['transportManager']['tmStatus']['description'])
             );
         }
 

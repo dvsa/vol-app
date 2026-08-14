@@ -44,7 +44,7 @@
     "test": "phpunit",
     "phpcs": "phpcs",
     "psalm": "psalm",
-    "phpstan": "phpstan",
+    "phpstan": "phpstan --memory-limit=1G",
     "all": [
       "@test",
       "@phpcs",

@@ -8,6 +8,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\RefData;
 
 /**
@@ -37,7 +38,7 @@ class FeeStatus implements FormatterPluginManagerInterface
 
         return vsprintf(
             '<strong class="govuk-tag govuk-tag--%s">%s</strong>',
-            [$statusClass, $row['feeStatus']['description']]
+            [$statusClass, Escape::html($row['feeStatus']['description'])]
         );
     }
 }

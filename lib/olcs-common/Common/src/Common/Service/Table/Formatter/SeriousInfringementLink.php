@@ -7,6 +7,7 @@
 namespace Common\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
+use Common\Util\Escape;
 
 /**
  * Class SeriousInfringementLink
@@ -33,6 +34,6 @@ class SeriousInfringementLink implements FormatterPluginManagerInterface
         unset($column);
         $url = $this->urlHelper->fromRoute('case_penalty_applied', ['si' => $data['id'], 'action' => 'index'], [], true);
 
-        return '<a class="govuk-link" href="' . $url . '">' . $data['id'] . '</a>';
+        return '<a class="govuk-link" href="' . $url . '">' . Escape::html($data['id']) . '</a>';
     }
 }

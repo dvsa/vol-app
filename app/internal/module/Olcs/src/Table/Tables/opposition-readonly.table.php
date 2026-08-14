@@ -25,7 +25,7 @@ return [
                     ['case' => $row['case']['id'], 'tab' => 'overview'],
                     'case_opposition',
                     false
-                ) . '">' . $row['case']['id'] . '</a>'
+                ) . '">' . \Common\Util\Escape::html($row['case']['id']) . '</a>'
         ],
         [
             'title' => 'Case status',
@@ -53,7 +53,7 @@ return [
             'formatter' => function ($data, $column) {
                 $grounds = [];
                 foreach ($data['grounds'] as $ground) {
-                    $grounds[] = $ground['description'];
+                    $grounds[] = \Common\Util\Escape::html($ground['description']);
                 }
 
                 return implode(', ', $grounds);
@@ -62,7 +62,7 @@ return [
         [
             'title' => 'App No.',
             'isNumeric' => true,
-            'formatter' => fn($row) => $row['case']['application']['id']
+            'formatter' => fn($row) => \Common\Util\Escape::html($row['case']['application']['id'])
         ],
     ]
 ];

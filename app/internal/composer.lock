@@ -3594,6 +3594,93 @@
       "time": "2026-01-26T13:04:50+00:00"
     },
     {
+      "name": "league/csv",
+      "version": "9.28.0",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/thephpleague/csv.git",
+        "reference": "6582ace29ae09ba5b07049d40ea13eb19c8b5073"
+      },
+      "dist": {
+        "type": "zip",
+        "url": "https://api.github.com/repos/thephpleague/csv/zipball/6582ace29ae09ba5b07049d40ea13eb19c8b5073",
+        "reference": "6582ace29ae09ba5b07049d40ea13eb19c8b5073",
+        "shasum": ""
+      },
+      "require": {
+        "ext-filter": "*",
+        "php": "^8.1.2"
+      },
+      "require-dev": {
+        "ext-dom": "*",
+        "ext-xdebug": "*",
+        "friendsofphp/php-cs-fixer": "^3.92.3",
+        "phpbench/phpbench": "^1.4.3",
+        "phpstan/phpstan": "^1.12.32",
+        "phpstan/phpstan-deprecation-rules": "^1.2.1",
+        "phpstan/phpstan-phpunit": "^1.4.2",
+        "phpstan/phpstan-strict-rules": "^1.6.2",
+        "phpunit/phpunit": "^10.5.16 || ^11.5.22 || ^12.5.4",
+        "symfony/var-dumper": "^6.4.8 || ^7.4.0 || ^8.0"
+      },
+      "suggest": {
+        "ext-dom": "Required to use the XMLConverter and the HTMLConverter classes",
+        "ext-iconv": "Needed to ease transcoding CSV using iconv stream filters",
+        "ext-mbstring": "Needed to ease transcoding CSV using mb stream filters",
+        "ext-mysqli": "Requiered to use the package with the MySQLi extension",
+        "ext-pdo": "Required to use the package with the PDO extension",
+        "ext-pgsql": "Requiered to use the package with the PgSQL extension",
+        "ext-sqlite3": "Required to use the package with the SQLite3 extension"
+      },
+      "type": "library",
+      "extra": {
+        "branch-alias": {
+          "dev-master": "9.x-dev"
+        }
+      },
+      "autoload": {
+        "files": ["src/functions_include.php"],
+        "psr-4": {
+          "League\\Csv\\": "src"
+        }
+      },
+      "notification-url": "https://packagist.org/downloads/",
+      "license": ["MIT"],
+      "authors": [
+        {
+          "name": "Ignace Nyamagana Butera",
+          "email": "nyamsprod@gmail.com",
+          "homepage": "https://github.com/nyamsprod/",
+          "role": "Developer"
+        }
+      ],
+      "description": "CSV data manipulation made easy in PHP",
+      "homepage": "https://csv.thephpleague.com",
+      "keywords": [
+        "convert",
+        "csv",
+        "export",
+        "filter",
+        "import",
+        "read",
+        "transform",
+        "write"
+      ],
+      "support": {
+        "docs": "https://csv.thephpleague.com",
+        "issues": "https://github.com/thephpleague/csv/issues",
+        "rss": "https://github.com/thephpleague/csv/releases.atom",
+        "source": "https://github.com/thephpleague/csv"
+      },
+      "funding": [
+        {
+          "url": "https://github.com/sponsors/nyamsprod",
+          "type": "github"
+        }
+      ],
+      "time": "2025-12-27T15:18:42+00:00"
+    },
+    {
       "name": "lm-commons/lmc-rbac-mvc",
       "version": "3.5.0",
       "source": {
@@ -4010,7 +4097,7 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-common",
-        "reference": "07fc842d1bf5c9157ca078d42cad8f5630d4c17c"
+        "reference": "47e863169c038356322cf194c1e1d129028a622c"
       },
       "require": {
         "ezyang/htmlpurifier": "^4.17",
@@ -4030,6 +4117,7 @@
         "laminas/laminas-stdlib": "^3.20",
         "laminas/laminas-validator": "^2.64",
         "laminas/laminas-view": "^2.41",
+        "league/csv": "^9.28",
         "olcs/olcs-logging": "^9.0",
         "olcs/olcs-transfer": "^8.0",
         "olcs/olcs-utils": "^7.1",
@@ -4088,7 +4176,7 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-logging",
-        "reference": "2e458c6466165abc82a6cb9119fc0e03eedb2b94"
+        "reference": "4f4a49ca9648b99985f7394fb77ae3b9282cafd0"
       },
       "require": {
         "ext-json": "*",
@@ -4131,7 +4219,7 @@
         "test": ["phpunit"],
         "phpcs": ["phpcs"],
         "psalm": ["psalm"],
-        "phpstan": ["phpstan"],
+        "phpstan": ["phpstan --memory-limit=1G"],
         "all": ["@test", "@phpcs", "@psalm", "@phpstan"]
       },
       "license": ["MIT"],
@@ -4147,7 +4235,7 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-transfer",
-        "reference": "ab1e2023bdd351ebeb124e89696b0216eaa6b9a3"
+        "reference": "77aae2d4addef9002877c0db74fbeb90c8ffc490"
       },
       "require": {
         "ext-igbinary": "*",
@@ -4197,7 +4285,7 @@
         "test": ["phpunit"],
         "phpcs": ["phpcs"],
         "psalm": ["psalm"],
-        "phpstan": ["phpstan"],
+        "phpstan": ["phpstan --memory-limit=1G"],
         "all": ["@test", "@phpcs", "@psalm", "@phpstan"]
       },
       "license": ["MIT"],

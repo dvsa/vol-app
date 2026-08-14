@@ -34,7 +34,7 @@ return [
                     ['action' => 'details', 'id' => $data['id']],
                     'operator/irfo/gv-permits',
                     true
-                ) . '" class="govuk-link js-modal-ajax">' . $data['id'] . '</a>'
+                ) . '" class="govuk-link js-modal-ajax">' . \Common\Util\Escape::html($data['id']) . '</a>'
         ],
         [
             'title' => 'In force date',

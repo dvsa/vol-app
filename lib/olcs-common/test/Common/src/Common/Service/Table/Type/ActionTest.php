@@ -32,13 +32,24 @@ final class ActionTest extends MockeryTestCase
     {
         $this->table
             ->expects('isInternalReadOnly')
+            ->withNoArgs()
             ->andReturn($isInternalReadOnly);
         $this->table->expects('getFieldset')
+            ->withNoArgs()
             ->andReturn($isFieldset ? 'unit_Fieldset' : null);
-        $this->table->shouldReceive('replaceContent')
-            ->andReturn('unit_ValueFormat');
 
         $data['id'] = self::ID;
+
+        // value_format is a template with row data substituted in, so it goes through the escaping
+        // variant — and only then. Declared inside the guard so the arguments can be the real ones
+        // rather than a wildcard, and so the columns without a value_format assert that it is not
+        // called at all. $data is stamped with the id first, because Mockery captures the expected
+        // arguments by value when the expectation is declared.
+        if (isset($column['value_format'])) {
+            $this->table->expects('replaceContentEscapingValues')
+                ->with($column['value_format'], $data)
+                ->andReturn('unit_ValueFormat');
+        }
 
         $this->assertEquals($expect, $this->sut->render($data, $column, $content));
     }
@@ -91,6 +102,24 @@ final class ActionTest extends MockeryTestCase
                 '<button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit"' .
                 ' class="action-button-link " name="action[unit_Action][' . self::ID . ']"' .
                 ' >unit_FldVal</button>',
+            "isInternalReadOnly" => false,
+        ];
+        // A column naming a to-many field. Escape::html() rejects an array outright, so without a
+        // guard this is a TypeError rather than the label "Array" sprintf() used to produce.
+        yield [
+            'isFieldset' => false,
+            'data' => [
+                'field' => [],
+            ],
+            'column' => [
+                'action' => 'unit_Action',
+                'name' => 'field',
+            ],
+            'content' => null,
+            'expect' =>
+                '<button data-prevent-double-click="true" data-module="govuk-button" role="link" type="submit"' .
+                ' class="action-button-link " name="action[unit_Action][' . self::ID . ']"' .
+                ' ></button>',
             "isInternalReadOnly" => false,
         ];
         yield [
