@@ -82,10 +82,6 @@ return [
                 'query_cache'       => 'redis',
                 'result_cache'      => 'redis',
                 'hydration_cache'   => 'redis',
-
-
-                // Log SQL queries to the OLCS application log file
-                //'sql_logger' => 'DoctrineLogger',
             ]
         ],
         'migrations' => [
@@ -596,7 +592,7 @@ return [
         'doctrine-cache' => [
             'options' => [
                 'ttl' => 3600,
-                'namespace' => 'doctrine',
+                'namespace' => 'doctrine-orm3',
             ]
         ],
         // Backs the Cognito JWKS cache. Its own namespace so a key rotation can be forced
