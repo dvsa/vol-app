@@ -231,13 +231,14 @@ final class LicenceTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('ocs.operatingCentre', 'ocs_oc')->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('ocs_oc.address', 'ocs_oc_a')->andReturnSelf();
 
-        $doctrineComparison = m::mock(Comparison::class);
-
-        $qb->shouldReceive('expr->eq')->with('m.licNo', ':licNo')->once()->andReturn($doctrineComparison);
-        $qb->shouldReceive('where')->with($doctrineComparison)->once()->andReturnSelf();
+        $expr = $this->mockExprEq('m.licNo', ':licNo');
+        $qb->shouldReceive('expr->eq')->with('m.licNo', ':licNo')->once()->andReturn($expr);
+        $qb->shouldReceive('where')->with($expr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('licNo', 'LIC0001')->once()->andReturnSelf();
 
-        $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn(['RESULTS']);
+        $query = m::mock(\Doctrine\ORM\Query::class);
+        $qb->shouldReceive('getQuery')->once()->andReturn($query);
+        $query->shouldReceive('getResult')->with()->once()->andReturn(['RESULTS']);
 
         $this->assertSame('RESULTS', $this->sut->fetchByLicNo('LIC0001'));
     }
@@ -258,13 +259,14 @@ final class LicenceTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('ocs.operatingCentre', 'ocs_oc')->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('ocs_oc.address', 'ocs_oc_a')->andReturnSelf();
 
-        $doctrineComparison = m::mock(Comparison::class);
-
-        $qb->shouldReceive('expr->eq')->with('m.licNo', ':licNo')->once()->andReturn($doctrineComparison);
-        $qb->shouldReceive('where')->with($doctrineComparison)->once()->andReturnSelf();
+        $expr = $this->mockExprEq('m.licNo', ':licNo');
+        $qb->shouldReceive('expr->eq')->with('m.licNo', ':licNo')->once()->andReturn($expr);
+        $qb->shouldReceive('where')->with($expr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('licNo', 'LIC0001')->once()->andReturnSelf();
 
-        $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn([]);
+        $query = m::mock(\Doctrine\ORM\Query::class);
+        $qb->shouldReceive('getQuery')->once()->andReturn($query);
+        $query->shouldReceive('getResult')->with()->once()->andReturn([]);
 
         $this->expectException(NotFoundException::class);
 
@@ -374,7 +376,7 @@ final class LicenceTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(Query::class)->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -393,7 +395,7 @@ final class LicenceTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(Query::class)->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -503,7 +505,7 @@ final class LicenceTest extends RepositoryTestCase
             ->shouldReceive('byId')->with(21)->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(Query::class)->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getSingleResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -519,12 +521,12 @@ final class LicenceTest extends RepositoryTestCase
         $this->setUpSut(LicenceRepo::class, true);
 
         $mockQb = m::mock(QueryBuilder::class);
-        $expr1 = m::mock(Comparison::class);
+        $expr1 = $this->mockExprEq('m.organisation', ':organisation');
         $mockQb->shouldReceive('expr->eq')->with('m.organisation', ':organisation')->once()->andReturn($expr1);
         $mockQb->shouldReceive('setParameter')->with('organisation', 723)->once()->andReturn();
         $mockQb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
 
-        $expr2 = m::mock(\Doctrine\ORM\Query\Expr\Func::class);
+        $expr2 = $this->mockExprNotIn('m.status', ':excludeStatuses');
         $mockQb->shouldReceive('expr->notIn')->with('m.status', ':excludeStatuses')->once()->andReturn($expr2);
         $mockQb->shouldReceive('setParameter')->with('excludeStatuses', ['status1', 'status2'])->once()->andReturn();
         $mockQb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
@@ -544,22 +546,24 @@ final class LicenceTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('withRefdata')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('trafficArea', 'ta')->once()->andReturnSelf();
 
-        $condFrom = m::mock(Comparison::class);
+        $condFrom = $this->mockExprGte('m.expiryDate', ':expiryFrom');
         $qb->shouldReceive('expr->gte')->with('m.expiryDate', ':expiryFrom')->once()->andReturn($condFrom);
         $qb->shouldReceive('andWhere')->with($condFrom)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('expiryFrom', m::type(\DateTime::class))->once()->andReturnSelf();
 
-        $condTo = m::mock(Comparison::class);
+        $condTo = $this->mockExprLte('m.expiryDate', ':expiryTo');
         $qb->shouldReceive('expr->lte')->with('m.expiryDate', ':expiryTo')->once()->andReturn($condTo);
         $qb->shouldReceive('andWhere')->with($condTo)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('expiryTo', m::type(\DateTime::class))->once()->andReturnSelf();
 
-        $condTa = m::mock(Comparison::class);
+        $condTa = $this->mockExprEq('ta.id', ':trafficArea');
         $qb->shouldReceive('expr->eq')->with('ta.id', ':trafficArea')->once()->andReturn($condTa);
         $qb->shouldReceive('andWhere')->with($condTa)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('trafficArea', 'B')->once()->andReturnSelf();
 
-        $qb->shouldReceive('getQuery->getResult')
+        $query = m::mock(\Doctrine\ORM\Query::class);
+        $qb->shouldReceive('getQuery')->andReturn($query);
+        $query->shouldReceive('getResult')
             ->andReturn('RESULT');
 
         $repo = m::mock(EntityRepository::class);
@@ -598,7 +602,7 @@ final class LicenceTest extends RepositoryTestCase
             ]
         ];
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock(Query::class)
+            m::mock(\Doctrine\ORM\Query::class)
                 ->shouldReceive('getResult')
                 ->with(Query::HYDRATE_ARRAY)
                 ->once()
@@ -643,11 +647,11 @@ final class LicenceTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('a.interimStatus', 'ais')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('byId')->with($licenceId)->once()->andReturnSelf();
 
-        $condVar = m::mock(Comparison::class);
+        $condVar = $this->mockExprEq('a.isVariation', true);
         $qb->shouldReceive('expr->eq')->with('a.isVariation', true)->once()->andReturn($condVar);
         $qb->shouldReceive('andWhere')->with($condVar)->once()->andReturnSelf();
 
-        $condApp = m::mock(Comparison::class);
+        $condApp = $this->mockExprEq('a.status', ':applicationStatus');
         $qb->shouldReceive('expr->eq')->with('a.status', ':applicationStatus')->once()->andReturn($condApp);
         $qb->shouldReceive('andWhere')->with($condApp)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')
@@ -655,7 +659,7 @@ final class LicenceTest extends RepositoryTestCase
             ->once()
             ->andReturnSelf();
 
-        $condInt = m::mock(Comparison::class);
+        $condInt = $this->mockExprEq('a.interimStatus', ':interimStatus');
         $qb->shouldReceive('expr->eq')->with('a.interimStatus', ':interimStatus')->once()->andReturn($condInt);
         $qb->shouldReceive('andWhere')->with($condInt)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')
@@ -663,7 +667,9 @@ final class LicenceTest extends RepositoryTestCase
             ->once()
             ->andReturnSelf();
 
-        $qb->shouldReceive('getQuery->getResult')->andReturn(['result']);
+        $query = m::mock(\Doctrine\ORM\Query::class);
+        $qb->shouldReceive('getQuery')->andReturn($query);
+        $query->shouldReceive('getResult')->andReturn(['result']);
 
         $repo = m::mock(EntityRepository::class);
         $repo->shouldReceive('createQueryBuilder')
@@ -756,17 +762,19 @@ final class LicenceTest extends RepositoryTestCase
 
         $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
 
-        $orgCond = m::mock(Comparison::class);
+        $orgCond = $this->mockExprEq('m.organisation', ':organisationId');
         $qb->shouldReceive('expr->eq')->with('m.organisation', ':organisationId')->once()->andReturn($orgCond);
         $qb->shouldReceive('andWhere')->with($orgCond)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('organisationId', 1)->once()->andReturnSelf();
 
-        $stCond = m::mock(\Doctrine\ORM\Query\Expr\Func::class);
+        $stCond = $this->mockExprIn('m.status', ':statuses');
         $qb->shouldReceive('expr->in')->with('m.status', ':statuses')->once()->andReturn($stCond);
         $qb->shouldReceive('andWhere')->with($stCond)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('statuses', $statuses)->once()->andReturnSelf();
 
-        $qb->shouldReceive('getQuery->getResult')->with(Query::HYDRATE_ARRAY)->once()->andReturn(['result']);
+        $query = m::mock(\Doctrine\ORM\Query::class);
+        $qb->shouldReceive('getQuery')->once()->andReturn($query);
+        $query->shouldReceive('getResult')->with(Query::HYDRATE_ARRAY)->once()->andReturn(['result']);
 
         $this->assertSame(['result'], $this->sut->fetchByOrganisationIdAndStatuses(1, $statuses));
     }
@@ -819,22 +827,22 @@ final class LicenceTest extends RepositoryTestCase
             ->with(Licence::class)
             ->andReturn($repo);
 
-        $expr1 = m::mock(Comparison::class);
+        $expr1 = $this->mockExprLt('m.expiryDate', ':now');
         $qb->shouldReceive('expr->lt')->with('m.expiryDate', ':now')->once()->andReturn($expr1);
         $qb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('now', m::type(DateTime::class))->once()->andReturnSelf();
 
-        $expr2 = m::mock(Comparison::class);
+        $expr2 = $this->mockExprEq('m.goodsOrPsv', ':psv');
         $qb->shouldReceive('expr->eq')->with('m.goodsOrPsv', ':psv')->once()->andReturn($expr2);
         $qb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('psv', Licence::LICENCE_CATEGORY_PSV)->once()->andReturnSelf();
 
-        $expr3 = m::mock(\Doctrine\ORM\Query\Expr\Func::class);
+        $expr3 = $this->mockExprIn('m.licenceType', ':licTypes');
         $qb->shouldReceive('expr->in')->with('m.licenceType', ':licTypes')->once()->andReturn($expr3);
         $qb->shouldReceive('andWhere')->with($expr3)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('licTypes', $licTypes)->once()->andReturnSelf();
 
-        $expr4 = m::mock(\Doctrine\ORM\Query\Expr\Func::class);
+        $expr4 = $this->mockExprIn('m.status', ':statuses');
         $qb->shouldReceive('expr->in')->with('m.status', ':statuses')->once()->andReturn($expr4);
         $qb->shouldReceive('andWhere')->with($expr4)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('statuses', $statuses)->once()->andReturnSelf();
@@ -848,7 +856,9 @@ final class LicenceTest extends RepositoryTestCase
             ]
         ];
 
-        $qb->shouldReceive('getQuery->getResult')->with(Query::HYDRATE_ARRAY)->once()->andReturn($results);
+        $query = m::mock(\Doctrine\ORM\Query::class);
+        $qb->shouldReceive('getQuery')->once()->andReturn($query);
+        $query->shouldReceive('getResult')->with(Query::HYDRATE_ARRAY)->once()->andReturn($results);
 
         $this->assertSame([1, 2], $this->sut->fetchPsvLicenceIdsToSurrender());
     }
