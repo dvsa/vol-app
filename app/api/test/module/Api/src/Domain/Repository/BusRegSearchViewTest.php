@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Dvsa\Olcs\Transfer\Query\BusRegSearchView\BusRegSearchViewList;
-use Dvsa\Olcs\Transfer\Query\Bus\SearchViewList;
-use Dvsa\Olcs\Api\Domain\Query\BusRegSearchView\BusRegSearchViewList as LocalAuthoritySearchViewList;
+use Dvsa\Olcs\Api\Domain\Query\BusRegSearchView\BusRegSearchViewList as SearchViewList;
 use Mockery as m;
 use Dvsa\Olcs\Api\Domain\Repository\BusRegSearchView as Repo;
 use Doctrine\ORM\QueryBuilder;
@@ -15,10 +14,6 @@ use Dvsa\Olcs\Api\Entity\View\BusRegSearchView as Entity;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Entity\Bus\BusReg;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
-use Doctrine\ORM\Query;
-use Doctrine\ORM\Query\Expr;
-use Doctrine\ORM\Query\Expr\Comparison;
-use Doctrine\ORM\Query\Expr\Func;
 
 /**
  * BusRegSearchViewTest
@@ -44,32 +39,12 @@ final class BusRegSearchViewTest extends RepositoryTestCase
 
         $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
 
+        $expr = $this->mockExprEq('m.regNo', ':regNo');
+        $qb->shouldReceive('expr->eq')->with('m.regNo', ':regNo')->once()->andReturn($expr);
+        $qb->shouldReceive('where')->with($expr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('regNo', 'REG0001')->once()->andReturnSelf();
 
-        $expr = m::mock(Expr::class);
-        $comparison = m::mock(Comparison::class);
-        $query = m::mock(Query::class);
-
-        $qb->shouldReceive('expr')
-            ->andReturn($expr);
-
-        $expr->shouldReceive('eq')
-            ->with('m.regNo', ':regNo')
-            ->once()
-            ->andReturn($comparison);
-
-        $qb->shouldReceive('where')
-            ->with($comparison)
-            ->once()
-            ->andReturnSelf();
-
-        $query->shouldReceive('getResult')
-            ->once()
-            ->andReturn(['RESULTS']);
-
-        $qb->shouldReceive('getQuery')
-            ->once()
-            ->andReturn($query);
+        $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn(['RESULTS']);
 
         $this->assertSame('RESULTS', $this->sut->fetchByRegNo('REG0001'));
     }
@@ -85,32 +60,12 @@ final class BusRegSearchViewTest extends RepositoryTestCase
 
         $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
 
+        $expr = $this->mockExprEq('m.regNo', ':regNo');
+        $qb->shouldReceive('expr->eq')->with('m.regNo', ':regNo')->once()->andReturn($expr);
+        $qb->shouldReceive('where')->with($expr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('regNo', 'REG0001')->once()->andReturnSelf();
 
-        $expr = m::mock(Expr::class);
-        $comparison = m::mock(Comparison::class);
-        $query = m::mock(Query::class);
-
-        $qb->shouldReceive('expr')
-            ->andReturn($expr);
-
-        $expr->shouldReceive('eq')
-            ->with('m.regNo', ':regNo')
-            ->once()
-            ->andReturn($comparison);
-
-        $qb->shouldReceive('where')
-            ->with($comparison)
-            ->once()
-            ->andReturnSelf();
-
-        $query->shouldReceive('getResult')
-            ->once()
-            ->andReturn([]);
-
-        $qb->shouldReceive('getQuery')
-            ->once()
-            ->andReturn($query);
+        $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn([]);
 
         $this->expectException(NotFoundException::class);
 
@@ -129,65 +84,23 @@ final class BusRegSearchViewTest extends RepositoryTestCase
         $qb = m::mock(QueryBuilder::class);
         $repo = m::mock(EntityRepository::class);
 
-        $this->em->shouldReceive('getRepository')
-            ->with(Entity::class)
-            ->andReturn($repo);
+        $this->em->shouldReceive('getRepository')->with(Entity::class)->andReturn($repo);
 
-        $repo->shouldReceive('createQueryBuilder')
-            ->with('m')
-            ->once()
-            ->andReturn($qb);
+        $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
 
-        $this->queryBuilder->shouldReceive('modifyQuery')
-            ->with($qb)
-            ->once()
-            ->andReturnSelf();
+        $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
 
-        $expr = m::mock(Expr::class);
-        $licenceCondition = m::mock(Comparison::class);
-        $statusCondition = m::mock(Func::class);
-        $query = m::mock(Query::class);
+        $licenceExpr = $this->mockExprEq('m.licId', ':licence');
+        $qb->shouldReceive('expr->eq')->with('m.licId', ':licence')->once()->andReturn($licenceExpr);
+        $qb->shouldReceive('where')->with($licenceExpr)->once()->andReturnSelf();
+        $qb->shouldReceive('setParameter')->with('licence', '611')->once()->andReturnSelf();
 
-        $qb->shouldReceive('expr')
-            ->andReturn($expr);
+        $statusExpr = $this->mockExprIn('m.busRegStatus', ':activeStatuses');
+        $qb->shouldReceive('expr->in')->with('m.busRegStatus', ':activeStatuses')->once()->andReturn($statusExpr);
+        $qb->shouldReceive('andWhere')->with($statusExpr)->once()->andReturnSelf();
+        $qb->shouldReceive('setParameter')->with('activeStatuses', $activeStatuses)->once()->andReturnSelf();
 
-        $expr->shouldReceive('eq')
-            ->with('m.licId', ':licence')
-            ->once()
-            ->andReturn($licenceCondition);
-
-        $qb->shouldReceive('where')
-            ->with($licenceCondition)
-            ->once()
-            ->andReturnSelf();
-
-        $qb->shouldReceive('setParameter')
-            ->with('licence', '611')
-            ->once()
-            ->andReturnSelf();
-
-        $expr->shouldReceive('in')
-            ->with('m.busRegStatus', ':activeStatuses')
-            ->once()
-            ->andReturn($statusCondition);
-
-        $qb->shouldReceive('andWhere')
-            ->with($statusCondition)
-            ->once()
-            ->andReturnSelf();
-
-        $qb->shouldReceive('setParameter')
-            ->with('activeStatuses', $activeStatuses)
-            ->once()
-            ->andReturnSelf();
-
-        $query->shouldReceive('getResult')
-            ->once()
-            ->andReturn(['RESULTS']);
-
-        $qb->shouldReceive('getQuery')
-            ->once()
-            ->andReturn($query);
+        $qb->shouldReceive('getQuery->getResult')->with()->once()->andReturn(['RESULTS']);
 
         $this->assertSame(['RESULTS'], $this->sut->fetchActiveByLicence(611));
     }
@@ -226,38 +139,17 @@ final class BusRegSearchViewTest extends RepositoryTestCase
         $qb = m::mock(QueryBuilder::class);
         $repo = m::mock(EntityRepository::class);
 
-        $expr = m::mock(Expr::class);
-        $comparison = m::mock(Comparison::class);
-        $query = m::mock(Query::class);
-
         $this->em->shouldReceive('getRepository')->with(Entity::class)->andReturn($repo);
 
         $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
 
         $qb->shouldReceive('distinct')->andReturnSelf();
         $qb->shouldReceive('select')->with($expected)->andReturnSelf();
+        $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULTS']);
 
-        $qb->shouldReceive('expr')
-            ->andReturn($expr);
-
-        $expr->shouldReceive('eq')
-            ->with('m.organisationId', ':organisationId')
-            ->once()
-            ->andReturn($comparison);
-
-        $qb->shouldReceive('andWhere')
-            ->with($comparison)
-            ->once()
-            ->andReturnSelf();
-
-        $query->shouldReceive('getResult')
-            ->once()
-            ->andReturn(['RESULTS']);
-
-        $qb->shouldReceive('getQuery')
-            ->once()
-            ->andReturn($query);
-
+        $expr = $this->mockExprEq('m.organisationId', ':organisationId');
+        $qb->shouldReceive('expr->eq')->with('m.organisationId', ':organisationId')->once()->andReturn($expr);
+        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('organisationId', $organisationId)->once()->andReturnSelf();
 
         $mockQuery = m::mock(QueryInterface::class);
@@ -277,37 +169,17 @@ final class BusRegSearchViewTest extends RepositoryTestCase
         $qb = m::mock(QueryBuilder::class);
         $repo = m::mock(EntityRepository::class);
 
-        $expr = m::mock(Expr::class);
-        $comparison = m::mock(Comparison::class);
-        $query = m::mock(Query::class);
-
         $this->em->shouldReceive('getRepository')->with(Entity::class)->andReturn($repo);
 
         $repo->shouldReceive('createQueryBuilder')->with('m')->once()->andReturn($qb);
 
         $qb->shouldReceive('distinct')->andReturnSelf();
         $qb->shouldReceive('select')->with($expected)->andReturnSelf();
+        $qb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULTS']);
 
-        $qb->shouldReceive('expr')
-            ->andReturn($expr);
-
-        $expr->shouldReceive('eq')
-            ->with('m.localAuthorityId', ':localAuthorityId')
-            ->once()
-            ->andReturn($comparison);
-
-        $qb->shouldReceive('andWhere')
-            ->with($comparison)
-            ->once()
-            ->andReturnSelf();
-
-        $query->shouldReceive('getResult')
-            ->once()
-            ->andReturn(['RESULTS']);
-
-        $qb->shouldReceive('getQuery')
-            ->once()
-            ->andReturn($query);
+        $expr = $this->mockExprEq('m.localAuthorityId', ':localAuthorityId');
+        $qb->shouldReceive('expr->eq')->with('m.localAuthorityId', ':localAuthorityId')->once()->andReturn($expr);
+        $qb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('localAuthorityId', $localAuthorityId)->once()->andReturnSelf();
 
         $mockQuery = m::mock(QueryInterface::class);
@@ -342,61 +214,33 @@ final class BusRegSearchViewTest extends RepositoryTestCase
         $this->setUpSut(Repo::class, true);
 
         $mockQb = m::mock(QueryBuilder::class);
-
-        $expr = m::mock(Expr::class);
-        $condition1 = m::mock(Comparison::class);
-        $condition2 = m::mock(Comparison::class);
-        $condition3 = m::mock(Comparison::class);
-
         $mockQb->shouldReceive('expr')
-            ->andReturn($expr);
-
-        $expr->shouldReceive('eq')
-            ->with('m.licId', ':licId')
-            ->once()
-            ->andReturn($condition1);
-
-        $mockQb->shouldReceive('andWhere')
-            ->with($condition1)
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('setParameter')
+            ->andReturn(new \Doctrine\ORM\Query\Expr())
+            ->shouldReceive('eq')
+            ->andReturnSelf()
+            ->shouldReceive('andWhere')
+            ->andReturnSelf()
+            ->shouldReceive('setParameter')
             ->with('licId', '1234')
-            ->once()
-            ->andReturnSelf();
+            ->andReturnSelf()
 
-        $expr->shouldReceive('eq')
-            ->with('m.busRegStatus', ':busRegStatus')
-            ->once()
-            ->andReturn($condition2);
-
-        $mockQb->shouldReceive('andWhere')
-            ->with($condition2)
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('setParameter')
+            ->shouldReceive('eq')
+            ->andReturnSelf()
+            ->shouldReceive('andWhere')
+            ->andReturnSelf()
+            ->shouldReceive('setParameter')
             ->with('busRegStatus', 'foo')
-            ->once()
-            ->andReturnSelf();
+            ->andReturnSelf()
 
-        $expr->shouldReceive('eq')
-            ->with('m.organisationId', ':organisationId')
-            ->once()
-            ->andReturn($condition3);
-
-        $mockQb->shouldReceive('andWhere')
-            ->with($condition3)
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('setParameter')
+            ->shouldReceive('eq')
+            ->andReturnSelf()
+            ->shouldReceive('andWhere')
+            ->andReturnSelf()
+            ->shouldReceive('setParameter')
             ->with('organisationId', 342)
-            ->once()
-            ->andReturnSelf();
+            ->andReturnSelf()
 
-        $mockQb->shouldReceive('groupBy')
+            ->shouldReceive('groupBy')
             ->with('m.id')
             ->once()
             ->andReturnSelf();
@@ -419,32 +263,21 @@ final class BusRegSearchViewTest extends RepositoryTestCase
     {
         $this->setUpSut(Repo::class, true);
 
-        $mockQb = m::mock(QueryBuilder::class);
-        $expr = m::mock(Expr::class);
-        $condition = m::mock(Comparison::class);
-
-        $mockQb->shouldReceive('expr')
-            ->andReturn($expr);
-
-        $expr->shouldReceive('eq')
-            ->with('m.busRegStatus', ':status')
-            ->once()
-            ->andReturn($condition);
-
-        $mockQb->shouldReceive('andWhere')
-            ->with($condition)
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('setParameter')
+        $mockQb = m::mock(QueryBuilder::class)
+            ->shouldReceive('expr')
+            ->andReturnSelf()
+            ->shouldReceive('eq')
+            ->andReturnSelf()
+            ->shouldReceive('andWhere')
+            ->andReturnSelf()
+            ->shouldReceive('setParameter')
             ->with('status', 'bar')
-            ->once()
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('groupBy')
+            ->andReturnSelf()
+            ->shouldReceive('groupBy')
             ->with('m.id')
             ->once()
-            ->andReturnSelf();
+            ->andReturnSelf()
+            ->getMock();
 
         $mockQ = SearchViewList::create(['status' => 'bar']);
 
@@ -455,55 +288,49 @@ final class BusRegSearchViewTest extends RepositoryTestCase
      * Test applyListFilters when logged in as an LA
      */
     public function testApplyListFiltersLocalAuthority(): void
-{
-    $this->setUpSut(Repo::class, true);
+    {
+        $this->setUpSut(Repo::class, true);
 
-    $mockQb = m::mock(QueryBuilder::class);
-    $expr = m::mock(\Doctrine\ORM\Query\Expr::class);
+        $mockQb = m::mock(QueryBuilder::class);
+        $mockQb->shouldReceive('expr')
+            ->andReturn(new \Doctrine\ORM\Query\Expr())
+            ->shouldReceive('eq')
+            ->andReturnSelf()
+            ->shouldReceive('andWhere')
+            ->andReturnSelf()
+            ->shouldReceive('setParameter')
+            ->with('licId', '1234')
+            ->andReturnSelf()
 
-    $expr->shouldReceive('eq')
-        ->zeroOrMoreTimes()
-        ->andReturnUsing(
-            fn ($left, $right) =>
-                new \Doctrine\ORM\Query\Expr\Comparison($left, '=', $right)
+            ->shouldReceive('eq')
+            ->andReturnSelf()
+            ->shouldReceive('andWhere')
+            ->andReturnSelf()
+            ->shouldReceive('setParameter')
+            ->with('busRegStatus', 'foo')
+            ->andReturnSelf()
+
+            ->shouldReceive('eq')
+            ->andReturnSelf()
+            ->shouldReceive('andWhere')
+            ->andReturnSelf()
+            ->shouldReceive('setParameter')
+            ->with('localAuthorityId', 234)
+            ->andReturnSelf()
+
+            ->shouldReceive('groupBy')
+            ->with('m.id')
+            ->once()
+            ->andReturnSelf();
+
+        $mockQ = BusRegSearchViewList::create(
+            [
+                'licId' => '1234',
+                'busRegStatus' => 'foo',
+                'localAuthorityId' => 234
+            ]
         );
 
-    $mockQb->shouldReceive('expr')
-        ->zeroOrMoreTimes()
-        ->andReturn($expr);
-
-    $mockQb->shouldReceive('andWhere')
-        ->zeroOrMoreTimes()
-        ->andReturnSelf();
-
-    $mockQb->shouldReceive('setParameter')
-        ->with('licId', '1234')
-        ->once()
-        ->andReturnSelf();
-
-    $mockQb->shouldReceive('setParameter')
-        ->with('busRegStatus', 'foo')
-        ->once()
-        ->andReturnSelf();
-
-    $mockQb->shouldReceive('setParameter')
-        ->with('localAuthorityId', 234)
-        ->once()
-        ->andReturnSelf();
-
-    $mockQb->shouldReceive('groupBy')
-        ->with('m.id')
-        ->once()
-        ->andReturnSelf();
-
-    $mockQ = LocalAuthoritySearchViewList::create(
-        [
-            'licId' => '1234',
-            'busRegStatus' => 'foo',
-            'localAuthorityId' => 234,
-        ]
-    );
-
-    $this->sut->applyListFilters($mockQb, $mockQ);
-}
+        $this->sut->applyListFilters($mockQb, $mockQ);
+    }
 }

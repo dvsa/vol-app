@@ -169,17 +169,14 @@ final class TaskTest extends RepositoryTestCase
     }
 
     public function testGetTeamReferenceByTeam(): void
-{
-    $teamId = 999;
-    $team = m::mock(Entity\User\Team::class);
+    {
+        $teamId = 999;
 
-    $this->em->shouldReceive('getReference')
-        ->once()
-        ->with(Entity\User\Team::class, $teamId)
-        ->andReturn($team);
+        $team = m::mock(Entity\User\Team::class);
+        $this->em->shouldReceive('getReference')->once()->with(Entity\User\Team::class, $teamId)->andReturn($team);
 
-    $this->assertSame($team, $this->sut->getTeamReference($teamId, null));
-}
+        $this->assertSame($team, $this->sut->getTeamReference($teamId, null));
+    }
 
     public function testGetTeamReferenceByUser(): void
     {
@@ -293,47 +290,47 @@ final class TaskTest extends RepositoryTestCase
     }
 
     public function testFetchOpenTasksForSurrender(): void
-{
-    $surrenderId = 1;
-    $qb = m::mock(QueryBuilder::class);
-    $this->mockCreateQueryBuilder($qb);
+    {
+        $surrenderId = 1;
+        $qb = m::mock(QueryBuilder::class);
+        $this->mockCreateQueryBuilder($qb);
 
-    $expr1 = $this->mockExprEq('m.surrender', ':surrenderId');
-    $qb->shouldReceive('expr->eq')
-        ->with('m.surrender', ':surrenderId')
-        ->once()
-        ->andReturn($expr1);
+        $expr1 = $this->mockExprEq('m.surrender', ':surrenderId');
+        $qb->shouldReceive('expr->eq')
+            ->with('m.surrender', ':surrenderId')
+            ->once()
+            ->andReturn($expr1);
 
-    $qb->shouldReceive('where')
-        ->with($expr1)
-        ->andReturnSelf();
+        $qb->shouldReceive('where')
+            ->with($expr1)
+            ->andReturnSelf();
 
-    $qb->shouldReceive('setParameter')
-        ->with('surrenderId', $surrenderId)
-        ->once()
-        ->andReturnSelf();
+        $qb->shouldReceive('setParameter')
+            ->with('surrenderId', $surrenderId)
+            ->once()
+            ->andReturnSelf();
 
-    $expr2 = $this->mockExprEq('m.isClosed', ':isClosed');
-    $qb->shouldReceive('expr->eq')
-        ->with('m.isClosed', ':isClosed')
-        ->once()
-        ->andReturn($expr2);
+        $expr2 = $this->mockExprEq('m.isClosed', ':isClosed');
+        $qb->shouldReceive('expr->eq')
+            ->with('m.isClosed', ':isClosed')
+            ->once()
+            ->andReturn($expr2);
 
-    $qb->shouldReceive('andWhere')
-        ->with($expr2)
-        ->andReturnSelf();
+        $qb->shouldReceive('andWhere')
+            ->with($expr2)
+            ->andReturnSelf();
 
-    $qb->shouldReceive('setParameter')
-        ->with('isClosed', 0)
-        ->once()
-        ->andReturnSelf();
+        $qb->shouldReceive('setParameter')
+            ->with('isClosed', 0)
+            ->once()
+            ->andReturnSelf();
 
-    $qb->shouldReceive('getQuery->getResult')
-        ->andReturn(['result']);
+        $qb->shouldReceive('getQuery->getResult')
+            ->andReturn(['result']);
 
-    $this->assertSame(
-        ['result'],
-        $this->sut->fetchOpenTasksForSurrender($surrenderId)
-    );
-}
+        $this->assertSame(
+            ['result'],
+            $this->sut->fetchOpenTasksForSurrender($surrenderId)
+        );
+    }
 }
