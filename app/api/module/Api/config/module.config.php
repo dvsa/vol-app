@@ -48,7 +48,6 @@ return [
             'AddressFormatter' => \Dvsa\Olcs\Api\Service\Helper\FormatAddress::class,
             'VariationPublishValidationService' =>
                 \Dvsa\Olcs\Api\Service\Lva\Variation\PublishValidationService::class,
-            'DoctrineLogger' => Util\DoctrineExtension\Logger::class,
             'CommonCurrentDateTimeFactory' =>
                 ApiSrv\Common\CurrentDateTimeFactory::class,
             'CqrsCommandCreator' => ApiSrv\Cqrs\CommandCreator::class,
