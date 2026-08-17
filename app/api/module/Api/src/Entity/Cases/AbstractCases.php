@@ -65,7 +65,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Foreign Key to application
      *
-     * @var \Dvsa\Olcs\Api\Entity\Application\Application
+     * @var \Dvsa\Olcs\Api\Entity\Application\Application|null
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'cases', fetch: 'LAZY')]
@@ -74,7 +74,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Foreign Key to transport_manager
      *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager|null
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'cases', fetch: 'LAZY')]
@@ -83,7 +83,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Foreign Key to licence
      *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence|null
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'cases', fetch: 'LAZY')]
@@ -92,7 +92,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -102,7 +102,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -112,7 +112,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Ecms no
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'ecms_no', length: 45, nullable: true)]
     protected $ecmsNo;
@@ -128,7 +128,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Date case closed
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'closed_date', nullable: true)]
     protected $closedDate;
@@ -136,7 +136,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Short summary note in old system
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'description', length: 1024, nullable: true)]
     protected $description;
@@ -152,7 +152,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Annual test history
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'annual_test_history', length: 4000, nullable: true)]
     protected $annualTestHistory;
@@ -160,7 +160,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Notes on any prohibitions linked to the case
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'prohibition_note', length: 4000, nullable: true)]
     protected $prohibitionNote;
@@ -168,7 +168,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Penalties note
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'penalties_note', length: 4000, nullable: true)]
     protected $penaltiesNote;
@@ -176,7 +176,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Notes on any convictions linked to the case
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'conviction_note', length: 4000, nullable: true)]
     protected $convictionNote;
@@ -193,7 +193,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
@@ -201,7 +201,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;
@@ -209,7 +209,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Categorys
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\System\RefData>
      */
     #[ORM\JoinTable(name: 'case_category')]
     #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id')]
@@ -220,7 +220,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Outcomes
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\System\RefData>
      */
     #[ORM\JoinTable(name: 'case_outcome')]
     #[ORM\JoinColumn(name: 'cases_id', referencedColumnName: 'id')]
@@ -231,7 +231,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Appeal
      *
-     * @var \Dvsa\Olcs\Api\Entity\Appeal
+     * @var \Dvsa\Olcs\Api\Entity\Cases\Appeal|null
      */
     #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Appeal::class, mappedBy: 'case')]
     protected $appeal;
@@ -239,7 +239,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * ReadAudits
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Cases\CasesReadAudit>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\CasesReadAudit::class, mappedBy: 'case')]
     protected $readAudits;
@@ -247,7 +247,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Complaints
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Cases\Complaint>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Complaint::class, mappedBy: 'case')]
     protected $complaints;
@@ -255,7 +255,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * ConditionUndertakings
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking::class, mappedBy: 'case')]
     protected $conditionUndertakings;
@@ -263,7 +263,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Convictions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Cases\Conviction>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Conviction::class, mappedBy: 'case')]
     protected $convictions;
@@ -271,7 +271,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Documents
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Doc\Document>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'case')]
     protected $documents;
@@ -279,7 +279,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * ErruRequest
      *
-     * @var \Dvsa\Olcs\Api\Entity\ErruRequest
+     * @var \Dvsa\Olcs\Api\Entity\Si\ErruRequest|null
      */
     #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\ErruRequest::class, mappedBy: 'case', cascade: ['persist'])]
     protected $erruRequest;
@@ -287,7 +287,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * LegacyOffences
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Legacy\LegacyOffence>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Legacy\LegacyOffence::class, mappedBy: 'case')]
     protected $legacyOffences;
@@ -295,7 +295,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Oppositions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Opposition\Opposition>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Opposition\Opposition::class, mappedBy: 'case')]
     protected $oppositions;
@@ -303,7 +303,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * PublicInquiry
      *
-     * @var \Dvsa\Olcs\Api\Entity\Pi
+     * @var \Dvsa\Olcs\Api\Entity\Pi\Pi|null
      */
     #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, mappedBy: 'case')]
     protected $publicInquiry;
@@ -311,7 +311,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Prohibitions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Prohibition\Prohibition>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Prohibition\Prohibition::class, mappedBy: 'case')]
     protected $prohibitions;
@@ -319,7 +319,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * SeriousInfringements
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SeriousInfringement::class, mappedBy: 'case', cascade: ['persist'])]
     protected $seriousInfringements;
@@ -327,7 +327,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Statements
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Cases\Statement>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Statement::class, mappedBy: 'case')]
     protected $statements;
@@ -335,7 +335,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * Stays
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Cases\Stay>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Stay::class, mappedBy: 'case')]
     protected $stays;
@@ -343,7 +343,7 @@ abstract class AbstractCases implements BundleSerializableInterface, JsonSeriali
     /**
      * TmDecisions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Tm\TmCaseDecision>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TmCaseDecision::class, mappedBy: 'case')]
     protected $tmDecisions;

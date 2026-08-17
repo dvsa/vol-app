@@ -220,7 +220,7 @@ class RelationshipTypeHandler extends AbstractTypeHandler
             'type' => '\\' . $targetEntity,
             'docBlock' => $comment,
             'defaultValue' => 'null',
-            'nullable' => true, // Relationships are typically nullable for initialization
+            'nullable' => $column->isNullable(),
             'isRelationship' => true,
         ];
     }

@@ -65,7 +65,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * The person making the complaint
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails|null
      */
     #[ORM\JoinColumn(name: 'complainant_contact_details_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY', cascade: ['persist'])]
@@ -74,7 +74,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Status
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -83,7 +83,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * ComplaintType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'complaint_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -92,7 +92,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -102,7 +102,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -120,7 +120,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Date received
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'complaint_date', nullable: true)]
     protected $complaintDate;
@@ -128,7 +128,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Description
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'description', length: 4000, nullable: true)]
     protected $description;
@@ -136,7 +136,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Vrm
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'vrm', length: 20, nullable: true)]
     protected $vrm;
@@ -144,7 +144,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Driver forename
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'driver_forename', length: 40, nullable: true)]
     protected $driverForename;
@@ -152,7 +152,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Driver family name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'driver_family_name', length: 40, nullable: true)]
     protected $driverFamilyName;
@@ -160,7 +160,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Closed date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'closed_date', nullable: true)]
     protected $closedDate;
@@ -177,7 +177,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
@@ -185,7 +185,7 @@ abstract class AbstractComplaint implements BundleSerializableInterface, JsonSer
     /**
      * OperatingCentres
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre>
      */
     #[ORM\JoinTable(name: 'oc_complaint')]
     #[ORM\JoinColumn(name: 'complaint_id', referencedColumnName: 'id')]

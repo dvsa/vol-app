@@ -48,7 +48,7 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -58,7 +58,7 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -68,7 +68,7 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     /**
      * All attributes from Verify
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'encrypted_string', name: 'attributes', nullable: true, length: 65535)]
     protected $attributes;
@@ -76,7 +76,7 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
     /**
      * SAML response received
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'saml_response', nullable: true)]
     protected $samlResponse;

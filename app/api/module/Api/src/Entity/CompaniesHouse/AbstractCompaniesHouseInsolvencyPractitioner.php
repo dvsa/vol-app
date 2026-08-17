@@ -55,7 +55,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'name', length: 100, nullable: true)]
     protected $name;
@@ -63,7 +63,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Address line 1
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'address_line_1', length: 100, nullable: true)]
     protected $addressLine1;
@@ -71,7 +71,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Address line 2
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'address_line_2', length: 100, nullable: true)]
     protected $addressLine2;
@@ -79,7 +79,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Country
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'country', length: 32, nullable: true)]
     protected $country;
@@ -87,7 +87,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Locality
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'locality', length: 100, nullable: true)]
     protected $locality;
@@ -95,7 +95,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Postal code
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'postal_code', length: 10, nullable: true)]
     protected $postalCode;
@@ -103,7 +103,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Region
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'region', length: 100, nullable: true)]
     protected $region;
@@ -111,7 +111,7 @@ abstract class AbstractCompaniesHouseInsolvencyPractitioner implements BundleSer
     /**
      * Appointed on
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'appointed_on', nullable: true)]
     protected $appointedOn;

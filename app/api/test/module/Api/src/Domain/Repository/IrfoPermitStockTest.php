@@ -52,7 +52,7 @@ final class IrfoPermitStockTest extends RepositoryTestCase
             ->andReturn($serialNoEnd);
 
     /** @var Expr $expr */
-    $expr = new Expr();
+        $expr = new Expr();
 
     /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);

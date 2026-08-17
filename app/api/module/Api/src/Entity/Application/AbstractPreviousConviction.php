@@ -54,7 +54,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Foreign Key to application
      *
-     * @var \Dvsa\Olcs\Api\Entity\Application\Application
+     * @var \Dvsa\Olcs\Api\Entity\Application\Application|null
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'previousConvictions', fetch: 'LAZY')]
@@ -63,7 +63,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Foreign Key to transport_manager
      *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager|null
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'previousConvictions', fetch: 'LAZY')]
@@ -72,7 +72,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Title
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'title', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -81,7 +81,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -91,7 +91,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -101,7 +101,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Conviction date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'conviction_date', nullable: true)]
     protected $convictionDate;
@@ -109,7 +109,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Forename
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'forename', length: 35, nullable: true)]
     protected $forename;
@@ -117,7 +117,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Family name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'family_name', length: 35, nullable: true)]
     protected $familyName;
@@ -125,7 +125,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Birth date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'birth_date', nullable: true)]
     protected $birthDate;
@@ -133,7 +133,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Category text
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'category_text', length: 1024, nullable: true)]
     protected $categoryText;
@@ -141,7 +141,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Notes
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'notes', length: 4000, nullable: true)]
     protected $notes;
@@ -149,7 +149,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Court fpn
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'court_fpn', length: 70, nullable: true)]
     protected $courtFpn;
@@ -157,7 +157,7 @@ abstract class AbstractPreviousConviction implements BundleSerializableInterface
     /**
      * Penalty
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'penalty', length: 255, nullable: true)]
     protected $penalty;

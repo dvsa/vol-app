@@ -75,7 +75,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Foreign Key to application
      *
-     * @var \Dvsa\Olcs\Api\Entity\Application\Application
+     * @var \Dvsa\Olcs\Api\Entity\Application\Application|null
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'licenceVehicles', fetch: 'LAZY')]
@@ -84,7 +84,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * InterimApplication
      *
-     * @var \Dvsa\Olcs\Api\Entity\Application\Application
+     * @var \Dvsa\Olcs\Api\Entity\Application\Application|null
      */
     #[ORM\JoinColumn(name: 'interim_application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'interimLicenceVehicles', fetch: 'LAZY')]
@@ -93,7 +93,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -103,7 +103,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -113,7 +113,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Received date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'received_date', nullable: true)]
     protected $receivedDate;
@@ -121,7 +121,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Date vehicle removed from licence
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'removal_date', nullable: true)]
     protected $removalDate;
@@ -129,7 +129,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Removal letter seed date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'removal_letter_seed_date', nullable: true)]
     protected $removalLetterSeedDate;
@@ -137,7 +137,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Vi action
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'vi_action', length: 1, nullable: true)]
     protected $viAction;
@@ -145,7 +145,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Warning letter seed date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'warning_letter_seed_date', nullable: true)]
     protected $warningLetterSeedDate;
@@ -153,7 +153,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Warning letter sent date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'warning_letter_sent_date', nullable: true)]
     protected $warningLetterSentDate;
@@ -161,7 +161,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Specified date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'specified_date', nullable: true)]
     protected $specifiedDate;
@@ -178,7 +178,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
@@ -186,7 +186,7 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     /**
      * GoodsDiscs
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc::class, mappedBy: 'licenceVehicle')]
     #[ORM\OrderBy(['createdOn' => 'DESC'])]

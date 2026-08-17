@@ -59,7 +59,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -69,7 +69,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -79,7 +79,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Type of licence status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'type_of_licence_status', nullable: true)]
     protected $typeOfLicenceStatus;
@@ -87,7 +87,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Business type status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'business_type_status', nullable: true)]
     protected $businessTypeStatus;
@@ -95,7 +95,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Business details status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'business_details_status', nullable: true)]
     protected $businessDetailsStatus;
@@ -103,7 +103,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Addresses status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'addresses_status', nullable: true)]
     protected $addressesStatus;
@@ -111,7 +111,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * People status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'people_status', nullable: true)]
     protected $peopleStatus;
@@ -119,7 +119,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Taxi phv status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'taxi_phv_status', nullable: true)]
     protected $taxiPhvStatus;
@@ -127,7 +127,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Operating centres status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'operating_centres_status', nullable: true)]
     protected $operatingCentresStatus;
@@ -135,7 +135,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Financial evidence status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'financial_evidence_status', nullable: true)]
     protected $financialEvidenceStatus;
@@ -143,7 +143,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Transport managers status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'transport_managers_status', nullable: true)]
     protected $transportManagersStatus;
@@ -151,7 +151,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Vehicles status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'vehicles_status', nullable: true)]
     protected $vehiclesStatus;
@@ -159,7 +159,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Vehicles psv status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'vehicles_psv_status', nullable: true)]
     protected $vehiclesPsvStatus;
@@ -167,7 +167,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Vehicles size status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'vehicles_size_status', nullable: true, options: ['unsigned' => true])]
     protected $vehiclesSizeStatus;
@@ -175,7 +175,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Psv operate small status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_operate_small_status', nullable: true, options: ['unsigned' => true])]
     protected $psvOperateSmallStatus;
@@ -183,7 +183,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Psv operate large status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_operate_large_status', nullable: true, options: ['unsigned' => true])]
     protected $psvOperateLargeStatus;
@@ -191,7 +191,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Psv small conditions status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_small_conditions_status', nullable: true, options: ['unsigned' => true])]
     protected $psvSmallConditionsStatus;
@@ -199,7 +199,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Psv operate novelty status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_operate_novelty_status', nullable: true, options: ['unsigned' => true])]
     protected $psvOperateNoveltyStatus;
@@ -207,7 +207,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Psv small part written status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_small_part_written_status', nullable: true, options: ['unsigned' => true])]
     protected $psvSmallPartWrittenStatus;
@@ -215,7 +215,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Psv documentary evidence small status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_documentary_evidence_small_status', nullable: true, options: ['unsigned' => true])]
     protected $psvDocumentaryEvidenceSmallStatus;
@@ -223,7 +223,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Psv documentary evidence large status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_documentary_evidence_large_status', nullable: true, options: ['unsigned' => true])]
     protected $psvDocumentaryEvidenceLargeStatus;
@@ -231,7 +231,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Psv main occupation undertakings status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_main_occupation_undertakings_status', nullable: true, options: ['unsigned' => true])]
     protected $psvMainOccupationUndertakingsStatus;
@@ -239,7 +239,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Vehicles declarations status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'vehicles_declarations_status', nullable: true)]
     protected $vehiclesDeclarationsStatus;
@@ -247,7 +247,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Discs status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'discs_status', nullable: true)]
     protected $discsStatus;
@@ -255,7 +255,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Community licences status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'community_licences_status', nullable: true)]
     protected $communityLicencesStatus;
@@ -263,7 +263,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Safety status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'safety_status', nullable: true)]
     protected $safetyStatus;
@@ -271,7 +271,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Conditions undertakings status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'conditions_undertakings_status', nullable: true)]
     protected $conditionsUndertakingsStatus;
@@ -279,7 +279,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Financial history status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'financial_history_status', nullable: true)]
     protected $financialHistoryStatus;
@@ -287,7 +287,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Licence history status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'licence_history_status', nullable: true)]
     protected $licenceHistoryStatus;
@@ -295,7 +295,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Convictions penalties status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'convictions_penalties_status', nullable: true)]
     protected $convictionsPenaltiesStatus;
@@ -303,7 +303,7 @@ abstract class AbstractApplicationTracking implements BundleSerializableInterfac
     /**
      * Declarations internal status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'declarations_internal_status', nullable: true)]
     protected $declarationsInternalStatus;

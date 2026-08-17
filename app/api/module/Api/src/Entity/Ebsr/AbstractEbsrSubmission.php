@@ -68,7 +68,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Foreign Key to document
      *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
+     * @var \Dvsa\Olcs\Api\Entity\Doc\Document|null
      */
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'ebsrSubmission', fetch: 'LAZY')]
@@ -77,7 +77,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Foreign Key to bus_reg
      *
-     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg|null
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'ebsrSubmissions', fetch: 'LAZY')]
@@ -86,7 +86,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Foreign Key to organisation
      *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation|null
      */
     #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
@@ -95,7 +95,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Submitted date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'submitted_date', nullable: true)]
     protected $submittedDate;
@@ -103,7 +103,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Licence no
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'licence_no', length: 9, nullable: true)]
     protected $licenceNo;
@@ -111,7 +111,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Organisation email address
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'organisation_email_address', length: 255, nullable: true)]
     protected $organisationEmailAddress;
@@ -119,7 +119,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Application classification
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'application_classification', length: 32, nullable: true)]
     protected $applicationClassification;
@@ -127,7 +127,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Variation no
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'variation_no', nullable: true, options: ['unsigned' => true])]
     protected $variationNo;
@@ -135,7 +135,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Registration no
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'registration_no', length: 4, nullable: true)]
     protected $registrationNo;
@@ -143,7 +143,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Validation start
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'validation_start', nullable: true)]
     protected $validationStart;
@@ -151,7 +151,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Validation end
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'validation_end', nullable: true)]
     protected $validationEnd;
@@ -159,7 +159,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Publish start
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'publish_start', nullable: true)]
     protected $publishStart;
@@ -167,7 +167,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Publish end
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'publish_end', nullable: true)]
     protected $publishEnd;
@@ -175,7 +175,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Process start
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'process_start', nullable: true)]
     protected $processStart;
@@ -183,7 +183,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Process end
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'process_end', nullable: true)]
     protected $processEnd;
@@ -191,7 +191,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Ebsr submission result
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'ebsr_submission_result', length: 10000, nullable: true)]
     protected $ebsrSubmissionResult;
@@ -199,7 +199,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Distribute start
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'distribute_start', nullable: true)]
     protected $distributeStart;
@@ -207,7 +207,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Distribute end
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'distribute_end', nullable: true)]
     protected $distributeEnd;
@@ -215,7 +215,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Distribute expire
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'distribute_expire', nullable: true)]
     protected $distributeExpire;
@@ -240,7 +240,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Txc version
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'txc_version', length: 10, nullable: true)]
     protected $txcVersion;
@@ -248,7 +248,7 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;

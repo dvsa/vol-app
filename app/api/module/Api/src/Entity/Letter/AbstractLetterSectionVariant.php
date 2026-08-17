@@ -66,7 +66,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
     /**
      * Points to latest version for this variant
      *
-     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion|null
      */
     #[ORM\JoinColumn(name: 'current_version_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterSectionVersion::class, fetch: 'LAZY')]
@@ -75,7 +75,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
     /**
      * FK to ref_data lcat_gv/lcat_psv. NULL = any
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -84,7 +84,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
     /**
      * FK to ref_data org_t_st/org_t_rc/org_t_llp/org_t_p. NULL = any
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'organisation_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -93,7 +93,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
     /**
      * FK to letter_choice. NULL = not conditional on a choice
      *
-     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterChoice
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterChoice|null
      */
     #[ORM\JoinColumn(name: 'letter_choice_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterChoice::class, fetch: 'LAZY')]
@@ -102,7 +102,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -112,7 +112,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -122,7 +122,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
     /**
      * NULL = any, 0 = new application, 1 = variation
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'is_variation', nullable: true)]
     protected $isVariation;
@@ -130,7 +130,7 @@ abstract class AbstractLetterSectionVariant implements BundleSerializableInterfa
     /**
      * NULL = any, 0 = GB, 1 = NI
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'is_ni', nullable: true)]
     protected $isNi;
