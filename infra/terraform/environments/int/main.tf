@@ -44,6 +44,13 @@ locals {
       resources = [
         "arn:aws:events:eu-west-1:054614622558:event-bus/default"
       ]
+      conditions = [
+        {
+          test     = "StringEquals"
+          variable = "events:source"
+          values   = ["vol.api"]
+        }
+      ]
     },
     {
       effect = "Allow"
