@@ -371,10 +371,10 @@ final class BusTest extends RepositoryTestCase
                 m::type('string'),
                 'WITH',
                 m::on(
-                static fn ($condition): bool =>
+                    static fn ($condition): bool =>
                     $condition instanceof \Doctrine\ORM\Query\Expr\Comparison
                     && (string) $condition === 't.localAuthority = :localAuthority'
-            )
+                )
             )
             ->andReturnSelf()
             ->shouldReceive('setParameter')->with('localAuthority', 1);

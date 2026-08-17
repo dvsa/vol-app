@@ -70,7 +70,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * FK to ref_data lcat_gv or lcat_psv
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -79,7 +79,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -89,7 +89,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -107,7 +107,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Editor.js format
      *
-     * @var array
+     * @var array|null
      */
     #[ORM\Column(type: 'json', name: 'default_content', nullable: true)]
     protected $defaultContent;
@@ -115,7 +115,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Help text for users
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'help_text', nullable: true)]
     protected $helpText;
@@ -123,7 +123,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Minimum content length
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'min_length', nullable: true, options: ['unsigned' => true])]
     protected $minLength;
@@ -131,7 +131,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Maximum content length
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'max_length', nullable: true, options: ['unsigned' => true])]
     protected $maxLength;
@@ -163,7 +163,7 @@ abstract class AbstractLetterSectionVersion implements BundleSerializableInterfa
     /**
      * Embargo until this date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'publish_from', nullable: true)]
     protected $publishFrom;

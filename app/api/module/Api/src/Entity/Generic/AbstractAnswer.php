@@ -61,7 +61,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * IrhpApplication
      *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication|null
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'answers', fetch: 'LAZY')]
@@ -70,7 +70,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * IrhpPermitApplication
      *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication|null
      */
     #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, inversedBy: 'answers', fetch: 'LAZY')]
@@ -79,7 +79,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -89,7 +89,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -99,7 +99,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Ans integer
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'ans_integer', nullable: true)]
     protected $ansInteger;
@@ -107,7 +107,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Ans string
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'ans_string', length: 255, nullable: true)]
     protected $ansString;
@@ -115,7 +115,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Ans decimal
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'decimal', name: 'ans_decimal', nullable: true)]
     protected $ansDecimal;
@@ -123,7 +123,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Ans date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'ans_date', nullable: true)]
     protected $ansDate;
@@ -131,7 +131,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Ans datetime
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'ans_datetime', nullable: true)]
     protected $ansDatetime;
@@ -139,7 +139,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Ans boolean
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'ans_boolean', nullable: true)]
     protected $ansBoolean;
@@ -147,7 +147,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Ans text
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'ans_text', nullable: true)]
     protected $ansText;
@@ -155,7 +155,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
     /**
      * Ans array
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'ans_array', nullable: true)]
     protected $ansArray;

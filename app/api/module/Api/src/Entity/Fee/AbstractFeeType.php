@@ -54,7 +54,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * IrfoFeeType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'irfo_fee_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -81,7 +81,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Foreign Key to traffic_area
      *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea|null
      */
     #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
@@ -90,7 +90,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * LicenceType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'licence_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -99,7 +99,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * GoodsOrPsv
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -108,7 +108,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -118,7 +118,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -144,7 +144,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Fixed value
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'decimal', name: 'fixed_value', nullable: true)]
     protected $fixedValue;
@@ -152,7 +152,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Annual value
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'decimal', name: 'annual_value', nullable: true)]
     protected $annualValue;
@@ -160,7 +160,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Five year value
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'decimal', name: 'five_year_value', nullable: true)]
     protected $fiveYearValue;
@@ -168,7 +168,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * DVSA value, rather than HMRC.  S for standard, Z for zero
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'vat_code', length: 1, nullable: true, options: ['fixed' => true])]
     protected $vatCode;
@@ -200,7 +200,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Cost centre ref
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'cost_centre_ref', length: 50, nullable: true)]
     protected $costCentreRef;
@@ -208,7 +208,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
     /**
      * Product reference for CPMS/Oracle
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'product_reference', length: 30, nullable: true)]
     protected $productReference;

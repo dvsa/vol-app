@@ -75,7 +75,7 @@ final class DateTypeTest extends MockeryTestCase
 
     public static function dpTestConvertToDatabaseValue(): \Iterator
     {
-       yield [
+        yield [
             'value' => '@1146711721',
             'expect' => '2006-05-04',
         ];

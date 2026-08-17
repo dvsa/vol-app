@@ -24,8 +24,7 @@ class YesNoNullType extends Type
     public function getSqlDeclaration(
         array $fieldDeclaration,
         AbstractPlatform $platform
-    ): string
-    {
+    ): string {
         unset($fieldDeclaration);
         unset($platform);
 
@@ -43,8 +42,7 @@ class YesNoNullType extends Type
     public function convertToPHPValue(
         mixed $value,
         AbstractPlatform $platform
-    ): mixed
-    {
+    ): mixed {
         unset($platform);
 
         if ($value === null) {
@@ -64,8 +62,7 @@ class YesNoNullType extends Type
     public function convertToDatabaseValue(
         mixed $value,
         AbstractPlatform $platform
-    ): mixed
-    {
+    ): mixed {
         unset($platform);
 
         if ($value === null) {

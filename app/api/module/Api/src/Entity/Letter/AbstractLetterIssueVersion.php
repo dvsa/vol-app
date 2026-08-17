@@ -62,7 +62,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     /**
      * LetterIssueType
      *
-     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssueType
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterIssueType|null
      */
     #[ORM\JoinColumn(name: 'letter_issue_type_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterIssueType::class, fetch: 'LAZY')]
@@ -80,7 +80,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     /**
      * SubCategory
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
+     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory|null
      */
     #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SubCategory::class, fetch: 'LAZY')]
@@ -89,7 +89,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     /**
      * FK to ref_data lcat_gv or lcat_psv
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -98,7 +98,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -108,7 +108,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -126,7 +126,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     /**
      * Short label for issue picker modal
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'modal_label', length: 200, nullable: true)]
     protected $modalLabel;
@@ -134,7 +134,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     /**
      * Editor.js format
      *
-     * @var array
+     * @var array|null
      */
     #[ORM\Column(type: 'json', name: 'default_body_content', nullable: true)]
     protected $defaultBodyContent;
@@ -142,7 +142,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     /**
      * Help text for users
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'help_text', nullable: true)]
     protected $helpText;
@@ -150,7 +150,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     /**
      * Minimum content length
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'min_length', nullable: true, options: ['unsigned' => true])]
     protected $minLength;
@@ -158,7 +158,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     /**
      * Maximum content length
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'max_length', nullable: true, options: ['unsigned' => true])]
     protected $maxLength;
@@ -190,7 +190,7 @@ abstract class AbstractLetterIssueVersion implements BundleSerializableInterface
     /**
      * Embargo until this date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'publish_from', nullable: true)]
     protected $publishFrom;

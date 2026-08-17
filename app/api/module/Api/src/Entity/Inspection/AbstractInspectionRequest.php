@@ -67,7 +67,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Foreign Key to application
      *
-     * @var \Dvsa\Olcs\Api\Entity\Application\Application
+     * @var \Dvsa\Olcs\Api\Entity\Application\Application|null
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
@@ -76,7 +76,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Foreign Key to operating_centre
      *
-     * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre
+     * @var \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre|null
      */
     #[ORM\JoinColumn(name: 'operating_centre_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\OperatingCentre\OperatingCentre::class, fetch: 'LAZY')]
@@ -94,7 +94,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Foreign Key to task
      *
-     * @var \Dvsa\Olcs\Api\Entity\Task\Task
+     * @var \Dvsa\Olcs\Api\Entity\Task\Task|null
      */
     #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, fetch: 'LAZY')]
@@ -103,7 +103,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Case
      *
-     * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
+     * @var \Dvsa\Olcs\Api\Entity\Cases\Cases|null
      */
     #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
@@ -130,7 +130,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * ReportType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'report_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -139,7 +139,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -149,7 +149,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -159,7 +159,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Requestor notes
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'requestor_notes', nullable: true)]
     protected $requestorNotes;
@@ -167,7 +167,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Inspector notes
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'inspector_notes', nullable: true)]
     protected $inspectorNotes;
@@ -175,7 +175,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Due date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'due_date', nullable: true)]
     protected $dueDate;
@@ -183,7 +183,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * From date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'from_date', nullable: true)]
     protected $fromDate;
@@ -191,7 +191,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * To date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'to_date', nullable: true)]
     protected $toDate;
@@ -199,7 +199,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Request date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'request_date', nullable: true)]
     protected $requestDate;
@@ -207,7 +207,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Return date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'return_date', nullable: true)]
     protected $returnDate;
@@ -215,7 +215,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Deferred date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'deferred_date', nullable: true)]
     protected $deferredDate;
@@ -223,7 +223,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Inspector name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'inspector_name', length: 70, nullable: true)]
     protected $inspectorName;
@@ -231,7 +231,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Trailers examined no
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'trailers_examined_no', nullable: true, options: ['unsigned' => true])]
     protected $trailersExaminedNo;
@@ -239,7 +239,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Vehicles examined no
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'vehicles_examined_no', nullable: true, options: ['unsigned' => true])]
     protected $vehiclesExaminedNo;
@@ -256,7 +256,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;

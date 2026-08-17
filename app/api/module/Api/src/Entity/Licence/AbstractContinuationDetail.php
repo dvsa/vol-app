@@ -73,7 +73,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * ChecklistDocument
      *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
+     * @var \Dvsa\Olcs\Api\Entity\Doc\Document|null
      */
     #[ORM\JoinColumn(name: 'checklist_document_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'continuationDetails', fetch: 'LAZY')]
@@ -82,7 +82,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Status
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'status', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -91,7 +91,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * SignatureType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'signature_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -100,7 +100,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * DigitalSignature
      *
-     * @var \Dvsa\Olcs\Api\Entity\DigitalSignature
+     * @var \Dvsa\Olcs\Api\Entity\DigitalSignature|null
      */
     #[ORM\JoinColumn(name: 'digital_signature_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\DigitalSignature::class, fetch: 'LAZY')]
@@ -109,7 +109,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -119,7 +119,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -137,7 +137,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Tot auth vehicles
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'tot_auth_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totAuthVehicles;
@@ -145,7 +145,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Tot psv discs
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'tot_psv_discs', nullable: true, options: ['unsigned' => true])]
     protected $totPsvDiscs;
@@ -153,7 +153,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Tot community licences
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'tot_community_licences', nullable: true, options: ['unsigned' => true])]
     protected $totCommunityLicences;
@@ -161,7 +161,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Average balance amount
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'decimal', name: 'average_balance_amount', nullable: true)]
     protected $averageBalanceAmount;
@@ -169,7 +169,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * hasOverdraft
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'has_overdraft', nullable: true)]
     protected $hasOverdraft;
@@ -177,7 +177,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Overdraft amount
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'decimal', name: 'overdraft_amount', nullable: true)]
     protected $overdraftAmount;
@@ -185,7 +185,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * hasFactoring
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'has_factoring', nullable: true)]
     protected $hasFactoring;
@@ -193,7 +193,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Factoring amount
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'decimal', name: 'factoring_amount', nullable: true)]
     protected $factoringAmount;
@@ -201,7 +201,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * hasOtherFinances
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'has_other_finances', nullable: true)]
     protected $hasOtherFinances;
@@ -209,7 +209,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Other finances amount
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'decimal', name: 'other_finances_amount', nullable: true)]
     protected $otherFinancesAmount;
@@ -217,7 +217,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Other finances details
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'other_finances_details', length: 200, nullable: true)]
     protected $otherFinancesDetails;
@@ -225,7 +225,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Financial evidence uploaded
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'financial_evidence_uploaded', nullable: true)]
     protected $financialEvidenceUploaded;
@@ -241,7 +241,7 @@ abstract class AbstractContinuationDetail implements BundleSerializableInterface
     /**
      * Digital notification sent
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'digital_notification_sent', nullable: true)]
     protected $digitalNotificationSent;

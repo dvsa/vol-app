@@ -73,7 +73,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -83,7 +83,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -93,7 +93,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Entity id
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'entity_id', nullable: true, options: ['unsigned' => true])]
     protected $entityId;
@@ -101,7 +101,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Options
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'options', nullable: true)]
     protected $options;
@@ -109,7 +109,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Process after date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'process_after_date', nullable: true)]
     protected $processAfterDate;
@@ -125,7 +125,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
     /**
      * Last error
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'last_error', nullable: true)]
     protected $lastError;

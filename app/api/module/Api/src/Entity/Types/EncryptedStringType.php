@@ -24,8 +24,7 @@ class EncryptedStringType extends StringType
     public function convertToPHPValue(
         mixed $value,
         AbstractPlatform $platform
-    ): mixed
-    {
+    ): mixed {
         return $this->getEncrypter()->decrypt(base64_decode($value));
     }
 
@@ -41,8 +40,7 @@ class EncryptedStringType extends StringType
     public function convertToDatabaseValue(
         mixed $value,
         AbstractPlatform $platform
-    ): mixed
-    {
+    ): mixed {
         return base64_encode($this->getEncrypter()->encrypt($value));
     }
 

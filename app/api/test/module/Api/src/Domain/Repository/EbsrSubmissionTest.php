@@ -118,23 +118,23 @@ final class EbsrSubmissionTest extends RepositoryTestCase
     /**
      * Tests applyListFilters
      */
-        public function testApplyListFilters(): void
+    public function testApplyListFilters(): void
     {
         $this->setUpSut(Repo::class, true);
 
         $mockQb = m::mock(QueryBuilder::class);
         $expr = new \Doctrine\ORM\Query\Expr();
         $mockQb->shouldReceive('expr')
-            ->zeroOrMoreTimes()
-            ->andReturn($expr);
+        ->zeroOrMoreTimes()
+        ->andReturn($expr);
 
         $mockQb->shouldReceive('setParameter')
-            ->zeroOrMoreTimes()
-            ->andReturnSelf();
+        ->zeroOrMoreTimes()
+        ->andReturnSelf();
 
         $mockQb->shouldReceive('andWhere')
-            ->times(4)
-            ->andReturnSelf();
+        ->times(4)
+        ->andReturnSelf();
 
         // organisation clause
 

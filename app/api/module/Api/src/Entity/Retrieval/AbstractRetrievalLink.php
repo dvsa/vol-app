@@ -76,7 +76,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
     /**
      * Source context
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'source_context', length: 255, nullable: true)]
     protected $sourceContext;
@@ -84,7 +84,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
     /**
      * Recipient email
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'recipient_email', length: 255, nullable: true)]
     protected $recipientEmail;
@@ -116,7 +116,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -126,7 +126,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -145,7 +145,7 @@ abstract class AbstractRetrievalLink implements BundleSerializableInterface, Jso
     /**
      * Documents
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLinkDocument>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLinkDocument::class, mappedBy: 'retrievalLink')]
     protected $documents;

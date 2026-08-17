@@ -148,7 +148,8 @@ final class QueueProcessorTest extends MockeryTestCase
         $mockConsumer->shouldReceive('processMessage')
             ->once()
             ->with($item)
-            ->andThrow(new class($exceptionMessage) extends \RuntimeException implements ORMException {});
+            ->andThrow(new class ($exceptionMessage) extends \RuntimeException implements ORMException {
+            });
 
         $this->expectException(ORMException::class);
 
@@ -178,7 +179,8 @@ final class QueueProcessorTest extends MockeryTestCase
         $mockConsumer->shouldReceive('processMessage')
             ->once()
             ->with($item)
-            ->andThrow(new class($exceptionMessage) extends \RuntimeException implements DBALException {});
+            ->andThrow(new class ($exceptionMessage) extends \RuntimeException implements DBALException {
+            });
 
         $this->expectException(DBALException::class);
 

@@ -53,13 +53,13 @@ final class FinancialStandingRateTest extends RepositoryTestCase
         ->once()
         ->andReturnSelf();
 
-    $qb
+        $qb
         ->shouldReceive('andWhere')
         ->with(m::any())
         ->once()
         ->andReturnSelf();
 
-    $qb
+        $qb
         ->shouldReceive('addOrderBy')
             ->with('fsr.effectiveFrom', 'DESC')
             ->andReturnSelf()

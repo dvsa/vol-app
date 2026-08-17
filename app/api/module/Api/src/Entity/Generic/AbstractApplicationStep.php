@@ -68,7 +68,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -78,7 +78,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -88,7 +88,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Weight
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'decimal', name: 'weight', nullable: true)]
     protected $weight;
@@ -96,7 +96,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Only on yes
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'only_on_yes', nullable: true)]
     protected $onlyOnYes;
@@ -104,7 +104,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Ignore question validation
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'ignore_question_validation', nullable: true)]
     protected $ignoreQuestionValidation;
@@ -112,7 +112,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Break on failure
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'break_on_failure', nullable: true)]
     protected $breakOnFailure;
@@ -120,7 +120,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * Enabled after submission
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'enabled_after_submission', nullable: true, options: ['default' => 0])]
     protected $enabledAfterSubmission = 0;
@@ -137,7 +137,7 @@ abstract class AbstractApplicationStep implements BundleSerializableInterface, J
     /**
      * ApplicationValidations
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Generic\ApplicationValidation>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationValidation::class, mappedBy: 'applicationStep')]
     protected $applicationValidations;

@@ -60,7 +60,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     /**
      * TranslationKey
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\TranslationKey
+     * @var \Dvsa\Olcs\Api\Entity\System\TranslationKey|null
      */
     #[ORM\JoinColumn(name: 'translation_key_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\TranslationKey::class, inversedBy: 'translationKeyTexts', fetch: 'LAZY')]
@@ -69,7 +69,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -79,7 +79,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -89,7 +89,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     /**
      * Translated text
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'translated_text', nullable: true)]
     protected $translatedText;
@@ -97,7 +97,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
     /**
      * Version
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'version', nullable: true, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]

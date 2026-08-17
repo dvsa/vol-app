@@ -98,8 +98,6 @@ final class TeamPrinterTest extends RepositoryTestCase
             ->once()
             ->andReturn($mockQb);
 
-
-
         $mockQb->shouldReceive('setParameter')->with('team', 3)->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->andReturn(['result']);
@@ -146,7 +144,6 @@ final class TeamPrinterTest extends RepositoryTestCase
             ->andReturnSelf();
 
         $qb->shouldReceive('setParameter')->with('team', 1)->once()->andReturnSelf();
-
 
         $qb->shouldReceive('addSelect')->with('CONCAT(ucdp.forename, ucdp.familyName) as HIDDEN userSort')
             ->once()->andReturnSelf();

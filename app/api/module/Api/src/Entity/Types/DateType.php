@@ -21,15 +21,14 @@ class DateType extends Type
      * @param AbstractPlatform $platform The currently used database platform.
      *
      * @return string|null
-     * @throws ConversionException
+     * @throws InvalidFormat
      * @inheritdoc
      */
     #[\Override]
     public function convertToPHPValue(
         mixed $value,
         AbstractPlatform $platform
-    ): mixed
-    {
+    ): mixed {
         if ($value === null) {
             return $value;
         }
@@ -63,8 +62,7 @@ class DateType extends Type
     public function convertToDatabaseValue(
         mixed $value,
         AbstractPlatform $platform
-    ): mixed
-    {
+    ): mixed {
         if ($value !== null && !($value instanceof \DateTime)) {
             $value = new DateTime($value);
         }
