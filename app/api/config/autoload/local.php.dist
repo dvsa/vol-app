@@ -97,6 +97,22 @@ return [
         'domain' => "api.accept.dev.cpms.dvsacloud.uk",
       ],
     ],
+    // CPMS Hybrid Gateway (VOL-7496). Overrides the %olcs_cpms_gateway_*%
+    // placeholders, which are only resolved in deployed environments — without
+    // these the toggle-on path would use the raw placeholder strings locally.
+    // Populate the oauth2 block with real Entra values to exercise the gateway
+    // for real. Local egress is direct, so the proxy keys are removed.
+    'gateway' => [
+      'domain' => "https://gw.accept.dev.cpms.dvsacloud.uk",
+      'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+      'oauth2' => [
+        'client_id' => "",
+        'client_secret' => "",
+        'token_url' => "",
+        'scope' => "",
+        'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
+      ],
+    ],
   ],
   'cpms_credentials' => [
     'client_id' => "OLCS",
