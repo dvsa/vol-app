@@ -58,7 +58,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Foreign Key to team
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\Team
+     * @var \Dvsa\Olcs\Api\Entity\User\Team|null
      */
     #[ORM\JoinColumn(name: 'team_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\Team::class, fetch: 'LAZY')]
@@ -67,7 +67,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * If user is also a transport manager.
      *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager|null
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'users', fetch: 'LAZY')]
@@ -76,7 +76,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * If user is a member of a local authority a link to the LA details.
      *
-     * @var \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority
+     * @var \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority|null
      */
     #[ORM\JoinColumn(name: 'local_authority_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\LocalAuthority::class, inversedBy: 'users', fetch: 'LAZY')]
@@ -85,7 +85,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Foreign Key to contact_details
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails|null
      */
     #[ORM\JoinColumn(name: 'contact_details_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY', cascade: ['persist'])]
@@ -94,7 +94,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * If user is part of a partner, such as HMRC a link to the partners details.
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails|null
      */
     #[ORM\JoinColumn(name: 'partner_contact_details_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY', cascade: ['persist'])]
@@ -103,7 +103,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -113,7 +113,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -123,7 +123,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Pid
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'pid', length: 255, nullable: true)]
     protected $pid;
@@ -131,7 +131,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Login id
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'login_id', length: 40, nullable: true)]
     protected $loginId;
@@ -147,7 +147,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Date when the account was disabled
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'disabled_date', nullable: true)]
     protected $disabledDate;
@@ -163,7 +163,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Last login at
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'last_login_at', nullable: true)]
     protected $lastLoginAt;
@@ -188,7 +188,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * Roles
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\User\Role>
      */
     #[ORM\JoinTable(name: 'user_role')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
@@ -199,7 +199,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * OrganisationUsers
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\OrganisationUser::class, mappedBy: 'user', cascade: ['persist'], indexBy: 'organisation_id', orphanRemoval: true)]
     protected $organisationUsers;
@@ -207,7 +207,7 @@ abstract class AbstractUser implements BundleSerializableInterface, JsonSerializ
     /**
      * PasswordResets
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\User\UserPasswordReset>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\User\UserPasswordReset::class, mappedBy: 'user', fetch: 'EXTRA_LAZY')]
     protected $passwordResets;

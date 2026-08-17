@@ -47,7 +47,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -57,7 +57,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -67,7 +67,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Country desc
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'country_desc', length: 50, nullable: true)]
     protected $countryDesc;
@@ -91,7 +91,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * Is ecmt state
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'is_ecmt_state', nullable: true, options: ['default' => 0])]
     protected $isEcmtState = 0;
@@ -116,7 +116,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * IrfoPsvAuths
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth>
      */
     #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth::class, mappedBy: 'countrys', fetch: 'LAZY')]
     protected $irfoPsvAuths;
@@ -124,7 +124,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * IrhpApplications
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication>
      */
     #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, mappedBy: 'countrys', fetch: 'LAZY')]
     protected $irhpApplications;
@@ -132,7 +132,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * IrhpPermitStockRanges
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange>
      */
     #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange::class, mappedBy: 'countrys', fetch: 'LAZY')]
     protected $irhpPermitStockRanges;
@@ -140,7 +140,7 @@ abstract class AbstractCountry implements BundleSerializableInterface, JsonSeria
     /**
      * IrhpPermitStocks
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock::class, mappedBy: 'country')]
     protected $irhpPermitStocks;

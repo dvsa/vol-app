@@ -39,7 +39,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * e.g. PI
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'category', length: 32, nullable: true)]
     protected $category;
@@ -47,7 +47,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Field holding source of sla
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'field', length: 32, nullable: true)]
     protected $field;
@@ -55,7 +55,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Field holding result
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'compare_to', length: 32, nullable: true)]
     protected $compareTo;
@@ -63,7 +63,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Number of days between source and result for succes. Can be negative
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'days', nullable: true)]
     protected $days;
@@ -71,7 +71,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Effective from
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'effective_from', nullable: true)]
     protected $effectiveFrom;
@@ -79,7 +79,7 @@ abstract class AbstractSla implements BundleSerializableInterface, JsonSerializa
     /**
      * Effective to
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'effective_to', nullable: true)]
     protected $effectiveTo;

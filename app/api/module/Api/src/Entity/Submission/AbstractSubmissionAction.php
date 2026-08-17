@@ -58,7 +58,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -68,7 +68,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -86,7 +86,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     /**
      * Comment
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'comment', nullable: true)]
     protected $comment;
@@ -103,7 +103,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     /**
      * Reasons
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Pi\Reason>
      */
     #[ORM\JoinTable(name: 'submission_action_reason')]
     #[ORM\JoinColumn(name: 'submission_action_id', referencedColumnName: 'id')]
@@ -114,7 +114,7 @@ abstract class AbstractSubmissionAction implements BundleSerializableInterface, 
     /**
      * ActionTypes
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\System\RefData>
      */
     #[ORM\JoinTable(name: 'submission_action_type')]
     #[ORM\JoinColumn(name: 'submission_action_id', referencedColumnName: 'id')]

@@ -73,7 +73,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * AssignedCaseworker
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'assigned_caseworker', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -82,7 +82,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -92,7 +92,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -102,7 +102,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * ApprovalSubmissionPresidingTc
      *
-     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc|null
      */
     #[ORM\JoinColumn(name: 'approval_submission_presiding_tc', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\PresidingTc::class, fetch: 'LAZY')]
@@ -111,7 +111,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * FinalSubmissionPresidingTc
      *
-     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc
+     * @var \Dvsa\Olcs\Api\Entity\Pi\PresidingTc|null
      */
     #[ORM\JoinColumn(name: 'final_submission_presiding_tc', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\PresidingTc::class, fetch: 'LAZY')]
@@ -120,7 +120,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * ActionToBeTaken
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'action_to_be_taken', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -129,7 +129,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Ptr agreed date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'ptr_agreed_date', nullable: true)]
     protected $ptrAgreedDate;
@@ -137,7 +137,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Closed date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'closed_date', nullable: true)]
     protected $closedDate;
@@ -145,7 +145,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Comment
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'comment', length: 4000, nullable: true)]
     protected $comment;
@@ -162,7 +162,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Is submission required for approval
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'is_submission_required_for_approval', nullable: true)]
     protected $isSubmissionRequiredForApproval;
@@ -170,7 +170,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Approval submission issued date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'approval_submission_issued_date', nullable: true)]
     protected $approvalSubmissionIssuedDate;
@@ -178,7 +178,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Approval submission returned date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'approval_submission_returned_date', nullable: true)]
     protected $approvalSubmissionReturnedDate;
@@ -186,7 +186,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Ior letter issued date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'ior_letter_issued_date', nullable: true)]
     protected $iorLetterIssuedDate;
@@ -194,7 +194,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Operator response due date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'operator_response_due_date', nullable: true)]
     protected $operatorResponseDueDate;
@@ -202,7 +202,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Operator response received date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'operator_response_received_date', nullable: true)]
     protected $operatorResponseReceivedDate;
@@ -210,7 +210,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Is submission required for action
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'is_submission_required_for_action', nullable: true)]
     protected $isSubmissionRequiredForAction;
@@ -218,7 +218,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Final submission issued date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'final_submission_issued_date', nullable: true)]
     protected $finalSubmissionIssuedDate;
@@ -226,7 +226,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Final submission returned date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'final_submission_returned_date', nullable: true)]
     protected $finalSubmissionReturnedDate;
@@ -234,7 +234,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Revocation letter issued date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'revocation_letter_issued_date', nullable: true)]
     protected $revocationLetterIssuedDate;
@@ -242,7 +242,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Nfa letter issued date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'nfa_letter_issued_date', nullable: true)]
     protected $nfaLetterIssuedDate;
@@ -250,7 +250,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Warning letter issued date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'warning_letter_issued_date', nullable: true)]
     protected $warningLetterIssuedDate;
@@ -258,7 +258,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Pi agreed date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'pi_agreed_date', nullable: true)]
     protected $piAgreedDate;
@@ -266,7 +266,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Other action agreed date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'other_action_agreed_date', nullable: true)]
     protected $otherActionAgreedDate;
@@ -274,7 +274,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * Reasons
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Pi\Reason>
      */
     #[ORM\JoinTable(name: 'ptr_reason')]
     #[ORM\JoinColumn(name: 'propose_to_revoke_id', referencedColumnName: 'id')]
@@ -285,7 +285,7 @@ abstract class AbstractProposeToRevoke implements BundleSerializableInterface, J
     /**
      * SlaTargetDates
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\System\SlaTargetDate>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\SlaTargetDate::class, mappedBy: 'proposeToRevoke', cascade: ['persist'], indexBy: 'sla_id', orphanRemoval: true)]
     protected $slaTargetDates;

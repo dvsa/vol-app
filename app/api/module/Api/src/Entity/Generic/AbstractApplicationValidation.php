@@ -50,7 +50,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Question
      *
-     * @var \Dvsa\Olcs\Api\Entity\Generic\Question
+     * @var \Dvsa\Olcs\Api\Entity\Generic\Question|null
      */
     #[ORM\JoinColumn(name: 'question_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\Question::class, inversedBy: 'applicationValidations', fetch: 'LAZY')]
@@ -59,7 +59,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * ApplicationStep
      *
-     * @var \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep
+     * @var \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep|null
      */
     #[ORM\JoinColumn(name: 'application_step_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationStep::class, inversedBy: 'applicationValidations', fetch: 'LAZY')]
@@ -68,7 +68,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -78,7 +78,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -88,7 +88,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Rule
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'rule', length: 255, nullable: true)]
     protected $rule;
@@ -96,7 +96,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Parameters
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'parameters', length: 1024, nullable: true)]
     protected $parameters;
@@ -104,7 +104,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Weight
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'decimal', name: 'weight', nullable: true)]
     protected $weight;
@@ -112,7 +112,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
     /**
      * Error translation key
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'error_translation_key', length: 255, nullable: true)]
     protected $errorTranslationKey;

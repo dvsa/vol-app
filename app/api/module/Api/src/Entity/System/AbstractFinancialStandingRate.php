@@ -72,7 +72,7 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     /**
      * VehicleType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'vehicle_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -81,7 +81,7 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -91,7 +91,7 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -101,7 +101,7 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     /**
      * Additional vehicle rate
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'additional_vehicle_rate', nullable: true)]
     protected $additionalVehicleRate;
@@ -109,7 +109,7 @@ abstract class AbstractFinancialStandingRate implements BundleSerializableInterf
     /**
      * First vehicle rate
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'first_vehicle_rate', nullable: true)]
     protected $firstVehicleRate;

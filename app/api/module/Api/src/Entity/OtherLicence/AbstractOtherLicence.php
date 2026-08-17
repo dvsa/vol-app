@@ -57,7 +57,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Foreign Key to application
      *
-     * @var \Dvsa\Olcs\Api\Entity\Application\Application
+     * @var \Dvsa\Olcs\Api\Entity\Application\Application|null
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'otherLicences', fetch: 'LAZY')]
@@ -66,7 +66,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Foreign Key to transport_manager
      *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager|null
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, inversedBy: 'otherLicences', fetch: 'LAZY')]
@@ -75,7 +75,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Foreign Key to transport_manager_licence
      *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence|null
      */
     #[ORM\JoinColumn(name: 'transport_manager_licence_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence::class, inversedBy: 'otherLicences', fetch: 'LAZY')]
@@ -84,7 +84,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Foreign Key to transport_manager_application
      *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication|null
      */
     #[ORM\JoinColumn(name: 'transport_manager_application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication::class, inversedBy: 'otherLicences', fetch: 'LAZY')]
@@ -93,7 +93,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Role
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'role', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -102,7 +102,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * PreviousLicenceType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'previous_licence_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -111,7 +111,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -121,7 +121,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -131,7 +131,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Lic no
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'lic_no', length: 18, nullable: true)]
     protected $licNo;
@@ -139,7 +139,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Holder name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'holder_name', length: 90, nullable: true)]
     protected $holderName;
@@ -147,7 +147,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Purchase date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'purchase_date', nullable: true)]
     protected $purchaseDate;
@@ -155,7 +155,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * willSurrender
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'will_surrender', nullable: true)]
     protected $willSurrender;
@@ -163,7 +163,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Disqualification date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'disqualification_date', nullable: true)]
     protected $disqualificationDate;
@@ -171,7 +171,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Disqualification length
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'disqualification_length', length: 255, nullable: true)]
     protected $disqualificationLength;
@@ -179,7 +179,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Additional information
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'additional_information', length: 4000, nullable: true)]
     protected $additionalInformation;
@@ -187,7 +187,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Operating centres
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'operating_centres', length: 255, nullable: true)]
     protected $operatingCentres;
@@ -195,7 +195,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * Total auth vehicles
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'total_auth_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totalAuthVehicles;
@@ -203,7 +203,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
     /**
      * If on transport manager
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'decimal', name: 'hours_per_week', nullable: true, options: ['unsigned' => true])]
     protected $hoursPerWeek;

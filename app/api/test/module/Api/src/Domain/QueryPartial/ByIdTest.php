@@ -29,7 +29,7 @@ final class ByIdTest extends QueryPartialTestCase
     public function testModifyQuery(): void
     {
         $id = 111;
-    $expr = \Mockery::mock(\Doctrine\ORM\Query\Expr\Comparison::class);
+        $expr = \Mockery::mock(\Doctrine\ORM\Query\Expr\Comparison::class);
 
         $this->qb->shouldReceive('getRootAliases')
             ->andReturn(['a'])

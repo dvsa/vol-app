@@ -44,7 +44,7 @@ final class IrhpPermitWindowTest extends RepositoryTestCase
 
         $expr = new Expr();
 
-    $queryBuilder->shouldReceive('expr')
+        $queryBuilder->shouldReceive('expr')
         ->andReturn($expr);
 
         $queryBuilder->shouldReceive('select')
@@ -92,7 +92,7 @@ final class IrhpPermitWindowTest extends RepositoryTestCase
 
         $expr = new Expr();
 
-    $queryBuilder->shouldReceive('expr')
+        $queryBuilder->shouldReceive('expr')
         ->andReturn($expr);
 
         $queryBuilder->shouldReceive('select')
@@ -394,14 +394,14 @@ final class IrhpPermitWindowTest extends RepositoryTestCase
 
         $expr = new \Doctrine\ORM\Query\Expr();
 
-    $mockQb->shouldReceive('expr')
+        $mockQb->shouldReceive('expr')
         ->zeroOrMoreTimes()
         ->andReturn($expr);
 
-    $mockQb->shouldReceive('orWhere')
+        $mockQb->shouldReceive('orWhere')
         ->times(3)
         ->andReturnSelf();
-    $mockQb->shouldReceive('andWhere')
+        $mockQb->shouldReceive('andWhere')
             ->andReturnSelf()
             ->shouldReceive('setParameter')
             ->times(4)

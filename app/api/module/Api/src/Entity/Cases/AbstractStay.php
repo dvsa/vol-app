@@ -60,7 +60,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Outcome
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'outcome', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -78,7 +78,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -88,7 +88,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -98,7 +98,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Request date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'request_date', nullable: true)]
     protected $requestDate;
@@ -106,7 +106,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Withdrawn date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'withdrawn_date', nullable: true)]
     protected $withdrawnDate;
@@ -114,7 +114,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Decision date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'decision_date', nullable: true)]
     protected $decisionDate;
@@ -122,7 +122,7 @@ abstract class AbstractStay implements BundleSerializableInterface, JsonSerializ
     /**
      * Notes
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'notes', length: 1100, nullable: true)]
     protected $notes;

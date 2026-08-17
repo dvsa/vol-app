@@ -22,14 +22,13 @@ class DateTimeType extends Type
      * @param AbstractPlatform $platform Platform eg MySQL
      *
      * @return \DateTime|string|null
-     * @throws ConversionException
+     * @throws InvalidFormat
      */
     #[\Override]
     public function convertToPHPValue(
         mixed $value,
         AbstractPlatform $platform
-    ): mixed
-    {
+    ): mixed {
         if ($value === null) {
             return $value;
         }
@@ -74,8 +73,7 @@ class DateTimeType extends Type
     public function convertToDatabaseValue(
         mixed $value,
         AbstractPlatform $platform
-    ): mixed
-    {
+    ): mixed {
         if ($value === null) {
             return null;
         }

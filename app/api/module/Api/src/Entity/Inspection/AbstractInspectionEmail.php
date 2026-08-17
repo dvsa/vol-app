@@ -58,7 +58,7 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Message body
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'message_body', nullable: true)]
     protected $messageBody;
@@ -82,7 +82,7 @@ abstract class AbstractInspectionEmail implements BundleSerializableInterface, J
     /**
      * Sender email address
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'sender_email_address', length: 255, nullable: true)]
     protected $senderEmailAddress;

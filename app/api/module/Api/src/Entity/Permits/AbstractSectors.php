@@ -51,7 +51,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -61,7 +61,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -95,7 +95,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Description key
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'description_key', length: 255, nullable: true)]
     protected $descriptionKey;
@@ -103,7 +103,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Sifting percentage
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'decimal', name: 'sifting_percentage', nullable: true)]
     protected $siftingPercentage;
@@ -111,7 +111,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Version
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'version', nullable: true)]
     #[ORM\Version]
@@ -120,7 +120,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Display order
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'display_order', nullable: true)]
     protected $displayOrder;

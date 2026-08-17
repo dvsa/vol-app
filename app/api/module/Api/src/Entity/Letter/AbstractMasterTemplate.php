@@ -49,7 +49,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -59,7 +59,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -93,7 +93,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     /**
      * Locale
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'locale', length: 20, nullable: true)]
     protected $locale;
@@ -101,7 +101,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     /**
      * Header left content
      *
-     * @var array
+     * @var array|null
      */
     #[ORM\Column(type: 'json', name: 'header_left_content', nullable: true)]
     protected $headerLeftContent;
@@ -109,7 +109,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     /**
      * Header right content
      *
-     * @var array
+     * @var array|null
      */
     #[ORM\Column(type: 'json', name: 'header_right_content', nullable: true)]
     protected $headerRightContent;
@@ -117,7 +117,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     /**
      * Signoff content
      *
-     * @var array
+     * @var array|null
      */
     #[ORM\Column(type: 'json', name: 'signoff_content', nullable: true)]
     protected $signoffContent;
@@ -125,7 +125,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
     /**
      * Footer content
      *
-     * @var array
+     * @var array|null
      */
     #[ORM\Column(type: 'json', name: 'footer_content', nullable: true)]
     protected $footerContent;

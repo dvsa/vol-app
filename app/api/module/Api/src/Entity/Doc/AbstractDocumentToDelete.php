@@ -65,7 +65,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
     /**
      * Process after date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'process_after_date', nullable: true)]
     protected $processAfterDate;

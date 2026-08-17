@@ -48,7 +48,7 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -58,7 +58,7 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -92,7 +92,7 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
     /**
      * Effective to
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'effective_to', nullable: true)]
     protected $effectiveTo;
@@ -100,7 +100,7 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
     /**
      * Version
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'version', nullable: true, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]

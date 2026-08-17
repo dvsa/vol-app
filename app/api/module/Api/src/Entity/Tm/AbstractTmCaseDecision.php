@@ -72,7 +72,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -82,7 +82,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -92,7 +92,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Decision date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'decision_date', nullable: true)]
     protected $decisionDate;
@@ -100,7 +100,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Notified date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'notified_date', nullable: true)]
     protected $notifiedDate;
@@ -116,7 +116,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Repute not lost reason
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'repute_not_lost_reason', length: 500, nullable: true)]
     protected $reputeNotLostReason;
@@ -124,7 +124,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Unfitness start date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'unfitness_start_date', nullable: true)]
     protected $unfitnessStartDate;
@@ -132,7 +132,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Unfitness end date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'unfitness_end_date', nullable: true)]
     protected $unfitnessEndDate;
@@ -140,7 +140,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * No further action reason
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'no_further_action_reason', length: 4000, nullable: true)]
     protected $noFurtherActionReason;
@@ -157,7 +157,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
@@ -165,7 +165,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * RehabMeasures
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\System\RefData>
      */
     #[ORM\JoinTable(name: 'tm_case_decision_rehab')]
     #[ORM\JoinColumn(name: 'tm_case_decision_id', referencedColumnName: 'id')]
@@ -176,7 +176,7 @@ abstract class AbstractTmCaseDecision implements BundleSerializableInterface, Js
     /**
      * UnfitnessReasons
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\System\RefData>
      */
     #[ORM\JoinTable(name: 'tm_case_decision_unfitness')]
     #[ORM\JoinColumn(name: 'tm_case_decision_id', referencedColumnName: 'id')]

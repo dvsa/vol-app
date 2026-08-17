@@ -58,7 +58,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -68,7 +68,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -78,7 +78,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
     /**
      * Description
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'description', nullable: true)]
     protected $description;
@@ -95,7 +95,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
     /**
      * ApplicationPaths
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Generic\ApplicationPath>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Generic\ApplicationPath::class, mappedBy: 'irhpPermitType')]
     protected $applicationPaths;
@@ -103,7 +103,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
     /**
      * IrhpPermitStocks
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitStock::class, mappedBy: 'irhpPermitType')]
     protected $irhpPermitStocks;

@@ -61,7 +61,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Reason
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'reason', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -70,7 +70,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Outcome
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'outcome', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -79,7 +79,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -89,7 +89,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -99,7 +99,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Non system generated number entered by user.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'appeal_no', length: 20, nullable: true)]
     protected $appealNo;
@@ -107,7 +107,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Deadline date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'deadline_date', nullable: true)]
     protected $deadlineDate;
@@ -115,7 +115,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Appeal date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'appeal_date', nullable: true)]
     protected $appealDate;
@@ -123,7 +123,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Grounds for the appeal.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'outline_ground', length: 1024, nullable: true)]
     protected $outlineGround;
@@ -131,7 +131,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Hearing date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'hearing_date', nullable: true)]
     protected $hearingDate;
@@ -139,7 +139,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Papers due date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'papers_due_date', nullable: true)]
     protected $papersDueDate;
@@ -147,7 +147,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Papers due tc date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'papers_due_tc_date', nullable: true)]
     protected $papersDueTcDate;
@@ -155,7 +155,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Comment
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'comment', length: 1024, nullable: true)]
     protected $comment;
@@ -163,7 +163,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Papers sent date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'papers_sent_date', nullable: true)]
     protected $papersSentDate;
@@ -171,7 +171,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Papers sent tc date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'papers_sent_tc_date', nullable: true)]
     protected $papersSentTcDate;
@@ -179,7 +179,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Decision date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'decision_date', nullable: true)]
     protected $decisionDate;
@@ -187,7 +187,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Withdrawn date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'withdrawn_date', nullable: true)]
     protected $withdrawnDate;
@@ -212,7 +212,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
@@ -220,7 +220,7 @@ abstract class AbstractAppeal implements BundleSerializableInterface, JsonSerial
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;

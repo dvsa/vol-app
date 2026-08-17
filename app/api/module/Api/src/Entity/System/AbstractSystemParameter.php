@@ -37,7 +37,7 @@ abstract class AbstractSystemParameter implements BundleSerializableInterface, J
     /**
      * Param value
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'param_value', length: 1024, nullable: true)]
     protected $paramValue;
@@ -45,7 +45,7 @@ abstract class AbstractSystemParameter implements BundleSerializableInterface, J
     /**
      * Description
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;

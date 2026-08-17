@@ -51,7 +51,6 @@ final class LicenceStatusRuleTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('l.status')->once()->andReturnSelf();
 
-
         $mockQb->shouldReceive('setParameter')->with('startDate', $date)->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->with()->once()->andReturn('RESULT');
@@ -78,7 +77,6 @@ final class LicenceStatusRuleTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('licenceStatus')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('licence', 'l')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('l.status')->once()->andReturnSelf();
-
 
         $mockQb->shouldReceive('setParameter')->with('endDate', $date)->once();
 

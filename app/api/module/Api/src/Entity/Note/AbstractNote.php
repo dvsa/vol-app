@@ -69,7 +69,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
     /**
      * Foreign Key to application
      *
-     * @var \Dvsa\Olcs\Api\Entity\Application\Application
+     * @var \Dvsa\Olcs\Api\Entity\Application\Application|null
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
@@ -78,7 +78,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
     /**
      * Foreign Key to licence
      *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence|null
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
@@ -87,7 +87,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
     /**
      * Case
      *
-     * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
+     * @var \Dvsa\Olcs\Api\Entity\Cases\Cases|null
      */
     #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
@@ -96,7 +96,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
     /**
      * Foreign Key to bus_reg
      *
-     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg|null
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
@@ -105,7 +105,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
     /**
      * Foreign Key to transport_manager
      *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager|null
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
@@ -114,7 +114,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
     /**
      * Foreign Key to organisation
      *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation|null
      */
     #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
@@ -123,7 +123,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
     /**
      * IrhpApplication
      *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication|null
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'notes', fetch: 'LAZY')]
@@ -132,7 +132,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -142,7 +142,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -152,7 +152,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
     /**
      * Comment
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'comment', nullable: true)]
     protected $comment;
@@ -177,7 +177,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
@@ -185,7 +185,7 @@ abstract class AbstractNote implements BundleSerializableInterface, JsonSerializ
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;

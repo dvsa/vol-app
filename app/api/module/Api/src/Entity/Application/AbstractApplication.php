@@ -82,7 +82,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * VariationType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'variation_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -91,7 +91,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * PSV Vehicle size
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'psv_which_vehicle_sizes', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -100,7 +100,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Restricted, Standard International etc.
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'licence_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -109,7 +109,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Application for a good or passenger service vehicle licence.
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -118,7 +118,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * VehicleType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'vehicle_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -127,7 +127,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * The authority under which an application was granted
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'grant_authority', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -136,7 +136,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Reason for withdrawing application. Reference data.
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'withdrawn_reason', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -145,7 +145,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Interim licence status.
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'interim_status', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -163,7 +163,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -173,7 +173,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -183,7 +183,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * SignatureType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'signature_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -192,7 +192,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * DigitalSignature
      *
-     * @var \Dvsa\Olcs\Api\Entity\DigitalSignature
+     * @var \Dvsa\Olcs\Api\Entity\DigitalSignature|null
      */
     #[ORM\JoinColumn(name: 'digital_signature_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\DigitalSignature::class, fetch: 'LAZY')]
@@ -209,7 +209,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Stores user has elected to enter vehicles. Affects application screenflow. Show screen to enter vehicles or not.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'has_entered_reg', nullable: true)]
     protected $hasEnteredReg;
@@ -217,7 +217,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Applicant wants to be authorised for this number of trailers.
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'tot_auth_trailers', nullable: true, options: ['unsigned' => true])]
     protected $totAuthTrailers;
@@ -225,7 +225,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Applicant wants to be authorised for this number of vehicles for goods. Will be sum of the psv columns for psv.
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'tot_auth_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totAuthVehicles;
@@ -233,7 +233,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Applicant wants to be authorised for this number of HGV vehicles for goods
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'tot_auth_hgv_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totAuthHgvVehicles;
@@ -241,7 +241,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Applicant wants to be authorised for this number of LGV vehicles for goods
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'tot_auth_lgv_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totAuthLgvVehicles;
@@ -249,7 +249,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Number of EU community licences required
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'tot_community_licences', nullable: true, options: ['unsigned' => true])]
     protected $totCommunityLicences;
@@ -265,7 +265,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Any person in application has ever been declared bankrupt
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'bankrupt', nullable: true)]
     protected $bankrupt;
@@ -273,7 +273,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Any person in application has ever been involved in a company that went into administration
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'administration', nullable: true)]
     protected $administration;
@@ -281,7 +281,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Any person in application has ever been disqualified as a director or manager of a company
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'disqualified', nullable: true)]
     protected $disqualified;
@@ -289,7 +289,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Operator has been liquidated
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'liquidation', nullable: true)]
     protected $liquidation;
@@ -297,7 +297,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Any person in application has ever been involved in a company that went into receivership
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'receivership', nullable: true)]
     protected $receivership;
@@ -313,7 +313,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Details of previous bankrupcy, insolvency, administration, receivership of people linked to application
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'insolvency_details', length: 4000, nullable: true)]
     protected $insolvencyDetails;
@@ -337,7 +337,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * noTmConfirmation
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'no_tm_confirmation', nullable: true)]
     protected $noTmConfirmation;
@@ -345,7 +345,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * User specifies whether they have uploaded financial evidence or will send by post
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'financial_evidence_uploaded', nullable: true)]
     protected $financialEvidenceUploaded;
@@ -353,7 +353,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Small vehicle evidence uploaded
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'small_vehicle_evidence_uploaded', nullable: true, options: ['unsigned' => true])]
     protected $smallVehicleEvidenceUploaded;
@@ -361,7 +361,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Occupation evidence uploaded
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'occupation_evidence_uploaded', nullable: true, options: ['unsigned' => true])]
     protected $occupationEvidenceUploaded;
@@ -369,7 +369,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Submitted date.  Was date_entered in OLBS
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'received_date', nullable: true)]
     protected $receivedDate;
@@ -377,7 +377,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * SLA for application to be processed.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'target_completion_date', nullable: true)]
     protected $targetCompletionDate;
@@ -385,7 +385,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Date application granted.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'granted_date', nullable: true)]
     protected $grantedDate;
@@ -393,7 +393,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Date application refused.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'refused_date', nullable: true)]
     protected $refusedDate;
@@ -401,7 +401,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Date application withdrawn.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'withdrawn_date', nullable: true)]
     protected $withdrawnDate;
@@ -409,7 +409,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * History section. Ay person linked to application currently holds a licence
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'prev_has_licence', nullable: true)]
     protected $prevHasLicence;
@@ -417,7 +417,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * History section. Any person linked to application has previously held a licence
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'prev_had_licence', nullable: true)]
     protected $prevHadLicence;
@@ -425,7 +425,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * History section. Any person linked to application has previously been refused a licence in the EU
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'prev_been_refused', nullable: true)]
     protected $prevBeenRefused;
@@ -433,7 +433,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * History section. Any person linked to application has previously been on a licence revoked in the EU
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'prev_been_revoked', nullable: true)]
     protected $prevBeenRevoked;
@@ -441,7 +441,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * History section. Any person linked to application has previously been to a public enquiry before a TC
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'prev_been_at_pi', nullable: true)]
     protected $prevBeenAtPi;
@@ -449,7 +449,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * History section. Any person linked to application has previously been disqualified by any TC
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'prev_been_disqualified_tc', nullable: true)]
     protected $prevBeenDisqualifiedTc;
@@ -457,7 +457,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * History section. In last 12 months any person or operator linked to the application has purchased a company or shares of  that has or had a licence
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'prev_purchased_assets', nullable: true)]
     protected $prevPurchasedAssets;
@@ -473,7 +473,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Anyone linked to app has been convicted or linked to a company that was convicted
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'prev_conviction', nullable: true)]
     protected $prevConviction;
@@ -489,7 +489,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * The psv operator intends to operate small vehicles English and Welsh operators only.Section 15B PSV421
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'psv_operate_small_vhl', nullable: true)]
     protected $psvOperateSmallVhl;
@@ -497,7 +497,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Small vehicle notes. Section 15B PSV421
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'psv_small_vhl_notes', length: 4000, nullable: true)]
     protected $psvSmallVhlNotes;
@@ -505,7 +505,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * User confirmation That if they operate small vehicles they agree to the conditions in the application ui form. Section 15D PSV421
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'psv_small_vhl_confirmation', nullable: true)]
     protected $psvSmallVhlConfirmation;
@@ -513,7 +513,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Confirm vehicles with 8 passenger seats or less will not be operated on the licence. Section 15E PSV421
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'psv_no_small_vhl_confirmation', nullable: true)]
     protected $psvNoSmallVhlConfirmation;
@@ -521,7 +521,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * User confirms compliance for restricted psv medium vehicle legislation. Section 8 of PSV 421 form
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'psv_medium_vhl_confirmation', nullable: true)]
     protected $psvMediumVhlConfirmation;
@@ -529,7 +529,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Notes by applicant on psv restriced medium vehicles.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'psv_medium_vhl_notes', length: 1000, nullable: true)]
     protected $psvMediumVhlNotes;
@@ -537,7 +537,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Are any vehicles on licence limos or novelty.Section 15F PSV421
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'psv_limousines', nullable: true)]
     protected $psvLimousines;
@@ -545,7 +545,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * If no limos on licence user confirms they will not put any on licence. Section 15F PSV421
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'psv_no_limousine_confirmation', nullable: true)]
     protected $psvNoLimousineConfirmation;
@@ -553,7 +553,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Licence is only for limos and no other vehicle types. Section 15G PSV 421
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'psv_only_limousines_confirmation', nullable: true)]
     protected $psvOnlyLimousinesConfirmation;
@@ -561,7 +561,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * psvIncomeRecordsConfirmation
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'psv_income_records_confirmation', nullable: true, options: ['unsigned' => true])]
     protected $psvIncomeRecordsConfirmation;
@@ -569,7 +569,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * psvOccupationRecordsConfirmation
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'psv_occupation_records_confirmation', nullable: true, options: ['unsigned' => true])]
     protected $psvOccupationRecordsConfirmation;
@@ -577,7 +577,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Psv total vehicle small
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_total_vehicle_small', nullable: true, options: ['unsigned' => true])]
     protected $psvTotalVehicleSmall;
@@ -585,7 +585,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Psv total vehicle large
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_total_vehicle_large', nullable: true, options: ['unsigned' => true])]
     protected $psvTotalVehicleLarge;
@@ -593,7 +593,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Date interim licence is to start.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'interim_start', nullable: true)]
     protected $interimStart;
@@ -601,7 +601,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Date interim licence is to end.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'interim_end', nullable: true)]
     protected $interimEnd;
@@ -609,7 +609,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Number of vehicles authorised on interim licence.
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'interim_auth_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $interimAuthVehicles;
@@ -617,7 +617,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Number of HGV vehicles authorised on interim licence.
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'interim_auth_hgv_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $interimAuthHgvVehicles;
@@ -625,7 +625,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Number of LGV vehicles authorised on interim licence.
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'interim_auth_lgv_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $interimAuthLgvVehicles;
@@ -633,7 +633,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Number of trailers authorised on interim licence.
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'interim_auth_trailers', nullable: true, options: ['unsigned' => true])]
     protected $interimAuthTrailers;
@@ -641,7 +641,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Reason an interim licence is required.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'interim_reason', length: 1000, nullable: true)]
     protected $interimReason;
@@ -649,7 +649,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * User confirmation that maintenance agreements are suitable and guidence notes read.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'is_maintenance_suitable', nullable: true)]
     protected $isMaintenanceSuitable;
@@ -665,7 +665,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Licence is to be for Northern Ireland
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'ni_flag', nullable: true)]
     protected $niFlag;
@@ -673,7 +673,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * When application granted schedule an inspection email
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'request_inspection', nullable: true, options: ['unsigned' => true])]
     protected $requestInspection;
@@ -681,7 +681,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Comment to add to inspection email
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'request_inspection_comment', length: 300, nullable: true)]
     protected $requestInspectionComment;
@@ -689,7 +689,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Delay in months after app is granted before inspection request email sent
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'request_inspection_delay', nullable: true, options: ['unsigned' => true])]
     protected $requestInspectionDelay;
@@ -706,7 +706,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * applicationReferredToPi
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'application_referred_to_pi', nullable: true)]
     protected $applicationReferredToPi;
@@ -722,7 +722,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * ApplicationCompletion
      *
-     * @var \Dvsa\Olcs\Api\Entity\ApplicationCompletion
+     * @var \Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion|null
      */
     #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\ApplicationCompletion::class, mappedBy: 'application', cascade: ['persist'])]
     protected $applicationCompletion;
@@ -730,7 +730,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * OperatingCentres
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre::class, mappedBy: 'application')]
     protected $operatingCentres;
@@ -738,7 +738,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * ApplicationOrganisationPersons
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\ApplicationOrganisationPerson::class, mappedBy: 'application')]
     protected $applicationOrganisationPersons;
@@ -746,7 +746,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * ReadAudits
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Application\ApplicationReadAudit>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\ApplicationReadAudit::class, mappedBy: 'application')]
     protected $readAudits;
@@ -754,7 +754,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * ApplicationTracking
      *
-     * @var \Dvsa\Olcs\Api\Entity\ApplicationTracking
+     * @var \Dvsa\Olcs\Api\Entity\Application\ApplicationTracking|null
      */
     #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\ApplicationTracking::class, mappedBy: 'application', cascade: ['persist'])]
     protected $applicationTracking;
@@ -762,7 +762,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Cases
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Cases\Cases>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, mappedBy: 'application')]
     protected $cases;
@@ -770,7 +770,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * ConditionUndertakings
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking::class, mappedBy: 'application')]
     protected $conditionUndertakings;
@@ -778,7 +778,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Documents
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Doc\Document>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'application', fetch: 'EXTRA_LAZY')]
     protected $documents;
@@ -786,7 +786,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Fees
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Fee\Fee>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, mappedBy: 'application')]
     protected $fees;
@@ -794,7 +794,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * LicenceVehicles
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle::class, mappedBy: 'application')]
     protected $licenceVehicles;
@@ -802,7 +802,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * InterimLicenceVehicles
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle::class, mappedBy: 'interimApplication')]
     protected $interimLicenceVehicles;
@@ -810,7 +810,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * OtherLicences
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence::class, mappedBy: 'application')]
     protected $otherLicences;
@@ -818,7 +818,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * PreviousConvictions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Application\PreviousConviction>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\PreviousConviction::class, mappedBy: 'application')]
     protected $previousConvictions;
@@ -826,7 +826,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * PublicationLinks
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Publication\PublicationLink>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationLink::class, mappedBy: 'application')]
     protected $publicationLinks;
@@ -834,7 +834,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * S4s
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Application\S4>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\S4::class, mappedBy: 'application')]
     protected $s4s;
@@ -842,7 +842,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Tasks
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Task\Task>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, mappedBy: 'application')]
     protected $tasks;
@@ -850,7 +850,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * TransportManagers
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication::class, mappedBy: 'application', cascade: ['remove'])]
     protected $transportManagers;

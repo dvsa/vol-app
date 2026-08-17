@@ -69,7 +69,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     /**
      * ReversedFeeTxn
      *
-     * @var \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction
+     * @var \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction|null
      */
     #[ORM\JoinColumn(name: 'reversed_fee_txn_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction::class, inversedBy: 'reversingFeeTransactions', fetch: 'LAZY')]
@@ -78,7 +78,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -88,7 +88,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -98,7 +98,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     /**
      * Amount
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'decimal', name: 'amount', nullable: true)]
     protected $amount;
@@ -115,7 +115,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
     /**
      * ReversingFeeTransactions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction::class, mappedBy: 'reversedFeeTransaction')]
     protected $reversingFeeTransactions;
