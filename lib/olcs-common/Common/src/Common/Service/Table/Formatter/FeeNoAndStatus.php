@@ -8,6 +8,8 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
+
 /**
  * Fee Number with Status formatter
  *
@@ -30,6 +32,8 @@ class FeeNoAndStatus implements FormatterPluginManagerInterface
     #[\Override]
     public function format($row, $column = null)
     {
-        return $row['id'] . ' ' . $this->feeStatusFormatter->format($row);
+        // The fee status formatter returns its own markup and escapes its own values; only the id
+        // is interpolated raw here.
+        return Escape::html($row['id']) . ' ' . $this->feeStatusFormatter->format($row);
     }
 }

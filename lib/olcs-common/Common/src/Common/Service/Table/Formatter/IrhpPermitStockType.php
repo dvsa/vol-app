@@ -2,6 +2,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\Service\Helper\UrlHelperService;
 
 /**
@@ -40,9 +41,9 @@ class IrhpPermitStockType implements FormatterPluginManagerInterface
         $canDelete = $data['canDelete'];
 
         return sprintf(
-            sprintf('<a class=\'govuk-link\' data-stock-delete=\'%s\' href=\'%%s\'>%%s</a>', $canDelete),
+            sprintf('<a class=\'govuk-link\' data-stock-delete=\'%s\' href=\'%%s\'>%%s</a>', Escape::htmlAttr($canDelete)),
             $url,
-            $data['irhpPermitType']['name']['description']
+            Escape::html($data['irhpPermitType']['name']['description'])
         );
     }
 }

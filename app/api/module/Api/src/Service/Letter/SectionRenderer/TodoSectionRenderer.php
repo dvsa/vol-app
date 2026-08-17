@@ -31,27 +31,13 @@ class TodoSectionRenderer extends AbstractSectionRenderer
         }
 
         /** @var LetterInstanceTodo $entity */
-        $todoVersion = $entity->getLetterTodoVersion();
-        // The ORM column is declared type=json (so the docblock says array|null)
-        // but in some hydration paths it comes back as a JSON-encoded string. The
-        // type is therefore widened to mixed here so the defensive normalisation
-        // below isn't flagged as dead code by Psalm.
-        /** @var mixed $description */
-        $description = $todoVersion?->getDescription();
+        // The caseworker's edit for this letter if there is one, otherwise the standing wording.
+        // getEffectiveDescription() is total -- it absorbs the double-encoded-JSON hydration case
+        // and returns [] for anything it cannot make an array of -- so the normalisation that used
+        // to live here now belongs to the entity, next to the data it is defending.
+        $description = $entity->getEffectiveDescription();
 
-        if (empty($description)) {
-            return '';
-        }
-
-        // Same defensive shape as LetterInstanceIssue::getEffectiveContent —
-        // normalise to array so convertEditorJsToHtml's strict array signature
-        // is honoured.
-        if (is_string($description)) {
-            $decoded = json_decode($description, true);
-            $description = (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) ? $decoded : [];
-        }
-
-        if (!is_array($description) || empty($description)) {
+        if ($description === []) {
             return '';
         }
 

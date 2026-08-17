@@ -11,11 +11,12 @@ return [
     'columns' => [
         [
             'title' => 'Penalty type',
-            'formatter' => fn($data) => $data['siPenaltyRequestedType']['id'] . ' - ' . $data['siPenaltyRequestedType']['description'],
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['siPenaltyRequestedType']['id'])
+                . ' - ' . \Common\Util\Escape::html($data['siPenaltyRequestedType']['description']),
         ],
         [
             'title' => 'Requested Identifier',
-            'formatter' => fn($data) => $data['penaltyRequestedIdentifier'],
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['penaltyRequestedIdentifier']),
         ],
         [
             'title' => 'Duration',

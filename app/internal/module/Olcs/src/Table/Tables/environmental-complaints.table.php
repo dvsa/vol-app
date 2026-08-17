@@ -51,8 +51,9 @@ return [
         ],
         [
             'title' => 'Complainant',
-            'formatter' => fn($data, $column) => $data['complainantContactDetails']['person']['forename'] . ' ' .
-            $data['complainantContactDetails']['person']['familyName']
+            'formatter' => fn($data, $column) =>
+                \Common\Util\Escape::html($data['complainantContactDetails']['person']['forename']) . ' ' .
+                \Common\Util\Escape::html($data['complainantContactDetails']['person']['familyName'])
         ],
         [
             'title' => 'OC Address',
@@ -80,7 +81,7 @@ return [
         ],
         [
             'title' => 'Status',
-            'formatter' => fn($data, $column) => $data['status']['description']
+            'formatter' => fn($data, $column) => \Common\Util\Escape::html($data['status']['description'])
         ]
     ]
 ];

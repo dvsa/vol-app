@@ -762,6 +762,8 @@ module "service" {
         name     = "import-anondb",
         commands = ["/mnt/data/scripts/import_anondb.sh"],
         type     = "scripts"
+        cpu      = 2,
+        memory   = 8192,
       },
       {
         name     = "populate-anondb",

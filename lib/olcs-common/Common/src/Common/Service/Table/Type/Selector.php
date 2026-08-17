@@ -2,6 +2,7 @@
 
 namespace Common\Service\Table\Type;
 
+use Common\Service\Table\ContentHelper;
 use Common\Util\Escape;
 use Laminas\I18n\Translator\TranslatorInterface as Translator;
 
@@ -67,9 +68,11 @@ class Selector extends AbstractType
             $idx = $column['idIndex'];
         }
 
-        $attributes[] = 'id="' . $fieldset . '[id][' . $data[$idx] . ']"';
+        // $data[$idx] is a row value going into two quoted attributes. It is an identifier, never
+        // markup, so escaping it cannot change what renders.
+        $attributes[] = 'id="' . $fieldset . '[id][' . Escape::html($data[$idx]) . ']"';
 
-        return sprintf($this->format, $name, $data[$idx], implode(' ', $attributes));
+        return sprintf($this->format, $name, Escape::html($data[$idx]), implode(' ', $attributes));
     }
 
     public function transformDataAttributes(array $column, array $data): array
@@ -79,11 +82,23 @@ class Selector extends AbstractType
         if (isset($column['data-attributes'])) {
             foreach ($column['data-attributes'] as $attrName) {
                 if (isset($data[$attrName])) {
-                    if (is_array($data[$attrName]) && isset($data[$attrName]['id'])) {
-                        $attributes[] = 'data-' . $attrName . '="' . $data[$attrName]['id'] . '"';
-                    } else {
-                        $attributes[] = 'data-' . $attrName . '="' . $data[$attrName] . '"';
+                    // Row data into a quoted data-* attribute; the attribute name comes from column
+                    // config, the value does not.
+                    $value = $data[$attrName];
+
+                    // A to-one entity arrives as an array and is identified by its id. Any other
+                    // array has no single value to put here — a to-many collection, or an entity
+                    // keyed some other way — and Escape::html() rejects one outright, so it would
+                    // take the whole table down rather than render a wrong attribute. Nothing
+                    // configures such a field today: `status`, `action` and `filename` are the only
+                    // data-attributes in the codebase, and status is a RefData carrying an id. This
+                    // is here so that adding one is an empty attribute rather than a 500.
+                    if (is_array($value)) {
+                        $value = $value['id'] ?? null;
                     }
+
+                    $attributes[] = 'data-' . $attrName . '="'
+                        . (ContentHelper::hasStringForm($value) ? Escape::html($value) : '') . '"';
                 }
             }
         }

@@ -1,0 +1,218 @@
+<?php
+/**
+ * Letter Type Builder
+ *
+ * @var int        $letterTypeId
+ * @var array|null $letterType
+ * @var array      $availableSections
+ * @var array      $availableAppendices
+ * @var array      $availableChoices
+ */
+
+$this->placeholder('pageTitle')->set($letterType['name'] ?? 'Letter Type Builder');
+
+// The composition as saved. The builder hydrates from this so that pressing Save writes back what
+// is on screen rather than replacing the stored composition with an empty one.
+$savedComposition = ['sections' => [], 'appendices' => []];
+
+foreach ($letterType['letterTypeSections'] ?? [] as $typeSection) {
+    $savedComposition['sections'][] = [
+        'id' => $typeSection['letterSection']['id'] ?? null,
+        'name' => $typeSection['letterSection']['currentVersion']['name']
+            ?? $typeSection['letterSection']['sectionKey']
+            ?? 'Untitled section',
+        'isRequired' => (bool) ($typeSection['isRequired'] ?? false),
+        'displayOrder' => (int) ($typeSection['displayOrder'] ?? 0),
+    ];
+}
+
+// The composition is keyed on the appendix, but only the version carries a name -- letter_appendix
+// has no name column of its own.
+foreach ($letterType['letterTypeAppendices'] ?? [] as $typeAppendix) {
+    $version = $typeAppendix['letterAppendixVersion'] ?? [];
+
+    $savedComposition['appendices'][] = [
+        'id' => $version['letterAppendix']['id'] ?? null,
+        'name' => $version['name'] ?? 'Untitled appendix',
+        'displayOrder' => (int) ($typeAppendix['displayOrder'] ?? 0),
+    ];
+}
+
+// display_order is the source of truth on the stored side; array position becomes it on save.
+foreach (['sections', 'appendices'] as $listKey) {
+    usort(
+        $savedComposition[$listKey],
+        static fn(array $a, array $b): int => $a['displayOrder'] <=> $b['displayOrder']
+    );
+}
+?>
+
+<div id="letter-type-builder"
+     data-letter-type-id="<?= $this->escapeHtmlAttr($letterTypeId) ?>"
+     data-saved-composition="<?= $this->escapeHtmlAttr(json_encode($savedComposition)) ?>">
+
+    <?php if ($letterTypeId === 0): ?>
+        <div class="govuk-inset-text">
+            Choose a letter type to build.
+            <a class="govuk-link" href="<?= $this->url('admin-dashboard/admin-letter-type', [], [], true) ?>">
+                Letter Types
+            </a>
+        </div>
+    <?php else: ?>
+
+    <div class="letter-builder__context" id="builder-context">
+        <div class="letter-builder__context-summary">
+            <span class="letter-builder__context-label">Preview as</span>
+            <span id="context-summary" class="letter-builder__context-value"></span>
+            <button type="button" class="letter-builder__context-toggle" id="context-toggle"
+                    aria-expanded="false" aria-controls="context-controls">Edit preview context</button>
+        </div>
+
+        <div class="govuk-form-group govuk-!-margin-bottom-2" id="context-controls" hidden>
+            <fieldset class="govuk-fieldset">
+                <legend class="govuk-visually-hidden">Preview this letter as</legend>
+
+                <div class="letter-builder__context-row">
+                    <div>
+                        <label class="govuk-label govuk-label--s" for="ctx-licence">Licence</label>
+                        <input class="govuk-input govuk-input--width-10" id="ctx-licence" type="number"
+                               placeholder="id" aria-describedby="ctx-licence-hint">
+                        <span id="ctx-licence-hint" class="govuk-hint govuk-!-font-size-14">
+                            Bookmarks resolve against this record
+                        </span>
+                    </div>
+
+                    <div>
+                        <label class="govuk-label govuk-label--s" for="ctx-application">Application</label>
+                        <input class="govuk-input govuk-input--width-10" id="ctx-application" type="number"
+                               placeholder="id">
+                    </div>
+
+                    <div>
+                        <label class="govuk-label govuk-label--s" for="ctx-goods-or-psv">Vehicle type</label>
+                        <select class="govuk-select" id="ctx-goods-or-psv">
+                            <option value="">From record</option>
+                            <option value="lcat_gv">Goods</option>
+                            <option value="lcat_psv">PSV</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="govuk-label govuk-label--s" for="ctx-is-variation">Application type</label>
+                        <select class="govuk-select" id="ctx-is-variation">
+                            <option value="">From record</option>
+                            <option value="0">New application</option>
+                            <option value="1">Variation</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="govuk-label govuk-label--s" for="ctx-is-ni">Region</label>
+                        <select class="govuk-select" id="ctx-is-ni">
+                            <option value="">From record</option>
+                            <option value="0">GB</option>
+                            <option value="1">NI</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="govuk-label govuk-label--s" for="ctx-org-type">Organisation</label>
+                        <select class="govuk-select" id="ctx-org-type">
+                            <option value="">From record</option>
+                            <option value="org_t_rc">Registered company</option>
+                            <option value="org_t_st">Sole trader</option>
+                            <option value="org_t_p">Partnership</option>
+                            <option value="org_t_llp">LLP</option>
+                        </select>
+                    </div>
+                </div>
+
+                <?php if ($availableChoices !== []): ?>
+                <div class="letter-builder__choices govuk-!-margin-top-2">
+                    <span class="govuk-label govuk-label--s">Letter choices</span>
+                    <div class="govuk-checkboxes govuk-checkboxes--small">
+                        <?php foreach ($availableChoices as $choice): ?>
+                        <div class="govuk-checkboxes__item">
+                            <input class="govuk-checkboxes__input js-ctx-choice" type="checkbox" name="ctxChoices[]"
+                                   id="ctx-choice-<?= $this->escapeHtmlAttr($choice['id']) ?>"
+                                   value="<?= $this->escapeHtmlAttr($choice['id']) ?>">
+                            <label class="govuk-label govuk-checkboxes__label"
+                                   for="ctx-choice-<?= $this->escapeHtmlAttr($choice['id']) ?>">
+                                <?= $this->escapeHtml($choice['label'] ?? $choice['choiceKey'] ?? '') ?>
+                            </label>
+                        </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+            </fieldset>
+        </div>
+    </div>
+
+    <div class="letter-builder">
+        <div class="letter-builder__composition">
+            <h3 class="govuk-heading-s">Sections</h3>
+            <ul class="letter-builder__list" id="composition-sections" data-empty="No sections yet"></ul>
+
+            <div class="govuk-form-group govuk-!-margin-top-2">
+                <label class="govuk-label govuk-label--s" for="add-section">Add a section</label>
+                <select class="govuk-select govuk-!-width-full" id="add-section">
+                    <option value="">Choose…</option>
+                    <?php foreach ($availableSections as $section): ?>
+                        <option value="<?= $this->escapeHtmlAttr($section['id']) ?>">
+                            <?= $this->escapeHtml($section['currentVersion']['name'] ?? $section['sectionKey'] ?? '') ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <p class="govuk-body-s govuk-!-margin-top-1 govuk-!-margin-bottom-0">
+                    <a class="govuk-link" id="new-section"
+                       href="<?= $this->url('admin-dashboard/admin-letter-section', ['action' => 'add']) ?>">
+                        Create a new section
+                    </a>
+                </p>
+            </div>
+
+            <h3 class="govuk-heading-s govuk-!-margin-top-4">Appendices</h3>
+            <ul class="letter-builder__list" id="composition-appendices" data-empty="No appendices"></ul>
+
+            <div class="govuk-form-group govuk-!-margin-top-2">
+                <label class="govuk-label govuk-label--s" for="add-appendix">Add an appendix</label>
+                <select class="govuk-select govuk-!-width-full" id="add-appendix">
+                    <option value="">Choose…</option>
+                    <?php foreach ($availableAppendices as $appendix): ?>
+                        <option value="<?= $this->escapeHtmlAttr($appendix['id']) ?>">
+                            <?= $this->escapeHtml($appendix['currentVersion']['name'] ?? $appendix['appendixKey'] ?? '') ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="letter-builder__preview">
+            <div class="letter-builder__diagnostics" id="builder-diagnostics" hidden>
+                <button class="letter-builder__diagnostics-toggle" type="button" id="diagnostics-toggle"
+                        aria-expanded="false" aria-controls="diagnostics-list">
+                    <span id="diagnostics-summary"></span>
+                </button>
+                <ul class="govuk-list letter-builder__diagnostics-list" id="diagnostics-list" hidden></ul>
+            </div>
+
+            <div class="letter-builder__actions">
+                <button class="govuk-button" type="button" id="save-composition" disabled>Save</button>
+                <button class="govuk-button govuk-button--secondary" type="button" id="revert-composition" disabled>
+                    Discard changes
+                </button>
+                <span class="letter-builder__dirty" id="composition-dirty" hidden>unsaved changes</span>
+                <span class="letter-builder__save-status" id="save-status" role="status"></span>
+            </div>
+
+            <div class="letter-builder__frame-container">
+                <iframe id="builder-preview-frame" title="Letter preview"></iframe>
+                <p class="letter-builder__preview-status" id="preview-status" role="status">Loading preview…</p>
+            </div>
+        </div>
+    </div>
+
+    <?php endif; ?>
+</div>

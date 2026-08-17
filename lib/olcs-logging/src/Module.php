@@ -47,6 +47,7 @@ class Module
                     Log\Processor\RemoteIp::class => InvokableFactory::class,
                     Log\Processor\RequestId::class => InvokableFactory::class,
                     Log\Processor\HidePassword::class => InvokableFactory::class,
+                    Log\Processor\HideCredentials::class => InvokableFactory::class,
                     Log\Processor\CorrelationId::class => Log\Processor\CorrelationIdFactory::class,
                 ],
             ],
@@ -81,6 +82,11 @@ class Module
         $serviceManager = $event->getApplication()->getServiceManager();
         $logger = $serviceManager->get('Logger');
         $config = $serviceManager->get('Config');
+
+        // Unconditional, and deliberately not behind allowPasswordLogging. That flag exists
+        // so a developer can see a password they typed themselves; it is not a licence to
+        // emit bearer tokens and session ids, which are live credentials for other people.
+        $logger->pushProcessor($serviceManager->get(Log\Processor\HideCredentials::class));
 
         if (empty($config['log']['allowPasswordLogging'])) {
             $hidePassword = $serviceManager->get(Log\Processor\HidePassword::class);

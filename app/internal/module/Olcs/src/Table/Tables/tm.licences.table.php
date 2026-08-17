@@ -20,7 +20,7 @@ return [
                 $url = $this->generateUrl($routeParams);
                 return '<a class="govuk-link" href="' . $url . '">' .
                 ((isset($row['tmType']['description']) && $row['tmType']['description']) ?
-                    $row['tmType']['description'] : 'Not set') . '</a>';
+                    \Common\Util\Escape::html($row['tmType']['description']) : 'Not set') . '</a>';
             },
         ],
         [
@@ -33,13 +33,13 @@ return [
                  */
                 $routeParams = ['licence' => $row['licence']['id']];
                 $url = $this->generateUrl($routeParams, 'lva-licence/transport_managers');
-                return '<a class="govuk-link" href="' . $url . '">' . $row['licence']['licNo'] . '</a>';
+                return '<a class="govuk-link" href="' . $url . '">' . \Common\Util\Escape::html($row['licence']['licNo']) . '</a>';
             },
         ],
         [
             'title' => 'Operator name',
             'name' => 'operatorName',
-            'formatter' => fn($row) => $row['licence']['organisation']['name'],
+            'formatter' => fn($row) => \Common\Util\Escape::html($row['licence']['organisation']['name']),
         ],
         [
             'title' => 'Hours per week',

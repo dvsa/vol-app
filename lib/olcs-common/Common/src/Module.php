@@ -131,8 +131,13 @@ class Module implements ConfigProviderInterface, ServiceProviderInterface
         /** @var Response $response */
         $response = $e->getResponse();
         $headers = $response->getHeaders();
+        // X-XSS-Protection is deliberately absent. The header is deprecated, no current
+        // browser implements it, and the auditor it enabled in older ones could itself be
+        // abused to disable legitimate script or leak cross-origin data. Chrome removed the
+        // feature in 2019 and the recommendation is now to omit it rather than send 0.
+        // https://owasp.org/www-project-secure-headers/#x-xss-protection
         $headers->addHeaders(
-            ['X-XSS-Protection: 1; mode=block', 'X-Content-Type-Options: nosniff']
+            ['X-Content-Type-Options: nosniff']
         );
     }
 
