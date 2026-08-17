@@ -1,20 +1,62 @@
 #!/bin/bash
 
-# The purpose of this script is to take a dump of the read replica database and copy it to s3 for collection by the MI team
+# The purpose of this script is to take a dump of the Aurora read replica database and copy it to S3 for collection by the MI team
 
-echoerr() { printf "%s\n" "$*" >&2; }
+# set -e: exit on error
+# set -u: error on unset variables
+# set -o pipefail: catch errors in pipes
+set -euo pipefail
 
-DATE=$(date +"%Y%m%d%H%M%S")
-READDB_HOST=${READDB_HOST}
-BATCH_DB_PASSWORD=${BATCH_DB_PASSWORD}
-ENVIRONMENT=${ENVIRONMENT_NAME}
+VALID_ENVIRONMENTS=("DEV" "INT" "PREP" "PROD")
+DUMP_DIR="/mnt/data/olcsdump"
+DB_NAME="OLCS_RDS_OLCSDB"
+DB_USER="olcsbatch"
+
+# Excluded tables — translation/reference data and internal DR tables
+EXCLUDED_TABLES="'translation_key_category_link','translation_key','translation_key_location','translation_key_tag_link','DR_EXPECTED_NULLS','translation_key_text','replacement','replacement_tag_link','replacement_category_link','dr_table_counts','dr_expected_deletes'"
+
+log() {
+    printf "\n%s %s\n" "$(date "+%Y-%m-%d %H:%M:%S")" "$1"
+}
+
+log_error() {
+    echo "ERROR: $1" >&2
+}
+
+usage() {
+    if [[ -n "${1:-}" ]]; then
+        log_error "$1"
+    fi
+    echo "Usage: $(basename "$0") [ENVIRONMENT]"
+    echo ""
+    echo "  ENVIRONMENT  One of: ${VALID_ENVIRONMENTS[*]} (default: from \$ENVIRONMENT_NAME)"
+    echo ""
+    echo "Required environment variables:"
+    echo "  READDB_HOST        Aurora read replica hostname"
+    echo "  BATCH_DB_PASSWORD  Password for the $DB_USER database user"
+    exit 1
+}
+
+# Accept environment as first positional argument or fall back to env var
+ENVIRONMENT="${1:-${ENVIRONMENT_NAME:-}}"
+
+if [[ -z "$ENVIRONMENT" ]]; then
+    usage "ENVIRONMENT must be provided as an argument or via ENVIRONMENT_NAME"
+fi
+
+# Validate required environment variables
+if [[ -z "${READDB_HOST:-}" ]]; then
+    log_error "READDB_HOST environment variable is not set."
+    exit 1
+fi
+
+if [[ -z "${BATCH_DB_PASSWORD:-}" ]]; then
+    log_error "BATCH_DB_PASSWORD environment variable is not set."
+    exit 1
+fi
 
 case "${ENVIRONMENT}" in
-  "DEV")
-    REPORTS_BUCKET="devapp-olcs-pri-integration-reporting-s3"
-    INTEGRATION_BUCKET="devapp-mc-pri-integration-data-s3"
-    ;;
-  "INT")
+  "DEV"|"INT")
     REPORTS_BUCKET="devapp-olcs-pri-integration-reporting-s3"
     INTEGRATION_BUCKET="devapp-mc-pri-integration-data-s3"
     ;;
@@ -27,41 +69,74 @@ case "${ENVIRONMENT}" in
     INTEGRATION_BUCKET="app-mc-pri-integration-data-s3"
     ;;
   *)
-    echoerr "ERROR: Invalid environment specified"
-    exit 1
+    usage "Invalid environment '${ENVIRONMENT}'. Must be one of: ${VALID_ENVIRONMENTS[*]}"
     ;;
 esac
 
-mysqldump_bin=$(which mysqldump)
-mysql_bin=$(which mysql)
+mysqldump_bin=$(command -v mysqldump)
+mysql_bin=$(command -v mysql)
 
-TABLES=$(/usr/bin/mysql -h ${READDB_HOST} -u olcsbatch -p ${BATCH_DB_PASSWORD} --skip-column-names -e "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA=database() AND TABLE_TYPE='BASE TABLE' AND TABLE_NAME NOT LIKE '%_hist' AND TABLE_NAME NOT IN ('translation_key_category_link', 'translation_key', 'translation_key_location', 'translation_key_tag_link','DR_EXPECTED_NULLS', 'translation_key_text','replacement','replacement_tag_link','replacement_category_link','dr_table_counts','dr_expected_deletes')" OLCS_RDS_OLCSDB )
-/usr/bin/mysqldump -h ${READDB_HOST} -u olcsbatch -p"${BATCH_DB_PASSWORD}" --skip-triggers --no-create-db --no-tablespaces OLCS_RDS_OLCSDB ${TABLES} > /mnt/data/olcsdump/olcsdump-${DATE}.dmp
+DATE=$(date +"%Y%m%d%H%M%S")
+DUMP_FILE="olcsdump-${DATE}.dmp"
+MANIFEST_FILE="olcsdump-manifest.txt"
+ARCHIVE_FILE="olcsdump-${DATE}.tar.gz"
 
-if [ $? -ne 0 ]; then
-    echoerr "ERROR: Database dump failed"
-    rm -f /mnt/data/olcsdump/olcsdump-${DATE}.dmp
+# Clean up local dump files on exit (success or failure)
+trap 'rm -f "${DUMP_DIR}/${DUMP_FILE}" "${DUMP_DIR}/${MANIFEST_FILE}" "${DUMP_DIR}/${ARCHIVE_FILE}"' EXIT
+
+mkdir -p "${DUMP_DIR}"
+
+log "Environment: ${ENVIRONMENT}"
+log "Aurora read replica: ${READDB_HOST}"
+log "Dump directory: ${DUMP_DIR}"
+
+# Query the list of tables to dump, excluding history and internal tables.
+# MYSQL_PWD avoids passing the password on the command line (Aurora-safe).
+log "Fetching table list from ${DB_NAME}..."
+TABLES=$(MYSQL_PWD="${BATCH_DB_PASSWORD}" "${mysql_bin}" \
+    --no-defaults \
+    -h "${READDB_HOST}" \
+    -u "${DB_USER}" \
+    --skip-column-names \
+    -e "SELECT TABLE_NAME
+        FROM information_schema.TABLES
+        WHERE TABLE_SCHEMA = DATABASE()
+          AND TABLE_TYPE = 'BASE TABLE'
+          AND TABLE_NAME NOT LIKE '%_hist'
+          AND TABLE_NAME NOT IN (${EXCLUDED_TABLES})" \
+    "${DB_NAME}")
+
+if [[ -z "$TABLES" ]]; then
+    log_error "No tables returned from ${DB_NAME}. Aborting."
     exit 1
 fi
-cd /mnt/data/olcsdump
-sha256sum olcsdump-${DATE}.dmp > /mnt/data/olcsdump/olcsdump-manifest.txt
-tar czf /mnt/data/olcsdump/olcsdump-${DATEi}.tar.gz olcsdump-${DATE}.dmp olcsdump-manifest.txt
-if [ $? -ne 0 ]; then
-    echoerr "ERROR: Failed to compress dumpfile"
-    rm -f /mnt/data/olcsdump/olcsdump-${DATE}.dmp
-    exit 1
-fi
-/usr/local/bin/aws s3 cp /mnt/data/olcsdump/olcsdump-${DATE}.tar.gz s3://${REPORTS_BUCKET}/olcsdump/olcsdump-${DATE}.tar.gz
-if [ $? -ne 0 ]; then
-    echoerr "ERROR: Upload to S3 bucket failed"
-    exit 1
-fi
 
-sleep 5
+# Dump selected tables.
+# --set-gtid-purged=OFF is required for Aurora MySQL to avoid GTID errors.
+# --single-transaction ensures a consistent snapshot without locking tables.
+log "Dumping database tables to ${DUMP_DIR}/${DUMP_FILE}..."
+MYSQL_PWD="${BATCH_DB_PASSWORD}" "${mysqldump_bin}" \
+    --no-defaults \
+    -h "${READDB_HOST}" \
+    -u "${DB_USER}" \
+    --skip-triggers \
+    --no-create-db \
+    --no-tablespaces \
+    --single-transaction \
+    --set-gtid-purged=OFF \
+    "${DB_NAME}" ${TABLES} > "${DUMP_DIR}/${DUMP_FILE}"
 
-/usr/local/bin/aws s3 cp /mnt/data/olcsdump/olcsdump-.tar.gz s3://${INTEGRATION_BUCKET}/olcsdump/olcsdump-${DATE}.tar.gz
-if [ $? -ne 0 ]; then
-    echoerr "ERROR: Upload to MC Integration S3 bucket for EDH failed"
-    exit 1
-fi
-rm -f /mnt/data/olcsdump/olcsdump-${DATE}.tar.gz /mnt/data/olcsdump/olcsdump-manifest.txt /mnt/data/olcsdump/olcsdump-${DATE}.dmp
+log "Generating checksum manifest..."
+cd "${DUMP_DIR}"
+sha256sum "${DUMP_FILE}" > "${MANIFEST_FILE}"
+
+log "Compressing dump and manifest into ${ARCHIVE_FILE}..."
+tar czf "${ARCHIVE_FILE}" "${DUMP_FILE}" "${MANIFEST_FILE}"
+
+log "Uploading to reports bucket: s3://${REPORTS_BUCKET}/olcsdump/${ARCHIVE_FILE}..."
+aws s3 cp "${DUMP_DIR}/${ARCHIVE_FILE}" "s3://${REPORTS_BUCKET}/olcsdump/${ARCHIVE_FILE}"
+
+log "Uploading to MI integration bucket: s3://${INTEGRATION_BUCKET}/olcsdump/${ARCHIVE_FILE}..."
+aws s3 cp "${DUMP_DIR}/${ARCHIVE_FILE}" "s3://${INTEGRATION_BUCKET}/olcsdump/${ARCHIVE_FILE}"
+
+log "SAS MI extract completed successfully."

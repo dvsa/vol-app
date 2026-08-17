@@ -780,7 +780,7 @@ module "service" {
         commands = ["batch:first-tm-letter", "-v"],
         timeout  = 43200,
         schedule = ["cron(30 6 ? * 2-7 *)"],
-      },
+      }
     ]
   }
 }

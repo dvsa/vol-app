@@ -736,7 +736,7 @@ module "service" {
         type     = "scripts"
         cpu      = 2,
         memory   = 8192,
-      },
+      }
     ]
   }
 }
