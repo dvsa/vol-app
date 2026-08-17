@@ -54,7 +54,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Company name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'company_name', length: 255, nullable: true)]
     protected $companyName;
@@ -62,7 +62,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Company status
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'company_status', length: 32, nullable: true)]
     protected $companyStatus;
@@ -70,7 +70,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Address line 1
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'address_line_1', length: 100, nullable: true)]
     protected $addressLine1;
@@ -78,7 +78,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Address line 2
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'address_line_2', length: 100, nullable: true)]
     protected $addressLine2;
@@ -86,7 +86,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Country
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'country', length: 32, nullable: true)]
     protected $country;
@@ -94,7 +94,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Locality
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'locality', length: 100, nullable: true)]
     protected $locality;
@@ -102,7 +102,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Po box
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'po_box', length: 100, nullable: true)]
     protected $poBox;
@@ -110,7 +110,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Postal code
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'postal_code', length: 10, nullable: true)]
     protected $postalCode;
@@ -118,7 +118,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Premises
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'premises', length: 100, nullable: true)]
     protected $premises;
@@ -126,7 +126,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Region
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'region', length: 100, nullable: true)]
     protected $region;
@@ -134,7 +134,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Insolvency processed
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'insolvency_processed', nullable: true, options: ['default' => 0])]
     protected $insolvencyProcessed = 0;
@@ -151,7 +151,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * InsolvencyPractitioners
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseInsolvencyPractitioner>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseInsolvencyPractitioner::class, mappedBy: 'companiesHouseCompany', cascade: ['persist'])]
     protected $insolvencyPractitioners;
@@ -159,7 +159,7 @@ abstract class AbstractCompaniesHouseCompany implements BundleSerializableInterf
     /**
      * Officers
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseOfficer>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\CompaniesHouse\CompaniesHouseOfficer::class, mappedBy: 'companiesHouseCompany', cascade: ['persist'])]
     protected $officers;

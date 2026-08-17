@@ -65,7 +65,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Internal to organisation, external or both when multi orgs.
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'tm_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -83,7 +83,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Work contact details FK
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails|null
      */
     #[ORM\JoinColumn(name: 'work_cd_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY')]
@@ -92,7 +92,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * MergeToTransportManager
      *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager|null
      */
     #[ORM\JoinColumn(name: 'merge_to_transport_manager_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
@@ -101,7 +101,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -111,7 +111,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -121,7 +121,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * FK to case where TM became disqualified
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'disqualification_tm_case_id', nullable: true, options: ['unsigned' => true])]
     protected $disqualificationTmCaseId;
@@ -129,7 +129,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Removed date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'removed_date', nullable: true)]
     protected $removedDate;
@@ -137,7 +137,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Last licence date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'last_licence_date', nullable: true)]
     protected $lastLicenceDate;
@@ -145,7 +145,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Family name recognised by nysiis - cross Europe name resolution
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'nysiis_family_name', length: 100, nullable: true)]
     protected $nysiisFamilyName;
@@ -153,7 +153,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * First name recognised by nysiis - cross Europe name resolution
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'nysiis_forename', length: 100, nullable: true)]
     protected $nysiisForename;
@@ -161,7 +161,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Merge details
      *
-     * @var array
+     * @var array|null
      */
     #[ORM\Column(type: 'json', name: 'merge_details', nullable: true)]
     protected $mergeDetails;
@@ -178,7 +178,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Olbs key
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
@@ -186,7 +186,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Cases
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Cases\Cases>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, mappedBy: 'transportManager')]
     protected $cases;
@@ -194,7 +194,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Documents
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Doc\Document>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'transportManager')]
     protected $documents;
@@ -202,7 +202,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * OtherLicences
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence::class, mappedBy: 'transportManager')]
     protected $otherLicences;
@@ -210,7 +210,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * PreviousConvictions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Application\PreviousConviction>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\PreviousConviction::class, mappedBy: 'transportManager')]
     protected $previousConvictions;
@@ -218,7 +218,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Employments
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Tm\TmEmployment>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TmEmployment::class, mappedBy: 'transportManager')]
     protected $employments;
@@ -226,7 +226,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Qualifications
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Tm\TmQualification>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TmQualification::class, mappedBy: 'transportManager')]
     protected $qualifications;
@@ -234,7 +234,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * TmApplications
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication::class, mappedBy: 'transportManager')]
     protected $tmApplications;
@@ -242,7 +242,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * TmLicences
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence::class, mappedBy: 'transportManager')]
     protected $tmLicences;
@@ -250,7 +250,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * ReadAudits
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Tm\TransportManagerReadAudit>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerReadAudit::class, mappedBy: 'transportManager')]
     protected $readAudits;
@@ -258,7 +258,7 @@ abstract class AbstractTransportManager implements BundleSerializableInterface, 
     /**
      * Users
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\User\User>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, mappedBy: 'transportManager')]
     protected $users;

@@ -68,7 +68,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Foreign Key to document for the incoming erru xml
      *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
+     * @var \Dvsa\Olcs\Api\Entity\Doc\Document|null
      */
     #[ORM\JoinColumn(name: 'request_document_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'requestErru', fetch: 'LAZY')]
@@ -77,7 +77,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Foreign Key to document for the msi response xml
      *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
+     * @var \Dvsa\Olcs\Api\Entity\Doc\Document|null
      */
     #[ORM\JoinColumn(name: 'response_document_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'responseErru', fetch: 'LAZY')]
@@ -104,7 +104,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * CommunityLicenceStatus
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'community_licence_status', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -113,7 +113,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * ResponseUser
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'response_user_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -122,7 +122,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -132,7 +132,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -166,7 +166,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * ERRU business case GUID
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'notification_number', length: 36, nullable: true)]
     protected $notificationNumber;
@@ -198,7 +198,7 @@ abstract class AbstractErruRequest implements BundleSerializableInterface, JsonS
     /**
      * Response time
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'response_time', nullable: true)]
     protected $responseTime;

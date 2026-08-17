@@ -171,8 +171,9 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
 
         // Get primary key columns
         $primaryKeyColumns = [];
-        if ($table->hasPrimaryKey()) {
-            $primaryKey = $table->getPrimaryKey();
+        $primaryKey = $table->getPrimaryKey();
+
+        if ($primaryKey !== null) {
             $primaryKeyColumns = $primaryKey->getColumns();
         }
 
@@ -205,7 +206,7 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
     {
         // unsigned/fixed are first-class DBAL column properties; surface them as
         // options so handlers can emit them for schema fidelity
-        $options = $column->getCustomSchemaOptions();
+        $options = $column->getPlatformOptions();
         if ($column->getUnsigned()) {
             $options['unsigned'] = true;
         }
@@ -213,14 +214,19 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
             $options['fixed'] = true;
         }
 
+        $default = $column->getDefault();
+        if ($default instanceof \Doctrine\DBAL\Schema\DefaultExpression) {
+            $default = $default->toSQL($this->connection->getDatabasePlatform());
+        }
+
         return new ColumnMetadata(
             name: $column->getName(),
-            type: $column->getType()->getName(),
+            type: \Doctrine\DBAL\Types\Type::lookupName($column->getType()),
             length: $column->getLength(),
             nullable: !$column->getNotnull(),
             primary: false, // Will be set later from primary key info
             autoIncrement: $column->getAutoincrement(),
-            default: $column->getDefault(),
+            default: $default,
             comment: $column->getComment(),
             options: $options
         );

@@ -71,7 +71,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Licence
      *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence|null
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
@@ -80,7 +80,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Application
      *
-     * @var \Dvsa\Olcs\Api\Entity\Application\Application
+     * @var \Dvsa\Olcs\Api\Entity\Application\Application|null
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
@@ -89,7 +89,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Case
      *
-     * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
+     * @var \Dvsa\Olcs\Api\Entity\Cases\Cases|null
      */
     #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
@@ -98,7 +98,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * BusReg
      *
-     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg|null
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
@@ -107,7 +107,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * IrfoOrganisation
      *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation|null
      */
     #[ORM\JoinColumn(name: 'irfo_organisation_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
@@ -116,7 +116,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Recipient organisation
      *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation|null
      */
     #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
@@ -125,7 +125,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Recipient TM
      *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager|null
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
@@ -143,7 +143,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * FK to document when PDF generated
      *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
+     * @var \Dvsa\Olcs\Api\Entity\Doc\Document|null
      */
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
@@ -152,7 +152,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -162,7 +162,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -180,7 +180,7 @@ abstract class AbstractLetterInstance implements BundleSerializableInterface, Js
     /**
      * Sent on
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'sent_on', nullable: true)]
     protected $sentOn;

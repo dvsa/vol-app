@@ -59,7 +59,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -69,7 +69,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -79,7 +79,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Effective from
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'effective_from', nullable: true)]
     protected $effectiveFrom;
@@ -87,7 +87,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Question short key
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'question_short_key', length: 255, nullable: true)]
     protected $questionShortKey;
@@ -95,7 +95,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Question summary key
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'question_summary_key', length: 255, nullable: true)]
     protected $questionSummaryKey;
@@ -103,7 +103,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Question key
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'question_key', length: 255, nullable: true)]
     protected $questionKey;
@@ -111,7 +111,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Warning key
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'warning_key', length: 255, nullable: true)]
     protected $warningKey;
@@ -119,7 +119,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Details key
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'details_key', length: 255, nullable: true)]
     protected $detailsKey;
@@ -127,7 +127,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Guidance key
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'guidance_key', length: 1024, nullable: true)]
     protected $guidanceKey;
@@ -135,7 +135,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Additional guidance key
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'additional_guidance_key', length: 1024, nullable: true)]
     protected $additionalGuidanceKey;
@@ -143,7 +143,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Hint key
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'hint_key', length: 255, nullable: true)]
     protected $hintKey;
@@ -151,7 +151,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Bullet list key
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'bullet_list_key', length: 255, nullable: true)]
     protected $bulletListKey;
@@ -159,7 +159,7 @@ abstract class AbstractQuestionText implements BundleSerializableInterface, Json
     /**
      * Label key
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'label_key', length: 255, nullable: true)]
     protected $labelKey;

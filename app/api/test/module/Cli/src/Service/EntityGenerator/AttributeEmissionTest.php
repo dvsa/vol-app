@@ -326,6 +326,45 @@ final class AttributeEmissionTest extends TestCase
         $this->assertStringContainsString("inversedBy: 'oppositions'", $field['annotation']);
     }
 
+
+    public function testNullableRelationshipPropertyUsesColumnNullability(): void
+    {
+        $table = new TableMetadata('application', [], [], [], [
+            ['local_columns' => ['licence_id'], 'foreign_table' => 'licence'],
+        ]);
+
+        $sut = new RelationshipTypeHandler();
+        $sut->setCurrentTable($table);
+
+        $nullableColumn = new ColumnMetadata('licence_id', 'integer', null, true);
+        $nonNullableColumn = new ColumnMetadata('licence_id', 'integer', null, false);
+
+        $this->assertTrue($sut->generateProperty($nullableColumn)['nullable']);
+        $this->assertFalse($sut->generateProperty($nonNullableColumn)['nullable']);
+    }
+
+    public function testCollectionPhpTypeUsesCollectionInterface(): void
+    {
+        $sut = new MethodGeneratorService();
+
+        $this->assertSame(
+            '\Doctrine\Common\Collections\Collection',
+            $sut->getPhpTypeFromType('\Doctrine\Common\Collections\Collection')
+        );
+
+        $this->assertSame(
+            '\Doctrine\Common\Collections\Collection',
+            $sut->getPhpTypeFromType('\Doctrine\Common\Collections\ArrayCollection')
+        );
+
+        $this->assertSame(
+            '\Doctrine\Common\Collections\Collection',
+            $sut->getPhpTypeFromType(
+                '\Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Task\Task>'
+            )
+        );
+    }
+
     private function invokeGeneratorMethod(string $method, array $args): string
     {
         $generator = (new \ReflectionClass(EntityGenerator::class))->newInstanceWithoutConstructor();

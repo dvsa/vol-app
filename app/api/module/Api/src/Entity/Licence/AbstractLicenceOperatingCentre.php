@@ -73,7 +73,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Foreign Key to s4
      *
-     * @var \Dvsa\Olcs\Api\Entity\Application\S4
+     * @var \Dvsa\Olcs\Api\Entity\Application\S4|null
      */
     #[ORM\JoinColumn(name: 's4_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\S4::class, fetch: 'LAZY')]
@@ -82,7 +82,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -92,7 +92,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -110,7 +110,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Publication advertisement placed in.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'ad_placed_in', length: 70, nullable: true)]
     protected $adPlacedIn;
@@ -118,7 +118,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Date advert placed.  Must be x number of days before application can be granted.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'ad_placed_date', nullable: true)]
     protected $adPlacedDate;
@@ -134,7 +134,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Number of trailers required to be at the operating centre at one time
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'no_of_trailers_required', nullable: true, options: ['unsigned' => true])]
     protected $noOfTrailersRequired;
@@ -142,7 +142,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Number of vehicles required to be at the oc at one time
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'no_of_vehicles_required', nullable: true, options: ['unsigned' => true])]
     protected $noOfVehiclesRequired;
@@ -150,7 +150,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * No of vehicles possessed.  Not related to required directly as vehicles are often off site.
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'no_of_vehicles_possessed', nullable: true, options: ['unsigned' => true])]
     protected $noOfVehiclesPossessed;
@@ -158,7 +158,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * No of trailers possessed. Not directly related to number required as some will be off site or at other op centres.
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'no_of_trailers_possessed', nullable: true, options: ['unsigned' => true])]
     protected $noOfTrailersPossessed;
@@ -166,7 +166,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Flag to send changes to mobile conpliance/vehicle inspectorate system
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'vi_action', length: 1, nullable: true)]
     protected $viAction;
@@ -174,7 +174,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Is an interim licence.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'is_interim', nullable: true)]
     protected $isInterim;
@@ -182,7 +182,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Advertisement was placed in an appropriate publication.  i.e. local with wide enough readership.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'publication_appropriate', nullable: true)]
     protected $publicationAppropriate;
@@ -199,7 +199,7 @@ abstract class AbstractLicenceOperatingCentre implements BundleSerializableInter
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;

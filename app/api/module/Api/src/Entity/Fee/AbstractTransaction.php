@@ -74,7 +74,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * PaymentMethod
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'payment_method', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -83,7 +83,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * WaiveRecommenderUser
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'waive_recommender_user_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -92,7 +92,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * ProcessedByUser
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'processed_by_user_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -101,7 +101,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * ReceiptDocument
      *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
+     * @var \Dvsa\Olcs\Api\Entity\Doc\Document|null
      */
     #[ORM\JoinColumn(name: 'receipt_document_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
@@ -110,7 +110,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -120,7 +120,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -130,7 +130,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * OLBS payment status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'legacy_status', nullable: true, options: ['unsigned' => true])]
     protected $legacyStatus;
@@ -138,7 +138,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * OLBS payment method
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'legacy_method', nullable: true, options: ['unsigned' => true])]
     protected $legacyMethod;
@@ -146,7 +146,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Legacy choice
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'legacy_choice', nullable: true, options: ['unsigned' => true])]
     protected $legacyChoice;
@@ -154,7 +154,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * OLBS payment reference
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'legacy_guid', length: 255, nullable: true)]
     protected $legacyGuid;
@@ -162,7 +162,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Completed date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'completed_date', nullable: true)]
     protected $completedDate;
@@ -170,7 +170,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Reference
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'reference', length: 255, nullable: true)]
     protected $reference;
@@ -178,7 +178,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Cpms schema
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'cpms_schema', length: 10, nullable: true)]
     protected $cpmsSchema;
@@ -186,7 +186,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Payer name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'payer_name', length: 100, nullable: true)]
     protected $payerName;
@@ -194,7 +194,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Cheque po number
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'cheque_po_number', length: 100, nullable: true)]
     protected $chequePoNumber;
@@ -202,7 +202,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Cheque po date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'cheque_po_date', nullable: true)]
     protected $chequePoDate;
@@ -210,7 +210,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Paying in slip number
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'paying_in_slip_number', length: 100, nullable: true)]
     protected $payingInSlipNumber;
@@ -218,7 +218,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Comment
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'comment', length: 1000, nullable: true)]
     protected $comment;
@@ -226,7 +226,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Waive recommendation date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'waive_recommendation_date', nullable: true)]
     protected $waiveRecommendationDate;
@@ -234,7 +234,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Gateway url
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'gateway_url', length: 1000, nullable: true)]
     protected $gatewayUrl;
@@ -251,7 +251,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
@@ -259,7 +259,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'olbs_type', length: 45, nullable: true)]
     protected $olbsType;
@@ -267,7 +267,7 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     /**
      * FeeTransactions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction::class, mappedBy: 'transaction', cascade: ['persist'])]
     protected $feeTransactions;

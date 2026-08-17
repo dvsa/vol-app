@@ -77,7 +77,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * ParentFee
      *
-     * @var \Dvsa\Olcs\Api\Entity\Fee\Fee
+     * @var \Dvsa\Olcs\Api\Entity\Fee\Fee|null
      */
     #[ORM\JoinColumn(name: 'parent_fee_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, fetch: 'LAZY')]
@@ -86,7 +86,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Foreign Key to application
      *
-     * @var \Dvsa\Olcs\Api\Entity\Application\Application
+     * @var \Dvsa\Olcs\Api\Entity\Application\Application|null
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, inversedBy: 'fees', fetch: 'LAZY')]
@@ -95,7 +95,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Foreign Key to bus_reg
      *
-     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg|null
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, inversedBy: 'fees', fetch: 'LAZY')]
@@ -104,7 +104,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Foreign Key to licence
      *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence|null
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, inversedBy: 'fees', fetch: 'LAZY')]
@@ -113,7 +113,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Foreign Key to task
      *
-     * @var \Dvsa\Olcs\Api\Entity\Task\Task
+     * @var \Dvsa\Olcs\Api\Entity\Task\Task|null
      */
     #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, fetch: 'LAZY')]
@@ -122,7 +122,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * IrhpApplication
      *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication|null
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'fees', fetch: 'LAZY')]
@@ -131,7 +131,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * IrhpPermitApplication
      *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication|null
      */
     #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, inversedBy: 'fees', fetch: 'LAZY')]
@@ -140,7 +140,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Foreign Key to irfo_gv_permit
      *
-     * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit
+     * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit|null
      */
     #[ORM\JoinColumn(name: 'irfo_gv_permit_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoGvPermit::class, fetch: 'LAZY')]
@@ -149,7 +149,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Foreign Key to irfo_psv_auth
      *
-     * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth
+     * @var \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth|null
      */
     #[ORM\JoinColumn(name: 'irfo_psv_auth_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Irfo\IrfoPsvAuth::class, fetch: 'LAZY')]
@@ -158,7 +158,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -168,7 +168,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -210,7 +210,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Invoiced date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'invoiced_date', nullable: true)]
     protected $invoicedDate;
@@ -218,7 +218,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * Description
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
@@ -226,7 +226,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * irfoFeeExempt
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'irfo_fee_exempt', nullable: true)]
     protected $irfoFeeExempt;
@@ -243,7 +243,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
     /**
      * FeeTransactions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\FeeTransaction::class, mappedBy: 'fee', cascade: ['persist'])]
     protected $feeTransactions;

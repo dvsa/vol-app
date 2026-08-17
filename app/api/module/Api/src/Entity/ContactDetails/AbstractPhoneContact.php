@@ -69,7 +69,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -79,7 +79,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -89,7 +89,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Phone number
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'phone_number', length: 45, nullable: true)]
     protected $phoneNumber;
@@ -97,7 +97,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Details
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'details', length: 45, nullable: true)]
     protected $details;
@@ -114,7 +114,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
@@ -122,7 +122,7 @@ abstract class AbstractPhoneContact implements BundleSerializableInterface, Json
     /**
      * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
     protected $olbsType;

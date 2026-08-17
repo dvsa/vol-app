@@ -76,7 +76,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * AssignedCaseworker
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'assigned_caseworker', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -85,7 +85,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * ContactType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'contact_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -94,7 +94,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * LicenceType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'licence_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -103,7 +103,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * RequestorsContactDetails
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails|null
      */
     #[ORM\JoinColumn(name: 'requestors_contact_details_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY', cascade: ['persist'])]
@@ -112,7 +112,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -122,7 +122,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -132,7 +132,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Vrm
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'vrm', length: 20, nullable: true)]
     protected $vrm;
@@ -140,7 +140,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Stopped date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'stopped_date', nullable: true)]
     protected $stoppedDate;
@@ -148,7 +148,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Requested date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'requested_date', nullable: true)]
     protected $requestedDate;
@@ -156,7 +156,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Authorisers decision
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'authorisers_decision', length: 4000, nullable: true)]
     protected $authorisersDecision;
@@ -164,7 +164,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Issued date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'issued_date', nullable: true)]
     protected $issuedDate;
@@ -172,7 +172,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Licence no
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'licence_no', length: 20, nullable: true)]
     protected $licenceNo;
@@ -180,7 +180,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Requestors body
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'requestors_body', length: 40, nullable: true)]
     protected $requestorsBody;
@@ -197,7 +197,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
@@ -205,7 +205,7 @@ abstract class AbstractStatement implements BundleSerializableInterface, JsonSer
     /**
      * SlaTargetDates
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\System\SlaTargetDate>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\System\SlaTargetDate::class, mappedBy: 'statement', cascade: ['persist'], indexBy: 'sla_id', orphanRemoval: true)]
     protected $slaTargetDates;

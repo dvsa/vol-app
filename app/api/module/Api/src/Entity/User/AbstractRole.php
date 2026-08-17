@@ -48,7 +48,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -58,7 +58,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -76,7 +76,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
     /**
      * Description of role.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
@@ -93,7 +93,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
     /**
      * Users
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\User\User>
      */
     #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, mappedBy: 'roles', fetch: 'LAZY')]
     protected $users;
@@ -101,7 +101,7 @@ abstract class AbstractRole implements BundleSerializableInterface, JsonSerializ
     /**
      * RolePermissions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\User\RolePermission>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\User\RolePermission::class, mappedBy: 'role')]
     protected $rolePermissions;

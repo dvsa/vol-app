@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use Doctrine\ORM\Query;
-
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result as DbalResult;
 use Doctrine\ORM\QueryBuilder;
