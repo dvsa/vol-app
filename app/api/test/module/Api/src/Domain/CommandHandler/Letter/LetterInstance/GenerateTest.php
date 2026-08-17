@@ -30,6 +30,9 @@ use Dvsa\Olcs\Api\Entity\Letter\LetterTypeSection as LetterTypeSectionEntity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\System\RefData;
+use Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer;
+use Dvsa\Olcs\Api\Service\Letter\Resolution\VariantResolution;
+use Dvsa\Olcs\Api\Service\Letter\SectionVariantResolver;
 use Dvsa\Olcs\Transfer\Command\Letter\LetterInstance\Generate as Cmd;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
@@ -39,8 +42,27 @@ use Mockery as m;
  */
 final class GenerateTest extends AbstractCommandHandlerTestCase
 {
+    /**
+     * Wrap a variant in the resolution the section now hands back.
+     *
+     * These tests stub the section's resolution seam rather than building whole variant graphs, so
+     * they only care which variant was chosen; the surrounding explanation is for the letter type
+     * builder's diagnostics and is exercised in SectionVariantResolverTest.
+     */
+    private function variantResolution(?LetterSectionVariantEntity $chosen): VariantResolution
+    {
+        return new VariantResolution($chosen, false, 0, [], [], []);
+    }
+
     public function setUp(): void
     {
+        // The resolver is pure (no repos, no persistence), so the handler is exercised
+        // against the real one — a mock here would let Generate drift from the shared path.
+        $this->mockedSmServices = [
+            SectionVariantResolver::class => new SectionVariantResolver(),
+            LetterInstanceComposer::class => new LetterInstanceComposer(),
+        ];
+
         $this->sut = new CommandHandler();
         $this->mockRepo('LetterInstance', LetterInstanceRepo::class);
         $this->mockRepo('LetterType', LetterTypeRepo::class);
@@ -423,7 +445,7 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
         $defaultVariant->shouldReceive('getCurrentVersion')->andReturn($sectionVersion);
 
         $section = m::mock(LetterSectionEntity::class)->makePartial();
-        $section->shouldReceive('getVariantForContext')->andReturn($defaultVariant);
+        $section->shouldReceive('explainVariantForContext')->andReturn($this->variantResolution($defaultVariant));
 
         // Create the letter type section
         $typeSection = m::mock(LetterTypeSectionEntity::class)->makePartial();
@@ -495,7 +517,7 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
 
         // Section where getVariantForContext returns null (no matching variant)
         $section = m::mock(LetterSectionEntity::class)->makePartial();
-        $section->shouldReceive('getVariantForContext')->andReturn(null);
+        $section->shouldReceive('explainVariantForContext')->andReturn($this->variantResolution(null));
 
         $typeSection = m::mock(LetterTypeSectionEntity::class)->makePartial();
         $typeSection->shouldReceive('getLetterSection')->andReturn($section);
@@ -555,7 +577,7 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
 
         // Section where getVariantForContext returns null AND section is required
         $section = m::mock(LetterSectionEntity::class)->makePartial();
-        $section->shouldReceive('getVariantForContext')->andReturn(null);
+        $section->shouldReceive('explainVariantForContext')->andReturn($this->variantResolution(null));
         $section->shouldReceive('getName')->andReturn('Introductory wording');
         $section->shouldReceive('getSectionKey')->andReturn('intro_wording');
 
@@ -637,7 +659,7 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
         $variant->shouldReceive('getCurrentVersion')->andReturn(null);
 
         $section = m::mock(LetterSectionEntity::class)->makePartial();
-        $section->shouldReceive('getVariantForContext')->andReturn($variant);
+        $section->shouldReceive('explainVariantForContext')->andReturn($this->variantResolution($variant));
 
         $typeSection = m::mock(LetterTypeSectionEntity::class)->makePartial();
         $typeSection->shouldReceive('getLetterSection')->andReturn($section);
@@ -783,7 +805,7 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
 
         // Section with a conditioned variant that requires GV + Variation + NI + choice 10
         $section = m::mock(LetterSectionEntity::class)->makePartial();
-        $section->shouldReceive('getVariantForContext')
+        $section->shouldReceive('explainVariantForContext')
             ->with(m::on(
                 // Verify the context was built correctly from application and licence
                 fn($context) => $context['goodsOrPsv'] === 'lcat_gv'
@@ -794,7 +816,7 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
             ->andReturnUsing(function () use ($sectionVersion) {
                 $variant = m::mock(LetterSectionVariantEntity::class)->makePartial();
                 $variant->shouldReceive('getCurrentVersion')->andReturn($sectionVersion);
-                return $variant;
+                return $this->variantResolution($variant);
             });
 
         $typeSection = m::mock(LetterTypeSectionEntity::class)->makePartial();
@@ -886,7 +908,7 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
         $variant1->shouldReceive('getCurrentVersion')->andReturn($version1);
 
         $section1 = m::mock(LetterSectionEntity::class)->makePartial();
-        $section1->shouldReceive('getVariantForContext')->andReturn($variant1);
+        $section1->shouldReceive('explainVariantForContext')->andReturn($this->variantResolution($variant1));
 
         $typeSection1 = m::mock(LetterTypeSectionEntity::class)->makePartial();
         $typeSection1->shouldReceive('getLetterSection')->andReturn($section1);
@@ -895,7 +917,7 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
 
         // Section 2: no matching variant (getVariantForContext returns null)
         $section2 = m::mock(LetterSectionEntity::class)->makePartial();
-        $section2->shouldReceive('getVariantForContext')->andReturn(null);
+        $section2->shouldReceive('explainVariantForContext')->andReturn($this->variantResolution(null));
 
         $typeSection2 = m::mock(LetterTypeSectionEntity::class)->makePartial();
         $typeSection2->shouldReceive('getLetterSection')->andReturn($section2);
@@ -910,7 +932,7 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
         $variant3->shouldReceive('getCurrentVersion')->andReturn($version3);
 
         $section3 = m::mock(LetterSectionEntity::class)->makePartial();
-        $section3->shouldReceive('getVariantForContext')->andReturn($variant3);
+        $section3->shouldReceive('explainVariantForContext')->andReturn($this->variantResolution($variant3));
 
         $typeSection3 = m::mock(LetterTypeSectionEntity::class)->makePartial();
         $typeSection3->shouldReceive('getLetterSection')->andReturn($section3);
@@ -987,7 +1009,7 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
         $sectionVersion->setId(700);
 
         $section = m::mock(LetterSectionEntity::class)->makePartial();
-        $section->shouldReceive('getVariantForContext')
+        $section->shouldReceive('explainVariantForContext')
             ->with(m::on(
                 // When no application, goodsOrPsv comes from licence
                 // isVariation is null (no application)
@@ -1000,7 +1022,7 @@ final class GenerateTest extends AbstractCommandHandlerTestCase
             ->andReturnUsing(function () use ($sectionVersion) {
                 $variant = m::mock(LetterSectionVariantEntity::class)->makePartial();
                 $variant->shouldReceive('getCurrentVersion')->andReturn($sectionVersion);
-                return $variant;
+                return $this->variantResolution($variant);
             });
 
         $typeSection = m::mock(LetterTypeSectionEntity::class)->makePartial();

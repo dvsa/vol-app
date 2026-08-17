@@ -58,7 +58,7 @@ class ExternalConversationLink implements FormatterPluginManagerInterface
                 $statusCSS,
                 $this->urlHelper->fromRoute($route, $params),
                 $idMatrix,
-                $data["subject"],
+                Escape::html($data["subject"]),
                 $dtOutput,
             ],
         );

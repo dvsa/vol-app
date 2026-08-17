@@ -18,9 +18,7 @@ return [
     'router' => [
         'routes' => include(__DIR__ . '/../../../vendor/olcs/olcs-transfer/config/backend-routes.config.php')
     ],
-    // Retrieve-via-Link: per-flow delivery policy + post-OTP session-grant secret. Kept in module
-    // config (not the SSM-resolved config.global) so the literal policy values aren't treated as
-    // parameter tokens.
+    // Retrieve-via-Link: per-flow delivery policy + post-OTP session-grant secret.
     'retrieval' => [
         // gate: none | otp. expiry: ISO-8601 duration or integer seconds. An unconfigured flow
         // fails secure (OTP + short window) in RetrievalPolicyResolver.
@@ -29,9 +27,8 @@ return [
             // Police copies are sensitive: OTP-gated, one link per recipient (tune the window as needed).
             'publication-police' => ['gate' => 'otp', 'expiry' => 'P42D'],
         ],
-        // HMAC secret (>=32 chars) for post-OTP session grants. Empty here so non-OTP envs boot
-        // fine; OTP-enabled envs MUST override via secrets/local config, or the OTP path errors.
-        'session_secret' => '',
+        // HMAC secret (>=32 chars) for post-OTP session grants, per env.
+        'session_secret' => '%olcs_retrieval_session_secret%',
         // Seconds a presigned download URL is valid (S3 document store only). Kept short —
         // selfserve fetches it server-side immediately, it never reaches the browser.
         'presigned_ttl' => 300,
@@ -231,6 +228,18 @@ return [
             // Master Template Resolver (VOL-7305)
             \Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolver::class =>
                 \Dvsa\Olcs\Api\Service\Letter\MasterTemplateResolverFactory::class,
+
+            // Section variant resolution shared by letter generation and builder preview
+            \Dvsa\Olcs\Api\Service\Letter\SectionVariantResolver::class =>
+                \Dvsa\Olcs\Api\Service\Letter\SectionVariantResolverFactory::class,
+
+            // Letter instance assembly shared by letter generation and builder preview
+            \Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposer::class =>
+                \Dvsa\Olcs\Api\Service\Letter\LetterInstanceComposerFactory::class,
+
+            // Explains a proposed composition for the letter type builder
+            \Dvsa\Olcs\Api\Service\Letter\CompositionDiagnostics::class =>
+                \Dvsa\Olcs\Api\Service\Letter\CompositionDiagnosticsFactory::class,
 
             \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClient::class =>
                 \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClientFactory::class,

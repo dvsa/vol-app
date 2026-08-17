@@ -96,6 +96,14 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     protected $lastModifiedBy;
 
     /**
+     * User edits to the to-do wording, this letter only
+     *
+     * @var array
+     */
+    #[ORM\Column(type: 'json', name: 'edited_description', nullable: true)]
+    protected $editedDescription;
+
+    /**
      * False if duplicate
      *
      * @var bool
@@ -278,6 +286,30 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     public function getLastModifiedBy()
     {
         return $this->lastModifiedBy;
+    }
+
+    /**
+     * Set the edited description
+     *
+     * @param array $editedDescription new value being set
+     *
+     * @return static
+     */
+    public function setEditedDescription($editedDescription)
+    {
+        $this->editedDescription = $editedDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get the edited description
+     *
+     * @return array
+     */
+    public function getEditedDescription()
+    {
+        return $this->editedDescription;
     }
 
     /**

@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "2626f7eaa674da39f9ed5bd472a7734f",
+  "content-hash": "27476ff48f78a831971696210a8f6f4f",
   "packages": [
     {
       "name": "alphagov/notifications-php-client",
@@ -1471,16 +1471,16 @@
     },
     {
       "name": "dvsa/authentication-cognito",
-      "version": "v3.3.0",
+      "version": "v3.3.1",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/authentication-cognito.git",
-        "reference": "8261471df232f743548d53f0197a7df191584788"
+        "reference": "6743e7a0be452bd8ea295426e167d81e0fb3cfef"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/authentication-cognito/zipball/8261471df232f743548d53f0197a7df191584788",
-        "reference": "8261471df232f743548d53f0197a7df191584788",
+        "url": "https://api.github.com/repos/dvsa/authentication-cognito/zipball/6743e7a0be452bd8ea295426e167d81e0fb3cfef",
+        "reference": "6743e7a0be452bd8ea295426e167d81e0fb3cfef",
         "shasum": ""
       },
       "require": {
@@ -1525,9 +1525,9 @@
       "keywords": ["Authentication", "Cognito", "dvsa"],
       "support": {
         "issues": "https://github.com/dvsa/authentication-cognito/issues",
-        "source": "https://github.com/dvsa/authentication-cognito/tree/v3.3.0"
+        "source": "https://github.com/dvsa/authentication-cognito/tree/v3.3.1"
       },
-      "time": "2026-01-15T10:47:55+00:00"
+      "time": "2026-08-10T10:26:08+00:00"
     },
     {
       "name": "dvsa/contracts",
@@ -4300,16 +4300,16 @@
     },
     {
       "name": "league/commonmark",
-      "version": "2.8.3",
+      "version": "2.9.1",
       "source": {
         "type": "git",
         "url": "https://github.com/thephpleague/commonmark.git",
-        "reference": "1902f60f984235023acbe03db6ad614a37b3c3e7"
+        "reference": "73cb188c785abfa7a7bec73487148202968274c6"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/1902f60f984235023acbe03db6ad614a37b3c3e7",
-        "reference": "1902f60f984235023acbe03db6ad614a37b3c3e7",
+        "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/73cb188c785abfa7a7bec73487148202968274c6",
+        "reference": "73cb188c785abfa7a7bec73487148202968274c6",
         "shasum": ""
       },
       "require": {
@@ -4346,7 +4346,7 @@
       "type": "library",
       "extra": {
         "branch-alias": {
-          "dev-main": "2.9-dev"
+          "dev-main": "2.10-dev"
         }
       },
       "autoload": {
@@ -4401,7 +4401,7 @@
           "type": "tidelift"
         }
       ],
-      "time": "2026-07-12T15:29:16+00:00"
+      "time": "2026-08-09T14:10:38+00:00"
     },
     {
       "name": "league/config",
@@ -5286,7 +5286,7 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-logging",
-        "reference": "2e458c6466165abc82a6cb9119fc0e03eedb2b94"
+        "reference": "4f4a49ca9648b99985f7394fb77ae3b9282cafd0"
       },
       "require": {
         "ext-json": "*",
@@ -5329,7 +5329,7 @@
         "test": ["phpunit"],
         "phpcs": ["phpcs"],
         "psalm": ["psalm"],
-        "phpstan": ["phpstan"],
+        "phpstan": ["phpstan --memory-limit=1G"],
         "all": ["@test", "@phpcs", "@psalm", "@phpstan"]
       },
       "license": ["MIT"],
@@ -5345,7 +5345,7 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-transfer",
-        "reference": "0d5f7955d09d68c5163b87b2f4c53faf9f3786ec"
+        "reference": "38fa0aa4540e159f9c96eebdc792c9f698fa610e"
       },
       "require": {
         "doctrine/annotations": "^2.0",
@@ -5395,7 +5395,7 @@
         "test": ["phpunit"],
         "phpcs": ["phpcs"],
         "psalm": ["psalm"],
-        "phpstan": ["phpstan"],
+        "phpstan": ["phpstan --memory-limit=1G"],
         "all": ["@test", "@phpcs", "@psalm", "@phpstan"]
       },
       "license": ["MIT"],

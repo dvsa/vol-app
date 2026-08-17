@@ -27,17 +27,40 @@ final class Create extends AbstractCommandHandler
         /** @var \Dvsa\Olcs\Api\Entity\Letter\LetterSection $letterSection */
         $letterSection = $this->getRepo('LetterSection')->fetchById($command->getSectionId());
 
-        // Check for duplicate condition combination
+        $requestedGoodsOrPsv = $command->getGoodsOrPsv() ?: null;
+        $requestedOrgType = $command->getOrganisationType() ?: null;
+        $requestedChoice = $command->getLetterChoice() ? (int) $command->getLetterChoice() : null;
+
+        $requestIsDefault = $requestedGoodsOrPsv === null
+            && $command->getIsVariation() === null
+            && $command->getIsNi() === null
+            && $requestedOrgType === null
+            && $requestedChoice === null;
+
+        // Check for duplicate condition combination. Soft-deleted variants are ignored so that a
+        // combination an admin deleted can be recreated; without this, deleting a variant left the
+        // admin unable to add it back.
         foreach ($letterSection->getVariants() as $existing) {
-            if ($existing->isDefault()) {
+            if ($existing->isDeleted()) {
                 continue;
             }
 
-            $sameGoodsOrPsv = ($existing->getGoodsOrPsv()?->getId() ?? null) === ($command->getGoodsOrPsv() ?: null);
+            // An all-null request is a second default. The unique key cannot catch these because
+            // MySQL treats NULLs as distinct, so it has to be rejected here.
+            if ($existing->isDefault()) {
+                if ($requestIsDefault) {
+                    throw new \Dvsa\Olcs\Api\Domain\Exception\BadRequestException(
+                        'A default variant already exists for this section'
+                    );
+                }
+                continue;
+            }
+
+            $sameGoodsOrPsv = ($existing->getGoodsOrPsv()?->getId() ?? null) === $requestedGoodsOrPsv;
             $sameIsVariation = $existing->getIsVariation() === $command->getIsVariation();
             $sameIsNi = $existing->getIsNi() === $command->getIsNi();
-            $sameOrgType = ($existing->getOrganisationType()?->getId() ?? null) === ($command->getOrganisationType() ?: null);
-            $sameChoice = ($existing->getLetterChoice()?->getId() ?? null) === ($command->getLetterChoice() ? (int) $command->getLetterChoice() : null);
+            $sameOrgType = ($existing->getOrganisationType()?->getId() ?? null) === $requestedOrgType;
+            $sameChoice = ($existing->getLetterChoice()?->getId() ?? null) === $requestedChoice;
 
             if ($sameGoodsOrPsv && $sameIsVariation && $sameIsNi && $sameOrgType && $sameChoice) {
                 throw new \Dvsa\Olcs\Api\Domain\Exception\BadRequestException(

@@ -1,0 +1,237 @@
+name: Deploy Env From Branch
+
+# Builds and deploys an arbitrary vol-app branch to a nonprod environment, without needing it merged
+# first. Everything the environment needs is produced from the branch — PHP artefacts, Docker images,
+# CDN assets — then terraform is applied and migrations run.
+#
+# Dispatch this from `main` (or whichever ref carries this file). `uses: ./…` always resolves against
+# the calling workflow's commit, so the *workflow definitions* come from the dispatch ref; only the
+# application code, assets and terraform follow `branch`.
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: "vol-app branch to build and deploy"
+        type: string
+        required: true
+      environment:
+        description: "Target environment"
+        type: choice
+        options:
+          - reg
+          - dev
+          - int
+        default: reg
+        required: true
+      etl_ref:
+        description: "olcs-etl ref to bundle as the liquibase changelog"
+        type: string
+        required: false
+        default: "main"
+      skip_checks:
+        description: "Skip PHP tests and static analysis (CI already runs them on the PR)"
+        type: boolean
+        required: false
+        default: true
+      run_smoke_tests:
+        description: "Run smoke tests afterwards (informational — runs after the deploy has completed)"
+        type: boolean
+        required: false
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-branch-${{ inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  resolve:
+    name: Resolve version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      sha: ${{ steps.version.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.branch }}
+          fetch-depth: 1
+
+      # One identifier is used as the Docker tag for all four images AND the assets S3 prefix.
+      #
+      # The commit sha has to be part of it for two reasons:
+      #   1. Docker tags cannot contain `/`, so `feat/VOL-1234` needs slugging regardless.
+      #   2. The CDN distributions use the managed CachingOptimized policy, which excludes query
+      #      strings from the cache key — the app's `?v=` cache-buster never reaches the origin. A
+      #      stable prefix would therefore serve stale CSS after a second build of the same branch.
+      #      Changing the origin path per commit avoids needing an invalidation at all.
+      #
+      # `branch` goes through the environment rather than being interpolated into the script, so a
+      # branch name cannot inject shell.
+      - name: Compute version
+        id: version
+        env:
+          BRANCH: ${{ inputs.branch }}
+        run: |
+          set -euo pipefail
+          SHA=$(git rev-parse --short=10 HEAD)
+          SLUG=$(printf '%s' "$BRANCH" | tr '[:upper:]' '[:lower:]' | sed 's#[^a-z0-9._-]#-#g' | cut -c1-80)
+          VERSION="branch-${SLUG}-${SHA}"
+          echo "sha=${SHA}" >> "$GITHUB_OUTPUT"
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+          {
+            echo "### Deploying \`${BRANCH}\` to \`${{ inputs.environment }}\`"
+            echo "- **Commit**: \`${SHA}\`"
+            echo "- **Version**: \`${VERSION}\`"
+            echo "- **ETL ref**: \`${{ inputs.etl_ref }}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  app:
+    name: App
+    needs:
+      - resolve
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - api
+          - selfserve
+          - internal
+    uses: ./.github/workflows/php.yaml
+    with:
+      ref: ${{ inputs.branch }}
+      project: ${{ matrix.project }}
+      version: ${{ needs.resolve.outputs.version }}
+      should-upload-artefact: true
+      artefact-name: ${{ matrix.project }}
+      retention-days: 1
+      skip-checks: ${{ inputs.skip_checks }}
+    permissions:
+      contents: read
+
+  docker:
+    name: Docker
+    needs:
+      - resolve
+      - app
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - api
+          - cli
+          - selfserve
+          - internal
+    uses: ./.github/workflows/docker.yaml
+    with:
+      ref: ${{ inputs.branch }}
+      project: ${{ matrix.project }}
+      version: ${{ needs.resolve.outputs.version }}
+      # cli ships the api artefact
+      app-artefact-name: ${{ matrix.project == 'cli' && 'api' || matrix.project }}
+      push: true
+      branch-build: true
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+  # `branch` is deliberately not passed: assets.yaml derives its S3 path as
+  # `inputs.branch && format('branch-{0}', inputs.branch) || inputs.version`, so passing `ref` +
+  # `version` checks out the branch while writing to our single version prefix. With `branch` unset
+  # and account `nonprod`, the account selector still resolves to ACCOUNT_NONPROD.
+  assets:
+    name: CDN
+    needs:
+      - resolve
+    uses: ./.github/workflows/assets.yaml
+    with:
+      ref: ${{ inputs.branch }}
+      account: nonprod
+      version: ${{ needs.resolve.outputs.version }}
+      push: true
+    permissions:
+      contents: read
+      id-token: write
+
+  deploy:
+    name: Environment Apply
+    needs:
+      - resolve
+      - docker
+      - assets
+    concurrency:
+      group: terraform-environment-${{ inputs.environment }}
+    uses: ./.github/workflows/deploy-environment.yaml
+    with:
+      # terraform follows the branch, so infra changes on it are applied too
+      ref: ${{ inputs.branch }}
+      environment: ${{ inputs.environment }}
+      api-image-tag: ${{ needs.resolve.outputs.version }}
+      cli-image-tag: ${{ needs.resolve.outputs.version }}
+      selfserve-image-tag: ${{ needs.resolve.outputs.version }}
+      internal-image-tag: ${{ needs.resolve.outputs.version }}
+      assets-version: ${{ needs.resolve.outputs.version }}
+      apply: true
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+    secrets: inherit
+
+  liquibase:
+    name: Database Migrations
+    needs:
+      - deploy
+    uses: ./.github/workflows/run-liquibase.yaml
+    with:
+      push: false
+      submit_job: true
+      account: nonprod
+      environment: ${{ inputs.environment }}
+      dry_run: false
+      ref: ${{ inputs.branch }}
+      etl_ref: ${{ inputs.etl_ref }}
+    permissions:
+      contents: read
+      id-token: write
+    secrets:
+      VOL_GITHUB_APP_PRIVATE_KEY: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
+
+  cache_clear:
+    name: Clear Cache
+    needs:
+      - liquibase
+    uses: ./.github/workflows/cache-clear.yaml
+    with:
+      account: nonprod
+      environment: ${{ inputs.environment }}
+    permissions:
+      contents: read
+      id-token: write
+
+  # Informational only. This is the last job and nothing depends on it, so the environment is fully
+  # deployed before it starts and a failure here cannot roll back or block anything.
+  #
+  # Note: `continue-on-error` is not among the keys GitHub accepts on a reusable-workflow (`uses:`)
+  # job, so it is not set here. A smoke failure will therefore still colour the overall run red even
+  # though the deploy succeeded — check the job graph, not the badge.
+  smoke:
+    name: Smoke Tests (informational)
+    if: ${{ always() && !cancelled() && inputs.run_smoke_tests && needs.cache_clear.result == 'success' }}
+    needs:
+      - cache_clear
+    uses: dvsa/vol-functional-tests/.github/workflows/e2eSmoke.yaml@v4.23.0
+    with:
+      platform_env: ${{ inputs.environment }}
+      aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
+      bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
+      bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
+      batch_job_queue: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_QUEUE }}
+      batch_job_definition: ${{ vars.ACCOUNT_NONPROD_BATCH_JOB_DEFINITION }}
+    permissions:
+      contents: write
+      id-token: write
+      checks: write

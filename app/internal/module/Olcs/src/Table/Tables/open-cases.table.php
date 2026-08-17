@@ -26,7 +26,7 @@ return [
                     ['case' => $row['id'], 'action' => 'details'],
                     'case',
                     true
-                ) . '">' . $row['id'] . '</a>',
+                ) . '">' . \Common\Util\Escape::html($row['id']) . '</a>',
             'sort' => 'id'
         ],
         [

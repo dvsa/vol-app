@@ -150,7 +150,10 @@ class PenaltyController extends AbstractInternalController implements CaseContro
     private function getPenaltyData()
     {
         $response = $this->handleQuery(
-            SingleSiDto::create(['id' => $this->params()->fromRoute('si')])
+            SingleSiDto::create([
+                'id' => $this->params()->fromRoute('si'),
+                'case' => $this->params()->fromRoute('case'),
+                ])
         );
 
         if (!$response->isOk()) {

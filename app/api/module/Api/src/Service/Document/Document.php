@@ -12,6 +12,7 @@ use Dvsa\Olcs\Api\Service\Document\Rtf\RtfEncoder;
 use Dvsa\Olcs\DocumentShare\Data\Object\File as ContentStoreFile;
 use Dvsa\Olcs\DocumentShare\Service\DocumentStoreInterface;
 use Laminas\I18n\Translator\TranslatorInterface;
+use Olcs\Logging\Log\Logger;
 
 /**
  * Document generation service
@@ -104,13 +105,27 @@ class Document
              */
             $bookmark->setParser($parser);
 
-            if ($bookmark->isStatic()) {
-                $result = $bookmark->render();
-            } elseif (isset($data[$token])) {
-                $bookmark->setData($data[$token]);
-                $result = $bookmark->render();
-            } else {
-                // no data to fulfil this dynamic bookmark, but that's okay
+            try {
+                if ($bookmark->isStatic()) {
+                    $result = $bookmark->render();
+                } elseif (isset($data[$token])) {
+                    $bookmark->setData($data[$token]);
+                    $result = $bookmark->render();
+                } else {
+                    // no data to fulfil this dynamic bookmark, but that's okay
+                    $result = null;
+                }
+            } catch (\Exception $e) {
+                // A bookmark that cannot render must not take the whole document with
+                // it -- generateFromTemplate() has no handling of its own, so an
+                // exception here would fail the caseworker's action outright. Treat it
+                // as unfulfilled, which leaves the token in place exactly as the
+                // no-data case below does, and record why.
+                Logger::warn(sprintf(
+                    'Render failed for bookmark token "%s": %s',
+                    $token,
+                    $e->getMessage()
+                ));
                 $result = null;
             }
             // this check means bookmarks we did find but couldn't replace with
