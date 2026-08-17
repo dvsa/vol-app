@@ -775,14 +775,7 @@ module "service" {
         commands = ["batch:first-tm-letter", "-v"],
         timeout  = 43200,
         schedule = ["cron(30 13 * * ? *)"],
-      },
-      {
-        name     = "sas-mi-extract",
-        commands = ["/mnt/data/scripts/sas_mi_extract.sh"],
-        type     = "scripts"
-        cpu      = 2,
-        memory   = 8192,
-      },
+      }
     ]
   }
 }

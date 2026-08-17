@@ -743,14 +743,7 @@ module "service" {
         type     = "scripts"
         cpu      = 2,
         memory   = 8192,
-      },
-      {
-        name     = "sas-mi-extract",
-        commands = ["/mnt/data/scripts/sas_mi_extract.sh"],
-        type     = "scripts"
-        cpu      = 2,
-        memory   = 8192,
-      },
+      }
     ]
   }
 }
