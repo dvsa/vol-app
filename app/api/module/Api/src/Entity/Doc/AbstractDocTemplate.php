@@ -64,7 +64,7 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Foreign Key to sub_category
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
+     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory|null
      */
     #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SubCategory::class, fetch: 'LAZY')]
@@ -73,7 +73,7 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Link to new database-driven letter type
      *
-     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterType|null
      */
     #[ORM\JoinColumn(name: 'letter_type_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterType::class, fetch: 'LAZY')]
@@ -91,7 +91,7 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -101,7 +101,7 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -135,7 +135,7 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * Template slug
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'template_slug', length: 100, nullable: true)]
     protected $templateSlug;
@@ -152,7 +152,7 @@ abstract class AbstractDocTemplate implements BundleSerializableInterface, JsonS
     /**
      * DocTemplateBookmarks
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Doc\DocTemplateBookmark>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\DocTemplateBookmark::class, mappedBy: 'docTemplate')]
     protected $docTemplateBookmarks;

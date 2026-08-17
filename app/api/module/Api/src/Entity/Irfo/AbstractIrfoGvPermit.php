@@ -79,7 +79,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * WithdrawnReason
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'withdrawn_reason', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -88,7 +88,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -98,7 +98,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -108,7 +108,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Irfo fee id
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'irfo_fee_id', length: 10, nullable: true)]
     protected $irfoFeeId;
@@ -116,7 +116,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Exemption details
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'exemption_details', length: 255, nullable: true)]
     protected $exemptionDetails;
@@ -124,7 +124,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Expiry date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'expiry_date', nullable: true)]
     protected $expiryDate;
@@ -140,7 +140,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * In force date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'in_force_date', nullable: true)]
     protected $inForceDate;
@@ -156,7 +156,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Note
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'note', length: 2000, nullable: true)]
     protected $note;
@@ -172,7 +172,7 @@ abstract class AbstractIrfoGvPermit implements BundleSerializableInterface, Json
     /**
      * Year required
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'year_required', nullable: true, options: ['unsigned' => true])]
     protected $yearRequired;

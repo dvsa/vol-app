@@ -59,7 +59,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -69,7 +69,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -79,7 +79,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Type of licence status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'type_of_licence_status', nullable: true, options: ['unsigned' => true])]
     protected $typeOfLicenceStatus;
@@ -87,7 +87,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Business type status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'business_type_status', nullable: true, options: ['unsigned' => true])]
     protected $businessTypeStatus;
@@ -95,7 +95,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Business details status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'business_details_status', nullable: true, options: ['unsigned' => true])]
     protected $businessDetailsStatus;
@@ -103,7 +103,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Addresses status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'addresses_status', nullable: true, options: ['unsigned' => true])]
     protected $addressesStatus;
@@ -111,7 +111,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * People status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'people_status', nullable: true, options: ['unsigned' => true])]
     protected $peopleStatus;
@@ -119,7 +119,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Taxi phv status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'taxi_phv_status', nullable: true, options: ['unsigned' => true])]
     protected $taxiPhvStatus;
@@ -127,7 +127,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Operating centres status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'operating_centres_status', nullable: true, options: ['unsigned' => true])]
     protected $operatingCentresStatus;
@@ -135,7 +135,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Financial evidence status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'financial_evidence_status', nullable: true, options: ['unsigned' => true])]
     protected $financialEvidenceStatus;
@@ -143,7 +143,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Transport managers status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'transport_managers_status', nullable: true, options: ['unsigned' => true])]
     protected $transportManagersStatus;
@@ -151,7 +151,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Vehicles status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'vehicles_status', nullable: true, options: ['unsigned' => true])]
     protected $vehiclesStatus;
@@ -159,7 +159,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Vehicles psv status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'vehicles_psv_status', nullable: true, options: ['unsigned' => true])]
     protected $vehiclesPsvStatus;
@@ -167,7 +167,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Vehicles size status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'vehicles_size_status', nullable: true, options: ['unsigned' => true])]
     protected $vehiclesSizeStatus;
@@ -175,7 +175,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Psv operate small status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_operate_small_status', nullable: true, options: ['unsigned' => true])]
     protected $psvOperateSmallStatus;
@@ -183,7 +183,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Psv operate large status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_operate_large_status', nullable: true, options: ['unsigned' => true])]
     protected $psvOperateLargeStatus;
@@ -191,7 +191,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Psv small conditions status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_small_conditions_status', nullable: true, options: ['unsigned' => true])]
     protected $psvSmallConditionsStatus;
@@ -199,7 +199,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Psv operate novelty status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_operate_novelty_status', nullable: true, options: ['unsigned' => true])]
     protected $psvOperateNoveltyStatus;
@@ -207,7 +207,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Psv small part written status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_small_part_written_status', nullable: true, options: ['unsigned' => true])]
     protected $psvSmallPartWrittenStatus;
@@ -215,7 +215,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Psv documentary evidence small status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_documentary_evidence_small_status', nullable: true, options: ['unsigned' => true])]
     protected $psvDocumentaryEvidenceSmallStatus;
@@ -223,7 +223,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Psv documentary evidence large status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_documentary_evidence_large_status', nullable: true, options: ['unsigned' => true])]
     protected $psvDocumentaryEvidenceLargeStatus;
@@ -231,7 +231,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Psv main occupation undertakings status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_main_occupation_undertakings_status', nullable: true, options: ['unsigned' => true])]
     protected $psvMainOccupationUndertakingsStatus;
@@ -239,7 +239,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Vehicles declarations status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'vehicles_declarations_status', nullable: true, options: ['unsigned' => true])]
     protected $vehiclesDeclarationsStatus;
@@ -247,7 +247,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Discs status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'discs_status', nullable: true, options: ['unsigned' => true])]
     protected $discsStatus;
@@ -255,7 +255,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Community licences status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'community_licences_status', nullable: true, options: ['unsigned' => true])]
     protected $communityLicencesStatus;
@@ -263,7 +263,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Safety status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'safety_status', nullable: true, options: ['unsigned' => true])]
     protected $safetyStatus;
@@ -271,7 +271,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Conditions undertakings status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'conditions_undertakings_status', nullable: true, options: ['unsigned' => true])]
     protected $conditionsUndertakingsStatus;
@@ -279,7 +279,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Financial history status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'financial_history_status', nullable: true, options: ['unsigned' => true])]
     protected $financialHistoryStatus;
@@ -287,7 +287,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Licence history status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'licence_history_status', nullable: true, options: ['unsigned' => true])]
     protected $licenceHistoryStatus;
@@ -295,7 +295,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Convictions penalties status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'convictions_penalties_status', nullable: true, options: ['unsigned' => true])]
     protected $convictionsPenaltiesStatus;
@@ -303,7 +303,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Undertakings status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'undertakings_status', nullable: true, options: ['unsigned' => true])]
     protected $undertakingsStatus;
@@ -311,7 +311,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Declarations internal status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'declarations_internal_status', nullable: true, options: ['unsigned' => true])]
     protected $declarationsInternalStatus;
@@ -319,7 +319,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Last section
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'last_section', length: 255, nullable: true)]
     protected $lastSection;

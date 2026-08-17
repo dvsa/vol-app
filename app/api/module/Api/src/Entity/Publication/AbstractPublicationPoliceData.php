@@ -60,7 +60,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Foreign Key to person
      *
-     * @var \Dvsa\Olcs\Api\Entity\Person\Person
+     * @var \Dvsa\Olcs\Api\Entity\Person\Person|null
      */
     #[ORM\JoinColumn(name: 'person_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Person\Person::class, fetch: 'LAZY')]
@@ -69,7 +69,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -79,7 +79,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -89,7 +89,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Forename
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'forename', length: 35, nullable: true)]
     protected $forename;
@@ -97,7 +97,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Family name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'family_name', length: 35, nullable: true)]
     protected $familyName;
@@ -105,7 +105,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * If null, police report will replace with not given.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'birth_date', nullable: true)]
     protected $birthDate;
@@ -113,7 +113,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Legacy DOB. Was stred as varchar and format was not consistand
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'olbs_dob', length: 20, nullable: true)]
     protected $olbsDob;
@@ -130,7 +130,7 @@ abstract class AbstractPublicationPoliceData implements BundleSerializableInterf
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;

@@ -49,7 +49,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Task
      *
-     * @var \Dvsa\Olcs\Api\Entity\Task\Task
+     * @var \Dvsa\Olcs\Api\Entity\Task\Task|null
      */
     #[ORM\JoinColumn(name: 'task_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, fetch: 'LAZY')]
@@ -58,7 +58,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -68,7 +68,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -86,7 +86,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Is attachments enabled
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'is_attachments_enabled', nullable: true, options: ['default' => 0])]
     protected $isAttachmentsEnabled = 0;
@@ -94,7 +94,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Last read at
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'last_read_at', nullable: true)]
     protected $lastReadAt;
@@ -102,7 +102,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Is closed
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'is_closed', nullable: true, options: ['default' => 0])]
     protected $isClosed = 0;
@@ -110,7 +110,7 @@ abstract class AbstractMessagingConversation implements BundleSerializableInterf
     /**
      * Is archived
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'is_archived', nullable: true, options: ['default' => 0])]
     protected $isArchived = 0;

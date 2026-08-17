@@ -48,7 +48,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -58,7 +58,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -68,7 +68,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
     /**
      * Description
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'description', length: 70, nullable: true)]
     protected $description;
@@ -76,7 +76,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
     /**
      * A&D section, expects something like 2.1 but allows for strings in future
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'ad_section', length: 10, nullable: true)]
     protected $adSection;
@@ -84,7 +84,7 @@ abstract class AbstractPublicationSection implements BundleSerializableInterface
     /**
      * N&P section, expects something like 2.1 but allows for strings in future
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'np_section', length: 10, nullable: true)]
     protected $npSection;
