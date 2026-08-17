@@ -35,9 +35,9 @@ final class TransportManagerLicenceTest extends RepositoryTestCase
         $mockQb->shouldReceive('addSelect')->with('tm.id as tmid')->once()->andReturnSelf();
         $mockQb->shouldReceive('addSelect')->with('p.birthDate, p.forename, p.familyName')->once()->andReturnSelf();
         $mockQb->shouldReceive('addSelect')->with('hcd.emailAddress')->once()->andReturnSelf();
-        $expr = $this->mockExprEq('tml.licence', ':licenceId');
-        $mockQb->shouldReceive('expr->eq')->with('tml.licence', ':licenceId')->once()->andReturn($expr);
-        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
+        $condition = $this->mockExprEq('tml.licence', ':licenceId');
+        $mockQb->shouldReceive('expr->eq')->with('tml.licence', ':licenceId')->once()->andReturn($condition);
+        $mockQb->shouldReceive('andWhere')->with($condition)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('licenceId', 834)->once();
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
 
@@ -96,15 +96,15 @@ final class TransportManagerLicenceTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('l.status', 'ls')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('transportManager', 'tm')->once()->andReturnSelf();
 
-        $tm = $this->mockExprEq('tml.transportManager', ':transportManager');
-        $mockQb->shouldReceive('expr->eq')->with('tml.transportManager', ':transportManager')->once()->andReturn($tm);
-        $mockQb->shouldReceive('where')->with($tm)->once()->andReturnSelf();
+        $conditionTm = $this->mockExprEq('tml.transportManager', ':transportManager');
+        $mockQb->shouldReceive('expr->eq')->with('tml.transportManager', ':transportManager')->once()->andReturn($conditionTm);
+        $mockQb->shouldReceive('where')->with($conditionTm)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('transportManager', 1)->once();
 
         $statuses = ['s0', 's1'];
-        $in_status = $this->mockExprIn('l.status', $statuses);
-        $mockQb->shouldReceive('expr->in')->with('l.status', $statuses)->once()->andReturn($in_status);
-        $mockQb->shouldReceive('andWhere')->with($in_status)->once()->andReturnSelf();
+        $conditionStatuses = $this->mockExprIn('l.status', $statuses);
+        $mockQb->shouldReceive('expr->in')->with('l.status', $statuses)->once()->andReturn($conditionStatuses);
+        $mockQb->shouldReceive('andWhere')->with($conditionStatuses)->once()->andReturnSelf();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);
 
@@ -135,14 +135,14 @@ final class TransportManagerLicenceTest extends RepositoryTestCase
 
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('tml')->once()->andReturn($mockQb);
 
-        $expr1 = $this->mockExprEq('tml.transportManager', ':tmId');
-        $mockQb->shouldReceive('expr->eq')->with('tml.transportManager', ':tmId')->once()->andReturn($expr1);
-        $mockQb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
+        $conditionTm = $this->mockExprEq('tml.transportManager', ':tmId');
+        $mockQb->shouldReceive('expr->eq')->with('tml.transportManager', ':tmId')->once()->andReturn($conditionTm);
+        $mockQb->shouldReceive('andWhere')->with($conditionTm)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('tmId', 1)->once();
 
-        $expr2 = $this->mockExprEq('tml.licence', ':licenceId');
-        $mockQb->shouldReceive('expr->eq')->with('tml.licence', ':licenceId')->once()->andReturn($expr2);
-        $mockQb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
+        $conditionLicence = $this->mockExprEq('tml.licence', ':licenceId');
+        $mockQb->shouldReceive('expr->eq')->with('tml.licence', ':licenceId')->once()->andReturn($conditionLicence);
+        $mockQb->shouldReceive('andWhere')->with($conditionLicence)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('licenceId', 2)->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
@@ -155,15 +155,10 @@ final class TransportManagerLicenceTest extends RepositoryTestCase
     public function testApplyListFiltersLicence(): void
     {
         $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $expr = $this->mockExprEq('tml.licence', ':licence');
-        $mockDqb->shouldReceive('expr->eq')
-            ->with('tml.licence', ':licence')
-            ->once()
-            ->andReturn($expr);
-        $mockDqb->shouldReceive('where')
-            ->with($expr)
-            ->once()
-            ->andReturnSelf();
+        $condition = $this->mockExprEq('tml.licence', ':licence');
+        $mockDqb->shouldReceive('expr->eq')->with('tml.licence', ':licence')->once()
+            ->andReturn($condition);
+        $mockDqb->shouldReceive('where')->with($condition)->once()->andReturnSelf();
         $mockDqb->shouldReceive('setParameter')->with('licence', 73)->once();
 
         $query = \Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetList::create(['licence' => 73]);
@@ -176,15 +171,10 @@ final class TransportManagerLicenceTest extends RepositoryTestCase
     public function testApplyListFiltersTransportManager(): void
     {
         $mockDqb = m::mock(\Doctrine\ORM\QueryBuilder::class);
-        $expr = $this->mockExprEq('tml.transportManager', ':transportManager');
-        $mockDqb->shouldReceive('expr->eq')
-            ->with('tml.transportManager', ':transportManager')
-            ->once()
-            ->andReturn($expr);
-        $mockDqb->shouldReceive('where')
-            ->with($expr)
-            ->once()
-            ->andReturnSelf();
+        $condition = $this->mockExprEq('tml.transportManager', ':transportManager');
+        $mockDqb->shouldReceive('expr->eq')->with('tml.transportManager', ':transportManager')->once()
+            ->andReturn($condition);
+        $mockDqb->shouldReceive('where')->with($condition)->once()->andReturnSelf();
         $mockDqb->shouldReceive('setParameter')->with('transportManager', 73)->once();
 
         $query = \Dvsa\Olcs\Transfer\Query\TransportManagerLicence\GetList::create(['transportManager' => 73]);
@@ -202,9 +192,9 @@ final class TransportManagerLicenceTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('la.licenceType')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('transportManager', 'tm')->once()->andReturnSelf();
 
-        $cond1 = $this->mockExprEq('tml.licence', ':licence');
-        $mockQb->shouldReceive('expr->eq')->with('tml.licence', ':licence')->once()->andReturn($cond1);
-        $mockQb->shouldReceive('where')->with($cond1)->once()->andReturnSelf();
+        $condition = $this->mockExprEq('tml.licence', ':licence');
+        $mockQb->shouldReceive('expr->eq')->with('tml.licence', ':licence')->once()->andReturn($condition);
+        $mockQb->shouldReceive('where')->with($condition)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('licence', 7)->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn(['RESULT']);

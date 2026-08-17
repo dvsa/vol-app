@@ -33,27 +33,27 @@ final class CorrespondenceInboxTest extends RepositoryTestCase
 
         $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->once()->andReturnSelf();
 
-        $condition1 = $this->mockExprEq('l.translateToWelsh', 0);
-        $qb->shouldReceive('expr->eq')->with('l.translateToWelsh', 0)->once()->andReturn($condition1);
-        $qb->shouldReceive('andWhere')->with($condition1)->once()->andReturnSelf();
+        $conditionEq1 = $this->mockExprEq('l.translateToWelsh', 0);
+        $qb->shouldReceive('expr->eq')->with('l.translateToWelsh', 0)->once()->andReturn($conditionEq1);
+        $qb->shouldReceive('andWhere')->with($conditionEq1)->once()->andReturnSelf();
 
-        $condition2 = $this->mockExprEq('m.accessed', 0);
-        $qb->shouldReceive('expr->eq')->with('m.accessed', 0)->once()->andReturn($condition2);
-        $qb->shouldReceive('andWhere')->with($condition2)->once()->andReturnSelf();
+        $conditionEq2 = $this->mockExprEq('m.accessed', 0);
+        $qb->shouldReceive('expr->eq')->with('m.accessed', 0)->once()->andReturn($conditionEq2);
+        $qb->shouldReceive('andWhere')->with($conditionEq2)->once()->andReturnSelf();
 
-        $condition3 = $this->mockExprGte('m.createdOn', ':minDate');
-        $qb->shouldReceive('expr->gte')->with('m.createdOn', ':minDate')->once()->andReturn($condition3);
-        $qb->shouldReceive('andWhere')->with($condition3)->once()->andReturnSelf();
+        $conditionGte1 = $this->mockExprGte('m.createdOn', ':minDate');
+        $qb->shouldReceive('expr->gte')->with('m.createdOn', ':minDate')->once()->andReturn($conditionGte1);
+        $qb->shouldReceive('andWhere')->with($conditionGte1)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('minDate', $minDate)->once()->andReturnSelf();
 
-        $condition4 = $this->mockExprLte('m.createdOn', ':maxDate');
-        $qb->shouldReceive('expr->lte')->with('m.createdOn', ':maxDate')->once()->andReturn($condition4);
-        $qb->shouldReceive('andWhere')->with($condition4)->once()->andReturnSelf();
+        $conditionLte1 = $this->mockExprLte('m.createdOn', ':maxDate');
+        $qb->shouldReceive('expr->lte')->with('m.createdOn', ':maxDate')->once()->andReturn($conditionLte1);
+        $qb->shouldReceive('andWhere')->with($conditionLte1)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('maxDate', $maxDate)->once()->andReturnSelf();
 
-        $condition5 = $this->mockExprEq('m.printed', 0);
-        $qb->shouldReceive('expr->eq')->with('m.printed', 0)->once()->andReturn($condition5);
-        $qb->shouldReceive('andWhere')->with($condition5)->once()->andReturnSelf();
+        $conditionEq3 = $this->mockExprEq('m.printed', 0);
+        $qb->shouldReceive('expr->eq')->with('m.printed', 0)->once()->andReturn($conditionEq3);
+        $qb->shouldReceive('andWhere')->with($conditionEq3)->once()->andReturnSelf();
 
         $qb->shouldReceive('expr->isNotNull')->with('l.id')->once()->andReturn('condition6');
         $qb->shouldReceive('andWhere')->with('condition6')->once()->andReturnSelf();
@@ -94,34 +94,34 @@ final class CorrespondenceInboxTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('d.continuationDetails', 'cd')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('cd.checklistDocument', 'cdd')->once()->andReturnSelf();
 
-        $condition1 = $this->mockExprEq('m.accessed', 0);
-        $qb->shouldReceive('expr->eq')->with('m.accessed', 0)->once()->andReturn($condition1);
-        $qb->shouldReceive('andWhere')->with($condition1)->once()->andReturnSelf();
+        $conditionEq4 = $this->mockExprEq('m.accessed', 0);
+        $qb->shouldReceive('expr->eq')->with('m.accessed', 0)->once()->andReturn($conditionEq4);
+        $qb->shouldReceive('andWhere')->with($conditionEq4)->once()->andReturnSelf();
 
-        $condition2 = $this->mockExprGte('m.createdOn', ':minDate');
-        $qb->shouldReceive('expr->gte')->with('m.createdOn', ':minDate')->once()->andReturn($condition2);
-        $qb->shouldReceive('andWhere')->with($condition2)->once()->andReturnSelf();
+        $conditionGte2 = $this->mockExprGte('m.createdOn', ':minDate');
+        $qb->shouldReceive('expr->gte')->with('m.createdOn', ':minDate')->once()->andReturn($conditionGte2);
+        $qb->shouldReceive('andWhere')->with($conditionGte2)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('minDate', $minDate)->once()->andReturnSelf();
 
-        $condition3 = $this->mockExprLte('m.createdOn', ':maxDate');
-        $qb->shouldReceive('expr->lte')->with('m.createdOn', ':maxDate')->once()->andReturn($condition3);
-        $qb->shouldReceive('andWhere')->with($condition3)->once()->andReturnSelf();
+        $conditionLte2 = $this->mockExprLte('m.createdOn', ':maxDate');
+        $qb->shouldReceive('expr->lte')->with('m.createdOn', ':maxDate')->once()->andReturn($conditionLte2);
+        $qb->shouldReceive('andWhere')->with($conditionLte2)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('maxDate', $maxDate)->once()->andReturnSelf();
 
-        $condition4 = $this->mockExprEq('m.emailReminderSent', 0);
-        $qb->shouldReceive('expr->eq')->with('m.emailReminderSent', 0)->once()->andReturn($condition4);
-        $qb->shouldReceive('andWhere')->with($condition4)->once()->andReturnSelf();
+        $conditionEq5 = $this->mockExprEq('m.emailReminderSent', 0);
+        $qb->shouldReceive('expr->eq')->with('m.emailReminderSent', 0)->once()->andReturn($conditionEq5);
+        $qb->shouldReceive('andWhere')->with($conditionEq5)->once()->andReturnSelf();
 
-        $condition5 = $this->mockExprEq('m.printed', 0);
-        $qb->shouldReceive('expr->eq')->with('m.printed', 0)->once()->andReturn($condition5);
-        $qb->shouldReceive('andWhere')->with($condition5)->once()->andReturnSelf();
+        $conditionEq6 = $this->mockExprEq('m.printed', 0);
+        $qb->shouldReceive('expr->eq')->with('m.printed', 0)->once()->andReturn($conditionEq6);
+        $qb->shouldReceive('andWhere')->with($conditionEq6)->once()->andReturnSelf();
 
         $qb->shouldReceive('expr->isNotNull')->with('l.id')->once()->andReturn('condition6');
         $qb->shouldReceive('andWhere')->with('condition6')->once()->andReturnSelf();
 
-        $condition7 = $this->mockExprEq('l.translateToWelsh', 0);
-        $qb->shouldReceive('expr->eq')->with('l.translateToWelsh', 0)->once()->andReturn($condition7);
-        $qb->shouldReceive('andWhere')->with($condition7)->once()->andReturnSelf();
+        $conditionEq7 = $this->mockExprEq('l.translateToWelsh', 0);
+        $qb->shouldReceive('expr->eq')->with('l.translateToWelsh', 0)->once()->andReturn($conditionEq7);
+        $qb->shouldReceive('andWhere')->with($conditionEq7)->once()->andReturnSelf();
 
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($qb);
 
@@ -148,9 +148,9 @@ final class CorrespondenceInboxTest extends RepositoryTestCase
         $qb = m::mock(QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($qb);
 
-        $condition = $this->mockExprEq('m.document', ':document');
-        $qb->shouldReceive('expr->eq')->with('m.document', ':document')->once()->andReturn($condition);
-        $qb->shouldReceive('andWhere')->with($condition)->once()->andReturnSelf();
+        $conditionEq8 = $this->mockExprEq('m.document', ':document');
+        $qb->shouldReceive('expr->eq')->with('m.document', ':document')->once()->andReturn($conditionEq8);
+        $qb->shouldReceive('andWhere')->with($conditionEq8)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('document', $documentId)->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery->getResult')->once()->andReturn('FOO');
