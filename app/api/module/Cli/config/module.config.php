@@ -10,6 +10,7 @@ use Dvsa\Olcs\Cli\Domain\Query;
 use Dvsa\Olcs\Cli\Domain\QueryHandler;
 use Dvsa\Olcs\Cli;
 use Dvsa\Olcs\Cli\Command\Batch as BatchCommands;
+use Dvsa\Olcs\Cli\Command\Idp as IdpCommands;
 use Dvsa\Olcs\Cli\Command\Permits as PermitsCommands;
 use Dvsa\Olcs\Cli\Command\Queue as QueueCommands;
 use Laminas\ServiceManager\AbstractFactory\ConfigAbstractFactory;
@@ -53,7 +54,7 @@ return [
             'batch:process-ntu' => Dvsa\Olcs\Cli\Command\Batch\ProcessNtuCommand::class,
             'batch:remove-read-audit' => Dvsa\Olcs\Cli\Command\Batch\RemoveReadAuditCommand::class,
             'batch:resolve-payments' => Dvsa\Olcs\Cli\Command\Batch\ResolvePaymentsCommand::class,
-            'batch:sweep-document-analysis' => Dvsa\Olcs\Cli\Command\Batch\SweepStaleDocumentAnalysisCommand::class,
+            'idp:sweep-stale-document-analysis' => Dvsa\Olcs\Cli\Command\Idp\SweepStaleDocumentAnalysisCommand::class,
             'permits:cancel-unsubmitted-bilateral' => Dvsa\Olcs\Cli\Command\Permits\CancelUnsubmittedBilateralCommand::class,
             'permits:close-expired-windows' => Dvsa\Olcs\Cli\Command\Permits\CloseExpiredWindowsCommand::class,
             'permits:mark-expired-permits' => Dvsa\Olcs\Cli\Command\Permits\MarkExpiredPermitsCommand::class,
@@ -212,7 +213,7 @@ return [
         BatchCommands\ProcessNtuCommand::class => $commonBatchCommandDeps,
         BatchCommands\RemoveReadAuditCommand::class => $commonBatchCommandDeps,
         BatchCommands\ResolvePaymentsCommand::class => $commonBatchCommandDeps,
-        BatchCommands\SweepStaleDocumentAnalysisCommand::class => $commonBatchCommandDeps,
+        IdpCommands\SweepStaleDocumentAnalysisCommand::class => $commonBatchCommandDeps,
         PermitsCommands\CancelUnsubmittedBilateralCommand::class => $commonBatchCommandDeps,
         PermitsCommands\CloseExpiredWindowsCommand::class => $commonBatchCommandDeps,
         PermitsCommands\MarkExpiredPermitsCommand::class => $commonBatchCommandDeps,

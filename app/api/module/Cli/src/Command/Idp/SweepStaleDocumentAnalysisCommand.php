@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Dvsa\Olcs\Cli\Command\Batch;
+namespace Dvsa\Olcs\Cli\Command\Idp;
 
 use Dvsa\Olcs\Api\Domain\Command\Document\SweepStaleDocumentAnalysis;
+use Dvsa\Olcs\Cli\Command\Batch\AbstractBatchCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -16,7 +17,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 class SweepStaleDocumentAnalysisCommand extends AbstractBatchCommand
 {
-    protected static $defaultName = 'batch:sweep-document-analysis';
+    protected static $defaultName = 'idp:sweep-stale-document-analysis';
 
     #[\Override]
     protected function configure()

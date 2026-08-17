@@ -603,6 +603,12 @@ module "service" {
         commands = ["batch:system-parameter"],
       },
       {
+        name     = "idp-sweep-stale-document-analysis",
+        commands = ["idp:sweep-stale-document-analysis"],
+        timeout  = 300,
+        schedule = ["cron(15 * * * ? *)"],
+      },
+      {
         name     = "cancel-unsubmitted-bilateral",
         commands = ["permits:cancel-unsubmitted-bilateral"],
       },
