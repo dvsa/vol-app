@@ -123,9 +123,9 @@ EOT;
             ->shouldReceive('leftJoin')->with('lfft.feeType', 'lfftft')->once()->andReturnSelf()
             ->shouldReceive('leftJoin')->with('lf.feeStatus', 'lffs')->once()->andReturnSelf();
 
-        $conditionlic = $this->mockExprIn('l.status', ':licenceStatuses');
-        $mockQb->shouldReceive('expr->in')->with('l.status', ':licenceStatuses')->once()->andReturn($conditionlic);
-        $mockQb->shouldReceive('andWhere')->with($conditionlic)->once()->andReturnSelf();
+        $conditionLic = $this->mockExprIn('l.status', ':licenceStatuses');
+        $mockQb->shouldReceive('expr->in')->with('l.status', ':licenceStatuses')->once()->andReturn($conditionLic);
+        $mockQb->shouldReceive('andWhere')->with($conditionLic)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with(
                 'licenceStatuses',
@@ -138,21 +138,21 @@ EOT;
             ->once()
             ->andReturnSelf();
 
-        $unit_condstatus = $this->mockExprNeq('m.status', ':status');
-        $mockQb->shouldReceive('expr->neq')->with('m.status', ':status')->once()->andReturn($unit_condstatus);
-        $mockQb->shouldReceive('andWhere')->with($unit_condstatus)->once()->andReturnSelf();
+        $unit_CondStatus = $this->mockExprNeq('m.status', ':status');
+        $mockQb->shouldReceive('expr->neq')->with('m.status', ':status')->once()->andReturn($unit_CondStatus);
+        $mockQb->shouldReceive('andWhere')->with($unit_CondStatus)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('status', Entity::STATUS_PREPARED);
 
-        $conditionreceived = $this->mockExprEq('m.received', 0);
-        $mockQb->shouldReceive('expr->eq')->with('m.received', 0)->once()->andReturn($conditionreceived);
-        $mockQb->shouldReceive('andWhere')->with($conditionreceived)->once()->andReturnSelf();
-        $conditionisdigital = $this->mockExprEq('m.isDigital', 0);
-        $mockQb->shouldReceive('expr->eq')->with('m.isDigital', 0)->once()->andReturn($conditionisdigital);
-        $mockQb->shouldReceive('andWhere')->with($conditionisdigital)->once()->andReturnSelf();
+        $conditionReceived = $this->mockExprEq('m.received', 0);
+        $mockQb->shouldReceive('expr->eq')->with('m.received', 0)->once()->andReturn($conditionReceived);
+        $mockQb->shouldReceive('andWhere')->with($conditionReceived)->once()->andReturnSelf();
+        $conditionIsDigital = $this->mockExprEq('m.isDigital', 0);
+        $mockQb->shouldReceive('expr->eq')->with('m.isDigital', 0)->once()->andReturn($conditionIsDigital);
+        $mockQb->shouldReceive('andWhere')->with($conditionIsDigital)->once()->andReturnSelf();
 
         $this->queryBuilder->shouldReceive('filterByIds')->with([1])->once()->andReturnSelf();
 
-        $conditionMonth = m::mock(\Doctrine\ORM\Query\Expr\Comparison::class);
+        $conditionMonth = $this->mockExprEq('c.month', ':month');
         $mockQb->shouldReceive('expr->eq')
             ->with('c.month', ':month')
             ->once()
@@ -163,7 +163,7 @@ EOT;
             ->once()
             ->andReturnSelf();
 
-        $conditionYear = m::mock(\Doctrine\ORM\Query\Expr\Comparison::class);
+        $conditionYear = $this->mockExprEq('c.year', ':year');
         $mockQb->shouldReceive('expr->eq')
             ->with('c.year', ':year')
             ->once()
@@ -174,7 +174,7 @@ EOT;
             ->once()
             ->andReturnSelf();
 
-        $conditionTa = m::mock(\Doctrine\ORM\Query\Expr\Func::class);
+        $conditionTa = $this->mockExprIn('l.trafficArea', ':trafficAreas');
         $mockQb->expects('expr->in')->with('l.trafficArea', ':trafficAreas')->andReturn($conditionTa);
         $mockQb->expects('andWhere')->with($conditionTa);
         $mockQb->expects('setParameter')->with('trafficAreas', ['A', 'B']);
@@ -284,28 +284,28 @@ EOT;
 
         $mockQb->shouldReceive('orderBy')->with('l.licNo', 'ASC')->once()->andReturnSelf();
 
-        $conditioncontid = $this->mockExprEq('c.id', ':continuationId');
-        $mockQb->shouldReceive('expr->eq')->with('c.id', ':continuationId')->once()->andReturn($conditioncontid);
-        $mockQb->shouldReceive('andWhere')->with($conditioncontid)->once()->andReturnSelf();
+        $conditionContId = $this->mockExprEq('c.id', ':continuationId');
+        $mockQb->shouldReceive('expr->eq')->with('c.id', ':continuationId')->once()->andReturn($conditionContId);
+        $mockQb->shouldReceive('andWhere')->with($conditionContId)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('continuationId', 1)->once()->andReturnSelf();
 
-        $conditionlicst = $this->mockExprIn('l.status', ':licenceStatuses');
-        $mockQb->shouldReceive('expr->in')->with('l.status', ':licenceStatuses')->once()->andReturn($conditionlicst);
-        $mockQb->shouldReceive('andWhere')->with($conditionlicst)->once()->andReturnSelf();
+        $conditionLicSt = $this->mockExprIn('l.status', ':licenceStatuses');
+        $mockQb->shouldReceive('expr->in')->with('l.status', ':licenceStatuses')->once()->andReturn($conditionLicSt);
+        $mockQb->shouldReceive('andWhere')->with($conditionLicSt)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('licenceStatuses', ['st'])->once()->andReturnSelf();
 
-        $conditionlicno = $this->mockExprEq('l.licNo', ':licNo');
-        $mockQb->shouldReceive('expr->eq')->with('l.licNo', ':licNo')->once()->andReturn($conditionlicno);
-        $mockQb->shouldReceive('andWhere')->with($conditionlicno)->once()->andReturnSelf();
+        $conditionLicNo = $this->mockExprEq('l.licNo', ':licNo');
+        $mockQb->shouldReceive('expr->eq')->with('l.licNo', ':licNo')->once()->andReturn($conditionLicNo);
+        $mockQb->shouldReceive('andWhere')->with($conditionLicNo)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('licNo', 'ln')->once()->andReturnSelf();
 
-        $conditionmethod = $this->mockExprEq('lo.allowEmail', $allowEmail);
-        $mockQb->shouldReceive('expr->eq')->with('lo.allowEmail', $allowEmail)->once()->andReturn($conditionmethod);
-        $mockQb->shouldReceive('andWhere')->with($conditionmethod)->once()->andReturnSelf();
+        $conditionMethod = $this->mockExprEq('lo.allowEmail', $allowEmail);
+        $mockQb->shouldReceive('expr->eq')->with('lo.allowEmail', $allowEmail)->once()->andReturn($conditionMethod);
+        $mockQb->shouldReceive('andWhere')->with($conditionMethod)->once()->andReturnSelf();
 
-        $conditionstatus = $this->mockExprEq('m.status', ':status');
-        $mockQb->shouldReceive('expr->eq')->with('m.status', ':status')->once()->andReturn($conditionstatus);
-        $mockQb->shouldReceive('andWhere')->with($conditionstatus)->once()->andReturnSelf();
+        $conditionStatus = $this->mockExprEq('m.status', ':status');
+        $mockQb->shouldReceive('expr->eq')->with('m.status', ':status')->once()->andReturn($conditionStatus);
+        $mockQb->shouldReceive('andWhere')->with($conditionStatus)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('status', 'st')->once()->andReturnSelf();
 
         $this->em
