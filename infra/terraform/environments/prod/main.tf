@@ -41,6 +41,15 @@ locals {
     {
       effect = "Allow"
       actions = [
+        "events:PutEvents"
+      ]
+      resources = [
+        "arn:aws:events:eu-west-1:146997448015:event-bus/default"
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
         "sts:AssumeRole"
       ]
       resources = [
