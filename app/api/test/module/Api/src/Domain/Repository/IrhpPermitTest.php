@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
+use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\ParameterType;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
 use Doctrine\ORM\QueryBuilder;
@@ -562,7 +562,7 @@ final class IrhpPermitTest extends RepositoryTestCase
                     $licenceId
                 ],
                 [
-                    Types::STRING,
+                    ArrayParameterType::STRING,
                     ParameterType::INTEGER
                 ]
             )
