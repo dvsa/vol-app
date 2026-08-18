@@ -9,6 +9,7 @@
 namespace Dvsa\Olcs\Transfer\Query\Cases\Si;
 
 use Dvsa\Olcs\Transfer\FieldType\Traits\Identity;
+use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 use Dvsa\Olcs\Transfer\Query\CacheableShortTermQueryInterface;
 use Dvsa\Olcs\Transfer\Query\AbstractQuery;
 use Dvsa\Olcs\Transfer\FieldType\Traits\CasesOptional;

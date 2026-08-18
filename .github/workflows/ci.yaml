@@ -158,22 +158,25 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+      # Kept identical to cd.yaml: the version an app is built under here has to mean the same
+      # thing as the version it is deployed under there. lib is part of it because it is part of
+      # every app's artefact. See the note in cd.yaml.
       - id: api-version
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
-          project-path: app/api infra/docker/api
+          project-path: app/api infra/docker/api lib
       - id: cli-version
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
-          project-path: app/api infra/docker/cli
+          project-path: app/api infra/docker/cli lib
       - id: selfserve-version
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
-          project-path: app/selfserve infra/docker/selfserve
+          project-path: app/selfserve infra/docker/selfserve lib
       - id: internal-version
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
-          project-path: app/internal infra/docker/internal
+          project-path: app/internal infra/docker/internal lib
       - id: assets-version
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
