@@ -3,7 +3,6 @@
 namespace Dvsa\Olcs\Api\Domain\Repository\Query\Licence;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\AbstractRawQuery;
-use Doctrine\DBAL\Connection as DoctrineConnection;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\System\RefData as RefDataEntity;

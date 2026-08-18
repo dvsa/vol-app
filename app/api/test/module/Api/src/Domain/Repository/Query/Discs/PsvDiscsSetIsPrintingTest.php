@@ -13,7 +13,6 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Discs;
 use Dvsa\Olcs\Api\Domain\Repository\Query\Discs\PsvDiscsSetIsPrinting;
 use Dvsa\Olcs\Api\Entity\Licence\PsvDisc;
 use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
-use Doctrine\DBAL\Connection;
 
 /**
  * Psv Discs Set Is Printing Test

@@ -2,7 +2,6 @@
 
 namespace Dvsa\Olcs\Api\Domain\Repository;
 
-use Doctrine\DBAL\Connection;
 use Doctrine\ORM\NoResultException;
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;

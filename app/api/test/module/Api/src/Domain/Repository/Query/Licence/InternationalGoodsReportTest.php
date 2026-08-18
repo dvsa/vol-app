@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Licence;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\Licence\InternationalGoodsReport as InternationalGoodsReportQry;
-use Doctrine\DBAL\Connection as DoctrineConnection;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\System\RefData as RefDataEntity;

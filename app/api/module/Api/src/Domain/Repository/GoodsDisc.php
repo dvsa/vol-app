@@ -13,7 +13,6 @@ use Doctrine\ORM\NoResultException;
 use Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc as Entity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Doctrine\ORM\Query;
-use Doctrine\DBAL\Connection;
 
 /**
  * Goods Disc

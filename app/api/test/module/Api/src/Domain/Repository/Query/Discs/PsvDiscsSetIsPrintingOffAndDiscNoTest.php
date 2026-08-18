@@ -13,7 +13,6 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Discs;
 use Dvsa\Olcs\Api\Domain\Repository\Query\Discs\PsvDiscsSetIsPrintingOffAndDiscNo;
 use Dvsa\Olcs\Api\Entity\Licence\PsvDisc;
 use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
-use Doctrine\DBAL\Connection;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 
 /**

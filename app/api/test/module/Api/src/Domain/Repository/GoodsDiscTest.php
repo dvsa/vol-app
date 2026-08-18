@@ -16,7 +16,6 @@ use Dvsa\Olcs\Api\Domain\Repository\GoodsDisc as GoodsDiscRepo;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
-use Doctrine\DBAL\Connection;
 
 /**
  * Goods Disc test
