@@ -145,7 +145,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $stockId = 14;
 
         $dbalResult = m::mock(DbalResult::class);
-        $dbalResult->expects('fetchAll')
+        $dbalResult->expects('fetchAllAssociative')
             ->andReturn(
                 [
                     [ 'id' => 14 ],
@@ -194,7 +194,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $stockId = 14;
 
         $dbalResult = m::mock(DbalResult::class);
-        $dbalResult->expects('fetchAll')
+        $dbalResult->expects('fetchAllAssociative')
             ->andReturn(
                 [
                     [ 'id' => 14 ],
@@ -865,7 +865,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         ];
 
         $dbalResult = m::mock(DbalResult::class);
-        $dbalResult->expects('fetchAll')
+        $dbalResult->expects('fetchAllAssociative')
             ->andReturn($associations);
 
         $connection = m::mock(Connection::class);
@@ -999,7 +999,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $organisationId = 14;
 
         $dbalResult = m::mock(DbalResult::class);
-        $dbalResult->expects('fetchAll')
+        $dbalResult->expects('fetchAllAssociative')
             ->andReturn($rows);
 
         $connection = m::mock(Connection::class);
@@ -1066,7 +1066,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $organisationId = 14;
 
         $dbalResult = m::mock(DbalResult::class);
-        $dbalResult->expects('fetchAll')
+        $dbalResult->expects('fetchAllAssociative')
             ->andReturn($rows);
 
         $connection = m::mock(Connection::class);
@@ -1129,7 +1129,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $status = null;
 
         $dbalResult = m::mock(DbalResult::class);
-        $dbalResult->expects('fetchAll')
+        $dbalResult->expects('fetchAllAssociative')
             ->andReturn($rows);
 
         $connection = m::mock(Connection::class);
@@ -1199,7 +1199,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $status = IrhpInterface::STATUS_NOT_YET_SUBMITTED;
 
         $dbalResult = m::mock(DbalResult::class);
-        $dbalResult->expects('fetchAll')
+        $dbalResult->expects('fetchAllAssociative')
             ->andReturn($rows);
 
         $connection = m::mock(Connection::class);

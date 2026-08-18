@@ -155,7 +155,7 @@ class IrhpApplication extends AbstractRepository
             ]
         );
 
-        return array_column($statement->fetchAll(), 'id');
+        return array_column($statement->fetchAllAssociative(), 'id');
     }
 
     /**
@@ -182,7 +182,7 @@ class IrhpApplication extends AbstractRepository
             ]
         );
 
-        return array_column($statement->fetchAll(), 'id');
+        return array_column($statement->fetchAllAssociative(), 'id');
     }
 
     /**
@@ -452,7 +452,7 @@ class IrhpApplication extends AbstractRepository
             ['stockId' => $stockId]
         );
 
-        return $statement->fetchAll();
+        return $statement->fetchAllAssociative();
     }
 
     /**
@@ -670,7 +670,7 @@ class IrhpApplication extends AbstractRepository
         }
 
         $statement = $this->getEntityManager()->getConnection()->executeQuery($sql, $statementParameters);
-        return $statement->fetchAll();
+        return $statement->fetchAllAssociative();
     }
 
     /**
@@ -742,7 +742,7 @@ class IrhpApplication extends AbstractRepository
         }
 
         $statement = $this->getEntityManager()->getConnection()->executeQuery($sql, $statementParameters);
-        return $statement->fetchAll();
+        return $statement->fetchAllAssociative();
     }
 
     /**
