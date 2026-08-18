@@ -206,7 +206,7 @@ class IrhpApplication extends AbstractRepository
      */
     public function clearScope($stockId)
     {
-        $statement = $this->getEntityManager()->getConnection()->executeQuery(
+        $this->getEntityManager()->getConnection()->executeStatement(
             'update irhp_application e ' .
             'set e.in_scope = 0 ' .
             'where e.id in (' .
@@ -216,8 +216,6 @@ class IrhpApplication extends AbstractRepository
             ')',
             ['stockId' => $stockId]
         );
-
-        $statement->execute();
     }
 
     /**
@@ -227,7 +225,7 @@ class IrhpApplication extends AbstractRepository
      */
     public function applyScope($stockId)
     {
-        $statement = $this->getEntityManager()->getConnection()->executeQuery(
+        $this->getEntityManager()->getConnection()->executeStatement(
             'update irhp_application as e ' .
             'inner join licence as l on e.licence_id = l.id ' .
             'set e.in_scope = 1 ' .
@@ -250,8 +248,6 @@ class IrhpApplication extends AbstractRepository
                 'licenceStatus3' => LicenceEntity::LICENCE_STATUS_CURTAILED
             ]
         );
-
-        $statement->execute();
     }
 
     /**
