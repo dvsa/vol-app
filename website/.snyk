@@ -1,0 +1,31 @@
+# Snyk policy file for the docs site (scanned by the Website leg of
+# .github/workflows/security-app.yaml).
+#
+# Only for advisories with no fixed release anywhere. Anything that can be resolved by moving
+# a version is resolved instead - by npm audit fix, by bumping Docusaurus, or by an entry in
+# the "overrides" block of package.json. An exclusion here is the last resort, not the first.
+#
+# Snyk applies this file to the project sharing its directory, so website/.snyk covers
+# website/package.json. If an ignore ever appears not to take effect, pass the documented
+# fallback --policy-path=website on the snyk test command.
+version: v1.25.0
+ignore:
+  # image-size, two infinite-loop DoS advisories (ICNS parser, and the JXL/HEIF parsers).
+  # 2.0.2 is the latest published release and both affect it, so there is no version to move
+  # to. Reached only via @docusaurus/mdx-loader while building the docs, and the malformed
+  # image would have to be one committed to docs/ in this repo - it is not a path any reader
+  # of the published site can reach. Revisit on expiry: either image-size has shipped a fix
+  # by then, or Docusaurus has moved off it, or this needs renewing with the same reasoning.
+  SNYK-JS-IMAGESIZE-17295816:
+    - "*":
+        reason: >-
+          No fixed release exists - every published version of image-size is affected. Build-time
+          only, via @docusaurus/mdx-loader, on images committed to this repo's own docs.
+        expires: 2027-02-17T00:00:00.000Z
+  SNYK-JS-IMAGESIZE-17295814:
+    - "*":
+        reason: >-
+          No fixed release exists - every published version of image-size is affected. Build-time
+          only, via @docusaurus/mdx-loader, on images committed to this repo's own docs.
+        expires: 2027-02-17T00:00:00.000Z
+patch: {}
