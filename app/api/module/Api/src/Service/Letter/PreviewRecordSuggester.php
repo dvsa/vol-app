@@ -143,8 +143,11 @@ class PreviewRecordSuggester
         }
 
         if (isset($combination['isNi'])) {
-            $qb->andWhere('l.niFlag = :niFlag')
-                ->setParameter('niFlag', $combination['isNi'] ? 'Y' : 'N');
+            // NI status is derived from the traffic area (Licence::getNiFlag()), with
+            // no traffic area counting as GB; the licence ni_flag column is unmapped
+            $qb->leftJoin('l.trafficArea', 'ta')
+                ->andWhere('COALESCE(ta.isNi, FALSE) = :isNi')
+                ->setParameter('isNi', $combination['isNi']);
         }
 
         if (isset($combination['organisationType'])) {
