@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Letter\LetterType;
 
+use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
+use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Entity\Letter\LetterInstance as LetterInstanceEntity;
@@ -32,8 +34,10 @@ use Psr\Container\ContainerInterface;
  * and flushing anywhere later in the request would delete the saved composition. The proposed
  * composition is therefore assembled from ids into fresh objects, never by editing the entity.
  */
-final class PreviewComposition extends AbstractCommandHandler
+final class PreviewComposition extends AbstractCommandHandler implements AuthAwareInterface
 {
+    use AuthAwareTrait;
+
     protected $repoServiceName = 'LetterType';
 
     protected $extraRepos = [
@@ -77,6 +81,16 @@ final class PreviewComposition extends AbstractCommandHandler
         // preview shows a bare "Our ref:", which reads as a fault in the letter rather than an
         // artefact of previewing it.
         $letterInstance->setReference(LetterInstanceEntity::generateReference());
+
+        // Real generation persists the instance, so Blameable stamps createdBy and the caseworker
+        // grabs ([[CASEWORKER_NAME]]) resolve from it. This instance never is, so stamp the
+        // previewing user explicitly -- otherwise those grabs report EMPTY on every preview,
+        // blaming the chosen record for data no record can carry.
+        $currentUser = $this->getCurrentUser();
+        if ($currentUser !== null) {
+            $letterInstance->setCreatedBy($currentUser);
+        }
+
         $this->attachContextRecords($letterInstance, $command);
 
         $context = $this->buildContext($letterInstance, $command);
@@ -107,7 +121,15 @@ final class PreviewComposition extends AbstractCommandHandler
         // nothing -- invisible in the HTML precisely because it was stripped.
         $grabOutcomes = new GrabOutcomeCollector();
 
-        $html = $this->previewService->renderPreview($letterInstance, $masterTemplate, grabOutcomes: $grabOutcomes, annotateSections: true);
+        // The effective isNi goes to the renderer too, so an overridden Region reaches the
+        // grab context (OTC logo, region-aware bookmarks) and not just the chrome choice.
+        $html = $this->previewService->renderPreview(
+            $letterInstance,
+            $masterTemplate,
+            grabOutcomes: $grabOutcomes,
+            annotateSections: true,
+            isNiOverride: $context['isNi']
+        );
 
         $this->result->setFlag('html', $html);
         $this->result->setFlag('diagnostics', $this->diagnostics->forResolution($resolution, $html, $grabOutcomes));

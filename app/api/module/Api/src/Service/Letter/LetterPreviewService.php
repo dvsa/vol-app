@@ -37,6 +37,14 @@ class LetterPreviewService
      */
     private bool $annotateSections = false;
 
+    /**
+     * The effective NI status for the current render when the caller has overridden it (the
+     * builder's Region control). Null means derive it from the licence as usual. Must reach
+     * every grab context built during the render, not just the master template resolver, or
+     * an NI-override preview renders NI chrome with the GB OTC logo and GB-context grabs.
+     */
+    private ?bool $isNiOverride = null;
+
     public function __construct(
         private readonly SectionRendererPluginManager $rendererManager,
         private $contentStore,
@@ -53,16 +61,18 @@ class LetterPreviewService
      * @param MasterTemplate|null $masterTemplate The master template to use (null for basic rendering)
      * @return string Complete HTML for the letter preview
      */
-    public function renderPreview(LetterInstance $letterInstance, ?MasterTemplate $masterTemplate = null, bool $excludePdfAppendices = false, ?GrabOutcomeCollector $grabOutcomes = null, bool $annotateSections = false): string
+    public function renderPreview(LetterInstance $letterInstance, ?MasterTemplate $masterTemplate = null, bool $excludePdfAppendices = false, ?GrabOutcomeCollector $grabOutcomes = null, bool $annotateSections = false, ?bool $isNiOverride = null): string
     {
         $this->grabOutcomes = $grabOutcomes;
         $this->annotateSections = $annotateSections;
+        $this->isNiOverride = $isNiOverride;
 
         try {
             return $this->doRenderPreview($letterInstance, $masterTemplate, $excludePdfAppendices);
         } finally {
             $this->grabOutcomes = null;
             $this->annotateSections = false;
+            $this->isNiOverride = null;
         }
     }
 
@@ -614,7 +624,7 @@ class LetterPreviewService
         // VOL-7305: isNi is needed by the OTC_LOGO token resolver and is a useful
         // signal for any future region-aware bookmark. Added outside the array_filter
         // because false is a meaningful value (GB letter) that should survive.
-        $context['isNi'] = (bool) ($letterInstance->getLicence()?->isNi() ?? false);
+        $context['isNi'] = $this->isNiOverride ?? (bool) ($letterInstance->getLicence()?->isNi() ?? false);
 
         if ($this->grabOutcomes !== null) {
             $context[GrabOutcomeCollector::CONTEXT_KEY] = $this->grabOutcomes;
