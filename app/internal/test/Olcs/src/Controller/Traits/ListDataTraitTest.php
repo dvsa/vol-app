@@ -113,6 +113,39 @@ final class ListDataTraitTest extends MockeryTestCase
         );
     }
 
+    /**
+     * Regenerating a document must keep its stored template selectable. By the time the form
+     * re-validates, the original document has already been deleted -- so if the stored id is a
+     * sibling that consolidation dropped, the browser silently falls back to a different
+     * template or the POST fails InArray validation. The kept row therefore stands as its
+     * letter type's single representative instead of the first row in description order.
+     */
+    public function testKeepTemplateIdSurvivesTheLetterTypeCollapse(): void
+    {
+        $this->mockResponse->shouldReceive('getResult')->andReturn(
+            ['isEnabled' => true],
+            ['results' => [
+                ['id' => 7, 'description' => 'GV - 1st request for supporting docs',
+                    'letterType' => ['id' => 7, 'name' => 'First and Finals GB']],
+                ['id' => 8, 'description' => 'GV - final request for supporting docs',
+                    'letterType' => ['id' => 7, 'name' => 'First and Finals GB']],
+                ['id' => 12, 'description' => 'A legacy RTF template'],
+            ]]
+        );
+        $this->mockResponse->shouldReceive('isOk')->andReturn(true);
+
+        $result = $this->sut->getListDataDocTemplates(9, 31, 'Please select', 8);
+
+        $this->assertSame(
+            [
+                '' => 'Please select',
+                8 => '[New] First and Finals GB',
+                12 => 'A legacy RTF template',
+            ],
+            $result
+        );
+    }
+
     public function testDocTemplatesAreUntouchedWhenTheFeatureIsOff(): void
     {
         $this->mockResponse->shouldReceive('getResult')->andReturn(
