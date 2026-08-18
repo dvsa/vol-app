@@ -111,6 +111,13 @@ class VolGrabReplacementService
             }
 
             $value = $populatedData[$token] ?? null;
+
+            // EditorJS renders produce ['content' => ..., 'preformatted' => ...] structures;
+            // the emptiness check must look at the content, not the wrapper
+            if (is_array($value)) {
+                $value = $value['content'] ?? null;
+            }
+
             $collector->record(
                 $token,
                 ($value === null || trim((string) $value) === '')
