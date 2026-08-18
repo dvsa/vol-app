@@ -1027,6 +1027,50 @@ final class LetterPreviewServiceTest extends MockeryTestCase
         $this->assertStringContainsString('<div class="letter-content">', $result);
     }
 
+    public function testRenderPreviewIsNiOverrideReachesGrabContext(): void
+    {
+        // A Region override must reach the grab context, not just the master template
+        // resolver — otherwise an NI-override preview renders NI chrome with the GB
+        // OTC logo and GB-context grabs.
+        $mockSectionRenderer = m::mock(SectionRendererInterface::class);
+        $mockSectionRenderer->shouldReceive('render')
+            ->withAnyArgs()
+            ->andReturn('<div class="section">Content</div>');
+
+        $this->mockRendererManager->shouldReceive('get')
+            ->with('content-section')
+            ->andReturn($mockSectionRenderer);
+        $this->mockRendererManager->shouldReceive('get')
+            ->with('issue')
+            ->andReturn(m::mock(SectionRendererInterface::class));
+
+        $mockLicence = m::mock(Licence::class);
+        $mockLicence->shouldReceive('getId')->andReturn(7);
+        $mockLicence->shouldReceive('isNi')->andReturn(false);
+
+        $mockLetterInstance = m::mock(LetterInstance::class);
+        $mockLetterInstance->shouldReceive('getLetterInstanceSections')
+            ->andReturn(new ArrayCollection([$this->createMockSection()]));
+        $mockLetterInstance->shouldReceive('getLetterInstanceTodos')->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLetterInstanceIssues')
+            ->andReturn(new ArrayCollection());
+        $mockLetterInstance->shouldReceive('getLicence')->andReturn($mockLicence);
+        $mockLetterInstance->shouldReceive('getApplication')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCreatedBy')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getCase')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getBusReg')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getOrganisation')->andReturn(null);
+        $mockLetterInstance->shouldReceive('getLetterInstanceAppendices')
+            ->andReturn(new ArrayCollection());
+
+        $this->mockVolGrabReplacementService->shouldReceive('replaceGrabsInHtml')
+            ->once()
+            ->with(m::type('string'), ['licence' => 7, 'isNi' => true])
+            ->andReturnUsing(fn($html, $context) => $html);
+
+        $this->sut->renderPreview($mockLetterInstance, null, isNiOverride: true);
+    }
+
     public function testRenderPreviewToleratesSeedShapedSlotJson(): void
     {
         // The 7.6.0 ETL seed wrote chrome slots without the top-level 'time' and per-block
