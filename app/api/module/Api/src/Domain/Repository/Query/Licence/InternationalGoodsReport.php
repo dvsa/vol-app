@@ -110,9 +110,9 @@ ORDER BY
     {
         return [
             'licenceStatuses' => \Doctrine\DBAL\ArrayParameterType::STRING,
-            'goodsOrPsv' => \PDO::PARAM_STR,
-            'licenceType' => \PDO::PARAM_STR,
-            'rdLicStatus' => \PDO::PARAM_STR,
+            'goodsOrPsv' => \Doctrine\DBAL\ParameterType::STRING,
+            'licenceType' => \Doctrine\DBAL\ParameterType::STRING,
+            'rdLicStatus' => \Doctrine\DBAL\ParameterType::STRING,
         ];
     }
 }

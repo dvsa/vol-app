@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
+use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
@@ -19,7 +20,6 @@ use Dvsa\Olcs\Api\Entity\Permits\IrhpPermit as IrhpPermitEntity;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitRange as IrhpPermitRangeEntity;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType as IrhpPermitTypeEntity;
 use Mockery as m;
-use PDO;
 
 /**
  * IRHP Permit test
@@ -563,7 +563,7 @@ final class IrhpPermitTest extends RepositoryTestCase
                 ],
                 [
                     Types::STRING,
-                    PDO::PARAM_INT
+                    ParameterType::INTEGER
                 ]
             )
             ->andReturn($dbalResult);

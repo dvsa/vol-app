@@ -243,7 +243,7 @@ final class GoodsDiscTest extends RepositoryTestCase
         $this->expectQueryWithData(
             'Discs\GoodsDiscsSetIsPrinting',
             ['isPrinting' => 1, 'ids' => [1, 2]],
-            ['isPrinting' => \PDO::PARAM_INT, 'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
+            ['isPrinting' => \Doctrine\DBAL\ParameterType::INTEGER, 'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
         );
 
         $this->sut->setIsPrintingOn([1, 2]);

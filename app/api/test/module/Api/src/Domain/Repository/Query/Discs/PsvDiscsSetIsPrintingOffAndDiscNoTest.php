@@ -55,16 +55,16 @@ final class PsvDiscsSetIsPrintingOffAndDiscNoTest extends AbstractDbQueryTestCas
         $today = new DateTime();
         yield [
             ['ids' => [1,2], 'startNumber' => 1],
-            ['ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER, 'startNumber' => \PDO::PARAM_INT],
+            ['ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER, 'startNumber' => \Doctrine\DBAL\ParameterType::INTEGER],
             [
                 'issuedDate' => $today->format('Y-m-d H:i:s'),
                 'ids' => [1,2],
                 'startNumber' => 1
             ],
             [
-                'issuedDate' => \PDO::PARAM_STR,
+                'issuedDate' => \Doctrine\DBAL\ParameterType::STRING,
                 'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER,
-                'startNumber' => \PDO::PARAM_INT]
+                'startNumber' => \Doctrine\DBAL\ParameterType::INTEGER]
         ];
     }
 
