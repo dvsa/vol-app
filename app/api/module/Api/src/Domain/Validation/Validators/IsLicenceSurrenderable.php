@@ -33,6 +33,10 @@ class IsLicenceSurrenderable extends AbstractValidator implements AuthAwareInter
             throw new ForbiddenException('This licence cannot be surrendered because it\'s status is: ' . $status);
         }
 
+        if ($licence->hasQueuedRevocation()) {
+            throw new ForbiddenException('This licence cannot be surrendered because it has a pending revocation');
+        }
+
         $openApplications = $this->getRepo('Application')->fetchOpenApplicationsForLicence($licenceId);
         if (count($openApplications) > 0) {
             throw new ForbiddenException('This licence cannot be surrendered because it has open applications');

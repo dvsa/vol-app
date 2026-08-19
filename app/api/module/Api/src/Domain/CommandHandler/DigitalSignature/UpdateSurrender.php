@@ -50,7 +50,7 @@ final class UpdateSurrender extends AbstractCommandHandler implements Transactio
 
         $licence = $surrender->getLicence();
         if ($licence->hasQueuedRevocation()) {
-            throw new ForbiddenException('This licence cannot be surrendered because it has a queued revocation');
+            throw new ForbiddenException('This licence cannot be surrendered because it has a pending revocation');
         }
 
         $licenceStatus = $repo->getRefdataReference(LicenceEntity::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION);

@@ -8,7 +8,7 @@ trait LicenceStatusAwareTrait
 {
     private function isLicenceStatusSurrenderable(Licence $licence): bool
     {
-        return $this->isLicenceStatusStrictlyActive($licence) && !$licence->hasQueuedRevocation();
+        return $this->isLicenceStatusStrictlyActive($licence);
     }
 
     private function isLicenceStatusAccessibleForExternalUser(Licence $licence): bool
