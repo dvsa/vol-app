@@ -53,10 +53,10 @@ final class SlaExceptionControllerTest extends MockeryTestCase
         $request->setMethod(Request::METHOD_POST);
 
         $params = m::mock(Params::class);
-        $params->shouldReceive('fromRoute')->with('action')->andReturn('add');
-        $params->shouldReceive('fromRoute')->with('case')->andReturn($caseId);
-        $params->shouldReceive('fromPost')->withNoArgs()->andReturn($postData);
-        $params->shouldReceive('fromPost')->with('form-actions')->andReturn(null);
+        $params->shouldReceive('fromRoute')->with('action')->andReturn('add')->once();
+        $params->shouldReceive('fromRoute')->with('case')->andReturn($caseId)->once();
+        $params->shouldReceive('fromPost')->withNoArgs()->andReturn($postData)->once();
+        $params->shouldReceive('fromPost')->with('form-actions')->andReturn(null)->once();
 
         $placeholder = m::mock(Placeholder::class);
         $placeholder->shouldReceive('setPlaceholder')->with('form', m::type(Form::class))->once();
@@ -64,11 +64,11 @@ final class SlaExceptionControllerTest extends MockeryTestCase
 
         $form = $this->createSlaExceptionForm($slaExceptionId);
 
-        $controller->shouldReceive('plugin')->with('params')->andReturn($params);
-        $controller->shouldReceive('params')->andReturn($params);
-        $controller->shouldReceive('placeholder')->andReturn($placeholder);
-        $controller->shouldReceive('getRequest')->andReturn($request);
-        $controller->shouldReceive('getForm')->with(PublicInquirySlaException::class)->andReturn($form);
+        $controller->shouldReceive('plugin')->with('params')->andReturn($params)->once();
+        $controller->shouldReceive('params')->withNoArgs()->andReturn($params);
+        $controller->shouldReceive('placeholder')->withNoArgs()->andReturn($placeholder)->twice();
+        $controller->shouldReceive('getRequest')->withNoArgs()->andReturn($request)->twice();
+        $controller->shouldReceive('getForm')->with(PublicInquirySlaException::class)->andReturn($form)->once();
 
         $formHelper->shouldReceive('processAddressLookupForm')->with($form, $request)->andReturn(false)->once();
 
