@@ -741,6 +741,7 @@ return [
 
     // Letter
     TransferQuery\Letter\LetterType\Get::class => QueryHandler\Letter\LetterType\Get::class,
+    TransferQuery\Letter\PreviewRecord\Lookup::class => QueryHandler\Letter\PreviewRecord\Lookup::class,
     TransferQuery\Letter\LetterType\GetList::class => QueryHandler\Letter\LetterType\GetList::class,
     TransferQuery\Letter\LetterSection\Get::class => QueryHandler\Letter\LetterSection\Get::class,
     TransferQuery\Letter\LetterSection\GetList::class => QueryHandler\Letter\LetterSection\GetList::class,
