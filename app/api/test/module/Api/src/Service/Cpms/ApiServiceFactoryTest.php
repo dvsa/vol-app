@@ -71,6 +71,79 @@ final class ApiServiceFactoryTest extends TestCase
         $sut->__invoke($mockSl, ApiService::class);
     }
 
+    /**
+     * Parameter Store cannot hold an empty string, so an environment that has not yet been issued
+     * Entra credentials carries " " sentinels. Those must be rejected as firmly as a missing key.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpUnusableGatewayValues')]
+    public function testInvokeToggleOnWithUnusableGatewayValueThrows(
+        array $gatewayConfig,
+        string $expectedKey
+    ): void {
+        $config = self::baseConfig();
+        $config['cpms_api']['gateway'] = $gatewayConfig;
+
+        $mockSl = $this->mockContainer($config, toggleEnabled: true);
+
+        $sut = new ApiServiceFactory();
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage($expectedKey);
+        $sut->__invoke($mockSl, ApiService::class);
+    }
+
+    public static function dpUnusableGatewayValues(): array
+    {
+        return [
+            'blank domain' => [self::gatewayConfig(['domain' => ' ']), 'domain'],
+            'blank client id' => [self::gatewayConfig(['oauth2' => ['client_id' => ' ']]), 'oauth2.client_id'],
+            'blank client secret' => [self::gatewayConfig(['oauth2' => ['client_secret' => ' ']]), 'oauth2.client_secret'],
+            'blank token url' => [self::gatewayConfig(['oauth2' => ['token_url' => ' ']]), 'oauth2.token_url'],
+            'blank scope' => [self::gatewayConfig(['oauth2' => ['scope' => ' ']]), 'oauth2.scope'],
+            'missing oauth2 block' => [['domain' => 'gw.cpms.domain'], 'oauth2.client_id'],
+        ];
+    }
+
+    public function testInvokeToggleOnNamesEveryUnusableKey(): void
+    {
+        $config = self::baseConfig();
+        $config['cpms_api']['gateway'] = self::gatewayConfig([
+            'oauth2' => ['client_id' => ' ', 'token_url' => ' ', 'scope' => ' '],
+        ]);
+
+        $mockSl = $this->mockContainer($config, toggleEnabled: true);
+
+        $sut = new ApiServiceFactory();
+
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('oauth2.client_id, oauth2.token_url, oauth2.scope');
+        $sut->__invoke($mockSl, ApiService::class);
+    }
+
+    /**
+     * A fully populated gateway block, with $overrides merged one level into oauth2.
+     */
+    private static function gatewayConfig(array $overrides = []): array
+    {
+        $gateway = [
+            'domain' => 'gw.cpms.domain',
+            'proxy' => 'http://proxy.local:3128',
+            'oauth2' => [
+                'client_id' => 'an-entra-client-id',
+                'client_secret' => 'an-entra-secret',
+                'token_url' => 'https://login.example.com/token',
+                'scope' => 'an-app/.default',
+                'proxy' => 'http://proxy.local:3128',
+                'service_name' => 'CPMS Hybrid Gateway',
+            ],
+        ];
+
+        $gateway['oauth2'] = array_merge($gateway['oauth2'], $overrides['oauth2'] ?? []);
+        unset($overrides['oauth2']);
+
+        return array_merge($gateway, $overrides);
+    }
+
     private function mockContainer(array $config, bool $toggleEnabled): m\MockInterface
     {
         $mockAuth = m::mock(AuthorizationService::class);

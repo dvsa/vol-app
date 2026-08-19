@@ -98,10 +98,16 @@ return [
       ],
     ],
     // CPMS Hybrid Gateway (VOL-7496). Overrides the %olcs_cpms_gateway_*%
-    // placeholders, which are only resolved in deployed environments — without
-    // these the toggle-on path would use the raw placeholder strings locally.
-    // Populate the oauth2 block with real Entra values to exercise the gateway
-    // for real. Local egress is direct, so the proxy keys are removed.
+    // placeholders, which are only resolved in deployed environments. Populate the
+    // oauth2 block with real Entra values to exercise the gateway for real; leaving
+    // one blank throws a RuntimeException naming it as soon as the
+    // cpms_hybrid_gateway toggle is switched on. Local egress is direct, so the
+    // proxy keys are removed.
+    //
+    // 'scope' must be the bare "<client-id>/.default". The conventional
+    // "api://<client-id>/.default" spelling — used by every other Entra integration
+    // in this repo — is rejected by Entra with AADSTS500011, because the CPMS app
+    // registration does not set an Application ID URI.
     'gateway' => [
       'domain' => "https://gw.accept.dev.cpms.dvsacloud.uk",
       'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
