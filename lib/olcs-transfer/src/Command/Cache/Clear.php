@@ -1,19 +1,36 @@
 <?php
 
-namespace Dvsa\Olcs\Cli\Domain\Command;
+namespace Dvsa\Olcs\Transfer\Command\Cache;
 
 use Dvsa\Olcs\Transfer\Command\AbstractCommand;
+use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 
 /**
  * Cache Clear Command DTO
  *
- * @author OLCS Team
+ * @Transfer\RouteName("backend/cache-clear")
+ * @Transfer\Method("POST")
  */
-class CacheClear extends AbstractCommand
+class Clear extends AbstractCommand
 {
+    /**
+     * @Transfer\Optional()
+     */
     protected ?bool $flushAll = null;
+
+    /**
+     * @Transfer\Optional()
+     */
     protected ?string $namespace = null;
+
+    /**
+     * @Transfer\Optional()
+     */
     protected ?string $pattern = null;
+
+    /**
+     * @Transfer\Optional()
+     */
     protected ?bool $dryRun = null;
 
     /**

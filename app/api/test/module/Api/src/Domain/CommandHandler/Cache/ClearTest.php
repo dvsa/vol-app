@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Dvsa\OlcsTest\Cli\Domain\CommandHandler;
+namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\Cache;
 
-use Dvsa\Olcs\Cli\Domain\Command\CacheClear as Cmd;
-use Dvsa\Olcs\Cli\Domain\CommandHandler\CacheClear;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use PHPUnit\Framework\Attributes\CoversClass;
+use Dvsa\Olcs\Api\Domain\CommandHandler\Cache\Clear as Handler;
+use Dvsa\Olcs\Transfer\Command\Cache\Clear as Command;
 
-#[CoversClass(CacheClear::class)]
-final class CacheClearTest extends AbstractCommandHandlerTestCase
+#[CoversClass(Handler::class)]
+final class ClearTest extends AbstractCommandHandlerTestCase
 {
     /**
      * @var \Redis&m\MockInterface
@@ -23,7 +23,7 @@ final class CacheClearTest extends AbstractCommandHandlerTestCase
     {
         $this->redis = m::mock(\Redis::class);
 
-        $this->sut = new CacheClear();
+        $this->sut = new Handler();
 
         $this->mockedSmServices['config'] = [
             'caches' => [
@@ -42,7 +42,7 @@ final class CacheClearTest extends AbstractCommandHandlerTestCase
 
     public function testHandleCommandReturnsMessageWhenNoOperationSpecified(): void
     {
-        $command = Cmd::create([]);
+        $command = Command::create([]);
 
         $result = $this->sut->handleCommand($command);
 
@@ -61,7 +61,7 @@ final class CacheClearTest extends AbstractCommandHandlerTestCase
 
         $this->redis->shouldNotReceive('flushDB');
 
-        $command = Cmd::create([
+        $command = Command::create([
             'flushAll' => true,
             'dryRun' => true,
         ]);
@@ -86,7 +86,7 @@ final class CacheClearTest extends AbstractCommandHandlerTestCase
             ->once()
             ->andReturnTrue();
 
-        $command = Cmd::create([
+        $command = Command::create([
             'flushAll' => true,
             'dryRun' => false,
         ]);
@@ -104,7 +104,7 @@ final class CacheClearTest extends AbstractCommandHandlerTestCase
         $this->redis->shouldNotReceive('scan');
         $this->redis->shouldNotReceive('del');
 
-        $command = Cmd::create([
+        $command = Command::create([
             'namespace' => 'not_a_valid_namespace',
             'dryRun' => false,
         ]);
@@ -127,7 +127,7 @@ final class CacheClearTest extends AbstractCommandHandlerTestCase
             ->once()
             ->andThrow(new \RuntimeException('Redis unavailable'));
 
-        $command = Cmd::create([
+        $command = Command::create([
             'flushAll' => true,
             'dryRun' => true,
         ]);
@@ -167,7 +167,7 @@ final class CacheClearTest extends AbstractCommandHandlerTestCase
 
         $this->redis->shouldNotReceive('del');
 
-        $command = Cmd::create([
+        $command = Command::create([
             'namespace' => 'user_account',
             'dryRun' => true,
         ]);
@@ -178,6 +178,40 @@ final class CacheClearTest extends AbstractCommandHandlerTestCase
             [
                 '[DRY RUN] Would delete 0 keys from namespace "user_account" '
                     . '(pattern: custom-cache:user_account*)',
+                '[DRY RUN] Total: would delete 0 keys',
+            ],
+            $result->toArray()['messages']
+        );
+    }
+
+    public function testCqrsNamespaceUsesDedicatedPrefix(): void
+    {
+        $this->redis
+            ->shouldReceive('scan')
+            ->once()
+            ->withArgs(
+                static function (&$iterator, string $pattern, int $count): bool {
+                    $iterator = 0;
+
+                    return $pattern === 'cqrs:*'
+                        && $count === 100;
+                }
+            )
+            ->andReturnFalse();
+
+        $this->redis->shouldNotReceive('del');
+
+        $command = Command::create([
+            'namespace' => 'cqrs',
+            'dryRun' => true,
+        ]);
+
+        $result = $this->sut->handleCommand($command);
+
+        self::assertSame(
+            [
+                '[DRY RUN] Would delete 0 keys from namespace "cqrs" '
+                    . '(pattern: cqrs:*)',
                 '[DRY RUN] Total: would delete 0 keys',
             ],
             $result->toArray()['messages']
