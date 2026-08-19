@@ -19,10 +19,13 @@ final class FormFileUploadListTest extends MockeryTestCase
 {
     public function testRenderInvalidElement(): void
     {
-        $this->expectException(\Exception::class);
+        $element = m::mock(FieldsetInterface::class);
+        $element->shouldReceive('count')->andThrow(new \DomainException('invalid element'));
+
+        $this->expectException(\DomainException::class);
 
         $sut = new FormFileUploadList();
-        $sut->render(m::mock(FieldsetInterface::class));
+        $sut->render($element);
     }
 
     public function testRenderNotItems(): void
