@@ -21,6 +21,9 @@ final class UpdateDetails extends AbstractCommand
     #[Transfer\Optional]
     protected $placeOfBirth;
 
+    /**
+     * @Transfer\Partial("Dvsa\Olcs\Transfer\Command\Partial\AddressOptional")
+     */
     #[Transfer\Filter('Laminas\Filter\StringTrim')]
     #[Transfer\Validator('Laminas\Validator\StringLength', options: ['min' => 7, 'max' => 7])]
     #[Transfer\Optional]
