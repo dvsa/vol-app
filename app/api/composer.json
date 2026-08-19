@@ -80,7 +80,8 @@
     "roave/psr-container-doctrine": "^4.2",
     "psr/cache": "^3.0",
     "symfony/cache": "^6.4",
-    "laminas/laminas-authentication": "^2.19"
+    "laminas/laminas-authentication": "^2.19",
+    "symfony/uid": "^7.4"
   },
   "autoload": {
     "psr-4": {

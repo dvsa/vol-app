@@ -115,6 +115,16 @@ return [
     ],
 
     // Document service
+    // Intelligent Document Processing.
+    'idp' => [
+        // Age in minutes beyond which a PENDING document_analysis row is swept to TIMEOUT.
+        // Must stay above the analysis timeout plus result-processing latency, or the sweeper
+        // produces false TIMEOUTs.
+        'sweeper_threshold_minutes' => '%idp_sweeper_threshold_minutes%',
+        // How long a successful analysis suppresses re-analysis of the same document when an
+        // application is resubmitted.
+        'dedupe_success_window_hours' => '%idp_dedupe_success_window_hours%',
+    ],
     'document_share' => [
         // Document store backend selector: 'webdav' | 's3'. Resolved per environment from
         // SSM / Secrets Manager; any value other than 's3' (including an unresolved placeholder)

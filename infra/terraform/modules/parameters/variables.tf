@@ -6,7 +6,7 @@ variable "environment" {
 /*
     * Log Level
     * RFC: http://tools.ietf.org/html/rfc3164
-    * 
+    *
     *    Code      Severity
     *      0       Emergency: system is unusable
     *      1       Alert: action must be taken immediately
@@ -49,6 +49,8 @@ variable "application_parameters" {
     govuk_account_id_assurance_public_key        = string
     govuk_account_private_key_algorithm          = string
     govuk_account_public_key                     = string
+    idp_sweeper_threshold_minutes                = string
+    idp_dedupe_success_window_hours              = string
     lar_base_uri                                 = string
     log_level                                    = string
     olcs_aws_account_number                      = string

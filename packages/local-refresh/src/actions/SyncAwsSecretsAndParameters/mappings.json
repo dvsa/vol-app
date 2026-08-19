@@ -212,6 +212,16 @@
             "secretKey": "olcs_companieshousexmlpassword"
           },
           {
+            "configPath": ["idp", "sweeper_threshold_minutes"],
+            "awsPath": "/applicationparams/{env}/idp_sweeper_threshold_minutes",
+            "type": "parameter"
+          },
+          {
+            "configPath": ["idp", "dedupe_success_window_hours"],
+            "awsPath": "/applicationparams/{env}/idp_dedupe_success_window_hours",
+            "type": "parameter"
+          },
+          {
             "configPath": ["document_share", "client", "webdav_baseuri"],
             "awsPath": "/applicationparams/{env}/olcs_webdav",
             "type": "parameter"
