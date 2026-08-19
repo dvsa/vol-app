@@ -246,15 +246,32 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project:
-          - olcs-logging
-          - olcs-utils
-          - olcs-transfer
-          - olcs-common
-          - olcs-auth
+        # Explicit pairs rather than a project x php-version product: only the libs whose
+        # composer php constraint allows 8.5 get an 8.5 leg (VOL-7536). The rest still declare
+        # ~8.4.0 and would fail to install on 8.5.
+        include:
+          - project: olcs-logging
+            php-version: "8.4"
+          - project: olcs-utils
+            php-version: "8.4"
+          - project: olcs-utils
+            php-version: "8.5"
+          - project: olcs-transfer
+            php-version: "8.4"
+          - project: olcs-transfer
+            php-version: "8.5"
+          - project: olcs-common
+            php-version: "8.4"
+          - project: olcs-auth
+            php-version: "8.4"
     uses: ./.github/workflows/php-lib.yaml
     with:
       project: ${{ matrix.project }}
+      php-version: ${{ matrix.php-version }}
+      # olcs-utils dev-requires olcs-logging, which pulls laminas/laminas-mvc ^3.8 - no release
+      # of that supports 8.5 yet. olcs-utils only touches olcs-logging's PSR-3 Logger facade,
+      # never its MVC listeners, so the unsupported package is installed but never executed.
+      ignore-php-platform-req: ${{ matrix.project == 'olcs-utils' && matrix.php-version == '8.5' }}
     permissions:
       contents: read
 

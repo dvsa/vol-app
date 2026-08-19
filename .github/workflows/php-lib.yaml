@@ -15,6 +15,14 @@ on:
         type: string
         required: false
         default: "8.4"
+      ignore-php-platform-req:
+        # Skip composer's php platform check when resolving. Only for forward-compatibility
+        # legs, where a dependency has not yet declared support for the PHP under test but is
+        # not actually exercised by the library's suite. The suite still runs on the real
+        # interpreter, so this weakens resolution only, not the test signal.
+        type: boolean
+        required: false
+        default: false
 
 jobs:
   checks:
@@ -48,9 +56,9 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-lib-${{ inputs.project }}-${{ hashFiles(format('**/lib/{0}/composer.lock', inputs.project)) }}
-          restore-keys: ${{ runner.os }}-composer-lib-${{ inputs.project }}-
+          key: ${{ runner.os }}-composer-lib-${{ inputs.project }}-php${{ inputs.php-version }}-${{ hashFiles(format('**/lib/{0}/composer.lock', inputs.project)) }}
+          restore-keys: ${{ runner.os }}-composer-lib-${{ inputs.project }}-php${{ inputs.php-version }}-
       - name: Install dependencies
-        run: composer install --no-progress --prefer-dist
+        run: composer install --no-progress --prefer-dist ${{ inputs.ignore-php-platform-req && '--ignore-platform-req=php' || '' }}
       - name: Test, phpcs, psalm, phpstan
         run: composer run-script all
