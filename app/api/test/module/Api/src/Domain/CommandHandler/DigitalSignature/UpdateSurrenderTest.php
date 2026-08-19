@@ -113,7 +113,7 @@ final class UpdateSurrenderTest extends AbstractCommandHandlerTestCase
             ->expects('fetchOneByLicenceId')->with($licenceId)->andReturn($surrender);
 
         $this->expectException(ForbiddenException::class);
-        $this->expectExceptionMessageIs('This licence cannot be surrendered because it has a queued revocation');
+        $this->expectExceptionMessageIs('This licence cannot be surrendered because it has a pending revocation');
 
         $this->sut->handleCommand($cmd);
     }

@@ -130,7 +130,6 @@ final class IsLicenceSurrenderableTest extends AbstractValidatorsTestCase
 
         $licence = m::mock(Licence::class);
         $licence->shouldReceive('getStatus->getId')->andReturn(Licence::LICENCE_STATUS_VALID);
-        $licence->shouldReceive('getStatus->getDescription')->once()->andReturn('Valid');
         $licence->shouldReceive('hasQueuedRevocation')->once()->andReturnTrue();
 
         $licenceRepo = $this->mockRepo('Licence');

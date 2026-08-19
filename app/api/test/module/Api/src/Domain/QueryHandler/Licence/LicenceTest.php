@@ -128,6 +128,7 @@ final class LicenceTest extends QueryHandlerTestCase
             'isLicenceSurrenderAllowed' => $isLicenceSurrenderAllowed,
             'activeVehicleCount' => 1,
             'totalVehicleCount' => 1,
+            'hasQueuedRevocation' => $hasQueuedRevocation,
         ];
 
         $this->assertEquals($expected, $result->serialize());
@@ -200,6 +201,7 @@ final class LicenceTest extends QueryHandlerTestCase
             'isLicenceSurrenderAllowed' => $isLicenceSurrenderAllowed,
             'activeVehicleCount' => 1,
             'totalVehicleCount' => 1,
+            'hasQueuedRevocation' => $hasQueuedRevocation,
         ];
 
         $this->assertEquals($expected, $result->serialize());
