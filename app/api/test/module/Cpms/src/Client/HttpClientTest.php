@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Cpms\Client;
 
+use Dvsa\Olcs\Cpms\Authenticate\GatewayTokenProviderInterface;
 use Dvsa\Olcs\Cpms\Client\HttpClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Response;
@@ -74,7 +75,7 @@ final class HttpClientTest extends TestCase
 
     public function testPost(): void
     {
-        $requestBody = ['postRequestBodyKeyExample' => 'postRequestBodyValueExample’'];
+        $requestBody = ['postRequestBodyKeyExample' => "postRequestBodyValueExample\u{2019}"];
         $encodedResponseBody = json_encode(['examplePostReponseKey' => 'examplePostResponseValue']);
 
         $this->appendToHandler(200, [], $encodedResponseBody);
@@ -95,7 +96,7 @@ final class HttpClientTest extends TestCase
 
     public function testPut(): void
     {
-        $requestBody = ['putRequestBodyKeyExample' => 'putRequestBodyValueExample’'];
+        $requestBody = ['putRequestBodyKeyExample' => "putRequestBodyValueExample\u{2019}"];
         $encodedResponseBody = json_encode(['examplePutReponseKey' => 'examplePutResponseValue']);
 
         $this->appendToHandler(200, [], $encodedResponseBody);
@@ -114,15 +115,58 @@ final class HttpClientTest extends TestCase
         $this->assertEquals('{"putRequestBodyKeyExample":"putRequestBodyValueExample"}', $this->getLastRequest()->getBody()->getContents());
     }
 
-    public function testResetHeaders(): void
+    public function testGatewayTokenProviderOverlaysAuthorizationHeader(): void
     {
-        $this->setUp();
-        $clientOptions = $this->sut->getClientOptions();
-        $clientOptions->setHeaders(['Authorization' => 'Bearer AKSNKDJNAJNBQJ121321NMM']);
+        $tokenProvider = m::mock(GatewayTokenProviderInterface::class);
+        $tokenProvider->shouldReceive('getToken')->andReturn('an-entra-jwt');
 
-        $this->sut->resetHeaders();
+        $this->sut = new HttpClient(
+            $this->setUpMockClient(),
+            $this->getClientOptions(),
+            $this->logger,
+            $tokenProvider
+        );
 
-        $this->assertEquals([], $clientOptions->getHeaders());
+        // a stale Authorization header persisted in ClientOptions must lose to the JWT overlay
+        $options = $this->sut->getClientOptions();
+        $options->setHeaders(array_merge($options->getHeaders(), ['Authorization' => 'Bearer stale-cpms-token']));
+
+        $this->appendToHandler(200, [], '{}');
+        $this->sut->post('/api/token', ['client_id' => 'olcs']);
+
+        $this->assertEquals(['Bearer an-entra-jwt'], $this->getLastRequest()->getHeader('Authorization'));
+        $this->assertTrue($this->sut->hasGatewayTokenProvider());
+    }
+
+    public function testGatewayTokenProviderConsultedPerRequest(): void
+    {
+        $tokenProvider = m::mock(GatewayTokenProviderInterface::class);
+        $tokenProvider->shouldReceive('getToken')->andReturn('jwt-1', 'jwt-2');
+
+        $this->sut = new HttpClient(
+            $this->setUpMockClient(),
+            $this->getClientOptions(),
+            $this->logger,
+            $tokenProvider
+        );
+
+        $this->appendToHandler(200, [], '{}');
+        $this->appendToHandler(200, [], '{}');
+
+        $this->sut->get('/endpoint', []);
+        $this->assertEquals(['Bearer jwt-1'], $this->getLastRequest()->getHeader('Authorization'));
+
+        $this->sut->get('/endpoint', []);
+        $this->assertEquals(['Bearer jwt-2'], $this->getLastRequest()->getHeader('Authorization'));
+    }
+
+    public function testNoAuthorizationHeaderWithoutGatewayTokenProvider(): void
+    {
+        $this->appendToHandler(200, [], '{}');
+        $this->sut->get('/endpoint', []);
+
+        $this->assertSame([], $this->getLastRequest()->getHeader('Authorization'));
+        $this->assertFalse($this->sut->hasGatewayTokenProvider());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestLogResponseOnSuccess')]

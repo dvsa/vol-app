@@ -61,6 +61,10 @@ variable "application_parameters" {
     olcs_aws_sqs_ch_insolvency_dlq               = string
     olcs_aws_sqs_ch_insolvency_queue             = string
     olcs_aws_version                             = string
+    olcs_cpms_gateway_client_id                  = string
+    olcs_cpms_gateway_host                       = string
+    olcs_cpms_gateway_scope                      = string
+    olcs_cpms_gateway_token_url                  = string
     olcs_cpmsclientid                            = string
     olcs_cpmsclientid_ni                         = string
     olcs_cpmsserver                              = string
