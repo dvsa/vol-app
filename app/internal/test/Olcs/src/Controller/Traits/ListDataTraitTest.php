@@ -81,4 +81,86 @@ final class ListDataTraitTest extends MockeryTestCase
             'unit_Id1' => 'unit_Val1',
         ], $actual);
     }
+
+    /**
+     * Several legacy templates point at one letter type -- the letters engine's choices adapt
+     * a single type at generation time, so the list must offer that journey once, labelled
+     * with the letter type's own name rather than one of the RTF-era descriptions.
+     */
+    public function testDocTemplatesLinkedToTheSameLetterTypeCollapseToOneEntry(): void
+    {
+        $this->mockResponse->shouldReceive('getResult')->andReturn(
+            ['isEnabled' => true],
+            ['results' => [
+                ['id' => 7, 'description' => 'GV - 1st request for supporting docs',
+                    'letterType' => ['id' => 7, 'name' => 'First and Finals GB']],
+                ['id' => 8, 'description' => 'GV - final request for supporting docs',
+                    'letterType' => ['id' => 7, 'name' => 'First and Finals GB']],
+                ['id' => 12, 'description' => 'A legacy RTF template'],
+            ]]
+        );
+        $this->mockResponse->shouldReceive('isOk')->andReturn(true);
+
+        $result = $this->sut->getListDataDocTemplates(9, 31, 'Please select');
+
+        $this->assertSame(
+            [
+                '' => 'Please select',
+                7 => '[New] First and Finals GB',
+                12 => 'A legacy RTF template',
+            ],
+            $result
+        );
+    }
+
+    /**
+     * Regenerating a document must keep its stored template selectable. By the time the form
+     * re-validates, the original document has already been deleted -- so if the stored id is a
+     * sibling that consolidation dropped, the browser silently falls back to a different
+     * template or the POST fails InArray validation. The kept row therefore stands as its
+     * letter type's single representative instead of the first row in description order.
+     */
+    public function testKeepTemplateIdSurvivesTheLetterTypeCollapse(): void
+    {
+        $this->mockResponse->shouldReceive('getResult')->andReturn(
+            ['isEnabled' => true],
+            ['results' => [
+                ['id' => 7, 'description' => 'GV - 1st request for supporting docs',
+                    'letterType' => ['id' => 7, 'name' => 'First and Finals GB']],
+                ['id' => 8, 'description' => 'GV - final request for supporting docs',
+                    'letterType' => ['id' => 7, 'name' => 'First and Finals GB']],
+                ['id' => 12, 'description' => 'A legacy RTF template'],
+            ]]
+        );
+        $this->mockResponse->shouldReceive('isOk')->andReturn(true);
+
+        $result = $this->sut->getListDataDocTemplates(9, 31, 'Please select', 8);
+
+        $this->assertSame(
+            [
+                '' => 'Please select',
+                8 => '[New] First and Finals GB',
+                12 => 'A legacy RTF template',
+            ],
+            $result
+        );
+    }
+
+    public function testDocTemplatesAreUntouchedWhenTheFeatureIsOff(): void
+    {
+        $this->mockResponse->shouldReceive('getResult')->andReturn(
+            ['isEnabled' => false],
+            ['results' => [
+                ['id' => 7, 'description' => 'GV - 1st request',
+                    'letterType' => ['id' => 7, 'name' => 'First and Finals GB']],
+                ['id' => 8, 'description' => 'GV - final request',
+                    'letterType' => ['id' => 7, 'name' => 'First and Finals GB']],
+            ]]
+        );
+        $this->mockResponse->shouldReceive('isOk')->andReturn(true);
+
+        $result = $this->sut->getListDataDocTemplates(9, 31);
+
+        $this->assertSame([7 => 'GV - 1st request', 8 => 'GV - final request'], $result);
+    }
 }
