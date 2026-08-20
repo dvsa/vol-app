@@ -4,6 +4,7 @@ $config = [
     'modules' => [
         'Dvsa\LaminasConfigCloudParameters',
         'Olcs\Logging',
+        'Olcs\Logging\Mvc',
         'Laminas\I18n',
         'Laminas\Mvc\Plugin\FlashMessenger',
         'Laminas\Filter',

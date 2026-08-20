@@ -5,6 +5,7 @@ $config = [
     'modules' => [
         'Dvsa\LaminasConfigCloudParameters',
         'Olcs\Logging',
+        'Olcs\Logging\Mvc',
         'Laminas\Router',
         'Laminas\Navigation',
         'Laminas\I18n',
