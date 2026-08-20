@@ -45,7 +45,7 @@ abstract class AbstractMessageFailures implements BundleSerializableInterface, J
     /**
      * Foreign key to organisation table.
      *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation|null
      */
     #[ORM\JoinColumn(name: 'organisation_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]

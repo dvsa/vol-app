@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\AbstractLazyCollection;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityNotFoundException;
-use Doctrine\ORM\Proxy\Proxy;
+use Doctrine\Persistence\Proxy;
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use Dvsa\Olcs\Api\Entity\System\RefData;
 
@@ -25,7 +25,12 @@ trait BundleSerializableTrait
     {
         $output = [];
 
-        $vars = get_object_vars($this);
+        try {
+            $vars = get_object_vars($this);
+        } catch (EntityNotFoundException) {
+            // ORM proxies may reference entities removed by SoftDeleteable
+            return null;
+        }
 
         foreach ($vars as $property => $value) {
             $output[$property] = null;

@@ -12,6 +12,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\ServiceManager\ServiceManager;
 use LmcRbacMvc\Service\AuthorizationService;
 use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 
 /**
  * Abstract Db Query Test Case
@@ -83,10 +84,10 @@ abstract class BaseAbstractDbQueryTestCase extends MockeryTestCase
         $this->assertSame($sut, $this->sut);
     }
 
-    public function getClassMetadata(mixed $entity): mixed
+    public function getClassMetadata(mixed $entity): ClassMetadata
     {
         if (empty($this->metaMap[$entity])) {
-            $this->metaMap[$entity] = m::mock();
+            $this->metaMap[$entity] = m::mock(ClassMetadata::class);
 
             $this->metaMap[$entity]->shouldReceive('getTableName')->andReturn($this->tableNameMap[$entity]);
 

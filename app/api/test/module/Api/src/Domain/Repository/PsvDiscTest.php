@@ -18,6 +18,9 @@ use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea as TrafficAreaEntity;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr\Andx;
 
 /**
  * Psv Disc test
@@ -46,16 +49,21 @@ final class PsvDiscTest extends RepositoryTestCase
         $maxPages = 1;
 
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('lta.isNi', 0)->once()->andReturn('condition1');
-        $mockQb->shouldReceive('expr->eq')->with('llt.id', ':licenceType')->once()->andReturn('condition2');
+        $condition1 = $this->mockExprEq('lta.isNi', 0);
+        $condition2 = $this->mockExprEq('llt.id', ':licenceType');
+        $condition3 = $this->mockExprNeq('lta.id', ':licenceTrafficAreaId');
+        $condition4 = $this->mockExprEq('lgp.id', ':goodsOrPsv');
+        $mockQb->shouldReceive('expr->eq')->with('lta.isNi', 0)->once()->andReturn($condition1);
+        $mockQb->shouldReceive('expr->eq')->with('llt.id', ':licenceType')->once()->andReturn($condition2);
         $mockQb->shouldReceive('expr->neq')
-            ->with('lta.id', ':licenceTrafficAreaId')->once()->andReturn('condition3');
+            ->with('lta.id', ':licenceTrafficAreaId')->once()->andReturn($condition3);
         $mockQb->shouldReceive('expr->eq')
-            ->with('lgp.id', ':goodsOrPsv')->once()->andReturn('condition4');
+            ->with('lgp.id', ':goodsOrPsv')->once()->andReturn($condition4);
+        $conditionAndX = new Andx([$condition1, $condition2, $condition3, $condition4]);
         $mockQb->shouldReceive('expr->andX')
-            ->with('condition1', 'condition2', 'condition3', 'condition4')->once()->andReturn('conditionAndX');
+            ->with($condition1, $condition2, $condition3, $condition4)->once()->andReturn($conditionAndX);
 
-        $mockQb->shouldReceive('andWhere')->with('conditionAndX')->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($conditionAndX)->once()->andReturnSelf();
         $mockQb->shouldReceive('setMaxResults')->with(6)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('licenceType', $licenceType)
@@ -74,8 +82,9 @@ final class PsvDiscTest extends RepositoryTestCase
         $mockQb->shouldReceive('expr->isNull')->with('psv.issuedDate')->once()->andReturn('noIssuedDateCond');
         $mockQb->shouldReceive('andWhere')->with('noCeasedDateCond')->once()->andReturnSelf();
         $mockQb->shouldReceive('andWhere')->with('noIssuedDateCond')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->in')->with('l.status', ':activeStatuses')->once()->andReturn('activeStatuses');
-        $mockQb->shouldReceive('andWhere')->with('activeStatuses')->once()->andReturnSelf();
+        $conditionStatuses = $this->mockExprIn('l.status', ':activeStatuses');
+        $mockQb->shouldReceive('expr->in')->with('l.status', ':activeStatuses')->once()->andReturn($conditionStatuses);
+        $mockQb->shouldReceive('andWhere')->with($conditionStatuses)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('activeStatuses', $this->activeStatuses)
             ->once()
@@ -124,7 +133,7 @@ final class PsvDiscTest extends RepositoryTestCase
         $this->expectQueryWithData(
             'Discs\PsvDiscsSetIsPrinting',
             ['isPrinting' => 1, 'ids' => [1, 2]],
-            ['isPrinting' => \PDO::PARAM_INT, 'ids' => Connection::PARAM_INT_ARRAY]
+            ['isPrinting' => \PDO::PARAM_INT, 'ids' => ArrayParameterType::INTEGER]
         );
 
         $this->sut->setIsPrintingOn([1, 2]);
@@ -158,8 +167,9 @@ final class PsvDiscTest extends RepositoryTestCase
         $qb->shouldReceive('expr->isNull')->with('psv.ceasedDate')->once()->andReturn('QUERY1');
         $qb->shouldReceive('andWhere')->with('QUERY1')->once();
 
-        $qb->shouldReceive('expr->eq')->with('psv.licence', ':licence')->once()->andReturn('QUERY2');
-        $qb->shouldReceive('andWhere')->with('QUERY2')->once()->andReturnSelf();
+        $condition2 = $this->mockExprEq('psv.licence', ':licence');
+        $qb->shouldReceive('expr->eq')->with('psv.licence', ':licence')->once()->andReturn($condition2);
+        $qb->shouldReceive('andWhere')->with($condition2)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('licence', 12)->once()->andReturnSelf();
         $qb->shouldReceive('addSelect')->with('psv.discNo+0 as HIDDEN intDiscNo')->once()->andReturnSelf();
         $qb->shouldReceive('orderBy')->with('intDiscNo', 'ASC')->once()->andReturnSelf();
@@ -178,8 +188,9 @@ final class PsvDiscTest extends RepositoryTestCase
         $sut->shouldReceive('applyListJoins')->with($qb)->once();
         $sut->shouldReceive('fetchPaginatedList')->with($qb, \Doctrine\ORM\Query::HYDRATE_ARRAY)->once();
 
-        $qb->shouldReceive('expr->eq')->with('psv.licence', ':licence')->once()->andReturn('QUERY2');
-        $qb->shouldReceive('andWhere')->with('QUERY2')->once()->andReturnSelf();
+        $condition3 = $this->mockExprEq('psv.licence', ':licence');
+        $qb->shouldReceive('expr->eq')->with('psv.licence', ':licence')->once()->andReturn($condition3);
+        $qb->shouldReceive('andWhere')->with($condition3)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('licence', 12)->once()->andReturnSelf();
         $qb->shouldReceive('addSelect')->with('psv.discNo+0 as HIDDEN intDiscNo')->once()->andReturnSelf();
         $qb->shouldReceive('orderBy')->with('intDiscNo', 'ASC')->once()->andReturnSelf();
@@ -203,16 +214,21 @@ final class PsvDiscTest extends RepositoryTestCase
         $licenceType = 'ltyp_r';
 
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('lta.isNi', 0)->once()->andReturn('condition1');
-        $mockQb->shouldReceive('expr->eq')->with('llt.id', ':licenceType')->once()->andReturn('condition2');
+        $condition1 = $this->mockExprEq('lta.isNi', 0);
+        $condition2 = $this->mockExprEq('llt.id', ':licenceType');
+        $condition3 = $this->mockExprNeq('lta.id', ':licenceTrafficAreaId');
+        $condition4 = $this->mockExprEq('lgp.id', ':goodsOrPsv');
+        $mockQb->shouldReceive('expr->eq')->with('lta.isNi', 0)->once()->andReturn($condition1);
+        $mockQb->shouldReceive('expr->eq')->with('llt.id', ':licenceType')->once()->andReturn($condition2);
         $mockQb->shouldReceive('expr->neq')
-            ->with('lta.id', ':licenceTrafficAreaId')->once()->andReturn('condition3');
+            ->with('lta.id', ':licenceTrafficAreaId')->once()->andReturn($condition3);
         $mockQb->shouldReceive('expr->eq')
-            ->with('lgp.id', ':goodsOrPsv')->once()->andReturn('condition4');
+            ->with('lgp.id', ':goodsOrPsv')->once()->andReturn($condition4);
+        $conditionAndX = new Andx([$condition1, $condition2, $condition3, $condition4]);
         $mockQb->shouldReceive('expr->andX')
-            ->with('condition1', 'condition2', 'condition3', 'condition4')->once()->andReturn('conditionAndX');
+            ->with($condition1, $condition2, $condition3, $condition4)->once()->andReturn($conditionAndX);
 
-        $mockQb->shouldReceive('andWhere')->with('conditionAndX')->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($conditionAndX)->once()->andReturnSelf();
 
         $mockQb->shouldReceive('setParameter')
             ->with('licenceType', $licenceType)
@@ -231,8 +247,9 @@ final class PsvDiscTest extends RepositoryTestCase
         $mockQb->shouldReceive('expr->isNull')->with('psv.issuedDate')->once()->andReturn('noIssuedDateCond');
         $mockQb->shouldReceive('andWhere')->with('noCeasedDateCond')->once()->andReturnSelf();
         $mockQb->shouldReceive('andWhere')->with('noIssuedDateCond')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->in')->with('l.status', ':activeStatuses')->once()->andReturn('activeStatuses');
-        $mockQb->shouldReceive('andWhere')->with('activeStatuses')->once()->andReturnSelf();
+        $conditionStatuses = $this->mockExprIn('l.status', ':activeStatuses');
+        $mockQb->shouldReceive('expr->in')->with('l.status', ':activeStatuses')->once()->andReturn($conditionStatuses);
+        $mockQb->shouldReceive('andWhere')->with($conditionStatuses)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('activeStatuses', $this->activeStatuses)
             ->once()
@@ -285,13 +302,14 @@ final class PsvDiscTest extends RepositoryTestCase
         $qb = $this->createMockQb();
         $exception = new NoResultException();
 
-        $qb->shouldReceive('getQuery')
-            ->once()
-            ->andReturn($qb)
-            ->getMock();
-        $qb->shouldReceive('getSingleScalarResult')
+        $query = m::mock(Query::class);
+        $query->shouldReceive('getSingleScalarResult')
             ->once()
             ->andThrow($exception);
+
+        $qb->shouldReceive('getQuery')
+            ->once()
+            ->andReturn($query);
 
         $this->mockCreateQueryBuilder($qb);
 
@@ -305,13 +323,14 @@ final class PsvDiscTest extends RepositoryTestCase
         $qb = $this->createMockQb();
 
         $ex = new \Exception('testException');
-        $qb->shouldReceive('getQuery')
-            ->once()
-            ->andReturn($qb)
-            ->getMock();
-        $qb->shouldReceive('getSingleScalarResult')
+        $query = m::mock(Query::class);
+        $query->shouldReceive('getSingleScalarResult')
             ->once()
             ->andThrow($ex);
+
+        $qb->shouldReceive('getQuery')
+            ->once()
+            ->andReturn($query);
 
         $this->mockCreateQueryBuilder($qb);
 

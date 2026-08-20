@@ -28,7 +28,7 @@ final class TranslationKeyTextTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($queryBuilder);
 
         $queryBuilder->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getOneOrNullResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -50,7 +50,7 @@ final class TranslationKeyTextTest extends RepositoryTestCase
         $queryResult = ['RESULTS'];
         $expectedQuery = 'initial select AND l.isoCode = [[' . $locale . ']]';
 
-        $doctrineQuery = m::mock();
+        $doctrineQuery = m::mock(\Doctrine\ORM\Query::class);
         $doctrineQuery->expects('getResult')->with($hydrationMode)->andReturn($queryResult);
 
         $mockQb = $this->createMockQb('initial select');

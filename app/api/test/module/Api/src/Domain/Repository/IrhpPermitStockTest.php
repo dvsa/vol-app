@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
 use DateTime;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitStock;
@@ -34,24 +33,29 @@ final class IrhpPermitStockTest extends RepositoryTestCase
 
         $this->mockCreateQueryBuilder($qb);
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
+        $query = m::mock(Query::class);
+
+        $query->shouldReceive('execute')
+            ->andReturnSelf();
+
+        $query->shouldReceive('getResult')
+            ->andReturn(['RESULTS']);
+
+        $qb->shouldReceive('getQuery')
+            ->andReturn($query);
+
         $this->assertEquals(['RESULTS'], $this->sut->fetchReadyToPrint(IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT));
 
         $expectedQuery = 'BLAH '
             . 'SELECT ips DISTINCT '
             . 'INNER JOIN ips.irhpPermitRanges ipr '
             . 'INNER JOIN ipr.irhpPermits ip '
-            . 'AND ip.status IN [[['
+            . 'AND ip.status IN([[['
                 . '"' . IrhpPermitEntity::STATUS_PENDING . '",'
                 . '"' . IrhpPermitEntity::STATUS_AWAITING_PRINTING . '",'
                 . '"' . IrhpPermitEntity::STATUS_PRINTING . '",'
                 . '"' . IrhpPermitEntity::STATUS_ERROR . '"'
-            . ']]] '
+            . ']]]) '
             . 'AND ips.irhpPermitType = [[' . IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_ECMT . ']] '
             . 'ORDER BY ips.validFrom DESC';
 
@@ -64,12 +68,17 @@ final class IrhpPermitStockTest extends RepositoryTestCase
 
         $this->mockCreateQueryBuilder($qb);
 
-        $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
-                ->shouldReceive('getResult')
-                ->andReturn(['RESULTS'])
-                ->getMock()
-        );
+        $query = m::mock(Query::class);
+
+        $query->shouldReceive('execute')
+            ->andReturnSelf();
+
+        $query->shouldReceive('getResult')
+            ->andReturn(['RESULTS']);
+
+        $qb->shouldReceive('getQuery')
+            ->andReturn($query);
+
         $this->assertEquals(
             ['RESULTS'],
             $this->sut->fetchReadyToPrint(IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_BILATERAL, 'DE')
@@ -79,12 +88,12 @@ final class IrhpPermitStockTest extends RepositoryTestCase
             . 'SELECT ips DISTINCT '
             . 'INNER JOIN ips.irhpPermitRanges ipr '
             . 'INNER JOIN ipr.irhpPermits ip '
-            . 'AND ip.status IN [[['
+            . 'AND ip.status IN([[['
                 . '"' . IrhpPermitEntity::STATUS_PENDING . '",'
                 . '"' . IrhpPermitEntity::STATUS_AWAITING_PRINTING . '",'
                 . '"' . IrhpPermitEntity::STATUS_PRINTING . '",'
                 . '"' . IrhpPermitEntity::STATUS_ERROR . '"'
-            . ']]] '
+            . ']]]) '
             . 'AND ips.irhpPermitType = [[' . IrhpPermitTypeEntity::IRHP_PERMIT_TYPE_ID_BILATERAL . ']] '
             . 'AND ips.country = [[DE]] '
             . 'ORDER BY ips.validFrom DESC';
@@ -118,7 +127,7 @@ final class IrhpPermitStockTest extends RepositoryTestCase
 
         $this->mockCreateQueryBuilder($qb);
 
-        $query = m::mock(AbstractQuery::class);
+        $query = m::mock(Query::class);
         $query->shouldReceive('setHint')
             ->with(Query::HINT_INCLUDE_META_COLUMNS, true)
             ->once()
@@ -168,7 +177,7 @@ final class IrhpPermitStockTest extends RepositoryTestCase
 
         $this->mockCreateQueryBuilder($qb);
 
-        $query = m::mock(AbstractQuery::class);
+        $query = m::mock(Query::class);
         $query->shouldReceive('setHint')
             ->with(Query::HINT_INCLUDE_META_COLUMNS, true)
             ->once()

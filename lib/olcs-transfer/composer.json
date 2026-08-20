@@ -7,6 +7,7 @@
     "php": "~8.4.0",
     "ext-igbinary": "*",
     "ext-sodium": "*",
+    "doctrine/annotations": "^2.0",
     "laminas/laminas-stdlib": "^3.20",
     "laminas/laminas-filter": "^2.41",
     "laminas/laminas-validator": "^2.64",
@@ -25,7 +26,6 @@
     "phpunit/phpunit": "^13.0",
     "mockery/mockery": "^1.6",
     "bamarni/composer-bin-plugin": "^1.8.2",
-    "doctrine/annotations": "^1.14.2",
     "phpstan/phpstan-mockery": "^2.0",
     "rector/rector": "^2.3"
   },

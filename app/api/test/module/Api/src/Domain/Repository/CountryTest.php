@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
+use Doctrine\ORM\Query;
 use DateTime;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Repository\Country;
@@ -68,7 +69,7 @@ final class CountryTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -98,7 +99,7 @@ final class CountryTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -110,12 +111,12 @@ final class CountryTest extends RepositoryTestCase
             . 'INNER JOIN m.irhpPermitStocks ips '
             . 'INNER JOIN ips.irhpPermitRanges ipr '
             . 'INNER JOIN ipr.irhpPermits ip '
-            . 'AND ip.status IN [[['
+            . 'AND ip.status IN([[['
                 . '"' . IrhpPermitEntity::STATUS_PENDING . '",'
                 . '"' . IrhpPermitEntity::STATUS_AWAITING_PRINTING . '",'
                 . '"' . IrhpPermitEntity::STATUS_PRINTING . '",'
                 . '"' . IrhpPermitEntity::STATUS_ERROR . '"'
-            . ']]] '
+            . ']]]) '
             . 'AND ips.irhpPermitType = [[' . IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL . ']] '
             . 'ORDER BY m.countryDesc ASC';
 

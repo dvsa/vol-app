@@ -51,7 +51,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
     /**
      * Foreign Key to address
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Address
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Address|null
      */
     #[ORM\JoinColumn(name: 'address_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Address::class, fetch: 'LAZY')]
@@ -60,7 +60,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
     /**
      * Foreign Key to traffic_area
      *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea|null
      */
     #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
@@ -69,7 +69,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -79,7 +79,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -97,7 +97,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
     /**
      * Start date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'start_date', nullable: true)]
     protected $startDate;
@@ -105,7 +105,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
     /**
      * End date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'end_date', nullable: true)]
     protected $endDate;
@@ -122,7 +122,7 @@ abstract class AbstractVenue implements BundleSerializableInterface, JsonSeriali
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;

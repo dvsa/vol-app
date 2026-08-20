@@ -52,7 +52,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
     /**
      * Foreign Key to retrieval_link
      *
-     * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink
+     * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink|null
      */
     #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(
@@ -65,7 +65,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
     /**
      * Foreign Key to document
      *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
+     * @var \Dvsa\Olcs\Api\Entity\Doc\Document|null
      */
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
@@ -98,7 +98,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -108,7 +108,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]

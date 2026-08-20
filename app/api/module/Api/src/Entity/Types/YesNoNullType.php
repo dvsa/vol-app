@@ -21,8 +21,10 @@ class YesNoNullType extends Type
     public const YESNONULL = 'yesnonull';
 
     #[\Override]
-    public function getSqlDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
-    {
+    public function getSqlDeclaration(
+        array $fieldDeclaration,
+        AbstractPlatform $platform
+    ): string {
         unset($fieldDeclaration);
         unset($platform);
 
@@ -37,8 +39,10 @@ class YesNoNullType extends Type
      * @return null|string
      */
     #[\Override]
-    public function convertToPHPValue($value, AbstractPlatform $platform)
-    {
+    public function convertToPHPValue(
+        mixed $value,
+        AbstractPlatform $platform
+    ): mixed {
         unset($platform);
 
         if ($value === null) {
@@ -55,24 +59,15 @@ class YesNoNullType extends Type
      * @return int
      */
     #[\Override]
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
-    {
+    public function convertToDatabaseValue(
+        mixed $value,
+        AbstractPlatform $platform
+    ): mixed {
         unset($platform);
 
         if ($value === null) {
             return null;
         }
         return (strtoupper($value) == 'Y' || strtoupper($value) == 'YES') ? 1 : 0;
-    }
-
-    /**
-     * Returns type name
-     *
-     * @return string
-     */
-    #[\Override]
-    public function getName()
-    {
-        return self::YESNONULL;
     }
 }

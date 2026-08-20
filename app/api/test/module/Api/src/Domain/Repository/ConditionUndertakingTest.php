@@ -39,7 +39,7 @@ final class ConditionUndertakingTest extends RepositoryTestCase
             ->shouldReceive('with')->with('oc.address')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -66,7 +66,7 @@ final class ConditionUndertakingTest extends RepositoryTestCase
             ->shouldReceive('with')->with('addedVia')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -95,7 +95,7 @@ final class ConditionUndertakingTest extends RepositoryTestCase
             ->shouldReceive('order')->with('id', 'ASC')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -122,7 +122,7 @@ final class ConditionUndertakingTest extends RepositoryTestCase
             ->shouldReceive('with')->with('addedVia')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -140,7 +140,7 @@ final class ConditionUndertakingTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -167,7 +167,7 @@ final class ConditionUndertakingTest extends RepositoryTestCase
             ->shouldReceive('with')->with('addedVia')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -189,7 +189,7 @@ final class ConditionUndertakingTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -207,17 +207,20 @@ final class ConditionUndertakingTest extends RepositoryTestCase
         $qb = m::mock(QueryBuilder::class);
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($qb);
 
-        $qb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn('licexpr');
-        $qb->shouldReceive('andWhere')->with('licexpr')->once()->andReturnSelf();
+        $licExpr = $this->mockExprEq('m.licence', ':licence');
+        $qb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn($licExpr);
+        $qb->shouldReceive('andWhere')->with($licExpr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('licence', $licenceId)->once()->andReturnSelf();
 
-        $qb->shouldReceive('expr->eq')->with('m.conditionType', ':conditionType')->once()->andReturn('condexpr');
-        $qb->shouldReceive('andWhere')->with('condexpr')->once()->andReturnSelf();
+        $condExpr = $this->mockExprEq('m.conditionType', ':conditionType');
+        $qb->shouldReceive('expr->eq')->with('m.conditionType', ':conditionType')->once()->andReturn($condExpr);
+        $qb->shouldReceive('andWhere')->with($condExpr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')
             ->with('conditionType', ConditionUndertakingEntity::TYPE_UNDERTAKING)->once()->andReturnSelf();
 
-        $qb->shouldReceive('expr->like')->with('m.notes', ':note')->once()->andReturn('likeexpr');
-        $qb->shouldReceive('andWhere')->with('likeexpr')->once()->andReturnSelf();
+        $likeExpr = m::mock(\Doctrine\ORM\Query\Expr\Comparison::class);
+        $qb->shouldReceive('expr->like')->with('m.notes', ':note')->once()->andReturn($likeExpr);
+        $qb->shouldReceive('andWhere')->with($likeExpr)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')
             ->with('note', '%' . ConditionUndertakingEntity::SMALL_VEHICLE_UNDERTAKINGS . '%')->once()->andReturnSelf();
 
@@ -242,12 +245,13 @@ final class ConditionUndertakingTest extends RepositoryTestCase
             ->once()
             ->andReturnSelf();
 
+        $licExpr = $this->mockExprEq('m.licence', ':licence');
         $qb->shouldReceive('expr->eq')
            ->with('m.licence', ':licence')
            ->once()
-           ->andReturn('licexpr');
+           ->andReturn($licExpr);
         $qb->shouldReceive('andWhere')
-           ->with('licexpr')
+           ->with($licExpr)
            ->once()
            ->andReturnSelf();
         $qb->shouldReceive('setParameter')
@@ -255,12 +259,13 @@ final class ConditionUndertakingTest extends RepositoryTestCase
            ->once()
            ->andReturnSelf();
 
+        $condExpr = $this->mockExprEq('m.conditionType', ':conditionType');
         $qb->shouldReceive('expr->eq')
            ->with('m.conditionType', ':conditionType')
            ->once()
-           ->andReturn('condexpr');
+           ->andReturn($condExpr);
         $qb->shouldReceive('andWhere')
-           ->with('condexpr')
+           ->with($condExpr)
            ->once()
            ->andReturnSelf();
         $qb->shouldReceive('setParameter')
@@ -268,12 +273,13 @@ final class ConditionUndertakingTest extends RepositoryTestCase
            ->once()
            ->andReturnSelf();
 
+        $noteExpr = $this->mockExprEq('m.notes', ':note');
         $qb->shouldReceive('expr->eq')
            ->with('m.notes', ':note')
            ->once()
-           ->andReturn('eqexpr');
+           ->andReturn($noteExpr);
         $qb->shouldReceive('andWhere')
-           ->with('eqexpr')
+           ->with($noteExpr)
            ->once()
            ->andReturnSelf();
         $qb->shouldReceive('setParameter')
@@ -319,6 +325,6 @@ final class ConditionUndertakingTest extends RepositoryTestCase
         $this->assertEquals(3, $this->sut->deleteFromVariations($ids));
 
         $this->assertEquals('[[QUERY]]' .
-        ' AND m.licConditionVariation IN [[[9001,9002,9003]]]', $this->query);
+        ' AND m.licConditionVariation IN([[[9001,9002,9003]]])', $this->query);
     }
 }

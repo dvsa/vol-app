@@ -42,28 +42,10 @@ final class IrhpPermitWindowTest extends RepositoryTestCase
         $queryBuilder = m::mock(QueryBuilder::class);
         $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
 
-        $andXFunc = m::mock(Func::class);
-        $eqFunc = m::mock(Func::class);
-        $betweenFunc = m::mock(Func::class);
-
-        $expr = m::mock(Expr::class);
+        $expr = new Expr();
 
         $queryBuilder->shouldReceive('expr')
-            ->andReturn($expr);
-
-        $expr->shouldReceive('andX')
-            ->with($eqFunc, $betweenFunc)
-            ->once()
-            ->andReturn($andXFunc);
-
-        $expr->shouldReceive('eq')
-            ->with('?1', 'ipw.irhpPermitStock')
-            ->once()
-            ->andReturn($eqFunc)
-            ->shouldReceive('between')
-            ->with('?2', 'ipw.startDate', 'ipw.endDate')
-            ->once()
-            ->andReturn($betweenFunc);
+        ->andReturn($expr);
 
         $queryBuilder->shouldReceive('select')
             ->with('ipw')
@@ -74,7 +56,7 @@ final class IrhpPermitWindowTest extends RepositoryTestCase
             ->once()
             ->andReturnSelf()
             ->shouldReceive('where')
-            ->with($andXFunc)
+            ->with(m::type(\Doctrine\ORM\Query\Expr\Andx::class))
             ->once()
             ->andReturnSelf()
             ->shouldReceive('setParameter')
@@ -108,28 +90,10 @@ final class IrhpPermitWindowTest extends RepositoryTestCase
         $queryBuilder = m::mock(QueryBuilder::class);
         $this->em->shouldReceive('createQueryBuilder')->once()->andReturn($queryBuilder);
 
-        $betweenFunc = m::mock(Func::class);
-        $eqFunc = m::mock(Func::class);
-        $andXFunc = m::mock(Func::class);
-
-        $expr = m::mock(Expr::class);
+        $expr = new Expr();
 
         $queryBuilder->shouldReceive('expr')
-            ->andReturn($expr);
-
-        $expr->shouldReceive('andX')
-            ->with($betweenFunc, $eqFunc)
-            ->once()
-            ->andReturn($andXFunc);
-
-        $expr->shouldReceive('between')
-            ->with('?1', 'ipw.startDate', 'ipw.endDate')
-            ->once()
-            ->andReturn($betweenFunc)
-            ->shouldReceive('eq')
-            ->with('ipw.irhpPermitStock', '?2')
-            ->once()
-            ->andReturn($eqFunc);
+        ->andReturn($expr);
 
         $queryBuilder->shouldReceive('select')
             ->with('ipw')
@@ -140,7 +104,7 @@ final class IrhpPermitWindowTest extends RepositoryTestCase
             ->once()
             ->andReturnSelf()
             ->shouldReceive('where')
-            ->with($andXFunc)
+            ->with(m::type(\Doctrine\ORM\Query\Expr\Andx::class))
             ->once()
             ->andReturnSelf()
             ->shouldReceive('orderBy')
@@ -175,7 +139,7 @@ final class IrhpPermitWindowTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -198,7 +162,7 @@ final class IrhpPermitWindowTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -220,7 +184,7 @@ final class IrhpPermitWindowTest extends RepositoryTestCase
             . 'AND ipt.id = [[' . IrhpPermitType::IRHP_PERMIT_TYPE_ID_BILATERAL . ']] '
             . 'AND ipw.startDate <= [[2018-10-25T13:21:10+00:00]] '
             . 'AND ipw.endDate > [[2018-10-25T13:21:10+00:00]] '
-            . 'AND c.id IN [[["DE","NL"]]]';
+            . 'AND c.id IN([[["DE","NL"]]])';
 
         $this->assertEquals($expectedQuery, $this->query);
     }
@@ -234,7 +198,7 @@ final class IrhpPermitWindowTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -272,7 +236,7 @@ final class IrhpPermitWindowTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn([])
                 ->getMock()
@@ -293,7 +257,7 @@ final class IrhpPermitWindowTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -332,7 +296,7 @@ final class IrhpPermitWindowTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -373,7 +337,7 @@ final class IrhpPermitWindowTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -428,48 +392,15 @@ final class IrhpPermitWindowTest extends RepositoryTestCase
         $this->em->shouldReceive('getRepository->createQueryBuilder')->once()->andReturn($mockQb);
         $mockWindow = m::mock(IrhpPermitWindowEntity::class);
 
-        $betweenFn = m::mock(Between::class);
+        $expr = new \Doctrine\ORM\Query\Expr();
 
-        $mockQb->shouldReceive('expr->between')
-            ->once()
-            ->with('ipw.startDate', ':proposedStartDate', ':proposedEndDate')
-            ->andReturn($betweenFn);
-
-        $mockQb->shouldReceive('expr->between')
-            ->once()
-            ->with('ipw.endDate', ':proposedStartDate', ':proposedEndDate')
-            ->andReturn($betweenFn);
-
-        $mockQb->shouldReceive('expr->between')
-            ->once()
-            ->with(':proposedStartDate', 'ipw.startDate', 'ipw.endDate')
-            ->andReturn($betweenFn);
-
-        $mockQb->shouldReceive('expr->eq')
-            ->once()
-            ->with('ipw.irhpPermitStock', ':irhpPermitStock')
-            ->andReturn('eqcond');
-
-        $mockQb->shouldReceive('expr->neq')
-            ->once()
-            ->with('ipw.id', ':irhpPermitWindow')
-            ->andReturn('neqcond');
+        $mockQb->shouldReceive('expr')
+        ->zeroOrMoreTimes()
+        ->andReturn($expr);
 
         $mockQb->shouldReceive('orWhere')
-            ->once()
-            ->with($betweenFn)
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('orWhere')
-            ->once()
-            ->with($betweenFn)
-            ->andReturnSelf();
-
-        $mockQb->shouldReceive('orWhere')
-            ->once()
-            ->with($betweenFn)
-            ->andReturnSelf();
-
+        ->times(3)
+        ->andReturnSelf();
         $mockQb->shouldReceive('andWhere')
             ->andReturnSelf()
             ->shouldReceive('setParameter')

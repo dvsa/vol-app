@@ -16,6 +16,7 @@ use Dvsa\Olcs\Api\Entity;
 use Mockery as m;
 use Dvsa\Olcs\Transfer\Query\Application\OperatingCentres as Qry;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\Query\Expr\Comparison;
 use Dvsa\Olcs\Api\Entity\Cases\Complaint;
 
 /**
@@ -42,8 +43,9 @@ final class ApplicationOperatingCentreTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('operatingCentre', 'oc')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('oc.address')->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('aoc.application', ':applicationId')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $condition = m::mock(Comparison::class);
+        $mockQb->shouldReceive('expr->eq')->with('aoc.application', ':applicationId')->once()->andReturn($condition);
+        $mockQb->shouldReceive('andWhere')->with($condition)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('applicationId', 12)->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
@@ -60,8 +62,9 @@ final class ApplicationOperatingCentreTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('aoc.s4', ':s4Id')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $condition = m::mock(Comparison::class);
+        $mockQb->shouldReceive('expr->eq')->with('aoc.s4', ':s4Id')->once()->andReturn($condition);
+        $mockQb->shouldReceive('andWhere')->with($condition)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('s4Id', 12)->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
@@ -127,11 +130,13 @@ final class ApplicationOperatingCentreTest extends RepositoryTestCase
         $qb->shouldReceive('innerJoin')->with('aoc.operatingCentre', 'oc')->once();
         $qb->shouldReceive('innerJoin')->with('oc.address', 'oca')->once();
         $qb->shouldReceive('leftJoin')->with('oca.countryCode', 'ocac')->once();
-        $qb->shouldReceive('expr->eq')->with('occ.status', ':complaintStatus')->andReturn('exp1')->once();
-        $qb->shouldReceive('leftJoin')->with('oc.complaints', 'occ', Join::WITH, 'exp1')->once();
+        $condition1 = m::mock(Comparison::class);
+        $qb->shouldReceive('expr->eq')->with('occ.status', ':complaintStatus')->andReturn($condition1)->once();
+        $qb->shouldReceive('leftJoin')->with('oc.complaints', 'occ', Join::WITH, $condition1)->once();
         $qb->shouldReceive('setParameter')->with('complaintStatus', Complaint::COMPLAIN_STATUS_OPEN)->once();
-        $qb->shouldReceive('expr->eq')->with('aoc.application', ':application')->andReturn('exp2')->once();
-        $qb->shouldReceive('andWhere')->with('exp2')->once();
+        $condition2 = m::mock(Comparison::class);
+        $qb->shouldReceive('expr->eq')->with('aoc.application', ':application')->andReturn($condition2)->once();
+        $qb->shouldReceive('andWhere')->with($condition2)->once();
         $qb->shouldReceive('setParameter')->with('application', 1)->once();
         $qb->shouldReceive('addSelect')->with('s4')->once();
         $qb->shouldReceive('addSelect')->with('oc')->once();
@@ -223,8 +228,9 @@ final class ApplicationOperatingCentreTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('operatingCentre', 'oc')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('oc.address', 'address')->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('aoc.application', ':applicationId')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $condition = m::mock(Comparison::class);
+        $mockQb->shouldReceive('expr->eq')->with('aoc.application', ':applicationId')->once()->andReturn($condition);
+        $mockQb->shouldReceive('andWhere')->with($condition)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('applicationId', 12)->once();
         $mockQb->shouldReceive('orderBy')->with('address.town')->once();
 

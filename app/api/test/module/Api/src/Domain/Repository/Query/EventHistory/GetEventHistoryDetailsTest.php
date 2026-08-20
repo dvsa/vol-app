@@ -26,9 +26,9 @@ final class GetEventHistoryDetailsTest extends AbstractDbQueryTestCase
     {
         yield [
             [1, [1, 2]],
-            ['version' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY],
+            ['version' => \Doctrine\DBAL\ArrayParameterType::INTEGER],
             [1, [1, 2]],
-            ['version' => \Doctrine\DBAL\Connection::PARAM_INT_ARRAY]
+            ['version' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
         ];
     }
 

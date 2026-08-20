@@ -45,7 +45,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
     /**
      * Foreign Key to retrieval_link
      *
-     * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink
+     * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink|null
      */
     #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink::class, fetch: 'LAZY')]
@@ -102,7 +102,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
     /**
      * Request ip
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'request_ip', length: 45, nullable: true)]
     protected $requestIp;

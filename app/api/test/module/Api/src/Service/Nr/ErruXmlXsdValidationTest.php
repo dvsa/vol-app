@@ -70,7 +70,7 @@ final class ErruXmlXsdValidationTest extends MockeryTestCase
 
         $appliedPenalties = new PersistentCollection(
             m::mock(EntityManagerInterface::class),
-            SiPenaltyEntity::class,
+            m::mock(\Doctrine\ORM\Mapping\ClassMetadata::class),
             new ArrayCollection([$penalty1, $penalty2])
         );
 

@@ -101,14 +101,17 @@ final class PublicationTest extends RepositoryTestCase
     public function getMockTaAndTypeQb(mixed $trafficArea, mixed $pubType, mixed $results): m\MockInterface
     {
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->eq')->with('m.trafficArea', ':trafficArea')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $trafficAreaExpr = $this->mockExprEq('m.trafficArea', ':trafficArea');
+        $mockQb->shouldReceive('expr->eq')->with('m.trafficArea', ':trafficArea')->once()->andReturn($trafficAreaExpr);
+        $mockQb->shouldReceive('andWhere')->with($trafficAreaExpr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('trafficArea', $trafficArea)->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('m.pubType', ':pubType')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $pubTypeExpr = $this->mockExprEq('m.pubType', ':pubType');
+        $mockQb->shouldReceive('expr->eq')->with('m.pubType', ':pubType')->once()->andReturn($pubTypeExpr);
+        $mockQb->shouldReceive('andWhere')->with($pubTypeExpr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('pubType', $pubType)->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('m.pubStatus', ':pubStatus')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $pubStatusExpr = $this->mockExprEq('m.pubStatus', ':pubStatus');
+        $mockQb->shouldReceive('expr->eq')->with('m.pubStatus', ':pubStatus')->once()->andReturn($pubStatusExpr);
+        $mockQb->shouldReceive('andWhere')->with($pubStatusExpr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('pubStatus', PublicationEntity::PUB_NEW_STATUS)
             ->once()
@@ -140,8 +143,9 @@ final class PublicationTest extends RepositoryTestCase
         ];
 
         $mockQb = m::mock(QueryBuilder::class);
-        $mockQb->shouldReceive('expr->in')->with('m.pubStatus', ':pubStatus')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->once()->andReturnSelf();
+        $pubStatusExpr = $this->mockExprIn('m.pubStatus', ':pubStatus');
+        $mockQb->shouldReceive('expr->in')->with('m.pubStatus', ':pubStatus')->once()->andReturn($pubStatusExpr);
+        $mockQb->shouldReceive('andWhere')->with($pubStatusExpr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')
             ->with('pubStatus', [PublicationEntity::PUB_NEW_STATUS, PublicationEntity::PUB_GENERATED_STATUS])
             ->once()
@@ -191,13 +195,14 @@ final class PublicationTest extends RepositoryTestCase
         $status = PublicationEntity::PUB_PRINTED_STATUS;
 
         $mockQb = m::mock(QueryBuilder::class);
+        $pubStatusExpr = $this->mockExprEq('m.pubStatus', ':pubStatus');
         $mockQb->shouldReceive('expr->eq')
             ->with('m.pubStatus', ':pubStatus')
             ->once()
-            ->andReturn('DUMMY_WHERE_PUB_STATUS');
+            ->andReturn($pubStatusExpr);
 
         $mockQb->shouldReceive('andWhere')
-            ->with('DUMMY_WHERE_PUB_STATUS')
+            ->with($pubStatusExpr)
             ->once()
             ->andReturnSelf();
 
@@ -206,13 +211,14 @@ final class PublicationTest extends RepositoryTestCase
             ->once()
             ->andReturnSelf();
 
+        $pubDateFromExpr = $this->mockExprGte('m.pubDate', ':pubDateFrom');
         $mockQb->shouldReceive('expr->gte')
             ->with('m.pubDate', ':pubDateFrom')
             ->once()
-            ->andReturn('DUMMY_WHERE_PUB_DATE_FROM');
+            ->andReturn($pubDateFromExpr);
 
         $mockQb->shouldReceive('andWhere')
-            ->with('DUMMY_WHERE_PUB_DATE_FROM')
+            ->with($pubDateFromExpr)
             ->once()
             ->andReturnSelf();
 
@@ -221,13 +227,14 @@ final class PublicationTest extends RepositoryTestCase
             ->once()
             ->andReturnSelf();
 
+        $pubDateToExpr = $this->mockExprLt('m.pubDate', ':pubDateTo');
         $mockQb->shouldReceive('expr->lt')
             ->with('m.pubDate', ':pubDateTo')
             ->once()
-            ->andReturn('DUMMY_WHERE_PUB_DATE_TO');
+            ->andReturn($pubDateToExpr);
 
         $mockQb->shouldReceive('andWhere')
-            ->with('DUMMY_WHERE_PUB_DATE_TO')
+            ->with($pubDateToExpr)
             ->once()
             ->andReturnSelf();
 
@@ -237,13 +244,14 @@ final class PublicationTest extends RepositoryTestCase
             ->andReturnSelf();
 
         if ($withPubType) {
+            $pubTypeExpr = $this->mockExprEq('m.pubType', ':pubType');
             $mockQb->shouldReceive('expr->eq')
                 ->with('m.pubType', ':pubType')
                 ->once()
-                ->andReturn('DUMMY_WHERE_PUB_TYPE');
+                ->andReturn($pubTypeExpr);
 
             $mockQb->shouldReceive('andWhere')
-                ->with('DUMMY_WHERE_PUB_TYPE')
+                ->with($pubTypeExpr)
                 ->once()
                 ->andReturnSelf();
 
@@ -254,13 +262,14 @@ final class PublicationTest extends RepositoryTestCase
         }
 
         if ($withTrafficArea) {
+            $trafficAreaExpr = $this->mockExprEq('m.trafficArea', ':trafficArea');
             $mockQb->shouldReceive('expr->eq')
                 ->with('m.trafficArea', ':trafficArea')
                 ->once()
-                ->andReturn('DUMMY_WHERE_TRAFFIC_AREA');
+                ->andReturn($trafficAreaExpr);
 
             $mockQb->shouldReceive('andWhere')
-                ->with('DUMMY_WHERE_TRAFFIC_AREA')
+                ->with($trafficAreaExpr)
                 ->once()
                 ->andReturnSelf();
 

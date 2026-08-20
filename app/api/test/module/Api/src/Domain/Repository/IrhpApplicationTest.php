@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
+use Doctrine\ORM\Query;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result as DbalResult;
 use Doctrine\ORM\QueryBuilder;
@@ -33,7 +34,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -44,7 +45,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
             . 'INNER JOIN ia.irhpPermitApplications ipa '
             . 'INNER JOIN ipa.irhpPermitWindow ipw '
             . 'AND ipw.id = [[ID]] '
-            . 'AND ia.status IN [[["S1","S2"]]]';
+            . 'AND ia.status IN([[["S1","S2"]]])';
 
         $this->assertEquals($expectedQuery, $this->query);
     }
@@ -95,7 +96,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($queryBuilder);
 
         $queryBuilder->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -104,8 +105,8 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $this->assertEquals(['RESULTS'], $this->sut->fetchForRoadworthinessReport($startDate, $endDate));
 
         $expectedQuery = 'query'
-            . ' AND ia.irhpPermitType IN [[[' . implode(',', IrhpPermitType::CERTIFICATE_TYPES) . ']]]'
-            . ' AND ia.status NOT IN [[["' . IrhpInterface::STATUS_NOT_YET_SUBMITTED . '","' . IrhpInterface::STATUS_CANCELLED . '","' . IrhpInterface::STATUS_WITHDRAWN . '"]]]'
+            . ' AND ia.irhpPermitType IN([[[' . implode(',', IrhpPermitType::CERTIFICATE_TYPES) . ']]])'
+            . ' AND ia.status NOT IN([[["' . IrhpInterface::STATUS_NOT_YET_SUBMITTED . '","' . IrhpInterface::STATUS_CANCELLED . '","' . IrhpInterface::STATUS_WITHDRAWN . '"]]])'
             . ' AND ia.dateReceived BETWEEN [[' . $startDate . ']] AND [[' . $endDate . ']]';
 
         $this->assertEquals($expectedQuery, $this->query);
@@ -118,7 +119,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($queryBuilder);
 
         $queryBuilder->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -128,7 +129,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
 
         $expectedQuery = 'BLAH '
             . 'AND ia.status = [[' . IrhpInterface::STATUS_VALID . ']] '
-            . 'AND ia.irhpPermitType IN [[[6,7]]]';
+            . 'AND ia.irhpPermitType IN([[[6,7]]])';
 
         $this->assertEquals($expectedQuery, $this->query);
     }
@@ -1252,7 +1253,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()

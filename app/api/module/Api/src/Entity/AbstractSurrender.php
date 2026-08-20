@@ -76,7 +76,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * STATUS of licence document
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'licence_document_status', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -85,7 +85,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * information relating TO community licence document
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'community_licence_document_status', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -94,7 +94,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * DigitalSignature
      *
-     * @var \Dvsa\Olcs\Api\Entity\DigitalSignature
+     * @var \Dvsa\Olcs\Api\Entity\DigitalSignature|null
      */
     #[ORM\JoinColumn(name: 'digital_signature_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\DigitalSignature::class, fetch: 'LAZY')]
@@ -103,7 +103,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * SignatureType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'signature_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -112,7 +112,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -122,7 +122,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -132,7 +132,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * NUMBER of discs that have been declared destroyed
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'disc_destroyed', nullable: true)]
     protected $discDestroyed;
@@ -140,7 +140,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * NUMBER of discs that have been declared lost
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'disc_lost', nullable: true)]
     protected $discLost;
@@ -148,7 +148,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * NUMBER of discs that have been declared stolen
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'disc_stolen', nullable: true)]
     protected $discStolen;
@@ -156,7 +156,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * information relating TO discs lost
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'disc_lost_info', nullable: true)]
     protected $discLostInfo;
@@ -164,7 +164,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * information relating TO stolen discs
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'disc_stolen_info', nullable: true)]
     protected $discStolenInfo;
@@ -172,7 +172,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * information relating to status of the operator licence document
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'licence_document_info', nullable: true)]
     protected $licenceDocumentInfo;
@@ -180,7 +180,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * information relating to the status of the operator licence document
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'community_licence_document_info', nullable: true)]
     protected $communityLicenceDocumentInfo;
@@ -188,7 +188,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Has the signature been checked?
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'signature_checked', nullable: true)]
     protected $signatureChecked;
@@ -196,7 +196,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Has ecms been checked?
      *
-     * @var bool
+     * @var bool|null
      */
     #[ORM\Column(type: 'boolean', name: 'ecms_checked', nullable: true)]
     protected $ecmsChecked;
@@ -204,7 +204,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
     /**
      * Version
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'version', nullable: true, options: ['default' => 1])]
     #[ORM\Version]
