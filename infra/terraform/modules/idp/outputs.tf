@@ -62,3 +62,23 @@ output "extract_s3_json_field_lambda_arn" {
   description = "ARN of the extract-s3-json-field Lambda"
   value       = aws_lambda_function.extract_s3_json_field.arn
 }
+
+output "analyse_financial_document_sm_arn" {
+  description = "ARN of the AnalyseFinancialDocument orchestrator Step Functions state machine"
+  value       = aws_sfn_state_machine.analyse_financial_document.arn
+}
+
+output "analyse_financial_document_sm_name" {
+  description = "Name of the AnalyseFinancialDocument orchestrator Step Functions state machine"
+  value       = aws_sfn_state_machine.analyse_financial_document.name
+}
+
+output "bank_statement_check_prompt_arn" {
+  description = "ARN of the Bedrock managed prompt for bank statement quality checks"
+  value       = awscc_bedrock_prompt.bank_statement_check.arn
+}
+
+output "bank_statement_check_prompt_version_arn" {
+  description = "ARN of the currently active immutable Bedrock prompt version used by the AI Analysis SM"
+  value       = awscc_bedrock_prompt_version.bank_statement_check.arn
+}

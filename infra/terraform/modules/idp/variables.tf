@@ -89,7 +89,8 @@ variable "classification_max_bytes" {
 # AI Analysis SM — Bedrock managed prompt
 # ============================================================
 
-variable "bedrock_prompt_version_arn" {
+variable "analysis_model_id" {
   type        = string
-  description = "ARN of the Bedrock managed prompt version to use for AI analysis (e.g. arn:aws:bedrock:{region}:{account}:prompt/{id}:{version}). The prompt is managed and versioned outside Terraform; supply the specific immutable version ARN here."
+  description = "Bedrock foundation model ID for AI analysis. Combined with bedrock_region_prefix to form the cross-region inference profile ARN passed to the managed prompt."
+  default     = "anthropic.claude-opus-4-7"
 }

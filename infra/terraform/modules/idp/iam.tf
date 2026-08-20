@@ -267,28 +267,6 @@ resource "aws_iam_role_policy" "extraction_sm" {
 }
 
 # ============================================================
-# IAM — EventBridge role (start Extraction SM execution)
-# ============================================================
-resource "aws_iam_role" "eventbridge_invoke_extraction" {
-  name               = "${local.name_prefix}-eventbridge-invoke-extraction"
-  assume_role_policy = data.aws_iam_policy_document.eventbridge_assume_role.json
-}
-
-data "aws_iam_policy_document" "eventbridge_invoke_extraction" {
-  statement {
-    sid       = "StartExtractionExecution"
-    actions   = ["states:StartExecution"]
-    resources = [aws_sfn_state_machine.extraction.arn]
-  }
-}
-
-resource "aws_iam_role_policy" "eventbridge_invoke_extraction" {
-  name   = "${local.name_prefix}-eventbridge-invoke-extraction"
-  role   = aws_iam_role.eventbridge_invoke_extraction.id
-  policy = data.aws_iam_policy_document.eventbridge_invoke_extraction.json
-}
-
-# ============================================================
 # IAM — Lambda execution role (extract-s3-json-field)
 # ============================================================
 resource "aws_iam_role" "extract_s3_json_field_lambda" {
@@ -352,6 +330,13 @@ data "aws_iam_policy_document" "ai_analysis_sm" {
     ]
   }
 
+  # Write AI analysis results under {key}/analysis/ in the shared output bucket.
+  statement {
+    sid       = "S3WriteAnalysisOutput"
+    actions   = ["s3:PutObject"]
+    resources = ["${aws_s3_bucket.idp_output.arn}/*/analysis/*"]
+  }
+
   # Bedrock Converse API to invoke the managed prompt.
   # Scoped to * to cover cross-region inference profile fan-out.
   statement {
@@ -409,23 +394,102 @@ resource "aws_iam_role_policy" "ai_analysis_sm" {
 }
 
 # ============================================================
-# IAM — EventBridge role (start AI Analysis SM execution)
+# IAM — Step Functions execution role (AnalyseFinancialDocument orchestrator)
 # ============================================================
-resource "aws_iam_role" "eventbridge_invoke_ai_analysis" {
-  name               = "${local.name_prefix}-eventbridge-invoke-ai-analysis"
-  assume_role_policy = data.aws_iam_policy_document.eventbridge_assume_role.json
+resource "aws_iam_role" "analyse_financial_document_sm" {
+  name               = "${local.name_prefix}-analyse-financial-document-sm"
+  assume_role_policy = data.aws_iam_policy_document.sfn_assume_role.json
 }
 
-data "aws_iam_policy_document" "eventbridge_invoke_ai_analysis" {
+data "aws_iam_policy_document" "analyse_financial_document_sm" {
+  # Start sub-SM executions synchronously (.sync:2 requires StartExecution +
+  # DescribeExecution + StopExecution on the sub-SM).
   statement {
-    sid       = "StartAIAnalysisExecution"
-    actions   = ["states:StartExecution"]
-    resources = [aws_sfn_state_machine.ai_analysis.arn]
+    sid = "InvokeSubStateMachines"
+    actions = [
+      "states:StartExecution",
+      "states:DescribeExecution",
+      "states:StopExecution",
+    ]
+    resources = [
+      aws_sfn_state_machine.classification.arn,
+      aws_sfn_state_machine.extraction.arn,
+      aws_sfn_state_machine.ai_analysis.arn,
+    ]
+  }
+
+  # Read S3 object tags to check for pre-existing Classification tag.
+  statement {
+    sid     = "S3ReadDocumentTags"
+    actions = ["s3:GetObjectTagging"]
+    resources = [
+      "arn:aws:s3:::${var.documents_bucket_name}",
+      "arn:aws:s3:::${var.documents_bucket_name}/*",
+    ]
+  }
+
+  # Emit FinancialDocumentAnalysed / pipeline events.
+  statement {
+    sid     = "EventBridgePutEvents"
+    actions = ["events:PutEvents"]
+    resources = [
+      "arn:aws:events:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:event-bus/default",
+    ]
+  }
+
+  statement {
+    sid = "CloudWatchLogs"
+    actions = [
+      "logs:CreateLogDelivery",
+      "logs:CreateLogStream",
+      "logs:GetLogDelivery",
+      "logs:UpdateLogDelivery",
+      "logs:DeleteLogDelivery",
+      "logs:ListLogDeliveries",
+      "logs:PutLogEvents",
+      "logs:PutResourcePolicy",
+      "logs:DescribeResourcePolicies",
+      "logs:DescribeLogGroups",
+    ]
+    resources = ["*"]
+  }
+
+  statement {
+    sid = "XRayTracing"
+    actions = [
+      "xray:PutTraceSegments",
+      "xray:PutTelemetryRecords",
+      "xray:GetSamplingRules",
+      "xray:GetSamplingTargets",
+    ]
+    resources = ["*"]
   }
 }
 
-resource "aws_iam_role_policy" "eventbridge_invoke_ai_analysis" {
-  name   = "${local.name_prefix}-eventbridge-invoke-ai-analysis"
-  role   = aws_iam_role.eventbridge_invoke_ai_analysis.id
-  policy = data.aws_iam_policy_document.eventbridge_invoke_ai_analysis.json
+resource "aws_iam_role_policy" "analyse_financial_document_sm" {
+  name   = "${local.name_prefix}-analyse-financial-document-sm"
+  role   = aws_iam_role.analyse_financial_document_sm.id
+  policy = data.aws_iam_policy_document.analyse_financial_document_sm.json
+}
+
+# ============================================================
+# IAM — EventBridge role (start AnalyseFinancialDocument SM execution)
+# ============================================================
+resource "aws_iam_role" "eventbridge_invoke_analyse_financial_document" {
+  name               = "${local.name_prefix}-eventbridge-invoke-analyse-fd"
+  assume_role_policy = data.aws_iam_policy_document.eventbridge_assume_role.json
+}
+
+data "aws_iam_policy_document" "eventbridge_invoke_analyse_financial_document" {
+  statement {
+    sid       = "StartAnalyseFinancialDocumentExecution"
+    actions   = ["states:StartExecution"]
+    resources = [aws_sfn_state_machine.analyse_financial_document.arn]
+  }
+}
+
+resource "aws_iam_role_policy" "eventbridge_invoke_analyse_financial_document" {
+  name   = "${local.name_prefix}-eventbridge-invoke-analyse-fd"
+  role   = aws_iam_role.eventbridge_invoke_analyse_financial_document.id
+  policy = data.aws_iam_policy_document.eventbridge_invoke_analyse_financial_document.json
 }

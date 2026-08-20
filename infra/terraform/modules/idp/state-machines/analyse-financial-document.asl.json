@@ -1,0 +1,326 @@
+{
+  "Comment": "Orchestrates the full IDP pipeline for a FinancialEvidenceDocumentSubmitted event from the VOL app (vol.api). Checks for an existing Classification S3 tag, optionally runs the Classification SM, then runs Extraction and AI Analysis SMs synchronously. Emits FinancialDocumentAnalysed on the default event bus.",
+  "StartAt": "BuildPipelineInput",
+  "TimeoutSeconds": 2700,
+  "States": {
+    "BuildPipelineInput": {
+      "Type": "Pass",
+      "QueryLanguage": "JSONata",
+      "Comment": "Flattens the FinancialEvidenceDocumentSubmitted event detail and injects BDA config from Terraform template vars.",
+      "Output": {
+        "bucket": "{% $states.input.document.bucket %}",
+        "key": "{% $states.input.document.key %}",
+        "analysisToken": "{% $states.input.analysis_token %}",
+        "applicationId": "{% $states.input.application_id %}",
+        "applicantProfile": "{% $states.input.applicant_profile %}",
+        "config": {
+          "outputBucket": "${OUTPUT_BUCKET}",
+          "bedrockProjectArn": "${BDA_PROJECT_ARN}",
+          "bedrockProfileArn": "${BDA_PROFILE_ARN}",
+          "bedrockProjectStage": "${BDA_PROJECT_STAGE}"
+        }
+      },
+      "Next": "GetExistingClassification"
+    },
+    "GetExistingClassification": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:s3:getObjectTagging",
+      "Parameters": {
+        "Bucket.$": "$.bucket",
+        "Key.$": "$.key"
+      },
+      "ResultPath": "$.s3Tags",
+      "Next": "IsAlreadyClassified",
+      "Retry": [
+        {
+          "ErrorEquals": ["S3.ServiceException", "ThrottlingException"],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "EmitFailedEvent"
+        }
+      ]
+    },
+    "IsAlreadyClassified": {
+      "Type": "Choice",
+      "QueryLanguage": "JSONata",
+      "Choices": [
+        {
+          "Condition": "{% $count($filter($states.input.s3Tags.TagSet, function($t){ $t.Key = 'Classification' })) > 0 %}",
+          "Next": "SetClassificationFromTag"
+        }
+      ],
+      "Default": "RunClassification"
+    },
+    "SetClassificationFromTag": {
+      "Type": "Pass",
+      "QueryLanguage": "JSONata",
+      "Comment": "Extracts the Classification tag value from the S3 TagSet and merges it into the pipeline state, removing s3Tags.",
+      "Output": {
+        "bucket": "{% $states.input.bucket %}",
+        "key": "{% $states.input.key %}",
+        "analysisToken": "{% $states.input.analysisToken %}",
+        "applicationId": "{% $states.input.applicationId %}",
+        "applicantProfile": "{% $states.input.applicantProfile %}",
+        "config": "{% $states.input.config %}",
+        "classification": "{% $filter($states.input.s3Tags.TagSet, function($t){ $t.Key = 'Classification' })[0].Value %}"
+      },
+      "Next": "BuildExtractionInput"
+    },
+    "RunClassification": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::states:startExecution.sync:2",
+      "Parameters": {
+        "StateMachineArn": "${CLASSIFICATION_SM_ARN}",
+        "Input": {
+          "bucket.$": "$.bucket",
+          "key.$": "$.key",
+          "object": {
+            "size": 0,
+            "versionId": ""
+          },
+          "config.$": "$.config"
+        }
+      },
+      "ResultSelector": {
+        "smOutput.$": "States.StringToJson($.Output)"
+      },
+      "ResultPath": "$.classificationResult",
+      "Next": "CheckClassificationOutcome",
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "EmitFailedEvent"
+        }
+      ]
+    },
+    "CheckClassificationOutcome": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.classificationResult.smOutput.status",
+          "StringEquals": "FAILED",
+          "Next": "EmitFailedEvent"
+        },
+        {
+          "Variable": "$.classificationResult.smOutput.status",
+          "StringEquals": "SKIPPED",
+          "Next": "EmitSkippedEvent"
+        }
+      ],
+      "Default": "MergeClassificationResult"
+    },
+    "MergeClassificationResult": {
+      "Type": "Pass",
+      "QueryLanguage": "JSONata",
+      "Comment": "Merges the classification field from the sub-SM output into the top-level state, dropping classificationResult and s3Tags.",
+      "Output": {
+        "bucket": "{% $states.input.bucket %}",
+        "key": "{% $states.input.key %}",
+        "analysisToken": "{% $states.input.analysisToken %}",
+        "applicationId": "{% $states.input.applicationId %}",
+        "applicantProfile": "{% $states.input.applicantProfile %}",
+        "config": "{% $states.input.config %}",
+        "classification": "{% $states.input.classificationResult.smOutput.classification %}"
+      },
+      "Next": "BuildExtractionInput"
+    },
+    "BuildExtractionInput": {
+      "Type": "Pass",
+      "QueryLanguage": "JSONata",
+      "Comment": "Builds the exact input shape the Extraction SM expects.",
+      "Output": {
+        "bucket": "{% $states.input.bucket %}",
+        "key": "{% $states.input.key %}",
+        "analysisToken": "{% $states.input.analysisToken %}",
+        "applicationId": "{% $states.input.applicationId %}",
+        "applicantProfile": "{% $states.input.applicantProfile %}",
+        "config": "{% $states.input.config %}",
+        "classification": "{% $states.input.classification %}",
+        "extractionInput": {
+          "bucket": "{% $states.input.bucket %}",
+          "key": "{% $states.input.key %}",
+          "object": {
+            "size": 0,
+            "versionId": ""
+          },
+          "config": "{% $states.input.config %}",
+          "classification": "{% $states.input.classification %}",
+          "classificationConfidence": 0,
+          "totalPages": 0,
+          "classifiedPages": 0,
+          "dominantTypePages": 0,
+          "pageBreakdown": {},
+          "documentSizeBytes": 0,
+          "modelId": ""
+        }
+      },
+      "Next": "RunExtraction"
+    },
+    "RunExtraction": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::states:startExecution.sync:2",
+      "Parameters": {
+        "StateMachineArn": "${EXTRACTION_SM_ARN}",
+        "Input.$": "States.JsonToString($.extractionInput)"
+      },
+      "ResultSelector": {
+        "smOutput.$": "States.StringToJson($.Output)"
+      },
+      "ResultPath": "$.extractionResult",
+      "Next": "CheckExtractionOutcome",
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "EmitFailedEvent"
+        }
+      ]
+    },
+    "CheckExtractionOutcome": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.extractionResult.smOutput.status",
+          "StringEquals": "SKIPPED",
+          "Next": "EmitSkippedEvent"
+        },
+        {
+          "Variable": "$.extractionResult.smOutput.status",
+          "StringEquals": "FAILED",
+          "Next": "EmitFailedEvent"
+        }
+      ],
+      "Default": "BuildAnalysisInput"
+    },
+    "BuildAnalysisInput": {
+      "Type": "Pass",
+      "QueryLanguage": "JSONata",
+      "Comment": "Builds the exact input shape the AI Analysis SM expects.",
+      "Output": {
+        "bucket": "{% $states.input.bucket %}",
+        "key": "{% $states.input.key %}",
+        "analysisToken": "{% $states.input.analysisToken %}",
+        "applicationId": "{% $states.input.applicationId %}",
+        "config": "{% $states.input.config %}",
+        "analysisInput": {
+          "bucket": "{% $states.input.bucket %}",
+          "key": "{% $states.input.key %}",
+          "object": {
+            "size": 0,
+            "versionId": ""
+          },
+          "config": "{% $states.input.config %}",
+          "classification": "{% $states.input.extractionResult.smOutput.classification %}",
+          "classificationConfidence": 0,
+          "totalPages": 0,
+          "classifiedPages": 0,
+          "dominantTypePages": 0,
+          "pageBreakdown": {},
+          "documentSizeBytes": 0,
+          "modelId": "",
+          "bedrockInvocationArn": "{% $states.input.extractionResult.smOutput.bedrockInvocationArn %}",
+          "bedrockInvocationId": "{% $states.input.extractionResult.smOutput.bedrockInvocationId %}",
+          "extractedDataS3Bucket": "{% $states.input.extractionResult.smOutput.extractedDataS3Bucket %}",
+          "extractedDataS3KeyPrefix": "{% $states.input.extractionResult.smOutput.extractedDataS3KeyPrefix %}",
+          "applicantProfile": "{% $states.input.applicantProfile %}"
+        }
+      },
+      "Next": "RunAIAnalysis"
+    },
+    "RunAIAnalysis": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::states:startExecution.sync:2",
+      "Parameters": {
+        "StateMachineArn": "${AI_ANALYSIS_SM_ARN}",
+        "Input.$": "States.JsonToString($.analysisInput)"
+      },
+      "ResultSelector": {
+        "smOutput.$": "States.StringToJson($.Output)"
+      },
+      "ResultPath": "$.analysisResult",
+      "Next": "CheckAnalysisOutcome",
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "EmitFailedEvent"
+        }
+      ]
+    },
+    "CheckAnalysisOutcome": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.analysisResult.smOutput.status",
+          "StringEquals": "FAILED",
+          "Next": "EmitFailedEvent"
+        }
+      ],
+      "Default": "EmitCompletedEvent"
+    },
+    "EmitCompletedEvent": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "analysis_token.$": "$.analysisToken",
+              "application_id.$": "$.applicationId",
+              "status": "COMPLETED",
+              "analysis.$": "$.analysisResult.smOutput.analysis"
+            },
+            "DetailType": "DocumentProcessing-FinancialDocumentAnalysed",
+            "Source": "custom.documentProcessing"
+          }
+        ]
+      },
+      "End": true
+    },
+    "EmitSkippedEvent": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "analysis_token.$": "$.analysisToken",
+              "application_id.$": "$.applicationId",
+              "status": "SKIPPED",
+              "reason": "Document is not a supported type for analysis"
+            },
+            "DetailType": "DocumentProcessing-FinancialDocumentSkipped",
+            "Source": "custom.documentProcessing"
+          }
+        ]
+      },
+      "End": true
+    },
+    "EmitFailedEvent": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "analysis_token.$": "$.analysisToken",
+              "application_id.$": "$.applicationId",
+              "status": "FAILED"
+            },
+            "DetailType": "DocumentProcessing-FinancialDocumentFailed",
+            "Source": "custom.documentProcessing"
+          }
+        ]
+      },
+      "End": true
+    }
+  }
+}
