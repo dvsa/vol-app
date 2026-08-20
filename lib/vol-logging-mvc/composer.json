@@ -1,27 +1,35 @@
 {
-  "name": "olcs/olcs-logging",
-  "description": "Logging Module for OLCS",
+  "name": "olcs/vol-logging-mvc",
+  "description": "Laminas MVC bindings for olcs-logging",
   "license": "MIT",
-  "version": "9.0.1",
+  "version": "1.0.0",
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../olcs-logging",
+      "options": {
+        "symlink": true
+      }
+    }
+  ],
   "require": {
-    "ext-json": "*",
-    "php": "~8.4.0 || ~8.5.0",
-    "psr/log": "^3.0",
-    "monolog/monolog": "^3.10",
+    "php": "~8.4.0",
+    "olcs/olcs-logging": "^9",
+    "laminas/laminas-eventmanager": "^3.14",
     "laminas/laminas-http": "^2.22",
+    "laminas/laminas-mvc": "^3.8",
     "laminas/laminas-servicemanager": "^3.23",
-    "laminas/laminas-session": "^2.21",
-    "laminas/laminas-stdlib": "^3.20",
-    "psr/container": "^1.1|^2"
+    "psr/container": "^1.1|^2",
+    "psr/log": "^3.0"
   },
   "autoload": {
     "psr-4": {
-      "Olcs\\Logging\\": "src/"
+      "Olcs\\Logging\\Mvc\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "OlcsTest\\Logging\\": "test/"
+      "OlcsTest\\Logging\\Mvc\\": "test/"
     }
   },
   "require-dev": {
