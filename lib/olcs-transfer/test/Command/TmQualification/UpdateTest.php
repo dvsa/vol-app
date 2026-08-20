@@ -70,7 +70,7 @@ final class UpdateTest extends TestCase
             'id' => [[99, '99']],
             'version' => [[2, '2']],
             'qualificationType' => [['tm_qt_ar ', 'tm_qt_ar']],
-            'serialNo' => ['aaaaa ', 'aaaaa'],
+            'serialNo' => [['aaaaa ', 'aaaaa']],
             'countryCode' => [['a ', 'a']],
         ];
     }

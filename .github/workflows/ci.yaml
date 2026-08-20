@@ -246,15 +246,32 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project:
-          - olcs-logging
-          - olcs-utils
-          - olcs-transfer
-          - olcs-common
-          - olcs-auth
+        # Explicit pairs rather than a project x php-version product: only the libs whose
+        # composer php constraint allows 8.5 get an 8.5 leg (VOL-7536, VOL-7537). The rest are
+        # still on ~8.4.0 because they require laminas/laminas-mvc, which has no 8.5 release.
+        include:
+          - project: olcs-logging
+            php-version: "8.4"
+          - project: olcs-logging
+            php-version: "8.5"
+          - project: vol-logging-mvc
+            php-version: "8.4"
+          - project: olcs-utils
+            php-version: "8.4"
+          - project: olcs-utils
+            php-version: "8.5"
+          - project: olcs-transfer
+            php-version: "8.4"
+          - project: olcs-transfer
+            php-version: "8.5"
+          - project: olcs-common
+            php-version: "8.4"
+          - project: olcs-auth
+            php-version: "8.4"
     uses: ./.github/workflows/php-lib.yaml
     with:
       project: ${{ matrix.project }}
+      php-version: ${{ matrix.php-version }}
     permissions:
       contents: read
 

@@ -5,6 +5,7 @@ return [
     'modules' => [
         'Dvsa\LaminasConfigCloudParameters',
         'Olcs\Logging',
+        'Olcs\Logging\Mvc',
         'Laminas\Router',
         'Laminas\Filter\Module',
         'Laminas\Validator\Module',
