@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace OlcsTest\Logging\Listener;
+namespace OlcsTest\Logging\Mvc\Listener;
 
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\Mvc\MvcEvent;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Logging\Helper\LogException;
-use Olcs\Logging\Listener\LogError;
+use Olcs\Logging\Mvc\Listener\LogError;
 use Olcs\Logging\Log\Processor\RequestId;
 use Psr\Container\ContainerInterface;
 

@@ -11,6 +11,13 @@
     },
     {
       "type": "path",
+      "url": "../../lib/vol-logging-mvc",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
       "url": "../../lib/olcs-utils",
       "options": {
         "symlink": true
@@ -62,6 +69,7 @@
     "olcs/olcs-auth": "*",
     "olcs/olcs-common": "*",
     "olcs/olcs-logging": "*",
+    "olcs/vol-logging-mvc": "*",
     "olcs/olcs-transfer": "*",
     "olcs/olcs-utils": "*",
     "psr/container": "^1.1|^2",

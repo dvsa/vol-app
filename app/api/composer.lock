@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "75eab5253074a3f8e3f82add3ea07a90",
+  "content-hash": "19bfc0be1c70a3f2ee2cb61e001b52da",
   "packages": [
     {
       "name": "alphagov/notifications-php-client",
@@ -5395,16 +5395,16 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-logging",
-        "reference": "4f4a49ca9648b99985f7394fb77ae3b9282cafd0"
+        "reference": "7486142d6481b159a9b9bd0a4985ba828f27529c"
       },
       "require": {
         "ext-json": "*",
-        "laminas/laminas-eventmanager": "^3.14",
-        "laminas/laminas-mvc": "^3.8",
+        "laminas/laminas-http": "^2.22",
+        "laminas/laminas-servicemanager": "^3.23",
         "laminas/laminas-session": "^2.21",
         "laminas/laminas-stdlib": "^3.20",
         "monolog/monolog": "^3.10",
-        "php": "~8.4.0",
+        "php": "~8.4.0 || ~8.5.0",
         "psr/container": "^1.1|^2",
         "psr/log": "^3.0"
       },
@@ -5454,7 +5454,7 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-transfer",
-        "reference": "77aae2d4addef9002877c0db74fbeb90c8ffc490"
+        "reference": "375a8e43458d488c2842f004f39f507103633c96"
       },
       "require": {
         "ext-igbinary": "*",
@@ -5469,7 +5469,7 @@
         "laminas/laminas-validator": "^2.64",
         "laminas/laminas-xml": "^1.7.0",
         "paragonie/halite": "^5",
-        "php": "~8.4.0",
+        "php": "~8.4.0 || ~8.5.0",
         "psr/cache": "^1.0 || ^2.0 || ^3.0",
         "psr/container": "^1.1|^2",
         "symfony/cache": "^5.4 || ^6.4"
@@ -5520,7 +5520,7 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-utils",
-        "reference": "318de3f90c5021cb96ae61bab3d763e00ed4d288"
+        "reference": "ccaeb8d8b863bf11fe9f25fbbab1d903158f9403"
       },
       "require": {
         "laminas/laminas-eventmanager": "^3.14",
@@ -5529,7 +5529,7 @@
         "laminas/laminas-servicemanager": "^3.23",
         "laminas/laminas-validator": "^2.64",
         "laminas/laminas-view": "^2.41",
-        "php": "~8.4.0",
+        "php": "~8.4.0 || ~8.5.0",
         "psr/container": "^1.1|^2.0"
       },
       "require-dev": {
@@ -5566,6 +5566,64 @@
       },
       "license": ["MIT"],
       "description": "OLCS Utils",
+      "transport-options": {
+        "symlink": true,
+        "relative": true
+      }
+    },
+    {
+      "name": "olcs/vol-logging-mvc",
+      "version": "1.0.0",
+      "dist": {
+        "type": "path",
+        "url": "../../lib/vol-logging-mvc",
+        "reference": "63f91c2e13db491d034a6e7b793db919061731ce"
+      },
+      "require": {
+        "laminas/laminas-eventmanager": "^3.14",
+        "laminas/laminas-http": "^2.22",
+        "laminas/laminas-mvc": "^3.8",
+        "laminas/laminas-servicemanager": "^3.23",
+        "olcs/olcs-logging": "^9",
+        "php": "~8.4.0",
+        "psr/container": "^1.1|^2",
+        "psr/log": "^3.0"
+      },
+      "require-dev": {
+        "bamarni/composer-bin-plugin": "^1.8.2",
+        "mockery/mockery": "^1.6",
+        "phpstan/phpstan-mockery": "^2.0",
+        "phpunit/phpunit": "^13.0",
+        "rector/rector": "^2.3"
+      },
+      "type": "library",
+      "extra": {
+        "bamarni-bin": {
+          "bin-links": true,
+          "forward-command": true
+        }
+      },
+      "autoload": {
+        "psr-4": {
+          "Olcs\\Logging\\Mvc\\": "src/"
+        }
+      },
+      "autoload-dev": {
+        "psr-4": {
+          "OlcsTest\\Logging\\Mvc\\": "test/"
+        }
+      },
+      "scripts": {
+        "bin": ["echo 'bin not installed'"],
+        "post-install-cmd": ["@composer bin all install"],
+        "test": ["phpunit"],
+        "phpcs": ["phpcs"],
+        "psalm": ["psalm"],
+        "phpstan": ["phpstan --memory-limit=1G"],
+        "all": ["@test", "@phpcs", "@psalm", "@phpstan"]
+      },
+      "license": ["MIT"],
+      "description": "Laminas MVC bindings for olcs-logging",
       "transport-options": {
         "symlink": true,
         "relative": true
