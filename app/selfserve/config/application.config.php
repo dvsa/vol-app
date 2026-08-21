@@ -15,8 +15,6 @@ $config = [
         'Laminas\Router',
         'Dvsa\Olcs\Utils',
         'Dvsa\Olcs\Transfer',
-        // Required for annotation parsing
-        'DoctrineModule',
         'Common',
         'Application',
         'Olcs',

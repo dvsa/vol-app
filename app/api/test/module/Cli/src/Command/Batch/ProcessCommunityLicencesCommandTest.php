@@ -31,8 +31,11 @@ final class ProcessCommunityLicencesCommandTest extends TestCase
         $this->mockQueryHandlerManager = $this->createMock(QueryHandlerManager::class);
 
         $command = new ProcessCommunityLicencesCommand($this->mockCommandHandlerManager, $this->mockQueryHandlerManager);
+        // symfony/console 8 no longer reads the static $defaultName property; the name
+        // comes from the laminas-cli command map at runtime, so set it explicitly here.
+        $command->setName('batch:process-community-licences');
         $application = new Application();
-        $application->add($command);
+        $application->addCommand($command);
 
         Logger::setLogger(new \Psr\Log\NullLogger());
 

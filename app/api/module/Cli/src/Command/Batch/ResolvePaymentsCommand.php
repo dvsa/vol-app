@@ -11,7 +11,7 @@ class ResolvePaymentsCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:resolve-payments';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Resolve pending CPMS payments.');
     }
