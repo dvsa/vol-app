@@ -1,7 +1,7 @@
 {
   "Comment": "Extract data from bank statements using Bedrock Data Automation",
   "StartAt": "CheckIsBankStatement",
-  "TimeoutSeconds": 1800,
+  "TimeoutSeconds": 900,
   "States": {
     "CheckIsBankStatement": {
       "Type": "Choice",
@@ -157,6 +157,7 @@
     "EmitExtractedEvent": {
       "Type": "Task",
       "Resource": "arn:aws:states:::events:putEvents",
+      "ResultPath": null,
       "Parameters": {
         "Entries": [
           {
@@ -183,6 +184,23 @@
           }
         ]
       },
+      "Next": "ExtractionSucceeded"
+    },
+    "ExtractionSucceeded": {
+      "Type": "Pass",
+      "Comment": "Returns extraction result as SM output for orchestrator callers using startExecution.sync:2.",
+      "Parameters": {
+        "status": "SUCCEEDED",
+        "bucket.$": "$.bucket",
+        "key.$": "$.key",
+        "object.$": "$.object",
+        "config.$": "$.config",
+        "classification.$": "$.classification",
+        "bedrockInvocationArn.$": "$.bedrockInvocationArn",
+        "bedrockInvocationId.$": "$.bedrockInvocationId",
+        "extractedDataS3Bucket.$": "$.extractedDataS3Bucket",
+        "extractedDataS3KeyPrefix.$": "$.extractedDataS3KeyPrefix"
+      },
       "End": true
     },
     "EmitSkippedEvent": {
@@ -203,6 +221,14 @@
             "Source": "custom.documentProcessing"
           }
         ]
+      },
+      "Next": "ExtractionSkipped"
+    },
+    "ExtractionSkipped": {
+      "Type": "Pass",
+      "Parameters": {
+        "status": "SKIPPED",
+        "reason": "Document is not a bank statement"
       },
       "End": true
     },
@@ -226,6 +252,14 @@
             "Source": "custom.documentProcessing"
           }
         ]
+      },
+      "Next": "ExtractionFailed"
+    },
+    "ExtractionFailed": {
+      "Type": "Pass",
+      "Parameters": {
+        "status": "FAILED",
+        "reason": "Data extraction failed"
       },
       "End": true
     }
