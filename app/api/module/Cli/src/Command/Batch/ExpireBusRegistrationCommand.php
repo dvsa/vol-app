@@ -11,7 +11,7 @@ class ExpireBusRegistrationCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:expire-bus-registration';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Expire bus registrations past their end date.');
     }
