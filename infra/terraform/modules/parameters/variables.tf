@@ -5,17 +5,17 @@ variable "environment" {
 
 /*
     * Log Level
-    * RFC: http://tools.ietf.org/html/rfc3164
-    * 
-    *    Code      Severity
-    *      0       Emergency: system is unusable
-    *      1       Alert: action must be taken immediately
-    *      2       Critical: critical conditions
-    *      3       Error: error conditions
-    *      4       Warning: warning conditions
-    *      5       Notice: normal but significant condition
-    *      6       Informational: informational messages
-    *      7       Debug: debug-level messages
+    * PSR-3 log level threshold. Messages at this severity and above are
+    * emitted, ordered most-to-least severe (RFC 5424):
+    *
+    *      emergency   system is unusable
+    *      alert       action must be taken immediately
+    *      critical    critical conditions
+    *      error       error conditions
+    *      warning     warning conditions
+    *      notice      normal but significant condition
+    *      info        informational messages
+    *      debug       debug-level messages
 */
 
 variable "application_parameters" {
