@@ -61,8 +61,8 @@
     "phpstan/phpstan-mockery": "^2.0",
     "phpunit/phpunit": "^13.0",
     "rector/rector": "^2.3",
-    "symfony/filesystem": "^5.4",
-    "symfony/lock": "^5.4"
+    "symfony/filesystem": "^8.1",
+    "symfony/lock": "^7.4"
   },
   "autoload": {
     "psr-4": {

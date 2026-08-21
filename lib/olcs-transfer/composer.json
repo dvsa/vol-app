@@ -14,8 +14,9 @@
     "laminas/laminas-inputfilter": "^2.33",
     "laminas/laminas-form": "^3.21",
     "paragonie/halite": "^5",
+    "doctrine/annotations": "^1.14.2 || ^2.0",
     "psr/cache": "^1.0 || ^2.0 || ^3.0",
-    "symfony/cache": "^5.4 || ^6.4",
+    "symfony/cache": "^5.4 || ^6.4 || ^7.4 || ^8.1",
     "laminas/laminas-xml": "^1.7.0",
     "laminas/laminas-router": "^3.14",
     "laminas/laminas-http": "^2.15",
@@ -25,7 +26,6 @@
     "phpunit/phpunit": "^13.0",
     "mockery/mockery": "^1.6",
     "bamarni/composer-bin-plugin": "^1.8.2",
-    "doctrine/annotations": "^1.14.2",
     "phpstan/phpstan-mockery": "^2.0",
     "rector/rector": "^2.3"
   },
