@@ -128,9 +128,36 @@
         "applicationId": "{% $states.input.applicationId %}",
         "applicantProfile": "{% $states.input.applicantProfile %}",
         "config": "{% $states.input.config %}",
-        "classification": "{% $states.input.classificationResult.smOutput.classification %}"
+        "classification": "{% $states.input.classificationResult.smOutput.classification %}",
+        "classificationConfidence": "{% $states.input.classificationResult.smOutput.classificationConfidence %}",
+        "totalPages": "{% $states.input.classificationResult.smOutput.totalPages %}",
+        "documentSizeBytes": "{% $states.input.classificationResult.smOutput.documentSizeBytes %}"
       },
-      "Next": "BuildExtractionInput"
+      "Next": "CheckEligibilityForExtraction"
+    },
+    "CheckEligibilityForExtraction": {
+      "Type": "Choice",
+      "QueryLanguage": "JSONata",
+      "Comment": "Gates extraction based on predefined rules found in variables.tf: classification label must be in the allowed list, confidence must meet the threshold, and document must be within page and size limits. Only evaluated on the fresh-classification path; already-tagged documents skip directly to BuildExtractionInput as they would have passed these checks previously.",
+      "Choices": [
+        {
+          "Condition": "{% $not($states.input.classification in ${EXTRACTION_CLASSIFICATIONS}) %}",
+          "Next": "EmitSkippedEvent"
+        },
+        {
+          "Condition": "{% $states.input.classificationConfidence < ${CLASSIFICATION_CONFIDENCE_THRESHOLD} %}",
+          "Next": "EmitSkippedEvent"
+        },
+        {
+          "Condition": "{% $states.input.totalPages > ${CLASSIFICATION_MAX_PAGES} %}",
+          "Next": "EmitSkippedEvent"
+        },
+        {
+          "Condition": "{% $states.input.documentSizeBytes > ${CLASSIFICATION_MAX_BYTES} %}",
+          "Next": "EmitSkippedEvent"
+        }
+      ],
+      "Default": "BuildExtractionInput"
     },
     "BuildExtractionInput": {
       "Type": "Pass",

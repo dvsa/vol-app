@@ -56,9 +56,9 @@ variable "bda_project_stage" {
 
 # ============================================================
 # Extraction SM — Routing policy thresholds
+# Applied in the orchestrator after classification to gate
+# whether a document proceeds to extraction and analysis.
 # Mirror the values in vol-idp-poc/config/routing-policy.json.
-# Documents that do not satisfy ALL conditions are not forwarded
-# to the Extraction SM (filtered by the EventBridge rule).
 # ============================================================
 
 variable "extraction_classifications" {
