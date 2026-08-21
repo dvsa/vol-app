@@ -1,5 +1,31 @@
 # Changelog
 
+## [9.2.0](https://github.com/dvsa/vol-app/compare/v9.1.0...v9.2.0) (2026-08-21)
+
+
+### Features
+
+* 7499 put events permissions ([#1722](https://github.com/dvsa/vol-app/issues/1722)) ([9eca4ff](https://github.com/dvsa/vol-app/commit/9eca4ff03389309cb27ae1f2b25530fc6035fa41))
+* cpms hybrid gateway vol 7496 ([#1714](https://github.com/dvsa/vol-app/issues/1714)) ([d33c7ef](https://github.com/dvsa/vol-app/commit/d33c7ef13d29c2e49e235c2e1f21e9de8f782a5c))
+* letter builder ux improvements ([#1708](https://github.com/dvsa/vol-app/issues/1708)) ([e242f5e](https://github.com/dvsa/vol-app/commit/e242f5ef5e823c4846ffa59b416e52f631b79399))
+* olcs-transfer, olcs-logging, olcs-utils PHP 8.5 support - added transient vol-logging-mvc ([#1730](https://github.com/dvsa/vol-app/issues/1730)) ([da5d29b](https://github.com/dvsa/vol-app/commit/da5d29b01f98240265b52bc391794c5f8f1952cd))
+* test surefire bump in dvsa github actions ([#1725](https://github.com/dvsa/vol-app/issues/1725)) ([d672767](https://github.com/dvsa/vol-app/commit/d672767164eb91af098397dcf94af5f9e6d423bf))
+* trigger CD (tests did not run in last merge) ([#1724](https://github.com/dvsa/vol-app/issues/1724)) ([bd77f0d](https://github.com/dvsa/vol-app/commit/bd77f0da52b184fa7939840d3a38a454b4b3928c))
+* use main ([#1732](https://github.com/dvsa/vol-app/issues/1732)) ([74f9217](https://github.com/dvsa/vol-app/commit/74f92173ddf3c35cc0b986e0a2c833f60c91056a))
+
+
+### Bug Fixes
+
+* add secret param for otp generation ([#1715](https://github.com/dvsa/vol-app/issues/1715)) ([def8252](https://github.com/dvsa/vol-app/commit/def825275ec54bab7264bbf35260bb98ffe18097))
+* build, test and deploy on changes under lib/ ([#1719](https://github.com/dvsa/vol-app/issues/1719)) ([07260b3](https://github.com/dvsa/vol-app/commit/07260b3a37fac389e64bd54fe67ee9159bb6985d))
+* main ci failures cleared ([#1720](https://github.com/dvsa/vol-app/issues/1720)) ([2556046](https://github.com/dvsa/vol-app/commit/2556046c3c498e3484122a7082b998a559d5c172))
+* remove debugging from prod ([#1713](https://github.com/dvsa/vol-app/issues/1713)) ([a9c6a84](https://github.com/dvsa/vol-app/commit/a9c6a847947e2cb1388cea0579ef97e9d1e8898f))
+* return annotations to Si.php ([#1718](https://github.com/dvsa/vol-app/issues/1718)) ([a851b20](https://github.com/dvsa/vol-app/commit/a851b20699f131c9dfa5ceb4b062fd6b0fe1b854))
+* trigger CD ([#1726](https://github.com/dvsa/vol-app/issues/1726)) ([37a33ad](https://github.com/dvsa/vol-app/commit/37a33ad70279232ddb4eb75d5a40ff942214586e))
+* upgrade docusaurus, fix security advisories on VOL documentation website, add to CI jobs ([#1723](https://github.com/dvsa/vol-app/issues/1723)) ([246a520](https://github.com/dvsa/vol-app/commit/246a520d5dbb0b168ac742d9f6cf6a90ba785666))
+* vol 5981 view unrelated penalty from other cases bug ([#1553](https://github.com/dvsa/vol-app/issues/1553)) ([a15dd8f](https://github.com/dvsa/vol-app/commit/a15dd8f781bab01eb228c7266d4b725314786c35))
+* vol 5983 fee from unrelated recorded bug ([#1523](https://github.com/dvsa/vol-app/issues/1523)) ([f6560e1](https://github.com/dvsa/vol-app/commit/f6560e1856f78a7eb87ce70804cfe630a2566e0d))
+
 ## [9.1.0](https://github.com/dvsa/vol-app/compare/v9.0.0...v9.1.0) (2026-08-10)
 
 
