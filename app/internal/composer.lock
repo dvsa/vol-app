@@ -3266,9 +3266,10 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-common",
-        "reference": "f870937feb445a08dcda38d858c806d9bc1978ef"
+        "reference": "3d721b1d88e6e78694f4946457948f3940703cf8"
       },
       "require": {
+        "doctrine/annotations": "^2.0",
         "ezyang/htmlpurifier": "^4.17",
         "laminas/laminas-authentication": "^2.18",
         "laminas/laminas-code": "^4.16",
@@ -3295,7 +3296,6 @@
       },
       "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8.2",
-        "doctrine/annotations": "^1.14.2",
         "lm-commons/lmc-rbac-mvc": "^3.5",
         "mikey179/vfsstream": "~v1.6.11",
         "mockery/mockery": "^1.6.7",
@@ -3404,10 +3404,10 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-transfer",
-        "reference": "09eb84116184feb9d5dc3bc0b2cef66365552488"
+        "reference": "2fd16525784b79e063d769f4c95fa86b2112944a"
       },
       "require": {
-        "doctrine/annotations": "^1.14.2 || ^2.0",
+        "doctrine/annotations": "^2.0",
         "ext-igbinary": "*",
         "ext-sodium": "*",
         "laminas/laminas-filter": "^2.41",
@@ -3421,9 +3421,9 @@
         "laminas/laminas-xml": "^1.7.0",
         "paragonie/halite": "^5",
         "php": "~8.4.0 || ~8.5.0",
-        "psr/cache": "^1.0 || ^2.0 || ^3.0",
+        "psr/cache": "^3.0",
         "psr/container": "^1.1|^2",
-        "symfony/cache": "^5.4 || ^6.4 || ^7.4 || ^8.1"
+        "symfony/cache": "^8.1"
       },
       "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8.2",

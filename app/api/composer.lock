@@ -5456,9 +5456,10 @@
       "dist": {
         "type": "path",
         "url": "../../lib/olcs-transfer",
-        "reference": "819b3c5b7f12ba2b8bc92ba7a5925c2f2821ea10"
+        "reference": "2fd16525784b79e063d769f4c95fa86b2112944a"
       },
       "require": {
+        "doctrine/annotations": "^2.0",
         "ext-igbinary": "*",
         "ext-sodium": "*",
         "laminas/laminas-filter": "^2.41",
@@ -5478,7 +5479,6 @@
       },
       "require-dev": {
         "bamarni/composer-bin-plugin": "^1.8.2",
-        "doctrine/annotations": "^1.14.2",
         "mockery/mockery": "^1.6",
         "phpstan/phpstan-mockery": "^2.0",
         "phpunit/phpunit": "^13.0",
