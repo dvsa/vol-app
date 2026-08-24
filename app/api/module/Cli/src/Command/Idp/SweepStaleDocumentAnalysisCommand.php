@@ -20,7 +20,7 @@ class SweepStaleDocumentAnalysisCommand extends AbstractBatchCommand
     protected static $defaultName = 'idp:sweep-stale-document-analysis';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Resolve stale PENDING IDP document analyses to TIMEOUT.')
             ->addOption(
