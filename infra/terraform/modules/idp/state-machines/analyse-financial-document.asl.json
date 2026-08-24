@@ -216,11 +216,6 @@
       "Choices": [
         {
           "Variable": "$.extractionResult.smOutput.status",
-          "StringEquals": "SKIPPED",
-          "Next": "EmitSkippedEvent"
-        },
-        {
-          "Variable": "$.extractionResult.smOutput.status",
           "StringEquals": "FAILED",
           "Next": "EmitFailedEvent"
         }
