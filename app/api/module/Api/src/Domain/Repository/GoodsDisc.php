@@ -13,7 +13,6 @@ use Doctrine\ORM\NoResultException;
 use Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc as Entity;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Doctrine\ORM\Query;
-use Doctrine\DBAL\Connection;
 
 /**
  * Goods Disc
@@ -146,7 +145,7 @@ class GoodsDisc extends AbstractRepository
         return $this->getDbQueryManager()->get('Discs\GoodsDiscsSetIsPrinting')
             ->execute(
                 ['isPrinting' => $type, 'ids' => $discIds],
-                ['isPrinting' => \PDO::PARAM_INT, 'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
+                ['isPrinting' => \Doctrine\DBAL\ParameterType::INTEGER, 'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
             );
     }
 

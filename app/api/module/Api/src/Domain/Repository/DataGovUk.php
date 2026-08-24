@@ -6,7 +6,6 @@ namespace Dvsa\Olcs\Api\Domain\Repository;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result;
-use PDO;
 use Doctrine\DBAL\ParameterType;
 
 /**

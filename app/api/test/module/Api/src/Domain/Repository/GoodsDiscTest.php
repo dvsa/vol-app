@@ -16,7 +16,6 @@ use Dvsa\Olcs\Api\Domain\Repository\GoodsDisc as GoodsDiscRepo;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
-use Doctrine\DBAL\Connection;
 
 /**
  * Goods Disc test
@@ -243,7 +242,7 @@ final class GoodsDiscTest extends RepositoryTestCase
         $this->expectQueryWithData(
             'Discs\GoodsDiscsSetIsPrinting',
             ['isPrinting' => 1, 'ids' => [1, 2]],
-            ['isPrinting' => \PDO::PARAM_INT, 'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
+            ['isPrinting' => \Doctrine\DBAL\ParameterType::INTEGER, 'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
         );
 
         $this->sut->setIsPrintingOn([1, 2]);

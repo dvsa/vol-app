@@ -17,7 +17,6 @@ use Dvsa\Olcs\Api\Domain\Repository\PsvDisc as PsvDiscRepo;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea as TrafficAreaEntity;
-use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\Andx;
@@ -133,7 +132,7 @@ final class PsvDiscTest extends RepositoryTestCase
         $this->expectQueryWithData(
             'Discs\PsvDiscsSetIsPrinting',
             ['isPrinting' => 1, 'ids' => [1, 2]],
-            ['isPrinting' => \PDO::PARAM_INT, 'ids' => ArrayParameterType::INTEGER]
+            ['isPrinting' => \Doctrine\DBAL\ParameterType::INTEGER, 'ids' => ArrayParameterType::INTEGER]
         );
 
         $this->sut->setIsPrintingOn([1, 2]);

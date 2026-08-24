@@ -47,9 +47,9 @@ final class GoodsDiscsSetIsPrintingTest extends AbstractDbQueryTestCase
     {
         yield [
             ['isPrinting' => 1, 'ids' => [1,2]],
-            ['isPrinting' => \PDO::PARAM_INT, 'ids' => ArrayParameterType::INTEGER],
+            ['isPrinting' => \Doctrine\DBAL\ParameterType::INTEGER, 'ids' => ArrayParameterType::INTEGER],
             ['isPrinting' => 1, 'ids' => [1,2]],
-            ['isPrinting' => \PDO::PARAM_INT, 'ids' => ArrayParameterType::INTEGER]
+            ['isPrinting' => \Doctrine\DBAL\ParameterType::INTEGER, 'ids' => ArrayParameterType::INTEGER]
         ];
     }
 

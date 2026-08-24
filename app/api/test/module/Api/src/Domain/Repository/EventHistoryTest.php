@@ -209,7 +209,7 @@ final class EventHistoryTest extends RepositoryTestCase
                 )
                 ->andReturn(
                     m::mock()
-                    ->shouldReceive('fetchAll')
+                    ->shouldReceive('fetchAllAssociative')
                     ->andReturn($results)
                     ->once()
                     ->getMock()
@@ -266,7 +266,7 @@ final class EventHistoryTest extends RepositoryTestCase
             ->with(['id' => $id, 'version' => [$version, $version - 1]])
             ->andReturn(
                 m::mock()
-                ->shouldReceive('fetchAll')
+                ->shouldReceive('fetchAllAssociative')
                 ->andReturn($results)
                 ->once()
                 ->getMock()
