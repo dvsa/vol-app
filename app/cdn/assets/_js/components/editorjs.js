@@ -17,6 +17,25 @@ OLCS.editorjs = (function (document, $, undefined) {
   var hiddenInputs = {};
 
   /**
+   * Has the content actually changed, ignoring the timestamp EditorJS re-stamps on
+   * every save?
+   *
+   * Returns true when the current value cannot be read as EditorJS output, so unknown
+   * or malformed content is written rather than assumed equal.
+   *
+   * @param {string} currentValue the hidden input's value
+   * @param {object} outputData   fresh output from editor.save()
+   * @returns {boolean}
+   */
+  function blocksChanged(currentValue, outputData) {
+    try {
+      return JSON.stringify(JSON.parse(currentValue).blocks) !== JSON.stringify(outputData.blocks);
+    } catch (e) {
+      return true;
+    }
+  }
+
+  /**
    * Bring every editor's hidden input up to date with what is currently on screen.
    *
    * The onChange handler below is the normal path, but it is debounced by EditorJS and
@@ -44,14 +63,17 @@ OLCS.editorjs = (function (document, $, undefined) {
         return editor
           .save()
           .then(function (outputData) {
-            var next = JSON.stringify(outputData);
-
             // Only write on a real change. Callers flush speculatively — before a
             // click that may not be a save at all — and letter-edit.js watches this
-            // input to decide whether there are unsaved edits. Assigning an identical
-            // value would mark clean content dirty and clear the "Saved" indicator.
-            if (hiddenInputs[name].value !== next) {
-              hiddenInputs[name].value = next;
+            // input to decide whether there are unsaved edits. A needless write marks
+            // clean content dirty, which raises "Unsaved changes" over content the
+            // caseworker has just saved.
+            //
+            // Compare the blocks rather than the whole payload: EditorJS stamps a fresh
+            // `time` on every save(), so the serialised output never matches itself and
+            // a plain string comparison would think everything had changed.
+            if (blocksChanged(hiddenInputs[name].value, outputData)) {
+              hiddenInputs[name].value = JSON.stringify(outputData);
             }
           })
           .catch(function (error) {
