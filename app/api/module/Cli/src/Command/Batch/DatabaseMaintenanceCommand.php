@@ -10,7 +10,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DatabaseMaintenanceCommand extends AbstractBatchCommand
 {
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('batch:database-maintenance')
