@@ -488,6 +488,7 @@ return [
             'linkNewWindow' => Common\View\Helper\LinkNewWindow::class,
             'linkNewWindowExternal' => Common\View\Helper\LinkNewWindowExternal::class,
             'linkModal' => Common\View\Helper\LinkModal::class,
+            'safeUser' => \Common\View\Helper\SafeUser::class,
 
             //  read only elements helpers
             ReadonlyFormHelper\FormFieldset::class => ReadonlyFormHelper\FormFieldset::class,
