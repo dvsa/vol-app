@@ -244,6 +244,8 @@ return [
             // Explains a proposed composition for the letter type builder
             \Dvsa\Olcs\Api\Service\Letter\CompositionDiagnostics::class =>
                 \Dvsa\Olcs\Api\Service\Letter\CompositionDiagnosticsFactory::class,
+            \Dvsa\Olcs\Api\Service\Letter\PreviewRecordSuggester::class =>
+                \Dvsa\Olcs\Api\Service\Letter\PreviewRecordSuggesterFactory::class,
 
             \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClient::class =>
                 \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClientFactory::class,

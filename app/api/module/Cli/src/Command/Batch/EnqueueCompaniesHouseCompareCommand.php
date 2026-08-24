@@ -14,7 +14,7 @@ class EnqueueCompaniesHouseCompareCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:enqueue-companies-house-compare';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Enqueue Companies House lookup for all Organisations');
     }

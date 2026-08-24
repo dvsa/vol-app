@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace OlcsTest\Logging;
 
-use Laminas\EventManager\EventInterface;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Monolog\Logger as MonologLogger;
@@ -31,32 +30,31 @@ final class ModuleTest extends MockeryTestCase
         $config = $sut->getConfig();
 
         $this->assertArrayHasKey('log', $config);
-        $this->assertArrayHasKey('listeners', $config);
         $this->assertArrayHasKey('service_manager', $config);
         $this->assertArrayHasKey('Logger', $config['service_manager']['factories']);
         $this->assertArrayHasKey('ExceptionLogger', $config['service_manager']['factories']);
+
+        // The MvcEvent listeners live in olcs/vol-logging-mvc now. Core contributing a
+        // 'listeners' key again would drag laminas-mvc back into this package.
+        $this->assertArrayNotHasKey('listeners', $config);
     }
 
-    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestOnBootstrap')]
-    public function testOnBootstrap(int $hideTimes, array $logConfig): void
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTestBootstrapLogger')]
+    public function testBootstrapLogger(int $hideTimes, array $logConfig): void
     {
-        $event = m::mock(EventInterface::class);
         $logger = m::mock(MonologLogger::class);
         $hidePassword = m::mock(HidePassword::class);
         $hideCredentials = m::mock(HideCredentials::class);
 
-        // Typed, because onBootstrap only ever calls get() on it. An untyped m::mock() also works
-        // at runtime but leaves phpstan-mockery unable to narrow expects(), which then reports
-        // with() as undefined on the union it falls back to.
-        $serviceManager = m::mock(ContainerInterface::class);
-        $serviceManager->expects('get')->with('Logger')->andReturn($logger);
-        $serviceManager->expects('get')->with('Config')->andReturn($logConfig);
+        // Typed, because bootstrapLogger only ever calls get() on it. An untyped m::mock() also
+        // works at runtime but leaves phpstan-mockery unable to narrow expects(), which then
+        // reports with() as undefined on the union it falls back to.
+        $container = m::mock(ContainerInterface::class);
+        $container->expects('get')->with('Logger')->andReturn($logger);
         // times() rather than expects(), because $hideTimes is 0 in the allow-logging cases.
-        $serviceManager->shouldReceive('get')->with(HidePassword::class)->times($hideTimes)->andReturn($hidePassword);
+        $container->shouldReceive('get')->with(HidePassword::class)->times($hideTimes)->andReturn($hidePassword);
         // Always attached, whatever allowPasswordLogging says.
-        $serviceManager->expects('get')->with(HideCredentials::class)->andReturn($hideCredentials);
-
-        $event->shouldReceive('getApplication->getServiceManager')->withNoArgs()->andReturn($serviceManager);
+        $container->expects('get')->with(HideCredentials::class)->andReturn($hideCredentials);
 
         // Split by processor rather than counted in aggregate, so the test says which one was
         // attached. HideCredentials is unconditional; HidePassword only when password logging is
@@ -64,10 +62,9 @@ final class ModuleTest extends MockeryTestCase
         $logger->expects('pushProcessor')->with($hideCredentials)->andReturnSelf();
         $logger->shouldReceive('pushProcessor')->with($hidePassword)->times($hideTimes)->andReturnSelf();
 
-        $sut = new Module();
-        $sut->onBootstrap($event);
+        new Module()->bootstrapLogger($container, $logConfig);
 
-        // onBootstrap permanently installs Monolog's error + exception handlers
+        // bootstrapLogger permanently installs Monolog's error + exception handlers
         // (via ErrorHandler::register) and the user-error tolerance handler as a
         // production side effect. Unwind them so the test leaves global handler
         // state untouched (PHPUnit failOnRisky).
@@ -76,7 +73,7 @@ final class ModuleTest extends MockeryTestCase
         restore_exception_handler();  // Monolog exception handler
     }
 
-    public static function dpTestOnBootstrap(): \Iterator
+    public static function dpTestBootstrapLogger(): \Iterator
     {
         yield 'noConfigEntry' => [1, []];
         yield 'allowTrue' => [0, ['log' => ['allowPasswordLogging' => true]]];
