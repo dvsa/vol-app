@@ -270,3 +270,60 @@ body[id="pg:letter/preview:preview"] .sidebar--left {
     max-width: none;
   }
 }
+
+// Create Letter modal: one visual rhythm for every group of choices.
+//
+// Issue groups were built as an accordion with their rules, spacing and pointer
+// affordance written inline, so nothing was available to the appendix and letter-choice
+// groups that follow them. Those rendered as bare headings, reading as an afterthought
+// hanging below a structured list rather than part of the same form.
+//
+// The letter choices deliberately do NOT get the accordion behaviour: picking First or
+// Final is mandatory, and a required choice must not be hidden behind a Show/Hide.
+#letter-create-form {
+  .letter-section__header,
+  .letter-group__header {
+    border-bottom: 1px solid $govuk-border-colour;
+    padding: 10px 0;
+    margin: 0;
+  }
+
+  // Only the accordion headers are clickable; the static ones must not pretend to be.
+  .letter-section__header {
+    cursor: pointer;
+  }
+
+  .letter-section__title,
+  .letter-group__title {
+    display: inline-block;
+    margin: 0;
+  }
+
+  .letter-section__toggle {
+    float: right;
+    font-size: 14px;
+  }
+
+  .letter-section__icon {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid $govuk-link-colour;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+
+  .letter-section__content,
+  .letter-group__content {
+    padding: 15px 0;
+    border-bottom: 1px solid $govuk-border-colour;
+  }
+
+  // The groups sit in one continuous list, so the gap belongs between them rather
+  // than only above the first non-accordion group.
+  .letter-group {
+    margin-top: 0;
+  }
+}

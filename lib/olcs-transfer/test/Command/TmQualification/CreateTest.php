@@ -63,7 +63,7 @@ final class CreateTest extends TestCase
         return [
             'transportManager' => [[99, '99']],
             'qualificationType' => [['tm_qt_ar ', 'tm_qt_ar']],
-            'serialNo' => ['aaaaa ', 'aaaaa'],
+            'serialNo' => [['aaaaa ', 'aaaaa']],
             'countryCode' => [['a ', 'a']],
         ];
     }

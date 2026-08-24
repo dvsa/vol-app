@@ -36,9 +36,9 @@ final class AssignSubmissionTest extends \PHPUnit\Framework\TestCase
     {
 
         return [
-            'recipientUser' => [99, '99'],
-            'presidingTcUser' => [97, '97'],
-            'urgent' => [' Y', 'Y']
+            'recipientUser' => [[99, '99']],
+            'presidingTcUser' => [[97, '97']],
+            'urgent' => [[' Y', 'Y']]
         ];
     }
 }

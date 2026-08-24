@@ -11,6 +11,13 @@
     },
     {
       "type": "path",
+      "url": "../../lib/vol-logging-mvc",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
       "url": "../../lib/olcs-utils",
       "options": {
         "symlink": true
@@ -36,7 +43,7 @@
     "beberlei/doctrineextensions": "^1.5",
     "caseyamcl/guzzle_retry_middleware": "^2.13",
     "doctrine/orm": "^2.20",
-    "dvsa/authentication-cognito": "^3.3",
+    "dvsa/authentication-cognito": "^4.0",
     "dvsa/laminas-config-cloud-parameters": "^2.1",
     "dvsa/php-govuk-account": "^4.0",
     "gedmo/doctrine-extensions": "^3.21",
@@ -44,6 +51,7 @@
     "league/flysystem": "^1.1",
     "league/flysystem-webdav": "1.0.10",
     "olcs/olcs-logging": "*",
+    "olcs/vol-logging-mvc": "*",
     "olcs/olcs-transfer": "*",
     "olcs/olcs-utils": "*",
     "oro/doctrine-extensions": "^2",
@@ -52,9 +60,9 @@
     "ramsey/uuid": "^3.9",
     "ruflin/elastica": "^7.3",
     "saeven/zf3-purifier": "^1.1",
-    "symfony/filesystem": "^7.4",
-    "symfony/finder": "^7.4",
-    "symfony/lock": "^6.1",
+    "symfony/filesystem": "^8.1",
+    "symfony/finder": "^8.1",
+    "symfony/lock": "^7.4",
     "twig/twig": "^3.21",
     "lm-commons/lmc-rbac-mvc": "^3.5",
     "laminas/laminas-mvc": "^3.8",
@@ -71,15 +79,15 @@
     "laminas/laminas-cli": "^1.13",
     "doctrine/migrations": "^3.9",
     "setono/editorjs-php": "^1.3",
-    "symfony/mailer": "^7.4",
-    "symfony/mime": "^7.4",
+    "symfony/mailer": "^8.1",
+    "symfony/mime": "^8.1",
     "firebase/php-jwt": "^7.0",
     "alphagov/notifications-php-client": "^7.0",
     "league/commonmark": "^2.9",
     "php-http/guzzle7-adapter": "^1.1",
     "roave/psr-container-doctrine": "^4.2",
     "psr/cache": "^3.0",
-    "symfony/cache": "^6.4",
+    "symfony/cache": "^8.1",
     "laminas/laminas-authentication": "^2.19"
   },
   "autoload": {
