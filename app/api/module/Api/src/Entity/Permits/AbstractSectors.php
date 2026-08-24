@@ -105,7 +105,7 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'sifting_percentage', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'sifting_percentage', nullable: true, precision: 18, scale: 9)]
     protected $siftingPercentage;
 
     /**

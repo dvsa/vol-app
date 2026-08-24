@@ -110,7 +110,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'application_score', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'application_score', nullable: true, precision: 18, scale: 9)]
     protected $applicationScore;
 
     /**
@@ -118,7 +118,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'intensity_of_use', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'intensity_of_use', nullable: true, precision: 18, scale: 9)]
     protected $intensityOfUse;
 
     /**
@@ -126,7 +126,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'random_factor', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'random_factor', nullable: true, precision: 18, scale: 9)]
     protected $randomFactor;
 
     /**
@@ -134,7 +134,7 @@ abstract class AbstractIrhpCandidatePermit implements BundleSerializableInterfac
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'randomized_score', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'randomized_score', nullable: true, precision: 18, scale: 9)]
     protected $randomizedScore;
 
     /**
