@@ -68,6 +68,35 @@ test("flushEditors resolves even when no editors are on the page", async ({ page
   expect(settled).toBe("settled");
 });
 
+test("flushing without an edit leaves the hidden input untouched", async ({ page }) => {
+  // EditorJS stamps a fresh `time` on every save(), so the serialised output differs on
+  // each call even when nothing was typed. Writing that back marks clean content dirty:
+  // letter-edit.js watches this input to decide whether there are unsaved edits, so a
+  // spurious write raises "Unsaved changes" over content the caseworker just saved.
+  const writes = await page.evaluate(async () => {
+    const input = document.querySelector("input[name='sectionContent']");
+    await window.OLCS.editorjsFlush();
+
+    let count = 0;
+    const descriptor = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value");
+    Object.defineProperty(input, "value", {
+      set(v) {
+        count++;
+        descriptor.set.call(this, v);
+      },
+      get() {
+        return descriptor.get.call(this);
+      },
+    });
+
+    await window.OLCS.editorjsFlush();
+    await window.OLCS.editorjsFlush();
+    return count;
+  });
+
+  expect(writes).toBe(0);
+});
+
 test("a form post carries the typed content without any deliberate pause", async ({ page }) => {
   await typeIntoEditor(page, "editor-variant", " Added by the admin.");
 
