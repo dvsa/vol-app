@@ -303,7 +303,10 @@
               "analysis_token.$": "$.analysisToken",
               "application_id.$": "$.applicationId",
               "status": "COMPLETED",
-              "analysis.$": "$.analysisResult.smOutput.analysis"
+              "analysis": {
+                "bucket.$": "$.bucket",
+                "key.$": "$.analysisResult.smOutput.analysisResultKey"
+              }
             },
             "DetailType": "DocumentProcessing-FinancialDocumentAnalysed",
             "Source": "custom.documentProcessing"

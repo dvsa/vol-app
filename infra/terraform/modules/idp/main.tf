@@ -86,8 +86,8 @@ resource "aws_sfn_state_machine" "classification" {
 
   logging_configuration {
     log_destination        = "${aws_cloudwatch_log_group.classification_sm.arn}:*"
-    include_execution_data = true
-    level                  = "ALL"
+    include_execution_data = false
+    level                  = "ERROR"
   }
 
   tracing_configuration {
@@ -221,8 +221,8 @@ resource "aws_sfn_state_machine" "extraction" {
 
   logging_configuration {
     log_destination        = "${aws_cloudwatch_log_group.extraction_sm.arn}:*"
-    include_execution_data = true
-    level                  = "ALL"
+    include_execution_data = false
+    level                  = "ERROR"
   }
 
   tracing_configuration {
@@ -300,8 +300,8 @@ resource "aws_sfn_state_machine" "ai_analysis" {
 
   logging_configuration {
     log_destination        = "${aws_cloudwatch_log_group.ai_analysis_sm.arn}:*"
-    include_execution_data = true
-    level                  = "ALL"
+    include_execution_data = false
+    level                  = "ERROR"
   }
 
   tracing_configuration {
@@ -328,14 +328,15 @@ resource "aws_sfn_state_machine" "analyse_financial_document" {
   type     = "STANDARD"
 
   definition = templatefile("${path.module}/state-machines/analyse-financial-document.asl.json", {
-    CLASSIFICATION_SM_ARN               = aws_sfn_state_machine.classification.arn
-    EXTRACTION_SM_ARN                   = aws_sfn_state_machine.extraction.arn
-    AI_ANALYSIS_SM_ARN                  = aws_sfn_state_machine.ai_analysis.arn
-    OUTPUT_BUCKET                       = aws_s3_bucket.idp_output.bucket
-    BDA_PROJECT_ARN                     = awscc_bedrock_data_automation_project.idp.project_arn
-    BDA_PROFILE_ARN                     = local.bda_profile_arn
-    BDA_PROJECT_STAGE                   = var.bda_project_stage
-    EXTRACTION_CLASSIFICATIONS          = jsonencode(var.extraction_classifications)
+    CLASSIFICATION_SM_ARN = aws_sfn_state_machine.classification.arn
+    EXTRACTION_SM_ARN     = aws_sfn_state_machine.extraction.arn
+    AI_ANALYSIS_SM_ARN    = aws_sfn_state_machine.ai_analysis.arn
+    OUTPUT_BUCKET         = aws_s3_bucket.idp_output.bucket
+    BDA_PROJECT_ARN       = awscc_bedrock_data_automation_project.idp.project_arn
+    BDA_PROFILE_ARN       = local.bda_profile_arn
+    BDA_PROJECT_STAGE     = var.bda_project_stage
+    # Render as a JSONata array using single-quoted strings so it can be safely embedded in the ASL condition.
+    EXTRACTION_CLASSIFICATIONS          = "[${join(", ", formatlist("'%s'", var.extraction_classifications))}]"
     CLASSIFICATION_CONFIDENCE_THRESHOLD = tostring(var.classification_confidence_threshold)
     CLASSIFICATION_MAX_PAGES            = tostring(var.classification_max_pages)
     CLASSIFICATION_MAX_BYTES            = tostring(var.classification_max_bytes)
@@ -343,8 +344,8 @@ resource "aws_sfn_state_machine" "analyse_financial_document" {
 
   logging_configuration {
     log_destination        = "${aws_cloudwatch_log_group.analyse_financial_document_sm.arn}:*"
-    include_execution_data = true
-    level                  = "ALL"
+    include_execution_data = false
+    level                  = "ERROR"
   }
 
   tracing_configuration {

@@ -198,6 +198,23 @@
           "analysis.$": "$.analysis"
         }
       },
+      "Next": "SetAnalysisResultKey"
+    },
+    "SetAnalysisResultKey": {
+      "Type": "Pass",
+      "Comment": "Constructs the S3 result key once for others to reference and key single source of truth.",
+      "Parameters": {
+        "bucket.$": "$.bucket",
+        "key.$": "$.key",
+        "object.$": "$.object",
+        "config.$": "$.config",
+        "classification.$": "$.classification",
+        "bedrockInvocationArn.$": "$.bedrockInvocationArn",
+        "applicantProfile.$": "$.applicantProfile",
+        "analysis.$": "$.analysis",
+        "analysisReport.$": "$.analysisReport",
+        "analysisResultKey.$": "States.Format('{}/analysis/result.json', $.key)"
+      },
       "Next": "PersistAnalysis"
     },
     "PersistAnalysis": {
@@ -206,7 +223,7 @@
       "Resource": "arn:aws:states:::aws-sdk:s3:putObject",
       "Parameters": {
         "Bucket.$": "$.config.outputBucket",
-        "Key.$": "States.Format('{}/analysis/result.json', $.key)",
+        "Key.$": "$.analysisResultKey",
         "Body.$": "States.JsonToString($.analysisReport)",
         "ContentType": "application/json"
       },
@@ -238,12 +255,8 @@
             "Detail": {
               "bucket.$": "$.bucket",
               "key.$": "$.key",
-              "object.$": "$.object",
-              "config.$": "$.config",
               "classification.$": "$.classification",
-              "bedrockInvocationArn.$": "$.bedrockInvocationArn",
-              "applicantProfile.$": "$.applicantProfile",
-              "analysis.$": "$.analysis",
+              "analysisResultKey.$": "$.analysisResultKey",
               "status": "COMPLETED"
             },
             "DetailType": "DocumentProcessing-AnalysisCompleted",
@@ -258,7 +271,7 @@
       "Comment": "Returns analysis result as SM output for orchestrator callers using startExecution.sync:2.",
       "Parameters": {
         "status": "SUCCEEDED",
-        "analysis.$": "$.analysis"
+        "analysisResultKey.$": "$.analysisResultKey"
       },
       "End": true
     },
