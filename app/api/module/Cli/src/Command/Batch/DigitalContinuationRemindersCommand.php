@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class DigitalContinuationRemindersCommand extends AbstractBatchCommand
 {
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('batch:digital-continuation-reminders')

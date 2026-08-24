@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>EditorJS component harness</title>
+  </head>
+  <body>
+    <!--
+      Exercises the real OLCS.editorjs component against the real EditorJS library.
+
+      The component keeps the value that gets POSTed in a hidden input, refreshed only by
+      EditorJS's debounced onChange and an async save(). This page reproduces that setup
+      faithfully — same markup contract, same libraries — so the timing can be tested
+      without standing up the application.
+    -->
+    <div class="editorjs-container" data-element-name="sectionContent">
+      <div id="editor-section" class="editorjs-editor"></div>
+      <input
+        type="hidden"
+        name="sectionContent"
+        value='{"blocks":[{"type":"paragraph","data":{"text":"Original wording."}}],"version":"2.28.2"}'
+      />
+    </div>
+
+    <form id="host-form" action="about:blank" method="post">
+      <div class="editorjs-container" data-element-name="variantContent">
+        <div id="editor-variant" class="editorjs-editor"></div>
+        <input
+          type="hidden"
+          name="variantContent"
+          value='{"blocks":[{"type":"paragraph","data":{"text":"Variant wording."}}],"version":"2.28.2"}'
+        />
+      </div>
+      <button type="submit" id="host-submit">Save</button>
+    </form>
+
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../node_modules/@editorjs/editorjs/dist/editorjs.umd.js"></script>
+    <script src="../../node_modules/@editorjs/header/dist/header.umd.js"></script>
+    <script src="../../node_modules/@editorjs/list/dist/list.umd.js"></script>
+    <script src="../../node_modules/@editorjs/paragraph/dist/paragraph.umd.js"></script>
+    <script src="../../node_modules/@editorjs/underline/dist/underline.umd.js"></script>
+
+    <script>
+      // The component expects these OLCS globals; the application supplies them.
+      window.OLCS = {
+        logger: function (message) {
+          (window.__olcsLog = window.__olcsLog || []).push(message);
+        },
+        eventEmitter: {
+          handlers: {},
+          on: function (name, fn) {
+            (this.handlers[name] = this.handlers[name] || []).push(fn);
+          },
+          trigger: function (name) {
+            (this.handlers[name] || []).forEach(function (fn) {
+              fn();
+            });
+          },
+        },
+      };
+
+      // The UMD tool bundles export under namespaced globals in some builds; the
+      // component looks for the bare names the application's script tags provide.
+      window.Header = window.Header || window.EditorjsHeader;
+      window.List = window.List || window.EditorjsList;
+      window.Paragraph = window.Paragraph || window.EditorjsParagraph;
+      window.Underline = window.Underline || window.EditorjsUnderline;
+
+      // Records what a form POST would have carried, so a submit can be inspected
+      // without navigating away.
+      window.__submittedValue = null;
+      document.getElementById("host-form").addEventListener("submit", function (e) {
+        e.preventDefault();
+        window.__submittedValue = document.querySelector("input[name='variantContent']").value;
+      });
+    </script>
+    <script src="../../assets/_js/components/editorjs.js"></script>
+    <script>
+      // The module returns its init function, which the application calls on ready.
+      OLCS.editorjs();
+    </script>
+  </body>
+</html>

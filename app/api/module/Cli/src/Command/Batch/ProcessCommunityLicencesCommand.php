@@ -15,7 +15,7 @@ class ProcessCommunityLicencesCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:process-community-licences';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Process community licences for suspension and activation.');
