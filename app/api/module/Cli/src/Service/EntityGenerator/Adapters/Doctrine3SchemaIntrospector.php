@@ -223,12 +223,25 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
     {
         // unsigned/fixed are first-class DBAL column properties; surface them as
         // options so handlers can emit them for schema fidelity
-        $options = $column->getPlatformOptions();
+        $options = [];
         if ($column->getUnsigned()) {
             $options['unsigned'] = true;
         }
         if ($column->getFixed()) {
             $options['fixed'] = true;
+        }
+
+        $type = \Doctrine\DBAL\Types\Type::lookupName($column->getType());
+
+        // DBAL models precision/scale as first-class column properties, but
+        // DefaultTypeHandler reads precision from length and scale from options, so
+        // map them across here. Without this the handler's precision/scale emission
+        // never fires on a real schema, and DBAL 4 rejects a decimal column whose
+        // declaration omits them (ColumnPrecisionRequired).
+        $length = $column->getLength();
+        if ($type === 'decimal') {
+            $length = $column->getPrecision();
+            $options['scale'] = $column->getScale();
         }
 
         $default = $column->getDefault();
@@ -238,8 +251,8 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
 
         return new ColumnMetadata(
             name: $column->getName(),
-            type: \Doctrine\DBAL\Types\Type::lookupName($column->getType()),
-            length: $column->getLength(),
+            type: $type,
+            length: $length,
             nullable: !$column->getNotnull(),
             primary: false, // Will be set later from primary key info
             autoIncrement: $column->getAutoincrement(),

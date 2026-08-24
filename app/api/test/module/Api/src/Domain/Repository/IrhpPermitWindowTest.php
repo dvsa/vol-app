@@ -7,13 +7,11 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository;
 use DateTime;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr;
-use Doctrine\ORM\Query\Expr\Func;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Repository\IrhpPermitWindow;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitWindow as IrhpPermitWindowEntity;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermitType;
 use Mockery as m;
-use Laminas\Db\Sql\Predicate\Between;
 
 /**
  * IRHP Permit Window test

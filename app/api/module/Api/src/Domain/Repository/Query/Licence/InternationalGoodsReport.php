@@ -3,7 +3,6 @@
 namespace Dvsa\Olcs\Api\Domain\Repository\Query\Licence;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\AbstractRawQuery;
-use Doctrine\DBAL\Connection as DoctrineConnection;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\System\RefData as RefDataEntity;
@@ -110,9 +109,9 @@ ORDER BY
     {
         return [
             'licenceStatuses' => \Doctrine\DBAL\ArrayParameterType::STRING,
-            'goodsOrPsv' => \PDO::PARAM_STR,
-            'licenceType' => \PDO::PARAM_STR,
-            'rdLicStatus' => \PDO::PARAM_STR,
+            'goodsOrPsv' => \Doctrine\DBAL\ParameterType::STRING,
+            'licenceType' => \Doctrine\DBAL\ParameterType::STRING,
+            'rdLicStatus' => \Doctrine\DBAL\ParameterType::STRING,
         ];
     }
 }

@@ -13,7 +13,6 @@ namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Discs;
 use Dvsa\Olcs\Api\Domain\Repository\Query\Discs\PsvDiscsSetIsPrinting;
 use Dvsa\Olcs\Api\Entity\Licence\PsvDisc;
 use Dvsa\OlcsTest\Api\Domain\Repository\Query\AbstractDbQueryTestCase;
-use Doctrine\DBAL\Connection;
 
 /**
  * Psv Discs Set Is Printing Test
@@ -47,9 +46,9 @@ final class PsvDiscsSetIsPrintingTest extends AbstractDbQueryTestCase
     {
         yield [
             ['isPrinting' => 1, 'ids' => [1,2]],
-            ['isPrinting' => \PDO::PARAM_INT, 'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER],
+            ['isPrinting' => \Doctrine\DBAL\ParameterType::INTEGER, 'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER],
             ['isPrinting' => 1, 'ids' => [1,2]],
-            ['isPrinting' => \PDO::PARAM_INT, 'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
+            ['isPrinting' => \Doctrine\DBAL\ParameterType::INTEGER, 'ids' => \Doctrine\DBAL\ArrayParameterType::INTEGER]
         ];
     }
 

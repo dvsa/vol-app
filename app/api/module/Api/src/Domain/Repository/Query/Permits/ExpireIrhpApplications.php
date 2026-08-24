@@ -2,7 +2,6 @@
 
 namespace Dvsa\Olcs\Api\Domain\Repository\Query\Permits;
 
-use Doctrine\DBAL\Connection;
 use Dvsa\Olcs\Api\Domain\Repository\Query\AbstractRawQuery;
 use Dvsa\Olcs\Api\Entity\IrhpInterface;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
