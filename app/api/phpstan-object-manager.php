@@ -68,6 +68,13 @@ $config->setCustomStringFunctions([
     'ifnull' => \DoctrineExtensions\Query\Mysql\IfNull::class,
 ]);
 
+// Mirrors Roave's ConfigurationFactory, which defaults enable_native_lazy_objects
+// to true on PHP 8.4 and is what the application actually runs with. It is also
+// required rather than optional now: ORM 3 proxies via either Symfony's LazyGhost
+// or PHP native lazy objects, and symfony/var-exporter 8 removed LazyGhost, so
+// without this the EntityManager cannot be constructed at all.
+$config->enableNativeLazyObjects(true);
+
 $connection = DriverManager::getConnection(
     ['driver' => 'pdo_mysql', 'serverVersion' => '8.0'],
     $config,
