@@ -23,6 +23,7 @@ use Symfony\Component\Uid\UuidV7;
 #[ORM\Index(name: 'ix_document_analysis_document', columns: ['document_id'])]
 #[ORM\Index(name: 'ix_document_analysis_application', columns: ['application_id'])]
 #[ORM\Index(name: 'ix_document_analysis_sweeper', columns: ['status', 'created_on'])]
+#[ORM\Index(name: 'ix_document_analysis_status', columns: ['status'])]
 #[ORM\UniqueConstraint(name: 'uk_document_analysis_token', columns: ['token'])]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]
@@ -47,15 +48,16 @@ class DocumentAnalysis
     protected $id;
 
     /** UUIDv7 as BINARY(16) - the external identifier used in events, S3 prefixes and the CLI. */
-    #[ORM\Column(type: 'binary', name: 'token', length: 16, nullable: false)]
+    #[ORM\Column(type: 'binary', name: 'token', length: 16, nullable: false, options: ['fixed' => true])]
     protected $token;
 
     #[ORM\ManyToOne(targetEntity: Document::class, fetch: 'LAZY')]
-    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     protected $document;
 
+    // Nullable: the DB nulls this FK when the owning application is deleted, preserving the row.
     #[ORM\ManyToOne(targetEntity: Application::class, fetch: 'LAZY')]
-    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: false)]
+    #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     protected $application;
 
     #[ORM\Column(type: 'string', name: 'status', nullable: false, options: ['default' => self::STATUS_PENDING])]
@@ -101,7 +103,7 @@ class DocumentAnalysis
     #[Gedmo\Blameable(on: 'create')]
     protected $createdBy;
 
-    #[ORM\Column(type: 'integer', name: 'version', nullable: false, options: ['default' => 1])]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['unsigned' => true, 'default' => 1])]
     #[ORM\Version]
     protected $version = 1;
 
@@ -148,6 +150,7 @@ class DocumentAnalysis
         return $this;
     }
 
+    /** @return Application|null null once the owning application has been deleted */
     public function getApplication()
     {
         return $this->application;
