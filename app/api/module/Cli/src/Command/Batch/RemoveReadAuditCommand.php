@@ -11,7 +11,7 @@ class RemoveReadAuditCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:remove-read-audit';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription('Process deletion of old read audit records');
     }
