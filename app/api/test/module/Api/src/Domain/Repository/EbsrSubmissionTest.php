@@ -8,7 +8,6 @@ use Dvsa\Olcs\Api\Domain\Query\Bus\EbsrSubmissionList;
 use Mockery as m;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Repository\EbsrSubmission as Repo;
-use Dvsa\Olcs\Api\Entity\Ebsr\EbsrSubmission as EbsrSubmissionEntity;
 
 /**
  * EbsrSubmissionTest
