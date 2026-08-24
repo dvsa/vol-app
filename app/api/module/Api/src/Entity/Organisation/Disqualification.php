@@ -13,7 +13,6 @@ use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 #[ORM\Index(name: 'ix_disqualification_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_disqualification_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_disqualification_person_idx', columns: ['person_id'])]
-#[ORM\UniqueConstraint(name: 'uk_disqualification_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class Disqualification extends AbstractDisqualification
 {

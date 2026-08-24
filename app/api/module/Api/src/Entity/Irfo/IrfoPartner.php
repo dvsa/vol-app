@@ -12,7 +12,6 @@ use Dvsa\Olcs\Api\Entity\Organisation\Organisation;
 #[ORM\Index(name: 'ix_irfo_partner_organisation_id', columns: ['organisation_id'])]
 #[ORM\Index(name: 'ix_irfo_partner_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_irfo_partner_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\UniqueConstraint(name: 'uk_irfo_partner_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class IrfoPartner extends AbstractIrfoPartner
 {

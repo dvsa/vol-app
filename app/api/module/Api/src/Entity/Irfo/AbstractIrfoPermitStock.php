@@ -28,7 +28,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_irfo_permit_stock_irfo_gv_permit_id', columns: ['irfo_gv_permit_id'])]
 #[ORM\Index(name: 'ix_irfo_permit_stock_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_irfo_permit_stock_status', columns: ['status'])]
-#[ORM\UniqueConstraint(name: 'uk_irfo_permit_stock_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
 abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, JsonSerializable, \Stringable
@@ -128,14 +127,6 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
     #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
-
-    /**
-     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
-     *
-     * @var int
-     */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
-    protected $olbsKey;
 
     /**
      * Initialise the collections
@@ -397,30 +388,6 @@ abstract class AbstractIrfoPermitStock implements BundleSerializableInterface, J
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return static
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
     }
 
     /**

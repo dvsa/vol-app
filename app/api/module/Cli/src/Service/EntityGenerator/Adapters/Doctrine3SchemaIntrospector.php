@@ -342,7 +342,7 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
 
             foreach ($allColumns as $column) {
                 $columnName = $column->getName();
-                // Skip legacy OLBS migration columns (olbs_key, olbs_oc_id, olbs_opp_id, olbs_type, etc.)
+                // Skip legacy OLBS migration columns.
                 if (!preg_match('/^olbs_/', $columnName)) {
                     $nonLegacyColumns[] = $columnName;
                 }

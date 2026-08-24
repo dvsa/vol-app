@@ -34,7 +34,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_transport_manager_application_tm_application_status', columns: ['tm_application_status'])]
 #[ORM\Index(name: 'ix_transport_manager_application_tm_type', columns: ['tm_type'])]
 #[ORM\Index(name: 'ix_transport_manager_application_transport_manager_id', columns: ['transport_manager_id'])]
-#[ORM\UniqueConstraint(name: 'uk_transport_manager_application_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
@@ -285,14 +284,6 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
-
-    /**
-     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
-     *
-     * @var int
-     */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
-    protected $olbsKey;
 
     /**
      * OtherLicences
@@ -989,30 +980,6 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return static
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
     }
 
     /**

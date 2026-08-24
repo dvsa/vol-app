@@ -33,7 +33,6 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\Index(name: 'ix_event_history_task_id', columns: ['task_id'])]
 #[ORM\Index(name: 'ix_event_history_transport_manager_id', columns: ['transport_manager_id'])]
 #[ORM\Index(name: 'ix_event_history_user_id', columns: ['user_id'])]
-#[ORM\UniqueConstraint(name: 'uk_event_history_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\MappedSuperclass]
 abstract class AbstractEventHistory implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
@@ -205,22 +204,6 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
      */
     #[ORM\Column(type: 'string', name: 'event_data', length: 255, nullable: true)]
     protected $eventData;
-
-    /**
-     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
-     *
-     * @var int
-     */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
-    protected $olbsKey;
-
-    /**
-     * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
-     *
-     * @var string
-     */
-    #[ORM\Column(type: 'string', name: 'olbs_type', length: 45, nullable: true)]
-    protected $olbsType;
 
     /**
      * Initialise the collections
@@ -698,54 +681,6 @@ abstract class AbstractEventHistory implements BundleSerializableInterface, Json
     public function getEventData()
     {
         return $this->eventData;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return static
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
-    }
-
-    /**
-     * Set the olbs type
-     *
-     * @param string $olbsType new value being set
-     *
-     * @return static
-     */
-    public function setOlbsType($olbsType)
-    {
-        $this->olbsType = $olbsType;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs type
-     *
-     * @return string
-     */
-    public function getOlbsType()
-    {
-        return $this->olbsType;
     }
 
     /**

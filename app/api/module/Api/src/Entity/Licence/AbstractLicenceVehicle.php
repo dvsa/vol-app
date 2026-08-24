@@ -31,7 +31,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_licence_vehicle_licence_id', columns: ['licence_id'])]
 #[ORM\Index(name: 'ix_licence_vehicle_vehicle_id', columns: ['vehicle_id'])]
 #[ORM\Index(name: 'ix_licence_vehicle_vi_action', columns: ['vi_action'])]
-#[ORM\UniqueConstraint(name: 'uk_licence_vehicle_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
@@ -174,14 +173,6 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
-
-    /**
-     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
-     *
-     * @var int
-     */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
-    protected $olbsKey;
 
     /**
      * GoodsDiscs
@@ -603,30 +594,6 @@ abstract class AbstractLicenceVehicle implements BundleSerializableInterface, Js
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return static
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
     }
 
     /**

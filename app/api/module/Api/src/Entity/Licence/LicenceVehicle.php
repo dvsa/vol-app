@@ -18,7 +18,6 @@ use Dvsa\Olcs\Api\Entity\Vehicle\GoodsDisc;
 #[ORM\Index(name: 'ix_licence_vehicle_application_id', columns: ['application_id'])]
 #[ORM\Index(name: 'ix_licence_vehicle_interim_application_id', columns: ['interim_application_id'])]
 #[ORM\Index(name: 'fk_licence_vehicle_licence_id_licence_id', columns: ['licence_id'])]
-#[ORM\UniqueConstraint(name: 'uk_licence_vehicle_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class LicenceVehicle extends AbstractLicenceVehicle implements OrganisationProviderInterface
 {

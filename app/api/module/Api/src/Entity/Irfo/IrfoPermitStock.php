@@ -14,7 +14,6 @@ use Dvsa\Olcs\Api\Entity\Irfo\IrfoCountry;
 #[ORM\Index(name: 'ix_irfo_permit_stock_status', columns: ['status'])]
 #[ORM\Index(name: 'ix_irfo_permit_stock_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_irfo_permit_stock_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\UniqueConstraint(name: 'uk_irfo_permit_stock_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class IrfoPermitStock extends AbstractIrfoPermitStock
 {

@@ -51,7 +51,6 @@ use Dvsa\Olcs\Api\Entity\Traits\TotAuthVehiclesTrait;
 #[ORM\Index(name: 'ix_licence_establishment_cd_id', columns: ['establishment_cd_id'])]
 #[ORM\Index(name: 'ix_licence_transport_consultant_cd_id', columns: ['transport_consultant_cd_id'])]
 #[ORM\UniqueConstraint(name: 'uk_licence_lic_no', columns: ['lic_no'])]
-#[ORM\UniqueConstraint(name: 'uk_licence_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class Licence extends AbstractLicence implements ContextProviderInterface, OrganisationProviderInterface
 {

@@ -109,8 +109,7 @@ LOAD DATA LOCAL INFILE '$ANON_DATA_DIR/$PERSON_ANON_DATA_FILE' INTO table person
 ,@created_on
 ,@last_modified_on
 ,version
-,@olbs_key
-,@olbs_type)
+)
 SET forename=NULLIF(@forename,'')
 ,family_name=NULLIF(@family_name,'')
 ,birth_date=NULLIF(@birth_date,'')
@@ -121,9 +120,7 @@ SET forename=NULLIF(@forename,'')
 ,created_by=NULLIF(@created_by,'')
 ,last_modified_by=NULLIF(@last_modified_by,'')
 ,created_on=NULLIF(@created_on,'')
-,last_modified_on=now()
-,olbs_key=NULLIF(@olbs_key,'')
-,olbs_type=NULLIF(@olbs_type,'');
+,last_modified_on=now();
 
 # hack - add the skipped row - publication_police_data will be patched to use this FK
 insert person (forename,family_name) SELECT 'ETL','ETL';
