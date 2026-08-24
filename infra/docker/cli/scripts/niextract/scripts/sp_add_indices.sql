@@ -6,10 +6,6 @@ CREATE PROCEDURE sp_add_indices()
 
 BEGIN
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'address' AND index_name = 'uk_address_olbs_key_olbs_type') THEN
-    CREATE UNIQUE  INDEX uk_address_olbs_key_olbs_type ON address (olbs_key,olbs_type); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'address' AND index_name = 'ix_address_country_code') THEN
     CREATE INDEX ix_address_country_code ON address (country_code); 
 END IF;
@@ -40,10 +36,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'appeal' AND index_name = 'uk_appeal_case_id') THEN
     CREATE UNIQUE  INDEX uk_appeal_case_id ON appeal (case_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'appeal' AND index_name = 'uk_appeal_olbs_key_olbs_type') THEN
-    CREATE UNIQUE  INDEX uk_appeal_olbs_key_olbs_type ON appeal (olbs_key,olbs_type); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'appeal' AND index_name = 'ix_appeal_created_by') THEN
@@ -116,10 +108,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'application_completion' AND index_name = 'ix_application_completion_application_id') THEN
     CREATE INDEX ix_application_completion_application_id ON application_completion (application_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'application_operating_centre' AND index_name = 'uk_application_operating_centre_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_application_operating_centre_olbs_key ON application_operating_centre (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'application_operating_centre' AND index_name = 'ix_application_operating_centre_application_id') THEN
@@ -206,10 +194,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_bus_notice_period_last_modified_by ON bus_notice_period (last_modified_by); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg' AND index_name = 'uk_bus_reg_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_bus_reg_olbs_key ON bus_reg (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg' AND index_name = 'uk_bus_reg_reg_no_variation_no_deleted_date') THEN
     CREATE UNIQUE  INDEX uk_bus_reg_reg_no_variation_no_deleted_date ON bus_reg (reg_no,variation_no,deleted_date); 
 END IF;
@@ -250,10 +234,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_bus_reg_parent_id ON bus_reg (parent_id); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_bus_service_type' AND index_name = 'uk_bus_reg_bus_service_type_olbs_key_bus_service_type_id') THEN
-    CREATE UNIQUE  INDEX uk_bus_reg_bus_service_type_olbs_key_bus_service_type_id ON bus_reg_bus_service_type (olbs_key,bus_service_type_id); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_bus_service_type' AND index_name = 'ix_bus_reg_bus_service_type_bus_reg_id') THEN
     CREATE INDEX ix_bus_reg_bus_service_type_bus_reg_id ON bus_reg_bus_service_type (bus_reg_id); 
 END IF;
@@ -262,16 +242,8 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX fk_bus_reg_bus_serv_type_bus_service_type_id_bus_service_type_id ON bus_reg_bus_service_type (bus_service_type_id); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_local_auth' AND index_name = 'uk_bus_reg_local_auth_olbs_key_local_authority_id') THEN
-    CREATE UNIQUE  INDEX uk_bus_reg_local_auth_olbs_key_local_authority_id ON bus_reg_local_auth (olbs_key,local_authority_id); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_local_auth' AND index_name = 'ix_bus_reg_local_auth_local_authority_id') THEN
     CREATE INDEX ix_bus_reg_local_auth_local_authority_id ON bus_reg_local_auth (local_authority_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_other_service' AND index_name = 'uk_bus_reg_other_service_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_bus_reg_other_service_olbs_key ON bus_reg_other_service (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_other_service' AND index_name = 'ix_bus_reg_other_service_bus_reg_id') THEN
@@ -302,20 +274,12 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_bus_reg_read_audit_created_on ON bus_reg_read_audit (created_on); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_traffic_area' AND index_name = 'uk_bus_reg_traffic_area_olbs_key_traffic_area_id') THEN
-    CREATE UNIQUE  INDEX uk_bus_reg_traffic_area_olbs_key_traffic_area_id ON bus_reg_traffic_area (olbs_key,traffic_area_id); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_traffic_area' AND index_name = 'ix_bus_reg_traffic_area_bus_reg_id') THEN
     CREATE INDEX ix_bus_reg_traffic_area_bus_reg_id ON bus_reg_traffic_area (bus_reg_id); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_traffic_area' AND index_name = 'ix_bus_reg_traffic_area_traffic_area_id') THEN
     CREATE INDEX ix_bus_reg_traffic_area_traffic_area_id ON bus_reg_traffic_area (traffic_area_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_traffic_area' AND index_name = 'ix_bus_reg_traffic_area_olbs_key_traffic_area_id') THEN
-    CREATE INDEX ix_bus_reg_traffic_area_olbs_key_traffic_area_id ON bus_reg_traffic_area (olbs_key,traffic_area_id); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_variation_reason' AND index_name = 'ix_bus_reg_variation_reason_bus_reg_id') THEN
@@ -326,16 +290,8 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_bus_reg_variation_reason_variation_reason_id ON bus_reg_variation_reason (variation_reason_id); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_variation_reason' AND index_name = 'ix_bus_reg_variation_reason_olbs_key_olbs_key2') THEN
-    CREATE INDEX ix_bus_reg_variation_reason_olbs_key_olbs_key2 ON bus_reg_variation_reason (olbs_key,olbs_key2); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_short_notice' AND index_name = 'uk_bus_short_notice_bus_reg_id') THEN
     CREATE UNIQUE  INDEX uk_bus_short_notice_bus_reg_id ON bus_short_notice (bus_reg_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_short_notice' AND index_name = 'uk_bus_short_notice_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_bus_short_notice_olbs_key ON bus_short_notice (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_short_notice' AND index_name = 'ix_bus_short_notice_created_by') THEN
@@ -368,10 +324,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'cases' AND index_name = 'ix_cases_licence_id') THEN
     CREATE INDEX ix_cases_licence_id ON cases (licence_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'cases' AND index_name = 'ix_cases_olbs_key_olbs_type') THEN
-    CREATE INDEX ix_cases_olbs_key_olbs_type ON cases (olbs_key,olbs_type); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'cases_read_audit' AND index_name = 'uk_cases_read_audit_case_id_user_id_created_on') THEN
@@ -418,10 +370,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_category_task_allocation_type ON category (task_allocation_type); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'change_of_entity' AND index_name = 'uk_change_of_entity_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_change_of_entity_olbs_key ON change_of_entity (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'change_of_entity' AND index_name = 'ix_change_of_entity_licence_id') THEN
     CREATE INDEX ix_change_of_entity_licence_id ON change_of_entity (licence_id); 
 END IF;
@@ -432,10 +380,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'change_of_entity' AND index_name = 'ix_change_of_entity_last_modified_by') THEN
     CREATE INDEX ix_change_of_entity_last_modified_by ON change_of_entity (last_modified_by); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'community_lic' AND index_name = 'uk_community_lic_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_community_lic_olbs_key ON community_lic (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'community_lic' AND index_name = 'ix_community_lic_licence_id') THEN
@@ -454,10 +398,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_community_lic_status ON community_lic (status); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'community_lic_suspension' AND index_name = 'uk_community_lic_suspension_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_community_lic_suspension_olbs_key ON community_lic_suspension (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'community_lic_suspension' AND index_name = 'ix_community_lic_suspension_community_lic_id') THEN
     CREATE INDEX ix_community_lic_suspension_community_lic_id ON community_lic_suspension (community_lic_id); 
 END IF;
@@ -468,10 +408,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'community_lic_suspension' AND index_name = 'ix_community_lic_suspension_last_modified_by') THEN
     CREATE INDEX ix_community_lic_suspension_last_modified_by ON community_lic_suspension (last_modified_by); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'community_lic_suspension_reason' AND index_name = 'uk_community_lic_suspension_reason_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_community_lic_suspension_reason_olbs_key ON community_lic_suspension_reason (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'community_lic_suspension_reason' AND index_name = 'ix_community_lic_suspension_reason_community_lic_suspension_id') THEN
@@ -490,10 +426,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_community_lic_suspension_reason_type_id ON community_lic_suspension_reason (type_id); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'community_lic_withdrawal' AND index_name = 'uk_community_lic_withdrawal_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_community_lic_withdrawal_olbs_key ON community_lic_withdrawal (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'community_lic_withdrawal' AND index_name = 'ix_community_lic_withdrawal_community_lic_id') THEN
     CREATE INDEX ix_community_lic_withdrawal_community_lic_id ON community_lic_withdrawal (community_lic_id); 
 END IF;
@@ -504,10 +436,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'community_lic_withdrawal' AND index_name = 'ix_community_lic_withdrawal_last_modified_by') THEN
     CREATE INDEX ix_community_lic_withdrawal_last_modified_by ON community_lic_withdrawal (last_modified_by); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'community_lic_withdrawal_reason' AND index_name = 'uk_community_lic_withdrawal_reason_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_community_lic_withdrawal_reason_olbs_key ON community_lic_withdrawal_reason (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'community_lic_withdrawal_reason' AND index_name = 'ix_community_lic_withdrawal_reason_community_lic_withdrawal_id') THEN
@@ -554,10 +482,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_companies_house_officer_companies_house_company_id ON companies_house_officer (companies_house_company_id); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'company_subsidiary' AND index_name = 'uk_company_subsidiary_olbs_key_licence_id') THEN
-    CREATE UNIQUE  INDEX uk_company_subsidiary_olbs_key_licence_id ON company_subsidiary (olbs_key,licence_id); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'company_subsidiary' AND index_name = 'ix_company_subsidiary_created_by') THEN
     CREATE INDEX ix_company_subsidiary_created_by ON company_subsidiary (created_by); 
 END IF;
@@ -592,14 +516,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'complaint' AND index_name = 'ix_complaint_case_id') THEN
     CREATE INDEX ix_complaint_case_id ON complaint (case_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'complaint' AND index_name = 'ix_complaint_olbs_key') THEN
-    CREATE INDEX ix_complaint_olbs_key ON complaint (olbs_key); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'condition_undertaking' AND index_name = 'uk_condition_undertaking_olbs_key_olbs_type') THEN
-    CREATE UNIQUE  INDEX uk_condition_undertaking_olbs_key_olbs_type ON condition_undertaking (olbs_key,olbs_type); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'condition_undertaking' AND index_name = 'ix_condition_undertaking_added_via') THEN
@@ -648,10 +564,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'condition_undertaking' AND index_name = 'ix_condition_undertaking_s4_id') THEN
     CREATE INDEX ix_condition_undertaking_s4_id ON condition_undertaking (s4_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'contact_details' AND index_name = 'uk_contact_details_olbs_key_olbs_type') THEN
-    CREATE UNIQUE  INDEX uk_contact_details_olbs_key_olbs_type ON contact_details (olbs_key,olbs_type); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'contact_details' AND index_name = 'ix_contact_details_person_id') THEN
@@ -714,10 +626,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_continuation_detail_checklist_document_id ON continuation_detail (checklist_document_id); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'conviction' AND index_name = 'uk_conviction_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_conviction_olbs_key ON conviction (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'conviction' AND index_name = 'ix_conviction_transport_manager_id') THEN
     CREATE INDEX ix_conviction_transport_manager_id ON conviction (transport_manager_id); 
 END IF;
@@ -740,10 +648,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'conviction' AND index_name = 'ix_conviction_conviction_category') THEN
     CREATE INDEX ix_conviction_conviction_category ON conviction (conviction_category); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'correspondence_inbox' AND index_name = 'uk_correspondence_inbox_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_correspondence_inbox_olbs_key ON correspondence_inbox (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'correspondence_inbox' AND index_name = 'ix_correspondence_inbox_document_id') THEN
@@ -798,10 +702,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_disc_sequence_last_modified_by ON disc_sequence (last_modified_by); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'disqualification' AND index_name = 'uk_disqualification_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_disqualification_olbs_key ON disqualification (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'disqualification' AND index_name = 'ix_disqualification_organisation_id') THEN
     CREATE INDEX ix_disqualification_organisation_id ON disqualification (organisation_id); 
 END IF;
@@ -816,10 +716,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'disqualification' AND index_name = 'ix_disqualification_person_id') THEN
     CREATE INDEX ix_disqualification_person_id ON disqualification (person_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'document' AND index_name = 'uk_document_olbs_key_olbs_type') THEN
-    CREATE UNIQUE  INDEX uk_document_olbs_key_olbs_type ON document (olbs_key,olbs_type); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'document' AND index_name = 'ix_document_traffic_area_id') THEN
@@ -954,14 +850,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_ebsr_route_reprint_requested_user_id ON ebsr_route_reprint (requested_user_id); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'ebsr_route_reprint' AND index_name = 'ix_ebsr_route_reprint_olbs_key') THEN
-    CREATE INDEX ix_ebsr_route_reprint_olbs_key ON ebsr_route_reprint (olbs_key); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'ebsr_submission' AND index_name = 'uk_ebsr_submission_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_ebsr_submission_olbs_key ON ebsr_submission (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'ebsr_submission' AND index_name = 'uk_ebsr_submission_document_id') THEN
     CREATE UNIQUE  INDEX uk_ebsr_submission_document_id ON ebsr_submission (document_id); 
 END IF;
@@ -1036,10 +924,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'erru_request_failure' AND index_name = 'ix_erru_request_failure_last_modified_by') THEN
     CREATE INDEX ix_erru_request_failure_last_modified_by ON erru_request_failure (last_modified_by); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'event_history' AND index_name = 'uk_event_history_olbs_key_olbs_type') THEN
-    CREATE UNIQUE  INDEX uk_event_history_olbs_key_olbs_type ON event_history (olbs_key,olbs_type); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'event_history' AND index_name = 'ix_event_history_user_id') THEN
@@ -1202,10 +1086,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_financial_standing_rate_last_modified_by ON financial_standing_rate (last_modified_by); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'goods_disc' AND index_name = 'uk_goods_disc_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_goods_disc_olbs_key ON goods_disc (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'goods_disc' AND index_name = 'ix_goods_disc_licence_vehicle_id') THEN
     CREATE INDEX ix_goods_disc_licence_vehicle_id ON goods_disc (licence_vehicle_id); 
 END IF;
@@ -1226,10 +1106,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_goods_disc_issued_date ON goods_disc (issued_date); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'grace_period' AND index_name = 'uk_grace_period_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_grace_period_olbs_key ON grace_period (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'grace_period' AND index_name = 'ix_grace_period_licence_id') THEN
     CREATE INDEX ix_grace_period_licence_id ON grace_period (licence_id); 
 END IF;
@@ -1240,10 +1116,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'grace_period' AND index_name = 'ix_grace_period_last_modified_by') THEN
     CREATE INDEX ix_grace_period_last_modified_by ON grace_period (last_modified_by); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'hearing' AND index_name = 'uk_hearing_olbs_key_olbs_type') THEN
-    CREATE UNIQUE  INDEX uk_hearing_olbs_key_olbs_type ON hearing (olbs_key,olbs_type); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'hearing' AND index_name = 'ix_hearing_case_id') THEN
@@ -1312,10 +1184,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'inspection_email' AND index_name = 'ix_inspection_email_inspection_request_id') THEN
     CREATE INDEX ix_inspection_email_inspection_request_id ON inspection_email (inspection_request_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'inspection_request' AND index_name = 'uk_inspection_request_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_inspection_request_olbs_key ON inspection_request (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'inspection_request' AND index_name = 'ix_inspection_request_licence_id') THEN
@@ -1410,10 +1278,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_irfo_gv_permit_type_irfo_fee_type ON irfo_gv_permit_type (irfo_fee_type); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'irfo_partner' AND index_name = 'uk_irfo_partner_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_irfo_partner_olbs_key ON irfo_partner (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'irfo_partner' AND index_name = 'ix_irfo_partner_organisation_id') THEN
     CREATE INDEX ix_irfo_partner_organisation_id ON irfo_partner (organisation_id); 
 END IF;
@@ -1424,10 +1288,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'irfo_partner' AND index_name = 'ix_irfo_partner_last_modified_by') THEN
     CREATE INDEX ix_irfo_partner_last_modified_by ON irfo_partner (last_modified_by); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'irfo_permit_stock' AND index_name = 'uk_irfo_permit_stock_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_irfo_permit_stock_olbs_key ON irfo_permit_stock (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'irfo_permit_stock' AND index_name = 'ix_irfo_permit_stock_irfo_gv_permit_id') THEN
@@ -1510,10 +1370,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_irfo_psv_auth_type_last_modified_by ON irfo_psv_auth_type (last_modified_by); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'irfo_vehicle' AND index_name = 'uk_irfo_vehicle_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_irfo_vehicle_olbs_key ON irfo_vehicle (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'irfo_vehicle' AND index_name = 'ix_irfo_vehicle_created_by') THEN
     CREATE INDEX ix_irfo_vehicle_created_by ON irfo_vehicle (created_by); 
 END IF;
@@ -1590,10 +1446,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE UNIQUE  INDEX uk_licence_lic_no ON licence (lic_no); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'licence' AND index_name = 'uk_licence_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_licence_olbs_key ON licence (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'licence' AND index_name = 'ix_licence_enforcement_area_id') THEN
     CREATE INDEX ix_licence_enforcement_area_id ON licence (enforcement_area_id); 
 END IF;
@@ -1644,10 +1496,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'licence_no_gen' AND index_name = 'ix_licence_no_gen_licence_id') THEN
     CREATE INDEX ix_licence_no_gen_licence_id ON licence_no_gen (licence_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'licence_operating_centre' AND index_name = 'uk_licence_operating_centre_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_licence_operating_centre_olbs_key ON licence_operating_centre (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'licence_operating_centre' AND index_name = 'ix_licence_operating_centre_licence_id') THEN
@@ -1710,10 +1558,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_licence_status_rule_last_modified_by ON licence_status_rule (last_modified_by); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'licence_vehicle' AND index_name = 'uk_licence_vehicle_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_licence_vehicle_olbs_key ON licence_vehicle (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'licence_vehicle' AND index_name = 'ix_licence_vehicle_vehicle_id') THEN
     CREATE INDEX ix_licence_vehicle_vehicle_id ON licence_vehicle (vehicle_id); 
 END IF;
@@ -1752,10 +1596,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'local_authority' AND index_name = 'ix_local_authority_traffic_area_id') THEN
     CREATE INDEX ix_local_authority_traffic_area_id ON local_authority (traffic_area_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'note' AND index_name = 'uk_note_olbs_key_olbs_type') THEN
-    CREATE UNIQUE  INDEX uk_note_olbs_key_olbs_type ON note (olbs_key,olbs_type); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'note' AND index_name = 'ix_note_application_id') THEN
@@ -1798,20 +1638,12 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE UNIQUE  INDEX uk_oc_complaint_operating_centre_id_complaint_id ON oc_complaint (operating_centre_id,complaint_id); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'oc_complaint' AND index_name = 'uk_oc_complaint_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_oc_complaint_olbs_key ON oc_complaint (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'oc_complaint' AND index_name = 'ix_oc_complaint_complaint_id') THEN
     CREATE INDEX ix_oc_complaint_complaint_id ON oc_complaint (complaint_id); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'oc_complaint' AND index_name = 'ix_oc_complaint_operating_centre_id') THEN
     CREATE INDEX ix_oc_complaint_operating_centre_id ON oc_complaint (operating_centre_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'operating_centre' AND index_name = 'uk_operating_centre_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_operating_centre_olbs_key ON operating_centre (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'operating_centre' AND index_name = 'ix_operating_centre_address_id') THEN
@@ -1826,20 +1658,12 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_operating_centre_last_modified_by ON operating_centre (last_modified_by); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'operating_centre_opposition' AND index_name = 'uk_operating_centre_opposition_olbs_oc_id_olbs_opp_id_olbs_type') THEN
-    CREATE UNIQUE  INDEX uk_operating_centre_opposition_olbs_oc_id_olbs_opp_id_olbs_type ON operating_centre_opposition (olbs_oc_id,olbs_opp_id,olbs_type); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'operating_centre_opposition' AND index_name = 'ix_operating_centre_opposition_opposition_id') THEN
     CREATE INDEX ix_operating_centre_opposition_opposition_id ON operating_centre_opposition (opposition_id); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'operating_centre_opposition' AND index_name = 'ix_operating_centre_opposition_operating_centre_id') THEN
     CREATE INDEX ix_operating_centre_opposition_operating_centre_id ON operating_centre_opposition (operating_centre_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'opposer' AND index_name = 'uk_opposer_olbs_key_olbs_type') THEN
-    CREATE UNIQUE  INDEX uk_opposer_olbs_key_olbs_type ON opposer (olbs_key,olbs_type); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'opposer' AND index_name = 'ix_opposer_contact_details_id') THEN
@@ -1856,10 +1680,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'opposer' AND index_name = 'ix_opposer_last_modified_by') THEN
     CREATE INDEX ix_opposer_last_modified_by ON opposer (last_modified_by); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'opposition' AND index_name = 'uk_opposition_olbs_key_olbs_type') THEN
-    CREATE UNIQUE  INDEX uk_opposition_olbs_key_olbs_type ON opposition (olbs_key,olbs_type); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'opposition' AND index_name = 'ix_opposition_opposer_id') THEN
@@ -1888,10 +1708,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'opposition' AND index_name = 'ix_opposition_status') THEN
     CREATE INDEX ix_opposition_status ON opposition (status); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'opposition_grounds' AND index_name = 'uk_opposition_grounds_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_opposition_grounds_olbs_key ON opposition_grounds (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'opposition_grounds' AND index_name = 'ix_opposition_grounds_opposition_id') THEN
@@ -1940,10 +1756,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'organisation' AND index_name = 'ix_organisation_cpid_name') THEN
     CREATE INDEX ix_organisation_cpid_name ON organisation (cpid,name); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'organisation_person' AND index_name = 'uk_organisation_person_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_organisation_person_olbs_key ON organisation_person (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'organisation_person' AND index_name = 'ix_organisation_person_person_id') THEN
@@ -2046,10 +1858,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_permission_last_modified_by ON permission (last_modified_by); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'person' AND index_name = 'uk_person_olbs_key_olbs_type') THEN
-    CREATE UNIQUE  INDEX uk_person_olbs_key_olbs_type ON person (olbs_key,olbs_type); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'person' AND index_name = 'ix_person_created_by') THEN
     CREATE INDEX ix_person_created_by ON person (created_by); 
 END IF;
@@ -2070,10 +1878,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_person_title ON person (title); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'phone_contact' AND index_name = 'uk_phone_contact_olbs_key_olbs_type_phone_contact_type') THEN
-    CREATE UNIQUE  INDEX uk_phone_contact_olbs_key_olbs_type_phone_contact_type ON phone_contact (olbs_key,olbs_type,phone_contact_type); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'phone_contact' AND index_name = 'ix_phone_contact_contact_details_id') THEN
     CREATE INDEX ix_phone_contact_contact_details_id ON phone_contact (contact_details_id); 
 END IF;
@@ -2092,10 +1896,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'pi' AND index_name = 'uk_pi_case_id') THEN
     CREATE UNIQUE  INDEX uk_pi_case_id ON pi (case_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'pi' AND index_name = 'uk_pi_olbs_key_olbs_type') THEN
-    CREATE UNIQUE  INDEX uk_pi_olbs_key_olbs_type ON pi (olbs_key,olbs_type); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'pi' AND index_name = 'ix_pi_pi_status') THEN
@@ -2152,10 +1952,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'pi_definition' AND index_name = 'ix_pi_definition_last_modified_by') THEN
     CREATE INDEX ix_pi_definition_last_modified_by ON pi_definition (last_modified_by); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'pi_hearing' AND index_name = 'uk_pi_hearing_olbs_key_olbs_type') THEN
-    CREATE UNIQUE  INDEX uk_pi_hearing_olbs_key_olbs_type ON pi_hearing (olbs_key,olbs_type); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'pi_hearing' AND index_name = 'ix_pi_hearing_pi_id') THEN
@@ -2246,10 +2042,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_print_queue_document_id ON print_queue (document_id); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'private_hire_licence' AND index_name = 'uk_private_hire_licence_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_private_hire_licence_olbs_key ON private_hire_licence (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'private_hire_licence' AND index_name = 'ix_private_hire_licence_licence_id') THEN
     CREATE INDEX ix_private_hire_licence_licence_id ON private_hire_licence (licence_id); 
 END IF;
@@ -2266,10 +2058,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_private_hire_licence_last_modified_by ON private_hire_licence (last_modified_by); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'prohibition' AND index_name = 'uk_prohibition_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_prohibition_olbs_key ON prohibition (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'prohibition' AND index_name = 'ix_prohibition_case_id') THEN
     CREATE INDEX ix_prohibition_case_id ON prohibition (case_id); 
 END IF;
@@ -2284,10 +2072,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'prohibition' AND index_name = 'ix_prohibition_prohibition_type') THEN
     CREATE INDEX ix_prohibition_prohibition_type ON prohibition (prohibition_type); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'prohibition_defect' AND index_name = 'uk_prohibition_defect_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_prohibition_defect_olbs_key ON prohibition_defect (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'prohibition_defect' AND index_name = 'ix_prohibition_defect_prohibition_id') THEN
@@ -2320,10 +2104,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'propose_to_revoke' AND index_name = 'ix_propose_to_revoke_last_modified_by') THEN
     CREATE INDEX ix_propose_to_revoke_last_modified_by ON propose_to_revoke (last_modified_by); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'psv_disc' AND index_name = 'uk_psv_disc_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_psv_disc_olbs_key ON psv_disc (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'psv_disc' AND index_name = 'ix_psv_disc_licence_id') THEN
@@ -2374,10 +2154,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_publication_doc_template_id ON publication (doc_template_id); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'publication_link' AND index_name = 'uk_publication_link_olbs_key_olbs_type') THEN
-    CREATE UNIQUE  INDEX uk_publication_link_olbs_key_olbs_type ON publication_link (olbs_key,olbs_type); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'publication_link' AND index_name = 'ix_publication_link_licence_id') THEN
     CREATE INDEX ix_publication_link_licence_id ON publication_link (licence_id); 
 END IF;
@@ -2420,10 +2196,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'publication_link' AND index_name = 'ix_publication_link_impounding_id') THEN
     CREATE INDEX ix_publication_link_impounding_id ON publication_link (impounding_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'publication_police_data' AND index_name = 'uk_publication_police_data_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_publication_police_data_olbs_key ON publication_police_data (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'publication_police_data' AND index_name = 'ix_publication_police_data_publication_link_id') THEN
@@ -2494,10 +2266,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_reason_goods_or_psv ON reason (goods_or_psv); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'recipient' AND index_name = 'uk_recipient_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_recipient_olbs_key ON recipient (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'recipient' AND index_name = 'ix_recipient_created_by') THEN
     CREATE INDEX ix_recipient_created_by ON recipient (created_by); 
 END IF;
@@ -2512,10 +2280,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'recipient_traffic_area' AND index_name = 'ix_recipient_traffic_area_recipient_id') THEN
     CREATE INDEX ix_recipient_traffic_area_recipient_id ON recipient_traffic_area (recipient_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'ref_data' AND index_name = 'uk_ref_data_ref_data_category_id_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_ref_data_ref_data_category_id_olbs_key ON ref_data (ref_data_category_id,olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'ref_data' AND index_name = 'ix_ref_data_parent_id') THEN
@@ -2754,10 +2518,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_sla_target_date_last_modified_by ON sla_target_date (last_modified_by); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'statement' AND index_name = 'uk_statement_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_statement_olbs_key ON statement (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'statement' AND index_name = 'ix_statement_case_id') THEN
     CREATE INDEX ix_statement_case_id ON statement (case_id); 
 END IF;
@@ -2906,10 +2666,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_system_info_message_is_internal_start_date_end_date ON system_info_message (is_internal,start_date,end_date); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'task' AND index_name = 'uk_task_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_task_olbs_key ON task (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'task' AND index_name = 'ix_task_assigned_to_user_id') THEN
     CREATE INDEX ix_task_assigned_to_user_id ON task (assigned_to_user_id); 
 END IF;
@@ -3018,10 +2774,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE UNIQUE  INDEX uk_team_name ON team (name); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'team' AND index_name = 'uk_team_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_team_olbs_key ON team (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'team' AND index_name = 'ix_team_traffic_area_id') THEN
     CREATE INDEX ix_team_traffic_area_id ON team (traffic_area_id); 
 END IF;
@@ -3058,10 +2810,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_tm_application_oc_operating_centre_id ON tm_application_oc (operating_centre_id); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'tm_case_decision' AND index_name = 'uk_tm_case_decision_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_tm_case_decision_olbs_key ON tm_case_decision (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'tm_case_decision' AND index_name = 'ix_tm_case_decision_decision') THEN
     CREATE INDEX ix_tm_case_decision_decision ON tm_case_decision (decision); 
 END IF;
@@ -3078,20 +2826,12 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_tm_case_decision_case_id ON tm_case_decision (case_id); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'tm_case_decision_rehab' AND index_name = 'uk_tm_case_decision_rehab_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_tm_case_decision_rehab_olbs_key ON tm_case_decision_rehab (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'tm_case_decision_rehab' AND index_name = 'ix_tm_case_decision_rehab_tm_case_decision_id') THEN
     CREATE INDEX ix_tm_case_decision_rehab_tm_case_decision_id ON tm_case_decision_rehab (tm_case_decision_id); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'tm_case_decision_rehab' AND index_name = 'ix_tm_case_decision_rehab_rehab_measure_id') THEN
     CREATE INDEX ix_tm_case_decision_rehab_rehab_measure_id ON tm_case_decision_rehab (rehab_measure_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'tm_case_decision_unfitness' AND index_name = 'uk_tm_case_decision_unfitness_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_tm_case_decision_unfitness_olbs_key ON tm_case_decision_unfitness (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'tm_case_decision_unfitness' AND index_name = 'ix_tm_case_decision_unfitness_tm_case_decision_id') THEN
@@ -3126,10 +2866,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_tm_licence_oc_operating_centre_id ON tm_licence_oc (operating_centre_id); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'tm_qualification' AND index_name = 'uk_tm_qualification_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_tm_qualification_olbs_key ON tm_qualification (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'tm_qualification' AND index_name = 'ix_tm_qualification_transport_manager_id') THEN
     CREATE INDEX ix_tm_qualification_transport_manager_id ON tm_qualification (transport_manager_id); 
 END IF;
@@ -3148,10 +2884,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'tm_qualification' AND index_name = 'ix_tm_qualification_last_modified_by') THEN
     CREATE INDEX ix_tm_qualification_last_modified_by ON tm_qualification (last_modified_by); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'trading_name' AND index_name = 'uk_trading_name_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_trading_name_olbs_key ON trading_name (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'trading_name' AND index_name = 'ix_trading_name_licence_id') THEN
@@ -3202,10 +2934,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_traffic_area_enforcement_area_last_modified_by ON traffic_area_enforcement_area (last_modified_by); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'trailer' AND index_name = 'uk_trailer_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_trailer_olbs_key ON trailer (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'trailer' AND index_name = 'ix_trailer_licence_id') THEN
     CREATE INDEX ix_trailer_licence_id ON trailer (licence_id); 
 END IF;
@@ -3246,10 +2974,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_transport_manager_merge_to_transport_manager_id ON transport_manager (merge_to_transport_manager_id); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'transport_manager_application' AND index_name = 'uk_transport_manager_application_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_transport_manager_application_olbs_key ON transport_manager_application (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'transport_manager_application' AND index_name = 'ix_transport_manager_application_transport_manager_id') THEN
     CREATE INDEX ix_transport_manager_application_transport_manager_id ON transport_manager_application (transport_manager_id); 
 END IF;
@@ -3272,10 +2996,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'transport_manager_application' AND index_name = 'ix_transport_manager_application_tm_application_status') THEN
     CREATE INDEX ix_transport_manager_application_tm_application_status ON transport_manager_application (tm_application_status); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'transport_manager_licence' AND index_name = 'uk_transport_manager_licence_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_transport_manager_licence_olbs_key ON transport_manager_licence (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'transport_manager_licence' AND index_name = 'ix_transport_manager_licence_transport_manager_id') THEN
@@ -3370,10 +3090,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_txn_processed_by_user_id ON txn (processed_by_user_id); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'txn' AND index_name = 'ix_txn_olbs_key') THEN
-    CREATE INDEX ix_txn_olbs_key ON txn (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'txn' AND index_name = 'ix_txn_payment_method') THEN
     CREATE INDEX ix_txn_payment_method ON txn (payment_method); 
 END IF;
@@ -3426,10 +3142,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_user_role_user_id ON user_role (user_id); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'vehicle' AND index_name = 'uk_vehicle_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_vehicle_olbs_key ON vehicle (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'vehicle' AND index_name = 'ix_vehicle_created_by') THEN
     CREATE INDEX ix_vehicle_created_by ON vehicle (created_by); 
 END IF;
@@ -3446,10 +3158,6 @@ IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_
     CREATE INDEX ix_vehicle_vi_action ON vehicle (vi_action); 
 END IF;
 
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'venue' AND index_name = 'uk_venue_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_venue_olbs_key ON venue (olbs_key); 
-END IF;
-
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'venue' AND index_name = 'ix_venue_address_id') THEN
     CREATE INDEX ix_venue_address_id ON venue (address_id); 
 END IF;
@@ -3464,10 +3172,6 @@ END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'venue' AND index_name = 'ix_venue_traffic_area_id') THEN
     CREATE INDEX ix_venue_traffic_area_id ON venue (traffic_area_id); 
-END IF;
-
-IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'workshop' AND index_name = 'uk_workshop_olbs_key') THEN
-    CREATE UNIQUE  INDEX uk_workshop_olbs_key ON workshop (olbs_key); 
 END IF;
 
 IF NOT EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'workshop' AND index_name = 'ix_workshop_licence_id') THEN

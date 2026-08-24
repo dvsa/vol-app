@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'ix_grace_period_licence_id', columns: ['licence_id'])]
 #[ORM\Index(name: 'ix_grace_period_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_grace_period_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\UniqueConstraint(name: 'uk_grace_period_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class GracePeriod extends AbstractGracePeriod
 {
