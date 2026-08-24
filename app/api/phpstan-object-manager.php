@@ -8,8 +8,16 @@
  * the MVC bootstrap: that requires a live database, and pinning serverVersion below
  * means DBAL never opens a connection either — so analysis works in CI with no DB.
  *
- * The custom DBAL types and DQL functions registered here must match the doctrine
- * configuration in module/Api/config/module.config.php and config/autoload/global.php.
+ * The custom DBAL types, entity paths and DQL functions are read from the same
+ * config files the application uses, rather than restated here, so the two cannot
+ * drift apart:
+ *
+ *   module/Api/config/module.config.php  doctrine.types, doctrine.driver
+ *   config/autoload/global.php           doctrine.configuration.orm_default
+ *
+ * Both are plain arrays with no environment or container lookups, so they can be
+ * required directly without the MVC bootstrap — which is the point, since that
+ * bootstrap needs AWS and a database.
  */
 
 chdir(__DIR__);
@@ -20,59 +28,29 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
 
-$types = [
-    'yesno' => \Dvsa\Olcs\Api\Entity\Types\YesNoType::class,
-    'yesnonull' => \Dvsa\Olcs\Api\Entity\Types\YesNoNullType::class,
-    'date' => \Dvsa\Olcs\Api\Entity\Types\DateType::class,
-    'datetime' => \Dvsa\Olcs\Api\Entity\Types\DateTimeType::class,
-    'encrypted_string' => \Dvsa\Olcs\Api\Entity\Types\EncryptedStringType::class,
-];
-foreach ($types as $name => $class) {
+$moduleConfig = require __DIR__ . '/module/Api/config/module.config.php';
+$globalConfig = require __DIR__ . '/config/autoload/global.php';
+$ormConfig    = $globalConfig['doctrine']['configuration']['orm_default'];
+
+foreach ($moduleConfig['doctrine']['types'] as $name => $class) {
     Type::hasType($name) ? Type::overrideType($name, $class) : Type::addType($name, $class);
 }
 
 $config = ORMSetup::createAttributeMetadataConfiguration(
-    paths: [__DIR__ . '/module/Api/src/Entity'],
+    paths: $moduleConfig['doctrine']['driver']['EntityDriver']['paths'],
     isDevMode: true,
 );
 
-$config->setCustomDatetimeFunctions([
-    'date' => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
-    'time' => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
-    'timestamp' => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
-    'convert_tz' => \Oro\ORM\Query\AST\Functions\DateTime\ConvertTz::class,
-]);
-$config->setCustomNumericFunctions([
-    'timestampdiff' => \Oro\ORM\Query\AST\Functions\Numeric\TimestampDiff::class,
-    'dayofyear' => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
-    'dayofmonth' => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
-    'dayofweek' => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
-    'week' => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
-    'day' => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
-    'hour' => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
-    'minute' => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
-    'month' => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
-    'quarter' => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
-    'second' => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
-    'year' => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
-    'sign' => \Oro\ORM\Query\AST\Functions\Numeric\Sign::class,
-    'pow' => \Oro\ORM\Query\AST\Functions\Numeric\Pow::class,
-]);
-$config->setCustomStringFunctions([
-    'md5' => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
-    'group_concat' => \Oro\ORM\Query\AST\Functions\String\GroupConcat::class,
-    'cast' => \Oro\ORM\Query\AST\Functions\Cast::class,
-    'concat_ws' => \Oro\ORM\Query\AST\Functions\String\ConcatWs::class,
-    'replace' => \Oro\ORM\Query\AST\Functions\String\Replace::class,
-    'date_format' => \Oro\ORM\Query\AST\Functions\String\DateFormat::class,
-    'ifnull' => \DoctrineExtensions\Query\Mysql\IfNull::class,
-]);
+$config->setCustomDatetimeFunctions($ormConfig['datetime_functions']);
+$config->setCustomNumericFunctions($ormConfig['numeric_functions']);
+$config->setCustomStringFunctions($ormConfig['string_functions']);
 
-// Mirrors Roave's ConfigurationFactory, which defaults enable_native_lazy_objects
-// to true on PHP 8.4 and is what the application actually runs with. It is also
-// required rather than optional now: ORM 3 proxies via either Symfony's LazyGhost
-// or PHP native lazy objects, and symfony/var-exporter 8 removed LazyGhost, so
-// without this the EntityManager cannot be constructed at all.
+// Not a preference: ORM 3 proxies through either Symfony's LazyGhost or PHP native
+// lazy objects, and symfony/var-exporter 8 removed LazyGhost, so this is the only
+// strategy left. Passing false makes EntityManager construction throw outright.
+// Roave reaches the same value on its own — its ConfigurationFactory defaults
+// enable_native_lazy_objects to PHP_VERSION_ID >= 80400 — so runtime matches
+// without any config key, and there is no key here to keep in step with it.
 $config->enableNativeLazyObjects(true);
 
 $connection = DriverManager::getConnection(
