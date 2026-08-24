@@ -12,7 +12,7 @@ class MarkExpiredPermitsCommand extends AbstractOlcsCommand
     protected static $defaultName = 'permits:mark-expired-permits';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Mark permits as expired.');
