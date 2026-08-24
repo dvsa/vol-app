@@ -16,7 +16,6 @@ final class DataRetentionRuleIsEnabledTest extends \PHPUnit\Framework\TestCase
                 "description" => "DR action type",
                 "displayOrder" => null,
                 "id" => "Automate",
-                "olbsKey" => null,
                 "parent" => null,
                 "refDataCategoryId" => "action_type",
                 "version" => 1
@@ -46,7 +45,6 @@ final class DataRetentionRuleIsEnabledTest extends \PHPUnit\Framework\TestCase
                 "description" => "DR action type",
                 "displayOrder" => null,
                 "id" => "Automate",
-                "olbsKey" => null,
                 "parent" => null,
                 "refDataCategoryId" => "action_type",
                 "version" => 1

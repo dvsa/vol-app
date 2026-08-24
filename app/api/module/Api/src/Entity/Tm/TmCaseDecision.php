@@ -15,7 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'ix_tm_case_decision_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_tm_case_decision_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_tm_case_decision_case_id', columns: ['case_id'])]
-#[ORM\UniqueConstraint(name: 'uk_tm_case_decision_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class TmCaseDecision extends AbstractTmCaseDecision
 {
