@@ -35,8 +35,8 @@ trait BundleSerializableTrait
         foreach ($vars as $property => $value) {
             $output[$property] = null;
 
-            if ($value instanceof Proxy) {
-                if ($value->__isInitialized()) {
+            if ($value instanceof Proxy || self::isUninitialisedAssociation($value)) {
+                if (!self::isUninitialisedAssociation($value)) {
                     $output[$property] = $value;
                 }
                 continue;
@@ -134,8 +134,8 @@ trait BundleSerializableTrait
             // ...and it is a RefData entity
             if (
                 $value instanceof RefData
-                // ...or initialized proxy
-                && (!($value instanceof Proxy) || $value->__isInitialized())
+                // ...that has already been loaded
+                && !self::isUninitialisedAssociation($value)
             ) {
                 // ...include it anyway
                 return $value->serialize();
@@ -145,22 +145,15 @@ trait BundleSerializableTrait
             return null;
         }
 
-        // If it's a proxy
-        if ($value instanceof Proxy) {
-            // ...and not initialized
-            if (!$value->__isInitialized()) {
-                // ... then initialize it
-                $value = $this->getPropertyValue($property);
-            }
-
-            // ...then include it
-            return $this->getSerializedValue($value, $propertyBundle);
+        // If it has not been loaded yet, load it through the getter
+        if (self::isUninitialisedAssociation($value)) {
+            $value = $this->getPropertyValue($property);
         }
 
         // If we have an actual entity object
         if ($value instanceof BundleSerializableInterface) {
             // ...then return the serialized entity
-            return $value->serialize($propertyBundle);
+            return $this->getSerializedValue($value, $propertyBundle);
         }
 
         // If we have a collection
@@ -219,6 +212,27 @@ trait BundleSerializableTrait
      *
      * @return mixed|null
      */
+    /**
+     * Has this association not been loaded yet?
+     *
+     * Doctrine hands back two shapes of unloaded association. Under the LazyGhost
+     * strategy it is a generated proxy subclass implementing Proxy. Since ORM 3 on
+     * PHP 8.4 — which is what this application runs, because symfony/var-exporter 8
+     * removed LazyGhost — it is instead a native lazy instance of the entity class
+     * itself, which satisfies neither `instanceof Proxy` nor `__isInitialized()`.
+     * Both shapes have to be recognised, or unloaded associations get treated as
+     * loaded and are silently fetched and serialised.
+     */
+    private static function isUninitialisedAssociation(mixed $value): bool
+    {
+        if ($value instanceof Proxy) {
+            return !$value->__isInitialized();
+        }
+
+        return is_object($value)
+            && new \ReflectionClass($value)->isUninitializedLazyObject($value);
+    }
+
     private function getPropertyValue($property)
     {
         $value = null;
