@@ -35,8 +35,10 @@ trait BundleSerializableTrait
         foreach ($vars as $property => $value) {
             $output[$property] = null;
 
-            if ($value instanceof Proxy || self::isUninitialisedAssociation($value)) {
-                if (!self::isUninitialisedAssociation($value)) {
+            $isUninitialised = self::isUninitialisedAssociation($value);
+
+            if ($value instanceof Proxy || $isUninitialised) {
+                if (!$isUninitialised) {
                     $output[$property] = $value;
                 }
                 continue;
