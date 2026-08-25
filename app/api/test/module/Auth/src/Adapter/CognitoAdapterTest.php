@@ -20,6 +20,8 @@ use Dvsa\Olcs\Transfer\Result\Auth\DeleteUserResult;
 use Laminas\Authentication\Result;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Olcs\Logging\Log\Logger;
+use Psr\Log\NullLogger;
 
 /**
  * Class CognitoAdapterTest
@@ -27,6 +29,19 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 final class CognitoAdapterTest extends MockeryTestCase
 {
+    /**
+     * The adapter reports failures through the static Logger facade, which keeps whatever
+     * logger the last test to touch it installed — in a full-suite run that is another
+     * test's Mockery mock, which then rejects these calls as unexpected. Nothing here
+     * asserts on logging, so pin an inert logger rather than inherit a stranger's.
+     */
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        Logger::setLogger(new NullLogger());
+    }
+
     #[\PHPUnit\Framework\Attributes\Test]
     public function authenticateReturnsSuccessResultWhenDetailsAreCorrect(): void
     {
