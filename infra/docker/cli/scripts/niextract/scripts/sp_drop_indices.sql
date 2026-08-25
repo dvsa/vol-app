@@ -1931,14 +1931,6 @@ IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_sche
     DROP INDEX ix_continuation_traffic_area_id_year_month ON continuation; 
 END IF;
 
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'continuation' AND index_name = 'ix_continuation_traffic_area_id_year_month') THEN
-    DROP INDEX ix_continuation_traffic_area_id_year_month ON continuation; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'continuation' AND index_name = 'ix_continuation_traffic_area_id_year_month') THEN
-    DROP INDEX ix_continuation_traffic_area_id_year_month ON continuation; 
-END IF;
-
 IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'event_history_type' AND index_name = 'uk_event_history_type_event_code') THEN
     DROP INDEX uk_event_history_type_event_code ON event_history_type; 
 END IF;
