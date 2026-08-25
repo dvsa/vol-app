@@ -27,6 +27,25 @@ final class BookmarkFactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(TextBlock::class, $sut->locate('invalid'));
     }
 
+    /**
+     * An unknown token quietly falls back to TextBlock rather than failing, so a typo in
+     * a class name would leave the grab resolving to nothing with no error. These pin
+     * the letters bookmarks to their real classes.
+     */
+    public function testLocatesTheLetterCaseworkerBookmarks(): void
+    {
+        $sut = new BookmarkFactory();
+
+        $this->assertInstanceOf(
+            \Dvsa\Olcs\Api\Service\Document\Bookmark\CaseworkerFirstName::class,
+            $sut->locate('CASEWORKER_FIRST_NAME')
+        );
+        $this->assertInstanceOf(
+            \Dvsa\Olcs\Api\Service\Document\Bookmark\CaseworkerPhone::class,
+            $sut->locate('CASEWORKER_PHONE')
+        );
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('allBookmarksProvider')]
     public function testGetClassNameFromToken(mixed $token, mixed $expected): void
     {
@@ -73,6 +92,11 @@ final class BookmarkFactoryTest extends \PHPUnit\Framework\TestCase
         yield ['BR_ROUTE_NUMBR_EFFECTIVE_DATE', 'BrRouteNumbrEffectiveDate'];
         yield ['BR_START_POINT', 'BrStartPoint'];
         yield ['caseworker_details', 'CaseworkerDetails'];
+        // Letters use the uppercase [[TOKEN]] form, so both cases are pinned here.
+        yield ['CASEWORKER_FIRST_NAME', 'CaseworkerFirstName'];
+        yield ['caseworker_first_name', 'CaseworkerFirstName'];
+        yield ['CASEWORKER_PHONE', 'CaseworkerPhone'];
+        yield ['caseworker_phone', 'CaseworkerPhone'];
         yield ['caseworker_name', 'CaseworkerName'];
         yield ['caseworker_name1', 'CaseworkerName1'];
         yield ['CONDITIONS', 'Conditions'];

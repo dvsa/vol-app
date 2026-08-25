@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "46c6f2279c609fb98bbca1dbf99f33fe",
+  "content-hash": "4c170f562c7e70b31f0d5e45986d4dde",
   "packages": [
     {
       "name": "alphagov/notifications-php-client",
@@ -1582,16 +1582,16 @@
     },
     {
       "name": "dvsa/authentication-cognito",
-      "version": "v4.0.0",
+      "version": "v4.1.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/authentication-cognito.git",
-        "reference": "e71115314fe1b8d50d9bc7897037f7b4f964c819"
+        "reference": "f48930643afd8350d2aa3c080e4ed0449677c644"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/authentication-cognito/zipball/e71115314fe1b8d50d9bc7897037f7b4f964c819",
-        "reference": "e71115314fe1b8d50d9bc7897037f7b4f964c819",
+        "url": "https://api.github.com/repos/dvsa/authentication-cognito/zipball/f48930643afd8350d2aa3c080e4ed0449677c644",
+        "reference": "f48930643afd8350d2aa3c080e4ed0449677c644",
         "shasum": ""
       },
       "require": {
@@ -1603,7 +1603,7 @@
         "guzzlehttp/guzzle": "^7.15.3",
         "guzzlehttp/psr7": "^2.13",
         "league/oauth2-client": "^2.9",
-        "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
         "psr/cache": "^1.0 || ^2.0 || ^3.0",
         "psr/http-client": "^1.0.3",
         "psr/http-factory": "^1.1"
@@ -1636,9 +1636,9 @@
       "keywords": ["Authentication", "Cognito", "dvsa"],
       "support": {
         "issues": "https://github.com/dvsa/authentication-cognito/issues",
-        "source": "https://github.com/dvsa/authentication-cognito/tree/v4.0.0"
+        "source": "https://github.com/dvsa/authentication-cognito/tree/v4.1.0"
       },
-      "time": "2026-08-12T08:39:58+00:00"
+      "time": "2026-08-24T12:18:53+00:00"
     },
     {
       "name": "dvsa/contracts",
