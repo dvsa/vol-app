@@ -579,6 +579,7 @@ return [
             Aws\EventBridge\EventBridgeClient::class => Dvsa\Olcs\AwsSdk\Factories\EventBridgeClientFactory::class,
             'default-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
             'doctrine-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
+            'jwks-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
             'cache.redis.connection'
                 =>  \Dvsa\Olcs\Api\Service\Cache\RedisConnectionFactory::class,
         ],

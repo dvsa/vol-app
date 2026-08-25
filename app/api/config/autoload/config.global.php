@@ -598,6 +598,16 @@ return [
                 'namespace' => 'doctrine',
             ]
         ],
+        // Backs the Cognito JWKS cache. Its own namespace so a key rotation can be forced
+        // through by clearing just this pool, without discarding the rest of the app cache.
+        // The ttl matches Client::DEFAULT_JWKS_CACHE_TTL — the client sets its own expiry on
+        // the item, so this is the backstop rather than the primary control.
+        'jwks-cache' => [
+            'options' => [
+                'ttl' => 3600,
+                'namespace' => 'jwks',
+            ]
+        ],
     ],
 
     'dvla_search' => [
