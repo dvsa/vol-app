@@ -78,7 +78,6 @@ return [
         'configuration' => [
             'orm_default' => [
                 'metadata_cache' => 'redis',
-                'auto_generate_proxy_classes' => true,
                 'query_cache'       => 'redis',
                 'result_cache'      => 'redis',
                 'hydration_cache'   => 'redis',
