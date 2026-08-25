@@ -12,6 +12,7 @@ use Common\Form\View\Helper\Readonly\FormFileUploadList;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Laminas\Form\Element;
+use Laminas\Form\FieldsetInterface;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Common\Form\View\Helper\Readonly\FormFileUploadList::class)]
 final class FormFileUploadListTest extends MockeryTestCase
