@@ -20,9 +20,10 @@ return [
     'doctrine' => [
         'configuration' => [
             'orm_default' => [
-                // If running as CLI then use different directory to avoid permissions problems
-                'proxy_dir'         => 'data/cache/DoctrineORMModule',
-                'proxy_namespace'   => 'Dvsa\Olcs\Api\Entity\Proxy',
+                // No proxy_dir/proxy_namespace/auto_generate_proxy_classes: on PHP 8.4 Roave
+                // defaults enable_native_lazy_objects to true, and ORM then builds lazy
+                // associations as native lazy objects rather than generated proxy classes,
+                // ignoring all three keys. Nothing is written to disk any more.
                 'datetime_functions' => [
                     'date'          => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
                     'time'          => \Oro\ORM\Query\AST\Functions\SimpleFunction::class,
