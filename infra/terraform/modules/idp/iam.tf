@@ -418,6 +418,20 @@ data "aws_iam_policy_document" "analyse_financial_document_sm" {
     ]
   }
 
+  # .sync:2 requires Step Functions to create a managed EventBridge rule to receive
+  # child execution completion notifications.
+  statement {
+    sid = "SyncExecutionManagedRules"
+    actions = [
+      "events:PutTargets",
+      "events:PutRule",
+      "events:DescribeRule",
+    ]
+    resources = [
+      "arn:aws:events:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:rule/StepFunctionsGetEventsForStepFunctionsExecutionRule",
+    ]
+  }
+
   # Read S3 object tags to check for pre-existing Classification tag.
   statement {
     sid     = "S3ReadDocumentTags"

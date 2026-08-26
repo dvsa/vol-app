@@ -291,6 +291,7 @@
     "EmitCompletedEvent": {
       "Type": "Task",
       "Resource": "arn:aws:states:::events:putEvents",
+      "ResultPath": null,
       "Parameters": {
         "Entries": [
           {
@@ -298,10 +299,7 @@
               "analysis_token.$": "$.analysisToken",
               "application_id.$": "$.applicationId",
               "status": "COMPLETED",
-              "analysis": {
-                "bucket.$": "$.config.outputBucket",
-                "key.$": "$.analysisResult.smOutput.analysisResultKey"
-              }
+              "execution_arn.$": "$$.Execution.Id"
             },
             "DetailType": "DocumentProcessing-FinancialDocumentAnalysed",
             "Source": "custom.documentProcessing"
