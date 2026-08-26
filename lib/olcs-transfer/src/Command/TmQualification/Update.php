@@ -60,6 +60,7 @@ final class Update extends AbstractCommand
 
     /**
      * @Transfer\Filter("Laminas\Filter\StringTrim")
+     * @Transfer\Filter("Laminas\Filter\StringToUpper")
      * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":1,"max":2})
      */
     public $countryCode;
