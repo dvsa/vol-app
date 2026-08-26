@@ -299,7 +299,7 @@
               "application_id.$": "$.applicationId",
               "status": "COMPLETED",
               "analysis": {
-                "bucket.$": "$.bucket",
+                "bucket.$": "$.config.outputBucket",
                 "key.$": "$.analysisResult.smOutput.analysisResultKey"
               }
             },
