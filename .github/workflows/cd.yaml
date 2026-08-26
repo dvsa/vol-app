@@ -636,10 +636,19 @@ jobs:
 
   deploy_prod:
     name: (prod)
+    # Gated on prep: previously prep and prod both unlocked as soon as the prod account
+    # apply finished, so one misclick could approve prod before prep had ever run. Prod
+    # now waits until prep has at least been ATTEMPTED (its later stages -- migrations,
+    # cache clear, tests -- may fail and prod stays approvable, so a known prep failure
+    # can be judged and overridden by a human), but prep's Environment Apply must have
+    # SUCCEEDED: a terraform change that failed against prep, or was never applied there,
+    # has no business being applied to prod. Note this also means rejecting prep's
+    # approval blocks prod -- there is deliberately no prod-without-prep path here.
     if: |
       always() &&
       !cancelled() &&
-      !failure() &&
+      contains(fromJSON('["success", "failure"]'), needs.deploy_prep.result) &&
+      needs.deploy_prep.outputs.terraform-env-result == 'success' &&
       needs.release-please.outputs.release_created &&
       !contains(needs.get-version.outputs.api, 'rc') &&
       !contains(needs.get-version.outputs.cli, 'rc') &&
@@ -652,6 +661,7 @@ jobs:
       - orchestrator
       - terraform-account-prod
       - push-to-prod-ecr
+      - deploy_prep
     concurrency:
       group: ${{ github.workflow }}-prod
     uses: ./.github/workflows/deploy-and-test.yaml

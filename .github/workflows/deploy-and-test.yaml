@@ -49,6 +49,10 @@ on:
       etl_ref:
         type: string
         required: true
+    outputs:
+      terraform-env-result:
+        description: "Result of the Environment Apply job (success/failure/skipped/cancelled)"
+        value: ${{ jobs.terraform_env.result }}
     secrets:
       VOL_GITHUB_APP_PRIVATE_KEY:
         required: true
