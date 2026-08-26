@@ -1,1 +1,16 @@
 npx --no -- lint-staged
+
+# VOL-6349 — local secrets scan via git-secrets (DVSA standard).
+# Skip cleanly if git-secrets isn't installed locally; CI is the
+# authoritative gate.
+if command -v git-secrets >/dev/null 2>&1; then
+  # Patterns are registered into the repo's git config the first time
+  # this runs; the call is idempotent.
+  git secrets --register-aws --global >/dev/null 2>&1 || true
+  git secrets --pre_commit_hook -- "$@"
+else
+  printf '\033[33mvol-app: git-secrets not on PATH — skipping local secrets scan.\033[0m\n'
+  printf '  Install it to enable pre-commit secret detection:\n'
+  printf '    macOS:  brew install git-secrets\n'
+  printf '    Other:  https://github.com/awslabs/git-secrets#installing-git-secrets\n'
+fi
