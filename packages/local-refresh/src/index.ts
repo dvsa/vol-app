@@ -24,6 +24,7 @@ const actionOrder = [
   "CopyDockerComposeDist",
   "FlushRedis",
   "ResetDatabase",
+  "DownloadRemoteDatabase",
   "ResetLdap",
 ];
 
