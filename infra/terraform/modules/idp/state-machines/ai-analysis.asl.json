@@ -1,0 +1,306 @@
+{
+  "Comment": "Analyse extracted bank statement data with an AI model following DVSA rules",
+  "StartAt": "FetchCustomOutput",
+  "TimeoutSeconds": 600,
+  "States": {
+    "FetchCustomOutput": {
+      "Type": "Task",
+      "Comment": "Invokes extract-s3-json-field Lambda to fetch the BDA custom output and return ONLY the inference_result subtree. The full result.json carries inference_metadata + explanations (bounding boxes per field) which can exceed the Step Functions 256KB state limit on busy statements.",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${EXTRACT_S3_JSON_FIELD_LAMBDA_ARN}",
+        "Payload": {
+          "bucket.$": "$.extractedDataS3Bucket",
+          "key.$": "States.Format('{}{}/0/custom_output/0/result.json', $.extractedDataS3KeyPrefix, $.bedrockInvocationId)",
+          "fieldPath": "inference_result"
+        }
+      },
+      "ResultSelector": {
+        "content.$": "$.Payload"
+      },
+      "ResultPath": "$.customOutput",
+      "Next": "FetchStandardOutput",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "EmitFailedEvent"
+        }
+      ]
+    },
+    "FetchStandardOutput": {
+      "Type": "Task",
+      "Comment": "Invokes extract-s3-json-field Lambda to fetch the BDA standard output and return ONLY the markdown at document.representation.markdown - skipping the description/statistics/summary/metadata wrapper. Note: the field is named after the configured textFormat (we set ['MARKDOWN'] in bda.tf); if more than one format is enabled BDA names the field 'text' instead.",
+      "Resource": "arn:aws:states:::lambda:invoke",
+      "Parameters": {
+        "FunctionName": "${EXTRACT_S3_JSON_FIELD_LAMBDA_ARN}",
+        "Payload": {
+          "bucket.$": "$.extractedDataS3Bucket",
+          "key.$": "States.Format('{}{}/0/standard_output/0/result.json', $.extractedDataS3KeyPrefix, $.bedrockInvocationId)",
+          "fieldPath": "document.representation.markdown"
+        }
+      },
+      "ResultSelector": {
+        "content.$": "$.Payload"
+      },
+      "ResultPath": "$.standardOutput",
+      "Next": "PrepareAnalysisInput",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "Lambda.ServiceException",
+            "Lambda.AWSLambdaException",
+            "Lambda.SdkClientException",
+            "Lambda.TooManyRequestsException"
+          ],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "EmitFailedEvent"
+        }
+      ]
+    },
+    "PrepareAnalysisInput": {
+      "Type": "Pass",
+      "Parameters": {
+        "bucket.$": "$.bucket",
+        "key.$": "$.key",
+        "object.$": "$.object",
+        "config.$": "$.config",
+        "classification.$": "$.classification",
+        "classificationConfidence.$": "$.classificationConfidence",
+        "totalPages.$": "$.totalPages",
+        "classifiedPages.$": "$.classifiedPages",
+        "dominantTypePages.$": "$.dominantTypePages",
+        "pageBreakdown.$": "$.pageBreakdown",
+        "documentSizeBytes.$": "$.documentSizeBytes",
+        "bedrockInvocationArn.$": "$.bedrockInvocationArn",
+        "bedrockInvocationId.$": "$.bedrockInvocationId",
+        "extractedDataS3Bucket.$": "$.extractedDataS3Bucket",
+        "extractedDataS3KeyPrefix.$": "$.extractedDataS3KeyPrefix",
+        "applicantProfile.$": "$.applicantProfile",
+        "bankStatementData.$": "$.customOutput.content",
+        "bankStatementMarkdown.$": "$.standardOutput.content",
+        "extractionContext": {
+          "totalPages.$": "$.totalPages",
+          "classifiedPages.$": "$.classifiedPages",
+          "dominantTypePages.$": "$.dominantTypePages",
+          "pageBreakdown.$": "$.pageBreakdown",
+          "classificationConfidence.$": "$.classificationConfidence",
+          "note": "Confidence is dominantTypePages / classifiedPages (UNCLASSIFIED pages are treated as noise, not counted). BDA splitter is enabled, so if multiple BANK_STATEMENT segments were detected this analysis covers the first matched segment. If totalPages is much larger than dominantTypePages, the upload contained other content alongside the bank statement (e.g. UNCLASSIFIED pages, an overdraft letter, an unrelated document, another bank statement). Surface multi-segment context in remark so the caseworker can verify."
+        }
+      },
+      "Next": "AnalyseWithAI"
+    },
+    "AnalyseWithAI": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:bedrockruntime:converse",
+      "Parameters": {
+        "ModelId": "${BEDROCK_PROMPT_VERSION_ARN}",
+        "PromptVariables": {
+          "applicant_profile": {
+            "Text.$": "States.JsonToString($.applicantProfile)"
+          },
+          "bank_statement_data": {
+            "Text.$": "States.JsonToString($.bankStatementData)"
+          },
+          "bank_statement_markdown": {
+            "Text.$": "$.bankStatementMarkdown"
+          },
+          "extraction_context": {
+            "Text.$": "States.JsonToString($.extractionContext)"
+          }
+        }
+      },
+      "ResultPath": "$.analysis.raw",
+      "Next": "ParseAnalysis",
+      "Retry": [
+        {
+          "ErrorEquals": [
+            "States.TaskFailed",
+            "States.Timeout",
+            "Bedrock.InternalServerException",
+            "Bedrock.ThrottlingException"
+          ],
+          "IntervalSeconds": 3,
+          "BackoffRate": 2.0,
+          "MaxAttempts": 4
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "EmitFailedEvent"
+        }
+      ]
+    },
+    "ParseAnalysis": {
+      "Type": "Pass",
+      "Comment": "Extracts the forced-tool analysis output and carries through all fields needed for the analysis report and downstream states.",
+      "Parameters": {
+        "bucket.$": "$.bucket",
+        "key.$": "$.key",
+        "object.$": "$.object",
+        "config.$": "$.config",
+        "classification.$": "$.classification",
+        "bedrockInvocationArn.$": "$.bedrockInvocationArn",
+        "applicantProfile.$": "$.applicantProfile",
+        "bankStatementData.$": "$.bankStatementData",
+        "documentSizeBytes.$": "$.documentSizeBytes",
+        "analysis.$": "$.analysis.raw.Output.Message.Content[0].ToolUse.Input"
+      },
+      "Next": "BuildAnalysisReport"
+    },
+    "BuildAnalysisReport": {
+      "Type": "Pass",
+      "Comment": "Assembles the full analysis report to persist to S3. metadata provides an audit/provenance trail; applicantProfile documents exactly what data the AI received; analysis is the model output.",
+      "Parameters": {
+        "bucket.$": "$.bucket",
+        "key.$": "$.key",
+        "object.$": "$.object",
+        "config.$": "$.config",
+        "classification.$": "$.classification",
+        "bedrockInvocationArn.$": "$.bedrockInvocationArn",
+        "applicantProfile.$": "$.applicantProfile",
+        "analysis.$": "$.analysis",
+        "analysisReport": {
+          "metadata": {
+            "executionId.$": "$$.Execution.Id",
+            "executionStartTime.$": "$$.Execution.StartTime",
+            "bucket.$": "$.bucket",
+            "key.$": "$.key",
+            "versionId.$": "$.object.versionId",
+            "classification.$": "$.classification",
+            "bedrockInvocationArn.$": "$.bedrockInvocationArn",
+            "documentSizeBytes.$": "$.documentSizeBytes"
+          },
+          "applicantProfile.$": "$.applicantProfile",
+          "analysis.$": "$.analysis"
+        }
+      },
+      "Next": "SetAnalysisResultKey"
+    },
+    "SetAnalysisResultKey": {
+      "Type": "Pass",
+      "Comment": "Constructs the S3 result key once for others to reference and key single source of truth.",
+      "Parameters": {
+        "bucket.$": "$.bucket",
+        "key.$": "$.key",
+        "object.$": "$.object",
+        "config.$": "$.config",
+        "classification.$": "$.classification",
+        "bedrockInvocationArn.$": "$.bedrockInvocationArn",
+        "applicantProfile.$": "$.applicantProfile",
+        "analysis.$": "$.analysis",
+        "analysisReport.$": "$.analysisReport",
+        "analysisResultKey.$": "States.Format('{}/analysis/result.json', $.key)"
+      },
+      "Next": "PersistAnalysis"
+    },
+    "PersistAnalysis": {
+      "Type": "Task",
+      "Comment": "Writes the AI analysis result to S3 under {key}/analysis/result.json in the shared IDP output bucket, alongside the BDA output at {key}/brda/.",
+      "Resource": "arn:aws:states:::aws-sdk:s3:putObject",
+      "Parameters": {
+        "Bucket.$": "$.config.outputBucket",
+        "Key.$": "$.analysisResultKey",
+        "Body.$": "States.JsonToString($.analysisReport)",
+        "ContentType": "application/json"
+      },
+      "ResultPath": null,
+      "Next": "EmitCompletedEvent",
+      "Retry": [
+        {
+          "ErrorEquals": ["S3.ServiceException", "ThrottlingException"],
+          "IntervalSeconds": 2,
+          "MaxAttempts": 3,
+          "BackoffRate": 2
+        }
+      ],
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "EmitFailedEvent"
+        }
+      ]
+    },
+    "EmitCompletedEvent": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "ResultPath": null,
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "bucket.$": "$.bucket",
+              "key.$": "$.key",
+              "classification.$": "$.classification",
+              "analysisResultKey.$": "$.analysisResultKey",
+              "status": "COMPLETED"
+            },
+            "DetailType": "DocumentProcessing-AnalysisCompleted",
+            "Source": "custom.documentProcessing"
+          }
+        ]
+      },
+      "Next": "AnalysisSucceeded"
+    },
+    "AnalysisSucceeded": {
+      "Type": "Pass",
+      "Comment": "Returns analysis result as SM output for orchestrator callers using startExecution.sync:2.",
+      "Parameters": {
+        "status": "SUCCEEDED",
+        "analysisResultKey.$": "$.analysisResultKey"
+      },
+      "End": true
+    },
+    "EmitFailedEvent": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::events:putEvents",
+      "Parameters": {
+        "Entries": [
+          {
+            "Detail": {
+              "bucket.$": "$.bucket",
+              "key.$": "$.key",
+              "config.$": "$.config",
+              "error.$": "$.error",
+              "status": "FAILED"
+            },
+            "DetailType": "DocumentProcessing-AnalysisFailed",
+            "Source": "custom.documentProcessing"
+          }
+        ]
+      },
+      "Next": "AnalysisFailed"
+    },
+    "AnalysisFailed": {
+      "Type": "Pass",
+      "Parameters": {
+        "status": "FAILED"
+      },
+      "End": true
+    }
+  }
+}
