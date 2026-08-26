@@ -39,6 +39,7 @@ final class UpdateIrfoDetails extends AbstractCommand
 
     /**
      * @Transfer\Filter("Laminas\Filter\StringTrim")
+     * @Transfer\Filter("Laminas\Filter\StringToUpper")
      * @Transfer\Validator("Laminas\Validator\StringLength",options={"min":2,"max":2})
      * @Transfer\Optional
      */
