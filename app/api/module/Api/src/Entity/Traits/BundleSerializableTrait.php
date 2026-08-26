@@ -90,6 +90,8 @@ trait BundleSerializableTrait
             '__isInitialized__',
         ];
 
+        self::recordIdentityDiagnostics($this);
+
         $vars = get_object_vars($this);
 
         foreach ($vars as $property => $value) {
@@ -214,6 +216,89 @@ trait BundleSerializableTrait
      *
      * @return mixed|null
      */
+    /**
+     * TEMPORARY - VOL-7070 diagnostics for EntityIdentityCollisionException.
+     *
+     * ORM 3 throws when a second object instance is registered for an identity that
+     * is already in the identity map. On reg this fires while serialising a Country,
+     * as get_object_vars() below initialises a lazy instance whose identity is
+     * already held by a different object. The stack trace names the object being
+     * initialised but not the one that got there first, which is what we need.
+     *
+     * So: remember class+id -> spl_object_id, and log once when a second, distinct
+     * object turns up for an identity we have already seen, with a backtrace of the
+     * path that produced it. Nothing here initialises anything — the identifier is
+     * read through the ClassMetadata accessors that ProxyFactory pre-populates on a
+     * lazy ghost — and every failure is swallowed, so diagnostics can never be the
+     * thing that breaks a request.
+     *
+     * Remove once the root cause is found.
+     */
+    private static array $identityDiagnostics = [];
+
+    private static function recordIdentityDiagnostics(object $entity): void
+    {
+        try {
+            if (!method_exists($entity, 'getId')) {
+                return;
+            }
+
+            $reflection = new \ReflectionClass($entity);
+            if (!$reflection->hasProperty('id')) {
+                return;
+            }
+
+            $idProperty = $reflection->getProperty('id');
+            $id = $idProperty->isInitialized($entity) ? $idProperty->getValue($entity) : null;
+            if ($id === null || is_object($id)) {
+                return;
+            }
+
+            $key = $entity::class . '#' . $id;
+            $objectId = spl_object_id($entity);
+            $seen = self::$identityDiagnostics[$key] ?? null;
+
+            if ($seen === null) {
+                // Queue consumers run for hours; do not let the map grow without bound.
+                if (count(self::$identityDiagnostics) > 20000) {
+                    self::$identityDiagnostics = [];
+                }
+
+                self::$identityDiagnostics[$key] = $objectId;
+                return;
+            }
+
+            if ($seen === $objectId) {
+                return;
+            }
+
+            // Second distinct instance for an identity we have already serialised.
+            self::$identityDiagnostics[$key] = $objectId;
+
+            \Olcs\Logging\Log\Logger::err(
+                'VOL-7070 identity diagnostics: duplicate instance for ' . $key,
+                [
+                    'data' => [
+                        'entity' => $entity::class,
+                        'id' => (string) $id,
+                        'firstObjectId' => $seen,
+                        'secondObjectId' => $objectId,
+                        'secondIsUninitialisedLazy' => $reflection->isUninitializedLazyObject($entity),
+                        'trace' => array_map(
+                            static fn(array $frame): string => ($frame['class'] ?? '')
+                                . ($frame['type'] ?? '')
+                                . ($frame['function'] ?? '')
+                                . ' at ' . basename($frame['file'] ?? '?') . ':' . ($frame['line'] ?? '?'),
+                            array_slice(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 25), 1)
+                        ),
+                    ],
+                ]
+            );
+        } catch (\Throwable) {
+            // diagnostics must never affect the request
+        }
+    }
+
     /**
      * Has this association not been loaded yet?
      *
