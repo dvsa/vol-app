@@ -132,7 +132,7 @@ locals {
       ]
       resources = [
 
-        "arn:aws:rds:eu-west-1:146997448015:cluster:apppp-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:prep-aurora-olcsdb-cluster",
         "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:olcs-db-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster-snapshot:ni-extract-*",
@@ -146,7 +146,7 @@ locals {
         "rds:DescribeDBClusters",
       ]
       resources = [
-        "arn:aws:rds:eu-west-1:146997448015:cluster:apppp-aurora-olcsdb-cluster",
+        "arn:aws:rds:eu-west-1:146997448015:cluster:prep-aurora-olcsdb-cluster",
         "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
       ]
@@ -168,14 +168,22 @@ locals {
     {
       effect = "Allow"
       actions = [
-        "rds:CreateDBInstance",
-        "rds:DescribeDBInstances",
+        "rds:CreateDBInstance"
       ]
       resources = [
         "arn:aws:rds:eu-west-1:146997448015:cluster:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:db:olcs-anon-*",
         "arn:aws:rds:eu-west-1:146997448015:db:ni-extract-*",
         "arn:aws:rds:eu-west-1:146997448015:cluster:ni-extract-*"
+      ]
+    },
+        {
+      effect = "Allow"
+      actions = [
+        "rds:DescribeDBInstances"
+      ]
+      resources = [
+        "arn:aws:rds:eu-west-1:146997448015:db:*",
       ]
     },
     {
