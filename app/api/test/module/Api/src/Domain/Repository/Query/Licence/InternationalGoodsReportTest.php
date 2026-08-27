@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Licence;
 
 use Dvsa\Olcs\Api\Domain\Repository\Query\Licence\InternationalGoodsReport as InternationalGoodsReportQry;
-use Doctrine\DBAL\Connection as DoctrineConnection;
 use Dvsa\Olcs\Api\Entity\Licence\Licence as LicenceEntity;
 use Dvsa\Olcs\Api\Entity\Organisation\Organisation as OrganisationEntity;
 use Dvsa\Olcs\Api\Entity\System\RefData as RefDataEntity;
@@ -179,10 +178,10 @@ final class InternationalGoodsReportTest extends AbstractDbQueryTestCase
                 'licStatusTerminated' => LicenceEntity::LICENCE_STATUS_TERMINATED
             ],
             [
-                'licenceStatuses' => DoctrineConnection::PARAM_STR_ARRAY,
-                'goodsOrPsv' => \PDO::PARAM_STR,
-                'licenceType' => \PDO::PARAM_STR,
-                'rdLicStatus' => \PDO::PARAM_STR,
+                'licenceStatuses' => \Doctrine\DBAL\ArrayParameterType::STRING,
+                'goodsOrPsv' => \Doctrine\DBAL\ParameterType::STRING,
+                'licenceType' => \Doctrine\DBAL\ParameterType::STRING,
+                'rdLicStatus' => \Doctrine\DBAL\ParameterType::STRING,
             ]
         ];
     }

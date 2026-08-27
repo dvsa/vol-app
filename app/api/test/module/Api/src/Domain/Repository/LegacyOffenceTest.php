@@ -45,10 +45,7 @@ final class LegacyOffenceTest extends RepositoryTestCase
             ->andReturn($case);
 
         /** @var Expr $expr */
-        $expr = m::mock(QueryBuilder::class);
-        $expr->shouldReceive('eq')
-            ->with(m::type('string'), ':byCase')
-            ->andReturnSelf();
+        $expr = new \Doctrine\ORM\Query\Expr();
 
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
@@ -61,7 +58,7 @@ final class LegacyOffenceTest extends RepositoryTestCase
             ->andReturnSelf();
 
         $qb->shouldReceive('andWhere')
-            ->with($expr)
+            ->with(m::type(\Doctrine\ORM\Query\Expr\Comparison::class))
             ->andReturnSelf();
 
         $this->queryBuilder->shouldReceive('modifyQuery')

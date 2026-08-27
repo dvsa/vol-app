@@ -70,7 +70,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * FromUser
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'from_user_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -79,7 +79,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * ToUser
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'to_user_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -88,7 +88,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -98,7 +98,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -116,7 +116,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Pi reason
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'pi_reason', length: 255, nullable: true)]
     protected $piReason;
@@ -124,7 +124,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Comment
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'comment', length: 4000, nullable: true)]
     protected $comment;
@@ -132,7 +132,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Effective date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'effective_date', nullable: true)]
     protected $effectiveDate;
@@ -140,7 +140,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Notes
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'notes', nullable: true)]
     protected $notes;
@@ -148,7 +148,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Pi decision
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'pi_decision', length: 255, nullable: true)]
     protected $piDecision;
@@ -156,7 +156,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Request
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'request', length: 20, nullable: true)]
     protected $request;
@@ -164,7 +164,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * revokeLic
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'revoke_lic', nullable: true)]
     protected $revokeLic;
@@ -172,7 +172,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * status
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'status', nullable: true)]
     protected $status;
@@ -180,7 +180,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
     /**
      * Total points
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'total_points', nullable: true, options: ['unsigned' => true])]
     protected $totalPoints;

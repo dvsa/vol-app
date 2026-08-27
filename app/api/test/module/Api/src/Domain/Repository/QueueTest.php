@@ -39,7 +39,7 @@ final class QueueTest extends RepositoryTestCase
             ->shouldReceive('order')->with('id', 'ASC')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn([$item])
                 ->getMock()
@@ -59,7 +59,7 @@ final class QueueTest extends RepositoryTestCase
 
         $now = new DateTime();
         $expectedQuery = '[QUERY] AND q.status = [[que_sts_queued]] AND ' .
-            '(q.processAfterDate <= [[' . $now->format(DateTime::W3C) . ']] OR q.processAfterDate IS NULL) LIMIT 1';
+            'q.processAfterDate <= [[' . $now->format(DateTime::W3C) . ']] OR q.processAfterDate IS NULL LIMIT 1';
         $this->assertEquals($expectedQuery, $this->query);
     }
 
@@ -74,7 +74,7 @@ final class QueueTest extends RepositoryTestCase
             ->shouldReceive('order')->with('id', 'ASC')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn([$item])
                 ->getMock()
@@ -94,8 +94,8 @@ final class QueueTest extends RepositoryTestCase
 
         $now = new DateTime();
         $expectedQuery = '[QUERY] AND q.status = [[que_sts_queued]] AND' .
-            ' (q.processAfterDate <= [[' . $now->format(DateTime::W3C) . ']] OR q.processAfterDate IS NULL) LIMIT 1' .
-            ' AND q.type IN [[["foo"]]]';
+            ' q.processAfterDate <= [[' . $now->format(DateTime::W3C) . ']] OR q.processAfterDate IS NULL LIMIT 1' .
+            ' AND q.type IN([[["foo"]]])';
         $this->assertEquals($expectedQuery, $this->query);
     }
 
@@ -110,7 +110,7 @@ final class QueueTest extends RepositoryTestCase
             ->shouldReceive('order')->with('id', 'ASC')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn([$item])
                 ->getMock()
@@ -130,8 +130,8 @@ final class QueueTest extends RepositoryTestCase
 
         $now = new DateTime();
         $expectedQuery = '[QUERY] AND q.status = [[que_sts_queued]] AND' .
-            ' (q.processAfterDate <= [[' . $now->format(DateTime::W3C) . ']] OR q.processAfterDate IS NULL) LIMIT 1' .
-            ' AND q.type IN [[["foo"]]] AND q.type NOT IN [[["bar"]]]';
+            ' q.processAfterDate <= [[' . $now->format(DateTime::W3C) . ']] OR q.processAfterDate IS NULL LIMIT 1' .
+            ' AND q.type IN([[["foo"]]]) AND q.type NOT IN([[["bar"]]])';
         $this->assertEquals($expectedQuery, $this->query);
     }
 
@@ -188,7 +188,7 @@ final class QueueTest extends RepositoryTestCase
 
         $now = new DateTime();
         $expectedQuery = '[QUERY] AND q.status = [[que_sts_queued]] AND' .
-            ' (q.processAfterDate <= [[' . $now->format(DateTime::W3C) . ']] OR q.processAfterDate IS NULL) LIMIT 1' .
+            ' q.processAfterDate <= [[' . $now->format(DateTime::W3C) . ']] OR q.processAfterDate IS NULL LIMIT 1' .
             ' AND q.type = [[foo]]';
         $this->assertEquals($expectedQuery, $this->query);
     }
@@ -207,7 +207,7 @@ final class QueueTest extends RepositoryTestCase
 
         $now = new DateTime();
         $expectedQuery = '[QUERY] AND q.status = [[que_sts_queued]] AND' .
-            ' (q.processAfterDate <= [[' . $now->format(DateTime::W3C) . ']] OR q.processAfterDate IS NULL) LIMIT 1' .
+            ' q.processAfterDate <= [[' . $now->format(DateTime::W3C) . ']] OR q.processAfterDate IS NULL LIMIT 1' .
             ' AND q.type = [[foo]]';
         $this->assertEquals($expectedQuery, $this->query);
     }
@@ -223,7 +223,7 @@ final class QueueTest extends RepositoryTestCase
             ->shouldReceive('order')->with('q.processAfterDate', 'ASC')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn([$item])
                 ->getMock()
@@ -232,7 +232,7 @@ final class QueueTest extends RepositoryTestCase
         $this->assertEquals($item, $this->sut->fetchNextItemIncludingPostponed(['foo']));
 
         $expectedQuery = '[QUERY] AND q.status = [[que_sts_queued]] LIMIT 1' .
-            ' AND q.type IN [[["foo"]]]';
+            ' AND q.type IN([[["foo"]]])';
         $this->assertEquals($expectedQuery, $this->query);
     }
 
@@ -247,7 +247,7 @@ final class QueueTest extends RepositoryTestCase
             ->shouldReceive('order')->with('q.processAfterDate', 'ASC')->once()->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn([$item])
                 ->getMock()
@@ -255,7 +255,7 @@ final class QueueTest extends RepositoryTestCase
 
         $this->assertEquals($item, $this->sut->fetchNextItemIncludingPostponed(['foo'], ['bar']));
         $expectedQuery = '[QUERY] AND q.status = [[que_sts_queued]] LIMIT 1' .
-            ' AND q.type IN [[["foo"]]] AND q.type NOT IN [[["bar"]]]';
+            ' AND q.type IN([[["foo"]]]) AND q.type NOT IN([[["bar"]]])';
         $this->assertEquals($expectedQuery, $this->query);
     }
 
@@ -271,7 +271,7 @@ final class QueueTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getArrayResult')
                 ->andReturn($results)
                 ->getMock()
@@ -280,8 +280,8 @@ final class QueueTest extends RepositoryTestCase
 
         $expectedQuery = 'BLAH '
             . 'SELECT q.id '
-            . 'AND q.type IN [[["T1","T2"]]] '
-            . 'AND q.status IN [[["S1","S2"]]] '
+            . 'AND q.type IN([[["T1","T2"]]]) '
+            . 'AND q.status IN([[["S1","S2"]]]) '
             . 'LIMIT 1';
 
         $this->assertEquals($expectedQuery, $this->query);

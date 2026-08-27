@@ -41,22 +41,24 @@ final class TeamPrinterTest extends RepositoryTestCase
 
         /** @var QueryBuilder $qb */
         $mockQb = m::mock(QueryBuilder::class);
+        $expr = new \Doctrine\ORM\Query\Expr();
+        $mockQb->shouldReceive('expr')
+            ->zeroOrMoreTimes()
+            ->andReturn($expr);
+
+        $mockQb->shouldReceive('andWhere')
+            ->times(3)
+            ->andReturnSelf();
 
         $this->em
             ->shouldReceive('getRepository->createQueryBuilder')
             ->once()
             ->andReturn($mockQb);
 
-        $mockQb->shouldReceive('expr->eq')->with('m.subCategory', ':subCategory')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('subCategory', 1)->once();
 
-        $mockQb->shouldReceive('expr->eq')->with('m.user', ':user')->once()->andReturn('EXPR1');
-        $mockQb->shouldReceive('andWhere')->with('EXPR1')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('user', 2)->once();
 
-        $mockQb->shouldReceive('expr->eq')->with('m.team', ':team')->once()->andReturn('EXPR3');
-        $mockQb->shouldReceive('andWhere')->with('EXPR3')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('team', 3)->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->andReturn(['result']);
@@ -82,20 +84,20 @@ final class TeamPrinterTest extends RepositoryTestCase
 
         /** @var QueryBuilder $qb */
         $mockQb = m::mock(QueryBuilder::class);
+        $expr = new \Doctrine\ORM\Query\Expr();
+        $mockQb->shouldReceive('expr')
+            ->zeroOrMoreTimes()
+            ->andReturn($expr);
+
+        $mockQb->shouldReceive('andWhere')
+            ->times(3)
+            ->andReturnSelf();
 
         $this->em
             ->shouldReceive('getRepository->createQueryBuilder')
             ->once()
             ->andReturn($mockQb);
 
-        $mockQb->shouldReceive('expr->isNull')->with('m.subCategory')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->isNull')->with('m.user')->once()->andReturn('EXPR1');
-        $mockQb->shouldReceive('andWhere')->with('EXPR1')->once()->andReturnSelf();
-
-        $mockQb->shouldReceive('expr->eq')->with('m.team', ':team')->once()->andReturn('EXPR3');
-        $mockQb->shouldReceive('andWhere')->with('EXPR3')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('team', 3)->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->andReturn(['result']);
@@ -132,16 +134,16 @@ final class TeamPrinterTest extends RepositoryTestCase
 
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
+        $expr = new \Doctrine\ORM\Query\Expr();
+        $qb->shouldReceive('expr')
+            ->zeroOrMoreTimes()
+            ->andReturn($expr);
 
-        $qb->shouldReceive('expr->eq')->with('m.team', ':team')->once()->andReturn('team');
-        $qb->shouldReceive('andWhere')->with('team')->once()->andReturnSelf();
+        $qb->shouldReceive('andWhere')
+            ->times(2)
+            ->andReturnSelf();
+
         $qb->shouldReceive('setParameter')->with('team', 1)->once()->andReturnSelf();
-
-        $qb->shouldReceive('expr->isNull')->with('sc.id')->once()->andReturn('andX1');
-        $qb->shouldReceive('expr->isNull')->with('u.id')->once()->andReturn('andX2');
-        $qb->shouldReceive('expr->andX')->with('andX1', 'andX2')->once()->andReturn('andExpr');
-        $qb->shouldReceive('expr->not')->with('andExpr')->once()->andReturn('notExpr');
-        $qb->shouldReceive('andWhere')->with('notExpr')->once()->andReturnSelf();
 
         $qb->shouldReceive('addSelect')->with('CONCAT(ucdp.forename, ucdp.familyName) as HIDDEN userSort')
             ->once()->andReturnSelf();

@@ -29,12 +29,13 @@ final class CommunityLicSuspensionReasonTest extends RepositoryTestCase
     public function testFetchBySuspensionIds(): void
     {
         $ids = [1];
-        $mockQb = m::mock();
+        $mockQb = m::mock(\Doctrine\ORM\QueryBuilder::class);
+        $foo = $this->mockExprIn('m.communityLicSuspension', ':communityLicSuspension');
         $mockQb->shouldReceive('expr->in')
             ->with('m.communityLicSuspension', ':communityLicSuspension')
             ->once()
-            ->andReturn('foo');
-        $mockQb->shouldReceive('andWhere')->with('foo')->once()->andReturnSelf();
+            ->andReturn($foo);
+        $mockQb->shouldReceive('andWhere')->with($foo)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('communityLicSuspension', $ids)->once()->andReturnSelf();
 
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($mockQb);

@@ -46,7 +46,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     /**
      * Foreign Key to retrieval_link
      *
-     * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink
+     * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink|null
      */
     #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink::class, fetch: 'LAZY')]
@@ -55,7 +55,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     /**
      * Source context
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'source_context', length: 255, nullable: true)]
     protected $sourceContext;
@@ -71,7 +71,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     /**
      * Member ref
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'member_ref', length: 64, nullable: true)]
     protected $memberRef;
@@ -79,7 +79,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     /**
      * Ip
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'ip', length: 45, nullable: true)]
     protected $ip;
@@ -87,7 +87,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     /**
      * User agent
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'user_agent', length: 255, nullable: true)]
     protected $userAgent;
@@ -95,7 +95,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
     /**
      * Detail
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'detail', length: 255, nullable: true)]
     protected $detail;

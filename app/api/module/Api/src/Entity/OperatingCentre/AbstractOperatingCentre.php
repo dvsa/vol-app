@@ -50,7 +50,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Foreign Key to address
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Address
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\Address|null
      */
     #[ORM\JoinColumn(name: 'address_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\Address::class, fetch: 'LAZY')]
@@ -59,7 +59,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -69,7 +69,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -88,7 +88,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
@@ -96,7 +96,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Complaints
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Cases\Complaint>
      */
     #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Complaint::class, mappedBy: 'operatingCentres', fetch: 'LAZY')]
     protected $complaints;
@@ -104,7 +104,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Oppositions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Opposition\Opposition>
      */
     #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Opposition\Opposition::class, mappedBy: 'operatingCentres', fetch: 'LAZY')]
     protected $oppositions;
@@ -112,7 +112,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * Applications
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\ApplicationOperatingCentre::class, mappedBy: 'operatingCentre')]
     protected $applications;
@@ -120,7 +120,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * ConditionUndertakings
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking::class, mappedBy: 'operatingCentre')]
     protected $conditionUndertakings;
@@ -128,7 +128,7 @@ abstract class AbstractOperatingCentre implements BundleSerializableInterface, J
     /**
      * AdDocuments
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Doc\Document>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'operatingCentre')]
     protected $adDocuments;

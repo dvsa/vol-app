@@ -57,7 +57,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     /**
      * Foreign Key to document
      *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
+     * @var \Dvsa\Olcs\Api\Entity\Doc\Document|null
      */
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\OneToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, inversedBy: 'slaTargetDate', fetch: 'LAZY')]
@@ -66,7 +66,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     /**
      * Foreign Key to pi
      *
-     * @var \Dvsa\Olcs\Api\Entity\Pi\Pi
+     * @var \Dvsa\Olcs\Api\Entity\Pi\Pi|null
      */
     #[ORM\JoinColumn(name: 'pi_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Pi\Pi::class, inversedBy: 'slaTargetDates', fetch: 'LAZY')]
@@ -75,7 +75,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     /**
      * Foreign Key to submission
      *
-     * @var \Dvsa\Olcs\Api\Entity\Submission\Submission
+     * @var \Dvsa\Olcs\Api\Entity\Submission\Submission|null
      */
     #[ORM\JoinColumn(name: 'submission_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Submission\Submission::class, inversedBy: 'slaTargetDates', fetch: 'LAZY')]
@@ -84,7 +84,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     /**
      * ProposeToRevoke
      *
-     * @var \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke
+     * @var \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke|null
      */
     #[ORM\JoinColumn(name: 'propose_to_revoke_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke::class, inversedBy: 'slaTargetDates', fetch: 'LAZY')]
@@ -93,7 +93,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     /**
      * Statement
      *
-     * @var \Dvsa\Olcs\Api\Entity\Cases\Statement
+     * @var \Dvsa\Olcs\Api\Entity\Cases\Statement|null
      */
     #[ORM\JoinColumn(name: 'statement_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Statement::class, inversedBy: 'slaTargetDates', fetch: 'LAZY')]
@@ -102,7 +102,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     /**
      * Foreign Key to sla
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\Sla
+     * @var \Dvsa\Olcs\Api\Entity\System\Sla|null
      */
     #[ORM\JoinColumn(name: 'sla_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Sla::class, fetch: 'LAZY')]
@@ -111,7 +111,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -121,7 +121,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -139,7 +139,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     /**
      * Target date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'target_date', nullable: true)]
     protected $targetDate;
@@ -147,7 +147,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     /**
      * Sent date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'sent_date', nullable: true)]
     protected $sentDate;
@@ -163,7 +163,7 @@ abstract class AbstractSlaTargetDate implements BundleSerializableInterface, Jso
     /**
      * SLA Target date notes
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'notes', length: 4000, nullable: true)]
     protected $notes;

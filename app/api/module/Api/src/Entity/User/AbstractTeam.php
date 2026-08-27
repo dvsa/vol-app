@@ -54,7 +54,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * Foreign Key to traffic_area
      *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea|null
      */
     #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
@@ -63,7 +63,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -73,7 +73,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -83,7 +83,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * Description
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;
@@ -108,7 +108,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
@@ -116,7 +116,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * Tasks
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Task\Task>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Task\Task::class, mappedBy: 'assignedToTeam')]
     protected $tasks;
@@ -124,7 +124,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * TaskAllocationRules
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Task\TaskAllocationRule::class, mappedBy: 'team')]
     protected $taskAllocationRules;
@@ -132,7 +132,7 @@ abstract class AbstractTeam implements BundleSerializableInterface, JsonSerializ
     /**
      * TeamPrinters
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\PrintScan\TeamPrinter>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\PrintScan\TeamPrinter::class, mappedBy: 'team', cascade: ['persist', 'remove'], orphanRemoval: true)]
     protected $teamPrinters;

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Permits;
 
-use Doctrine\DBAL\Connection;
 use Dvsa\Olcs\Api\Domain\Repository\Query\Permits\ExpireIrhpPermits as ExpireIrhpPermitsQry;
 use Dvsa\Olcs\Api\Domain\Util\DateTime\DateTime;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpPermit;
@@ -81,7 +80,7 @@ final class ExpireIrhpPermitsTest extends AbstractDbQueryTestCase
                 'currentUserId' => 1,
             ],
             [
-                'validStatuses' => Connection::PARAM_STR_ARRAY,
+                'validStatuses' => \Doctrine\DBAL\ArrayParameterType::STRING,
             ]
         ];
     }

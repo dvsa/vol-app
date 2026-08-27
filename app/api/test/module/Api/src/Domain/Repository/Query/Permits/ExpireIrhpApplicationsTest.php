@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository\Query\Permits;
 
-use Doctrine\DBAL\Connection;
 use Dvsa\Olcs\Api\Domain\Repository\Query\Permits\ExpireIrhpApplications as ExpireIrhpApplicationsQry;
 use Dvsa\Olcs\Api\Entity\IrhpInterface;
 use Dvsa\Olcs\Api\Entity\Permits\IrhpApplication;
@@ -82,8 +81,8 @@ final class ExpireIrhpApplicationsTest extends AbstractDbQueryTestCase
                 'currentUserId' => 1,
             ],
             [
-                'permitValidStatuses' => Connection::PARAM_STR_ARRAY,
-                'certificatePermitTypes' => Connection::PARAM_INT_ARRAY,
+                'permitValidStatuses' => \Doctrine\DBAL\ArrayParameterType::STRING,
+                'certificatePermitTypes' => \Doctrine\DBAL\ArrayParameterType::INTEGER,
             ]
         ];
     }

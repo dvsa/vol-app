@@ -29,7 +29,7 @@ final class TaskTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -47,7 +47,7 @@ final class TaskTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -65,7 +65,7 @@ final class TaskTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -83,7 +83,7 @@ final class TaskTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -101,7 +101,7 @@ final class TaskTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getSingleResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -125,7 +125,7 @@ final class TaskTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getOneOrNullResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -172,9 +172,10 @@ final class TaskTest extends RepositoryTestCase
     {
         $teamId = 999;
 
-        $this->em->shouldReceive('getReference')->once()->with(Entity\User\Team::class, $teamId)->andReturn('EXPECT');
+        $team = m::mock(Entity\User\Team::class);
+        $this->em->shouldReceive('getReference')->once()->with(Entity\User\Team::class, $teamId)->andReturn($team);
 
-        $this->assertEquals('EXPECT', $this->sut->getTeamReference($teamId, null));
+        $this->assertSame($team, $this->sut->getTeamReference($teamId, null));
     }
 
     public function testGetTeamReferenceByUser(): void
@@ -205,16 +206,19 @@ final class TaskTest extends RepositoryTestCase
             ->once()
             ->andReturn($mockQb);
 
-        $mockQb->shouldReceive('expr->eq')->with('m.application', ':application')->once()->andReturn('EXPR1');
-        $mockQb->shouldReceive('andWhere')->with('EXPR1')->once()->andReturnSelf();
+        $expr1 = $this->mockExprEq('m.application', ':application');
+        $mockQb->shouldReceive('expr->eq')->with('m.application', ':application')->once()->andReturn($expr1);
+        $mockQb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('application', 1)->once();
 
-        $mockQb->shouldReceive('expr->eq')->with('m.description', ':description')->once()->andReturn('EXPR2');
-        $mockQb->shouldReceive('andWhere')->with('EXPR2')->once()->andReturnSelf();
+        $expr2 = $this->mockExprEq('m.description', ':description');
+        $mockQb->shouldReceive('expr->eq')->with('m.description', ':description')->once()->andReturn($expr2);
+        $mockQb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('description', 'foo')->once();
 
-        $mockQb->shouldReceive('expr->eq')->with('m.isClosed', ':isClosed')->once()->andReturn('EXPR3');
-        $mockQb->shouldReceive('andWhere')->with('EXPR3')->once()->andReturnSelf();
+        $expr3 = $this->mockExprEq('m.isClosed', ':isClosed');
+        $mockQb->shouldReceive('expr->eq')->with('m.isClosed', ':isClosed')->once()->andReturn($expr3);
+        $mockQb->shouldReceive('andWhere')->with($expr3)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('isClosed', 'N')->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->andReturn(['result']);
@@ -247,24 +251,29 @@ final class TaskTest extends RepositoryTestCase
             ->once()
             ->getMock();
 
-        $qb->shouldReceive('expr->in')->with('m.licence', ':licenceIds')->once()->andReturn('EXPR1');
-        $qb->shouldReceive('andWhere')->with('EXPR1')->once()->andReturnSelf();
+        $expr1 = $this->mockExprIn('m.licence', ':licenceIds');
+        $qb->shouldReceive('expr->in')->with('m.licence', ':licenceIds')->once()->andReturn($expr1);
+        $qb->shouldReceive('andWhere')->with($expr1)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('licenceIds', $licenceIds)->once()->andReturnSelf();
 
-        $qb->shouldReceive('expr->eq')->with('m.description', ':description')->once()->andReturn('EXPR2');
-        $qb->shouldReceive('andWhere')->with('EXPR2')->once()->andReturnSelf();
+        $expr2 = $this->mockExprEq('m.description', ':description');
+        $qb->shouldReceive('expr->eq')->with('m.description', ':description')->once()->andReturn($expr2);
+        $qb->shouldReceive('andWhere')->with($expr2)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('description', $description)->once()->andReturnSelf();
 
-        $qb->shouldReceive('expr->eq')->with('m.isClosed', ':isClosed')->once()->andReturn('EXPR3');
-        $qb->shouldReceive('andWhere')->with('EXPR3')->once()->andReturnSelf();
+        $expr3 = $this->mockExprEq('m.isClosed', ':isClosed');
+        $qb->shouldReceive('expr->eq')->with('m.isClosed', ':isClosed')->once()->andReturn($expr3);
+        $qb->shouldReceive('andWhere')->with($expr3)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('isClosed', 0)->once()->andReturnSelf();
 
-        $qb->shouldReceive('expr->eq')->with('m.category', ':categoryId')->once()->andReturn('EXPR4');
-        $qb->shouldReceive('andWhere')->with('EXPR4')->once()->andReturnSelf();
+        $expr4 = $this->mockExprEq('m.category', ':categoryId');
+        $qb->shouldReceive('expr->eq')->with('m.category', ':categoryId')->once()->andReturn($expr4);
+        $qb->shouldReceive('andWhere')->with($expr4)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('categoryId', $categoryId)->once()->andReturnSelf();
 
-        $qb->shouldReceive('expr->eq')->with('m.subCategory', ':subCategoryId')->once()->andReturn('EXPR5');
-        $qb->shouldReceive('andWhere')->with('EXPR5')->once()->andReturnSelf();
+        $expr5 = $this->mockExprEq('m.subCategory', ':subCategoryId');
+        $qb->shouldReceive('expr->eq')->with('m.subCategory', ':subCategoryId')->once()->andReturn($expr5);
+        $qb->shouldReceive('andWhere')->with($expr5)->once()->andReturnSelf();
         $qb->shouldReceive('setParameter')->with('subCategoryId', $subCategoryId)->once()->andReturnSelf();
 
         $this->em
@@ -286,13 +295,14 @@ final class TaskTest extends RepositoryTestCase
         $qb = m::mock(QueryBuilder::class);
         $this->mockCreateQueryBuilder($qb);
 
+        $expr1 = $this->mockExprEq('m.surrender', ':surrenderId');
         $qb->shouldReceive('expr->eq')
             ->with('m.surrender', ':surrenderId')
             ->once()
-            ->andReturn('EXPR1');
+            ->andReturn($expr1);
 
         $qb->shouldReceive('where')
-            ->with('EXPR1')
+            ->with($expr1)
             ->andReturnSelf();
 
         $qb->shouldReceive('setParameter')
@@ -300,13 +310,14 @@ final class TaskTest extends RepositoryTestCase
             ->once()
             ->andReturnSelf();
 
+        $expr2 = $this->mockExprEq('m.isClosed', ':isClosed');
         $qb->shouldReceive('expr->eq')
             ->with('m.isClosed', ':isClosed')
             ->once()
-            ->andReturn('EXPR2');
+            ->andReturn($expr2);
 
         $qb->shouldReceive('andWhere')
-            ->with('EXPR2')
+            ->with($expr2)
             ->andReturnSelf();
 
         $qb->shouldReceive('setParameter')

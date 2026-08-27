@@ -30,7 +30,7 @@ final class HearingTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getSingleResult')
                 ->andReturn('RESULT')
                 ->getMock()

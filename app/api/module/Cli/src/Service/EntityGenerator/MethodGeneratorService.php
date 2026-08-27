@@ -68,8 +68,15 @@ final readonly class MethodGeneratorService
     public function getPhpTypeFromType(string $type): string
     {
         // Handle array types for collections
-        if (str_starts_with($type, 'ArrayCollection') || str_starts_with($type, \Doctrine\Common\Collections\ArrayCollection::class)) {
-            return '\\' . \Doctrine\Common\Collections\ArrayCollection::class;
+        $normalizedType = ltrim($type, '\\');
+
+        if (
+            str_starts_with($normalizedType, 'ArrayCollection') ||
+            str_starts_with($normalizedType, \Doctrine\Common\Collections\ArrayCollection::class) ||
+            str_starts_with($normalizedType, 'Collection') ||
+            str_starts_with($normalizedType, \Doctrine\Common\Collections\Collection::class)
+        ) {
+            return '\\' . \Doctrine\Common\Collections\Collection::class;
         }
 
         // Handle entity types (anything starting with uppercase or backslash)

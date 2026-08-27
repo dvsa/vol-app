@@ -45,7 +45,7 @@ final class CompaniesHouseAlertTest extends RepositoryTestCase
 
         $this->assertEquals(['foo' => 'bar'], $this->sut->fetchList($query));
 
-        $expected = '{QUERY} SELECT cha_o, cha_o_ls, cha_o_lst INNER JOIN cha.organisation cha_o INNER JOIN cha_o.licences cha_o_ls WITH cha_o_ls.status IN ([[["lsts_curtailed","lsts_valid","lsts_suspended"]]]) INNER JOIN cha_o_ls.licenceType cha_o_lst AND cha.isClosed = 0 AND cha_o_ls.trafficArea IN [[["A","B"]]]';
+        $expected = '{QUERY} SELECT cha_o, cha_o_ls, cha_o_lst INNER JOIN cha.organisation cha_o INNER JOIN cha_o.licences cha_o_ls WITH cha_o_ls.status IN ([[["lsts_curtailed","lsts_valid","lsts_suspended"]]]) INNER JOIN cha_o_ls.licenceType cha_o_lst AND cha.isClosed = 0 AND cha_o_ls.trafficArea IN([[["A","B"]]])';
 
         $this->assertEquals($expected, $this->query);
     }
@@ -72,7 +72,7 @@ final class CompaniesHouseAlertTest extends RepositoryTestCase
 
         $this->assertEquals(['foo' => 'bar'], $this->sut->fetchList($query));
 
-        $expected = '{QUERY} SELECT cha_o, cha_o_ls, cha_o_lst INNER JOIN cha.organisation cha_o INNER JOIN cha_o.licences cha_o_ls WITH cha_o_ls.status IN ([[["lsts_curtailed","lsts_valid","lsts_suspended"]]]) INNER JOIN cha_o_ls.licenceType cha_o_lst INNER JOIN cha.reasons r WITH r.reasonType = [[some_type]] AND cha_o_ls.trafficArea IN [[["A","B"]]]';
+        $expected = '{QUERY} SELECT cha_o, cha_o_ls, cha_o_lst INNER JOIN cha.organisation cha_o INNER JOIN cha_o.licences cha_o_ls WITH cha_o_ls.status IN ([[["lsts_curtailed","lsts_valid","lsts_suspended"]]]) INNER JOIN cha_o_ls.licenceType cha_o_lst INNER JOIN cha.reasons r WITH r.reasonType = [[some_type]] AND cha_o_ls.trafficArea IN([[["A","B"]]])';
 
         $this->assertEquals($expected, $this->query);
     }
@@ -82,7 +82,7 @@ final class CompaniesHouseAlertTest extends RepositoryTestCase
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
 
-        $mockRefDataRepo = m::mock();
+        $mockRefDataRepo = m::mock(\Doctrine\ORM\EntityRepository::class);
 
         $this->em
             ->shouldReceive('getRepository')
@@ -94,7 +94,7 @@ final class CompaniesHouseAlertTest extends RepositoryTestCase
             ->with('r')
             ->andReturn($qb);
 
-        $where = m::mock();
+        $where = m::mock(\Doctrine\ORM\Query\Expr\Comparison::class);
         $qb
             ->shouldReceive('where')
             ->once()
