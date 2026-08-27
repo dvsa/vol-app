@@ -11,7 +11,7 @@ use PHPUnit\Framework\Attributes\Test;
 
 final class CallbackReplayStoreTest extends MockeryTestCase
 {
-    private const CODE = 'UmT5isA_NDSuUBWd_GSZ';
+    private const string CODE = 'UmT5isA_NDSuUBWd_GSZ';
 
     private function key(): string
     {

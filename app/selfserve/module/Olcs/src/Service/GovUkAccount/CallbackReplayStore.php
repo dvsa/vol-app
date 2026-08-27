@@ -11,10 +11,10 @@ namespace Olcs\Service\GovUkAccount;
  */
 class CallbackReplayStore
 {
-    public const TTL_SECONDS = 60;
+    public const int TTL_SECONDS = 60;
 
-    private const KEY_PREFIX = 'govuk-account-callback:';
-    private const IN_PROGRESS = 'in-progress';
+    private const string KEY_PREFIX = 'govuk-account-callback:';
+    private const string IN_PROGRESS = 'in-progress';
 
     public function __construct(private readonly \Redis $redis)
     {

@@ -17,6 +17,7 @@ class SignatureVerificationController extends AbstractSelfserveController
      * @param FormHelperService $formHelper
      * @param TableFactory $tableBuilder
      * @param MapperManager $mapperManager
+     * @param CallbackReplayStore $replayStore
      */
     public function __construct(
         TranslationHelperService $translationHelper,
@@ -31,7 +32,8 @@ class SignatureVerificationController extends AbstractSelfserveController
     #[\Override]
     public function indexAction(): \Laminas\Http\Response
     {
-        $code = (string) ($this->getRequest()->getQuery('code') ?? '');
+        $queryCode = $this->getRequest()->getQuery('code');
+        $code = is_string($queryCode) ? $queryCode : '';
         $claim = $this->replayStore->claim($code);
 
         // An earlier request already finished this callback; the code is spent.

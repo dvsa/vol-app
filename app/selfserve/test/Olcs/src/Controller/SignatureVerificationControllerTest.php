@@ -16,9 +16,9 @@ use ReflectionClass;
 
 final class SignatureVerificationControllerTest extends MockeryTestCase
 {
-    private const CODE = 'UmT5isA_NDSuUBWd_GSZ';
-    private const SUCCESS = '/licence/672250/surrender/confirmation/';
-    private const FAILURE = '/licence/672250/surrender/declaration/sign-with-external/';
+    private const string CODE = 'UmT5isA_NDSuUBWd_GSZ';
+    private const string SUCCESS = '/licence/672250/surrender/confirmation/';
+    private const string FAILURE = '/licence/672250/surrender/declaration/sign-with-external/';
 
     private $sut;
 
@@ -121,6 +121,36 @@ final class SignatureVerificationControllerTest extends MockeryTestCase
         $this->expectRedirectTo(self::SUCCESS);
 
         $this->sut->indexAction();
+    }
+
+    #[Test]
+    public function anArrayCodeParameterIsNotUsedAsACacheKey(): void
+    {
+        $request = m::mock();
+        $request->shouldReceive('getQuery')->with('code')->andReturn(['injected']);
+        $request->shouldReceive('getQuery')->with('state')->andReturn('a.b.c');
+        $request->shouldReceive('getQuery')->with('error')->andReturnNull();
+        $request->shouldReceive('getQuery')->with('errorDescription')->andReturnNull();
+
+        $sut = m::mock(Sut::class)->makePartial()->shouldAllowMockingProtectedMethods();
+        (new ReflectionClass(Sut::class))->getProperty('replayStore')->setValue($sut, $this->store);
+        $sut->shouldReceive('getRequest')->andReturn($request);
+
+        // '' rather than the string 'Array', which would collide across requests.
+        $this->store->shouldReceive('claim')->once()->with('')->andReturn(CallbackClaim::claimed());
+
+        $response = m::mock('stdClass');
+        $response->shouldReceive('getResult')->andReturn(['flags' => ['redirect_url' => self::SUCCESS]]);
+        $response->shouldReceive('getStatusCode')->andReturn(201);
+        $sut->shouldReceive('handleCommand')->andReturn($response);
+
+        $this->store->shouldReceive('recordOutcome')->once()->with('', self::SUCCESS);
+
+        $redirect = m::mock();
+        $redirect->shouldReceive('toUrl')->once()->with(self::SUCCESS)->andReturn(new Response());
+        $sut->shouldReceive('redirect')->andReturn($redirect);
+
+        $sut->indexAction();
     }
 
     #[Test]
