@@ -7,6 +7,8 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\GovUkAccount\ProcessAuthResponse;
+use Olcs\Logging\Log\Logger;
+use Olcs\Service\GovUkAccount\CallbackClaimStatus;
 use Olcs\Service\GovUkAccount\CallbackReplayStore;
 use Permits\Data\Mapper\MapperManager;
 
@@ -34,9 +36,24 @@ class SignatureVerificationController extends AbstractSelfserveController
     {
         $queryCode = $this->getRequest()->getQuery('code');
         $code = is_string($queryCode) ? $queryCode : '';
-        $claim = $this->replayStore->claim($code);
+        $userId = (string) ($this->currentUser()->getUserData()['id'] ?? '');
+        $claim = $this->replayStore->claim($code, $userId);
 
-        // An earlier request already finished this callback; the code is spent.
+        // Logged at warn and above deliberately: every environment runs at
+        // log_level "warning", so anything lower would never be visible.
+        if ($claim->status === CallbackClaimStatus::ForeignReplay) {
+            Logger::err(
+                'GOV.UK One Login authorisation code replayed by a different user',
+                ['userId' => $userId]
+            );
+        } elseif ($claim->isOwnReplay()) {
+            Logger::warn(
+                'GOV.UK One Login callback replayed; reusing the first outcome',
+                ['userId' => $userId, 'status' => $claim->status->name]
+            );
+        }
+
+        // The owning request already finished; the code is spent.
         if ($claim->redirectUrl !== null) {
             return $this->redirect()->toUrl($claim->redirectUrl);
         }
@@ -59,7 +76,7 @@ class SignatureVerificationController extends AbstractSelfserveController
 
         // A replay reaching here means the owning request is still running and
         // consumed the code, so our failure is not this user's failure.
-        if (!empty($error) && !$claim->isReplay) {
+        if (!empty($error) && !$claim->isOwnReplay()) {
             $this->flashMessenger()->getContainer()->offsetSet('govUkAccountError', true);
 
             if (!empty($redirectUrlOnError)) {
@@ -67,8 +84,10 @@ class SignatureVerificationController extends AbstractSelfserveController
             }
         }
 
-        if (!$claim->isReplay) {
-            $this->replayStore->recordOutcome($code, $redirectUrl);
+        // Only the owning request publishes, so a foreign replay cannot
+        // overwrite the real user's destination.
+        if ($claim->ownsCode()) {
+            $this->replayStore->recordOutcome($code, $userId, $redirectUrl);
         }
 
         return $this->redirect()->toUrl($redirectUrl);

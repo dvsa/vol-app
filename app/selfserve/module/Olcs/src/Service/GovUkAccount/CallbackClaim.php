@@ -10,26 +10,41 @@ namespace Olcs\Service\GovUkAccount;
 final readonly class CallbackClaim
 {
     private function __construct(
-        public bool $isReplay,
+        public CallbackClaimStatus $status,
         public ?string $redirectUrl,
     ) {
     }
 
-    /** This request owns the code and should process it. */
     public static function claimed(): self
     {
-        return new self(false, null);
+        return new self(CallbackClaimStatus::Claimed, null);
     }
 
-    /** An earlier request finished and sent the user to $redirectUrl. */
-    public static function replayOf(string $redirectUrl): self
-    {
-        return new self(true, $redirectUrl);
-    }
-
-    /** An earlier request owns the code and has not published an outcome yet. */
     public static function replayInFlight(): self
     {
-        return new self(true, null);
+        return new self(CallbackClaimStatus::ReplayInFlight, null);
+    }
+
+    public static function replayComplete(string $redirectUrl): self
+    {
+        return new self(CallbackClaimStatus::ReplayComplete, $redirectUrl);
+    }
+
+    public static function foreignReplay(): self
+    {
+        return new self(CallbackClaimStatus::ForeignReplay, null);
+    }
+
+    /** True only for a replay by the user who owns the code. */
+    public function isOwnReplay(): bool
+    {
+        return $this->status === CallbackClaimStatus::ReplayInFlight
+            || $this->status === CallbackClaimStatus::ReplayComplete;
+    }
+
+    /** Only the owning request may publish an outcome. */
+    public function ownsCode(): bool
+    {
+        return $this->status === CallbackClaimStatus::Claimed;
     }
 }
