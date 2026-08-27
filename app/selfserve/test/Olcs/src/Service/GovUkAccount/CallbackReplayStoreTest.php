@@ -124,6 +124,28 @@ final class CallbackReplayStoreTest extends MockeryTestCase
     }
 
     #[Test]
+    public function anUnencodableUserIdDegradesRatherThanFailingTheCallback(): void
+    {
+        $redis = m::mock(\Redis::class);
+        $redis->shouldNotReceive('get');
+
+        // Invalid UTF-8 makes json_encode throw; signing must not 500 because of it.
+        $claim = (new CallbackReplayStore($redis))->claim(self::CODE, "\xB1\x31");
+
+        $this->assertSame(CallbackClaimStatus::Claimed, $claim->status);
+    }
+
+    #[Test]
+    public function anUnencodableUserIdIsNotRecorded(): void
+    {
+        $redis = m::mock(\Redis::class);
+
+        (new CallbackReplayStore($redis))->recordOutcome(self::CODE, "\xB1\x31", self::URL);
+
+        $this->addToAssertionCount(1);
+    }
+
+    #[Test]
     public function aCallbackWithoutACodeOrUserNeverTouchesTheCache(): void
     {
         $redis = m::mock(\Redis::class);

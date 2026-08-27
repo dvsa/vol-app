@@ -38,7 +38,7 @@ class CallbackReplayStore
             }
 
             $stored = $this->redis->get($this->key($code));
-        } catch (\RedisException) {
+        } catch (\RedisException | \JsonException) {
             // Never block signing on the cache.
             return CallbackClaim::claimed();
         }
@@ -78,7 +78,7 @@ class CallbackReplayStore
                 $this->payload($userId, $redirectUrl),
                 ['ex' => self::TTL_SECONDS]
             );
-        } catch (\RedisException) {
+        } catch (\RedisException | \JsonException) {
             // A lost write only means a later replay behaves as it does today.
         }
     }
