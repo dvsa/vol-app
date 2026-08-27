@@ -40,7 +40,7 @@ return [
                     true
                 );
                 $column['formatter'] = Date::class;
-                return '<a class="govuk-link" href="' . $url . '">' . date(Module::$dateTimeSecFormat, strtotime((string) $data['hearingDate'])) . '</a>';
+                return '<a class="govuk-link" href="' . $url . '">' . \Common\Util\Escape::html(date(Module::$dateTimeSecFormat, strtotime((string) $data['hearingDate']))) . '</a>';
             },
             'name' => 'id'
         ],

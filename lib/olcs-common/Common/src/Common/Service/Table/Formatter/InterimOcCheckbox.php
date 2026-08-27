@@ -8,6 +8,8 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
+
 /**
  * Interim Operating Centres Checkbox formatter
  *
@@ -25,7 +27,7 @@ class InterimOcCheckbox implements FormatterPluginManagerInterface
     #[\Override]
     public function format($data, $column = [])
     {
-        $format = '<input type="checkbox" value="' . $data['id'] . '" name="operatingCentres[id][]" %s>';
+        $format = '<input type="checkbox" value="' . Escape::html($data['id']) . '" name="operatingCentres[id][]" %s>';
         if (
             isset($data['isInterim'])
             && $data['isInterim'] == 'Y'

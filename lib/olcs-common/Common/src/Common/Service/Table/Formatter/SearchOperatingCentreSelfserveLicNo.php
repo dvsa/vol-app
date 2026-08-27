@@ -30,9 +30,11 @@ class SearchOperatingCentreSelfserveLicNo implements FormatterPluginManagerInter
     {
         return sprintf(
             '<a class="govuk-link" href="%s">%s</a><br/>%s',
-            '/view-details/licence/' . $data['licId'],
+            '/view-details/licence/' . Escape::htmlAttr($data['licId']),
             Escape::html($data['licNo']),
-            $this->translator->translate($data['licStatusDesc'])
+            // translate() returns its argument unchanged when there is no translation, so a row
+            // value passed through it is still a row value.
+            Escape::html($this->translator->translate($data['licStatusDesc']))
         );
     }
 }

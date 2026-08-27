@@ -8,6 +8,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\Service\Helper\UrlHelperService;
 use Laminas\Http\Request;
 use Laminas\Router\Http\TreeRouteStack;
@@ -76,6 +77,10 @@ class TaskDescription implements FormatterPluginManagerInterface
             ]
         );
 
-        return sprintf('<a href="%s" class="govuk-link js-modal-ajax">%s</a>', $url, $row['description']);
+        return sprintf(
+            '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
+            $url,
+            Escape::html($row['description'])
+        );
     }
 }

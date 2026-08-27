@@ -152,6 +152,37 @@ final class SelectorTest extends MockeryTestCase
         );
     }
 
+    /**
+     * An array with no id renders an empty attribute rather than taking the table down
+     *
+     * The branch above identifies a to-one entity by its id. A to-many collection has no id, and
+     * handing one to Escape::html() is a TypeError, not a wrong attribute.
+     */
+    #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
+    public function testRenderWithDataAttributesArrayWithoutId(): void
+    {
+        $fieldset = null;
+        $data = [
+            'id' => 7,
+            'action' => [['id' => 'blap'], ['id' => 'blip']]
+        ];
+        $column = [
+            'data-attributes' => [
+                'action'
+            ]
+        ];
+
+        $this->table->shouldReceive('getFieldset')
+            ->andReturn($fieldset);
+
+        $response = $this->sut->render($data, $column);
+
+        $this->assertEquals(
+            '<input type="radio" name="id" value="7" data-action="" id="[id][7]" />',
+            $response
+        );
+    }
+
     #[\PHPUnit\Framework\Attributes\Group('checkboxTest')]
     public function testRenderWithDataIdxSet(): void
     {

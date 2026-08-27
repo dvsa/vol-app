@@ -22,6 +22,9 @@ final class ContentSectionRendererTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->mockConverterService = m::mock(ConverterService::class);
+        // normalize() fills in the EditorJS envelope and returns conforming content
+        // untouched, so the tests below assert against exactly what they pass in.
+        $this->mockConverterService->shouldReceive('normalize')->andReturnUsing(fn(array $d): array => $d);
         $this->mockVolGrabService = m::mock(VolGrabReplacementService::class);
         $this->sut = new ContentSectionRenderer($this->mockConverterService, $this->mockVolGrabService);
     }

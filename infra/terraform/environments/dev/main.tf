@@ -40,6 +40,22 @@ locals {
     {
       effect = "Allow"
       actions = [
+        "events:PutEvents"
+      ]
+      resources = [
+        "arn:aws:events:eu-west-1:054614622558:event-bus/default"
+      ]
+      conditions = [
+        {
+          test     = "StringEquals"
+          variable = "events:source"
+          values   = ["vol.api"]
+        }
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
         "sts:AssumeRole"
       ]
       resources = [
@@ -711,13 +727,6 @@ module "service" {
         name     = "sas-mi-extract",
         commands = ["/mnt/data/scripts/sas_mi_extract.sh"],
         type     = "scripts"
-      },
-      {
-        name     = "import-anondb",
-        commands = ["/mnt/data/scripts/import_anondb.sh"],
-        type     = "scripts"
-        cpu      = 2,
-        memory   = 8192,
       },
       {
         name     = "populate-anondb",

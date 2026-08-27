@@ -23,6 +23,30 @@ return [
             ),
             'GET' => QueryConfig::getConfig(Query\Letter\LetterType\GetList::class),
             'POST' => CommandConfig::getPostConfig(Command\Letter\LetterType\Create::class),
+            'suggest-preview-records' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route' => 'suggest-preview-records',
+                    'defaults' => [
+                        'controller' => 'Api\Generic'
+                    ]
+                ],
+                'child_routes' => [
+                    'POST' => CommandConfig::getPostConfig(Command\Letter\LetterType\SuggestPreviewRecords::class),
+                ]
+            ],
+            'preview-composition' => [
+                'type' => 'Segment',
+                'options' => [
+                    'route' => 'preview-composition',
+                    'defaults' => [
+                        'controller' => 'Api\Generic'
+                    ]
+                ],
+                'child_routes' => [
+                    'POST' => CommandConfig::getPostConfig(Command\Letter\LetterType\PreviewComposition::class),
+                ]
+            ],
             'clone' => [
                 'type' => 'Segment',
                 'options' => [

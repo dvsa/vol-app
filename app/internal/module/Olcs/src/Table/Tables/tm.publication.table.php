@@ -44,19 +44,19 @@ return [
         [
             'title' => 'Publication No.',
             'isNumeric' => true,
-            'formatter' => fn($data) => $data['publication']['publicationNo']
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['publication']['publicationNo'])
         ],
         [
             'title' => 'Type',
-            'formatter' => fn($data) => $data['publication']['pubType']
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['publication']['pubType'])
         ],
         [
             'title' => 'Traffic area',
-            'formatter' => fn($data) => $data['publication']['trafficArea']['name']
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['publication']['trafficArea']['name'])
         ],
         [
             'title' => 'Status',
-            'formatter' => fn($data) => $data['publication']['pubStatus']['description']
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['publication']['pubStatus']['description'])
         ],
         [
             'title' => 'Publication date',
@@ -67,12 +67,16 @@ return [
         ],
         [
             'title' => 'Section',
-            'formatter' => fn($data) => $data['publicationSection']['description']
+            'formatter' => fn($data) => \Common\Util\Escape::html($data['publicationSection']['description'])
         ],
         [
             'title' => 'Text',
             'formatter' => function ($data) {
-                $string = nl2br((string) $data['text1']) . '<br />' . $data['text2'];
+                // Escaped before nl2br, so the <br /> it inserts stays markup while the text
+                // around it cannot be. Truncation below can split an entity, which renders as
+                // literal text — the same cosmetic risk the original had with the <br /> tag.
+                $string = nl2br(\Common\Util\Escape::html((string) $data['text1']))
+                    . '<br />' . \Common\Util\Escape::html((string) $data['text2']);
                 if (strlen($string) > 100) {
                     return substr($string, 0, 100) . ' [...]';
                 }

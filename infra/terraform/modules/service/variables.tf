@@ -42,6 +42,11 @@ variable "services" {
       effect    = string
       actions   = list(string)
       resources = list(string)
+      conditions = optional(list(object({
+        test     = string
+        values   = list(string)
+        variable = string
+      })), [])
     }))
     task_exec_iam_role_statements = optional(list(object({
       effect    = string
@@ -82,6 +87,11 @@ variable "batch" {
       effect    = string
       actions   = list(string)
       resources = list(string)
+      conditions = optional(list(object({
+        test     = string
+        values   = list(string)
+        variable = string
+      })), [])
     }))
     jobs = list(object({
       name     = string

@@ -8,6 +8,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\Service\Helper\UrlHelperService;
 use Laminas\Http\Request;
 use Laminas\Router\Http\TreeRouteStack;
@@ -44,6 +45,6 @@ class TransactionUrl implements FormatterPluginManagerInterface
             true
         );
 
-        return '<a class="govuk-link" href="' . $url . '">' . $row['transactionId'] . '</a>';
+        return '<a class="govuk-link" href="' . $url . '">' . Escape::html($row['transactionId']) . '</a>';
     }
 }

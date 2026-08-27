@@ -54,19 +54,21 @@ jobs:
     outputs:
       # Docs
       should-deploy-docs: ${{ steps.changed-website-files.outputs.any_modified == 'true' || null }}
-      # App
-      should-build-app: ${{ needs.release-please.outputs.release_created || steps.changed-api-files.outputs.any_modified == 'true' || steps.changed-selfserve-files.outputs.any_modified == 'true' || steps.changed-internal-files.outputs.any_modified == 'true' || null }}
-      should-build-api: ${{ needs.release-please.outputs.release_created || steps.changed-api-files.outputs.any_modified == 'true' || null }}
-      should-build-selfserve: ${{ needs.release-please.outputs.release_created || steps.changed-selfserve-files.outputs.any_modified == 'true' || null }}
-      should-build-internal: ${{ needs.release-please.outputs.release_created || steps.changed-internal-files.outputs.any_modified == 'true' || null }}
+      # App  (a change to an in-tree shared lib rebuilds every app, since all apps consume them)
+      should-build-app: ${{ needs.release-please.outputs.release_created || steps.changed-api-files.outputs.any_modified == 'true' || steps.changed-selfserve-files.outputs.any_modified == 'true' || steps.changed-internal-files.outputs.any_modified == 'true' || steps.changed-lib-files.outputs.any_modified == 'true' || null }}
+      should-build-api: ${{ needs.release-please.outputs.release_created || steps.changed-api-files.outputs.any_modified == 'true' || steps.changed-lib-files.outputs.any_modified == 'true' || null }}
+      should-build-selfserve: ${{ needs.release-please.outputs.release_created || steps.changed-selfserve-files.outputs.any_modified == 'true' || steps.changed-lib-files.outputs.any_modified == 'true' || null }}
+      should-build-internal: ${{ needs.release-please.outputs.release_created || steps.changed-internal-files.outputs.any_modified == 'true' || steps.changed-lib-files.outputs.any_modified == 'true' || null }}
+      # Libs (in-tree shared libraries under lib/)
+      should-build-libs: ${{ needs.release-please.outputs.release_created || steps.changed-lib-files.outputs.any_modified == 'true' || null }}
       # Assets
       should-build-assets: ${{ needs.release-please.outputs.release_created || steps.changed-assets-files.outputs.any_modified == 'true' || null }}
       # Docker
       should-build-and-push-docker: ${{ needs.release-please.outputs.release_created || steps.changed-api-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-internal-docker-files.outputs.any_modified == 'true' || steps.changed-cli-docker-files.outputs.any_modified == 'true' || null}}
-      should-build-and-push-api-docker: ${{ needs.release-please.outputs.release_created || steps.changed-api-docker-files.outputs.any_modified == 'true' || steps.changed-api-files.outputs.any_modified == 'true' || null }}
-      should-build-and-push-cli-docker: ${{ needs.release-please.outputs.release_created || steps.changed-cli-docker-files.outputs.any_modified == 'true' || steps.changed-api-files.outputs.any_modified == 'true' || null }}
-      should-build-and-push-selfserve-docker: ${{ needs.release-please.outputs.release_created || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-files.outputs.any_modified == 'true' || null }}
-      should-build-and-push-internal-docker: ${{ needs.release-please.outputs.release_created || steps.changed-internal-docker-files.outputs.any_modified == 'true' || steps.changed-internal-files.outputs.any_modified == 'true' || null }}
+      should-build-and-push-api-docker: ${{ needs.release-please.outputs.release_created || steps.changed-api-docker-files.outputs.any_modified == 'true' || steps.changed-api-files.outputs.any_modified == 'true' || steps.changed-lib-files.outputs.any_modified == 'true' || null }}
+      should-build-and-push-cli-docker: ${{ needs.release-please.outputs.release_created || steps.changed-cli-docker-files.outputs.any_modified == 'true' || steps.changed-api-files.outputs.any_modified == 'true' || steps.changed-lib-files.outputs.any_modified == 'true' || null }}
+      should-build-and-push-selfserve-docker: ${{ needs.release-please.outputs.release_created || steps.changed-selfserve-docker-files.outputs.any_modified == 'true' || steps.changed-selfserve-files.outputs.any_modified == 'true' || steps.changed-lib-files.outputs.any_modified == 'true' || null }}
+      should-build-and-push-internal-docker: ${{ needs.release-please.outputs.release_created || steps.changed-internal-docker-files.outputs.any_modified == 'true' || steps.changed-internal-files.outputs.any_modified == 'true' || steps.changed-lib-files.outputs.any_modified == 'true' || null }}
       # Terraform account
       should-apply-account-terraform: ${{ needs.release-please.outputs.release_created || steps.changed-accounts-terraform-files.outputs.any_modified == 'true' || null }}
       # Terraform environment
@@ -90,6 +92,11 @@ jobs:
         with:
           files: |
             app/internal/**
+      - uses: tj-actions/changed-files@v47
+        id: changed-lib-files
+        with:
+          files: |
+            lib/**
       - uses: tj-actions/changed-files@v47
         id: changed-assets-files
         with:
@@ -170,22 +177,30 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+      # lib is part of every app's version because it is part of every app's artefact:
+      # composer resolves lib/<name> through a path repository and php.yaml materialises
+      # those symlinks into real directories before packaging. The action resolves a version
+      # with `git rev-list -1 -- <project-path>`, so without lib here a commit touching only
+      # lib/ leaves the version unchanged — the image would be rebuilt under a tag that
+      # already exists, and terraform would see no change and deploy nothing.
       - id: api-version
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
-          project-path: app/api infra/docker/api
+          project-path: app/api infra/docker/api lib
       - id: cli-version
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
-          project-path: app/api infra/docker/cli
+          project-path: app/api infra/docker/cli lib
       - id: selfserve-version
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
-          project-path: app/selfserve infra/docker/selfserve
+          project-path: app/selfserve infra/docker/selfserve lib
       - id: internal-version
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
-          project-path: app/internal infra/docker/internal
+          project-path: app/internal infra/docker/internal lib
+      # Assets are built from app/cdn alone and ship to the CDN bucket rather than in an
+      # app image, so lib is deliberately absent here.
       - id: assets-version
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
@@ -245,6 +260,27 @@ jobs:
     permissions:
       contents: read
 
+  lib:
+    name: Lib
+    if: ${{ needs.orchestrator.outputs.should-build-libs }}
+    needs:
+      - orchestrator
+    strategy:
+      fail-fast: false
+      matrix:
+        project:
+          - olcs-logging
+          - vol-logging-mvc
+          - olcs-utils
+          - olcs-transfer
+          - olcs-common
+          - olcs-auth
+    uses: ./.github/workflows/php-lib.yaml
+    with:
+      project: ${{ matrix.project }}
+    permissions:
+      contents: read
+
   docker:
     name: Docker
     if: ${{ always() && !cancelled() && !failure() && (needs.orchestrator.outputs.should-build-app || needs.orchestrator.outputs.should-build-and-push-docker) }}
@@ -254,6 +290,10 @@ jobs:
       - orchestrator
       - get-version
       - app
+      # A lib failure must stop the push, not just be reported. `lib` is skipped when nothing
+      # under lib/ changed, and a skipped need is not a failure, so !failure() above still lets
+      # the ordinary app-only path through.
+      - lib
     strategy:
       fail-fast: false
       matrix:

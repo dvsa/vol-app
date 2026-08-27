@@ -2,6 +2,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\Service\Helper\UrlHelperService;
 
 /**
@@ -36,7 +37,7 @@ class VehicleLink implements FormatterPluginManagerInterface
                 [],
                 true
             ),
-            $data['vehicle']['vrm']
+            Escape::html($data['vehicle']['vrm'])
         );
     }
 }

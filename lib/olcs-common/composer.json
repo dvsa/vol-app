@@ -29,6 +29,7 @@
   ],
   "require": {
     "php": "~8.4.0",
+    "doctrine/annotations": "^2.0",
     "ezyang/htmlpurifier": "^4.17",
     "laminas/laminas-authentication": "^2.18",
     "laminas/laminas-code": "^4.16",
@@ -46,6 +47,7 @@
     "laminas/laminas-stdlib": "^3.20",
     "laminas/laminas-validator": "^2.64",
     "laminas/laminas-view": "^2.41",
+    "league/csv": "^9.28",
     "olcs/olcs-logging": "^9.0",
     "olcs/olcs-transfer": "^8.0",
     "olcs/olcs-utils": "^7.1",
@@ -53,15 +55,14 @@
   },
   "require-dev": {
     "bamarni/composer-bin-plugin": "^1.8.2",
-    "doctrine/annotations": "^1.14.2",
     "lm-commons/lmc-rbac-mvc": "^3.5",
     "mikey179/vfsstream": "~v1.6.11",
     "mockery/mockery": "^1.6.7",
     "phpstan/phpstan-mockery": "^2.0",
     "phpunit/phpunit": "^13.0",
     "rector/rector": "^2.3",
-    "symfony/filesystem": "^5.4",
-    "symfony/lock": "^5.4"
+    "symfony/filesystem": "^8.1",
+    "symfony/lock": "^7.4"
   },
   "autoload": {
     "psr-4": {
@@ -87,7 +88,7 @@
       "phpstan/extension-installer": true
     },
     "platform": {
-      "ext-redis": "6.0"
+      "ext-redis": "6.2.6"
     }
   },
   "scripts": {

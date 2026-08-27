@@ -8,6 +8,7 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
 use Common\RefData;
 
 /**
@@ -37,6 +38,6 @@ class ValidPermitCount implements FormatterPluginManagerInterface
             return 1;
         }
 
-        return $row['validPermitCount'];
+        return Escape::html($row['validPermitCount']);
     }
 }

@@ -35,7 +35,7 @@ return [
                 sprintf(
                     '<a href="%s" class="govuk-link js-modal-ajax">%s</a>',
                     $this->generateUrl(['action' => 'edit', 'id' => $data['id']], 'case_penalty'),
-                    $data['id']
+                    \Common\Util\Escape::html($data['id'])
                 )
         ],
         [

@@ -6,6 +6,7 @@ namespace Dvsa\Olcs\Api\Entity\Letter;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
+use Dvsa\Olcs\Api\Service\Letter\Resolution\VariantResolution;
 
 /**
  * LetterSection Entity
@@ -315,6 +316,10 @@ class LetterSection extends AbstractLetterSection
     public function getDefaultVariant(): ?LetterSectionVariant
     {
         foreach ($this->variants as $variant) {
+            if ($variant->isDeleted()) {
+                continue;
+            }
+
             if ($variant->isDefault()) {
                 return $variant;
             }
@@ -325,9 +330,12 @@ class LetterSection extends AbstractLetterSection
     /**
      * Find the best matching variant for the given context.
      *
-     * Returns the first non-default variant whose conditions all match the context.
-     * Priority is determined by the variant's displayOrder (ASC) -- admins control
-     * which variant wins when multiple could match by setting display order.
+     * Of the non-deleted, non-default variants whose conditions all match the context, the most
+     * specific one wins -- that is, the one that pins down the most conditions. A variant for
+     * "PSV + variation" beats one for "PSV, any application type", because the former is a
+     * deliberately narrower piece of wording and the latter is the catch-all it was written to
+     * override. Ties are settled by displayOrder (ASC), since the collection is ordered that way.
+     *
      * Falls back to the default variant (all NULL conditions) if no conditioned variant matches.
      *
      * @param array $context Keys: goodsOrPsv, isVariation, isNi, organisationType, selectedChoiceIds
@@ -335,20 +343,70 @@ class LetterSection extends AbstractLetterSection
      */
     public function getVariantForContext(array $context): ?LetterSectionVariant
     {
+        return $this->explainVariantForContext($context)->chosen;
+    }
+
+    /**
+     * Resolve a variant and explain the outcome.
+     *
+     * Carries the same rules as getVariantForContext(), which defers to this so the two cannot
+     * drift. The extra bookkeeping exists for the letter type builder, which has to tell an admin
+     * why their wording is or is not being used.
+     *
+     * @param array $context Keys: goodsOrPsv, isVariation, isNi, organisationType, selectedChoiceIds
+     * @return VariantResolution
+     */
+    public function explainVariantForContext(array $context): VariantResolution
+    {
         $default = null;
+        $best = null;
+        $bestSpecificity = -1;
+
+        $liveDefaults = [];
+        $deleted = [];
+        $rejections = [];
+        $conditionedCount = 0;
 
         foreach ($this->variants as $variant) {
-            if ($variant->isDefault()) {
-                $default = $variant;
+            // A variant an admin deleted must never reach an operator, even though the row is
+            // retained so historic letter instances keep resolving their versions.
+            if ($variant->isDeleted()) {
+                $deleted[] = $variant;
                 continue;
             }
 
-            if ($variant->matchesContext($context)) {
-                return $variant;
+            if ($variant->isDefault()) {
+                // First default wins; duplicates can exist because MySQL unique keys ignore NULLs.
+                $liveDefaults[] = $variant;
+                $default ??= $variant;
+                continue;
+            }
+
+            $conditionedCount++;
+
+            $failed = $variant->explainMatch($context);
+            if ($failed !== []) {
+                $rejections[spl_object_id($variant)] = ['variant' => $variant, 'failed' => $failed];
+                continue;
+            }
+
+            $specificity = $variant->getSpecificity();
+            if ($specificity > $bestSpecificity) {
+                $best = $variant;
+                $bestSpecificity = $specificity;
             }
         }
 
-        return $default;
+        $chosen = $best ?? $default;
+
+        return new VariantResolution(
+            $chosen,
+            $best === null && $chosen !== null,
+            $conditionedCount,
+            $liveDefaults,
+            $deleted,
+            $rejections
+        );
     }
 
     /**

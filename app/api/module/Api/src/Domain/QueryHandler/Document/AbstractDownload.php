@@ -87,17 +87,71 @@ abstract class AbstractDownload extends AbstractQueryHandler implements Uploader
             $downloadFileName = $chosenFileName . '.' . $extension;
         }
 
+        $mimeType = $this->getMimeType($file, $path);
+
         $headers = $response->getHeaders();
         $headers->addHeaders(
             [
-                'Content-Type' => $this->getMimeType($file, $path) . ';charset=UTF-8',
+                'Content-Type' => $mimeType . ';charset=UTF-8',
                 'Content-Length' => $fileSize,
                 'Content-Disposition' => ($isInline ? 'inline' : 'attachment') .
                     ';filename="' . $downloadFileName . '"',
+
+                // Applies to every document, whatever the type. This is what stops a browser
+                // sniffing a stored .rtf, .txt or image as HTML and rendering it as a document —
+                // which is the route by which a non-HTML upload becomes an HTML one.
+                'X-Content-Type-Options' => 'nosniff',
             ]
         );
 
+        if (self::executesInOwnOrigin($mimeType, $extension)) {
+            // 'sandbox' puts the document in a unique opaque origin. That is the load-bearing
+            // part: injected script can no longer read cookies, storage, or make same-origin
+            // requests as the viewer. The document itself stays readable.
+            //
+            // NEVER add allow-same-origin here. Combined with allow-scripts it re-grants the
+            // real origin and is equivalent to having no sandbox at all. It looks harmless in
+            // a diff, which is exactly why it is called out.
+            //
+            // allow-scripts is present, rather than the stricter no-token form, because the
+            // snapshot layouts use href="javascript:window.print()" for their Print link and
+            // already-stored snapshots cannot be re-rendered. The no-token form would break
+            // Print on every historical document.
+            $headers->addHeaderLine('Content-Security-Policy', 'sandbox allow-scripts');
+        }
+
         return $response;
+    }
+
+    /**
+     * Whether this content type, if the browser renders it, executes script in *our* origin.
+     *
+     * Only those types get the sandbox CSP. The store holds mostly rtf, images, pdf and office
+     * documents; none of those can script in the origin once nosniff is set, and sandboxing them
+     * buys nothing. It is not free either — a sandbox CSP on an inline PDF can stop the browser's
+     * built-in viewer rendering it, and caseworkers open PDFs inline deliberately. PDF script runs
+     * in the viewer's own sandbox, not the page origin, so it is not the exposure being closed
+     * here.
+     *
+     * SVG and XML are included alongside HTML: an SVG served as image/svg+xml and opened directly
+     * is a document, and script inside it runs in the serving origin.
+     */
+    private static function executesInOwnOrigin(string $mimeType, ?string $extension): bool
+    {
+        $scriptableMimeTypes = [
+            'text/html',
+            'application/xhtml+xml',
+            'image/svg+xml',
+            'text/xml',
+            'application/xml',
+        ];
+
+        $scriptableExtensions = ['html', 'htm', 'xhtml', 'svg', 'xml'];
+
+        $baseMimeType = strtolower(trim(explode(';', $mimeType)[0]));
+
+        return in_array($baseMimeType, $scriptableMimeTypes, true)
+            || in_array(strtolower((string)$extension), $scriptableExtensions, true);
     }
 
     /**

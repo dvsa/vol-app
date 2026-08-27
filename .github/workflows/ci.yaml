@@ -158,22 +158,25 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           fetch-depth: 0
+      # Kept identical to cd.yaml: the version an app is built under here has to mean the same
+      # thing as the version it is deployed under there. lib is part of it because it is part of
+      # every app's artefact. See the note in cd.yaml.
       - id: api-version
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
-          project-path: app/api infra/docker/api
+          project-path: app/api infra/docker/api lib
       - id: cli-version
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
-          project-path: app/api infra/docker/cli
+          project-path: app/api infra/docker/cli lib
       - id: selfserve-version
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
-          project-path: app/selfserve infra/docker/selfserve
+          project-path: app/selfserve infra/docker/selfserve lib
       - id: internal-version
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
-          project-path: app/internal infra/docker/internal
+          project-path: app/internal infra/docker/internal lib
       - id: assets-version
         uses: dvsa/.github/.github/actions/get-vol-app-version@v5.0.10
         with:
@@ -243,15 +246,32 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        project:
-          - olcs-logging
-          - olcs-utils
-          - olcs-transfer
-          - olcs-common
-          - olcs-auth
+        # Explicit pairs rather than a project x php-version product: only the libs whose
+        # composer php constraint allows 8.5 get an 8.5 leg (VOL-7536, VOL-7537). The rest are
+        # still on ~8.4.0 because they require laminas/laminas-mvc, which has no 8.5 release.
+        include:
+          - project: olcs-logging
+            php-version: "8.4"
+          - project: olcs-logging
+            php-version: "8.5"
+          - project: vol-logging-mvc
+            php-version: "8.4"
+          - project: olcs-utils
+            php-version: "8.4"
+          - project: olcs-utils
+            php-version: "8.5"
+          - project: olcs-transfer
+            php-version: "8.4"
+          - project: olcs-transfer
+            php-version: "8.5"
+          - project: olcs-common
+            php-version: "8.4"
+          - project: olcs-auth
+            php-version: "8.4"
     uses: ./.github/workflows/php-lib.yaml
     with:
       project: ${{ matrix.project }}
+      php-version: ${{ matrix.php-version }}
     permissions:
       contents: read
 

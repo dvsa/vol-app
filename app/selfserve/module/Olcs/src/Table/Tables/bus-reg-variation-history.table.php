@@ -31,7 +31,7 @@ return [
                             ['action' => 'details', 'busRegId' => $data['id']],
                             'bus-registration/details',
                             false
-                        ) . '" class="govuk-link">' . $data['regNo'] . '</a>';
+                        ) . '" class="govuk-link">' . \Common\Util\Escape::html($data['regNo']) . '</a>';
                     }
                 }
                 return '';
