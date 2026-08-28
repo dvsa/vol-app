@@ -32,6 +32,7 @@ class DocumentAnalysis extends AbstractDocumentAnalysis
     public const OVERWRITABLE_STATUSES = [self::STATUS_PENDING, self::STATUS_TIMEOUT];
 
     /** Raw 16 bytes as stored; use getTokenString() for the form that goes on the wire. */
+    #[\Override]
     public function getToken(): string
     {
         return $this->readToken();
@@ -45,6 +46,7 @@ class DocumentAnalysis extends AbstractDocumentAnalysis
      * still reads as a change: a pointless UPDATE, a bumped @Version, and a spurious row in
      * document_analysis_hist. Guarding the round trip keeps setToken(getToken()) harmless.
      */
+    #[\Override]
     public function setToken($token): self
     {
         if (!is_string($token)) {
