@@ -7,15 +7,17 @@ namespace Dvsa\OlcsTest\Api\Entity\Doc;
 use Doctrine\DBAL\Platforms\MySQL80Platform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
+use Dvsa\Olcs\Api\Entity\Doc\AbstractDocumentAnalysis;
 use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as Entity;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Uid\UuidV7;
 
 /**
- * Hand-written entity, so there is no generated AbstractDocumentAnalysis for EntityTester
- * to reflect over; this extends TestCase directly.
+ * The token behaviour is custom, so this stays as a focused TestCase rather than relying on
+ * EntityTester, even now that the generated abstract exists.
  */
 #[\PHPUnit\Framework\Attributes\CoversClass(Entity::class)]
+#[\PHPUnit\Framework\Attributes\CoversClass(AbstractDocumentAnalysis::class)]
 final class DocumentAnalysisEntityTest extends TestCase
 {
     private Entity $sut;
@@ -29,6 +31,11 @@ final class DocumentAnalysisEntityTest extends TestCase
         $this->token = new UuidV7();
 
         parent::setUp();
+    }
+
+    public function testConcreteEntityExtendsTheGeneratedAbstract(): void
+    {
+        $this->assertInstanceOf(AbstractDocumentAnalysis::class, $this->sut);
     }
 
     /** In-memory, pre-flush: the property still holds the raw string handed to setToken(). */
@@ -102,6 +109,14 @@ final class DocumentAnalysisEntityTest extends TestCase
         $this->sut->setToken($replacement->toBinary());
 
         $this->assertSame($replacement->toRfc4122(), $this->sut->getTokenString());
+    }
+
+    /** Regression: inheritance forces an untyped override, so the old string-only contract is enforced manually. */
+    public function testSetTokenStillRejectsNonStrings(): void
+    {
+        $this->expectException(\TypeError::class);
+
+        $this->sut->setToken(123);
     }
 
     /**
