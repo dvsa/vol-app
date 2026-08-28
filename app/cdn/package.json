@@ -8,6 +8,7 @@
     "build:production": "npm run build:grunt:production",
     "build:staging": "npm run build:grunt:staging",
     "start": "./node_modules/grunt-cli/bin/grunt serve",
+    "pretest": "./node_modules/grunt-cli/bin/grunt browserify:editorJsGovuk",
     "test": "playwright test --config=test/playwright.config.js",
     "assets:save": "node tools/asset-snapshot.mjs save",
     "assets:compare": "node tools/asset-snapshot.mjs compare"
@@ -22,6 +23,7 @@
     "@editorjs/list": "^1.8.0",
     "@editorjs/paragraph": "^2.10.0",
     "@editorjs/underline": "^1.2.1",
+    "@vitriltd/editor-js-govuk-frontend": "1.0.0",
     "autoprefixer": "^10.4.20",
     "chosen-npm": "^1.4.2",
     "govuk-frontend": "^6.4.0",
@@ -37,6 +39,7 @@
     "grunt": "^1.0.3",
     "grunt-babel": "^8.0.0",
     "grunt-browser-sync": "^2.2.0",
+    "grunt-browserify": "6.0.0",
     "grunt-cli": "^1.3.0",
     "grunt-contrib-clean": "^2.0.1",
     "grunt-contrib-copy": "^1.0.0",
