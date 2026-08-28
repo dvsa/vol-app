@@ -7,6 +7,9 @@ use Common\Service\Helper\FormHelperService;
 use Common\Service\Helper\TranslationHelperService;
 use Common\Service\Table\TableFactory;
 use Dvsa\Olcs\Transfer\Command\GovUkAccount\ProcessAuthResponse;
+use Olcs\Logging\Log\Logger;
+use Olcs\Service\GovUkAccount\CallbackClaimStatus;
+use Olcs\Service\GovUkAccount\CallbackReplayStore;
 use Permits\Data\Mapper\MapperManager;
 
 class SignatureVerificationController extends AbstractSelfserveController
@@ -16,12 +19,14 @@ class SignatureVerificationController extends AbstractSelfserveController
      * @param FormHelperService $formHelper
      * @param TableFactory $tableBuilder
      * @param MapperManager $mapperManager
+     * @param CallbackReplayStore $replayStore
      */
     public function __construct(
         TranslationHelperService $translationHelper,
         FormHelperService $formHelper,
         TableFactory $tableBuilder,
-        MapperManager $mapperManager
+        MapperManager $mapperManager,
+        private readonly CallbackReplayStore $replayStore
     ) {
         parent::__construct($translationHelper, $formHelper, $tableBuilder, $mapperManager);
     }
@@ -29,6 +34,30 @@ class SignatureVerificationController extends AbstractSelfserveController
     #[\Override]
     public function indexAction(): \Laminas\Http\Response
     {
+        $queryCode = $this->getRequest()->getQuery('code');
+        $code = is_string($queryCode) ? $queryCode : '';
+        $userId = (string) ($this->currentUser()->getUserData()['id'] ?? '');
+        $claim = $this->replayStore->claim($code, $userId);
+
+        // Logged at warn and above deliberately: every environment runs at
+        // log_level "warning", so anything lower would never be visible.
+        if ($claim->status === CallbackClaimStatus::ForeignReplay) {
+            Logger::err(
+                'GOV.UK One Login authorisation code replayed by a different user',
+                ['userId' => $userId]
+            );
+        } elseif ($claim->isOwnReplay()) {
+            Logger::warn(
+                'GOV.UK One Login callback replayed; reusing the first outcome',
+                ['userId' => $userId, 'status' => $claim->status->name]
+            );
+        }
+
+        // The owning request already finished; the code is spent.
+        if ($claim->redirectUrl !== null) {
+            return $this->redirect()->toUrl($claim->redirectUrl);
+        }
+
         $response = $this->handleCommand(ProcessAuthResponse::create([
             'error' => $this->getRequest()->getQuery('error'),
             'errorDescription' => $this->getRequest()->getQuery('errorDescription'),
@@ -45,12 +74,20 @@ class SignatureVerificationController extends AbstractSelfserveController
             throw new \Exception("GovUKAccount/ProcessAuthResponse was OK but specified no redirect URL: " . json_encode($response->getResult()), $response->getStatusCode());
         }
 
-        if (!empty($error)) {
+        // A replay reaching here means the owning request is still running and
+        // consumed the code, so our failure is not this user's failure.
+        if (!empty($error) && !$claim->isOwnReplay()) {
             $this->flashMessenger()->getContainer()->offsetSet('govUkAccountError', true);
 
             if (!empty($redirectUrlOnError)) {
                 $redirectUrl = $redirectUrlOnError;
             }
+        }
+
+        // Only the owning request publishes, so a foreign replay cannot
+        // overwrite the real user's destination.
+        if ($claim->ownsCode()) {
+            $this->replayStore->recordOutcome($code, $userId, $redirectUrl);
         }
 
         return $this->redirect()->toUrl($redirectUrl);

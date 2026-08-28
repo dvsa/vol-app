@@ -1615,6 +1615,8 @@ return [
             \Olcs\Logging\Log\Processor\CorrelationId::class => \Olcs\Logging\Log\Processor\CorrelationIdFactory::class,
             'cache.redis.connection' => \Olcs\Service\Cache\RedisConnectionFactory::class,
             'default-cache' => \Olcs\Service\Cache\DefaultCacheFactory::class,
+            \Olcs\Service\GovUkAccount\CallbackReplayStore::class =>
+                \Olcs\Service\GovUkAccount\CallbackReplayStoreFactory::class,
         ],
     ],
     'search' => [
