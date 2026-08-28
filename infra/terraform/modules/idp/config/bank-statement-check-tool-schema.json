@@ -1,0 +1,119 @@
+{
+  "type": "object",
+  "required": ["summary", "detected_currency", "core_checks"],
+  "properties": {
+    "summary": {
+      "type": "string",
+      "description": "Brief overall assessment (1-4 sentences)."
+    },
+    "detected_currency": {
+      "type": "string",
+      "description": "ISO currency code detected on the statement (GBP, USD, EUR, etc)."
+    },
+    "core_checks": {
+      "type": "object",
+      "required": ["FI01", "FI02", "FI03", "FI04", "FI05", "FI06", "FI07", "FI08", "FI09", "FI10", "FI16"],
+      "properties": {
+        "FI01": {
+          "type": "object",
+          "required": ["result", "workingOut", "remark"],
+          "properties": {
+            "result": { "type": "string", "enum": ["Pass", "Fail"] },
+            "workingOut": { "type": "array", "items": { "type": "string" } },
+            "remark": { "type": "string", "description": "Brief overall statement on the outcome (1-2 sentences)." }
+          }
+        },
+        "FI02": {
+          "type": "object",
+          "required": ["result", "workingOut", "remark"],
+          "properties": {
+            "result": { "type": "string", "enum": ["Pass", "Fail", "Skipped"] },
+            "workingOut": { "type": "array", "items": { "type": "string" } },
+            "remark": { "type": "string", "description": "Brief overall statement on the outcome (1-2 sentences)." }
+          }
+        },
+        "FI03": {
+          "type": "object",
+          "required": ["result", "workingOut", "remark"],
+          "properties": {
+            "result": { "type": "string", "enum": ["Pass", "Fail", "Skipped"] },
+            "workingOut": { "type": "array", "items": { "type": "string" } },
+            "remark": { "type": "string", "description": "Brief overall statement on the outcome (1-2 sentences)." }
+          }
+        },
+        "FI04": {
+          "type": "object",
+          "required": ["result", "workingOut", "remark"],
+          "properties": {
+            "result": { "type": "string", "enum": ["Pass", "Fail", "Skipped"] },
+            "workingOut": { "type": "array", "items": { "type": "string" } },
+            "remark": { "type": "string", "description": "Brief overall statement on the outcome (1-2 sentences)." }
+          }
+        },
+        "FI05": {
+          "type": "object",
+          "required": ["result", "workingOut", "remark"],
+          "properties": {
+            "result": { "type": "string", "enum": ["Pass", "Fail", "Skipped"] },
+            "workingOut": { "type": "array", "items": { "type": "string" } },
+            "remark": { "type": "string", "description": "Brief overall statement on the outcome (1-2 sentences)." }
+          }
+        },
+        "FI06": {
+          "type": "object",
+          "required": ["result", "workingOut", "remark"],
+          "properties": {
+            "result": { "type": "string", "enum": ["Pass", "Fail", "Skipped"] },
+            "workingOut": { "type": "array", "items": { "type": "string" } },
+            "remark": { "type": "string", "description": "Brief overall statement on the outcome (1-2 sentences)." }
+          }
+        },
+        "FI07": {
+          "type": "object",
+          "required": ["result", "workingOut", "remark"],
+          "properties": {
+            "result": { "type": "string", "enum": ["Pass", "Fail", "Skipped"] },
+            "workingOut": { "type": "array", "items": { "type": "string" } },
+            "remark": { "type": "string", "description": "Brief overall statement on the outcome (1-2 sentences)." }
+          }
+        },
+        "FI08": {
+          "type": "object",
+          "required": ["result", "workingOut", "remark"],
+          "properties": {
+            "result": { "type": "string", "enum": ["Pass", "Fail", "Skipped"] },
+            "workingOut": { "type": "array", "items": { "type": "string" } },
+            "remark": { "type": "string", "description": "Brief overall statement on the outcome (1-2 sentences)." }
+          }
+        },
+        "FI09": {
+          "type": "object",
+          "required": ["result", "workingOut", "remark"],
+          "properties": {
+            "result": { "type": "string", "enum": ["Pass", "Fail", "Skipped"] },
+            "workingOut": { "type": "array", "items": { "type": "string" } },
+            "remark": { "type": "string", "description": "Brief overall statement on the outcome (1-2 sentences)." }
+          }
+        },
+        "FI10": {
+          "type": "object",
+          "required": ["result", "workingOut", "remark"],
+          "properties": {
+            "result": { "type": "string", "enum": ["Pass", "Fail", "Skipped"] },
+            "workingOut": { "type": "array", "items": { "type": "string" } },
+            "remark": { "type": "string", "description": "Brief overall statement on the outcome (1-2 sentences)." }
+          }
+        },
+        "FI16": {
+          "type": "object",
+          "required": ["result", "workingOut", "remark"],
+          "properties": {
+            "result": { "type": "string", "enum": ["Pass", "Fail", "Skipped"] },
+            "workingOut": { "type": "array", "items": { "type": "string" } },
+            "remark": { "type": "string", "description": "Brief overall statement on the outcome (1-2 sentences)." }
+          }
+        }
+      }
+    }
+  }
+}
