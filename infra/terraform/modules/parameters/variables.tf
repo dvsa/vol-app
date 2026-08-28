@@ -49,6 +49,8 @@ variable "application_parameters" {
     govuk_account_id_assurance_public_key        = string
     govuk_account_private_key_algorithm          = string
     govuk_account_public_key                     = string
+    idp_sweeper_threshold_minutes                = string
+    idp_dedupe_success_window_hours              = string
     lar_base_uri                                 = string
     log_level                                    = string
     olcs_aws_account_number                      = string
