@@ -41,6 +41,7 @@ test.beforeEach(async ({ page }) => {
   // Both editors are initialised before any test types into them.
   await expect(page.locator("#editor-section .ce-paragraph")).toHaveAttribute("contenteditable", "true");
   await expect(page.locator("#editor-variant .ce-paragraph")).toHaveAttribute("contenteditable", "true");
+  await expect(page.locator("#editor-long-text .govuk-body")).toHaveAttribute("contenteditable", "true");
 });
 
 test("flushEditors makes the typed content readable immediately", async ({ page }) => {
@@ -117,4 +118,44 @@ test("the hidden input tracks typing without waiting for EditorJS's debounce", a
   await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 50))));
 
   expect(await hiddenInputText(page, "sectionContent")).toContain("Tracked.");
+});
+
+test("Long Text uses the shared GOV.UK tools and their JSON vocabulary", async ({ page }) => {
+  await expect(page.locator("#editor-long-text .govuk-body")).toContainText("Important guidance");
+  await expect(page.locator("#editor-long-text h2.govuk-heading-l")).toHaveText("Before you apply");
+  await expect(page.locator("#editor-long-text ol.govuk-list--number li")).toHaveCount(2);
+
+  const blocks = await page.evaluate(async () => {
+    await window.OLCS.editorjsFlush();
+    return JSON.parse(document.querySelector("input[name='longTextContent']").value).blocks;
+  });
+
+  expect(blocks.map((block) => block.type)).toEqual(["paragraph", "heading", "list"]);
+  expect(blocks[0].data.size).toBe("body");
+  expect(blocks[0].data.text).toContain("<b>Important</b>");
+  expect(blocks[0].data.text).toContain("<u>underline</u>");
+  expect(blocks[0].data.text).toContain('<a href="/help">link</a>');
+  expect(blocks[2].data).toEqual({ style: "number", items: ["First step", "Second step"] });
+});
+
+test("Long Text has its own placeholder without changing the existing default", async ({ page }) => {
+  await expect(page.locator("#editor-long-text .govuk-body")).toHaveAttribute(
+    "data-placeholder",
+    "Enter Long Text content...",
+  );
+  await expect(page.locator("#editor-section .ce-paragraph")).toHaveAttribute(
+    "data-placeholder-active",
+    "Enter your submission comment...",
+  );
+});
+
+test("Long Text does not expose paragraph font sizes", async ({ page }) => {
+  await expect(page.locator("#editor-long-text .govuk-body-l, #editor-long-text .govuk-body-s")).toHaveCount(0);
+
+  const savedSize = await page.evaluate(async () => {
+    await window.OLCS.editorjsFlush();
+    return JSON.parse(document.querySelector("input[name='longTextContent']").value).blocks[0].data.size;
+  });
+
+  expect(savedSize).toBe("body");
 });
