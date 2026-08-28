@@ -113,13 +113,25 @@ class DocumentAnalysis
     }
 
     /** Raw 16 bytes as stored; use getTokenString() for the form that goes on the wire. */
-    public function getToken()
+    public function getToken(): string
     {
-        return $this->token;
+        return $this->readToken();
     }
 
+    /**
+     * Reassigning the same token is a no-op by design.
+     *
+     * A hydrated entity holds a stream here, and the UnitOfWork compares scalar fields by
+     * identity (`$orgValue !== $actualValue`), so replacing that stream with an equal string
+     * still reads as a change: a pointless UPDATE, a bumped @Version, and a spurious row in
+     * document_analysis_hist. Guarding the round trip keeps setToken(getToken()) harmless.
+     */
     public function setToken(string $token): self
     {
+        if (is_resource($this->token) && $this->readToken() === $token) {
+            return $this;
+        }
+
         $this->token = $token;
 
         return $this;
@@ -128,14 +140,25 @@ class DocumentAnalysis
     /** The dashed UUID string, as it appears on the wire. */
     public function getTokenString(): string
     {
-        $token = $this->token;
+        return UuidV7::fromBinary($this->readToken())->toRfc4122();
+    }
 
-        // Doctrine returns binary columns as a stream resource on some platforms.
-        if (is_resource($token)) {
-            $token = stream_get_contents($token);
+    /**
+     * The raw 16 bytes, whichever form the property currently holds.
+     *
+     * Doctrine's BinaryType always hydrates a BINARY column into a php://temp stream, so a
+     * managed entity holds a resource here while a freshly constructed one holds the string
+     * passed to setToken(). Reading a stream advances its pointer, so the read is anchored
+     * at offset 0 rather than trusting wherever an earlier call left it; without that, the
+     * second read of the same entity returns an empty string and fromBinary() throws.
+     */
+    private function readToken(): string
+    {
+        if (is_resource($this->token)) {
+            return (string)stream_get_contents($this->token, -1, 0);
         }
 
-        return UuidV7::fromBinary((string)$token)->toRfc4122();
+        return (string)$this->token;
     }
 
     public function getDocument()
