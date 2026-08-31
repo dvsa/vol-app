@@ -23,6 +23,10 @@ ALTER TABLE cases_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE condition_undertaking CHANGE olbs_type olbs_type VARCHAR(32) DEFAULT NULL
 ALTER TABLE digital_signature CHANGE attributes attributes VARCHAR(65535) DEFAULT NULL, CHANGE saml_response saml_response LONGTEXT DEFAULT NULL
 ALTER TABLE document CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
+ALTER TABLE document_analysis DROP FOREIGN KEY fk_struct_application_id_application_id
+ALTER TABLE document_analysis DROP FOREIGN KEY fk_struct_created_by_user_id
+ALTER TABLE document_analysis DROP FOREIGN KEY fk_struct_document_id_document_id
+ALTER TABLE document_analysis DROP FOREIGN KEY fk_struct_last_modified_by_user_id
 ALTER TABLE document_to_delete CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE erru_request_failure CHANGE input input LONGTEXT DEFAULT NULL, CHANGE errors errors LONGTEXT DEFAULT NULL
 ALTER TABLE impounding_legislation_type RENAME INDEX ix_impounding_legislation_type_impounding_id TO IDX_56C373FED885EE1F
@@ -43,8 +47,6 @@ ALTER TABLE irhp_permit_request_attribute RENAME INDEX ix_irhp_permit_request_at
 ALTER TABLE irhp_permit_type CHANGE description description LONGTEXT DEFAULT NULL
 ALTER TABLE legacy_recommendation CHANGE notes notes LONGTEXT DEFAULT NULL
 ALTER TABLE letter_appendix_version CHANGE description description LONGTEXT DEFAULT NULL, CHANGE created_on created_on DATETIME DEFAULT NULL
-ALTER TABLE letter_issue_type ADD CONSTRAINT fk_struct_created_by_user_id FOREIGN KEY (created_by) REFERENCES user (id)
-ALTER TABLE letter_issue_type ADD CONSTRAINT fk_struct_last_modified_by_user_id FOREIGN KEY (last_modified_by) REFERENCES user (id)
 ALTER TABLE letter_issue_version CHANGE help_text help_text LONGTEXT DEFAULT NULL, CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE letter_section_version CHANGE help_text help_text LONGTEXT DEFAULT NULL, CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE letter_todo_version CHANGE name name VARCHAR(255) DEFAULT NULL, CHANGE help_text help_text LONGTEXT DEFAULT NULL, CHANGE created_on created_on DATETIME DEFAULT NULL
@@ -119,8 +121,6 @@ ALTER TABLE txc_inbox CHANGE file_read file_read TINYINT DEFAULT 0
 ALTER TABLE user_role RENAME INDEX ix_user_role_role_id TO IDX_2DE8C6A3D60322AC
 ALTER TABLE user_role RENAME INDEX ix_user_role_user_id TO IDX_2DE8C6A3A76ED395
 ALTER TABLE venue CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
-CREATE INDEX IDX_14B1B5B565CF370E ON letter_issue_type (last_modified_by)
-CREATE INDEX IDX_14B1B5B5DE12AB56 ON letter_issue_type (created_by)
 CREATE INDEX fk_answers_question_text1_idx ON answer (question_text_id)
 CREATE INDEX fk_application_organisation_person_person1_idx ON application_organisation_person (original_person_id)
 CREATE INDEX fk_application_path_irhp_permit_application_id ON answer (irhp_permit_application_id)
