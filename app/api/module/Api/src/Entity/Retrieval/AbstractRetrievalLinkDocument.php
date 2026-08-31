@@ -52,7 +52,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
     /**
      * Foreign Key to retrieval_link
      *
-     * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink|null
+     * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink
      */
     #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(
@@ -65,7 +65,7 @@ abstract class AbstractRetrievalLinkDocument implements BundleSerializableInterf
     /**
      * Foreign Key to document
      *
-     * @var \Dvsa\Olcs\Api\Entity\Doc\Document|null
+     * @var \Dvsa\Olcs\Api\Entity\Doc\Document
      */
     #[ORM\JoinColumn(name: 'document_id', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, fetch: 'LAZY')]
