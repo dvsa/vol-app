@@ -21,7 +21,6 @@ ALTER TABLE case_outcome RENAME INDEX ix_case_outcome_cases_id TO IDX_9F1F98C92A
 ALTER TABLE case_outcome RENAME INDEX ix_case_outcome_outcome_id TO IDX_9F1F98C9E6EE6D63
 ALTER TABLE cases_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE condition_undertaking CHANGE olbs_type olbs_type VARCHAR(32) DEFAULT NULL
-ALTER TABLE data_retention DROP INDEX ix_entity_name_entity_pk, ADD UNIQUE INDEX uk_entity_name_entity_pk (entity_name, entity_pk)
 ALTER TABLE digital_signature CHANGE attributes attributes VARCHAR(65535) DEFAULT NULL, CHANGE saml_response saml_response LONGTEXT DEFAULT NULL
 ALTER TABLE document CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
 ALTER TABLE document_to_delete CHANGE created_on created_on DATETIME DEFAULT NULL
@@ -148,7 +147,6 @@ CREATE INDEX fk_event_history_organisation1_idx ON event_history (organisation_i
 CREATE INDEX fk_fee_txn_fee_txn1_idx ON fee_txn (reversed_fee_txn_id)
 CREATE INDEX fk_legacy_offence_cases1_idx ON legacy_offence (case_id)
 CREATE INDEX fk_licence_vehicle_licence_id_licence_id ON licence_vehicle (licence_id)
-CREATE INDEX fk_messaging_message_messaging_content_id ON messaging_message (messaging_content_id)
 CREATE INDEX fk_messaging_subject_category_id_category_id ON messaging_subject (category_id)
 CREATE INDEX fk_messaging_subject_sub_category_id_sub_category_id ON messaging_subject (sub_category_id)
 CREATE INDEX fk_note_transport_manager1_idx ON note (transport_manager_id)
@@ -162,7 +160,6 @@ CREATE INDEX fk_statement_contact_details1_idx ON statement (requestors_contact_
 CREATE INDEX fk_tm_employment_user1_idx ON tm_employment (created_by)
 CREATE INDEX fk_tm_employment_user2_idx ON tm_employment (last_modified_by)
 CREATE INDEX fk_translation_key_text_keys1_idx ON translation_key_text (translation_key_id)
-CREATE INDEX ix_appeal_case_id ON appeal (case_id)
 CREATE INDEX ix_audit_read_application_application_id ON application_read_audit (application_id)
 CREATE INDEX ix_audit_read_application_created_on ON application_read_audit (created_on)
 CREATE INDEX ix_audit_read_application_user_id ON application_read_audit (user_id)
@@ -181,20 +178,12 @@ CREATE INDEX ix_audit_read_organisation_user_id ON organisation_read_audit (user
 CREATE INDEX ix_audit_read_transport_manager_created_on ON transport_manager_read_audit (created_on)
 CREATE INDEX ix_audit_read_transport_manager_transport_manager_id ON transport_manager_read_audit (transport_manager_id)
 CREATE INDEX ix_audit_read_transport_manager_user_id ON transport_manager_read_audit (user_id)
-CREATE INDEX ix_bus_reg_reg_no ON bus_reg (reg_no)
 CREATE INDEX ix_community_lic_com_lic_status ON community_lic (status)
-CREATE INDEX ix_continuation_detail_received ON continuation_detail (received)
-CREATE INDEX ix_continuation_month ON continuation (month)
-CREATE INDEX ix_continuation_year ON continuation (year)
 CREATE INDEX ix_disqualification_person_idx ON disqualification (person_id)
-CREATE INDEX ix_erru_request_case_id ON erru_request (case_id)
 CREATE INDEX ix_erru_request_created_by ON erru_request_failure (created_by)
 CREATE INDEX ix_erru_request_last_modified_by ON erru_request_failure (last_modified_by)
-CREATE INDEX ix_fee_type_is_miscellaneous ON fee_type (is_miscellaneous)
-CREATE INDEX ix_sla_target_date_document_id ON sla_target_date (document_id)
 CREATE INDEX ix_task_etl ON task (description, category_id, sub_category_id)
 CREATE UNIQUE INDEX application_id_UNIQUE ON application_tracking (application_id)
-CREATE UNIQUE INDEX uk_fee_txn_fee_id_txn_id ON fee_txn (fee_id, txn_id)
 DROP INDEX ix_bus_reg_traffic_area_olbs_key_traffic_area_id ON bus_reg_traffic_area
 DROP INDEX ix_bus_reg_variation_reason_olbs_key_olbs_key2 ON bus_reg_variation_reason
 DROP INDEX uk_bus_reg_bus_service_type_olbs_key_bus_service_type_id ON bus_reg_bus_service_type
