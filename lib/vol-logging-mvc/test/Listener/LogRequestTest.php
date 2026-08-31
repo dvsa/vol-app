@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace OlcsTest\Logging\Listener;
+namespace OlcsTest\Logging\Mvc\Listener;
 
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\Http\Request;
@@ -11,7 +11,7 @@ use Laminas\Router\Http\RouteMatch;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase as TestCase;
 use Olcs\Logging\CliLoggableInterface;
-use Olcs\Logging\Listener\LogRequest;
+use Olcs\Logging\Mvc\Listener\LogRequest;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 

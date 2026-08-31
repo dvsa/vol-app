@@ -270,6 +270,7 @@ jobs:
       matrix:
         project:
           - olcs-logging
+          - vol-logging-mvc
           - olcs-utils
           - olcs-transfer
           - olcs-common

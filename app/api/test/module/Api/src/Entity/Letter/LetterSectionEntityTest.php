@@ -247,7 +247,7 @@ final class LetterSectionEntityTest extends EntityTester
         $this->assertTrue($resolution->wasDefaultFallback);
         $this->assertSame(1, $resolution->conditionedCount);
         $this->assertTrue($resolution->fellBackDespiteConditionedVariants());
-        $this->assertSame(['isVariation'], array_values($resolution->rejections)[0]);
+        $this->assertSame(['isVariation'], array_values($resolution->rejections)[0]['failed']);
     }
 
     public function testExplainVariantForContextDoesNotReportFallbackWhenThereIsNothingToFallFrom(): void

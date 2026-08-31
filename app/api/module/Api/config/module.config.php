@@ -240,6 +240,8 @@ return [
             // Explains a proposed composition for the letter type builder
             \Dvsa\Olcs\Api\Service\Letter\CompositionDiagnostics::class =>
                 \Dvsa\Olcs\Api\Service\Letter\CompositionDiagnosticsFactory::class,
+            \Dvsa\Olcs\Api\Service\Letter\PreviewRecordSuggester::class =>
+                \Dvsa\Olcs\Api\Service\Letter\PreviewRecordSuggesterFactory::class,
 
             \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClient::class =>
                 \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClientFactory::class,
@@ -572,6 +574,7 @@ return [
             Aws\S3\S3Client::class => Dvsa\Olcs\Api\Service\S3\S3ClientFactory::class,
             'default-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
             'doctrine-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
+            'jwks-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
             'cache.redis.connection'
                 =>  \Dvsa\Olcs\Api\Service\Cache\RedisConnectionFactory::class,
         ],

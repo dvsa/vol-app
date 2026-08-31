@@ -12,6 +12,81 @@ OLCS.editorjs = (function (document, $, undefined) {
   // Store editor instances for cleanup
   var editorInstances = {};
 
+  // Hidden input per editor, so the value that gets POSTed can be brought up to date on
+  // demand rather than only when EditorJS gets round to announcing a change.
+  var hiddenInputs = {};
+
+  /**
+   * Has the content actually changed, ignoring the timestamp EditorJS re-stamps on
+   * every save?
+   *
+   * Returns true when the current value cannot be read as EditorJS output, so unknown
+   * or malformed content is written rather than assumed equal.
+   *
+   * @param {string} currentValue the hidden input's value
+   * @param {object} outputData   fresh output from editor.save()
+   * @returns {boolean}
+   */
+  function blocksChanged(currentValue, outputData) {
+    try {
+      return JSON.stringify(JSON.parse(currentValue).blocks) !== JSON.stringify(outputData.blocks);
+    } catch (e) {
+      return true;
+    }
+  }
+
+  /**
+   * Bring every editor's hidden input up to date with what is currently on screen.
+   *
+   * The onChange handler below is the normal path, but it is debounced by EditorJS and
+   * completes asynchronously. Anything that reads the hidden input in direct response to
+   * a user action — a save button, a form submit — can therefore read the previous
+   * content, send it, and report success. Callers await this first to close that gap.
+   *
+   * Always resolves: a failure to serialise one editor must not strand a save handler
+   * waiting on a promise that never settles, leaving a disabled button and no message.
+   *
+   * @returns {Promise} resolved once every editor's hidden input has been refreshed
+   */
+  function flushEditors() {
+    var pending = Object.keys(editorInstances)
+      .filter(function (name) {
+        return !name.endsWith("_observer") && hiddenInputs[name];
+      })
+      .map(function (name) {
+        var editor = editorInstances[name];
+
+        if (!editor || typeof editor.save !== "function") {
+          return null;
+        }
+
+        return editor
+          .save()
+          .then(function (outputData) {
+            // Only write on a real change. Callers flush speculatively — before a
+            // click that may not be a save at all — and letter-edit.js watches this
+            // input to decide whether there are unsaved edits. A needless write marks
+            // clean content dirty, which raises "Unsaved changes" over content the
+            // caseworker has just saved.
+            //
+            // Compare the blocks rather than the whole payload: EditorJS stamps a fresh
+            // `time` on every save(), so the serialised output never matches itself and
+            // a plain string comparison would think everything had changed.
+            if (blocksChanged(hiddenInputs[name].value, outputData)) {
+              hiddenInputs[name].value = JSON.stringify(outputData);
+            }
+          })
+          .catch(function (error) {
+            if (typeof OLCS.logger !== "undefined") {
+              OLCS.logger("EditorJS flush failed for " + name + ": " + error.message);
+            }
+          });
+      })
+      .filter(Boolean);
+
+    return Promise.all(pending);
+  }
+
   /**
    * Initialize an EditorJS instance for a form element
    * @param {string} editorId - The ID of the editor container
@@ -170,8 +245,9 @@ OLCS.editorjs = (function (document, $, undefined) {
           }
         });
 
-      // Store editor instance for cleanup
+      // Store editor instance for cleanup, and its input so it can be flushed on demand
       editorInstances[inputName] = editor;
+      hiddenInputs[inputName] = hiddenInput;
     } catch (error) {
       if (typeof OLCS.logger !== "undefined") {
         OLCS.logger("EditorJS creation failed: " + error.message);
@@ -179,7 +255,66 @@ OLCS.editorjs = (function (document, $, undefined) {
     }
   }
 
+  // Exposed so save handlers elsewhere can await an up-to-date hidden input before they
+  // read it. Assigned on the OLCS namespace rather than returned, because this module's
+  // export is already its init function.
+  OLCS.editorjsFlush = flushEditors;
+
   return function init() {
+    /**
+     * Keep the hidden input close behind the keystrokes.
+     *
+     * EditorJS announces changes on its own debounce, which leaves a window where what
+     * is on screen and what would be POSTed disagree. Plain form posts — the admin
+     * modals, which carry no JavaScript of their own — read the input directly and have
+     * nothing to await, so the window is closed from this end instead: every keystroke
+     * schedules a flush, and each flush is coalesced so a fast typist queues one save
+     * rather than one per character.
+     *
+     * Code that can await something should still call OLCS.editorjsFlush() before
+     * reading the input; that is a guarantee, whereas this is a very short window.
+     */
+    function trackInput() {
+      var pending = false;
+
+      $(document)
+        .off("input.editorjs")
+        .on("input.editorjs", ".editorjs-container", function () {
+          if (pending) {
+            return;
+          }
+
+          pending = true;
+
+          // A frame is long enough to coalesce a burst of typing and short enough that
+          // the input is current well before a click on a save button lands.
+          window.requestAnimationFrame(function () {
+            pending = false;
+            flushEditors();
+          });
+        });
+    }
+
+    /**
+     * Flush before an activation that is about to read the input.
+     *
+     * A pointer press precedes its click, and a key press precedes the submit it
+     * triggers, so flushing here gives the save a fully current value even if the
+     * keystroke that preceded it has not yet been through the frame above.
+     */
+    function flushBeforeActivation() {
+      $(document)
+        .off("pointerdown.editorjs keydown.editorjs")
+        .on("pointerdown.editorjs", "button, input[type=submit], a", function () {
+          flushEditors();
+        })
+        .on("keydown.editorjs", "button, input[type=submit]", function (event) {
+          if (event.key === "Enter" || event.key === " ") {
+            flushEditors();
+          }
+        });
+    }
+
     function setup() {
       // Initialize all EditorJS containers on the page
       $(".editorjs-container").each(function () {
@@ -205,6 +340,8 @@ OLCS.editorjs = (function (document, $, undefined) {
 
     // Initial setup for page load
     setup();
+    trackInput();
+    flushBeforeActivation();
 
     // Re-setup on render events (for modals and AJAX content)
     OLCS.eventEmitter.on("render", setup);
@@ -234,6 +371,7 @@ OLCS.editorjs = (function (document, $, undefined) {
         }
       });
       editorInstances = {};
+      hiddenInputs = {};
 
       // Reset initialization flags
       $(".editorjs-container").removeData("editorjs-initialized");

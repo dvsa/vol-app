@@ -78,7 +78,6 @@ return [
         'configuration' => [
             'orm_default' => [
                 'metadata_cache' => 'redis',
-                'auto_generate_proxy_classes' => true,
                 'query_cache'       => 'redis',
                 'result_cache'      => 'redis',
                 'hydration_cache'   => 'redis',
@@ -259,6 +258,22 @@ return [
                 'headers' => [
                     'Accept' => 'application/json',
                 ],
+            ],
+        ],
+        // CPMS Hybrid Gateway (VOL-7496) — used instead of rest_client domain when the
+        // cpms_hybrid_gateway feature toggle is enabled. The oauth2 block is the standard
+        // Entra client-credentials shape consumed by AccessToken\ProviderFactory.
+        'gateway' => [
+            // Gateway hostname e.g. 'https://gw.accept.dev.cpms.dvsacloud.uk' *Environment specific*
+            'domain' => "%olcs_cpms_gateway_host%",
+            'proxy' => 'http://%shd_proxy%',
+            'oauth2' => [
+                'client_id' => "%olcs_cpms_gateway_client_id%",
+                'client_secret' => "%olcs_cpms_gateway_client_secret%", // secret
+                'token_url' => "%olcs_cpms_gateway_token_url%",
+                'scope' => "%olcs_cpms_gateway_scope%",
+                'proxy' => 'http://%shd_proxy%',
+                'service_name' => 'CPMS Hybrid Gateway',
             ],
         ],
     ],
@@ -567,6 +582,16 @@ return [
             'options' => [
                 'ttl' => 3600,
                 'namespace' => 'doctrine-orm3',
+            ]
+        ],
+        // Backs the Cognito JWKS cache. Its own namespace so a key rotation can be forced
+        // through by clearing just this pool, without discarding the rest of the app cache.
+        // The ttl matches Client::DEFAULT_JWKS_CACHE_TTL — the client sets its own expiry on
+        // the item, so this is the backstop rather than the primary control.
+        'jwks-cache' => [
+            'options' => [
+                'ttl' => 3600,
+                'namespace' => 'jwks',
             ]
         ],
     ],
