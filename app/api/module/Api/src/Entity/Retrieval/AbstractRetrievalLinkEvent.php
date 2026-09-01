@@ -39,7 +39,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'bigint', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'bigint', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -48,7 +48,7 @@ abstract class AbstractRetrievalLinkEvent implements BundleSerializableInterface
      *
      * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink|null
      */
-    #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink::class, fetch: 'LAZY')]
     protected $retrievalLink;
 

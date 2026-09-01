@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'messaging_message')]
 #[ORM\Index(name: 'fk_messaging_message_created_by_user_id', columns: ['created_by'])]
 #[ORM\Index(name: 'fk_messaging_message_last_modified_by_user_id', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'fk_messaging_message_messaging_content_id', columns: ['messaging_content_id'])]
 #[ORM\Index(name: 'fk_messaging_message_messaging_conversation_id', columns: ['messaging_conversation_id'])]
 #[ORM\Entity]
 class MessagingMessage extends AbstractMessagingMessage

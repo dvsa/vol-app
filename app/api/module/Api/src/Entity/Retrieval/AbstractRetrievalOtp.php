@@ -38,16 +38,16 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
     /**
      * Foreign Key to retrieval_link
      *
-     * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink|null
+     * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink
      */
-    #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink::class, fetch: 'LAZY')]
     protected $retrievalLink;
 
@@ -64,7 +64,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'attempts', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'integer', name: 'attempts', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $attempts = 0;
 
     /**
@@ -72,7 +72,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'max_attempts', nullable: false, options: ['default' => 5])]
+    #[ORM\Column(type: 'integer', name: 'max_attempts', nullable: false, options: ['default' => 5, 'unsigned' => true])]
     protected $maxAttempts = 5;
 
     /**
