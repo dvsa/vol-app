@@ -91,3 +91,7 @@ packages/local-refresh/.cache/
 # JetBrains
 .idea
 
+
+# Playwright browser tests for CDN components
+app/cdn/test-results/
+app/cdn/playwright-report/

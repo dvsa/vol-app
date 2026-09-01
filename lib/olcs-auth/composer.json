@@ -44,7 +44,7 @@
     "laminas/laminas-servicemanager": "^3.19",
     "laminas/laminas-session": "^2.24.0",
     "laminas/laminas-stdlib": "^3.19",
-    "laminas/laminas-validator": "2.64.0",
+    "laminas/laminas-validator": "^2.65",
     "laminas/laminas-view": "^2.41",
     "lm-commons/lmc-rbac-mvc": "^3.5",
     "olcs/olcs-common": "^9.0",

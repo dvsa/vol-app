@@ -1,0 +1,767 @@
+{
+  "version": "2.0",
+  "description": "DVSA Bank Statement Quality Checks for Vehicle Operator Licensing - Digital service provided by DVSA for Office of the Traffic Commissioner (OTC) caseworkers to assess financial standing. All checks use positive framing with explicit pass/fail criteria",
+  "criticalInstructions": {
+    "mathematicalPrecision": "Perform all numeric comparisons with mathematical precision. Double-check calculations before determining pass/fail.",
+    "strictAdherence": "Follow pass/fail criteria EXACTLY as specified. Do not apply leniency or make excuses for failures.",
+    "noSubjectiveOverride": "Do not override objective criteria with subjective reasoning. If criteria are not met, mark as FAIL regardless of context or explanations.",
+    "examples": [
+      "If closing balance is £45,000 and required funds is £48,000, this is FAIL (45,000 < 48,000). Do not mark as PASS.",
+      "If statement covers 18 days and requirement is 28 days, this is FAIL (18 < 28). Do not mark as PASS with justifications."
+    ]
+  },
+  "executionFlowOrder": {
+    "description": "Execution flow with skip conditions and possible outcomes for each check",
+    "notes": [
+      "^ Where sequence number is the same, checks can happen in parallel if more efficient for AWS, else do in sequence shown",
+      "£ Non-GBP currency: Skip numeric checks (FI02, FI09, FI16). Non-GBP is noted in the FI01 remark. Rare case - caseworker converts manually."
+    ],
+    "sequence": {
+      "1": {
+        "checks": ["FI01"],
+        "description": "Bank statement as a whole - Initial validation",
+        "FI01": {
+          "possibleOutcomes": ["Pass", "Fail"],
+          "skipConditions": [],
+          "onFail": "Skip all remaining checks"
+        }
+      },
+      "2": {
+        "checks": ["FI03", "FI04"],
+        "description": "Bank statement as a whole - Authenticity and completeness",
+        "canRunInParallel": true,
+        "FI03": {
+          "possibleOutcomes": ["Pass", "Fail", "Skipped"],
+          "skipConditions": ["FI01 fails"]
+        },
+        "FI04": {
+          "possibleOutcomes": ["Pass", "Fail", "Skipped"],
+          "skipConditions": ["FI01 fails"],
+          "onFail": "Still do Account name checks (FI06, FI07, FI08) but skip Dates/transactions/balances checks (FI10, FI05, FI02, FI09, FI16)"
+        }
+      },
+      "3": {
+        "checks": ["FI06", "FI07"],
+        "description": "Account name checks",
+        "canRunInParallel": true,
+        "FI06": {
+          "possibleOutcomes": ["Pass", "Fail", "Skipped"],
+          "skipConditions": ["FI01 fails"]
+        },
+        "FI07": {
+          "possibleOutcomes": ["Pass", "Fail", "Skipped"],
+          "skipConditions": ["FI01 fails"]
+        }
+      },
+      "4": {
+        "checks": ["FI08"],
+        "description": "Statutory declaration check",
+        "FI08": {
+          "possibleOutcomes": ["Pass", "Fail", "Skipped"],
+          "skipConditions": [
+            "FI01 fails",
+            "BusinessType is NOT 'Sole Trader' or 'Partnership'",
+            "FI07 passes AND BusinessType is 'Sole Trader' or 'Partnership'"
+          ],
+          "note": "Only evaluate for Sole Trader/Partnership when FI07 fails"
+        }
+      },
+      "5": {
+        "checks": ["FI10"],
+        "description": "Statement age check",
+        "FI10": {
+          "possibleOutcomes": ["Pass", "Fail", "Skipped"],
+          "skipConditions": ["FI01 fails", "FI04 fails"],
+          "onFail": "Skip remaining checks (FI05, FI02, FI09, FI16)"
+        }
+      },
+      "6a": {
+        "checks": ["FI05", "FI09"],
+        "description": "Date coverage and average funds calculation - FI09 MUST complete before FI02 is evaluated",
+        "FI05": {
+          "possibleOutcomes": ["Pass", "Fail", "Skipped"],
+          "skipConditions": ["FI01 fails", "FI04 fails", "FI10 fails"],
+          "note": "Even if fails will still run subsequent checks - caseworker may make exception, e.g. on interims"
+        },
+        "FI09": {
+          "possibleOutcomes": ["Pass", "Fail", "Skipped"],
+          "skipConditions": ["FI01 fails", "FI04 fails", "FI10 fails", "Currency is not GBP"],
+          "note": "Skip for non-GBP currency - RequiredFunds is in GBP, caseworker will convert manually.",
+          "onComplete": "If 4-balance average was calculatable (whether Pass or Fail), mark FI02 as Skipped. If uncalculatable, FI09 result is Fail with reason 'uncalculatable' and FI02 must then be evaluated."
+        }
+      },
+      "6b": {
+        "checks": ["FI02", "FI16"],
+        "description": "Artificial inflation check (conditional on FI09) and large deposits",
+        "FI02": {
+          "possibleOutcomes": ["Pass", "Fail", "Skipped"],
+          "skipConditions": [
+            "FI01 fails",
+            "FI04 fails",
+            "FI10 fails",
+            "Currency is not GBP",
+            "FI09 calculated average successfully (Pass or Fail)"
+          ],
+          "evaluateOnlyWhen": "FI09 result is Fail with reason 'uncalculatable'",
+          "note": "SKIP unless FI09 could not calculate 4-balance average. If evaluating: Fail if closing balance >= RequiredFunds (artificial inflation), Pass if closing < RequiredFunds (genuinely insufficient)."
+        },
+        "FI16": {
+          "possibleOutcomes": ["Pass", "Fail", "Skipped"],
+          "skipConditions": ["FI01 fails", "FI04 fails", "FI10 fails", "Currency is not GBP"],
+          "note": "Pass if no deposits exceed 25% of RequiredFunds. Fail if large deposits found. Skip for non-GBP - caseworker reviews manually."
+        }
+      }
+    }
+  },
+  "coreChecks": [
+    {
+      "id": "FI01",
+      "name": "FinancialEvidencePresent",
+      "description": "Document contains data consistent with a bank statement",
+      "grouping": "Bank statement as a whole",
+      "coreIssue": true,
+      "validation": "Verify the extracted data from Data Automation (BANK_STATEMENT blueprint) contains the key fields expected from a bank statement. The document has already been classified as a bank statement by the blueprint - this check confirms the extracted data is consistent with that classification.",
+      "requiredFields": [
+        "Bank name or financial institution identifier",
+        "Account holder name",
+        "Account identifier: (Account Number + Sort Code) OR IBAN OR other country-specific identifier",
+        "Statement period (start and end dates)",
+        "Opening and/or closing balance"
+      ],
+      "foreignBankStatements": {
+        "accepted": true,
+        "note": "Foreign bank statements are rare but accepted (typically from larger Multi License Holder companies). As long as name, dates, and balances are clear, they can be processed.",
+        "currencyDetection": {
+          "instruction": "Detect currency from symbol (£/$/€), bank location, or explicit currency field. Include detected currency in FI01 remark.",
+          "ifNotGBP": "Note detected currency in FI01 remark. Downstream numeric checks (FI02, FI09, FI16) will be SKIPPED - caseworker converts manually."
+        },
+        "accountIdentifier": "IBAN or country-specific format acceptable - no strict UK format required"
+      },
+      "passCriteria": "Extracted data contains bank identifier, account holder name, account identifier, statement period, and balance information.",
+      "failCriteria": "Extracted data is missing critical bank statement fields - no bank name, no account identifier, or no balances.",
+      "example": "PASS: Data includes bank name, account number + sort code (or IBAN), statement dates, opening/closing balances. FAIL: Data lacks account identifier or balances."
+    },
+    {
+      "id": "FI02",
+      "name": "RequiredFundsAsClosingBalanceOnly",
+      "description": "Required funds are shown ONLY as closing balance (artificial inflation detection)",
+      "grouping": "Dates, transactions and balances",
+      "coreIssue": false,
+      "evaluateAfter": "FI09",
+      "evaluateOnlyWhen": "FI09 result is Fail with reason 'uncalculatable'",
+      "validation": "CRITICAL: Only evaluate FI02 when FI09 CANNOT calculate 4-balance average. If FI09 successfully calculated the average (whether Pass or Fail), FI02 MUST be Skipped. FI02 is only evaluated when FI09 fails because insufficient transaction data prevents calculating 4 distinct closing day balances.",
+      "passCriteria": "FI09 failed due to uncalculatable average AND closing balance < RequiredFunds. Genuinely insufficient funds throughout, not artificial inflation.",
+      "failCriteria": "FI09 failed due to uncalculatable average AND closing balance >= RequiredFunds. Artificial inflation - funds shown only as closing balance, not as sustainable average. This suggests a large deposit was made just before statement end to artificially meet requirements.",
+      "skippedCriteria": "FI09 successfully calculated 4-balance average (whether it passed or failed). No need to evaluate artificial inflation when average was calculatable.",
+      "example": "FI09 calculated average: FI02 SKIPPED. FI09 uncalculatable (balances same from day 2-27), closing £15,000 >= required £10,000: FI02 FAIL (artificial inflation detected). FI09 uncalculatable, closing £8,000 < required £10,000: FI02 PASS (genuinely insufficient).",
+      "considerationFactors": [
+        "First: Did FI09 calculate average? If YES, mark FI02 as SKIPPED.",
+        "If NO (FI09 uncalculatable): Compare closing balance vs RequiredFunds",
+        "Closing >= Required = FI02 FAIL (artificial inflation - deposit made at end)",
+        "Closing < Required = FI02 PASS (insufficient throughout)",
+        "Correlation with FI16 (LargeDepositsPresent) results for context - a large deposit near statement end combined with FI02 FAIL is strong indicator of artificial inflation"
+      ],
+      "note": "FI02 detects artificial inflation where applicant deposits large sum just before statement end to meet requirements. If FI09 can calculate 4-balance average, FI02 is SKIPPED. FI02 only applies when transactions are insufficient to determine 4 distinct balances."
+    },
+    {
+      "id": "FI03",
+      "name": "AuthenticBankStatement",
+      "description": "Document data is consistent with an authentic bank statement",
+      "grouping": "Bank statement as a whole",
+      "coreIssue": true,
+      "validation": "Verify the extracted data from Bedrock Data Automation is internally consistent and contains expected fields for an authentic bank statement. Note: Visual checks (fonts, logos, alignment) are NOT possible with extracted data - focus on data consistency and cross-validation.",
+      "dataSource": {
+        "type": "Bedrock Data Automation",
+        "blueprint": "BANK_STATEMENT",
+        "note": "This approach supports future Open Banking API integration where bank statements may not be the only input source"
+      },
+      "authenticityIndicators": {
+        "dataConsistencyChecks": [
+          "All expected fields present (bank name, account number, sort code, balances, transactions)",
+          "Opening balance + transactions = Closing balance (mathematical consistency)",
+          "Transaction dates fall within statement period",
+          "No duplicate transaction entries with identical details",
+          "Running balance is mathematically correct through transactions"
+        ],
+        "accountIdentifiers": [
+          "Account number present and in valid format (typically 8 digits for UK)",
+          "Sort code present and in valid format (6 digits for UK)",
+          "IBAN present and internally consistent with account number and sort code (if applicable)",
+          "Where UK company: IBAN starts with 'GB'",
+          "Where foreign company: IBAN country code matches bank location"
+        ],
+        "ibanValidation": {
+          "description": "The international bank identifier code (IBAN) should be internally consistent with other account information",
+          "reference": "https://bank.codes/iban/structure/united-kingdom/",
+          "ukFormat": {
+            "totalLength": 22,
+            "structure": [
+              { "position": "1-2", "length": 2, "type": "alpha", "field": "Country Code", "ukValue": "GB" },
+              { "position": "3-4", "length": 2, "type": "numeric", "field": "IBAN Check Digits", "example": "29" },
+              { "position": "5-8", "length": 4, "type": "alpha", "field": "SWIFT/BIC Code", "example": "NWBK" },
+              { "position": "9-14", "length": 6, "type": "numeric", "field": "Sort Code", "example": "601613" },
+              { "position": "15-22", "length": 8, "type": "numeric", "field": "Account Number", "example": "31926819" }
+            ],
+            "exampleIBAN": "GB29NWBK60161331926819",
+            "exampleBreakdown": "GB | 29 | NWBK | 601613 | 31926819"
+          },
+          "validationRules": [
+            "1. If UK company: IBAN must start with 'GB'",
+            "2. IBAN length must be exactly 22 characters for UK",
+            "3. Sort code in IBAN (positions 9-14) should match the sort code shown elsewhere on statement",
+            "4. Account number in IBAN (positions 15-22) should match the account number shown elsewhere on statement",
+            "5. If IBAN, sort code, and account number are all present, verify they are internally consistent"
+          ],
+          "consistencyCheck": {
+            "instruction": "Extract sort code and account number from IBAN and compare with standalone values on statement",
+            "example": "IBAN: GB29NWBK60161331926819 -> Sort Code: 60-16-13, Account: 31926819. If statement shows Sort Code: 60-16-13 and Account: 31926819, they are CONSISTENT. If statement shows different values, mark as Fail.",
+            "note": "Sort code may appear with or without hyphens (601613 or 60-16-13) - normalize for comparison"
+          },
+          "foreignIBAN": {
+            "description": "IBAN (International Bank Account Number) is a standard format that identifies bank accounts internationally",
+            "generalFormat": {
+              "length": "16-34 alphanumeric characters",
+              "structure": [
+                {
+                  "position": "1-2",
+                  "field": "Country Code",
+                  "type": "2 letters (ISO 3166-1 alpha-2)",
+                  "example": "DE, FR, ES, NL"
+                },
+                {
+                  "position": "3-4",
+                  "field": "Check Digits",
+                  "type": "2 numeric",
+                  "note": "Calculated for validation"
+                },
+                {
+                  "position": "5+",
+                  "field": "BBAN (Basic Bank Account Number)",
+                  "type": "Up to 30 alphanumeric",
+                  "note": "Country-specific format"
+                }
+              ],
+              "note": "The BBAN portion contains the country's domestic bank account details"
+            },
+            "validationRules": [
+              "1. First 2 characters must be valid ISO country code (letters only)",
+              "2. Characters 3-4 must be numeric (check digits)",
+              "3. Total length must be 16-34 characters",
+              "4. Only alphanumeric characters allowed (no spaces or special characters in stored format)",
+              "5. Country code should match the bank's location if determinable"
+            ],
+            "commonCountryLengths": {
+              "BE": 16,
+              "DE": 22,
+              "ES": 24,
+              "FR": 27,
+              "GB": 22,
+              "IE": 22,
+              "IT": 27,
+              "NL": 18,
+              "PL": 28,
+              "CH": 21
+            },
+            "looseValidation": {
+              "instruction": "For foreign IBANs, apply looser validation - focus on format consistency rather than strict rules",
+              "checks": [
+                "Verify length is 16-34 characters",
+                "Verify starts with 2 letters (country code)",
+                "Verify characters 3-4 are digits",
+                "Do not fail if country code is unfamiliar - apply loose validation for foreign IBANs",
+                "Accept that BBAN format varies significantly by country"
+              ],
+              "action": "Accept non-GB IBANs for foreign statements - do not fail on country code mismatch"
+            }
+          }
+        },
+        "dataAnomalyIndicators": [
+          "Mathematical inconsistency: running balance doesn't match transaction amounts",
+          "Impossible dates: transactions outside statement period",
+          "Missing data: gaps in transaction sequence or missing expected fields",
+          "Suspicious patterns: round number deposits just before period end (see FI16)",
+          "Bank name not in knownUKBanks list - Fail"
+        ],
+        "bankNameValidation": {
+          "source": "Bank of England Prudential Regulation Authority (PRA)",
+          "reference": "https://www.bankofengland.co.uk/prudential-regulation/authorisations/which-firms-does-the-pra-regulate",
+          "lastUpdated": "2025-02",
+          "updateFrequency": "Monthly CSV published by BoE - refresh periodically",
+          "instruction": "Compare extracted bank name against knownUKBanks list. Use fuzzy matching for variations (e.g., 'HSBC UK' matches 'HSBC UK Bank plc'). If no match found, mark as Fail.",
+          "knownUKBanks": [
+            "ABC International Bank",
+            "AIB Group (UK)",
+            "Al Rayan Bank",
+            "Aldermore Bank",
+            "Allica Bank",
+            "Alpha Bank London",
+            "Arbuthnot Latham",
+            "Atom Bank",
+            "Bank of Baroda (UK)",
+            "Bank of Ireland UK",
+            "Bank of Scotland",
+            "Barclays",
+            "Barclays Bank UK",
+            "Brighthouse Group",
+            "C. Hoare & Co",
+            "CAF Bank",
+            "Citibank UK",
+            "Clydesdale Bank",
+            "Co-operative Bank",
+            "Coutts",
+            "Credit Suisse UK",
+            "Cynergy Bank",
+            "DB UK Bank",
+            "Duncan Lawrie",
+            "First Direct",
+            "GB Bank",
+            "Gatehouse Bank",
+            "Goldman Sachs International Bank",
+            "Habib Bank Zurich",
+            "Halifax",
+            "Hampden & Co",
+            "Handelsbanken",
+            "HSBC",
+            "HSBC UK Bank",
+            "ICICI Bank UK",
+            "Investec Bank",
+            "JPMorgan Chase Bank",
+            "Julian Hodge Bank",
+            "Lloyds Bank",
+            "Lloyds Bank Corporate Markets",
+            "Metro Bank",
+            "Monzo Bank",
+            "Morgan Stanley Bank International",
+            "NatWest",
+            "NatWest Markets",
+            "OakNorth Bank",
+            "Paragon Bank",
+            "Qatar National Bank",
+            "Recognise Bank",
+            "Revolut",
+            "Royal Bank of Scotland",
+            "Sainsbury's Bank",
+            "Santander UK",
+            "Secure Trust Bank",
+            "Shawbrook Bank",
+            "Silicon Valley Bank UK",
+            "Starling Bank",
+            "State Bank of India UK",
+            "Tesco Bank",
+            "The Access Bank UK",
+            "TSB Bank",
+            "Turkish Bank UK",
+            "UBS",
+            "Ulster Bank",
+            "Unity Trust Bank",
+            "Virgin Money UK",
+            "Weatherbys Bank",
+            "Wyelands Bank",
+            "Yorkshire Bank",
+            "Zenith Bank UK"
+          ],
+          "knownBuildingSocieties": [
+            "Nationwide Building Society",
+            "Yorkshire Building Society",
+            "Coventry Building Society",
+            "Skipton Building Society",
+            "Leeds Building Society",
+            "Principality Building Society",
+            "West Bromwich Building Society",
+            "Newcastle Building Society",
+            "Nottingham Building Society",
+            "Cumberland Building Society",
+            "Progressive Building Society",
+            "Cambridge Building Society",
+            "Monmouthshire Building Society",
+            "Furness Building Society",
+            "Hinckley & Rugby Building Society",
+            "Ipswich Building Society",
+            "Leek United Building Society",
+            "Marsden Building Society",
+            "Newbury Building Society",
+            "Saffron Building Society",
+            "Suffolk Building Society",
+            "Tipton & Coseley Building Society",
+            "Vernon Building Society"
+          ],
+          "digitalBanks": ["Monzo", "Starling", "Revolut", "Atom Bank", "Tandem Bank", "N26", "Chase UK", "Zopa Bank"],
+          "matchingGuidance": {
+            "fuzzyMatch": true,
+            "ignoreCase": true,
+            "ignoreSuffixes": ["plc", "PLC", "Ltd", "Limited", "Bank", "UK"],
+            "examples": [
+              "'HSBC UK BANK PLC' matches 'HSBC UK Bank'",
+              "'LLOYDS BANK' matches 'Lloyds Bank'",
+              "'Nationwide' matches 'Nationwide Building Society'",
+              "'NatWest' matches 'National Westminster Bank'"
+            ]
+          },
+          "ifNotRecognised": {
+            "action": "Fail",
+            "reason": "Bank name not in known list - may be legitimate but unfamiliar, or potentially fraudulent",
+            "note": "If the bank name is not recognised, the check fails."
+          }
+        },
+        "visualChecksNotPossible": {
+          "note": "The following checks require visual inspection and CANNOT be performed with extracted data",
+          "examples": ["Font consistency", "Logo placement", "Text alignment", "Image manipulation artifacts"],
+          "mitigation": "If caseworker suspects fraud based on other indicators, request original paper document for visual inspection"
+        }
+      },
+      "passCriteria": "Extracted data is internally consistent: balances reconcile, IBAN matches account details, transactions within statement period, bank name recognised",
+      "failCriteria": "Data inconsistencies detected: balance calculation errors, IBAN mismatch, transactions outside period, unrecognised bank name",
+      "example": "PASS: Opening balance + transactions = closing balance, IBAN contains correct sort code/account, all transactions within statement dates. FAIL: Closing balance doesn't match calculated total, IBAN sort code differs from statement sort code, or bank name is unrecognised.",
+      "note": "Visual fraud detection is not possible with extracted data alone - if fraud is suspected, caseworker should request original paper document."
+    },
+    {
+      "id": "FI04",
+      "name": "CompleteOfficialDocument",
+      "description": "Statement is complete and not a screenshot or summary",
+      "grouping": "Bank statement as a whole",
+      "coreIssue": true,
+      "validation": "Confirm this is a complete official bank statement, not a screenshot, mobile app export, or summary page",
+      "passCriteria": "Complete official statement with all pages and proper formatting",
+      "failCriteria": "Screenshot, mobile app export, partial pages, summary document, expected statement dates and accompanying transactions (if any) (if not transactions, opening and closing balances should be the same).",
+      "example": "PASS: Full PDF statement from bank. FAIL: Screenshot of online banking or single summary page."
+    },
+    {
+      "id": "FI05",
+      "name": "Covers28DayPeriod",
+      "description": "Statement transaction date range covers minimum 28 calendar days",
+      "grouping": "Dates, transactions and balances",
+      "coreIssue": false,
+      "validation": "Fail if the statement transaction date range is < 28 calendar days. This includes scenarios where the upload is only 1 page from the bank statement (which is different to FI04 - FI04 checks if it's a screenshot/summary, FI05 checks if the date range is sufficient).",
+      "calculation": "days_covered = (statement_end_date - statement_start_date). Must be >= 28 calendar days.",
+      "passCriteria": "Statement transaction date range covers >= 28 calendar days",
+      "failCriteria": "Statement transaction date range covers < 28 calendar days",
+      "example": "If statement period is 1st-30th of a month (30 days), PASS (30 >= 28). If statement period is 1st-20th (20 days), FAIL (20 < 28). Single page with only 14 days of transactions: FAIL.",
+      "note": "This is different from FI04 - a statement could be complete and official (FI04 PASS) but still fail FI05 if it doesn't cover 28 days. Example: Natwest case 1134805 where upload was only 1 page."
+    },
+    {
+      "id": "FI06",
+      "name": "FullAccountHolderNameShown",
+      "description": "Account holder name is shown in full and matches the operator name per business type rules",
+      "grouping": "Account name",
+      "coreIssue": false,
+      "validation": "Find the account holder name on the statement using the nameDiscoverySteps, then verify it matches the operator name per the businessTypeRules. FI06 fails if the name is truncated, abbreviated, or partially shown.",
+      "nameDiscoverySteps": [
+        "1. If not a Limited Company or Limited Liability Partnership, start with the correspondence block on the statement",
+        "2. If using the correspondence block, also check the second line as the first line may be FAO (For the Attention Of)",
+        "3. Look for an explicit 'Account Name' or 'Account Holder' label/field on the statement",
+        "4. Look elsewhere in the statement header for the operator name"
+      ],
+      "businessTypeRules": {
+        "Limited Company": {
+          "matchField": "OperatorName (Company name)",
+          "logic": "Bank statement account name should be the VOL company name. Accept 'Limited' instead of 'Ltd' or vice versa. Do not accept if name is truncated or shortened due to length.",
+          "example": "VOL: 'ABC Transport Limited' matches 'ABC Transport Ltd' on statement"
+        },
+        "Sole Trader": {
+          "matchField": "OperatorName (Sole trader name)",
+          "logic": "Bank statement account name should be the VOL operator name (sole trader name). Would not accept a trading name.",
+          "example": "VOL operator 'John Smith' should match 'John Smith' on statement",
+          "acceptableNameFormats": [
+            "Title + First name(s) + Other name(s) + Last name",
+            "Title + First name(s) + Last name",
+            "First name(s) + Other name(s) + Last name",
+            "First name(s) + Last name"
+          ]
+        },
+        "Partnership": {
+          "matchField": "OperatorName (Partnership name) OR People list",
+          "logic_england_wales": "Match partner names from the People list. Looking for a match of however many names are on the bank statement to those on VOL. Can be 1 or many. There can be fewer partner names on the bank statement than responsible persons on VOL, but there cannot be a name on the bank statement account name that is not a responsible person on VOL.",
+          "logic_scotland": "Same as England & Wales for partner names, but can also be the partnership or company name.",
+          "example": "Partnership 'Smith & Jones' or individual partners 'John Smith' from People list"
+        },
+        "Limited Liability Partnership": {
+          "matchField": "OperatorName (Company name)",
+          "logic": "Same as Limited Company - bank statement account name should be the VOL company name. See Limited Company alternatives.",
+          "example": "VOL: 'XYZ Partners LLP' matches statement"
+        },
+        "Other": {
+          "matchField": "OperatorName (Organisation name)",
+          "logic": "Bank statement account name should be the VOL organisation name (for charity/trust/university/public authority).",
+          "example": "VOL: 'City Council Transport Dept' matches statement"
+        }
+      },
+      "fuzzyMatching": {
+        "note": "Use confidence scoring or Levenshtein distance to show how close the match is",
+        "ignoreCase": true,
+        "acceptVariations": ["Ltd/Limited", "PLC/plc", "&/and"]
+      },
+      "passCriteria": "Account holder name found in full on the statement and matches operator name per business type rules",
+      "failCriteria": "Account holder name is abbreviated, truncated, partially shown, or missing from the statement",
+      "example": "PASS: 'ABC Transport Limited' shown in full matching VOL operator name. FAIL: Only 'ABC Trans...' shown (truncated). FAIL: Name completely missing from statement."
+    },
+    {
+      "id": "FI07",
+      "name": "CorrectAccountHolderName",
+      "description": "Account holder name is the correct entity - not a completely different name",
+      "grouping": "Account name",
+      "coreIssue": false,
+      "validation": "Use the same nameDiscoverySteps and businessTypeRules as FI06 to find and identify the account holder name. FI07 checks whether the name is for the CORRECT entity. FI06 fails for truncation/abbreviation (close but incomplete). FI07 fails when the name is completely wrong - a different entity with no recognisable match.",
+      "relationship_to_FI06": "FI06 = name is truncated/abbreviated but recognisable. FI07 = name is completely wrong, different entity.",
+      "businessTypeRules": {
+        "note": "Same business type rules as FI06 apply. See FI06.businessTypeRules for the full matching table.",
+        "Sole Trader": {
+          "matchField": "OperatorName (Sole trader name)",
+          "acceptableNameFormats": [
+            "Title + First name(s) + Other name(s) + Last name",
+            "Title + First name(s) + Last name",
+            "First name(s) + Other name(s) + Last name",
+            "First name(s) + Last name"
+          ],
+          "requirements": "Must contain full first name(s) AND the last name. This is important to trap partners that may require a statutory declaration (FI08).",
+          "rejectionRules": [
+            "Would NOT accept 2 of the same last name (e.g., 'Smith & Smith') unless both are named responsible persons on VOL",
+            "Would NOT accept names not found in the VOL People list"
+          ],
+          "example": "VOL operator 'John David Smith'. PASS: 'John Smith', 'John David Smith', 'Mr John Smith'. FAIL: 'J Smith' (initial not full first name - this is FI06 territory), 'Jane Smith' (completely different person - FI07 FAIL)."
+        },
+        "Partnership": {
+          "note": "Same rules as FI06. Every name on the bank statement must be a responsible person on VOL. A name that is NOT a responsible person on VOL = FI07 FAIL."
+        }
+      },
+      "passCriteria": "Account holder name matches or is recognisably the same entity as the operator name per business type rules",
+      "failCriteria": "Account holder name is a completely different entity - no recognisable match to operator name, partnership people, or organisation name. The name on the statement belongs to a different person or company.",
+      "example": "For Limited Company 'XYZ Transport Ltd': PASS if statement shows 'XYZ Transport Ltd' or 'XYZ Transport Limited'. FAIL if statement shows 'ABC Haulage Ltd' (completely different company). For Sole Trader 'John Smith': PASS if statement shows 'John Smith'. FAIL if statement shows 'Jane Williams' (completely different person)."
+    },
+    {
+      "id": "FI08",
+      "name": "NoStatutoryDeclarationRequired",
+      "description": "No statutory declaration is needed",
+      "grouping": "Account name",
+      "coreIssue": false,
+      "validation": "Determine if a statutory declaration is required. This ONLY applies to Sole Trader and Partnership business types where the bank statement is a joint account (e.g., sole trader applicant and their domestic partner) AND where FI07 fails. Does NOT apply to Limited Companies, Limited Liability Partnerships, or Other business types.",
+      "applicableBusinessTypes": ["Sole Trader", "Partnership"],
+      "notApplicableBusinessTypes": ["Limited Company", "Limited Liability Partnership", "Other"],
+      "passCriteria": "Account name matches applicant (FI07 passed), no statutory declaration needed",
+      "failCriteria": "For Sole Trader or Partnership: Bank statement is in a joint account name (e.g., applicant and domestic partner) and FI07 failed - statutory declaration required to confirm relationship",
+      "skippedCriteria": "Skip if business type is 'Sole Trader' or 'Partnership' AND FI07 result is 'Pass'. Also skip for Limited Company, LLP, or Other business types.",
+      "example": "PASS: Sole trader account matches applicant name. FAIL: Joint account 'Mr J Smith & Mrs A Smith' for sole trader 'Mr J Smith' - needs statutory declaration. SKIPPED: Limited Company (not applicable) or Sole trader with FI07 Pass."
+    },
+    {
+      "id": "FI09",
+      "name": "SufficientAverageFundsRequired",
+      "description": "Statement demonstrates sufficient average funds over the period",
+      "grouping": "Dates, transactions and balances",
+      "coreIssue": false,
+      "validation": "ALWAYS evaluate FI09 first. Use the calculation property. Calculate the 4-balance average. If average >= required: PASS (sufficient funds demonstrated). If average < required: FAIL (insufficient average). Mark FI02 as SKIPPED. If 4 balances CANNOT be identified: FAIL (with reason: uncalculatable - insufficient transaction data), then evaluate FI02. Consider agreed overdraft if shown.",
+      "passCriteria": "4-balance average successfully calculated AND average >= required. Sufficient funds demonstrated over the period. Result is PASS regardless of closing balance value. FI02 will be SKIPPED.",
+      "failCriteria": "Either (1) 4-balance average calculated but average < required - insufficient average funds (mark FI02 as SKIPPED), OR (2) Cannot calculate 4-balance average due to insufficient transaction data - uncalculatable (evaluate FI02 for artificial inflation). The closing balance alone is NEVER a reason to fail - only the average matters.",
+      "example": "Required £8,000. 4 balances: £10k, £12k, £9k, £11k. Average £10,500: PASS - sufficient average (even if closing is £9k). Required £8,000. 4 balances: £10k, £6k, £7k, £5k. Average £7,000: FAIL - insufficient average (even if opening was £10k). Cannot identify 4 balances: FAIL with reason 'uncalculatable'.",
+      "calculation": {
+        "step1": "Get RequiredFunds from ApplicationContext - this is pre-calculated based on licence type and vehicle count",
+        "step2": "Identify 4 closing day balances: opening balance day 1, closing balance final day, highest balance in between, 2nd highest balance in between",
+        "step3": "Calculate average: (balance1 + balance2 + balance3 + balance4) / 4",
+        "step4": "If agreed overdraft is shown on bank statement, add it to the average balance",
+        "step5": "Compare: calculated average balance >= RequiredFunds?",
+        "step6": "Present back the expected (RequiredFunds) and actual (calculated average) to the caseworker and mark Pass/Fail appropriately"
+      },
+      "requiredFundsReference": {
+        "Standard Licence": {
+          "firstVehicle": 3100,
+          "additionalVehicle": 1700,
+          "note": "£3,100 for first vehicle + £1,700 for each additional vehicle"
+        },
+        "Restricted Licence": {
+          "firstVehicle": 3000,
+          "additionalVehicle": 1600,
+          "note": "£3,000 for first vehicle + £1,600 for each additional vehicle"
+        },
+        "multiLicenceHolder": "If applicant is a multi-licence holder, the required average balance applies across all licences"
+      },
+      "considerationFactors": [
+        "Can 4 distinct closing day balances be identified?",
+        "Agreed overdraft facility if shown on statement - add to effective balance",
+        "Present calculation details to caseworker for verification",
+        "If FI09 FAILS explain why (insufficient average vs uncalculatable)",
+        "Do NOT FAIL due to inadequate final closing balance; the decision must be based on average (using the calculation steps)",
+        "Do NOT FAIL due to the result of FI05, make your decision solely on the average balance calculation",
+        "Consider if applicant is multi-licence holder - required funds apply across all licences",
+        "If any of the 4 balances are negative due to overdraft, do not automatically fail - consider the context and whether the average can still meet requirements",
+        "If any of the 4 balances are negative due to overdraft, use the actual negative value in 4 balance average, do not invert the calculation (do not treat negative as zero) - the average should reflect the true financial position including overdraft usage. for example: balance 1: £10k, balance 2: -£2k (overdraft), balance 3: £8k, balance 4: £12k. Average = (£10k + (-£2k) + £8k + £12k) / 4 = £7k average. If required is £6k, this would PASS because the average including overdraft is still above required as £7k is greater than £6k.",
+        "If any of the 4 balances are negative (-) then keep it negative and do not invert the value",
+        "If any of the 4 balances are positive (has a (+) prefix, or does not have a (-) prefix) then keep it positive and do not invert",
+        "Ensure that if an agreed overdraft is shown on the bank statement, then it is added to the average balance, always take it into consideration when calculating the average, do not ignore it or treat it as a separate factor - it can be the difference between PASS and FAIL",
+        "NOT MVP: Bank overdraft details may be in a separate upload letter/document",
+        "NOT MVP: Interim statements have different calculation - look at 4 closing balances in four months time, track back every 10 days over 3 month period"
+      ],
+      "currencyHandling": {
+        "expectedCurrency": "GBP",
+        "ifNotGBP": "SKIP this check - caseworker will manually convert and verify. Result: Skipped with reason 'Non-GBP currency detected'.",
+        "note": "Date-based checks (FI05, FI10) still apply regardless of currency. Only numeric checks (FI02, FI09, FI16) are skipped for non-GBP."
+      },
+      "note": "FI09 is evaluated FIRST and ALWAYS. If FI09 calculates average: result is PASS/FAIL based on average, and FI02 is SKIPPED. If FI09 cannot calculate average: FI09 FAILS with reason 'uncalculatable', then FI02 is evaluated to diagnose artificial inflation (FAIL) vs genuine insufficiency (PASS). See finance calculator spreadsheet for reference: https://dvsa.sharepoint.com reference.",
+      "financeCalculatorReference": "See finance calculator spreadsheet for detailed calculation examples"
+    },
+    {
+      "id": "FI10",
+      "name": "StatementRecentlyIssued",
+      "description": "Statement is recent and not dated after document upload",
+      "grouping": "Dates, transactions and balances",
+      "coreIssue": false,
+      "validation": "Statement end date must be on or before DocumentUploadDate (cannot be in the future relative to upload), and must be within 58 days before DocumentUploadDate. The 58-day threshold is used instead of '2 calendar months' to handle edge cases like January/February or February/March back-to-back months. Use DocumentUploadDate from applicantProfile as reference, NOT today's date. This applies from the date of submission and applies to the last day of the dated transactions.",
+      "calculation": "1. Check: statement_end_date <= DocumentUploadDate (must not be after upload). 2. Check: (DocumentUploadDate - statement_end_date) <= 58 days. Both conditions must be true for PASS.",
+      "passCriteria": "Statement end date is on or before DocumentUploadDate AND within 58 days before DocumentUploadDate.",
+      "failCriteria": "Statement end date is after DocumentUploadDate (suspicious - future date) OR statement end date is more than 58 days before DocumentUploadDate (too old).",
+      "example": "DocumentUploadDate: 20 Sep 2019. Statement ending 18 Sep 2019 (2 days before): PASS. Statement ending 25 Jul 2019 (57 days before): PASS. Statement ending 20 Jul 2019 (62 days before): FAIL - exceeds 58 days.",
+      "note": "58 days is the minimum for back-to-back months (e.g., January/February or February/March) and is more precise than '2 calendar months'."
+    },
+    {
+      "id": "FI16",
+      "name": "LargeDepositsPresent",
+      "description": "Large deposits over threshold are present",
+      "grouping": "Dates, transactions and balances",
+      "coreIssue": false,
+      "validation": "Fail if any individual deposits exceed 25% of RequiredFunds",
+      "calculation": "deposit_amount > (RequiredFunds * 0.25)",
+      "thresholdPercentage": 25,
+      "failCriteria": "One or more deposits > 25% of RequiredFunds",
+      "passCriteria": "No deposits exceed 25% of RequiredFunds threshold",
+      "example": "If RequiredFunds is £20,000, threshold is £5,000. Deposit of £6,000 triggers Fail. Deposit of £4,000 is Pass.",
+      "currency": "GBP"
+    }
+  ],
+  "additionalAnalysis": [
+    {
+      "category": "Name discrepancies",
+      "description": "Apply business type rules to validate name matching",
+      "action": "REVIEW"
+    },
+    {
+      "category": "IBAN/account number validation",
+      "description": "Verify UK bank account format (sort code, account number, IBAN if present)",
+      "action": "VALIDATE"
+    },
+    {
+      "category": "Evidence of tampering/fraud",
+      "description": "Check for font inconsistencies, misaligned balances, suspicious patterns, digital manipulation",
+      "action": "FAIL"
+    },
+    {
+      "category": "Financial standing",
+      "description": "Assess balances, overdrafts, account health for operating commercial vehicles",
+      "action": "ASSESS"
+    },
+    {
+      "category": "Account type appropriateness",
+      "description": "Verify account type matches business (business vs personal, charity account for commercial operator)",
+      "action": "REVIEW"
+    },
+    {
+      "category": "Transaction patterns",
+      "description": "Review regular income/expenses consistent with vehicle operation business",
+      "action": "ASSESS"
+    }
+  ],
+  "assumptions": [
+    "All pages of bank statement loaded as 1 document",
+    "Does NOT address back-to-back statements in separate documents",
+    "Interim statements are NOT in scope for this validation"
+  ],
+  "outputStructure": {
+    "format": "JSON",
+    "instructions": "Return ONLY valid JSON. Do not include markdown code blocks, explanatory text, or any content before/after the JSON. The JSON must be parseable directly. Use the positive check names (e.g., 'FinancialEvidencePresent', 'RequiredFundsAsClosingBalanceOnly') as labels. Result values must be: Pass, Fail, or Skipped. For EVERY rule evaluation, include a workingOut array that shows the evidence examined, calculations performed (if applicable), comparisons made, and the objective reason for the result. The remark must be a concise, caseworker-facing summary of the outcome. It must state the key evidence or fact that led to the result and must not introduce information, assumptions, or conclusions that are not supported by the evidence or the rule being evaluated. Do not repeat the full workingOut. Do not use subjective language, speculation, or recommendations. For Pass, state what requirement was satisfied. For Fail, state the specific requirement that was not satisfied and, where applicable, the relevant actual value versus required value. For Skipped, state that the check was not evaluated and give the specific skip condition that applied. Keep remarks to 1-2 concise sentences. Do not use a remark to override, reinterpret, or contradict the result value. FI check identifiers (e.g., FI01, FI02, FI03, FI09, FI16) are internal identifiers only. They MUST be retained where required by the JSON structure but MUST NOT be rendered, displayed, mentioned, or exposed in any user-facing text, including the summary, labels, remarks, or any other natural-language output. When referring to a check in user-facing text, use its human-readable label instead.",
+    "schema": {
+      "summary": "string - Brief overall assessment (1-4 sentences)",
+      "detected_currency": "string - Currency detected (GBP/USD/EUR/etc).",
+      "core_checks": {
+        "FI01": {
+          "label": "FinancialEvidencePresent",
+          "result": "Pass|Fail",
+          "workingOut": ["array of strings - step-by-step reasoning"],
+          "remark": "string - Brief overall statement on the outcome (1-2 sentences)."
+        },
+        "FI02": {
+          "label": "RequiredFundsAsClosingBalanceOnly",
+          "result": "Pass|Fail|Skipped",
+          "workingOut": ["array of strings - step-by-step reasoning"],
+          "remark": "string - Brief overall statement on the outcome (1-2 sentences)."
+        },
+        "FI03": {
+          "label": "AuthenticBankStatement",
+          "result": "Pass|Fail|Skipped",
+          "workingOut": ["array of strings - step-by-step reasoning"],
+          "remark": "string - Brief overall statement on the outcome (1-2 sentences)."
+        },
+        "FI04": {
+          "label": "CompleteOfficialDocument",
+          "result": "Pass|Fail|Skipped",
+          "workingOut": ["array of strings - step-by-step reasoning"],
+          "remark": "string - Brief overall statement on the outcome (1-2 sentences)."
+        },
+        "FI05": {
+          "label": "Covers28DayPeriod",
+          "result": "Pass|Fail|Skipped",
+          "workingOut": ["array of strings - step-by-step reasoning"],
+          "remark": "string - Brief overall statement on the outcome (1-2 sentences)."
+        },
+        "FI06": {
+          "label": "FullAccountHolderNameShown",
+          "result": "Pass|Fail|Skipped",
+          "workingOut": ["array of strings - step-by-step reasoning"],
+          "remark": "string - Brief overall statement on the outcome (1-2 sentences)."
+        },
+        "FI07": {
+          "label": "CorrectAccountHolderName",
+          "result": "Pass|Fail|Skipped",
+          "workingOut": ["array of strings - step-by-step reasoning"],
+          "remark": "string - Brief overall statement on the outcome (1-2 sentences)."
+        },
+        "FI08": {
+          "label": "NoStatutoryDeclarationRequired",
+          "result": "Pass|Fail|Skipped",
+          "workingOut": ["array of strings - step-by-step reasoning"],
+          "remark": "string - Brief overall statement on the outcome (1-2 sentences)."
+        },
+        "FI09": {
+          "label": "SufficientAverageFundsRequired",
+          "result": "Pass|Fail|Skipped",
+          "workingOut": ["array of strings - step-by-step reasoning"],
+          "remark": "string - Brief overall statement on the outcome (1-2 sentences)."
+        },
+        "FI10": {
+          "label": "StatementRecentlyIssued",
+          "result": "Pass|Fail|Skipped",
+          "workingOut": ["array of strings - step-by-step reasoning"],
+          "remark": "string - Brief overall statement on the outcome (1-2 sentences)."
+        },
+        "FI16": {
+          "label": "LargeDepositsPresent",
+          "result": "Pass|Fail|Skipped",
+          "workingOut": ["array of strings - step-by-step reasoning"],
+          "remark": "string - Brief overall statement on the outcome (1-2 sentences)."
+        }
+      }
+    },
+    "example": {
+      "summary": "Bank statement meets all requirements with sufficient funds.",
+      "detected_currency": "GBP",
+      "core_checks": {
+        "FI01": {
+          "label": "FinancialEvidencePresent",
+          "result": "Pass",
+          "workingOut": [
+            "Document header examined: 'BANK STATEMENT'",
+            "Bank letterhead present with address",
+            "Result: PASS - correct financial evidence"
+          ],
+          "remark": "Bank letterhead and address visible"
+        },
+        "FI02": {
+          "label": "RequiredFundsAsClosingBalanceOnly",
+          "result": "Pass",
+          "workingOut": [
+            "Required funds: £12,000",
+            "Closing balance: £15,000",
+            "No large artificial deposits detected",
+            "Result: PASS - funds maintained throughout period"
+          ],
+          "remark": "Funds maintained as average balance throughout period"
+        }
+      }
+    }
+  }
+}

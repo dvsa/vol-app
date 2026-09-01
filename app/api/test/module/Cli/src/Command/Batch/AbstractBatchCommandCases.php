@@ -53,7 +53,7 @@ abstract class AbstractBatchCommandCases extends TestCase
         Logger::setLogger(new \Psr\Log\NullLogger());
 
         $application = new Application();
-        $application->add($this->sut);
+        $application->addCommand($this->sut);
 
         $this->commandTester = new CommandTester($application->find($this->getCommandName()));
     }

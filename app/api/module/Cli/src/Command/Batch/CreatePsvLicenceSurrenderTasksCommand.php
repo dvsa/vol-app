@@ -14,7 +14,7 @@ class CreatePsvLicenceSurrenderTasksCommand extends AbstractBatchCommand
     protected static $defaultName = 'batch:create-psv-licence-surrender-tasks';
 
     #[\Override]
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('Create tasks to surrender PSV licences that have expired.');

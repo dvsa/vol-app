@@ -32,3 +32,23 @@ output "idp_output_bucket_name" {
   description = "Name of the BDA extraction output S3 bucket"
   value       = module.idp.idp_output_bucket_name
 }
+
+output "idp_ai_analysis_sm_arn" {
+  description = "ARN of the IDP AI Analysis Step Functions state machine"
+  value       = module.idp.ai_analysis_sm_arn
+}
+
+output "idp_ai_analysis_sm_name" {
+  description = "Name of the IDP AI Analysis Step Functions state machine"
+  value       = module.idp.ai_analysis_sm_name
+}
+
+output "idp_analyse_financial_document_sm_arn" {
+  description = "ARN of the IDP AnalyseFinancialDocument orchestrator Step Functions state machine"
+  value       = module.idp.analyse_financial_document_sm_arn
+}
+
+output "idp_analyse_financial_document_sm_name" {
+  description = "Name of the IDP AnalyseFinancialDocument orchestrator Step Functions state machine"
+  value       = module.idp.analyse_financial_document_sm_name
+}

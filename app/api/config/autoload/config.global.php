@@ -115,6 +115,16 @@ return [
     ],
 
     // Document service
+    // Intelligent Document Processing.
+    'idp' => [
+        // Age in minutes beyond which a PENDING document_analysis row is swept to TIMEOUT.
+        // Must stay above the analysis timeout plus result-processing latency, or the sweeper
+        // produces false TIMEOUTs.
+        'sweeper_threshold_minutes' => '%idp_sweeper_threshold_minutes%',
+        // How long a successful analysis suppresses re-analysis of the same document when an
+        // application is resubmitted.
+        'dedupe_success_window_hours' => '%idp_dedupe_success_window_hours%',
+    ],
     'document_share' => [
         // Document store backend selector: 'webdav' | 's3'. Resolved per environment from
         // SSM / Secrets Manager; any value other than 's3' (including an unresolved placeholder)
@@ -262,6 +272,22 @@ return [
                 'headers' => [
                     'Accept' => 'application/json',
                 ],
+            ],
+        ],
+        // CPMS Hybrid Gateway (VOL-7496) — used instead of rest_client domain when the
+        // cpms_hybrid_gateway feature toggle is enabled. The oauth2 block is the standard
+        // Entra client-credentials shape consumed by AccessToken\ProviderFactory.
+        'gateway' => [
+            // Gateway hostname e.g. 'https://gw.accept.dev.cpms.dvsacloud.uk' *Environment specific*
+            'domain' => "%olcs_cpms_gateway_host%",
+            'proxy' => 'http://%shd_proxy%',
+            'oauth2' => [
+                'client_id' => "%olcs_cpms_gateway_client_id%",
+                'client_secret' => "%olcs_cpms_gateway_client_secret%", // secret
+                'token_url' => "%olcs_cpms_gateway_token_url%",
+                'scope' => "%olcs_cpms_gateway_scope%",
+                'proxy' => 'http://%shd_proxy%',
+                'service_name' => 'CPMS Hybrid Gateway',
             ],
         ],
     ],
@@ -570,6 +596,16 @@ return [
             'options' => [
                 'ttl' => 3600,
                 'namespace' => 'doctrine',
+            ]
+        ],
+        // Backs the Cognito JWKS cache. Its own namespace so a key rotation can be forced
+        // through by clearing just this pool, without discarding the rest of the app cache.
+        // The ttl matches Client::DEFAULT_JWKS_CACHE_TTL — the client sets its own expiry on
+        // the item, so this is the backstop rather than the primary control.
+        'jwks-cache' => [
+            'options' => [
+                'ttl' => 3600,
+                'namespace' => 'jwks',
             ]
         ],
     ],

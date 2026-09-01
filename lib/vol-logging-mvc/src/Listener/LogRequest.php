@@ -1,6 +1,6 @@
 <?php
 
-namespace Olcs\Logging\Listener;
+namespace Olcs\Logging\Mvc\Listener;
 
 use Laminas\EventManager\EventManagerInterface;
 use Laminas\EventManager\ListenerAggregateInterface;

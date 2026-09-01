@@ -202,6 +202,9 @@ return [
             'FeesHelperService' => \Dvsa\Olcs\Api\Service\FeesHelperService::class,
             'FinancialStandingHelperService' => \Dvsa\Olcs\Api\Service\FinancialStandingHelperService::class,
             DvlaSearchService::class => DvlaSearchServiceFactory::class,
+            ApiSrv\EventBridge\EventBridge::class => ApiSrv\EventBridge\EventBridgeFactory::class,
+            ApiSrv\Idp\AnalysisTokenGenerator::class => Laminas\ServiceManager\Factory\InvokableFactory::class,
+            ApiSrv\Idp\ApplicantProfileBuilder::class => ApiSrv\Idp\ApplicantProfileBuilderFactory::class,
 
             PublicationGenerator::class =>
                 \Dvsa\Olcs\Api\Service\Publication\PublicationGeneratorFactory::class,
@@ -241,6 +244,8 @@ return [
             // Explains a proposed composition for the letter type builder
             \Dvsa\Olcs\Api\Service\Letter\CompositionDiagnostics::class =>
                 \Dvsa\Olcs\Api\Service\Letter\CompositionDiagnosticsFactory::class,
+            \Dvsa\Olcs\Api\Service\Letter\PreviewRecordSuggester::class =>
+                \Dvsa\Olcs\Api\Service\Letter\PreviewRecordSuggesterFactory::class,
 
             \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClient::class =>
                 \Dvsa\Olcs\Api\Service\Ebsr\TransExchangeClientFactory::class,
@@ -571,8 +576,10 @@ return [
             ApiSrv\AddressHelper\AddressHelperService::class => ApiSrv\AddressHelper\AddressHelperServiceFactory::class,
 
             Aws\S3\S3Client::class => Dvsa\Olcs\Api\Service\S3\S3ClientFactory::class,
+            Aws\EventBridge\EventBridgeClient::class => Dvsa\Olcs\AwsSdk\Factories\EventBridgeClientFactory::class,
             'default-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
             'doctrine-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
+            'jwks-cache' => \Dvsa\Olcs\Api\Service\Cache\DefaultCacheFactory::class,
             'cache.redis.connection'
                 =>  \Dvsa\Olcs\Api\Service\Cache\RedisConnectionFactory::class,
         ],
@@ -701,6 +708,7 @@ return [
             'PhoneContact' => RepositoryFactory::class,
             'OtherLicence' => RepositoryFactory::class,
             Repository\Document::class => RepositoryFactory::class,
+            Repository\DocumentAnalysis::class => RepositoryFactory::class,
             Repository\Correspondence::class => RepositoryFactory::class,
             Repository\SystemParameter::class => RepositoryFactory::class,
             'FeatureToggle' => RepositoryFactory::class,
