@@ -26,6 +26,9 @@ class DefaultTypeHandler extends AbstractTypeHandler
         'date' => ['\\DateTime', 'date'],
         'datetime' => ['\\DateTime', 'datetime'],
         'decimal' => ['string', 'decimal'],
+        // DBAL 4 maps MySQL's ENUM to its own EnumType; the entities model these columns
+        // as a string property with class constants, so it is flattened back to a string.
+        'enum' => ['string', 'string'],
         'float' => ['float', 'float'],
         'integer' => ['int', 'integer'],
         'json' => ['array', 'json'],
