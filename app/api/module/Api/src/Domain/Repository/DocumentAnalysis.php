@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Domain\Repository;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Entity\Application\Application as ApplicationEntity;
 use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
@@ -26,8 +27,10 @@ class DocumentAnalysis extends AbstractRepository
     {
         $qb = $this->createQueryBuilder();
 
+        // Bound explicitly as BINARY: left to infer, the ORM types any string parameter as
+        // STRING, which sends raw uid bytes through the connection's character set.
         $qb->andWhere($qb->expr()->eq($this->alias . '.token', ':token'))
-            ->setParameter('token', $token)
+            ->setParameter('token', $token, Types::BINARY)
             ->setMaxResults(1);
 
         return $qb->getQuery()->getOneOrNullResult(Query::HYDRATE_OBJECT);
