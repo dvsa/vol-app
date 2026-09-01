@@ -21,7 +21,7 @@ final class TestStartController extends StartController
     }
 
     #[\Override]
-    protected function conditionalDisplayNotMet(string $route): string
+    protected function conditionalDisplayNotMet(string $route)
     {
         return $route;
     }
