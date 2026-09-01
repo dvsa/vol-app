@@ -89,7 +89,7 @@
         }
       },
       "ResultSelector": {
-        "smOutput.$": "States.StringToJson($.Output)"
+        "smOutput.$": "$.Output"
       },
       "ResultPath": "$.classificationResult",
       "Next": "CheckClassificationOutcome",
@@ -196,10 +196,10 @@
       "Resource": "arn:aws:states:::states:startExecution.sync:2",
       "Parameters": {
         "StateMachineArn": "${EXTRACTION_SM_ARN}",
-        "Input.$": "States.JsonToString($.extractionInput)"
+        "Input.$": "$.extractionInput"
       },
       "ResultSelector": {
-        "smOutput.$": "States.StringToJson($.Output)"
+        "smOutput.$": "$.Output"
       },
       "ResultPath": "$.extractionResult",
       "Next": "CheckExtractionOutcome",
@@ -262,10 +262,10 @@
       "Resource": "arn:aws:states:::states:startExecution.sync:2",
       "Parameters": {
         "StateMachineArn": "${AI_ANALYSIS_SM_ARN}",
-        "Input.$": "States.JsonToString($.analysisInput)"
+        "Input.$": "$.analysisInput"
       },
       "ResultSelector": {
-        "smOutput.$": "States.StringToJson($.Output)"
+        "smOutput.$": "$.Output"
       },
       "ResultPath": "$.analysisResult",
       "Next": "CheckAnalysisOutcome",
