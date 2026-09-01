@@ -349,6 +349,18 @@ data "aws_iam_policy_document" "ai_analysis_sm" {
     resources = ["*"]
   }
 
+  # Bedrock automatically initiates an AWS Marketplace subscription the first time a                                                                                              ┃
+  # third-party model is used (Anthropic Claude Opus 4.7 in our case); without these permissions
+  # the subscription fails and subsequent invocations return AccessDeniedException.
+  statement {
+    sid = "BedrockMarketplaceSubscription"
+    actions = [
+      "aws-marketplace:Subscribe",
+      "aws-marketplace:ViewSubscriptions",
+    ]
+    resources = ["*"]
+  }
+
   # Emit DocumentProcessing-AnalysisCompleted / AnalysisFailed events.
   statement {
     sid     = "EventBridgePutEvents"
