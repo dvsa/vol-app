@@ -401,11 +401,12 @@ final class AttributeEmissionTest extends TestCase
     }
 
     /**
-     * cf. document_analysis.status. DBAL has no ENUM mapping, and an unmappable column
-     * aborts the whole generation run ("Unknown database type enum requested"), not just
-     * the table that owns it.
+     * cf. document_analysis.status. A column the platform cannot type aborts the whole
+     * generation run ("Unknown database type enum requested"), not just the table that owns
+     * it. DBAL 4 maps MySQL's ENUM to its own EnumType, so the introspector's registration is
+     * a no-op there; either way the platform has to end up with a mapping.
      */
-    public function testEnumIsRegisteredAsStringSoIntrospectionDoesNotAbort(): void
+    public function testEnumIsMappedSoIntrospectionDoesNotAbort(): void
     {
         $platform = new \Doctrine\DBAL\Platforms\MySQL80Platform();
         $connection = m::mock(\Doctrine\DBAL\Connection::class);
@@ -413,11 +414,26 @@ final class AttributeEmissionTest extends TestCase
         $connection->shouldReceive('createSchemaManager')
             ->andReturn(m::mock(\Doctrine\DBAL\Schema\AbstractSchemaManager::class));
 
-        $this->assertFalse($platform->hasDoctrineTypeMappingFor('enum'), 'precondition');
-
         new Doctrine3SchemaIntrospector($connection);
 
-        $this->assertSame('string', $platform->getDoctrineTypeMapping('enum'));
+        $this->assertTrue($platform->hasDoctrineTypeMappingFor('enum'));
+    }
+
+    /**
+     * Whichever type the platform resolves an ENUM to, it is flattened back to a plain string
+     * property backed by class constants - under DBAL 4 that arrives here as `enum` rather
+     * than the `string` testZeroLengthIsNotEmitted covers.
+     */
+    public function testEnumColumnEmitsAnUnlengthedString(): void
+    {
+        $sut = new DefaultTypeHandler();
+        $column = new ColumnMetadata('status', 'enum', null, false, false, false, 'PENDING');
+
+        $this->assertSame(
+            "#[ORM\\Column(type: 'string', name: 'status', nullable: false,"
+            . " options: ['default' => 'PENDING'])]",
+            $sut->generateAnnotation($column)
+        );
     }
 
     public function testNullableRelationshipPropertyUsesColumnNullability(): void

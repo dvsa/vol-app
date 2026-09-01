@@ -29,10 +29,11 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
     }
 
     /**
-     * DBAL has no mapping for MySQL's ENUM, and introspecting a column it cannot type throws
-     * `Unknown database type enum requested`, which aborts the entire generation run rather
-     * than just the table that owns the column. Mapping it to `string` matches how these
-     * columns are already modelled in the entities (a string property with class constants).
+     * Introspecting a column the platform cannot type throws `Unknown database type <x>
+     * requested`, which aborts the entire generation run rather than just the table that owns
+     * the column. DBAL 4 maps MySQL's ENUM to its own EnumType, so this is a no-op there and
+     * DefaultTypeHandler is what flattens `enum` back to `string`; the registration stays for
+     * platforms that carry no mapping of their own, where `string` is the same end state.
      */
     private function registerUnmappedPlatformTypes(): void
     {
