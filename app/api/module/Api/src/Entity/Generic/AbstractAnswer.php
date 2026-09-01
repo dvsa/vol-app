@@ -117,7 +117,7 @@ abstract class AbstractAnswer implements BundleSerializableInterface, JsonSerial
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'ans_decimal', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'ans_decimal', nullable: true, precision: 18, scale: 4)]
     protected $ansDecimal;
 
     /**

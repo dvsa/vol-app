@@ -100,7 +100,7 @@ abstract class AbstractFeeTransaction implements BundleSerializableInterface, Js
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'amount', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'amount', nullable: true, precision: 10, scale: 2)]
     protected $amount;
 
     /**

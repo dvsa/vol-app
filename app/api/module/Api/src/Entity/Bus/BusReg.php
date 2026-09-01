@@ -33,7 +33,6 @@ use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
 #[ORM\Index(name: 'ix_bus_reg_withdrawn_reason', columns: ['withdrawn_reason'])]
 #[ORM\Index(name: 'ix_bus_reg_status', columns: ['status'])]
 #[ORM\Index(name: 'ix_bus_reg_revert_status', columns: ['revert_status'])]
-#[ORM\Index(name: 'ix_bus_reg_reg_no', columns: ['reg_no'])]
 #[ORM\Index(name: 'fk_bus_reg_parent_id_bus_reg_id', columns: ['parent_id'])]
 #[ORM\UniqueConstraint(name: 'uk_bus_reg_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]

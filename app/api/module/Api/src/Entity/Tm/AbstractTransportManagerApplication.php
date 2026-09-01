@@ -170,7 +170,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_mon', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_mon', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursMon;
 
     /**
@@ -178,7 +178,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_tue', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_tue', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursTue;
 
     /**
@@ -186,7 +186,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_wed', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_wed', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursWed;
 
     /**
@@ -194,7 +194,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_thu', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_thu', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursThu;
 
     /**
@@ -202,7 +202,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_fri', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_fri', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursFri;
 
     /**
@@ -210,7 +210,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_sat', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_sat', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursSat;
 
     /**
@@ -218,7 +218,7 @@ abstract class AbstractTransportManagerApplication implements BundleSerializable
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_sun', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_sun', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursSun;
 
     /**

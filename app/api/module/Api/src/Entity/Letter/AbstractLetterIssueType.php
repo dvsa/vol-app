@@ -23,6 +23,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @source OLCS-Entity-Generator-v2
  */
 #[ORM\Table(name: 'letter_issue_type')]
+#[ORM\Index(name: 'ix_letter_issue_type_created_by', columns: ['created_by'])]
+#[ORM\Index(name: 'ix_letter_issue_type_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\UniqueConstraint(name: 'code', columns: ['code'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
