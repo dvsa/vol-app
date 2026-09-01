@@ -205,7 +205,7 @@ abstract class AbstractOtherLicence implements BundleSerializableInterface, Json
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_per_week', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_per_week', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursPerWeek;
 
     /**

@@ -16,7 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'ix_fee_type_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_fee_type_accrual_rule', columns: ['accrual_rule'])]
 #[ORM\Index(name: 'ix_fee_type_fee_type', columns: ['fee_type'])]
-#[ORM\Index(name: 'ix_fee_type_is_miscellaneous', columns: ['is_miscellaneous'])]
 #[ORM\Entity]
 class FeeType extends AbstractFeeType
 {

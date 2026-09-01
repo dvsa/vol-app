@@ -13,7 +13,6 @@ use Dvsa\Olcs\Api\Entity\Doc\Document as DocumentEntity;
  * ErruRequest Entity
  */
 #[ORM\Table(name: 'erru_request')]
-#[ORM\Index(name: 'ix_erru_request_case_id', columns: ['case_id'])]
 #[ORM\Index(name: 'ix_erru_request_response_user_id', columns: ['response_user_id'])]
 #[ORM\Index(name: 'ix_erru_request_member_state_code', columns: ['member_state_code'])]
 #[ORM\Index(name: 'ix_erru_request_created_by', columns: ['created_by'])]

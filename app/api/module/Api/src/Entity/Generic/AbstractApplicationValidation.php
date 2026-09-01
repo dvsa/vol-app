@@ -106,7 +106,7 @@ abstract class AbstractApplicationValidation implements BundleSerializableInterf
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'weight', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'weight', nullable: true, precision: 10, scale: 2)]
     protected $weight;
 
     /**

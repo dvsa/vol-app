@@ -146,7 +146,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'fixed_value', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'fixed_value', nullable: true, precision: 10, scale: 2)]
     protected $fixedValue;
 
     /**
@@ -154,7 +154,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'annual_value', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'annual_value', nullable: true, precision: 10, scale: 2)]
     protected $annualValue;
 
     /**
@@ -162,7 +162,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'five_year_value', nullable: true)]
+    #[ORM\Column(type: 'decimal', name: 'five_year_value', nullable: true, precision: 10, scale: 2)]
     protected $fiveYearValue;
 
     /**
@@ -178,7 +178,7 @@ abstract class AbstractFeeType implements BundleSerializableInterface, JsonSeria
      *
      * @var string
      */
-    #[ORM\Column(type: 'decimal', name: 'vat_rate', nullable: false, options: ['default' => '0.00', 'unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'vat_rate', nullable: false, options: ['default' => '0.00', 'unsigned' => true], precision: 5, scale: 2)]
     protected $vatRate = 0.00;
 
     /**

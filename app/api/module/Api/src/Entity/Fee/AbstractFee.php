@@ -180,7 +180,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @var string
      */
-    #[ORM\Column(type: 'decimal', name: 'net_amount', nullable: false)]
+    #[ORM\Column(type: 'decimal', name: 'net_amount', nullable: false, precision: 10, scale: 2)]
     protected $netAmount = '';
 
     /**
@@ -188,7 +188,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @var string
      */
-    #[ORM\Column(type: 'decimal', name: 'gross_amount', nullable: false)]
+    #[ORM\Column(type: 'decimal', name: 'gross_amount', nullable: false, precision: 10, scale: 2)]
     protected $grossAmount = '';
 
     /**
@@ -196,7 +196,7 @@ abstract class AbstractFee implements BundleSerializableInterface, JsonSerializa
      *
      * @var string
      */
-    #[ORM\Column(type: 'decimal', name: 'vat_amount', nullable: false, options: ['default' => '0.00'])]
+    #[ORM\Column(type: 'decimal', name: 'vat_amount', nullable: false, options: ['default' => '0.00'], precision: 10, scale: 2)]
     protected $vatAmount = 0.00;
 
     /**

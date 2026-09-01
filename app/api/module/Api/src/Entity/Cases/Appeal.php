@@ -9,7 +9,6 @@ use Dvsa\Olcs\Api\Entity\System\RefData;
  * Appeal Entity
  */
 #[ORM\Table(name: 'appeal')]
-#[ORM\Index(name: 'ix_appeal_case_id', columns: ['case_id'])]
 #[ORM\Index(name: 'ix_appeal_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_appeal_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_appeal_reason', columns: ['reason'])]
