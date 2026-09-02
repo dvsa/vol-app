@@ -42,12 +42,6 @@ return [
             'formatter' => fn($row) => Escape::html($row['referenceKey'] ?? ''),
         ],
         [
-            'title' => 'Language',
-            'name' => 'locale',
-            'sort' => 'locale',
-            'formatter' => fn($row) => Escape::html($row['locale'] ?? ''),
-        ],
-        [
             'title' => 'Page name',
             'name' => 'pageName',
             'sort' => 'pageName',
@@ -58,6 +52,12 @@ return [
             'name' => 'description',
             'sort' => 'description',
             'formatter' => fn($row) => Escape::html($row['description'] ?? ''),
+        ],
+        [
+            'title' => 'Language',
+            'name' => 'locale',
+            'sort' => 'locale',
+            'formatter' => fn($row) => Escape::html($row['locale'] ?? ''),
         ],
         [
             'title' => 'Last updated',
