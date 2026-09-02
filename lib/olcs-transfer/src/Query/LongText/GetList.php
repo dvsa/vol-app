@@ -18,4 +18,26 @@ final class GetList extends AbstractQuery implements PagedQueryInterface, Ordere
 {
     use PagedTrait;
     use OrderedTrait;
+
+    /**
+     * @Transfer\Filter("Laminas\Filter\StringTrim")
+     * @Transfer\Optional
+     */
+    protected $search;
+
+    /**
+     * @Transfer\Filter("Laminas\Filter\StringTrim")
+     * @Transfer\Optional
+     */
+    protected $locale;
+
+    public function getSearch(): ?string
+    {
+        return $this->search;
+    }
+
+    public function getLocale(): ?string
+    {
+        return $this->locale;
+    }
 }

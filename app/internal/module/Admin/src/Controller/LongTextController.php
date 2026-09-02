@@ -7,6 +7,7 @@ namespace Admin\Controller;
 use Admin\Data\Mapper\LongText as LongTextMapper;
 use Admin\Form\Model\Form\LongTextAdd;
 use Admin\Form\Model\Form\LongTextEdit;
+use Admin\Form\Model\Form\LongTextFilter;
 use Dvsa\Olcs\Transfer\Command\LongText\Create as CreateDto;
 use Dvsa\Olcs\Transfer\Command\LongText\Update as UpdateDto;
 use Dvsa\Olcs\Transfer\Query\LongText\ById as ItemDto;
@@ -20,6 +21,7 @@ final class LongTextController extends AbstractInternalController implements Lef
     protected $navigationId = 'admin-dashboard/content-management/long-text';
 
     protected $tableName = 'admin-long-text';
+    protected $filterForm = LongTextFilter::class;
     protected $listDto = ListDto::class;
     protected $itemDto = ItemDto::class;
     protected $createCommand = CreateDto::class;

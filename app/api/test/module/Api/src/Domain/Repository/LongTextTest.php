@@ -8,6 +8,7 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\Repository\LongText as LongTextRepo;
+use Dvsa\Olcs\Transfer\Query\LongText\GetList;
 use Dvsa\Olcs\Api\Entity\System\LongText as LongTextEntity;
 use Mockery as m;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -106,5 +107,31 @@ final class LongTextTest extends RepositoryTestCase
         $this->expectException(NotFoundException::class);
 
         $this->sut->fetchByReferenceKey('does-not-exist', 'en_GB');
+    }
+
+    public function testTheListCanBeSearchedByUidAndPageName(): void
+    {
+        $qb = m::mock(QueryBuilder::class);
+        $qb->shouldReceive('orWhere')->once()->with('m.referenceKey LIKE :search')->andReturnSelf();
+        $qb->shouldReceive('orWhere')->once()->with('m.pageName LIKE :search')->andReturnSelf();
+        $qb->shouldReceive('orWhere')->once()->with('m.description LIKE :search')->andReturnSelf();
+        $qb->shouldReceive('setParameter')->once()->with('search', '%gv79%')->andReturnSelf();
+
+        $this->applyListFilters($qb, GetList::create(['search' => 'gv79']));
+    }
+
+    public function testTheListCanBeNarrowedToOneLocale(): void
+    {
+        $qb = m::mock(QueryBuilder::class);
+        $qb->shouldReceive('andWhere')->once()->with('m.locale = :locale')->andReturnSelf();
+        $qb->shouldReceive('setParameter')->once()->with('locale', 'cy_GB')->andReturnSelf();
+
+        $this->applyListFilters($qb, GetList::create(['locale' => 'cy_GB']));
+    }
+
+    private function applyListFilters(QueryBuilder $qb, GetList $query): void
+    {
+        $method = new \ReflectionMethod($this->sut, 'applyListFilters');
+        $method->invoke($this->sut, $qb, $query);
     }
 }
