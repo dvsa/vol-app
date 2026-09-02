@@ -20,6 +20,7 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\DefaultTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\RelationshipTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\InversedByConfig;
+use Mockery as m;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -261,6 +262,79 @@ final class AttributeEmissionTest extends TestCase
         );
     }
 
+    /**
+     * cf. Doc\DocumentAnalysis::$token - binary(16) NOT NULL.
+     *
+     * The Doctrine type must be `binary`, not `string`: DBAL declares a `string` column as
+     * VARCHAR, so mapping it as a string both loses BinaryType's conversion and reports the
+     * column as drifted against the Liquibase schema. `length` matters for the same reason -
+     * DBAL falls back to 255 without it - and `fixed` is what makes it BINARY not VARBINARY.
+     */
+    public function testFixedBinaryColumnEmitsBinaryTypeWithLength(): void
+    {
+        $sut = new DefaultTypeHandler();
+        $column = new ColumnMetadata('token', 'binary', 16, false, false, false, null, null, ['fixed' => true]);
+
+        $this->assertSame(
+            "#[ORM\\Column(type: 'binary', name: 'token', length: 16, nullable: false,"
+            . " options: ['fixed' => true])]",
+            $sut->generateAnnotation($column)
+        );
+    }
+
+    public function testVarbinaryColumnKeepsLengthWithoutFixed(): void
+    {
+        $sut = new DefaultTypeHandler();
+        $column = new ColumnMetadata('payload', 'binary', 255, true);
+
+        $this->assertSame(
+            "#[ORM\\Column(type: 'binary', name: 'payload', length: 255, nullable: true)]",
+            $sut->generateAnnotation($column)
+        );
+    }
+
+    /**
+     * BinaryType::convertToPHPValue() always returns a php://temp stream, so a bare
+     * `@var string` on the generated property would be false and would make legitimate
+     * is_resource()/stream_get_contents() handling in the concrete entity look like a
+     * type error to PHPStan.
+     */
+    public function testBinaryPropertyIsTypedAsStringOrResource(): void
+    {
+        $sut = new DefaultTypeHandler();
+        $column = new ColumnMetadata('token', 'binary', 16, false, false, false, null, null, ['fixed' => true]);
+
+        $property = $sut->generateProperty($column);
+
+        $this->assertSame('string|resource', $property['type']);
+        $this->assertSame('string|resource', (new MethodGeneratorService())->getPhpTypeFromType($property['type']));
+    }
+
+    /** A NOT NULL binary gets no property initialiser: '' is not a valid 16-byte token. */
+    public function testBinaryPropertyHasNoEmptyStringDefault(): void
+    {
+        $sut = new DefaultTypeHandler();
+        $column = new ColumnMetadata('token', 'binary', 16, false, false, false, null, null, ['fixed' => true]);
+
+        $this->assertSame('null', $sut->generateProperty($column)['defaultValue']);
+    }
+
+    /**
+     * cf. document_analysis.status - an ENUM, which the introspector maps to string and
+     * which MySQL reports with length 0. Emitting that would declare VARCHAR(0).
+     */
+    public function testZeroLengthIsNotEmitted(): void
+    {
+        $sut = new DefaultTypeHandler();
+        $column = new ColumnMetadata('status', 'string', 0, false, false, false, 'PENDING');
+
+        $this->assertSame(
+            "#[ORM\\Column(type: 'string', name: 'status', nullable: false,"
+            . " options: ['default' => 'PENDING'])]",
+            $sut->generateAnnotation($column)
+        );
+    }
+
     public function testUniqueKeysAreEmittedOnlyAsUniqueConstraints(): void
     {
         // cf. AbstractTransaction: uk_txn_receipt_document_id must not be emitted as
@@ -323,6 +397,26 @@ final class AttributeEmissionTest extends TestCase
         ]);
 
         $this->assertStringContainsString("inversedBy: 'oppositions'", $field['annotation']);
+    }
+
+    /**
+     * cf. document_analysis.status. DBAL has no ENUM mapping, and an unmappable column
+     * aborts the whole generation run ("Unknown database type enum requested"), not just
+     * the table that owns it.
+     */
+    public function testEnumIsRegisteredAsStringSoIntrospectionDoesNotAbort(): void
+    {
+        $platform = new \Doctrine\DBAL\Platforms\MySQL80Platform();
+        $connection = m::mock(\Doctrine\DBAL\Connection::class);
+        $connection->shouldReceive('getDatabasePlatform')->andReturn($platform);
+        $connection->shouldReceive('createSchemaManager')
+            ->andReturn(m::mock(\Doctrine\DBAL\Schema\AbstractSchemaManager::class));
+
+        $this->assertFalse($platform->hasDoctrineTypeMappingFor('enum'), 'precondition');
+
+        new Doctrine3SchemaIntrospector($connection);
+
+        $this->assertSame('string', $platform->getDoctrineTypeMapping('enum'));
     }
 
     private function invokeGeneratorMethod(string $method, array $args): string
