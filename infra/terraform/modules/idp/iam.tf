@@ -507,3 +507,25 @@ resource "aws_iam_role_policy" "eventbridge_invoke_analyse_financial_document" {
   role   = aws_iam_role.eventbridge_invoke_analyse_financial_document.id
   policy = data.aws_iam_policy_document.eventbridge_invoke_analyse_financial_document.json
 }
+
+resource "aws_iam_role" "eventbridge_invoke_store_result" {
+  name               = "${local.name_prefix}-eventbridge-store-result"
+  assume_role_policy = data.aws_iam_policy_document.eventbridge_assume_role.json
+}
+
+data "aws_iam_policy_document" "eventbridge_invoke_store_result" {
+  statement {
+    sid     = "BatchSubmitStoreDocumentAnalysisResult"
+    actions = ["batch:SubmitJob"]
+    resources = [
+      local.store_result_batch_queue_arn,
+      local.store_result_batch_job_def_arn,
+    ]
+  }
+}
+
+resource "aws_iam_role_policy" "eventbridge_invoke_store_result" {
+  name   = "${local.name_prefix}-eventbridge-store-result"
+  role   = aws_iam_role.eventbridge_invoke_store_result.id
+  policy = data.aws_iam_policy_document.eventbridge_invoke_store_result.json
+}

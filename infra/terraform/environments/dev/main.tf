@@ -199,6 +199,24 @@ locals {
         "arn:aws:rds:eu-west-1:054614622558:db:olcs-anon-*",
         "arn:aws:rds:eu-west-1:054614622558:db:ni-extract-*"
       ]
+    },
+    # idp-store-document-analysis-result Batch job needs to retrieve the
+    # analysis result S3 location from the AnalyseFinancialDocument SM execution output,
+    # and fetch the result JSON from the IDP output bucket.
+    {
+      effect  = "Allow"
+      actions = ["states:DescribeExecution"]
+      resources = [
+        "arn:aws:states:eu-west-1:054614622558:execution:vol-idp-dev-analyse-financial-document:*"
+      ]
+    },
+    {
+      effect  = "Allow"
+      actions = ["s3:GetObject"]
+      resources = [
+        "arn:aws:s3:::vol-idp-dev-output",
+        "arn:aws:s3:::vol-idp-dev-output/*"
+      ]
     }
 
   ]
@@ -623,6 +641,11 @@ module "service" {
         commands = ["idp:sweep-stale-document-analysis"],
         timeout  = 300,
         schedule = ["cron(15 * * * ? *)"],
+      },
+      {
+        name     = "idp-store-document-analysis-result",
+        commands = ["idp:store-document-analysis-result"],
+        timeout  = 300,
       },
       {
         name     = "cancel-unsubmitted-bilateral",

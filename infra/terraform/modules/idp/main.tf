@@ -384,6 +384,48 @@ resource "aws_cloudwatch_event_target" "analyse_financial_document" {
   input_path = "$.detail"
 }
 
+# The AnalyseFinancialDocument SM emits DocumentProcessing-FinancialDocumentAnalysed when
+# the pipeline finishes. The detail contains analysis_token and execution_arn.
+# EventBridge submits an AWS Batch job to store the result using those values
+# as command arguments, overriding the default container command.
+locals {
+  # Batch ARNs follow the naming conventions established by the service module.
+  store_result_batch_queue_arn   = "arn:aws:batch:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:job-queue/vol-app-${var.environment}-default"
+  store_result_batch_job_def_arn = "arn:aws:batch:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:job-definition/vol-app-${var.environment}-idp-store-document-analysis-result"
+}
+
+resource "aws_cloudwatch_event_rule" "financial_document_analysed" {
+  name        = "${local.name_prefix}-financial-document-analysed"
+  description = "Trigger idp-store-document-analysis-result Batch job when the orchestrator SM completes financial document analysis"
+
+  event_pattern = jsonencode({
+    source      = ["custom.documentProcessing"]
+    detail-type = ["DocumentProcessing-FinancialDocumentAnalysed"]
+  })
+}
+
+resource "aws_cloudwatch_event_target" "store_document_analysis_result" {
+  rule     = aws_cloudwatch_event_rule.financial_document_analysed.name
+  arn      = local.store_result_batch_queue_arn
+  role_arn = aws_iam_role.eventbridge_invoke_store_result.arn
+
+  batch_target {
+    job_definition = local.store_result_batch_job_def_arn
+    job_name       = "${local.name_prefix}-store-document-analysis-result"
+  }
+
+  # Pass analysis_token and execution_arn as container command overrides so the
+  # Batch job can find the correct item in the table from the analysis_token and
+  # retrieve the S3 bucket and S3 key from the execution_arn from AnalyseFinancialDocument SM
+  input_transformer {
+    input_paths = {
+      analysis_token = "$.detail.analysis_token"
+      execution_arn  = "$.detail.execution_arn"
+    }
+    input_template = "{\"containerOverrides\":{\"command\":[\"/var/www/html/vendor/bin/laminas\",\"--container=/var/www/html/config/container-cli.php\",\"-v\",\"idp:store-document-analysis-result\",\"--analysis-token=<analysis_token>\",\"--execution-arn=<execution_arn>\"]}}"
+  }
+}
+
 # ============================================================
 # Bedrock Managed Prompt — Bank Statement Quality Check
 #
