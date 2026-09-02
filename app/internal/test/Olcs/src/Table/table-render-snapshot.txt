@@ -4,7 +4,7 @@
 # something which was not a row value got escaped. Regenerate deliberately, never to
 # make a red build green.
 #
-# 150 rendered, 0 could not be rendered by the probe.
+# 151 rendered, 0 could not be rendered by the probe.
 #
 c697a638a08d93bf6f818dceac9a6869da87559bea9a599c0a6ff8360715a135  Bus/conditions.table.php
 e94fbf874af15d408aebf9c9b66dea031419c32e89a227f746151bcc79ef26d9  Bus/registration-history.table.php
@@ -68,6 +68,7 @@ ecc920fa3c305660953ca93589f2df4d91d5bc2f8f6119c965ee9f9838e4fa5b  admin-letter-i
 6fcdc54c3f42a8c8a0984d6c27d3504436ea6897124fbc06a5dd471465212138  admin-letter-todo.table.php
 5cb787b3397c17928f61337afa1a9c0d97f298441b3d1ccc7aabeac16107ae22  admin-letter-type.table.php
 076289f445883dfa2c63aeca73d4a927f23494f19b72db1295a8bd83f346afa8  admin-local-authority.table.php
+890daa5000b43d272b6fb42d351e2768d01bb268a2e5626edd50b8e0c6b65fe1  admin-long-text.table.php
 43a55b90671fe9412195570b14271d1b8bef7d585fb7a0eb8473c84dd5ee942f  admin-master-template.table.php
 b8db69d6e72875a59b3fdc9d88e2df072a80d59b9d8d6834ecbd3a4750a2c2a5  admin-pi-report.table.php
 6a95d5afc289217c47727882362045fe86d9cd343288616c4ab997ee6085e8a7  admin-presiding-tcs.table.php
