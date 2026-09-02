@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\Olcs\Api\Entity\System;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
@@ -44,6 +45,16 @@ abstract class AbstractLongText implements BundleSerializableInterface, JsonSeri
     /** EditorJS document, stored as authored. */
     #[ORM\Column(type: 'json', name: 'content', nullable: false)]
     protected $content;
+
+    #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'create')]
+    protected $createdBy;
+
+    #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
+    #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
+    #[Gedmo\Blameable(on: 'update')]
+    protected $lastModifiedBy;
 
     #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1])]
     #[ORM\Version]
@@ -96,6 +107,30 @@ abstract class AbstractLongText implements BundleSerializableInterface, JsonSeri
     public function setContent(array $content): self
     {
         $this->content = $content;
+
+        return $this;
+    }
+
+    public function getCreatedBy()
+    {
+        return $this->createdBy;
+    }
+
+    public function setCreatedBy($createdBy): self
+    {
+        $this->createdBy = $createdBy;
+
+        return $this;
+    }
+
+    public function getLastModifiedBy()
+    {
+        return $this->lastModifiedBy;
+    }
+
+    public function setLastModifiedBy($lastModifiedBy): self
+    {
+        $this->lastModifiedBy = $lastModifiedBy;
 
         return $this;
     }
