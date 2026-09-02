@@ -2,7 +2,7 @@
 
 namespace Dvsa\Olcs\Cli\Command\Batch;
 
-use Dvsa\Olcs\Cli\Domain\Command\CacheClear;
+use Dvsa\Olcs\Transfer\Command\Cache\Clear;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,6 +29,7 @@ class CacheClearCommand extends AbstractBatchCommand
         'translation_replacement',
         'storage',
         'secretsmanager',
+        'cqrs',
     ];
 
     #[\Override]
@@ -115,7 +116,7 @@ class CacheClearCommand extends AbstractBatchCommand
         }
 
         // Build command DTO
-        $command = CacheClear::create([
+        $command = Clear::create([
             'flushAll' => $flushAll,
             'namespace' => $namespace,
             'pattern' => $pattern,

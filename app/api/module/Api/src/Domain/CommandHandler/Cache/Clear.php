@@ -1,10 +1,10 @@
 <?php
 
-namespace Dvsa\Olcs\Cli\Domain\CommandHandler;
+namespace Dvsa\Olcs\Api\Domain\CommandHandler\Cache;
 
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
-use Dvsa\Olcs\Cli\Domain\Command\CacheClear as CacheClearCmd;
+use Dvsa\Olcs\Transfer\Command\Cache\Clear as ClearCmd;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Dvsa\Olcs\Api\Domain\RedisAwareInterface;
 use Dvsa\Olcs\Api\Domain\RedisAwareTrait;
@@ -15,7 +15,7 @@ use Dvsa\Olcs\Api\Domain\ConfigAwareTrait;
  * Cache Clear Command Handler
  *
  */
-class CacheClear extends AbstractCommandHandler implements
+class Clear extends AbstractCommandHandler implements
     RedisAwareInterface,
     ConfigAwareInterface
 {
@@ -33,12 +33,15 @@ class CacheClear extends AbstractCommandHandler implements
         'translation_replacement',
         'storage',
         'secretsmanager',
+        'cqrs'
     ];
+
+    private const CQRS_CACHE_PREFIX = 'cqrs:';
 
     /**
      * Handle cache clear command
      *
-     * @param CommandInterface|CacheClearCmd $command
+     * @param CommandInterface|ClearCmd $command
      * @return Result
      */
     #[\Override]
@@ -216,6 +219,10 @@ class CacheClear extends AbstractCommandHandler implements
         $cacheNamespace =
             $this->getConfig()['caches']['default-cache']['options']['namespace']
             ?? 'zfcache';
+
+        if ($namespace === 'cqrs') {
+            return self::CQRS_CACHE_PREFIX;
+        }
 
         return $cacheNamespace . ':' . $namespace;
     }
