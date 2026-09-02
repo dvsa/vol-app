@@ -36,7 +36,7 @@ module "parameters" {
     idp_sweeper_threshold_minutes                = "60"
     idp_dedupe_success_window_hours              = "24"
     lar_base_uri                                 = "https://ce5rumk6p4.execute-api.eu-west-1.amazonaws.com/ci/"
-    log_level                                    = "warning"
+    log_level                                    = "info"
     olcs_aws_account_number                      = "054614622558"
     olcs_aws_region                              = "eu-west-1"
     olcs_aws_s3_role_arn                         = "arn:aws:iam::054614622558:role/OLCS-DEVAPPDEV-BASE-API"
