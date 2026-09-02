@@ -51,4 +51,17 @@ final class LongTextTest extends TestCase
 
         LongText::create('application-declaration', 'fr_FR', 'Page', null, ['blocks' => []]);
     }
+
+    public function testItRecordsWhenItWasCreatedAndLastUpdated(): void
+    {
+        $longText = LongText::create('application-declaration', 'en_GB', 'Page', null, ['blocks' => []]);
+
+        self::assertNull($longText->getLastModifiedOn());
+
+        $longText->setCreatedOnBeforePersist();
+        $longText->setLastModifiedOnBeforeUpdate();
+
+        self::assertInstanceOf(\DateTime::class, $longText->getCreatedOn(true));
+        self::assertInstanceOf(\DateTime::class, $longText->getLastModifiedOn(true));
+    }
 }
