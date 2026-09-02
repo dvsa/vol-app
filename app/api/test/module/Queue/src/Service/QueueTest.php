@@ -12,6 +12,7 @@ use Dvsa\Olcs\Queue\Service\Queue;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
+use Psr\Log\NullLogger;
 
 final class QueueTest extends MockeryTestCase
 {
@@ -28,6 +29,17 @@ final class QueueTest extends MockeryTestCase
         $this->sut = new Queue($this->queue);
 
         parent::setUp();
+    }
+
+    /**
+     * Restores the static Logger facade. Without this, the mock this test installs stays
+     * installed for whatever test runs next, which then fails on log calls it never made.
+     */
+    protected function tearDown(): void
+    {
+        Logger::setLogger(new NullLogger());
+
+        parent::tearDown();
     }
 
     public function testSendMessage(): void

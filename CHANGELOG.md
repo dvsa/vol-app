@@ -1,5 +1,12 @@
 # Changelog
 
+## [9.2.1](https://github.com/dvsa/vol-app/compare/v9.2.0...v9.2.1) (2026-09-02)
+
+
+### Bug Fixes
+
+* bound and proxy the EventBridge client so a failed emit cannot hang submission ([#1752](https://github.com/dvsa/vol-app/issues/1752)) ([4845106](https://github.com/dvsa/vol-app/commit/4845106e30d157f821949fc5a79ff0f02c1d2e4d))
+
 ## [9.2.0](https://github.com/dvsa/vol-app/compare/v9.1.0...v9.2.0) (2026-09-01)
 
 

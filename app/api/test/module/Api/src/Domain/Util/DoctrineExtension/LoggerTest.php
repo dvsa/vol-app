@@ -7,9 +7,21 @@ namespace Dvsa\OlcsTest\Api\Domain\Util\DoctrineExtension;
 use Olcs\Logging\Log\Logger;
 use Olcs\Logging\Test\RecordingLogger;
 use Psr\Log\LogLevel;
+use Psr\Log\NullLogger;
 
 final class LoggerTest extends \PHPUnit\Framework\TestCase
 {
+    /**
+     * Restores the static Logger facade. Without this, the mock this test installs stays
+     * installed for whatever test runs next, which then fails on log calls it never made.
+     */
+    protected function tearDown(): void
+    {
+        Logger::setLogger(new NullLogger());
+
+        parent::tearDown();
+    }
+
     public function testStopQuery(): void
     {
         $recorder = new RecordingLogger();
