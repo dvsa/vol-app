@@ -89,6 +89,9 @@ final readonly class MethodGeneratorService
             'datetime', 'date', 'time', 'timestamp' => '\\DateTime',
             'decimal', 'float', 'double' => 'float',
             'array' => 'array',
+            // DBAL hydrates binary/blob columns into a stream, so accessors have to
+            // accept and return both forms
+            'binary', 'blob', 'string|resource' => 'string|resource',
             default => 'mixed'
         };
     }
