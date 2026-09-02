@@ -34,6 +34,8 @@ class EditorJs extends AbstractHelper
         $value = $element->getValue();
         $required = $element->getAttribute('required') ? 'required' : '';
         $classes = $element->getAttribute('class') ?? '';
+        $placeholder = $element->getAttribute('data-placeholder') ?? 'Enter your submission comment...';
+        $toolsProfile = $element->getAttribute('data-tools-profile') ?? 'default';
 
         // Add EditorJS specific classes
         $classes = trim($classes . ' editorjs-element');
@@ -43,12 +45,15 @@ class EditorJs extends AbstractHelper
 
         // Create the container and hidden input
         $markup = sprintf(
-            '<div class="editorjs-container" data-element-name="%s" data-required="%s">' .
+            '<div class="editorjs-container" data-element-name="%s" data-required="%s" ' .
+            'data-placeholder="%s" data-tools-profile="%s">' .
             '<div id="%s" class="editorjs-editor"></div>' .
             '<input type="hidden" name="%s" value="%s" class="%s" %s />' .
             '</div>',
             htmlspecialchars((string) $name, ENT_QUOTES),
             $required,
+            htmlspecialchars((string) $placeholder, ENT_QUOTES),
+            htmlspecialchars((string) $toolsProfile, ENT_QUOTES),
             htmlspecialchars($id, ENT_QUOTES),
             htmlspecialchars((string) $name, ENT_QUOTES),
             $escapedValue,
