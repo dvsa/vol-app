@@ -981,9 +981,7 @@ return [
                                                 'type' => 'segment',
                                                 'options' => [
                                                     'route' => 'fee-type-list/:date',
-                                                    // 'constraints' => [
-                                                    //     'date' => '([0-9]{4}\-[0-9]{2}\-[0-9]{2})',
-                                                    // ],
+                                                    // 'constraints' => [ 'date' => '([0-9]{4}\-[0-9]{2}\-[0-9]{2})', ]
                                                     'defaults' => [
                                                         'action' => 'feeTypeList',
                                                     ]
@@ -1040,6 +1038,20 @@ return [
                             ]
                         ],
                     ],
+                    'admin-long-text' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'long-text[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\LongTextController::class,
+                                'action' => 'index',
+                            ],
+                        ],
+                    ],
                     'admin-replacements' => [
                         'type' => 'Segment',
                         'options' => [
@@ -1093,14 +1105,7 @@ return [
         ]
     ],
     'crud-config' => [
-        /**
-         * Sample crud config
-         * 'route/match/name' => [
-         *    // Define which actions are available, and whether they require rows to be selected
-         *   'add' => ['requireRows' => false],
-         *   'edit' => ['requireRows' => true]
-         * ]
-         */
+        /** Sample crud config 'route/match/name' => [ // Define which actions are available, and whether they require row */
     ],
     'controllers' => [
         'factories' => [
@@ -1151,6 +1156,7 @@ return [
             Admin\Controller\PublishedPublicationController::class => Admin\Controller\PublishedPublicationControllerFactory::class,
             Admin\Controller\RecipientController::class => Admin\Controller\RecipientControllerFactory::class,
             Admin\Controller\ReplacementsController::class => Admin\Controller\ReplacementsControllerFactory::class,
+            Admin\Controller\LongTextController::class => \Laminas\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory::class,
             Admin\Controller\ReportCasesOpenController::class => Admin\Controller\ReportCasesOpenControllerFactory::class,
             Admin\Controller\ReportController::class =>  Admin\Controller\ReportControllerFactory::class,
             Admin\Controller\ReportUploadController::class => Admin\Controller\ReportUploadControllerFactory::class,

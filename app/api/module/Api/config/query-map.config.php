@@ -540,6 +540,11 @@ return [
     TransferQuery\SystemParameter\SystemParameter::class => QueryHandler\SystemParameter\SystemParameter::class,
     TransferQuery\SystemParameter\SystemParameterList::class => QueryHandler\SystemParameter\SystemParameterList::class,
 
+    // Long Text
+    TransferQuery\LongText\ByReferenceKey::class => QueryHandler\LongText\ByReferenceKey::class,
+    TransferQuery\LongText\GetList::class => QueryHandler\LongText\GetList::class,
+    TransferQuery\LongText\ById::class => QueryHandler\LongText\ById::class,
+
     // FeatureToggle
     TransferQuery\FeatureToggle\ById::class => QueryHandler\FeatureToggle\ById::class,
     TransferQuery\FeatureToggle\GetList::class => QueryHandler\FeatureToggle\GetList::class,

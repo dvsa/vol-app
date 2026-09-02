@@ -71,6 +71,7 @@ return [
             'admin-dashboard/admin-letter-test-data*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/admin-permits*' => [RefData::PERMISSION_INTERNAL_PERMITS],
             'admin-dashboard/admin-email-templates' => [RefData::PERMISSION_SYSTEM_ADMIN],
+            'admin-dashboard/admin-long-text*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/content-management*' => [RefData::PERMISSION_SYSTEM_ADMIN],
             'admin-dashboard/admin-publication*' => [RefData::PERMISSION_INTERNAL_PUBLICATIONS],
             'admin-dashboard/admin-fee-rates*' => [RefData::PERMISSION_SYSTEM_ADMIN],
