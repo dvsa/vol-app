@@ -342,6 +342,10 @@ return [
     'awsOptions' => array_filter([
         'region' => '%olcs_aws_region%',
         'version' => '%olcs_aws_version%',
+        // Egress proxy for AWS API calls that have no VPC endpoint. array_filter drops this when
+        // the token resolves empty, so local development is left without a proxy rather than a
+        // broken one. *Environment specific*
+        'proxy' => 'http://%shd_proxy%',
         's3' => [
             'use_path_style_endpoint' => false,
         ],

@@ -15,6 +15,7 @@ use Dvsa\Olcs\Queue\Service\Queue;
 use Dvsa\OlcsTest\Api\Domain\CommandHandler\AbstractCommandHandlerTestCase;
 use Mockery as m;
 use Olcs\Logging\Log\Logger;
+use Psr\Log\NullLogger;
 
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 final class EnqueueTest extends AbstractCommandHandlerTestCase
@@ -38,6 +39,17 @@ final class EnqueueTest extends AbstractCommandHandlerTestCase
         ];
 
         parent::setUp();
+    }
+
+    /**
+     * Restores the static Logger facade. Without this, the mock this test installs stays
+     * installed for whatever test runs next, which then fails on log calls it never made.
+     */
+    protected function tearDown(): void
+    {
+        Logger::setLogger(new NullLogger());
+
+        parent::tearDown();
     }
 
     public function testHandleCommand(): void
