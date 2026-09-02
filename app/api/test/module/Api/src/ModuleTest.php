@@ -20,6 +20,7 @@ use Olcs\Logging\Log\Processor\UserId;
 use Olcs\Logging\Test\RecordingLogger;
 use phpseclib3\Crypt\AES;
 use Psr\Log\LogLevel;
+use Psr\Log\NullLogger;
 
 /**
  * Tests the Api Module php
@@ -33,6 +34,17 @@ final class ModuleTest extends MockeryTestCase
     public function setUp(): void
     {
         $this->sut = m::mock(Module::class)->makePartial()->shouldAllowMockingProtectedMethods();
+    }
+
+    /**
+     * Restores the static Logger facade. Without this, the mock this test installs stays
+     * installed for whatever test runs next, which then fails on log calls it never made.
+     */
+    protected function tearDown(): void
+    {
+        Logger::setLogger(new NullLogger());
+
+        parent::tearDown();
     }
 
     public function testOnBootstrap(): void
