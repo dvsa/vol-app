@@ -8,7 +8,7 @@ use Dvsa\Olcs\Api\Entity\System\LongText;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
-final class LongTextTest extends TestCase
+final class LongTextTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     public function testItIsCreatedWithAReferenceKeyAndContent(): void
     {
@@ -63,5 +63,19 @@ final class LongTextTest extends TestCase
 
         self::assertInstanceOf(\DateTime::class, $longText->getCreatedOn(true));
         self::assertInstanceOf(\DateTime::class, $longText->getLastModifiedOn(true));
+    }
+
+    public function testItRecordsWhoCreatedAndLastUpdatedIt(): void
+    {
+        $longText = LongText::create('application-declaration', 'en_GB', 'Page', null, ['blocks' => []]);
+        $user = \Mockery::mock(\Dvsa\Olcs\Api\Entity\User\User::class);
+
+        self::assertNull($longText->getCreatedBy());
+        self::assertNull($longText->getLastModifiedBy());
+
+        $longText->setCreatedBy($user)->setLastModifiedBy($user);
+
+        self::assertSame($user, $longText->getCreatedBy());
+        self::assertSame($user, $longText->getLastModifiedBy());
     }
 }
