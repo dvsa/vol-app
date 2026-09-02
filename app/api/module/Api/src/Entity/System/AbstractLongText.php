@@ -8,16 +8,21 @@ use Doctrine\ORM\Mapping as ORM;
 use Dvsa\Olcs\Api\Domain\QueryHandler\BundleSerializableInterface;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
+use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
+use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
 use JsonSerializable;
 
 #[ORM\Table(name: 'long_text')]
 #[ORM\MappedSuperclass]
+#[ORM\HasLifecycleCallbacks]
 abstract class AbstractLongText implements BundleSerializableInterface, JsonSerializable, \Stringable
 {
     use BundleSerializableTrait;
     use ProcessDateTrait;
     use ClearPropertiesTrait;
+    use CreatedOnTrait;
+    use ModifiedOnTrait;
 
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
