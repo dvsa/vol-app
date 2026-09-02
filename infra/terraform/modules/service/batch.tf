@@ -117,10 +117,6 @@ locals {
           value = var.batch.cli_version
         },
         {
-          name  = "READDB_HOST"
-          value = "olcsreaddb-rds.${var.domain_env}.olcs.${var.domain_name}"
-        },
-        {
           name  = "DVA_REPORT_BUCKET"
           value = local.dva_ni_export_bucket
         }

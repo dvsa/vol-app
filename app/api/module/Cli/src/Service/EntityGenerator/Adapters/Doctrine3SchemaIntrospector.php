@@ -23,7 +23,24 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
 
     public function __construct(private readonly Connection $connection, private array $config = [])
     {
+        $this->registerUnmappedPlatformTypes();
+
         $this->schemaManager = $this->connection->createSchemaManager();
+    }
+
+    /**
+     * DBAL has no mapping for MySQL's ENUM, and introspecting a column it cannot type throws
+     * `Unknown database type enum requested`, which aborts the entire generation run rather
+     * than just the table that owns the column. Mapping it to `string` matches how these
+     * columns are already modelled in the entities (a string property with class constants).
+     */
+    private function registerUnmappedPlatformTypes(): void
+    {
+        $platform = $this->connection->getDatabasePlatform();
+
+        if (!$platform->hasDoctrineTypeMappingFor('enum')) {
+            $platform->registerDoctrineTypeMapping('enum', 'string');
+        }
     }
 
     #[\Override]
