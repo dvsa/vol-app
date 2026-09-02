@@ -60,6 +60,32 @@ schema-drift baseline (see [Testing](app/testing.md)) to move.
   attribute's `options` array. Foreign key columns don't need them: Doctrine
   derives a join column's type (including unsignedness) from the referenced
   identifier.
+- **Binary columns map to Doctrine's `binary` type, with an explicit `length`.**
+  Mapping them as `string` would declare the column as `CHAR`/`VARCHAR` (a
+  `binary(16)` came out as `CHAR(16)`), so the bytes would round-trip through the
+  connection's character set and the schema-drift check would report the column
+  as drifted. `length` is emitted because DBAL falls back to 255 without it, and
+  `fixed` is what separates `BINARY(16)` from `VARBINARY(16)`:
+
+    ```php
+    // cf. Doc\DocumentAnalysis::$token
+    #[ORM\Column(type: 'binary', name: 'token', length: 16, nullable: false, options: ['fixed' => true])]
+    ```
+
+    The generated property is documented as `@var string|resource`, not `string`:
+    DBAL's `BinaryType::convertToPHPValue()` always returns a `php://temp` stream,
+    so a concrete entity reading one has to handle both forms. Anchor the read at
+    offset 0 (`stream_get_contents($value, -1, 0)`); reading a stream consumes it,
+    so an unanchored second read returns an empty string. `blob` columns behave the
+    same way.
+
+- **MySQL `ENUM` columns are introspected as `string`.** DBAL has no ENUM
+  mapping, and a column it cannot type aborts the whole run with `Unknown
+database type enum requested`, not just the table that owns it. The
+  introspector registers `enum => string` so it degrades to the way these
+  columns are already modelled (a string property with class constants). No
+  `length` is emitted for them, because MySQL reports an enum's length as 0 and
+  `length: 0` would declare `VARCHAR(0)`.
 - **Column comments are not emitted.** They are owned by the database DDL in
   olcs-etl, and ORM 2's `JoinColumn` cannot carry options at all, so comments
   can never round-trip through entity metadata. The schema-drift comparison
@@ -211,6 +237,10 @@ entity:generate -o /tmp/review-entities
 # Then compare with existing:
 diff -r /tmp/review-entities app/api/module/Api/src/Entity
 ```
+
+A run with `-o` writes everything under that path and nothing into the repository,
+including the generated `*EntityTest.php` stubs, which land in `<output-path>/tests`.
+Only `--replace` writes into the tree.
 
 ### Output Example
 

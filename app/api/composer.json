@@ -43,7 +43,7 @@
     "beberlei/doctrineextensions": "^1.5",
     "caseyamcl/guzzle_retry_middleware": "^2.13",
     "doctrine/orm": "^2.20",
-    "dvsa/authentication-cognito": "^4.0",
+    "dvsa/authentication-cognito": "^4.1",
     "dvsa/laminas-config-cloud-parameters": "^2.1",
     "dvsa/php-govuk-account": "^4.0",
     "gedmo/doctrine-extensions": "^3.21",
@@ -88,7 +88,8 @@
     "roave/psr-container-doctrine": "^4.2",
     "psr/cache": "^3.0",
     "symfony/cache": "^8.1",
-    "laminas/laminas-authentication": "^2.19"
+    "laminas/laminas-authentication": "^2.19",
+    "symfony/uid": "^8.0"
   },
   "autoload": {
     "psr-4": {

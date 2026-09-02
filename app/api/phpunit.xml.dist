@@ -32,6 +32,9 @@
     <testsuite name="Address">
       <directory>./test/module/Address</directory>
     </testsuite>
+    <testsuite name="Auth">
+      <directory>./test/module/Auth</directory>
+    </testsuite>
     <testsuite name="AwsSdk">
       <directory>./test/module/AwsSdk</directory>
     </testsuite>
