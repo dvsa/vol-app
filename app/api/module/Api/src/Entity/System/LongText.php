@@ -8,10 +8,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'long_text')]
 #[ORM\Entity]
-#[ORM\UniqueConstraint(name: 'uk_long_text_reference_key', columns: ['reference_key'])]
+#[ORM\UniqueConstraint(name: 'uk_long_text_reference_key_locale', columns: ['reference_key', 'locale'])]
 class LongText extends AbstractLongText
 {
-
     private const REFERENCE_KEY_PATTERN = '/^[a-z0-9]+(-[a-z0-9]+)*$/';
 
     public const LOCALES = ['en_GB', 'cy_GB', 'en_NI', 'cy_NI'];
