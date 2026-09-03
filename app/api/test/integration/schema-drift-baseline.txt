@@ -23,10 +23,7 @@ ALTER TABLE cases_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE condition_undertaking CHANGE olbs_type olbs_type VARCHAR(32) DEFAULT NULL
 ALTER TABLE digital_signature CHANGE attributes attributes VARCHAR(65535) DEFAULT NULL, CHANGE saml_response saml_response LONGTEXT DEFAULT NULL
 ALTER TABLE document CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
-ALTER TABLE document_analysis DROP FOREIGN KEY fk_struct_application_id_application_id
-ALTER TABLE document_analysis DROP FOREIGN KEY fk_struct_created_by_user_id
-ALTER TABLE document_analysis DROP FOREIGN KEY fk_struct_document_id_document_id
-ALTER TABLE document_analysis DROP FOREIGN KEY fk_struct_last_modified_by_user_id
+ALTER TABLE document_analysis CHANGE status status VARCHAR(255) DEFAULT 'PENDING' NOT NULL, CHANGE error_detail error_detail LONGTEXT DEFAULT NULL
 ALTER TABLE document_to_delete CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE erru_request_failure CHANGE input input LONGTEXT DEFAULT NULL, CHANGE errors errors LONGTEXT DEFAULT NULL
 ALTER TABLE impounding_legislation_type RENAME INDEX ix_impounding_legislation_type_impounding_id TO IDX_56C373FED885EE1F
