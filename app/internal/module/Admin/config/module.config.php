@@ -1105,8 +1105,15 @@ return [
         ]
     ],
     'crud-config' => [
-        /** Sample crud config 'route/match/name' => [ // Define which actions are available, and whether they require row */
-    ],
+        /**
+         * Sample crud config
+         * 'route/match/name' => [
+         *    // Define which actions are available, and whether they require rows to be selected
+         *   'add' => ['requireRows' => false],
+         *   'edit' => ['requireRows' => true]
+         * ]
+         */
+        ],
     'controllers' => [
         'factories' => [
             Admin\Controller\DataRetention\ExportController::class => Admin\Controller\DataRetention\ExportControllerFactory::class,
@@ -1156,7 +1163,7 @@ return [
             Admin\Controller\PublishedPublicationController::class => Admin\Controller\PublishedPublicationControllerFactory::class,
             Admin\Controller\RecipientController::class => Admin\Controller\RecipientControllerFactory::class,
             Admin\Controller\ReplacementsController::class => Admin\Controller\ReplacementsControllerFactory::class,
-            Admin\Controller\LongTextController::class => \Laminas\ServiceManager\AbstractFactory\ReflectionBasedAbstractFactory::class,
+            Admin\Controller\LongTextController::class => Admin\Controller\LongTextControllerFactory::class,
             Admin\Controller\ReportCasesOpenController::class => Admin\Controller\ReportCasesOpenControllerFactory::class,
             Admin\Controller\ReportController::class =>  Admin\Controller\ReportControllerFactory::class,
             Admin\Controller\ReportUploadController::class => Admin\Controller\ReportUploadControllerFactory::class,
