@@ -12,6 +12,8 @@ use Dvsa\Olcs\Api\Service\LongText\LongTextTranslator;
 use Laminas\I18n\Translator\Translator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Olcs\Logging\Log\Logger;
+use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 
 #[CoversClass(LongTextTranslator::class)]
@@ -68,16 +70,17 @@ final class LongTextTranslatorTest extends MockeryTestCase
         );
     }
 
-    public function testAnUnexpectedFailureFallsBackRatherThanBreakingThePage(): void
+    public function testAnUnexpectedFailureStopsThePageRatherThanServingStaleWording(): void
     {
+        Logger::setLogger(m::mock(LoggerInterface::class)->shouldIgnoreMissing());
+
         $this->repo->shouldReceive('fetchByReferenceKey')->once()->andThrow(new \RuntimeException('database gone'));
         $this->inner->shouldReceive('getLocale')->andReturn('en_GB');
-        $this->inner->shouldReceive('translate')->once()->andReturn('<p>the wording in place today</p>');
+        $this->inner->shouldNotReceive('translate');
 
-        self::assertSame(
-            '<p>the wording in place today</p>',
-            $this->sut->translate('markup-application_undertakings_GV79'),
-        );
+        $this->expectException(\RuntimeException::class);
+
+        $this->sut->translate('markup-application_undertakings_GV79');
     }
 
     public function testOrdinaryTranslationKeysNeverReachTheDatabase(): void
@@ -96,5 +99,38 @@ final class LongTextTranslatorTest extends MockeryTestCase
 
         $this->sut->translate('markup-application_undertakings_GV79');
         $this->sut->translate('markup-application_undertakings_GV79');
+    }
+
+    public function testContentThatIsSimplyNotManagedYetIsNotReportedAsAFault(): void
+    {
+        $logger = m::mock(LoggerInterface::class);
+        $logger->shouldNotReceive('error');
+        $logger->shouldReceive('debug')->zeroOrMoreTimes();
+        Logger::setLogger($logger);
+
+        $this->repo->shouldReceive('fetchByReferenceKey')->andThrow(new NotFoundException('nope'));
+        $this->inner->shouldReceive('getLocale')->andReturn('en_GB');
+        $this->inner->shouldReceive('translate')->andReturn('<p>today</p>');
+
+        $this->sut->translate('markup-application_undertakings_GV79');
+    }
+
+    public function testAnythingElseIsReportedLoudlyEnoughToSeeInProduction(): void
+    {
+        $logger = m::mock(LoggerInterface::class);
+        $logger->shouldReceive('error')
+            ->once()
+            ->withArgs(fn(string $message): bool => str_contains($message, 'markup-application_undertakings_GV79')
+                && str_contains($message, 'database gone'));
+        Logger::setLogger($logger);
+
+        $this->repo->shouldReceive('fetchByReferenceKey')->andThrow(new \RuntimeException('database gone'));
+        $this->inner->shouldReceive('getLocale')->andReturn('en_GB');
+
+        try {
+            $this->sut->translate('markup-application_undertakings_GV79');
+        } catch (\RuntimeException) {
+            // reported before it is rethrown
+        }
     }
 }
