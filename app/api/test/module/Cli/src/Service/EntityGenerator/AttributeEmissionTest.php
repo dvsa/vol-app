@@ -248,10 +248,9 @@ final class AttributeEmissionTest extends TestCase
     {
         $sut = new DefaultTypeHandler();
 
-        // cf. address.olbs_key: int unsigned with no default
-        $unsigned = new ColumnMetadata('olbs_key', 'integer', null, true, false, false, null, null, ['unsigned' => true]);
+        $unsigned = new ColumnMetadata('unsigned_value', 'integer', null, true, false, false, null, null, ['unsigned' => true]);
         $this->assertSame(
-            "#[ORM\\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]",
+            "#[ORM\\Column(type: 'integer', name: 'unsigned_value', nullable: true, options: ['unsigned' => true])]",
             $sut->generateAnnotation($unsigned)
         );
 

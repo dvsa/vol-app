@@ -25,7 +25,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Table(name: 'txn')]
 #[ORM\Index(name: 'ix_txn_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_txn_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'ix_txn_olbs_key', columns: ['olbs_key'])]
 #[ORM\Index(name: 'ix_txn_payment_method', columns: ['payment_method'])]
 #[ORM\Index(name: 'ix_txn_processed_by_user_id', columns: ['processed_by_user_id'])]
 #[ORM\Index(name: 'ix_txn_reference', columns: ['reference'])]
@@ -247,22 +246,6 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
-
-    /**
-     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
-     *
-     * @var int
-     */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
-    protected $olbsKey;
-
-    /**
-     * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
-     *
-     * @var string
-     */
-    #[ORM\Column(type: 'string', name: 'olbs_type', length: 45, nullable: true)]
-    protected $olbsType;
 
     /**
      * FeeTransactions
@@ -881,54 +864,6 @@ abstract class AbstractTransaction implements BundleSerializableInterface, JsonS
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return static
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
-    }
-
-    /**
-     * Set the olbs type
-     *
-     * @param string $olbsType new value being set
-     *
-     * @return static
-     */
-    public function setOlbsType($olbsType)
-    {
-        $this->olbsType = $olbsType;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs type
-     *
-     * @return string
-     */
-    public function getOlbsType()
-    {
-        return $this->olbsType;
     }
 
     /**

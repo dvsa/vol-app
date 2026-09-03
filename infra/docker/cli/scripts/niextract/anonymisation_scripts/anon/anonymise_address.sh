@@ -123,8 +123,6 @@ LOAD DATA LOCAL INFILE '$ANON_DATA_DIR/$ADDRESS_ANON_DATA_FILE' INTO table addre
 ,@created_on
 ,@last_modified_on
 ,@version
-,@olbs_key
-,@olbs_type
 )
 SET uprn=nullif(@uprn,'')
 ,paon_start=nullif(@paon_start,'')
@@ -144,9 +142,7 @@ SET uprn=nullif(@uprn,'')
 ,deleted_date=nullif(@deleted_date,'')
 ,created_on=nullif(@created_on,'')
 ,last_modified_on=now()
-,version=nullif(@version,'')
-,olbs_key=nullif(@olbs_key,'')
-,olbs_type=nullif(@olbs_type,'');
+,version=nullif(@version,'');
 
 -- Re-enable indexes cleanly in a single fast block operation after the data finishes writing.
 ALTER TABLE address ENABLE KEYS;

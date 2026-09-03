@@ -27,7 +27,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_ebsr_submission_ebsr_submission_type_id', columns: ['ebsr_submission_type_id'])]
 #[ORM\Index(name: 'ix_ebsr_submission_organisation_id', columns: ['organisation_id'])]
 #[ORM\UniqueConstraint(name: 'uk_ebsr_submission_document_id', columns: ['document_id'])]
-#[ORM\UniqueConstraint(name: 'uk_ebsr_submission_olbs_key', columns: ['olbs_key'])]
 #[ORM\MappedSuperclass]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedDate', timeAware: true)]
 abstract class AbstractEbsrSubmission implements BundleSerializableInterface, JsonSerializable, \Stringable
@@ -244,14 +243,6 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
      */
     #[ORM\Column(type: 'string', name: 'txc_version', length: 10, nullable: true)]
     protected $txcVersion;
-
-    /**
-     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
-     *
-     * @var int
-     */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
-    protected $olbsKey;
 
     /**
      * Initialise the collections
@@ -927,30 +918,6 @@ abstract class AbstractEbsrSubmission implements BundleSerializableInterface, Js
     public function getTxcVersion()
     {
         return $this->txcVersion;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return static
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
     }
 
     /**

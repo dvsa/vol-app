@@ -13,7 +13,6 @@ use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
 #[ORM\Index(name: 'ix_organisation_person_organisation_id', columns: ['organisation_id'])]
 #[ORM\Index(name: 'ix_organisation_person_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_organisation_person_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\UniqueConstraint(name: 'uk_organisation_person_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class OrganisationPerson extends AbstractOrganisationPerson implements OrganisationProviderInterface
 {

@@ -29,7 +29,6 @@ use Dvsa\Olcs\Api\Entity\User\User as UserEntity;
 #[ORM\Index(name: 'ix_pi_decided_by_tc_role', columns: ['decided_by_tc_role'])]
 #[ORM\Index(name: 'ix_pi_written_outcome', columns: ['written_outcome'])]
 #[ORM\UniqueConstraint(name: 'ix_pi_case_id', columns: ['case_id'])]
-#[ORM\UniqueConstraint(name: 'uk_pi_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\Entity]
 class Pi extends AbstractPi implements CloseableInterface, ReopenableInterface
 {

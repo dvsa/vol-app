@@ -26,9 +26,7 @@ class EventHistory extends AbstractRepository
         'last_modified_by',
         'created_on',
         'last_modified_on',
-        'version',
-        'olbs_key',
-        'olbs_type'
+        'version'
     ];
 
     /**

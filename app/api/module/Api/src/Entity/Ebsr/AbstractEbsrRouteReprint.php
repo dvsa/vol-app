@@ -21,7 +21,6 @@ use Doctrine\Common\Collections\Collection;
  */
 #[ORM\Table(name: 'ebsr_route_reprint')]
 #[ORM\Index(name: 'ix_ebsr_route_reprint_bus_reg_id', columns: ['bus_reg_id'])]
-#[ORM\Index(name: 'ix_ebsr_route_reprint_olbs_key', columns: ['olbs_key'])]
 #[ORM\Index(name: 'ix_ebsr_route_reprint_requested_user_id', columns: ['requested_user_id'])]
 #[ORM\MappedSuperclass]
 abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, JsonSerializable, \Stringable
@@ -89,14 +88,6 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
      */
     #[ORM\Column(type: 'datetime', name: 'requested_timestamp', nullable: false)]
     protected $requestedTimestamp;
-
-    /**
-     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
-     *
-     * @var int
-     */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
-    protected $olbsKey;
 
     /**
      * Initialise the collections
@@ -292,30 +283,6 @@ abstract class AbstractEbsrRouteReprint implements BundleSerializableInterface, 
         }
 
         return $this->requestedTimestamp;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return static
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
     }
 
     /**
