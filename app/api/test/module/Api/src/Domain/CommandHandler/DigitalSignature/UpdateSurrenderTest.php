@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Domain\Command\DigitalSignature\UpdateSurrender as Cmd;
 use Dvsa\Olcs\Api\Domain\Command\Surrender\Snapshot;
 use Dvsa\Olcs\Api\Domain\Command\Task\CreateTask;
 use Dvsa\Olcs\Api\Domain\CommandHandler\DigitalSignature\UpdateSurrender as Handler;
+use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
 use Dvsa\Olcs\Api\Domain\Repository\Surrender as SurrenderRepo;
 use Dvsa\Olcs\Api\Entity\DigitalSignature as DigitalSignatureEntity;
 use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType as EventHistoryTypeEntity;
@@ -54,6 +55,7 @@ final class UpdateSurrenderTest extends AbstractCommandHandlerTestCase
         $cmd = Cmd::create(['licence' => $licenceId, 'digitalSignature' => $digitalSignatureId]);
 
         $licence = m::mock(LicenceEntity::class);
+        $licence->expects('hasQueuedRevocation')->withNoArgs()->andReturnFalse();
 
         $surrender = m::mock(SurrenderEntity::class);
         $surrender->expects('getLicence')->withNoArgs()->andReturn($licence);
@@ -94,6 +96,26 @@ final class UpdateSurrenderTest extends AbstractCommandHandlerTestCase
 
         $result = $this->sut->handleCommand($cmd);
         $this->assertEquals($this->expectedResultMessages(), $result->getMessages());
+    }
+
+    public function testHandleCommandRejectsQueuedRevocationBeforeMutation(): void
+    {
+        $licenceId = 666;
+        $cmd = Cmd::create(['licence' => $licenceId, 'digitalSignature' => 999]);
+
+        $licence = m::mock(LicenceEntity::class);
+        $licence->expects('hasQueuedRevocation')->withNoArgs()->andReturnTrue();
+
+        $surrender = m::mock(SurrenderEntity::class);
+        $surrender->expects('getLicence')->withNoArgs()->andReturn($licence);
+
+        $this->repoMap['Surrender']
+            ->expects('fetchOneByLicenceId')->with($licenceId)->andReturn($surrender);
+
+        $this->expectException(ForbiddenException::class);
+        $this->expectExceptionMessageIs('This licence cannot be surrendered because it has a pending revocation');
+
+        $this->sut->handleCommand($cmd);
     }
 
     private function expectedResultMessages(): array

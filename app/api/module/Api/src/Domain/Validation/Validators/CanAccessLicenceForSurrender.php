@@ -17,10 +17,23 @@ class CanAccessLicenceForSurrender extends CanAccessLicence implements Validator
     public function isValid($entityId)
     {
         $licence = $this->getRepo($this->repo)->fetchById($entityId);
-        $surrender = $this->getRepo('Surrender')->fetchOneByLicenceId($entityId);
 
         if ($this->isExternalUser()) {
-            return $this->notBeenSurrendered($licence) || $this->hasBeenSigned($surrender)  ? parent::isValid($entityId) : false;
+            if ($licence->hasQueuedRevocation()) {
+                return false;
+            }
+
+            if ($this->notBeenSurrendered($licence)) {
+                return parent::isValid($entityId);
+            }
+
+            try {
+                $surrender = $this->getRepo('Surrender')->fetchOneByLicenceId($entityId);
+            } catch (\Dvsa\Olcs\Api\Domain\Exception\NotFoundException $e) {
+                return false;
+            }
+
+            return $this->hasBeenSigned($surrender) && parent::isValid($entityId);
         }
         return parent::isValid($entityId);
     }
