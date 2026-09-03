@@ -15,6 +15,7 @@ final class GovukParagraphBlockRenderer implements BlockRendererInterface
 {
     private const BODY_CLASS = 'govuk-body';
 
+    #[\Override]
     public function render(Block $block): HtmlElement|string
     {
         UnsupportedBlockException::assert($this->supports($block), $block, $this);
@@ -25,6 +26,7 @@ final class GovukParagraphBlockRenderer implements BlockRendererInterface
     /**
      * @phpstan-assert-if-true ParagraphBlock $block
      */
+    #[\Override]
     public function supports(Block $block): bool
     {
         return $block instanceof ParagraphBlock;

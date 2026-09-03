@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 
 final class DeclarationPartialMigrationTest extends TestCase
 {
-
     private const NEEDS_HAND_AUTHORING = [
         'markup-application_undertakings_GV79-NI.phtml',
         'markup-application_undertakings_GV81.phtml',
