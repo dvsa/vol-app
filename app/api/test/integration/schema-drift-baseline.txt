@@ -34,7 +34,7 @@ ALTER TABLE licence_read_audit CHANGE created_on created_on DATETIME DEFAULT NUL
 ALTER TABLE local_authority CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
 ALTER TABLE messaging_subject CHANGE is_active is_active SMALLINT DEFAULT 1
 ALTER TABLE organisation_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
-ALTER TABLE pi_sla_exception CHANGE created_on created_on DATETIME DEFAULT NULL, CHANGE created_by created_by INT UNSIGNED DEFAULT NULL
+ALTER TABLE pi_sla_exception CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE prohibition CHANGE is_trailer is_trailer TINYINT DEFAULT 0
 ALTER TABLE psv_disc CHANGE is_copy is_copy TINYINT DEFAULT 0, CHANGE reprint_required reprint_required TINYINT DEFAULT 0
 ALTER TABLE publication CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL
@@ -44,7 +44,7 @@ ALTER TABLE ref_data CHANGE olbs_key olbs_key VARCHAR(20) DEFAULT NULL
 ALTER TABLE retrieval_link_event CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE sectors CHANGE version version SMALLINT DEFAULT 1
 ALTER TABLE si_penalty_imposed_type CHANGE deleted_date deleted_date DATETIME DEFAULT NULL
-ALTER TABLE sla_exception CHANGE created_on created_on DATETIME DEFAULT NULL, CHANGE created_by created_by INT UNSIGNED DEFAULT NULL
+ALTER TABLE sla_exception CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE team CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
 ALTER TABLE tm_qualification CHANGE country_code country_code VARCHAR(2) NOT NULL
 ALTER TABLE traffic_area_enforcement_area CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL
