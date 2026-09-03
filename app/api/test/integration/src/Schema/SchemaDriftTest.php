@@ -13,10 +13,10 @@ use Dvsa\OlcsTest\Integration\IntegrationTestCase;
  * recorded in schema-drift-baseline.txt; the test fails only when NEW drift is
  * introduced (an entity change with no matching migration, or vice versa).
  *
- * Column and table comments are excluded from the comparison: they are owned
- * by olcs-etl DDL, and ORM 2.x cannot express them on association join columns
- * (JoinColumn has no options), so they can never round-trip through entity
- * metadata. Revisit once on ORM 3, where JoinColumn supports options.
+ * Comments are silenced only where the mapping declares none of its own - see
+ * silenceUnmodelledComments(). The former rationale, that ORM 2's JoinColumn had no
+ * options so a comment could never round-trip, no longer holds: ORM 3's JoinColumn
+ * takes options.
  *
  * When resolving drift, or after a legitimate coordinated entity + migration
  * change, regenerate the baseline:
@@ -52,23 +52,27 @@ class SchemaDriftTest extends IntegrationTestCase
         $databaseSchema = $schemaManager->introspectSchema();
         $entitySchema = (new SchemaTool($entityManager))->getSchemaFromMetadata($metadata);
 
+        SchemaComparison::silenceUnmodelledComments($databaseSchema, $entitySchema);
+
         foreach ([$databaseSchema, $entitySchema] as $schema) {
             foreach ($schema->getTables() as $table) {
-                $table->addOption('comment', '');
                 foreach ($table->getColumns() as $column) {
-                    $column->setComment('');
-
-                    // Custom DBAL types are PHP conversion semantics over a plain
-                    // storage type; the Liquibase DDL never carries their DC2Type
-                    // comment hint, so compare the storage declaration instead.
+                    // YesNoType and YesNoNullType hardcode
+                    // "tinyint(1) NOT NULL COMMENT '(DC2Type:yesno)'" as their whole
+                    // declaration SQL, so they can never match the column they map however
+                    // it is declared. They are PHP conversion semantics over a plain
+                    // boolean, so compare the storage declaration instead.
+                    //
+                    // EncryptedStringType needed the same treatment under DBAL 3, which
+                    // appended a DC2Type comment hint to custom types. DBAL 4 dropped that
+                    // mechanism and the type declares as its StringType parent, so no
+                    // normalisation is required - removing it changes no statement.
                     $type = $column->getType();
                     if (
                         $type instanceof \Dvsa\Olcs\Api\Entity\Types\YesNoType
                         || $type instanceof \Dvsa\Olcs\Api\Entity\Types\YesNoNullType
                     ) {
                         $column->setType(\Doctrine\DBAL\Types\Type::getType('boolean'));
-                    } elseif ($type instanceof \Dvsa\Olcs\Api\Entity\Types\EncryptedStringType) {
-                        $column->setType(\Doctrine\DBAL\Types\Type::getType('string'));
                     }
                 }
 
