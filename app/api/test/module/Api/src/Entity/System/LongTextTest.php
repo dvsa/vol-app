@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dvsa\OlcsTest\Api\Entity\System;
 
 use Dvsa\Olcs\Api\Entity\System\LongText;
+use Doctrine\ORM\Mapping as ORM;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
@@ -50,6 +51,14 @@ final class LongTextTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $this->expectException(\InvalidArgumentException::class);
 
         LongText::create('application-declaration', 'fr_FR', 'Page', null, ['blocks' => []]);
+    }
+
+    public function testReferenceKeysAreUniquePerLanguage(): void
+    {
+        $attributes = (new \ReflectionClass(LongText::class))->getAttributes(ORM\UniqueConstraint::class);
+        $constraint = $attributes[0]->newInstance();
+
+        self::assertSame(['reference_key', 'locale'], $constraint->columns);
     }
 
     public function testItRecordsWhenItWasCreatedAndLastUpdated(): void
