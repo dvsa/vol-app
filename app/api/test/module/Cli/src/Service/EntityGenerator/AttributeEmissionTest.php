@@ -503,6 +503,33 @@ final class AttributeEmissionTest extends TestCase
         ];
     }
 
+
+    /**
+     * JoinColumn defaults to nullable: true, the opposite of Column, so a NOT NULL
+     * created_by has to say so explicitly. The handler hardcoded true, which made every
+     * Blameable column read as nullable however the schema declared it.
+     */
+    public function testNotNullBlameableColumnSaysSo(): void
+    {
+        $sut = new BlameableTypeHandler();
+
+        $this->assertStringContainsString(
+            "#[ORM\\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: false)]",
+            $sut->generateAnnotation(new ColumnMetadata('created_by', 'integer', null, false))
+        );
+        $this->assertFalse($sut->generateProperty(new ColumnMetadata('created_by', 'integer', null, false))['nullable']);
+    }
+
+    public function testNullableBlameableColumnStillSaysTrue(): void
+    {
+        $sut = new BlameableTypeHandler();
+
+        $this->assertStringContainsString(
+            "#[ORM\\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]",
+            $sut->generateAnnotation(new ColumnMetadata('last_modified_by', 'integer', null, true))
+        );
+    }
+
     private function invokeGeneratorMethod(string $method, array $args): string
     {
         $generator = (new \ReflectionClass(EntityGenerator::class))->newInstanceWithoutConstructor();
