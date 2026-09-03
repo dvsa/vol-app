@@ -30,7 +30,7 @@ abstract class AbstractLongText implements BundleSerializableInterface, JsonSeri
     #[ORM\Column(type: 'integer', name: 'id')]
     protected $id;
 
-    #[ORM\Column(type: 'string', name: 'reference_key', length: 128, nullable: false, unique: true)]
+    #[ORM\Column(type: 'string', name: 'reference_key', length: 128, nullable: false)]
     protected $referenceKey;
 
     #[ORM\Column(type: 'string', name: 'locale', length: 5, nullable: false)]
