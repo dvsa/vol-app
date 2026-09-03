@@ -20,6 +20,20 @@ For each database table, the generator creates:
 - `{Namespace}/{EntityName}.php` - Concrete class for custom logic (only created if it doesn't exist)
 - Test stub in `test/module/Api/src/Entity/{Namespace}/{EntityName}EntityTest.php`
 
+The concrete class is yours to edit; the abstract is not. One trap is worth
+calling out: **do not declare table-level `#[ORM\Index]` or
+`#[ORM\UniqueConstraint]` attributes on the concrete for columns the abstract
+already covers.** Doctrine unions the two sets rather than letting the concrete
+override, so a differently-named duplicate makes the metadata claim an index the
+database has never had. Sixty-four such attributes were removed across 34
+entities under VOL-7070; between them they accounted for the entire
+`CREATE INDEX` section of the schema drift baseline.
+
+They are easy to miss, because DBAL's comparator pairs indexes by shape as well
+as by name — a duplicate can sit invisible until an unrelated one beside it is
+removed. Match on **columns, not names**: a concrete declaration whose columns
+are already covered by its abstract is redundant whatever it is called.
+
 The namespace is determined by `namespace.config.php` which maps entity names to subdirectories. For example:
 
 - `Application` entity → `Application/AbstractApplication.php` and `Application/Application.php`
