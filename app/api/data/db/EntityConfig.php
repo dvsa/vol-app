@@ -1576,6 +1576,15 @@ return array(
             )
         )
     ),
+    // Retrieval module: RetrievalLink::$documents is an ordinary generated inverse
+    // collection on the abstract, so generateInverse stays on. Without this entry the
+    // generator has no idea the association is bidirectional and a regeneration drops both
+    // the collection and the owning side's inversedBy.
+    'retrieval_link_document' => array(
+        'retrieval_link_id' => array(
+            'inversedBy' => array('entity' => 'RetrievalLink', 'property' => 'documents')
+        )
+    ),
     // Letter module: the inverse collections are hand-written in the concrete
     // entities (with cascade/orphanRemoval options), so generateInverse is false -
     // the owning side still emits a matching inversedBy, but no collection is
