@@ -252,7 +252,7 @@ abstract class AbstractPi implements BundleSerializableInterface, JsonSerializab
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'decision_notes', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'decision_notes', length: 65535, nullable: true)]
     protected $decisionNotes;
 
     /**

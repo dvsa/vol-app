@@ -131,7 +131,7 @@ abstract class AbstractTemplate implements BundleSerializableInterface, JsonSeri
      *
      * @var string
      */
-    #[ORM\Column(type: 'text', name: 'source', nullable: false)]
+    #[ORM\Column(type: 'text', name: 'source', length: 65535, nullable: false)]
     protected $source = '';
 
     /**

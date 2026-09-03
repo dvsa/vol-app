@@ -142,7 +142,7 @@ abstract class AbstractLegacyRecommendation implements BundleSerializableInterfa
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'notes', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'notes', length: 65535, nullable: true)]
     protected $notes;
 
     /**

@@ -161,7 +161,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'requestor_notes', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'requestor_notes', length: 65535, nullable: true)]
     protected $requestorNotes;
 
     /**
@@ -169,7 +169,7 @@ abstract class AbstractInspectionRequest implements BundleSerializableInterface,
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'inspector_notes', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'inspector_notes', length: 65535, nullable: true)]
     protected $inspectorNotes;
 
     /**

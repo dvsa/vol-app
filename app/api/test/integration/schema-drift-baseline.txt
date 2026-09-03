@@ -6,7 +6,7 @@
 #
 # Grouping is presentational. Every statement below is compared; nothing is hidden.
 
-# ---- actionable (59) ----
+# ---- actionable (43) ----
 # A real disagreement between an entity and the schema. Resolve by changing the
 # mapping, or by adding a Liquibase migration in olcs-etl.
 
@@ -19,52 +19,36 @@ ALTER TABLE bus_reg_read_audit CHANGE created_on created_on DATETIME DEFAULT NUL
 ALTER TABLE bus_reg_traffic_area DROP olbs_key, CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL
 ALTER TABLE cases_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE condition_undertaking CHANGE olbs_type olbs_type VARCHAR(32) DEFAULT NULL
-ALTER TABLE digital_signature CHANGE attributes attributes VARCHAR(65535) DEFAULT NULL, CHANGE saml_response saml_response LONGTEXT DEFAULT NULL
+ALTER TABLE digital_signature CHANGE attributes attributes VARCHAR(65535) DEFAULT NULL
 ALTER TABLE document CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
-ALTER TABLE document_analysis CHANGE status status VARCHAR(255) DEFAULT 'PENDING' NOT NULL, CHANGE error_detail error_detail LONGTEXT DEFAULT NULL
+ALTER TABLE document_analysis CHANGE status status VARCHAR(255) DEFAULT 'PENDING' NOT NULL
 ALTER TABLE document_to_delete CHANGE created_on created_on DATETIME DEFAULT NULL
-ALTER TABLE erru_request_failure CHANGE input input LONGTEXT DEFAULT NULL, CHANGE errors errors LONGTEXT DEFAULT NULL
-ALTER TABLE inspection_email CHANGE message_body message_body LONGTEXT DEFAULT NULL
-ALTER TABLE inspection_request CHANGE requestor_notes requestor_notes LONGTEXT DEFAULT NULL, CHANGE inspector_notes inspector_notes LONGTEXT DEFAULT NULL
 ALTER TABLE irhp_application_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
-ALTER TABLE irhp_permit_type CHANGE description description LONGTEXT DEFAULT NULL
-ALTER TABLE legacy_recommendation CHANGE notes notes LONGTEXT DEFAULT NULL
-ALTER TABLE letter_appendix_version CHANGE description description LONGTEXT DEFAULT NULL, CHANGE created_on created_on DATETIME DEFAULT NULL
-ALTER TABLE letter_issue_version CHANGE help_text help_text LONGTEXT DEFAULT NULL, CHANGE created_on created_on DATETIME DEFAULT NULL
-ALTER TABLE letter_section_version CHANGE help_text help_text LONGTEXT DEFAULT NULL, CHANGE created_on created_on DATETIME DEFAULT NULL
-ALTER TABLE letter_todo_version CHANGE name name VARCHAR(255) DEFAULT NULL, CHANGE help_text help_text LONGTEXT DEFAULT NULL, CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE letter_appendix_version CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE letter_issue_version CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE letter_section_version CHANGE created_on created_on DATETIME DEFAULT NULL
+ALTER TABLE letter_todo_version CHANGE name name VARCHAR(255) DEFAULT NULL, CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE licence CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
 ALTER TABLE licence_operating_centre CHANGE ad_placed ad_placed SMALLINT NOT NULL
 ALTER TABLE licence_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE local_authority CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
-ALTER TABLE master_template CHANGE template_content template_content LONGTEXT NOT NULL
-ALTER TABLE messaging_content CHANGE text text LONGTEXT NOT NULL
 ALTER TABLE messaging_subject CHANGE is_active is_active SMALLINT DEFAULT 1
-ALTER TABLE note CHANGE comment comment LONGTEXT DEFAULT NULL
 ALTER TABLE organisation_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
-ALTER TABLE pi CHANGE decision_notes decision_notes LONGTEXT DEFAULT NULL
 ALTER TABLE pi_sla_exception CHANGE created_on created_on DATETIME DEFAULT NULL, CHANGE created_by created_by INT UNSIGNED DEFAULT NULL
 ALTER TABLE prohibition CHANGE is_trailer is_trailer TINYINT DEFAULT 0
 ALTER TABLE psv_disc CHANGE is_copy is_copy TINYINT DEFAULT 0, CHANGE reprint_required reprint_required TINYINT DEFAULT 0
 ALTER TABLE publication CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL
-ALTER TABLE publication_link CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL, CHANGE text1 text1 LONGTEXT DEFAULT NULL, CHANGE text2 text2 LONGTEXT DEFAULT NULL, CHANGE text3 text3 LONGTEXT DEFAULT NULL
-ALTER TABLE queue CHANGE last_error last_error LONGTEXT DEFAULT NULL
+ALTER TABLE publication_link CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL
 ALTER TABLE recipient_traffic_area CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL
 ALTER TABLE ref_data CHANGE olbs_key olbs_key VARCHAR(20) DEFAULT NULL
 ALTER TABLE retrieval_link_event CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE sectors CHANGE version version SMALLINT DEFAULT 1
 ALTER TABLE si_penalty_imposed_type CHANGE deleted_date deleted_date DATETIME DEFAULT NULL
 ALTER TABLE sla_exception CHANGE created_on created_on DATETIME DEFAULT NULL, CHANGE created_by created_by INT UNSIGNED DEFAULT NULL
-ALTER TABLE submission CHANGE data_snapshot data_snapshot LONGTEXT DEFAULT NULL
-ALTER TABLE submission_action CHANGE comment comment LONGTEXT DEFAULT NULL
-ALTER TABLE submission_section_comment CHANGE comment comment LONGTEXT DEFAULT NULL
-ALTER TABLE surrender CHANGE disc_lost_info disc_lost_info LONGTEXT DEFAULT NULL, CHANGE disc_stolen_info disc_stolen_info LONGTEXT DEFAULT NULL, CHANGE licence_document_info licence_document_info LONGTEXT DEFAULT NULL, CHANGE community_licence_document_info community_licence_document_info LONGTEXT DEFAULT NULL
 ALTER TABLE team CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
-ALTER TABLE template CHANGE source source LONGTEXT NOT NULL
 ALTER TABLE tm_qualification CHANGE country_code country_code VARCHAR(2) NOT NULL
 ALTER TABLE traffic_area_enforcement_area CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL
 ALTER TABLE translation_key CHANGE translation_key translation_key VARCHAR(512) NOT NULL
-ALTER TABLE translation_key_text CHANGE translated_text translated_text LONGTEXT DEFAULT NULL
 ALTER TABLE transport_manager CHANGE merge_details merge_details JSON DEFAULT NULL
 ALTER TABLE transport_manager_read_audit CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE txc_inbox CHANGE file_read file_read TINYINT DEFAULT 0

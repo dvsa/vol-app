@@ -90,7 +90,7 @@ abstract class AbstractSubmissionSectionComment implements BundleSerializableInt
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'comment', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'comment', length: 16777215, nullable: true)]
     protected $comment;
 
     /**

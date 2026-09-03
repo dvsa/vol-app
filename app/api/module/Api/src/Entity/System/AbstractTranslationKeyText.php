@@ -91,7 +91,7 @@ abstract class AbstractTranslationKeyText implements BundleSerializableInterface
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'translated_text', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'translated_text', length: 65535, nullable: true)]
     protected $translatedText;
 
     /**

@@ -113,7 +113,7 @@ abstract class AbstractSubmission implements BundleSerializableInterface, JsonSe
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'data_snapshot', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'data_snapshot', length: 16777215, nullable: true)]
     protected $dataSnapshot;
 
     /**
