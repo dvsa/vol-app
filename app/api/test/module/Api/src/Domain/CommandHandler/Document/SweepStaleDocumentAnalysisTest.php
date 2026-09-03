@@ -10,6 +10,7 @@ use Dvsa\Olcs\Api\Domain\CommandHandlerManager;
 use Dvsa\Olcs\Api\Domain\QueryHandlerManager;
 use Dvsa\Olcs\Api\Domain\RepositoryServiceManager;
 use Dvsa\Olcs\Api\Domain\Repository\DocumentAnalysis as DocumentAnalysisRepo;
+use Dvsa\Olcs\Api\Entity\Doc\DocumentAnalysis as DocAnalysisEntity;
 use Dvsa\Olcs\Api\Domain\Repository\TransactionManagerInterface;
 use Dvsa\Olcs\Api\Rbac\IdentityProviderInterface;
 use PHPUnit\Framework\TestCase;
@@ -65,6 +66,27 @@ final class SweepStaleDocumentAnalysisTest extends TestCase
         $this->assertEqualsWithDelta(90 * 60, $ageMinutes, 5, 'uses idp.sweeper_threshold_minutes');
         $this->assertContains(
             'Swept 3 stale document analysis row(s) to TIMEOUT (threshold 90 minutes)',
+            $result->getMessages()
+        );
+    }
+
+    public function testLogsStaleRowsWithoutErrorWhenCreatedOnIsHydratedAsAString(): void
+    {
+        // Regression test: getCreatedOn() (without $asDateTime=true) can return the raw
+        // stored value rather than a \DateTime, which previously caused errors
+        $staleAnalysis = m::mock(DocAnalysisEntity::class);
+        $staleAnalysis->shouldReceive('getTokenString')->andReturn('abc123');
+        $staleAnalysis->shouldReceive('getApplication')->andReturn(null);
+        $staleAnalysis->shouldReceive('getDocument')->andReturn(null);
+        $staleAnalysis->shouldReceive('getCreatedOn')->with(true)->andReturn(new \DateTimeImmutable('-2 hours'));
+
+        $this->analysisRepo->shouldReceive('fetchStalePending')->once()->andReturn([$staleAnalysis]);
+        $this->analysisRepo->shouldReceive('sweepStalePending')->once()->andReturn(1);
+
+        $result = $this->sut->handleCommand(Cmd::create([]));
+
+        $this->assertContains(
+            'Swept 1 stale document analysis row(s) to TIMEOUT (threshold 90 minutes)',
             $result->getMessages()
         );
     }
