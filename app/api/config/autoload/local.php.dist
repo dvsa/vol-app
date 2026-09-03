@@ -352,14 +352,6 @@ return [
       ],
     ],
   ],
-  'acquired_rights' => [
-    'client' => [
-      'base_uri' => 'http://127.0.0.1:3000',
-      'headers' => [
-        'x-api-key' => ''
-      ],
-    ],
-  ],
   'govuk_account' => [
     'redirectUri' => 'http://ssweb.local.olcs.dev-dvsacloud.uk/govuk-id/loggedin',
     'discovery_endpoint' => 'https://oidc.integration.account.gov.uk/.well-known/openid-configuration',

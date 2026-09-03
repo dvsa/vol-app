@@ -807,7 +807,7 @@ return [
     TransferCommand\TransportManagerApplication\UpdateStatus::class
         => CommandHandler\TransportManagerApplication\UpdateStatus::class,
     TransferCommand\TransportManagerApplication\UpdateDetails::class
-        => CommandHandler\TransportManagerApplication\UpdateDetailsFactory::class,
+        => CommandHandler\TransportManagerApplication\UpdateDetails::class,
     TransferCommand\TransportManagerApplication\CreateForResponsibilities::class =>
         CommandHandler\TransportManagerApplication\CreateForResponsibilities::class,
     TransferCommand\TransportManagerApplication\UpdateForResponsibilities::class =>
