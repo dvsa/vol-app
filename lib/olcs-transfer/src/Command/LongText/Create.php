@@ -37,7 +37,6 @@ final class Create extends AbstractCommand
      */
     protected $description;
 
-    /** EditorJS document as JSON. */
     protected $content;
 
     public function getReferenceKey(): ?string

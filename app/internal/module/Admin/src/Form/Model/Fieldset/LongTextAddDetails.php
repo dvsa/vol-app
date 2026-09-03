@@ -6,7 +6,6 @@ namespace Admin\Form\Model\Fieldset;
 
 use Laminas\Form\Annotation as Form;
 
-/** The reference key can only be set at creation — application code addresses content by it, so it does not appea */
 class LongTextAddDetails
 {
     /**

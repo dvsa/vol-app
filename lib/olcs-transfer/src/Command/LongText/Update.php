@@ -8,9 +8,6 @@ use Dvsa\Olcs\Transfer\Command\AbstractCommand;
 use Dvsa\Olcs\Transfer\Util\Annotation as Transfer;
 
 /**
- * The reference key is deliberately absent: application code addresses content
- * by it, so it is set once at creation and never edited.
- *
  * @Transfer\RouteName("backend/long-text/update")
  * @Transfer\Method("PUT")
  */
