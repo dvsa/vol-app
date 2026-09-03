@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Service\LongText;
 
+use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\Repository\LongText as LongTextRepo;
 use Dvsa\Olcs\Api\Entity\System\LongText;
 use Dvsa\Olcs\Api\Service\EditorJs\LongTextConverterService;
@@ -16,7 +17,6 @@ use Olcs\Logging\Log\Logger;
  */
 final class LongTextTranslator implements TranslatorInterface
 {
-
     private const MANAGED_PREFIX = 'markup-';
 
     /** @var array<string, string|null> */
@@ -79,12 +79,17 @@ final class LongTextTranslator implements TranslatorInterface
             return $this->converter->convertJsonToHtml(
                 json_encode($longText->getContent(), JSON_THROW_ON_ERROR),
             );
-        } catch (\Throwable $e) {
-            // Missing content is expected while pages are being migrated;
-            // anything else is worth knowing about but must not stop the page.
-            Logger::debug(sprintf('Long Text "%s" not served: %s', $message, $e->getMessage()));
-
+        } catch (NotFoundException) {
             return null;
+        } catch (\Throwable $e) {
+            Logger::err(sprintf(
+                'Long Text "%s" could not be served for locale %s: %s',
+                $message,
+                $locale,
+                $e->getMessage(),
+            ), ['exception' => $e]);
+
+            throw $e;
         }
     }
 
