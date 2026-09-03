@@ -78,7 +78,7 @@ abstract class AbstractDigitalSignature implements BundleSerializableInterface, 
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'saml_response', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'saml_response', length: 65535, nullable: true)]
     protected $samlResponse;
 
     /**

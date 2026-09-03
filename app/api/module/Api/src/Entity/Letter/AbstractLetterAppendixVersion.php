@@ -99,7 +99,7 @@ abstract class AbstractLetterAppendixVersion implements BundleSerializableInterf
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'description', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'description', length: 65535, nullable: true)]
     protected $description;
 
     /**

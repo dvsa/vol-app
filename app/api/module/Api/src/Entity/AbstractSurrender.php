@@ -158,7 +158,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'disc_lost_info', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'disc_lost_info', length: 65535, nullable: true)]
     protected $discLostInfo;
 
     /**
@@ -166,7 +166,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'disc_stolen_info', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'disc_stolen_info', length: 65535, nullable: true)]
     protected $discStolenInfo;
 
     /**
@@ -174,7 +174,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'licence_document_info', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'licence_document_info', length: 65535, nullable: true)]
     protected $licenceDocumentInfo;
 
     /**
@@ -182,7 +182,7 @@ abstract class AbstractSurrender implements BundleSerializableInterface, JsonSer
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'community_licence_document_info', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'community_licence_document_info', length: 65535, nullable: true)]
     protected $communityLicenceDocumentInfo;
 
     /**

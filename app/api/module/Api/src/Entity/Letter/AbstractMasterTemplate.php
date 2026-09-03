@@ -79,7 +79,7 @@ abstract class AbstractMasterTemplate implements BundleSerializableInterface, Js
      *
      * @var string
      */
-    #[ORM\Column(type: 'text', name: 'template_content', nullable: false)]
+    #[ORM\Column(type: 'text', name: 'template_content', length: 65535, nullable: false)]
     protected $templateContent = '';
 
     /**

@@ -127,7 +127,7 @@ abstract class AbstractQueue implements BundleSerializableInterface, JsonSeriali
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'last_error', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'last_error', length: 65535, nullable: true)]
     protected $lastError;
 
     /**

@@ -80,7 +80,7 @@ abstract class AbstractErruRequestFailure implements BundleSerializableInterface
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'input', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'input', length: 65535, nullable: true)]
     protected $input;
 
     /**
@@ -88,7 +88,7 @@ abstract class AbstractErruRequestFailure implements BundleSerializableInterface
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'errors', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'errors', length: 65535, nullable: true)]
     protected $errors;
 
     /**

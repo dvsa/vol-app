@@ -42,9 +42,15 @@ class DefaultTypeHandler extends AbstractTypeHandler
 
     /**
      * Types whose declaration is length-bearing. Without an explicit length DBAL falls back
-     * to 255, so a BINARY(16) would be reported as drifted and rebuilt at the wrong width.
+     * to 255 for string and binary - so a BINARY(16) would be reported as drifted and rebuilt
+     * at the wrong width - and to the largest width for text, turning every TEXT and
+     * MEDIUMTEXT column into a LONGTEXT.
+     *
+     * DBAL introspects the text widths as tinytext 255, text 65535, mediumtext 16777215 and
+     * longtext null, so the `> 0` guard below leaves longtext unlengthed, which is what
+     * renders it back as LONGTEXT.
      */
-    private const array LENGTH_BEARING_TYPES = ['string', 'binary'];
+    private const array LENGTH_BEARING_TYPES = ['string', 'binary', 'text'];
 
     #[\Override]
     public function supports(ColumnMetadata $column, array $config = []): bool

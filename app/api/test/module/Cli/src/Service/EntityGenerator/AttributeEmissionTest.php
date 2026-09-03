@@ -474,6 +474,35 @@ final class AttributeEmissionTest extends TestCase
         );
     }
 
+
+    /**
+     * Without a length DBAL renders `text` as LONGTEXT, so every TEXT and MEDIUMTEXT column
+     * reads as drifted against the Liquibase schema. Widths are what DBAL introspects them
+     * as; longtext comes back with a null length and stays unlengthed.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTextWidths')]
+    public function testTextColumnsCarryTheirWidth(?int $length, string $expected): void
+    {
+        $sut = new DefaultTypeHandler();
+        $column = new ColumnMetadata('notes', 'text', $length, true);
+
+        $this->assertSame($expected, $sut->generateAnnotation($column));
+    }
+
+    /** @return array<string, array{int|null, string}> */
+    public static function dpTextWidths(): array
+    {
+        return [
+            'tinytext' => [255, "#[ORM\\Column(type: 'text', name: 'notes', length: 255, nullable: true)]"],
+            'text' => [65535, "#[ORM\\Column(type: 'text', name: 'notes', length: 65535, nullable: true)]"],
+            'mediumtext' => [
+                16777215,
+                "#[ORM\\Column(type: 'text', name: 'notes', length: 16777215, nullable: true)]",
+            ],
+            'longtext stays unlengthed' => [null, "#[ORM\\Column(type: 'text', name: 'notes', nullable: true)]"],
+        ];
+    }
+
     private function invokeGeneratorMethod(string $method, array $args): string
     {
         $generator = (new \ReflectionClass(EntityGenerator::class))->newInstanceWithoutConstructor();

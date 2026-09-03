@@ -125,7 +125,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
      *
      * @var string
      */
-    #[ORM\Column(type: 'text', name: 'error_detail', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'error_detail', length: 65535, nullable: true)]
     protected $errorDetail;
 
     /**
