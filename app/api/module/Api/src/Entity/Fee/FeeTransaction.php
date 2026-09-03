@@ -12,7 +12,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'ix_fee_txn_fee_id', columns: ['fee_id'])]
 #[ORM\Index(name: 'ix_fee_txn_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_fee_txn_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'fk_fee_txn_fee_txn1_idx', columns: ['reversed_fee_txn_id'])]
 #[ORM\Entity]
 class FeeTransaction extends AbstractFeeTransaction
 {
