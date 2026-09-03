@@ -6,7 +6,6 @@ namespace Admin\Form\Model\Fieldset;
 
 use Laminas\Form\Annotation as Form;
 
-/** Editing changes the wording only. */
 class LongTextEditDetails
 {
     /**
@@ -15,9 +14,7 @@ class LongTextEditDetails
     public $id = null;
 
     /**
-     * Readonly rather than PlainText: PlainText silently discards any value
-     * set while the form populates from data (OLCS-17989, because it renders
-     * unescaped), so it cannot display a stored value.
+     * PlainText does not retain populated values (OLCS-17989).
      *
      * @Form\Options({"label": "UID", "hint": "Used by developers to place this content on a page. It cannot be changed."})
      * @Form\Type("Text")

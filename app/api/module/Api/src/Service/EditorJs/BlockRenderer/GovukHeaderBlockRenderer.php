@@ -21,6 +21,7 @@ final class GovukHeaderBlockRenderer implements BlockRendererInterface
 
     private const FALLBACK_CLASS = 'govuk-heading-l';
 
+    #[\Override]
     public function render(Block $block): HtmlElement|string
     {
         UnsupportedBlockException::assert($this->supports($block), $block, $this);
@@ -32,6 +33,7 @@ final class GovukHeaderBlockRenderer implements BlockRendererInterface
     /**
      * @phpstan-assert-if-true HeaderBlock $block
      */
+    #[\Override]
     public function supports(Block $block): bool
     {
         return $block instanceof HeaderBlock;

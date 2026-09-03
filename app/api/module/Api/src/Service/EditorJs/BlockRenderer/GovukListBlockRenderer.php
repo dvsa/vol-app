@@ -10,9 +10,9 @@ use Setono\EditorJS\BlockRenderer\BlockRendererInterface;
 use Setono\EditorJS\Exception\UnsupportedBlockException;
 use Setono\HtmlElement\HtmlElement;
 
-/** The GOV.UK modifier is named for the marker (bullet/number) while the parser models the list semantically (uno */
 final class GovukListBlockRenderer implements BlockRendererInterface
 {
+    #[\Override]
     public function render(Block $block): HtmlElement|string
     {
         UnsupportedBlockException::assert($this->supports($block), $block, $this);
@@ -28,6 +28,7 @@ final class GovukListBlockRenderer implements BlockRendererInterface
     /**
      * @phpstan-assert-if-true ListBlock $block
      */
+    #[\Override]
     public function supports(Block $block): bool
     {
         return $block instanceof ListBlock;
