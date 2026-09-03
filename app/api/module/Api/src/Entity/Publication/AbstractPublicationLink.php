@@ -172,7 +172,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'text1', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'text1', length: 65535, nullable: true)]
     protected $text1;
 
     /**
@@ -180,7 +180,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'text2', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'text2', length: 65535, nullable: true)]
     protected $text2;
 
     /**
@@ -188,7 +188,7 @@ abstract class AbstractPublicationLink implements BundleSerializableInterface, J
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'text3', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'text3', length: 65535, nullable: true)]
     protected $text3;
 
     /**

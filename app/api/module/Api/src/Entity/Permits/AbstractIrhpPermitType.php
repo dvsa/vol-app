@@ -80,7 +80,7 @@ abstract class AbstractIrhpPermitType implements BundleSerializableInterface, Js
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'description', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'description', length: 65535, nullable: true)]
     protected $description;
 
     /**

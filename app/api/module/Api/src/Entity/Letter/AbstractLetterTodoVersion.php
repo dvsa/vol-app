@@ -96,7 +96,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'text', name: 'help_text', nullable: true)]
+    #[ORM\Column(type: 'text', name: 'help_text', length: 65535, nullable: true)]
     protected $helpText;
 
     /**

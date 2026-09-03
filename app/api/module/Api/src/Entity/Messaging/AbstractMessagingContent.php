@@ -70,7 +70,7 @@ abstract class AbstractMessagingContent implements BundleSerializableInterface, 
      *
      * @var string
      */
-    #[ORM\Column(type: 'text', name: 'text', nullable: false)]
+    #[ORM\Column(type: 'text', name: 'text', length: 65535, nullable: false)]
     protected $text = '';
 
     /**
