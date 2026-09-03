@@ -9,9 +9,6 @@ use Dvsa\Olcs\Api\Entity\User\User;
  * ApplicationReadAudit Entity
  */
 #[ORM\Table(name: 'application_read_audit')]
-#[ORM\Index(name: 'ix_audit_read_application_application_id', columns: ['application_id'])]
-#[ORM\Index(name: 'ix_audit_read_application_user_id', columns: ['user_id'])]
-#[ORM\Index(name: 'ix_audit_read_application_created_on', columns: ['created_on'])]
 #[ORM\UniqueConstraint(name: 'uk_audit_read_application_application_id_user_id_created_on', columns: ['application_id', 'user_id', 'created_on'])]
 #[ORM\Entity]
 class ApplicationReadAudit extends AbstractApplicationReadAudit

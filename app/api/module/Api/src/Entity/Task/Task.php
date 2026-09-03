@@ -23,7 +23,6 @@ use Dvsa\Olcs\Api\Entity\System\SubCategory;
 #[ORM\Index(name: 'ix_task_category_id', columns: ['category_id'])]
 #[ORM\Index(name: 'ix_task_case_id', columns: ['case_id'])]
 #[ORM\Index(name: 'ix_task_sub_category_id', columns: ['sub_category_id'])]
-#[ORM\Index(name: 'ix_task_etl', columns: ['description', 'category_id', 'sub_category_id'])]
 #[ORM\UniqueConstraint(name: 'uk_task_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class Task extends AbstractTask

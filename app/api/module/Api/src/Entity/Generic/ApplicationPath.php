@@ -9,7 +9,6 @@ use Dvsa\Olcs\Api\Service\Qa\QaEntityInterface;
  * ApplicationPath Entity
  */
 #[ORM\Table(name: 'application_path')]
-#[ORM\Index(name: 'fk_application_path_irhp_permit_type_id', columns: ['irhp_permit_type_id'])]
 #[ORM\Entity]
 class ApplicationPath extends AbstractApplicationPath
 {
