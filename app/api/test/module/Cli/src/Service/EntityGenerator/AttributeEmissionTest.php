@@ -18,6 +18,7 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlerRegistry;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\BlameableTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\DefaultTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\RelationshipTypeHandler;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\YesNoTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\InversedByConfig;
 use Mockery as m;
@@ -527,6 +528,90 @@ final class AttributeEmissionTest extends TestCase
         $this->assertStringContainsString(
             "#[ORM\\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]",
             $sut->generateAnnotation(new ColumnMetadata('last_modified_by', 'integer', null, true))
+        );
+    }
+
+
+    /**
+     * cf. ref_data.olbs_key, latin1_swedish_ci on a utf8mb3_unicode_ci table. A column that
+     * overrides its table's charset or collation has to say so, or the mapping renders the
+     * table default and the column reads as drifted for a difference nothing expresses.
+     * Only overrides are emitted - carrying them on every column would put charset and
+     * collation on all 7722 of them.
+     */
+    public function testCharsetAndCollationOverridesAreEmitted(): void
+    {
+        $sut = new DefaultTypeHandler();
+        $column = new ColumnMetadata(
+            'olbs_key',
+            'string',
+            20,
+            true,
+            false,
+            false,
+            null,
+            null,
+            ['charset' => 'latin1', 'collation' => 'latin1_swedish_ci'],
+        );
+
+        $this->assertSame(
+            "#[ORM\\Column(type: 'string', name: 'olbs_key', length: 20, nullable: true,"
+            . " options: ['charset' => 'latin1', 'collation' => 'latin1_swedish_ci'])]",
+            $sut->generateAnnotation($column)
+        );
+    }
+
+    /** A column that simply inherits its table's collation carries no options at all. */
+    public function testInheritedCollationIsNotEmitted(): void
+    {
+        $sut = new DefaultTypeHandler();
+
+        $this->assertSame(
+            "#[ORM\\Column(type: 'string', name: 'olbs_key', length: 20, nullable: true)]",
+            $sut->generateAnnotation(new ColumnMetadata('olbs_key', 'string', 20, true))
+        );
+    }
+
+
+    /**
+     * yesnonull describes what the PHP value can hold - Y, N or null - which says nothing
+     * about whether the column accepts NULL. The handler treated the two as the same thing,
+     * so a NOT NULL column configured yesnonull reported as nullable regardless of schema.
+     */
+    public function testYesNoNullOnANotNullColumnIsNotNullable(): void
+    {
+        $sut = new YesNoTypeHandler();
+        $column = new ColumnMetadata('is_copy', 'boolean', null, false, false, false, '0');
+
+        $this->assertStringContainsString(
+            'nullable: false',
+            $sut->generateAnnotation($column, ['is_copy' => ['type' => 'yesnonull']])
+        );
+    }
+
+    /** The config-aware path is the one the generator actually calls. */
+    public function testYesNoNullOnANotNullColumnIsNotNullableViaFieldConfig(): void
+    {
+        $sut = new YesNoTypeHandler();
+        $column = new ColumnMetadata('is_copy', 'boolean', null, false, false, false, '0');
+
+        $this->assertStringContainsString(
+            'nullable: false',
+            $sut->generateAnnotationWithConfig(
+                $column,
+                \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig::fromArray(['type' => 'yesnonull'])
+            )
+        );
+    }
+
+    public function testYesNoNullOnANullableColumnStaysNullable(): void
+    {
+        $sut = new YesNoTypeHandler();
+        $column = new ColumnMetadata('is_copy', 'boolean', null, true, false, false, '0');
+
+        $this->assertStringContainsString(
+            'nullable: true',
+            $sut->generateAnnotation($column, ['is_copy' => ['type' => 'yesnonull']])
         );
     }
 

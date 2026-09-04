@@ -71,7 +71,7 @@ abstract class AbstractTranslationKey implements BundleSerializableInterface, Js
      *
      * @var string
      */
-    #[ORM\Column(type: 'string', name: 'translation_key', length: 512, nullable: false)]
+    #[ORM\Column(type: 'string', name: 'translation_key', length: 512, nullable: false, options: ['charset' => 'utf8mb4', 'collation' => 'utf8mb4_bin'])]
     protected $translationKey = '';
 
     /**

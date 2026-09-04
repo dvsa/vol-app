@@ -196,7 +196,7 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
         }
 
         foreach ($table->getColumns() as $column) {
-            $columnMetadata = $this->convertColumn($column);
+            $columnMetadata = $this->convertColumn($column, $table);
             // Set primary key flag
             if (in_array($column->getName(), $primaryKeyColumns)) {
                 $columnMetadata = new ColumnMetadata(
@@ -220,7 +220,7 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
     /**
      * Convert Doctrine Column to our ColumnMetadata
      */
-    private function convertColumn(Column $column): ColumnMetadata
+    private function convertColumn(Column $column, ?Table $table = null): ColumnMetadata
     {
         // unsigned/fixed are first-class DBAL column properties; surface them as
         // options so handlers can emit them for schema fidelity
@@ -230,6 +230,17 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
         }
         if ($column->getFixed()) {
             $options['fixed'] = true;
+        }
+
+        // A column that overrides its table's charset or collation has to say so, or the
+        // mapping renders the table default and the column reads as drifted for a difference
+        // nothing in the attribute expresses. Only the overrides are emitted - carrying them
+        // on every column would put charset and collation on all 7722 of them.
+        $tableOptions = $table?->getOptions() ?? [];
+        foreach (['charset' => $column->getCharset(), 'collation' => $column->getCollation()] as $key => $value) {
+            if ($value !== null && $value !== ($tableOptions[$key] ?? null)) {
+                $options[$key] = $value;
+            }
         }
 
         $type = \Doctrine\DBAL\Types\Type::lookupName($column->getType());

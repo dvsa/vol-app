@@ -67,12 +67,12 @@ class YesNoTypeHandler extends AbstractTypeHandler
 
         $options = [];
 
-        // Add nullable option
-        if ($column->isNullable() || $doctrineType === 'yesnonull') {
-            $options[] = 'nullable: true';
-        } else {
-            $options[] = 'nullable: false';
-        }
+        // Nullability is the column's, not the type's. yesnonull describes what the PHP
+        // value can hold - Y, N or null - which says nothing about whether the column accepts
+        // NULL, and treating the two as the same thing made four NOT NULL columns
+        // (psv_disc.is_copy and reprint_required, txc_inbox.file_read, prohibition.is_trailer)
+        // report as nullable however the schema declared them.
+        $options[] = $column->isNullable() ? 'nullable: true' : 'nullable: false';
 
         // Add default value option
         $columnOptions = [];
@@ -107,9 +107,8 @@ class YesNoTypeHandler extends AbstractTypeHandler
 
         $options = [];
 
-        // Add nullable option
-        $isNullable = $column->isNullable() || $fieldConfig?->type === CustomFieldType::YESNO_NULL;
-        $options[] = $isNullable ? 'nullable: true' : 'nullable: false';
+        // Nullability is the column's, not the type's - see generateAnnotation().
+        $options[] = $column->isNullable() ? 'nullable: true' : 'nullable: false';
 
         // Add default value option
         $columnOptions = [];
