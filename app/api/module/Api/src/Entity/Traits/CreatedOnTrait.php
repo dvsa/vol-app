@@ -6,9 +6,14 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * CreatedOn Trait
+ *
+ * For the 402 tables whose created_on is nullable. The 13 that declare it NOT NULL use
+ * CreatedOnNotNullTrait instead; the entity generator picks between them from the column.
  */
 trait CreatedOnTrait
 {
+    use CreatedOnBehaviourTrait;
+
     /**
      * Created on
      *
@@ -16,45 +21,4 @@ trait CreatedOnTrait
      */
     #[ORM\Column(type: 'datetime', name: 'created_on', nullable: true)]
     protected $createdOn;
-
-    /**
-     * Set the createdOn field on persist
-     *
-     * @return void
-     */
-    #[ORM\PrePersist]
-    public function setCreatedOnBeforePersist()
-    {
-        $this->createdOn = new \DateTime();
-    }
-
-    /**
-     * Set the created on
-     *
-     * @param \DateTime $createdOn new value being set
-     *
-     * @return $this
-     */
-    public function setCreatedOn($createdOn)
-    {
-        $this->createdOn = $createdOn;
-
-        return $this;
-    }
-
-    /**
-     * Get the created on
-     *
-     * @param bool $asDateTime If true will always return a \DateTime (or null) never a string datetime
-     *
-     * @return \DateTime|string
-     */
-    public function getCreatedOn($asDateTime = false)
-    {
-        if ($asDateTime === true) {
-            return $this->asDateTime($this->createdOn);
-        }
-
-        return $this->createdOn;
-    }
 }

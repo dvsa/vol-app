@@ -101,6 +101,7 @@ class EntityGenerator implements EntityGeneratorInterface
             'table' => $table,
             'hasCollections' => $this->hasCollections($fields),
             'hasCreatedOn' => $this->hasField($fields, 'createdOn'),
+            'createdOnNotNull' => $this->isFieldNotNull($fields, 'createdOn'),
             'hasModifiedOn' => $this->hasField($fields, 'lastModifiedOn'),
             'softDeletable' => $this->hasSoftDeletable($table, $config),
             'entityConfig' => $this->entityConfigService->getTableConfig($tableName),
@@ -374,6 +375,7 @@ class EntityGenerator implements EntityGeneratorInterface
             'uniqueConstraints' => $table->getUniqueConstraints(),
             'hasCollections' => $this->hasCollections($fields),
             'hasCreatedOn' => $this->hasField($fields, 'createdOn'),
+            'createdOnNotNull' => $this->isFieldNotNull($fields, 'createdOn'),
             'hasModifiedOn' => $this->hasField($fields, 'lastModifiedOn'),
             'softDeletable' => $this->hasSoftDeletable($table, $config),
             'imports' => $this->gatherImports($fields),
@@ -734,6 +736,23 @@ class EntityGenerator implements EntityGeneratorInterface
     /**
      * Check if a specific field exists
      */
+    /**
+     * Whether a field exists and its column is NOT NULL. Drives the choice between
+     * CreatedOnTrait and CreatedOnNotNullTrait, which differ only in the mapping's nullable
+     * flag - the 13 tables that declare created_on NOT NULL need the mapping to say so, and
+     * the trait is where that mapping lives.
+     */
+    private function isFieldNotNull(array $fields, string $fieldName): bool
+    {
+        foreach ($fields as $field) {
+            if (($field['property']['name'] ?? null) === $fieldName) {
+                return ($field['property']['nullable'] ?? true) === false;
+            }
+        }
+
+        return false;
+    }
+
     private function hasField(array $fields, string $fieldName): bool
     {
         foreach ($fields as $field) {
