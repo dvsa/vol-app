@@ -105,7 +105,7 @@ abstract class AbstractPsvDisc implements BundleSerializableInterface, JsonSeria
      *
      * @var string
      */
-    #[ORM\Column(type: 'yesnonull', name: 'is_copy', nullable: true, options: ['default' => 0])]
+    #[ORM\Column(type: 'yesnonull', name: 'is_copy', nullable: false, options: ['default' => 0])]
     protected $isCopy = 0;
 
     /**
@@ -113,7 +113,7 @@ abstract class AbstractPsvDisc implements BundleSerializableInterface, JsonSeria
      *
      * @var string
      */
-    #[ORM\Column(type: 'yesnonull', name: 'reprint_required', nullable: true, options: ['default' => 0])]
+    #[ORM\Column(type: 'yesnonull', name: 'reprint_required', nullable: false, options: ['default' => 0])]
     protected $reprintRequired = 0;
 
     /**

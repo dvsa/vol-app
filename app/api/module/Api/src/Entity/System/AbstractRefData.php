@@ -71,7 +71,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'string', name: 'olbs_key', length: 20, nullable: true)]
+    #[ORM\Column(type: 'string', name: 'olbs_key', length: 20, nullable: true, options: ['charset' => 'latin1', 'collation' => 'latin1_swedish_ci'])]
     protected $olbsKey;
 
     /**

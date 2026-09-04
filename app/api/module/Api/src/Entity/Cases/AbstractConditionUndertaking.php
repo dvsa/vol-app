@@ -233,7 +233,7 @@ abstract class AbstractConditionUndertaking implements BundleSerializableInterfa
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
+    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true, options: ['charset' => 'latin1', 'collation' => 'latin1_swedish_ci'])]
     protected $olbsType;
 
     /**

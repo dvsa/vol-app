@@ -110,7 +110,7 @@ abstract class AbstractProhibition implements BundleSerializableInterface, JsonS
      *
      * @var string
      */
-    #[ORM\Column(type: 'yesnonull', name: 'is_trailer', nullable: true, options: ['default' => 0])]
+    #[ORM\Column(type: 'yesnonull', name: 'is_trailer', nullable: false, options: ['default' => 0])]
     protected $isTrailer = 0;
 
     /**

@@ -80,7 +80,7 @@ abstract class AbstractLetterTodoVersion implements BundleSerializableInterface,
      *
      * @var string|null
      */
-    #[ORM\Column(type: 'string', name: 'name', length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', name: 'name', length: 255, nullable: true, options: ['charset' => 'utf8mb4', 'collation' => 'utf8mb4_unicode_ci'])]
     protected $name;
 
     /**
