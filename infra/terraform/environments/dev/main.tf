@@ -211,8 +211,11 @@ locals {
       ]
     },
     {
-      effect  = "Allow"
-      actions = ["s3:GetObject"]
+      effect = "Allow"
+      actions = [
+        "s3:ListBucket",
+        "s3:GetObject",
+      ]
       resources = [
         "arn:aws:s3:::vol-idp-dev-output",
         "arn:aws:s3:::vol-idp-dev-output/*"
