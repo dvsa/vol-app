@@ -3,6 +3,7 @@
 namespace Common\Service\Table\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
+use Common\Util\Escape;
 
 /**
  * System info message link formatter
@@ -41,7 +42,7 @@ class SystemInfoMessageLink implements FormatterPluginManagerInterface
             $desc = substr($desc, 0, self::MAX_DESC_LEN) . '...';
         }
 
-        $htmlLink = '<a href="' . $url . '" class="govuk-link js-modal-ajax">' . $desc . '</a>';
+        $htmlLink = '<a href="' . $url . '" class="govuk-link js-modal-ajax">' . Escape::html($desc) . '</a>';
 
         //  define status
         $statusParams = $data['isActive'] ? ['green', 'ACTIVE'] : ['grey', 'INACTIVE'];

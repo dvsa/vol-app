@@ -27,9 +27,9 @@ return [
         [
             'title' => 'Application No',
             'formatter' => function ($data) {
-                $string = $data['id'];
+                $string = \Common\Util\Escape::html($data['id']);
                 if (isset($data['licNo'])) {
-                    $string = $data['licNo'] . ' / ' . $string;
+                    $string = \Common\Util\Escape::html($data['licNo']) . ' / ' . $string;
                 }
 
                 return $string;
@@ -48,10 +48,10 @@ return [
             'formatter' => function ($data, $column) {
                 $string = ' - ';
                 if (isset($data['ooo'])) {
-                    $string = $data['ooo'] . $string;
+                    $string = \Common\Util\Escape::html($data['ooo']) . $string;
                 }
                 if (isset($data['oor'])) {
-                    $string .= $data['oor'];
+                    $string .= \Common\Util\Escape::html($data['oor']);
                 }
                 return $string;
             }

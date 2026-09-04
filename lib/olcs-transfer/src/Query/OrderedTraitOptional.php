@@ -95,7 +95,10 @@ trait OrderedTraitOptional
             return true;
         }
 
-        if (!in_array($this->sort, $this->sortWhitelist)) {
+        // Strict, so a whitelist entry cannot be matched by type juggling rather than by
+        // being the value it says it is. See OrderedTrait for the comma-separated $sort
+        // caveat that applies equally here.
+        if (!in_array($this->sort, $this->sortWhitelist, true)) {
             return false;
         }
 

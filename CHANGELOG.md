@@ -1,5 +1,85 @@
 # Changelog
 
+## [9.2.1](https://github.com/dvsa/vol-app/compare/v9.2.0...v9.2.1) (2026-09-02)
+
+
+### Bug Fixes
+
+* bound and proxy the EventBridge client so a failed emit cannot hang submission ([#1752](https://github.com/dvsa/vol-app/issues/1752)) ([4845106](https://github.com/dvsa/vol-app/commit/4845106e30d157f821949fc5a79ff0f02c1d2e4d))
+
+## [9.2.0](https://github.com/dvsa/vol-app/compare/v9.1.0...v9.2.0) (2026-09-01)
+
+
+### Features
+
+* 7490 update sas mi extract ([#1717](https://github.com/dvsa/vol-app/issues/1717)) ([f84db10](https://github.com/dvsa/vol-app/commit/f84db10c73de2c12fd2ff22135edcb290efef6e5))
+* 7499 put events permissions ([#1722](https://github.com/dvsa/vol-app/issues/1722)) ([9eca4ff](https://github.com/dvsa/vol-app/commit/9eca4ff03389309cb27ae1f2b25530fc6035fa41))
+* add analyse financial document state machine ([#1731](https://github.com/dvsa/vol-app/issues/1731)) ([3422fc7](https://github.com/dvsa/vol-app/commit/3422fc70160cd780d1667990b85570aa307f7145))
+* add binary & enum support for entity generator ([#1744](https://github.com/dvsa/vol-app/issues/1744)) ([fcaf3a2](https://github.com/dvsa/vol-app/commit/fcaf3a25d32ca2c94e6f26f5c848505fa6ff7863))
+* add caseworker first name and phone VOL grabs ([#1735](https://github.com/dvsa/vol-app/issues/1735)) ([679e0fd](https://github.com/dvsa/vol-app/commit/679e0fdb2e411623b5d6322d70aae5b0a6d64404))
+* add reg environment to the clear cache workflow ([#1739](https://github.com/dvsa/vol-app/issues/1739)) ([4f65e8e](https://github.com/dvsa/vol-app/commit/4f65e8e570da54746cdb6600a47c8f870526907e))
+* **api:** cache the Cognito JWKS - VOL-7508 ([#1737](https://github.com/dvsa/vol-app/issues/1737)) ([dc1ea8c](https://github.com/dvsa/vol-app/commit/dc1ea8ca7ae34b5dc9e7d2c0ffa74b7f9a4e6113))
+* cpms hybrid gateway vol 7496 ([#1714](https://github.com/dvsa/vol-app/issues/1714)) ([d33c7ef](https://github.com/dvsa/vol-app/commit/d33c7ef13d29c2e49e235c2e1f21e9de8f782a5c))
+* emit financial evidence analysis events on application submit, with sweeper backstop VOL-7438 ([#1680](https://github.com/dvsa/vol-app/issues/1680)) ([edf8505](https://github.com/dvsa/vol-app/commit/edf850544303155b33f44644692d3bac8b0f2890))
+* letter builder ux improvements ([#1708](https://github.com/dvsa/vol-app/issues/1708)) ([e242f5e](https://github.com/dvsa/vol-app/commit/e242f5ef5e823c4846ffa59b416e52f631b79399))
+* olcs-transfer, olcs-logging, olcs-utils PHP 8.5 support - added transient vol-logging-mvc ([#1730](https://github.com/dvsa/vol-app/issues/1730)) ([da5d29b](https://github.com/dvsa/vol-app/commit/da5d29b01f98240265b52bc391794c5f8f1952cd))
+* test surefire bump in dvsa github actions ([#1725](https://github.com/dvsa/vol-app/issues/1725)) ([d672767](https://github.com/dvsa/vol-app/commit/d672767164eb91af098397dcf94af5f9e6d423bf))
+* trigger CD (tests did not run in last merge) ([#1724](https://github.com/dvsa/vol-app/issues/1724)) ([bd77f0d](https://github.com/dvsa/vol-app/commit/bd77f0da52b184fa7939840d3a38a454b4b3928c))
+* use main ([#1732](https://github.com/dvsa/vol-app/issues/1732)) ([74f9217](https://github.com/dvsa/vol-app/commit/74f92173ddf3c35cc0b986e0a2c833f60c91056a))
+
+
+### Bug Fixes
+
+* add missing iam role for parent state machine to listen to child state machines ([#1741](https://github.com/dvsa/vol-app/issues/1741)) ([dbaf7b5](https://github.com/dvsa/vol-app/commit/dbaf7b57ca4c4e7fcf5790bea89bdd84ca6f3102))
+* add secret param for otp generation ([#1715](https://github.com/dvsa/vol-app/issues/1715)) ([def8252](https://github.com/dvsa/vol-app/commit/def825275ec54bab7264bbf35260bb98ffe18097))
+* build, test and deploy on changes under lib/ ([#1719](https://github.com/dvsa/vol-app/issues/1719)) ([07260b3](https://github.com/dvsa/vol-app/commit/07260b3a37fac389e64bd54fe67ee9159bb6985d))
+* letters editor save and modal styling ([#1734](https://github.com/dvsa/vol-app/issues/1734)) ([431bb98](https://github.com/dvsa/vol-app/commit/431bb98e23a0f2e4c2235537750a61f93de8d512))
+* main ci failures cleared ([#1720](https://github.com/dvsa/vol-app/issues/1720)) ([2556046](https://github.com/dvsa/vol-app/commit/2556046c3c498e3484122a7082b998a559d5c172))
+* onelogin callback replay guard ([#1743](https://github.com/dvsa/vol-app/issues/1743)) ([5d02d95](https://github.com/dvsa/vol-app/commit/5d02d958e922b67536e031f9c7e8cd5014e7c0a3))
+* remove debugging from prod ([#1713](https://github.com/dvsa/vol-app/issues/1713)) ([a9c6a84](https://github.com/dvsa/vol-app/commit/a9c6a847947e2cb1388cea0579ef97e9d1e8898f))
+* return annotations to Si.php ([#1718](https://github.com/dvsa/vol-app/issues/1718)) ([a851b20](https://github.com/dvsa/vol-app/commit/a851b20699f131c9dfa5ceb4b062fd6b0fe1b854))
+* stop the editor flush marking saved content as unsaved ([#1736](https://github.com/dvsa/vol-app/issues/1736)) ([807bfab](https://github.com/dvsa/vol-app/commit/807bfabadf1d9593cc4de6bd7a520385b4aa85fe))
+* trigger CD ([#1726](https://github.com/dvsa/vol-app/issues/1726)) ([37a33ad](https://github.com/dvsa/vol-app/commit/37a33ad70279232ddb4eb75d5a40ff942214586e))
+* upgrade docusaurus, fix security advisories on VOL documentation website, add to CI jobs ([#1723](https://github.com/dvsa/vol-app/issues/1723)) ([246a520](https://github.com/dvsa/vol-app/commit/246a520d5dbb0b168ac742d9f6cf6a90ba785666))
+* vol 5981 view unrelated penalty from other cases bug ([#1553](https://github.com/dvsa/vol-app/issues/1553)) ([a15dd8f](https://github.com/dvsa/vol-app/commit/a15dd8f781bab01eb228c7266d4b725314786c35))
+* vol 5983 fee from unrelated recorded bug ([#1523](https://github.com/dvsa/vol-app/issues/1523)) ([f6560e1](https://github.com/dvsa/vol-app/commit/f6560e1856f78a7eb87ce70804cfe630a2566e0d))
+
+## [9.1.0](https://github.com/dvsa/vol-app/compare/v9.0.0...v9.1.0) (2026-08-10)
+
+
+### Features
+
+* 7078 update prod tasks ([#1702](https://github.com/dvsa/vol-app/issues/1702)) ([af767ff](https://github.com/dvsa/vol-app/commit/af767ffe5c66b3ed2c2966d5e60d236663f9e34e))
+* add Deploy Env From Branch workflow ([#1704](https://github.com/dvsa/vol-app/issues/1704)) ([9492e39](https://github.com/dvsa/vol-app/commit/9492e392f84f1608474d1bb74e043cbfafed012b))
+* add idp extraction state machine within vol app ([#1668](https://github.com/dvsa/vol-app/issues/1668)) ([9bc5c0a](https://github.com/dvsa/vol-app/commit/9bc5c0aa264305b287ae51e038ffbf07b6848577))
+* **api:** validate doctrine entities with phpstan-doctrine, fix entity generator docblocks VOL-6959 ([#1662](https://github.com/dvsa/vol-app/issues/1662)) ([1cad729](https://github.com/dvsa/vol-app/commit/1cad7296f90180b0909772f2fef4c50dcdf2526c))
+* enable gotenberg prod ([#1683](https://github.com/dvsa/vol-app/issues/1683)) ([6cd002b](https://github.com/dvsa/vol-app/commit/6cd002b3d51a0b877e7a7de92f85aba34f2acdc9))
+* integration test bootstrap VOL-7480 ([#1681](https://github.com/dvsa/vol-app/issues/1681)) ([052eee2](https://github.com/dvsa/vol-app/commit/052eee27df9bd4b341abee4d3f5d919d4a58db21))
+* letter type builder ([#1700](https://github.com/dvsa/vol-app/issues/1700)) ([d3e4a34](https://github.com/dvsa/vol-app/commit/d3e4a34d1bfb4b2ac64238af67d68dfff3179f58))
+* replace doctrine-orm-module with roave/psr-container-doctrine VOL-7036 ([#1673](https://github.com/dvsa/vol-app/issues/1673)) ([dfcba35](https://github.com/dvsa/vol-app/commit/dfcba354ebb139f99300721bf3c106e5fde09b2f))
+* retrieve file via email link with optional OTP gate ([#1684](https://github.com/dvsa/vol-app/issues/1684)) ([b176a58](https://github.com/dvsa/vol-app/commit/b176a58b260cc6ef7620e773772b87463f57083f))
+* security hardening - enhanced escaping of tables and in CSV creation. Log sanitisation, redirects, headers, downloads VOL-6509 ([#1706](https://github.com/dvsa/vol-app/issues/1706)) ([356bbc9](https://github.com/dvsa/vol-app/commit/356bbc98babf732d1455f743208a4869170d1822))
+* swap lamians cache for symfony cache (PSR-6) VOL-6110 ([#1651](https://github.com/dvsa/vol-app/issues/1651)) ([dc61599](https://github.com/dvsa/vol-app/commit/dc61599f43deb44a8ad26855d59efc53c3366b5a))
+* update govuk-frontend to v6.4.0 ([#1701](https://github.com/dvsa/vol-app/issues/1701)) ([83495d8](https://github.com/dvsa/vol-app/commit/83495d8f203d32f763e3a063187e5d4f5eafdcf2))
+* vol-7070 Convert Retrieval entities to Doctrine attributes ([#1697](https://github.com/dvsa/vol-app/issues/1697)) ([02d3865](https://github.com/dvsa/vol-app/commit/02d38657b48e1f0c258609fed2411ed4502582ec))
+
+
+### Bug Fixes
+
+* 7078 anon updates image ([#1682](https://github.com/dvsa/vol-app/issues/1682)) ([5d806d4](https://github.com/dvsa/vol-app/commit/5d806d48fbe78d3b1c0274a5f37251c009e4ec49))
+* add correct password ([#1687](https://github.com/dvsa/vol-app/issues/1687)) ([b615a04](https://github.com/dvsa/vol-app/commit/b615a0404f8aba418e0e758b64887c92f45af630))
+* added ni job permissions for production environments as well as correcting account number to prod for RDS instances ([#1610](https://github.com/dvsa/vol-app/issues/1610)) ([f3a3642](https://github.com/dvsa/vol-app/commit/f3a3642fae07cc8738ce92ecdd9a68f12909b381))
+* another param ([#1689](https://github.com/dvsa/vol-app/issues/1689)) ([8cf8bd2](https://github.com/dvsa/vol-app/commit/8cf8bd2a0a7ca0890b042b02b71de25fa0d22f80))
+* **api:** apply revised general conditions wording to GB standard licence docs VOL-6958 ([#1677](https://github.com/dvsa/vol-app/issues/1677)) ([985083e](https://github.com/dvsa/vol-app/commit/985083e89f846ccff224942bf4feaea151a0af7b))
+* **api:** omit fatal error detail from the 500 response body VOL-2515 ([#1685](https://github.com/dvsa/vol-app/issues/1685)) ([1fe6277](https://github.com/dvsa/vol-app/commit/1fe627743ee82cf22a26dd270bb361caa112e774))
+* **api:** process remaining NTU applications when one fails and report each failure reason ([#1674](https://github.com/dvsa/vol-app/issues/1674)) ([7e3cd28](https://github.com/dvsa/vol-app/commit/7e3cd283cf963e84617f2ebc337af4fb33d7f77a))
+* bda project description to not fail regex check ([#1675](https://github.com/dvsa/vol-app/issues/1675)) ([b53260b](https://github.com/dvsa/vol-app/commit/b53260bba50b58f1481502afd4c772b7c43dcac0))
+* correct command in int, pp and prod for ni-compliance job ([#1678](https://github.com/dvsa/vol-app/issues/1678)) ([88fd67a](https://github.com/dvsa/vol-app/commit/88fd67a015ec232c3a2fef38780d917cf7fad2fc))
+* parameter dependencies and paths ([#1672](https://github.com/dvsa/vol-app/issues/1672)) ([3a74467](https://github.com/dvsa/vol-app/commit/3a744670f9b0ba12a281fe84640b82bda6088e98))
+* s3 changes ([#1691](https://github.com/dvsa/vol-app/issues/1691)) ([73d4773](https://github.com/dvsa/vol-app/commit/73d477365c5324764aa51a9071e551e1e8f93e05))
+* **selfserve:** stop a failed conversation submit recursing until the worker dies VOL-7492 ([#1695](https://github.com/dvsa/vol-app/issues/1695)) ([229e10a](https://github.com/dvsa/vol-app/commit/229e10a3e7f4ae4221067c183fbae9d5d11c2fa0))
+* update proxy setup ([#1670](https://github.com/dvsa/vol-app/issues/1670)) ([937269e](https://github.com/dvsa/vol-app/commit/937269e5b251abce9eb14f332df72c168a1bcee2))
+
 ## [9.0.0](https://github.com/dvsa/vol-app/compare/v8.1.3...v9.0.0) (2026-07-21)
 
 

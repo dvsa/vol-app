@@ -10,6 +10,7 @@ namespace Common\Service\Section\VehicleSafety\Vehicle\Formatter;
 
 use Common\Service\Helper\UrlHelperService;
 use Common\Service\Table\Formatter\FormatterPluginManagerInterface;
+use Common\Util\Escape;
 
 /**
  * Vrm
@@ -42,6 +43,9 @@ class Vrm implements FormatterPluginManagerInterface
             $action = $column['action-type'] . '-' . $action;
         }
 
+        // The anchor is developer-authored markup, so it is returned raw; the row value interpolated
+        // into it is user-supplied and must be escaped. The href comes from the route builder rather
+        // than from the row, so it is left as the builder produced it.
         return '<a class="govuk-link" href="' . $this->urlHelper->fromRoute(
             null,
             [
@@ -50,6 +54,6 @@ class Vrm implements FormatterPluginManagerInterface
             ],
             [],
             true
-        ) . '">' . $data['vrm'] . '</a>';
+        ) . '">' . Escape::html($data['vrm']) . '</a>';
     }
 }

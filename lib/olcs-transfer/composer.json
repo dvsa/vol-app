@@ -4,7 +4,7 @@
   "license": "MIT",
   "version": "8.16.0",
   "require": {
-    "php": "~8.4.0",
+    "php": "~8.4.0 || ~8.5.0",
     "ext-igbinary": "*",
     "ext-sodium": "*",
     "laminas/laminas-stdlib": "^3.20",
@@ -14,8 +14,9 @@
     "laminas/laminas-inputfilter": "^2.33",
     "laminas/laminas-form": "^3.21",
     "paragonie/halite": "^5",
-    "psr/cache": "^1.0 || ^2.0 || ^3.0",
-    "symfony/cache": "^5.4 || ^6.4",
+    "doctrine/annotations": "^2.0",
+    "psr/cache": "^3.0",
+    "symfony/cache": "^8.1",
     "laminas/laminas-xml": "^1.7.0",
     "laminas/laminas-router": "^3.14",
     "laminas/laminas-http": "^2.15",
@@ -25,7 +26,6 @@
     "phpunit/phpunit": "^13.0",
     "mockery/mockery": "^1.6",
     "bamarni/composer-bin-plugin": "^1.8.2",
-    "doctrine/annotations": "^1.14.2",
     "phpstan/phpstan-mockery": "^2.0",
     "rector/rector": "^2.3"
   },
@@ -44,7 +44,7 @@
     "test": "phpunit",
     "phpcs": "phpcs",
     "psalm": "psalm",
-    "phpstan": "phpstan",
+    "phpstan": "phpstan --memory-limit=1G",
     "all": [
       "@test",
       "@phpcs",

@@ -40,6 +40,22 @@ locals {
     {
       effect = "Allow"
       actions = [
+        "events:PutEvents"
+      ]
+      resources = [
+        "arn:aws:events:eu-west-1:054614622558:event-bus/default"
+      ]
+      conditions = [
+        {
+          test     = "StringEquals"
+          variable = "events:source"
+          values   = ["vol.api"]
+        }
+      ]
+    },
+    {
+      effect = "Allow"
+      actions = [
         "sts:AssumeRole"
       ]
       resources = [
@@ -603,6 +619,12 @@ module "service" {
         commands = ["batch:system-parameter"],
       },
       {
+        name     = "idp-sweep-stale-document-analysis",
+        commands = ["idp:sweep-stale-document-analysis"],
+        timeout  = 300,
+        schedule = ["cron(15 * * * ? *)"],
+      },
+      {
         name     = "cancel-unsubmitted-bilateral",
         commands = ["permits:cancel-unsubmitted-bilateral"],
       },
@@ -736,7 +758,7 @@ module "service" {
         type     = "scripts"
         cpu      = 2,
         memory   = 8192,
-      },
+      }
     ]
   }
 }

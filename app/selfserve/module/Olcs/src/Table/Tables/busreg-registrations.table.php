@@ -53,7 +53,7 @@ return [
                  * @var TableBuilder $this
                  * @psalm-scope-this TableBuilder
                  */
-                str_replace('(', ' (', $row['serviceNo'])
+                \Common\Util\Escape::html(str_replace('(', ' (', $row['serviceNo']))
         ],
         [
             'title' => '1st-registered-cancelled',

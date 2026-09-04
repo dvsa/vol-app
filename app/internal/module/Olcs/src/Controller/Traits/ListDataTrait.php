@@ -12,13 +12,17 @@ trait ListDataTrait
     /**
      * Get a list of doc templates
      *
-     * @param int         $categoryId    Category to filter by
-     * @param int         $subCategoryId Sub category to filter by
-     * @param ?string $firstOption   First Option
+     * @param int         $categoryId     Category to filter by
+     * @param int         $subCategoryId  Sub category to filter by
+     * @param ?string     $firstOption    First Option
+     * @param int|null    $keepTemplateId A template id that must stay selectable even if the
+     *                                    letter-type consolidation would collapse it away --
+     *                                    the template a document being re-generated was
+     *                                    stored with
      *
      * @return array
      */
-    public function getListDataDocTemplates($categoryId = null, $subCategoryId = null, $firstOption = null)
+    public function getListDataDocTemplates($categoryId = null, $subCategoryId = null, $firstOption = null, $keepTemplateId = null)
     {
         $isFeatureEnabled = $this->isLettersDatabaseDrivenEnabled();
 
@@ -46,14 +50,52 @@ trait ListDataTrait
             $options[''] = $firstOption;
         }
 
+        $results = $response->getResult()['results'];
+
+        // A document being re-generated has already had its original deleted by the time the
+        // form re-validates, so its stored template id must remain a selectable option; if
+        // that id is a sibling the consolidation below would drop, its row stands as the
+        // letter type's representative instead of the first row in description order.
+        $keepTemplateId = (int) $keepTemplateId;
+        $keepRowLetterType = null;
+        if ($keepTemplateId !== 0) {
+            foreach ($results as $item) {
+                if ((int) $item['id'] === $keepTemplateId) {
+                    $keepRowLetterType = $item['letterType']['id'] ?? null;
+                    break;
+                }
+            }
+        }
+
         // Build options array with [New] prefix for new templates
-        foreach ($response->getResult()['results'] as $item) {
+        $seenLetterTypes = [];
+        foreach ($results as $item) {
             $key = $item['id'];
             $value = $item['description'];
 
             // Add [New] prefix for templates with letterType when feature is enabled
             if ($isFeatureEnabled && !empty($item['letterType'])) {
-                $value = '[New] ' . $value;
+                $letterTypeId = $item['letterType']['id'] ?? null;
+
+                // Several legacy templates can point at one letter type -- consolidation is
+                // the point of the letters engine, whose choices adapt a single type at
+                // generation time. Listing every linked template offers the same journey
+                // multiple times over, so one entry stands for the type, labelled with the
+                // type's own name: the RTF-era description would name only one of the
+                // variants the type has absorbed.
+                if ($letterTypeId !== null) {
+                    if ($keepRowLetterType !== null && $letterTypeId === $keepRowLetterType) {
+                        if ((int) $key !== $keepTemplateId) {
+                            continue;
+                        }
+                    } elseif (isset($seenLetterTypes[$letterTypeId])) {
+                        continue;
+                    } else {
+                        $seenLetterTypes[$letterTypeId] = true;
+                    }
+                }
+
+                $value = '[New] ' . ($item['letterType']['name'] ?? $value);
             }
 
             $options[$key] = $value;

@@ -11,6 +11,13 @@
     },
     {
       "type": "path",
+      "url": "../../lib/vol-logging-mvc",
+      "options": {
+        "symlink": true
+      }
+    },
+    {
+      "type": "path",
       "url": "../../lib/olcs-utils",
       "options": {
         "symlink": true
@@ -41,12 +48,11 @@
   "require": {
     "php": "~8.4.0",
     "ext-redis": "*",
-    "doctrine/doctrine-module": "^6.3",
     "dvsa/laminas-config-cloud-parameters": "^2.1",
     "laminas/laminas-authentication": "^2.19",
     "laminas/laminas-eventmanager": "^3.15",
     "laminas/laminas-filter": "^2.42",
-    "laminas/laminas-form": "3.23",
+    "laminas/laminas-form": "^3.24",
     "laminas/laminas-http": "^2.23",
     "laminas/laminas-i18n": "^2.32",
     "laminas/laminas-inputfilter": "^2.35",
@@ -62,13 +68,14 @@
     "olcs/olcs-auth": "*",
     "olcs/olcs-common": "*",
     "olcs/olcs-logging": "*",
+    "olcs/vol-logging-mvc": "*",
     "olcs/olcs-transfer": "*",
     "olcs/olcs-utils": "*",
     "psr/container": "^1.1|^2",
     "aws/aws-sdk-php": "^3.385",
-    "symfony/filesystem": "^7.0",
-    "psr/cache": "^1.0 || ^2.0 || ^3.0",
-    "symfony/cache": "^5.4 || ^6.4"
+    "symfony/filesystem": "^8.1",
+    "psr/cache": "^3.0",
+    "symfony/cache": "^8.1"
   },
   "require-dev": {
     "laminas/laminas-developer-tools": "*",
@@ -94,7 +101,8 @@
   "autoload-dev": {
     "psr-4": {
       "OlcsTest\\": "test/Olcs/src",
-      "PermitsTest\\": "test/Permits/src"
+      "PermitsTest\\": "test/Permits/src",
+      "CommonTest\\": "vendor/olcs/olcs-common/test/Common/src/"
     }
   },
   "minimum-stability": "dev",

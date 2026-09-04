@@ -8,6 +8,8 @@
 
 namespace Common\Service\Table\Formatter;
 
+use Common\Util\Escape;
+
 /**
  * Printer Exception formatter
  *
@@ -33,6 +35,6 @@ class PrinterException implements FormatterPluginManagerInterface
                 $data['user']['contactDetails']['person']['familyName'] : $data['user']['loginId'];
         }
 
-        return $exception;
+        return Escape::html($exception);
     }
 }

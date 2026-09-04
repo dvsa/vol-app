@@ -6,6 +6,7 @@ namespace Dvsa\OlcsTest\Auth\Adapter;
 
 use Dvsa\Olcs\Api\Domain\CommandHandler\Auth\LoginFactory;
 use Dvsa\Olcs\Auth\Adapter\ValidatableAdapterFactory;
+use Dvsa\OlcsTest\Auth\Adapter\Stub\ValidatableAdapterStub;
 use InvalidArgumentException;
 use Laminas\Authentication\Adapter\ValidatableAdapterInterface;
 use Laminas\ServiceManager\ServiceManager;
@@ -102,13 +103,13 @@ final class ValidatableAdapterFactoryTest extends MockeryTestCase
     {
         // Setup
         $this->setUpSut();
-        $this->configureAdapter(ValidatableAdapterInterface::class);
+        $this->configureAdapter(ValidatableAdapterStub::class);
 
         // Execute
         $result = $this->sut->__invoke($this->serviceManager(), null);
 
         // Assert
-        $this->assertInstanceOf(ValidatableAdapterInterface::class, $result);
+        $this->assertInstanceOf(ValidatableAdapterStub::class, $result);
     }
 
     #[\PHPUnit\Framework\Attributes\Depends('invokeIsCallable')]
@@ -239,6 +240,6 @@ final class ValidatableAdapterFactoryTest extends MockeryTestCase
      */
     protected function getValidatableAdapterMock(): ValidatableAdapterInterface
     {
-        return $this->createMock(ValidatableAdapterInterface::class);
+        return $this->createStub(ValidatableAdapterInterface::class);
     }
 }

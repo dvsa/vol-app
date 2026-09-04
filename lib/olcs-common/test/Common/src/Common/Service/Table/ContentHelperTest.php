@@ -88,6 +88,23 @@ final class ContentHelperTest extends TestCase
         yield [['name' => 'bob', 'id' => 123, 'type' => 'test'], 'name="bob" id="123" type="test"'];
         yield [['name' => null, 'id' => 123, 'type' => 'test'], 'name="" id="123" type="test"'];
         yield [[], ''];
+
+        // A value carrying a quote must not be able to close the attribute and start a new one.
+        yield 'attribute breakout' => [
+            ['class' => 'x" onmouseover="alert(1)'],
+            'class="x&quot; onmouseover=&quot;alert(1)"',
+        ];
+
+        // Spaces and slashes are left alone — these are quoted attributes, so only the quote
+        // character is load-bearing, and class lists / URL paths stay readable.
+        yield 'class list is not mangled' => [
+            ['class' => 'govuk-table__cell govuk-table__cell--numeric'],
+            'class="govuk-table__cell govuk-table__cell--numeric"',
+        ];
+        yield 'url path is not mangled' => [
+            ['href' => '/file/123'],
+            'href="/file/123"',
+        ];
     }
 
     /**

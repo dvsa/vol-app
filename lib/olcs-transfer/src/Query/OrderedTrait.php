@@ -93,7 +93,15 @@ trait OrderedTrait
             return true;
         }
 
-        if (!in_array($this->sort, $this->sortWhitelist)) {
+        // Strict, so a whitelist entry cannot be matched by type juggling rather than by
+        // being the value it says it is.
+        //
+        // Note for whoever populates the first whitelist: $sort may be a comma-separated
+        // list of fields, because Validators\Sort permits commas, and this compares the
+        // whole joined string against the whitelist. A multi-field sort will therefore fail
+        // even when every individual field is listed. Split on commas and check each field
+        // before relying on this.
+        if (!in_array($this->sort, $this->sortWhitelist, true)) {
             return false;
         }
 
