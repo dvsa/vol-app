@@ -2521,8 +2521,5 @@ return array(
         ),
     ),
     'messaging_subject' => array(
-        'is_active' => array(
-            'type' => 'smallint'
-        ),
     ),
 );
