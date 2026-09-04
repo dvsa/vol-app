@@ -1,5 +1,13 @@
 # Changelog
 
+## [9.2.3](https://github.com/dvsa/vol-app/compare/v9.2.2...v9.2.3) (2026-09-04)
+
+
+### Bug Fixes
+
+* update sas extract script ([#1761](https://github.com/dvsa/vol-app/issues/1761)) ([933bf9b](https://github.com/dvsa/vol-app/commit/933bf9bbb1974b57454c89faab218bd6b88ae895))
+* vol 6118 open cases filtering bug ([#1705](https://github.com/dvsa/vol-app/issues/1705)) ([632c2e8](https://github.com/dvsa/vol-app/commit/632c2e84bb2624222eb18532cc3d742f2b66a437))
+
 ## [9.2.2](https://github.com/dvsa/vol-app/compare/v9.2.1...v9.2.2) (2026-09-04)
 
 
