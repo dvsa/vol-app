@@ -7,7 +7,7 @@
 # set -o pipefail: catch errors in pipes
 set -euo pipefail
 
-VALID_ENVIRONMENTS=("DEV" "INT" "PP" "PREP""PROD")
+VALID_ENVIRONMENTS=("DEV" "INT" "PP" "PREP" "PROD")
 DUMP_DIR="/mnt/data/olcsdump"
 DB_NAME="OLCS_RDS_OLCSDB"
 DB_USER="olcsbatch"
