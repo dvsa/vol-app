@@ -90,6 +90,7 @@ data "aws_iam_policy_document" "classification_sm" {
       "s3:GetObject",
       "s3:GetObjectTagging",
       "s3:PutObjectTagging",
+      "s3:ListBucket",
     ]
     resources = [
       data.aws_s3_bucket.documents.arn,
@@ -337,6 +338,12 @@ data "aws_iam_policy_document" "ai_analysis_sm" {
     resources = ["${aws_s3_bucket.idp_output.arn}/*/analysis/*"]
   }
 
+  statement {
+    sid       = "S3ListOutputBucket"
+    actions   = ["s3:ListBucket"]
+    resources = [aws_s3_bucket.idp_output.arn]
+  }
+
   # Bedrock Converse API to invoke the managed prompt.
   # Scoped to * to cover cross-region inference profile fan-out.
   statement {
@@ -345,6 +352,18 @@ data "aws_iam_policy_document" "ai_analysis_sm" {
       "bedrock:InvokeModel",
       "bedrock:GetPrompt",
       "bedrock:RenderPrompt",
+    ]
+    resources = ["*"]
+  }
+
+  # Bedrock automatically initiates an AWS Marketplace subscription the first time a
+  # third-party model is used (Anthropic Claude Opus 4.7 in our case); without these permissions
+  # the subscription fails and subsequent invocations return AccessDeniedException.
+  statement {
+    sid = "BedrockMarketplaceSubscription"
+    actions = [
+      "aws-marketplace:Subscribe",
+      "aws-marketplace:ViewSubscriptions",
     ]
     resources = ["*"]
   }
@@ -435,7 +454,7 @@ data "aws_iam_policy_document" "analyse_financial_document_sm" {
   # Read S3 object tags to check for pre-existing Classification tag.
   statement {
     sid     = "S3ReadDocumentTags"
-    actions = ["s3:GetObjectTagging"]
+    actions = ["s3:GetObjectTagging", "s3:ListBucket"]
     resources = [
       "arn:aws:s3:::${var.documents_bucket_name}",
       "arn:aws:s3:::${var.documents_bucket_name}/*",
