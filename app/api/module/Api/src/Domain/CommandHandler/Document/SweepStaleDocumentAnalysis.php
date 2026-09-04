@@ -54,7 +54,7 @@ final class SweepStaleDocumentAnalysis extends AbstractCommandHandler implements
                     'analysis_token' => $analysis->getTokenString(),
                     'application_id' => $analysis->getApplication()?->getId(),
                     'document_id' => $analysis->getDocument()?->getId(),
-                    'created_on' => $analysis->getCreatedOn()?->format('c'),
+                    'created_on' => $analysis->getCreatedOn(true)?->format('c'),
                     'threshold_minutes' => $thresholdMinutes,
                 ]
             );
