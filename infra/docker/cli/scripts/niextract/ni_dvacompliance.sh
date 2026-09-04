@@ -33,6 +33,7 @@ script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ###############################################
 
 mode=""
+cleanup_done=false
 while getopts ":hd" opt; do
   case ${opt} in
     d ) echo "Debug mode enabled"; mode="debug" ;;
@@ -57,26 +58,41 @@ loge() { echo "$(date '+%Y-%m-%d %H:%M:%S') ERROR: $*" >&2; }
 # CLEANUP
 ###############################################
 cleanup() {
+  if [[ "$cleanup_done" == true ]]; then
+    return 0
+  fi
+  cleanup_done=true
+
   if [[ "$mode" != "debug" ]]; then
     log "Cleaning up Aurora resources"
 
+    cleanup_rc=0
+    set +e
     aws rds delete-db-instance \
       --db-instance-identifier "$tmp_instance_id" \
-      --skip-final-snapshot --region "$region" >/dev/null 2>&1 || true
+      --skip-final-snapshot --region "$region" || cleanup_rc=1
+
     aws rds wait db-instance-deleted \
-      --db-instance-identifier "$tmp_instance_id" --region "$region" >/dev/null 2>&1 || true
+      --db-instance-identifier "$tmp_instance_id" --region "$region" || cleanup_rc=1
 
     aws rds delete-db-cluster \
       --db-cluster-identifier "$tmp_cluster_id" \
-      --skip-final-snapshot --region "$region" >/dev/null 2>&1 || true
+      --skip-final-snapshot --delete-automated-backups --region "$region" || cleanup_rc=1
+
     aws rds wait db-cluster-deleted \
-      --db-cluster-identifier "$tmp_cluster_id" --region "$region" >/dev/null 2>&1 || true
+      --db-cluster-identifier "$tmp_cluster_id" --region "$region" || cleanup_rc=1
 
     aws rds delete-db-cluster-snapshot \
-      --db-cluster-snapshot-identifier "$snapshot_id" --region "$region" >/dev/null 2>&1 || true
+      --db-cluster-snapshot-identifier "$snapshot_id" --region "$region" || cleanup_rc=1
+    set -e
+
+    if [[ "$cleanup_rc" -ne 0 ]]; then
+      loge "One or more Aurora cleanup steps failed"
+      return 1
+    fi
   fi
 }
-trap cleanup EXIT
+trap cleanup EXIT INT TERM
 
 ###############################################
 # 1. SNAPSHOT SOURCE CLUSTER
@@ -230,3 +246,4 @@ if ! aws s3 cp "$output_file" s3://$dva_report_bucket/dvacompliance/; then
 fi
 
 log "Upload successful"
+cleanup
