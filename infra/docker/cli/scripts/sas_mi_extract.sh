@@ -7,7 +7,7 @@
 # set -o pipefail: catch errors in pipes
 set -euo pipefail
 
-VALID_ENVIRONMENTS=("DEV" "INT" "PREP" "PROD")
+VALID_ENVIRONMENTS=("DEV" "INT" "PP" "PROD")
 DUMP_DIR="/mnt/data/olcsdump"
 DB_NAME="OLCS_RDS_OLCSDB"
 DB_USER="olcsbatch"
@@ -60,7 +60,7 @@ case "${ENVIRONMENT}" in
     REPORTS_BUCKET="devapp-olcs-pri-integration-reporting-s3"
     INTEGRATION_BUCKET="devapp-mc-pri-integration-data-s3"
     ;;
-  "PREP")
+  "PP"|"PREP")
     REPORTS_BUCKET="apppp-olcs-pri-integration-reporting-s3"
     INTEGRATION_BUCKET="apppp-mc-pri-integration-data-s3"
     ;;
@@ -111,9 +111,7 @@ if [[ -z "$TABLES" ]]; then
     exit 1
 fi
 
-# Dump selected tables.
-# --set-gtid-purged=OFF is required for Aurora MySQL to avoid GTID errors.
-# --single-transaction ensures a consistent snapshot without locking tables.
+# Dump selected tables with a consistent snapshot without locking tables.
 log "Dumping database tables to ${DUMP_DIR}/${DUMP_FILE}..."
 MYSQL_PWD="${BATCH_DB_PASSWORD}" "${mysqldump_bin}" \
     --no-defaults \
@@ -123,7 +121,6 @@ MYSQL_PWD="${BATCH_DB_PASSWORD}" "${mysqldump_bin}" \
     --no-create-db \
     --no-tablespaces \
     --single-transaction \
-    --set-gtid-purged=OFF \
     "${DB_NAME}" ${TABLES} > "${DUMP_DIR}/${DUMP_FILE}"
 
 log "Generating checksum manifest..."
