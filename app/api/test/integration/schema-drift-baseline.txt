@@ -6,7 +6,7 @@
 #
 # Grouping is presentational. Every statement below is compared; nothing is hidden.
 
-# ---- actionable (24) ----
+# ---- actionable (23) ----
 # A real disagreement between an entity and the schema. Resolve by changing the
 # mapping, or by adding a Liquibase migration in olcs-etl.
 
@@ -21,7 +21,6 @@ ALTER TABLE document_analysis CHANGE status status VARCHAR(255) DEFAULT 'PENDING
 ALTER TABLE licence CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
 ALTER TABLE licence_operating_centre CHANGE ad_placed ad_placed SMALLINT NOT NULL
 ALTER TABLE local_authority CHANGE traffic_area_id traffic_area_id CHAR(1) DEFAULT NULL
-ALTER TABLE messaging_subject CHANGE is_active is_active SMALLINT DEFAULT 1
 ALTER TABLE pi_sla_exception CHANGE created_on created_on DATETIME DEFAULT NULL
 ALTER TABLE publication CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL
 ALTER TABLE publication_link CHANGE traffic_area_id traffic_area_id CHAR(1) NOT NULL

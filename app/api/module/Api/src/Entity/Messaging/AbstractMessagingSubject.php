@@ -105,9 +105,9 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Is active
      *
-     * @var int|null
+     * @var bool|null
      */
-    #[ORM\Column(type: 'smallint', name: 'is_active', nullable: true, options: ['default' => 1])]
+    #[ORM\Column(type: 'boolean', name: 'is_active', nullable: true, options: ['default' => 1])]
     protected $isActive = 1;
 
     /**
