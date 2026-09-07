@@ -43,10 +43,10 @@ final class ProcessDuplicateVehicleWarning extends AbstractCommandHandler implem
             'jobName' => $description
 
         ];
-        $adminEmails = array_filter(
-            $licenceVehicle->getLicence()->getOrganisation()->getAdminEmailAddresses()
+        $correspondenceEmail = array_filter(
+            $licenceVehicle->getLicence()->getCorrespondenceCd()->getEmailAddress()
         );
-        $method = !empty($adminEmails)
+        $method = !empty($correspondenceEmail)
             ? PrintLetter::METHOD_EMAIL
             : PrintLetter::METHOD_PRINT_AND_POST;
 
