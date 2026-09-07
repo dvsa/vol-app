@@ -1,5 +1,30 @@
 # Changelog
 
+## [9.3.0](https://github.com/dvsa/vol-app/compare/v9.2.2...v9.3.0) (2026-09-07)
+
+
+### Features
+
+* update process inbox timing to 7am ([#1762](https://github.com/dvsa/vol-app/issues/1762)) ([5403453](https://github.com/dvsa/vol-app/commit/54034538482c6b1c52fb8aac85550b315b228e7f))
+
+
+### Bug Fixes
+
+* **api:** neutralise the AWS egress proxy in the local config template ([#1763](https://github.com/dvsa/vol-app/issues/1763)) ([0541c0e](https://github.com/dvsa/vol-app/commit/0541c0ef4f88c1204390fee47c75c64fe62c1318))
+* update sas extract script ([#1761](https://github.com/dvsa/vol-app/issues/1761)) ([933bf9b](https://github.com/dvsa/vol-app/commit/933bf9bbb1974b57454c89faab218bd6b88ae895))
+* updates to MariaDB dump ([#1760](https://github.com/dvsa/vol-app/issues/1760)) ([b7e7dd7](https://github.com/dvsa/vol-app/commit/b7e7dd74dc3fe2f502d89a806c01a4dca745d84b))
+* vol 6118 open cases filtering bug ([#1705](https://github.com/dvsa/vol-app/issues/1705)) ([632c2e8](https://github.com/dvsa/vol-app/commit/632c2e84bb2624222eb18532cc3d742f2b66a437))
+
+## [9.2.2](https://github.com/dvsa/vol-app/compare/v9.2.1...v9.2.2) (2026-09-04)
+
+
+### Bug Fixes
+
+* input and output mapping for SM add missing policies and amend access for sweeper ([#1747](https://github.com/dvsa/vol-app/issues/1747)) ([b514f42](https://github.com/dvsa/vol-app/commit/b514f42e90b695a009fa52ae592ea8e653c9443e))
+* match dev for perms ([#1756](https://github.com/dvsa/vol-app/issues/1756)) ([1365e19](https://github.com/dvsa/vol-app/commit/1365e194eaa37d7e315526f6e5c917aadbf52ffd))
+* sweeper command created_on returning raw value and handle formatting ([#1758](https://github.com/dvsa/vol-app/issues/1758)) ([c6c58ba](https://github.com/dvsa/vol-app/commit/c6c58ba9238bb6466142e7e20b2be03b6defa794))
+* webdav to s3 sync broken on int/qa reverting to webdav for now ([#1754](https://github.com/dvsa/vol-app/issues/1754)) ([8efc930](https://github.com/dvsa/vol-app/commit/8efc9303f3e73bcd35ea946b8e1b90702932e942))
+
 ## [9.2.1](https://github.com/dvsa/vol-app/compare/v9.2.0...v9.2.1) (2026-09-02)
 
 
