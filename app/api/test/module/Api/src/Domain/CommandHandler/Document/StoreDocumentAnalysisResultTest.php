@@ -332,6 +332,36 @@ final class StoreDocumentAnalysisResultTest extends TestCase
         ]));
     }
 
+    public function testTokenValidUuidButNotVersion7ThrowsRuntimeException(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        $this->sut->handleCommand(Cmd::create([
+            'analysisToken' => '018f1234-5678-4000-8000-000000000001',
+            'executionArn'  => self::EXECUTION_ARN,
+        ]));
+    }
+
+    public function testMalformedExecutionArnThrowsRuntimeException(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        $this->sut->handleCommand(Cmd::create([
+            'analysisToken' => self::TOKEN_STRING,
+            'executionArn'  => 'not-an-arn',
+        ]));
+    }
+
+    public function testExecutionArnForWrongServiceThrowsRuntimeException(): void
+    {
+        $this->expectException(RuntimeException::class);
+
+        $this->sut->handleCommand(Cmd::create([
+            'analysisToken' => self::TOKEN_STRING,
+            'executionArn'  => 'arn:aws:s3:::some-bucket',
+        ]));
+    }
+
     public function testRecordSuccessIssuesSingleUpdateWithPendingCondition(): void
     {
         // Confirm the repo method is called exactly once with WHERE status = PENDING.

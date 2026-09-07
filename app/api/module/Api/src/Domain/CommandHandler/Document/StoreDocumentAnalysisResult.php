@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Document;
 
+use Aws\Arn\ArnParser;
+use Aws\Arn\Exception\InvalidArnException;
 use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3Client;
 use Aws\Sfn\SfnClient;
@@ -14,6 +16,7 @@ use Dvsa\Olcs\Api\Domain\Repository;
 use Dvsa\Olcs\Transfer\Command\CommandInterface;
 use Olcs\Logging\Log\Logger;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Uid\UuidV7;
 
 /**
  * Retrieves the document analysis bucket and key from Step Functions execution output,
@@ -49,11 +52,7 @@ final class StoreDocumentAnalysisResult extends AbstractCommandHandler
         $tokenString  = $command->getAnalysisToken();
         $executionArn = $command->getExecutionArn();
 
-        if ($tokenString === '' || $executionArn === '') {
-            throw new RuntimeException(
-                'analysis_token and execution_arn are required'
-            );
-        }
+        $this->validateArgs($tokenString, $executionArn);
 
         /** @var Repository\DocumentAnalysis $repo */
         $repo = $this->getRepo();
@@ -138,14 +137,54 @@ final class StoreDocumentAnalysisResult extends AbstractCommandHandler
      * Calls sfn:DescribeExecution to get the execution output and extracts the S3 location.
      *
      * @return array{string, string} [bucket, key]
+     * @throws RuntimeException
      */
     private function resolveS3LocationFromExecution(string $executionArn): array
     {
         $response = $this->sfnClient->describeExecution(['executionArn' => $executionArn]);
 
-        $rawOutput = $response->get('output');
+        $output = $this->validateExecutionOutput($response->get('output'));
 
-        if (!is_string($rawOutput) || $rawOutput === '') {
+        return $this->validateS3Location(
+            $output['config']['outputBucket'] ?? null,
+            $output['analysisResult']['smOutput']['analysisResultKey'] ?? null
+        );
+    }
+
+    /**
+     * Validates the required command arguments are present and well-formed.
+     */
+    private function validateArgs(string $tokenString, string $executionArn): void
+    {
+        if (empty($tokenString) || empty($executionArn)) {
+            throw new RuntimeException(
+                'analysis_token and execution_arn are required'
+            );
+        }
+
+        try {
+            $arn = ArnParser::parse($executionArn);
+        } catch (InvalidArnException $e) {
+            throw new RuntimeException(
+                sprintf('execution_arn is not a valid ARN: %s', $executionArn),
+                0,
+                $e
+            );
+        }
+
+        if ($arn->getService() !== 'states') {
+            throw new RuntimeException(
+                sprintf('execution_arn is not a Step Functions ARN: %s', $executionArn)
+            );
+        }
+    }
+
+    /**
+     * Validates the raw Step Functions execution output is present and decodes to a JSON array.
+     */
+    private function validateExecutionOutput(mixed $rawOutput): array
+    {
+        if (!is_string($rawOutput) || empty($rawOutput)) {
             throw new RuntimeException(
                 'Step Functions execution has no output; pipeline may still be running or failed'
             );
@@ -159,10 +198,17 @@ final class StoreDocumentAnalysisResult extends AbstractCommandHandler
             );
         }
 
-        $bucket = $output['config']['outputBucket'] ?? null;
-        $key    = $output['analysisResult']['smOutput']['analysisResultKey'] ?? null;
+        return $output;
+    }
 
-        if (!is_string($bucket) || $bucket === '' || !is_string($key) || $key === '') {
+    /**
+     * Validates the bucket and key extracted from the execution output.
+     *
+     * @return array{string, string} [bucket, key]
+     */
+    private function validateS3Location(mixed $bucket, mixed $key): array
+    {
+        if (!is_string($bucket) || empty($bucket) || !is_string($key) || empty($key)) {
             throw new RuntimeException(
                 'Step Functions execution output missing config.outputBucket or analysisResult.smOutput.analysisResultKey'
             );
@@ -230,12 +276,20 @@ final class StoreDocumentAnalysisResult extends AbstractCommandHandler
 
     private function tokenStringToBinary(string $tokenString): string
     {
-        try {
-            return Uuid::fromRfc4122($tokenString)->toBinary();
-        } catch (\Throwable) {
+        if (!Uuid::isValid($tokenString, Uuid::FORMAT_RFC_4122)) {
             throw new RuntimeException(
                 sprintf('Invalid analysis_token format: %s', $tokenString)
             );
         }
+
+        $uuid = Uuid::fromString($tokenString);
+
+        if (!$uuid instanceof UuidV7) {
+            throw new RuntimeException(
+                sprintf('analysis_token is not a UUIDv7: %s', $tokenString)
+            );
+        }
+
+        return $uuid->toBinary();
     }
 }
