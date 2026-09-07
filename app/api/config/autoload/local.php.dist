@@ -155,6 +155,12 @@ return [
     ],
   ],
   'awsOptions'=>[
+    // config.global.php routes AWS calls that have no VPC endpoint through the shared egress
+    // proxy. There is no proxy locally, and its array_filter cannot drop the entry because
+    // %shd_proxy% is still an unresolved placeholder at that point, not an empty string - so
+    // without this the parameter resolver aborts container startup with
+    // "You have requested a non-existent parameter shd_proxy".
+    'proxy' => new \Laminas\Stdlib\ArrayUtils\MergeRemoveKey(),
     'region' => 'eu-west-1',
     'version' => 'latest',
     'useEnvCredentials' => true,
