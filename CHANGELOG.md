@@ -1,5 +1,15 @@
 # Changelog
 
+## [9.2.2](https://github.com/dvsa/vol-app/compare/v9.2.1...v9.2.2) (2026-09-04)
+
+
+### Bug Fixes
+
+* input and output mapping for SM add missing policies and amend access for sweeper ([#1747](https://github.com/dvsa/vol-app/issues/1747)) ([b514f42](https://github.com/dvsa/vol-app/commit/b514f42e90b695a009fa52ae592ea8e653c9443e))
+* match dev for perms ([#1756](https://github.com/dvsa/vol-app/issues/1756)) ([1365e19](https://github.com/dvsa/vol-app/commit/1365e194eaa37d7e315526f6e5c917aadbf52ffd))
+* sweeper command created_on returning raw value and handle formatting ([#1758](https://github.com/dvsa/vol-app/issues/1758)) ([c6c58ba](https://github.com/dvsa/vol-app/commit/c6c58ba9238bb6466142e7e20b2be03b6defa794))
+* webdav to s3 sync broken on int/qa reverting to webdav for now ([#1754](https://github.com/dvsa/vol-app/issues/1754)) ([8efc930](https://github.com/dvsa/vol-app/commit/8efc9303f3e73bcd35ea946b8e1b90702932e942))
+
 ## [9.2.1](https://github.com/dvsa/vol-app/compare/v9.2.0...v9.2.1) (2026-09-02)
 
 
