@@ -636,7 +636,7 @@ module "service" {
         name     = "process-inbox",
         commands = ["batch:process-inbox"],
         timeout  = 43200,
-        schedule = ["cron(45 01 * * ? *)"],
+        schedule = ["cron(0 07 * * ? *)"],
       },
       {
         name     = "process-ntu",
