@@ -27,6 +27,7 @@ return [
     CommandHandler\Document\PrintLetters::class => CanAccessDocumentsWithIds::class,
     CommandHandler\Document\UpdateDocumentLinks::class => IsInternalUser::class,
     CommandHandler\Document\RemoveDeletedDocuments::class => IsSystemUser::class,
+    CommandHandler\Document\SweepStaleDocumentAnalysis::class => IsSystemUser::class,
     CommandHandler\Document\OverwriteContent::class => CanOverwriteDocumentWithId::class,
     CommandHandler\Email\SendPsvOperatorListReport::class => CanAccessDocumentWithId::class,
     CommandHandler\Email\SendInternationalGoods::class => CanAccessDocumentWithId::class,
