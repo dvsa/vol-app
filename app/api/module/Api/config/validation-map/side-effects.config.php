@@ -54,7 +54,6 @@ return [
     CommandHandler\Document\CreateDocumentSpecific::class                             => IsSideEffect::class,
     CommandHandler\Document\AnalyseDocument\FinancialEvidence::class                  => IsSideEffect::class,
     CommandHandler\Document\AnalyseDocument\FinancialEvidenceFactory::class           => IsSideEffect::class,
-    CommandHandler\Document\SweepStaleDocumentAnalysis::class                         => IsSideEffect::class,
     CommandHandler\Application\CreateApplicationFee::class                            => IsSideEffect::class,
     CommandHandler\Application\ResetApplication::class                                => IsSideEffect::class,
     CommandHandler\Application\GenerateLicenceNumber::class                           => IsSideEffect::class,

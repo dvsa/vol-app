@@ -9,6 +9,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Olcs\Logging\Log\Logger;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Psr\Log\NullLogger;
 
 final class LoggerTest extends MockeryTestCase
 {
@@ -20,6 +21,17 @@ final class LoggerTest extends MockeryTestCase
         $this->logger = m::mock(LoggerInterface::class);
         Logger::setLogger($this->logger);
         $this->assertSame($this->logger, Logger::getLogger());
+    }
+
+    /**
+     * Restores the static Logger facade. Without this, the mock this test installs stays
+     * installed for whatever test runs next, which then fails on log calls it never made.
+     */
+    protected function tearDown(): void
+    {
+        Logger::setLogger(new NullLogger());
+
+        parent::tearDown();
     }
 
     public function testEmerg(): void
