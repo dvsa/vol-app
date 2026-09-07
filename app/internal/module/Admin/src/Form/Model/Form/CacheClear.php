@@ -25,7 +25,9 @@ class CacheClear extends Base
      *     "value_options":{
      *         "translations":"Translations",
      *         "system_parameters":"System parameters",
-     *         "cqrs":"Feature toggles and front-end CQRS cache"
+     *         "cqrs":"Feature toggles and front-end CQRS cache",
+     *         "doctrine":"Doctrine ORM (entity metadata, query and result cache)",
+     *         "jwks":"Cognito signing keys (JWKS)"
      *     }
      * })
      */

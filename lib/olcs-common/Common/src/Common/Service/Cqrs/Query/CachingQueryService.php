@@ -40,8 +40,6 @@ class CachingQueryService implements QueryServiceInterface, \Psr\Log\LoggerAware
 
     public const MISSING_TTL_INTERFACE_TYPE = 'No TTL value found for this query';
 
-    private const CQRS_CACHE_PREFIX = 'cqrs:';
-
     /** @var array */
     private $localCache;
 
@@ -243,7 +241,7 @@ class CachingQueryService implements QueryServiceInterface, \Psr\Log\LoggerAware
     {
         $cacheIdentifier = $query->getCacheIdentifier();
         $persistentCacheIdentifier =
-            self::CQRS_CACHE_PREFIX . $cacheIdentifier;
+            CacheEncryptionService::CQRS_CACHE_PREFIX . $cacheIdentifier;
 
         $dtoClassName = $query->getDtoClassName();
 
