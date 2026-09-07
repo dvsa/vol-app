@@ -18,20 +18,6 @@ class CacheClearCommand extends AbstractBatchCommand
 {
     protected static $defaultName = 'batch:cache-clear';
 
-    /**
-     * Available cache namespaces from CacheEncryption service
-     */
-    private const array NAMESPACES = [
-        'user_account',
-        'sys_param',
-        'sys_param_list',
-        'translation_key',
-        'translation_replacement',
-        'storage',
-        'secretsmanager',
-        'cqrs',
-    ];
-
     #[\Override]
     protected function configure(): void
     {
@@ -47,7 +33,7 @@ class CacheClearCommand extends AbstractBatchCommand
                 'namespace',
                 null,
                 InputOption::VALUE_REQUIRED,
-                'Clear specific cache namespace(s) (comma-separated). Available: ' . implode(', ', self::NAMESPACES)
+                'Clear specific cache namespace(s) (comma-separated). Available: ' . implode(', ', Clear::NAMESPACES)
             )
             ->addOption(
                 'pattern',
@@ -90,12 +76,12 @@ class CacheClearCommand extends AbstractBatchCommand
         // Validate namespaces if provided
         if ($namespace) {
             $namespaces = array_map(trim(...), explode(',', (string) $namespace));
-            $invalid = array_diff($namespaces, self::NAMESPACES);
+            $invalid = array_diff($namespaces, Clear::NAMESPACES);
             if (!empty($invalid)) {
                 $output->writeln(sprintf(
                     '<error>Invalid namespace(s): %s. Available: %s</error>',
                     implode(', ', $invalid),
-                    implode(', ', self::NAMESPACES)
+                    implode(', ', Clear::NAMESPACES)
                 ));
                 return self::FAILURE;
             }
