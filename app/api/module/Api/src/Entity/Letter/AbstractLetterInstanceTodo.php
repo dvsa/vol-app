@@ -98,7 +98,7 @@ abstract class AbstractLetterInstanceTodo implements BundleSerializableInterface
     /**
      * User edits to the to-do wording, this letter only
      *
-     * @var array
+     * @var array|null
      */
     #[ORM\Column(type: 'json', name: 'edited_description', nullable: true)]
     protected $editedDescription;

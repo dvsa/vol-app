@@ -48,7 +48,7 @@ abstract class AbstractSlaException implements BundleSerializableInterface, Json
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User|null
+     * @var \Dvsa\Olcs\Api\Entity\User\User
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: false)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]

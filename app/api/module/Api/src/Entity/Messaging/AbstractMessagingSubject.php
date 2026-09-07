@@ -297,7 +297,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Set the is active
      *
-     * @param int $isActive new value being set
+     * @param bool $isActive new value being set
      *
      * @return static
      */
@@ -311,7 +311,7 @@ abstract class AbstractMessagingSubject implements BundleSerializableInterface, 
     /**
      * Get the is active
      *
-     * @return int
+     * @return bool
      */
     public function getIsActive()
     {
