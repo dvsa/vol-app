@@ -62,7 +62,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     /**
      * Owning application; nulled if the application is deleted
      *
-     * @var \Dvsa\Olcs\Api\Entity\Application\Application
+     * @var \Dvsa\Olcs\Api\Entity\Application\Application|null
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
@@ -71,7 +71,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -81,7 +81,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -107,7 +107,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     /**
      * Provider result payload on success
      *
-     * @var array
+     * @var array|null
      */
     #[ORM\Column(type: 'json', name: 'result', nullable: true)]
     protected $result;
@@ -115,7 +115,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     /**
      * Provider metadata accompanying the analysis result
      *
-     * @var array
+     * @var array|null
      */
     #[ORM\Column(type: 'json', name: 'result_metadata', nullable: true)]
     protected $resultMetadata;
@@ -123,7 +123,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     /**
      * Failure detail when the analysis ends in ERROR
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'text', name: 'error_detail', length: 65535, nullable: true)]
     protected $errorDetail;
@@ -131,7 +131,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     /**
      * Reserved for caseworker annotations
      *
-     * @var array
+     * @var array|null
      */
     #[ORM\Column(type: 'json', name: 'annotations', nullable: true)]
     protected $annotations;
@@ -139,7 +139,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     /**
      * When the sweeper resolved the row to TIMEOUT
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'timed_out_at', nullable: true)]
     protected $timedOutAt;
@@ -147,7 +147,7 @@ abstract class AbstractDocumentAnalysis implements BundleSerializableInterface, 
     /**
      * When a terminal result was recorded
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'completed_at', nullable: true)]
     protected $completedAt;
