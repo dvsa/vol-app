@@ -111,9 +111,9 @@ abstract class AbstractSectors implements BundleSerializableInterface, JsonSeria
     /**
      * Version
      *
-     * @var int|null
+     * @var int
      */
-    #[ORM\Column(type: 'smallint', name: 'version', nullable: true)]
+    #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
 

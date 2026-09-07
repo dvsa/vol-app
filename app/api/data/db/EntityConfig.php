@@ -224,26 +224,11 @@ return array(
         'no_tm_confirmation' => array(
             'type' => 'yesnonull'
         ),
-        'financial_evidence_uploaded' => array(
-            'type' => 'smallint'
-        ),
-        'small_vehicle_evidence_uploaded' => array(
-            'type' => 'smallint'
-        ),
-        'occupation_evidence_uploaded' => array(
-            'type' => 'smallint'
-        ),
         'psv_income_records_confirmation' => array(
             'type' => 'yesnonull'
         ),
         'psv_occupation_records_confirmation' => array(
             'type' => 'yesnonull'
-        ),
-        'psv_total_vehicle_small' => array(
-            'type' => 'smallint'
-        ),
-        'psv_total_vehicle_large' => array(
-            'type' => 'smallint'
         ),
         'prev_has_licence' => array(
             'type' => 'yesnonull'
@@ -318,9 +303,6 @@ return array(
         )
     ),
     'licence_operating_centre' => array(
-        'ad_placed' => array(
-            'type' => 'smallint'
-        ),
         'sufficient_parking' => array(
             'type' => 'yesno'
         ),
@@ -341,9 +323,6 @@ return array(
         )
     ),
     'application_operating_centre' => array(
-        'ad_placed' => array(
-            'type' => 'smallint'
-        ),
         'publication_appropriate' => array(
             'type' => 'yesno'
         ),
