@@ -23,6 +23,7 @@ CREATE_NI_XML_DUMP=false
 CONNECTION=""
 DVA_FILE_PREFIX="dvacompliance-"
 MANIFEST_FILE="${DVA_FILE_PREFIX}manifest.txt"
+DUMP_BIN="$(command -v mariadb-dump)"
 
 usage () {
     if [ -n "$1" ]; then
@@ -148,7 +149,14 @@ if $CREATE_NI_XML_DUMP ; then
 
     cd "$NI_EXTRACT_DUMP_DIR" || log_error "Could not enter output target dump directory"
 
-    mysqldump $CONNECTION -X "$DB" --set-gtid-purged=OFF | tr -cd '\11\12\15\40-\176' > "$XML_DUMP_FILE" || log_error "create NI database dump FAILED!"
+    [ -n "$DUMP_BIN" ] || log_error "mariadb-dump not found in PATH (required to create NI XML dump)"
+    ( set -o pipefail; "$DUMP_BIN" $CONNECTION -X "$DB" --set-gtid-purged=OFF \
+        | tr -cd '\11\12\15\40-\176' > "$XML_DUMP_FILE" ) \
+        || log_error "create NI database dump FAILED!"
+
+    if [ ! -s "$XML_DUMP_FILE" ]; then
+        log_error "create NI database dump FAILED! $NI_EXTRACT_DUMP_DIR/$XML_DUMP_FILE is empty"
+    fi
 
     log "Creating manifest file $NI_EXTRACT_DUMP_DIR/$MANIFEST_FILE..."
     sha256sum "$XML_DUMP_FILE" > "$MANIFEST_FILE" || log_error "create manifest file $NI_EXTRACT_DUMP_DIR/$MANIFEST_FILE FAILED!"
