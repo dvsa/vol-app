@@ -162,6 +162,7 @@ jobs:
           fetch-depth: 0
       - name: Generate GitHub App Token
         id: generate-token
+        if: ${{ needs.orchestrator.outputs.should-plan-terraform-environments }}
         uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ vars.VOL_GITHUB_APP_ID }}
@@ -171,11 +172,13 @@ jobs:
       # Same resolution as cd.yaml so a PR's environment plan uses the value a release would apply.
       - name: Resolve olcs-etl main
         id: etl
+        if: ${{ needs.orchestrator.outputs.should-plan-terraform-environments }}
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
         run: |
           set -o pipefail
           bash .github/scripts/liquibase/resolve-etl-ref.sh main | tee -a "$GITHUB_OUTPUT"
+          echo "**olcs-etl**: \`$(grep '^etl_sha=' "$GITHUB_OUTPUT" | tail -1 | cut -d= -f2)\`" >> "$GITHUB_STEP_SUMMARY"
       # Kept identical to cd.yaml: the version an app is built under here has to mean the same
       # thing as the version it is deployed under there. lib is part of it because it is part of
       # every app's artefact. See the note in cd.yaml.
@@ -206,7 +209,6 @@ jobs:
           echo "**Selfserve**: \`${{ steps.selfserve-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Assets**: \`${{ steps.assets-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
-          echo "**olcs-etl**: \`${{ steps.etl.outputs.etl_sha }}\`" >> "$GITHUB_STEP_SUMMARY"
 
   cdn:
     name: CDN
