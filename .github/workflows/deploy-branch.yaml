@@ -25,7 +25,7 @@ on:
         default: reg
         required: true
       etl_ref:
-        description: "olcs-etl ref to bundle as the liquibase changelog"
+        description: "olcs-etl ref to bundle as the liquibase changelog: branch, tag or commit sha"
         type: string
         required: false
         default: "main"
@@ -54,11 +54,29 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.version }}
       sha: ${{ steps.version.outputs.sha }}
+      etl_sha: ${{ steps.etl.outputs.etl_sha }}
+      etl_short: ${{ steps.etl.outputs.etl_short }}
     steps:
       - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.branch }}
           fetch-depth: 1
+      - name: Generate GitHub App Token
+        id: generate-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.VOL_GITHUB_APP_ID }}
+          private-key: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
+          owner: dvsa
+          repositories: olcs-etl
+      - name: Resolve olcs-etl ref
+        id: etl
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          ETL_REF: ${{ inputs.etl_ref }}
+        run: |
+          set -o pipefail
+          bash .github/scripts/liquibase/resolve-etl-ref.sh "$ETL_REF" | tee -a "$GITHUB_OUTPUT"
 
       # One identifier is used as the Docker tag for all four images AND the assets S3 prefix.
       #
@@ -75,6 +93,8 @@ jobs:
         id: version
         env:
           BRANCH: ${{ inputs.branch }}
+          ETL_REF: ${{ inputs.etl_ref }}
+          ETL_SHA: ${{ steps.etl.outputs.etl_sha }}
         run: |
           set -euo pipefail
           SHA=$(git rev-parse --short=10 HEAD)
@@ -86,7 +106,7 @@ jobs:
             echo "### Deploying \`${BRANCH}\` to \`${{ inputs.environment }}\`"
             echo "- **Commit**: \`${SHA}\`"
             echo "- **Version**: \`${VERSION}\`"
-            echo "- **ETL ref**: \`${{ inputs.etl_ref }}\`"
+            echo "- **ETL ref**: \`$ETL_REF\` -> \`$ETL_SHA\`"
           } >> "$GITHUB_STEP_SUMMARY"
 
   app:
@@ -174,6 +194,7 @@ jobs:
       selfserve-image-tag: ${{ needs.resolve.outputs.version }}
       internal-image-tag: ${{ needs.resolve.outputs.version }}
       assets-version: ${{ needs.resolve.outputs.version }}
+      liquibase-image-tag: ${{ needs.resolve.outputs.etl_short }}
       apply: true
     permissions:
       contents: read
@@ -185,15 +206,17 @@ jobs:
     name: Database Migrations
     needs:
       - deploy
+      - resolve
     uses: ./.github/workflows/run-liquibase.yaml
     with:
-      push: false
       submit_job: true
       account: nonprod
       environment: ${{ inputs.environment }}
       dry_run: false
       ref: ${{ inputs.branch }}
-      etl_ref: ${{ inputs.etl_ref }}
+      etl_ref: ${{ needs.resolve.outputs.etl_sha }}
+      branch_build: true
+      previous_image_tag: ${{ needs.deploy.outputs.previous_liquibase_image_tag }}
     permissions:
       contents: read
       id-token: write
