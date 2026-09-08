@@ -16,7 +16,6 @@ use Dvsa\Olcs\Api\Entity\OrganisationProviderInterface;
 #[ORM\Index(name: 'ix_transport_manager_licence_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_transport_manager_licence_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_transport_manager_licence_tm_type', columns: ['tm_type'])]
-#[ORM\UniqueConstraint(name: 'uk_transport_manager_licence_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class TransportManagerLicence extends AbstractTransportManagerLicence implements OrganisationProviderInterface
 {

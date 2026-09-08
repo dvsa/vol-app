@@ -18,8 +18,6 @@ address,last_modified_by
 address,created_on
 address,last_modified_on
 address,version
-address,olbs_key
-address,olbs_type
 admin_area_traffic_area,id
 admin_area_traffic_area,traffic_area_id
 admin_area_traffic_area,created_by
@@ -49,8 +47,6 @@ appeal,last_modified_by
 appeal,created_on
 appeal,last_modified_on
 appeal,version
-appeal,olbs_key
-appeal,olbs_type
 application,id
 application,licence_id
 application,status
@@ -175,7 +171,6 @@ application_operating_centre,last_modified_by
 application_operating_centre,created_on
 application_operating_centre,last_modified_on
 application_operating_centre,version
-application_operating_centre,olbs_key
 application_organisation_person,id
 application_organisation_person,person_id
 application_organisation_person,original_person_id
@@ -286,13 +281,10 @@ bus_reg,last_modified_by
 bus_reg,created_on
 bus_reg,last_modified_on
 bus_reg,version
-bus_reg,olbs_key
 bus_reg_bus_service_type,bus_reg_id
 bus_reg_bus_service_type,bus_service_type_id
-bus_reg_bus_service_type,olbs_key
 bus_reg_local_auth,bus_reg_id
 bus_reg_local_auth,local_authority_id
-bus_reg_local_auth,olbs_key
 bus_reg_other_service,id
 bus_reg_other_service,bus_reg_id
 bus_reg_other_service,service_no
@@ -301,17 +293,14 @@ bus_reg_other_service,last_modified_by
 bus_reg_other_service,created_on
 bus_reg_other_service,last_modified_on
 bus_reg_other_service,version
-bus_reg_other_service,olbs_key
 bus_reg_read_audit,id
 bus_reg_read_audit,bus_reg_id
 bus_reg_read_audit,user_id
 bus_reg_read_audit,created_on
 bus_reg_traffic_area,traffic_area_id
 bus_reg_traffic_area,bus_reg_id
-bus_reg_traffic_area,olbs_key
 bus_reg_variation_reason,bus_reg_id
 bus_reg_variation_reason,variation_reason_id
-bus_reg_variation_reason,olbs_key
 bus_reg_variation_reason,olbs_key2
 bus_service_type,id
 bus_service_type,description
@@ -342,7 +331,6 @@ bus_short_notice,last_modified_by
 bus_short_notice,created_on
 bus_short_notice,last_modified_on
 bus_short_notice,version
-bus_short_notice,olbs_key
 cases,id
 cases,case_type
 cases,application_id
@@ -363,8 +351,6 @@ cases,last_modified_by
 cases,created_on
 cases,last_modified_on
 cases,version
-cases,olbs_key
-cases,olbs_type
 cases_read_audit,id
 cases_read_audit,case_id
 cases_read_audit,user_id
@@ -394,7 +380,6 @@ change_of_entity,created_on
 change_of_entity,last_modified_on
 change_of_entity,deleted_date
 change_of_entity,version
-change_of_entity,olbs_key
 community_lic,id
 community_lic,licence_id
 community_lic,status
@@ -409,7 +394,6 @@ community_lic,last_modified_by
 community_lic,created_on
 community_lic,last_modified_on
 community_lic,version
-community_lic,olbs_key
 community_lic_suspension,id
 community_lic_suspension,community_lic_id
 community_lic_suspension,start_date
@@ -421,7 +405,6 @@ community_lic_suspension,last_modified_by
 community_lic_suspension,created_on
 community_lic_suspension,last_modified_on
 community_lic_suspension,version
-community_lic_suspension,olbs_key
 community_lic_suspension_reason,id
 community_lic_suspension_reason,community_lic_suspension_id
 community_lic_suspension_reason,type_id
@@ -431,7 +414,6 @@ community_lic_suspension_reason,last_modified_by
 community_lic_suspension_reason,created_on
 community_lic_suspension_reason,last_modified_on
 community_lic_suspension_reason,version
-community_lic_suspension_reason,olbs_key
 community_lic_withdrawal,id
 community_lic_withdrawal,community_lic_id
 community_lic_withdrawal,start_date
@@ -442,7 +424,6 @@ community_lic_withdrawal,last_modified_by
 community_lic_withdrawal,created_on
 community_lic_withdrawal,last_modified_on
 community_lic_withdrawal,version
-community_lic_withdrawal,olbs_key
 community_lic_withdrawal_reason,id
 community_lic_withdrawal_reason,community_lic_withdrawal_id
 community_lic_withdrawal_reason,type_id
@@ -452,7 +433,6 @@ community_lic_withdrawal_reason,last_modified_by
 community_lic_withdrawal_reason,created_on
 community_lic_withdrawal_reason,last_modified_on
 community_lic_withdrawal_reason,version
-community_lic_withdrawal_reason,olbs_key
 companies_house_alert,id
 companies_house_alert,company_or_llp_no
 companies_house_alert,organisation_id
@@ -512,7 +492,6 @@ company_subsidiary,last_modified_by
 company_subsidiary,created_on
 company_subsidiary,last_modified_on
 company_subsidiary,version
-company_subsidiary,olbs_key
 company_subsidiary,deleted_date
 complaint,id
 complaint,is_compliance
@@ -532,7 +511,6 @@ complaint,last_modified_by
 complaint,created_on
 complaint,last_modified_on
 complaint,version
-complaint,olbs_key
 condition_undertaking,id
 condition_undertaking,application_id
 condition_undertaking,licence_id
@@ -555,8 +533,6 @@ condition_undertaking,last_modified_by
 condition_undertaking,created_on
 condition_undertaking,last_modified_on
 condition_undertaking,version
-condition_undertaking,olbs_key
-condition_undertaking,olbs_type
 contact_details,id
 contact_details,contact_type
 contact_details,email_address
@@ -571,8 +547,6 @@ contact_details,last_modified_by
 contact_details,created_on
 contact_details,last_modified_on
 contact_details,version
-contact_details,olbs_key
-contact_details,olbs_type
 continuation,id
 continuation,month
 continuation,year
@@ -634,7 +608,6 @@ conviction,last_modified_by
 conviction,created_on
 conviction,last_modified_on
 conviction,version
-conviction,olbs_key
 correspondence_inbox,id
 correspondence_inbox,archived
 correspondence_inbox,accessed
@@ -647,7 +620,6 @@ correspondence_inbox,last_modified_by
 correspondence_inbox,created_on
 correspondence_inbox,last_modified_on
 correspondence_inbox,version
-correspondence_inbox,olbs_key
 country,id
 country,country_desc
 country,is_member_state
@@ -759,8 +731,6 @@ disqualification,last_modified_by
 disqualification,created_on
 disqualification,last_modified_on
 disqualification,version
-disqualification,olbs_key
-disqualification,olbs_type
 document,id
 document,document_store_id
 document,description
@@ -791,8 +761,6 @@ document,last_modified_by
 document,created_on
 document,last_modified_on
 document,version
-document,olbs_key
-document,olbs_type
 document,messaging_conversation_id
 document,messaging_message_id
 document_to_delete,id
@@ -864,7 +832,6 @@ ebsr_route_reprint,published_timestamp
 ebsr_route_reprint,requested_timestamp
 ebsr_route_reprint,bus_reg_id
 ebsr_route_reprint,requested_user_id
-ebsr_route_reprint,olbs_key
 ebsr_submission,id
 ebsr_submission,ebsr_submission_status_id
 ebsr_submission,ebsr_submission_type_id
@@ -890,7 +857,6 @@ ebsr_submission,is_from_ftp
 ebsr_submission,organisation_id
 ebsr_submission,deleted_date
 ebsr_submission,version
-ebsr_submission,olbs_key
 enforcement_area,id
 enforcement_area,name
 enforcement_area,email_address
@@ -946,8 +912,6 @@ event_history,entity_type
 event_history,entity_pk
 event_history,entity_version
 event_history,event_data
-event_history,olbs_key
-event_history,olbs_type
 event_history_type,id
 event_history_type,event_code
 event_history_type,description
@@ -1041,7 +1005,6 @@ goods_disc,last_modified_by
 goods_disc,created_on
 goods_disc,last_modified_on
 goods_disc,version
-goods_disc,olbs_key
 grace_period,id
 grace_period,licence_id
 grace_period,description
@@ -1052,7 +1015,6 @@ grace_period,last_modified_by
 grace_period,created_on
 grace_period,last_modified_on
 grace_period,version
-grace_period,olbs_key
 hearing,id
 hearing,case_id
 hearing,venue_id
@@ -1070,8 +1032,6 @@ hearing,last_modified_by
 hearing,created_on
 hearing,last_modified_on
 hearing,version
-hearing,olbs_key
-hearing,olbs_type
 impounding,id
 impounding,impounding_type
 impounding,case_id
@@ -1127,7 +1087,6 @@ inspection_request,last_modified_by
 inspection_request,created_on
 inspection_request,last_modified_on
 inspection_request,version
-inspection_request,olbs_key
 irfo_country,id
 irfo_country,description
 irfo_country,created_by
@@ -1172,7 +1131,6 @@ irfo_partner,last_modified_by
 irfo_partner,created_on
 irfo_partner,last_modified_on
 irfo_partner,version
-irfo_partner,olbs_key
 irfo_permit_stock,id
 irfo_permit_stock,irfo_gv_permit_id
 irfo_permit_stock,serial_no
@@ -1185,7 +1143,6 @@ irfo_permit_stock,last_modified_by
 irfo_permit_stock,created_on
 irfo_permit_stock,last_modified_on
 irfo_permit_stock,version
-irfo_permit_stock,olbs_key
 irfo_psv_auth,id
 irfo_psv_auth,organisation_id
 irfo_psv_auth,irfo_psv_auth_type_id
@@ -1247,7 +1204,6 @@ irfo_vehicle,last_modified_by
 irfo_vehicle,created_on
 irfo_vehicle,last_modified_on
 irfo_vehicle,version
-irfo_vehicle,olbs_key
 message_failures,id
 message_failures,queue_type
 message_failures,organisation_id
@@ -1362,7 +1318,6 @@ licence,last_modified_by
 licence,created_on
 licence,last_modified_on
 licence,version
-licence,olbs_key
 licence_no_gen,id
 licence_no_gen,licence_id
 licence_operating_centre,id
@@ -1386,7 +1341,6 @@ licence_operating_centre,last_modified_by
 licence_operating_centre,created_on
 licence_operating_centre,last_modified_on
 licence_operating_centre,version
-licence_operating_centre,olbs_key
 licence_read_audit,id
 licence_read_audit,licence_id
 licence_read_audit,user_id
@@ -1406,7 +1360,6 @@ licence_status_rule,last_modified_by
 licence_status_rule,created_on
 licence_status_rule,last_modified_on
 licence_status_rule,version
-licence_status_rule,olbs_key
 licence_vehicle,id
 licence_vehicle,licence_id
 licence_vehicle,vehicle_id
@@ -1425,7 +1378,6 @@ licence_vehicle,last_modified_by
 licence_vehicle,created_on
 licence_vehicle,last_modified_on
 licence_vehicle,version
-licence_vehicle,olbs_key
 local_authority,id
 local_authority,description
 local_authority,email_address
@@ -1460,11 +1412,8 @@ note,last_modified_by
 note,created_on
 note,last_modified_on
 note,version
-note,olbs_key
-note,olbs_type
 oc_complaint,complaint_id
 oc_complaint,operating_centre_id
-oc_complaint,olbs_key
 operating_centre,id
 operating_centre,address_id
 operating_centre,created_by
@@ -1472,12 +1421,10 @@ operating_centre,last_modified_by
 operating_centre,created_on
 operating_centre,last_modified_on
 operating_centre,version
-operating_centre,olbs_key
 operating_centre_opposition,opposition_id
 operating_centre_opposition,operating_centre_id
 operating_centre_opposition,olbs_oc_id
 operating_centre_opposition,olbs_opp_id
-operating_centre_opposition,olbs_type
 opposer,id
 opposer,contact_details_id
 opposer,opposer_type
@@ -1486,8 +1433,6 @@ opposer,last_modified_by
 opposer,created_on
 opposer,last_modified_on
 opposer,version
-opposer,olbs_key
-opposer,olbs_type
 opposition,id
 opposition,case_id
 opposition,opposer_id
@@ -1507,11 +1452,8 @@ opposition,last_modified_by
 opposition,created_on
 opposition,last_modified_on
 opposition,version
-opposition,olbs_key
-opposition,olbs_type
 opposition_grounds,opposition_id
 opposition_grounds,ground_id
-opposition_grounds,olbs_key
 organisation,id
 organisation,company_or_llp_no
 organisation,name
@@ -1544,7 +1486,6 @@ organisation_person,last_modified_by
 organisation_person,created_on
 organisation_person,last_modified_on
 organisation_person,version
-organisation_person,olbs_key
 organisation_read_audit,id
 organisation_read_audit,organisation_id
 organisation_read_audit,user_id
@@ -1606,8 +1547,6 @@ person,last_modified_by
 person,created_on
 person,last_modified_on
 person,version
-person,olbs_key
-person,olbs_type
 phone_contact,id
 phone_contact,phone_contact_type
 phone_contact,phone_number
@@ -1618,8 +1557,6 @@ phone_contact,last_modified_by
 phone_contact,created_on
 phone_contact,last_modified_on
 phone_contact,version
-phone_contact,olbs_key
-phone_contact,olbs_type
 pi,id
 pi,case_id
 pi,assigned_to
@@ -1655,8 +1592,6 @@ pi,last_modified_by
 pi,created_on
 pi,last_modified_on
 pi,version
-pi,olbs_key
-pi,olbs_type
 pi_decision,pi_id
 pi_decision,decision_id
 pi_definition,id
@@ -1693,8 +1628,6 @@ pi_hearing,last_modified_by
 pi_hearing,created_on
 pi_hearing,last_modified_on
 pi_hearing,version
-pi_hearing,olbs_key
-pi_hearing,olbs_type
 pi_reason,pi_id
 pi_reason,reason_id
 pi_tm_decision,pi_id
@@ -1748,7 +1681,6 @@ private_hire_licence,last_modified_by
 private_hire_licence,created_on
 private_hire_licence,last_modified_on
 private_hire_licence,version
-private_hire_licence,olbs_key
 prohibition,id
 prohibition,case_id
 prohibition,prohibition_date
@@ -1763,7 +1695,6 @@ prohibition,last_modified_by
 prohibition,created_on
 prohibition,last_modified_on
 prohibition,version
-prohibition,olbs_key
 prohibition_defect,id
 prohibition_defect,prohibition_id
 prohibition_defect,notes
@@ -1773,7 +1704,6 @@ prohibition_defect,last_modified_by
 prohibition_defect,created_on
 prohibition_defect,last_modified_on
 prohibition_defect,version
-prohibition_defect,olbs_key
 propose_to_revoke,id
 propose_to_revoke,case_id
 propose_to_revoke,presiding_tc_id
@@ -1816,7 +1746,6 @@ psv_disc,last_modified_by
 psv_disc,created_on
 psv_disc,last_modified_on
 psv_disc,version
-psv_disc,olbs_key
 ptr_reason,propose_to_revoke_id
 ptr_reason,reason_id
 publication,id
@@ -1855,8 +1784,6 @@ publication_link,last_modified_by
 publication_link,created_on
 publication_link,last_modified_on
 publication_link,version
-publication_link,olbs_key
-publication_link,olbs_type
 publication_police_data,id
 publication_police_data,publication_link_id
 publication_police_data,person_id
@@ -1869,7 +1796,6 @@ publication_police_data,last_modified_by
 publication_police_data,created_on
 publication_police_data,last_modified_on
 publication_police_data,version
-publication_police_data,olbs_key
 publication_section,id
 publication_section,description
 publication_section,ad_section
@@ -1930,13 +1856,11 @@ recipient,last_modified_by
 recipient,created_on
 recipient,last_modified_on
 recipient,version
-recipient,olbs_key
 recipient_traffic_area,recipient_id
 recipient_traffic_area,traffic_area_id
 ref_data,id
 ref_data,description
 ref_data,ref_data_category_id
-ref_data,olbs_key
 ref_data,parent_id
 ref_data,display_order
 ref_data,version
@@ -2001,8 +1925,6 @@ serious_infringement,last_modified_by
 serious_infringement,created_on
 serious_infringement,last_modified_on
 serious_infringement,version
-serious_infringement,olbs_key
-serious_infringement,olbs_type
 si_category,id
 si_category,description
 si_category,deleted_date
@@ -2033,7 +1955,6 @@ si_penalty,last_modified_by
 si_penalty,created_on
 si_penalty,last_modified_on
 si_penalty,version
-si_penalty,olbs_key
 si_penalty_erru_imposed,id
 si_penalty_erru_imposed,final_decision_date
 si_penalty_erru_imposed,start_date
@@ -2047,7 +1968,6 @@ si_penalty_erru_imposed,last_modified_by
 si_penalty_erru_imposed,created_on
 si_penalty_erru_imposed,last_modified_on
 si_penalty_erru_imposed,version
-si_penalty_erru_imposed,olbs_key
 si_penalty_erru_requested,id
 si_penalty_erru_requested,duration
 si_penalty_erru_requested,deleted_date
@@ -2058,7 +1978,6 @@ si_penalty_erru_requested,last_modified_by
 si_penalty_erru_requested,created_on
 si_penalty_erru_requested,last_modified_on
 si_penalty_erru_requested,version
-si_penalty_erru_requested,olbs_key
 si_penalty_imposed_type,id
 si_penalty_imposed_type,description
 si_penalty_imposed_type,deleted_date
@@ -2130,7 +2049,6 @@ statement,created_on
 statement,last_modified_on
 statement,deleted_date
 statement,version
-statement,olbs_key
 stay,id
 stay,case_id
 stay,request_date
@@ -2259,7 +2177,6 @@ task,last_modified_by
 task,created_on
 task,last_modified_on
 task,version
-task,olbs_key
 task_allocation_rule,id
 task_allocation_rule,category_id
 task_allocation_rule,team_id
@@ -2291,7 +2208,6 @@ team,last_modified_by
 team,created_on
 team,last_modified_on
 team,version
-team,olbs_key
 team_printer,id
 team_printer,team_id
 team_printer,printer_id
@@ -2315,13 +2231,10 @@ tm_case_decision,last_modified_by
 tm_case_decision,created_on
 tm_case_decision,last_modified_on
 tm_case_decision,version
-tm_case_decision,olbs_key
 tm_case_decision_rehab,tm_case_decision_id
 tm_case_decision_rehab,rehab_measure_id
-tm_case_decision_rehab,olbs_key
 tm_case_decision_unfitness,tm_case_decision_id
 tm_case_decision_unfitness,unfitness_reason_id
-tm_case_decision_unfitness,olbs_key
 tm_employment,id
 tm_employment,transport_manager_id
 tm_employment,contact_details_id
@@ -2346,7 +2259,6 @@ tm_qualification,last_modified_by
 tm_qualification,created_on
 tm_qualification,last_modified_on
 tm_qualification,version
-tm_qualification,olbs_key
 trading_name,id
 trading_name,name
 trading_name,licence_id
@@ -2358,7 +2270,6 @@ trading_name,last_modified_by
 trading_name,created_on
 trading_name,last_modified_on
 trading_name,version
-trading_name,olbs_key
 traffic_area,id
 traffic_area,name
 traffic_area,txc_name
@@ -2392,7 +2303,6 @@ trailer,last_modified_by
 trailer,created_on
 trailer,last_modified_on
 trailer,version
-trailer,olbs_key
 transport_manager,id
 transport_manager,tm_status
 transport_manager,tm_type
@@ -2411,7 +2321,6 @@ transport_manager,last_modified_by
 transport_manager,created_on
 transport_manager,last_modified_on
 transport_manager,version
-transport_manager,olbs_key
 transport_manager_application,id
 transport_manager_application,transport_manager_id
 transport_manager_application,application_id
@@ -2443,7 +2352,6 @@ transport_manager_application,last_modified_by
 transport_manager_application,created_on
 transport_manager_application,last_modified_on
 transport_manager_application,version
-transport_manager_application,olbs_key
 transport_manager_licence,id
 transport_manager_licence,transport_manager_id
 transport_manager_licence,licence_id
@@ -2464,7 +2372,6 @@ transport_manager_licence,last_modified_by
 transport_manager_licence,created_on
 transport_manager_licence,last_modified_on
 transport_manager_licence,version
-transport_manager_licence,olbs_key
 transport_manager_read_audit,id
 transport_manager_read_audit,transport_manager_id
 transport_manager_read_audit,user_id
@@ -2509,8 +2416,6 @@ txn,last_modified_by
 txn,created_on
 txn,last_modified_on
 txn,version
-txn,olbs_key
-txn,olbs_type
 user,id
 user,team_id
 user,transport_manager_id
@@ -2559,7 +2464,6 @@ vehicle,last_modified_by
 vehicle,created_on
 vehicle,last_modified_on
 vehicle,version
-vehicle,olbs_key
 venue,id
 venue,name
 venue,address_id
@@ -2571,7 +2475,6 @@ venue,last_modified_by
 venue,created_on
 venue,last_modified_on
 venue,version
-venue,olbs_key
 workshop,id
 workshop,licence_id
 workshop,contact_details_id
@@ -2585,7 +2488,6 @@ workshop,created_on
 workshop,last_modified_on
 workshop,deleted_date
 workshop,version
-workshop,olbs_key
 answer,id
 answer,question_text_id
 answer,irhp_application_id

@@ -150,22 +150,6 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     protected $version = 1;
 
     /**
-     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
-     *
-     * @var int
-     */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
-    protected $olbsKey;
-
-    /**
-     * used to differentiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
-     *
-     * @var string
-     */
-    #[ORM\Column(type: 'string', name: 'olbs_type', length: 48, nullable: true)]
-    protected $olbsType;
-
-    /**
      * AppliedPenalties
      *
      * @var \Doctrine\Common\Collections\ArrayCollection
@@ -506,54 +490,6 @@ abstract class AbstractSeriousInfringement implements BundleSerializableInterfac
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return static
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
-    }
-
-    /**
-     * Set the olbs type
-     *
-     * @param string $olbsType new value being set
-     *
-     * @return static
-     */
-    public function setOlbsType($olbsType)
-    {
-        $this->olbsType = $olbsType;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs type
-     *
-     * @return string
-     */
-    public function getOlbsType()
-    {
-        return $this->olbsType;
     }
 
     /**

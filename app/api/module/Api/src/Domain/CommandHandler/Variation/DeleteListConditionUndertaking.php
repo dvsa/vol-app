@@ -49,9 +49,7 @@ final class DeleteListConditionUndertaking extends AbstractCommandHandler implem
                     ->setLicence(null)
                     ->setApplication(
                         $repo->getReference(Application::class, $command->getId())
-                    )
-                    ->setOlbsKey(null)
-                    ->setOlbsType(null);
+                    );
 
                 $repo->save($deltaConditionUndertaking);
             }

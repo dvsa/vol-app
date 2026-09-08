@@ -16,7 +16,6 @@ use Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails;
 #[ORM\Index(name: 'ix_complaint_status', columns: ['status'])]
 #[ORM\Index(name: 'ix_complaint_complaint_type', columns: ['complaint_type'])]
 #[ORM\Index(name: 'ix_complaint_case_id', columns: ['case_id'])]
-#[ORM\Index(name: 'ix_complaint_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class Complaint extends AbstractComplaint
 {

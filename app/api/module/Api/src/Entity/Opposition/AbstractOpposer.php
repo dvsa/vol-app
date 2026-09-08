@@ -27,7 +27,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[ORM\Index(name: 'ix_opposer_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_opposer_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_opposer_opposer_type', columns: ['opposer_type'])]
-#[ORM\UniqueConstraint(name: 'uk_opposer_olbs_key_olbs_type', columns: ['olbs_key', 'olbs_type'])]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
 abstract class AbstractOpposer implements BundleSerializableInterface, JsonSerializable, \Stringable
@@ -94,22 +93,6 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     #[ORM\Column(type: 'smallint', name: 'version', nullable: false, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]
     protected $version = 1;
-
-    /**
-     * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
-     *
-     * @var int
-     */
-    #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
-    protected $olbsKey;
-
-    /**
-     * used to differntiate source of data during ETL when one OLCS table relates to many OLBS. Can be dropped when fully live
-     *
-     * @var string
-     */
-    #[ORM\Column(type: 'string', name: 'olbs_type', length: 32, nullable: true)]
-    protected $olbsType;
 
     /**
      * Initialise the collections
@@ -269,54 +252,6 @@ abstract class AbstractOpposer implements BundleSerializableInterface, JsonSeria
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * Set the olbs key
-     *
-     * @param int $olbsKey new value being set
-     *
-     * @return static
-     */
-    public function setOlbsKey($olbsKey)
-    {
-        $this->olbsKey = $olbsKey;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs key
-     *
-     * @return int
-     */
-    public function getOlbsKey()
-    {
-        return $this->olbsKey;
-    }
-
-    /**
-     * Set the olbs type
-     *
-     * @param string $olbsType new value being set
-     *
-     * @return static
-     */
-    public function setOlbsType($olbsType)
-    {
-        $this->olbsType = $olbsType;
-
-        return $this;
-    }
-
-    /**
-     * Get the olbs type
-     *
-     * @return string
-     */
-    public function getOlbsType()
-    {
-        return $this->olbsType;
     }
 
     /**

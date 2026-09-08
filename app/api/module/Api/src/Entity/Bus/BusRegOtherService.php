@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'ix_bus_reg_other_service_bus_reg_id', columns: ['bus_reg_id'])]
 #[ORM\Index(name: 'ix_bus_reg_other_service_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_bus_reg_other_service_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\UniqueConstraint(name: 'uk_bus_reg_other_service_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class BusRegOtherService extends AbstractBusRegOtherService
 {

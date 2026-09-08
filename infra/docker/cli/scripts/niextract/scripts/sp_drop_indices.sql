@@ -6,307 +6,6 @@ CREATE PROCEDURE sp_drop_indices()
 
 BEGIN
 
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'address' AND index_name = 'uk_address_olbs_key_olbs_type') THEN
-    DROP INDEX uk_address_olbs_key_olbs_type ON address; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'address' AND index_name = 'uk_address_olbs_key_olbs_type') THEN
-    DROP INDEX uk_address_olbs_key_olbs_type ON address; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'appeal' AND index_name = 'uk_appeal_olbs_key_olbs_type') THEN
-    DROP INDEX uk_appeal_olbs_key_olbs_type ON appeal; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'appeal' AND index_name = 'uk_appeal_olbs_key_olbs_type') THEN
-    DROP INDEX uk_appeal_olbs_key_olbs_type ON appeal; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'application_operating_centre' AND index_name = 'uk_application_operating_centre_olbs_key') THEN
-    DROP INDEX uk_application_operating_centre_olbs_key ON application_operating_centre; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'bus_reg' AND index_name = 'uk_bus_reg_olbs_key') THEN
-    DROP INDEX uk_bus_reg_olbs_key ON bus_reg; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'bus_reg_other_service' AND index_name = 'uk_bus_reg_other_service_olbs_key') THEN
-    DROP INDEX uk_bus_reg_other_service_olbs_key ON bus_reg_other_service; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'bus_short_notice' AND index_name = 'uk_bus_short_notice_olbs_key') THEN
-    DROP INDEX uk_bus_short_notice_olbs_key ON bus_short_notice; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'change_of_entity' AND index_name = 'uk_change_of_entity_olbs_key') THEN
-    DROP INDEX uk_change_of_entity_olbs_key ON change_of_entity; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'community_lic' AND index_name = 'uk_community_lic_olbs_key') THEN
-    DROP INDEX uk_community_lic_olbs_key ON community_lic; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'community_lic_suspension' AND index_name = 'uk_community_lic_suspension_olbs_key') THEN
-    DROP INDEX uk_community_lic_suspension_olbs_key ON community_lic_suspension; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'community_lic_suspension_reason' AND index_name = 'uk_community_lic_suspension_reason_olbs_key') THEN
-    DROP INDEX uk_community_lic_suspension_reason_olbs_key ON community_lic_suspension_reason; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'community_lic_withdrawal' AND index_name = 'uk_community_lic_withdrawal_olbs_key') THEN
-    DROP INDEX uk_community_lic_withdrawal_olbs_key ON community_lic_withdrawal; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'community_lic_withdrawal_reason' AND index_name = 'uk_community_lic_withdrawal_reason_olbs_key') THEN
-    DROP INDEX uk_community_lic_withdrawal_reason_olbs_key ON community_lic_withdrawal_reason; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'condition_undertaking' AND index_name = 'uk_condition_undertaking_olbs_key_olbs_type') THEN
-    DROP INDEX uk_condition_undertaking_olbs_key_olbs_type ON condition_undertaking; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'condition_undertaking' AND index_name = 'uk_condition_undertaking_olbs_key_olbs_type') THEN
-    DROP INDEX uk_condition_undertaking_olbs_key_olbs_type ON condition_undertaking; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'contact_details' AND index_name = 'uk_contact_details_olbs_key_olbs_type') THEN
-    DROP INDEX uk_contact_details_olbs_key_olbs_type ON contact_details; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'contact_details' AND index_name = 'uk_contact_details_olbs_key_olbs_type') THEN
-    DROP INDEX uk_contact_details_olbs_key_olbs_type ON contact_details; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'conviction' AND index_name = 'uk_conviction_olbs_key') THEN
-    DROP INDEX uk_conviction_olbs_key ON conviction; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'correspondence_inbox' AND index_name = 'uk_correspondence_inbox_olbs_key') THEN
-    DROP INDEX uk_correspondence_inbox_olbs_key ON correspondence_inbox; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'disqualification' AND index_name = 'uk_disqualification_olbs_key') THEN
-    DROP INDEX uk_disqualification_olbs_key ON disqualification; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'document' AND index_name = 'uk_document_olbs_key_olbs_type') THEN
-    DROP INDEX uk_document_olbs_key_olbs_type ON document; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'document' AND index_name = 'uk_document_olbs_key_olbs_type') THEN
-    DROP INDEX uk_document_olbs_key_olbs_type ON document; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'ebsr_submission' AND index_name = 'uk_ebsr_submission_olbs_key') THEN
-    DROP INDEX uk_ebsr_submission_olbs_key ON ebsr_submission; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'event_history' AND index_name = 'uk_event_history_olbs_key_olbs_type') THEN
-    DROP INDEX uk_event_history_olbs_key_olbs_type ON event_history; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'event_history' AND index_name = 'uk_event_history_olbs_key_olbs_type') THEN
-    DROP INDEX uk_event_history_olbs_key_olbs_type ON event_history; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'goods_disc' AND index_name = 'uk_goods_disc_olbs_key') THEN
-    DROP INDEX uk_goods_disc_olbs_key ON goods_disc; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'grace_period' AND index_name = 'uk_grace_period_olbs_key') THEN
-    DROP INDEX uk_grace_period_olbs_key ON grace_period; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'hearing' AND index_name = 'uk_hearing_olbs_key_olbs_type') THEN
-    DROP INDEX uk_hearing_olbs_key_olbs_type ON hearing; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'hearing' AND index_name = 'uk_hearing_olbs_key_olbs_type') THEN
-    DROP INDEX uk_hearing_olbs_key_olbs_type ON hearing; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'inspection_request' AND index_name = 'uk_inspection_request_olbs_key') THEN
-    DROP INDEX uk_inspection_request_olbs_key ON inspection_request; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'irfo_partner' AND index_name = 'uk_irfo_partner_olbs_key') THEN
-    DROP INDEX uk_irfo_partner_olbs_key ON irfo_partner; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'irfo_permit_stock' AND index_name = 'uk_irfo_permit_stock_olbs_key') THEN
-    DROP INDEX uk_irfo_permit_stock_olbs_key ON irfo_permit_stock; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'irfo_vehicle' AND index_name = 'uk_irfo_vehicle_olbs_key') THEN
-    DROP INDEX uk_irfo_vehicle_olbs_key ON irfo_vehicle; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'licence' AND index_name = 'uk_licence_olbs_key') THEN
-    DROP INDEX uk_licence_olbs_key ON licence; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'licence_operating_centre' AND index_name = 'uk_licence_operating_centre_olbs_key') THEN
-    DROP INDEX uk_licence_operating_centre_olbs_key ON licence_operating_centre; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'licence_vehicle' AND index_name = 'uk_licence_vehicle_olbs_key') THEN
-    DROP INDEX uk_licence_vehicle_olbs_key ON licence_vehicle; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'note' AND index_name = 'uk_note_olbs_key_olbs_type') THEN
-    DROP INDEX uk_note_olbs_key_olbs_type ON note; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'note' AND index_name = 'uk_note_olbs_key_olbs_type') THEN
-    DROP INDEX uk_note_olbs_key_olbs_type ON note; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'oc_complaint' AND index_name = 'uk_oc_complaint_olbs_key') THEN
-    DROP INDEX uk_oc_complaint_olbs_key ON oc_complaint; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'operating_centre' AND index_name = 'uk_operating_centre_olbs_key') THEN
-    DROP INDEX uk_operating_centre_olbs_key ON operating_centre; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'opposer' AND index_name = 'uk_opposer_olbs_key_olbs_type') THEN
-    DROP INDEX uk_opposer_olbs_key_olbs_type ON opposer; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'opposer' AND index_name = 'uk_opposer_olbs_key_olbs_type') THEN
-    DROP INDEX uk_opposer_olbs_key_olbs_type ON opposer; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'opposition' AND index_name = 'uk_opposition_olbs_key_olbs_type') THEN
-    DROP INDEX uk_opposition_olbs_key_olbs_type ON opposition; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'opposition' AND index_name = 'uk_opposition_olbs_key_olbs_type') THEN
-    DROP INDEX uk_opposition_olbs_key_olbs_type ON opposition; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'opposition_grounds' AND index_name = 'uk_opposition_grounds_olbs_key') THEN
-    DROP INDEX uk_opposition_grounds_olbs_key ON opposition_grounds; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'organisation_person' AND index_name = 'uk_organisation_person_olbs_key') THEN
-    DROP INDEX uk_organisation_person_olbs_key ON organisation_person; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'person' AND index_name = 'uk_person_olbs_key_olbs_type') THEN
-    DROP INDEX uk_person_olbs_key_olbs_type ON person; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'person' AND index_name = 'uk_person_olbs_key_olbs_type') THEN
-    DROP INDEX uk_person_olbs_key_olbs_type ON person; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'pi' AND index_name = 'uk_pi_olbs_key_olbs_type') THEN
-    DROP INDEX uk_pi_olbs_key_olbs_type ON pi; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'pi' AND index_name = 'uk_pi_olbs_key_olbs_type') THEN
-    DROP INDEX uk_pi_olbs_key_olbs_type ON pi; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'pi_hearing' AND index_name = 'uk_pi_hearing_olbs_key_olbs_type') THEN
-    DROP INDEX uk_pi_hearing_olbs_key_olbs_type ON pi_hearing; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'pi_hearing' AND index_name = 'uk_pi_hearing_olbs_key_olbs_type') THEN
-    DROP INDEX uk_pi_hearing_olbs_key_olbs_type ON pi_hearing; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'private_hire_licence' AND index_name = 'uk_private_hire_licence_olbs_key') THEN
-    DROP INDEX uk_private_hire_licence_olbs_key ON private_hire_licence; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'prohibition' AND index_name = 'uk_prohibition_olbs_key') THEN
-    DROP INDEX uk_prohibition_olbs_key ON prohibition; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'prohibition_defect' AND index_name = 'uk_prohibition_defect_olbs_key') THEN
-    DROP INDEX uk_prohibition_defect_olbs_key ON prohibition_defect; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'psv_disc' AND index_name = 'uk_psv_disc_olbs_key') THEN
-    DROP INDEX uk_psv_disc_olbs_key ON psv_disc; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'publication_link' AND index_name = 'uk_publication_link_olbs_key_olbs_type') THEN
-    DROP INDEX uk_publication_link_olbs_key_olbs_type ON publication_link; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'publication_link' AND index_name = 'uk_publication_link_olbs_key_olbs_type') THEN
-    DROP INDEX uk_publication_link_olbs_key_olbs_type ON publication_link; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'publication_police_data' AND index_name = 'uk_publication_police_data_olbs_key') THEN
-    DROP INDEX uk_publication_police_data_olbs_key ON publication_police_data; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'recipient' AND index_name = 'uk_recipient_olbs_key') THEN
-    DROP INDEX uk_recipient_olbs_key ON recipient; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'statement' AND index_name = 'uk_statement_olbs_key') THEN
-    DROP INDEX uk_statement_olbs_key ON statement; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'task' AND index_name = 'uk_task_olbs_key') THEN
-    DROP INDEX uk_task_olbs_key ON task; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'team' AND index_name = 'uk_team_olbs_key') THEN
-    DROP INDEX uk_team_olbs_key ON team; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'tm_case_decision' AND index_name = 'uk_tm_case_decision_olbs_key') THEN
-    DROP INDEX uk_tm_case_decision_olbs_key ON tm_case_decision; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'tm_case_decision_rehab' AND index_name = 'uk_tm_case_decision_rehab_olbs_key') THEN
-    DROP INDEX uk_tm_case_decision_rehab_olbs_key ON tm_case_decision_rehab; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'tm_case_decision_unfitness' AND index_name = 'uk_tm_case_decision_unfitness_olbs_key') THEN
-    DROP INDEX uk_tm_case_decision_unfitness_olbs_key ON tm_case_decision_unfitness; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'tm_qualification' AND index_name = 'uk_tm_qualification_olbs_key') THEN
-    DROP INDEX uk_tm_qualification_olbs_key ON tm_qualification; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'trading_name' AND index_name = 'uk_trading_name_olbs_key') THEN
-    DROP INDEX uk_trading_name_olbs_key ON trading_name; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'trailer' AND index_name = 'uk_trailer_olbs_key') THEN
-    DROP INDEX uk_trailer_olbs_key ON trailer; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'transport_manager_application' AND index_name = 'uk_transport_manager_application_olbs_key') THEN
-    DROP INDEX uk_transport_manager_application_olbs_key ON transport_manager_application; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'transport_manager_licence' AND index_name = 'uk_transport_manager_licence_olbs_key') THEN
-    DROP INDEX uk_transport_manager_licence_olbs_key ON transport_manager_licence; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'vehicle' AND index_name = 'uk_vehicle_olbs_key') THEN
-    DROP INDEX uk_vehicle_olbs_key ON vehicle; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'venue' AND index_name = 'uk_venue_olbs_key') THEN
-    DROP INDEX uk_venue_olbs_key ON venue; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics  WHERE table_schema = database() AND table_name = 'workshop' AND index_name = 'uk_workshop_olbs_key') THEN
-    DROP INDEX uk_workshop_olbs_key ON workshop; 
-END IF;
-
-
 IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'address' AND index_name = 'ix_address_country_code') THEN
     DROP INDEX ix_address_country_code ON address; 
 END IF;
@@ -453,10 +152,6 @@ END IF;
 
 IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg' AND index_name = 'ix_bus_reg_withdrawn_reason') THEN
     DROP INDEX ix_bus_reg_withdrawn_reason ON bus_reg; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_local_auth' AND index_name = 'uk_bus_reg_local_auth_olbs_key_local_authority_id') THEN
-    DROP INDEX uk_bus_reg_local_auth_olbs_key_local_authority_id ON bus_reg_local_auth; 
 END IF;
 
 IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_local_auth' AND index_name = 'ix_bus_reg_local_auth_local_authority_id') THEN
@@ -1423,10 +1118,6 @@ IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_sche
     DROP INDEX ix_phone_contact_last_modified_by ON phone_contact; 
 END IF;
 
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'phone_contact' AND index_name = 'uk_phone_contact_olbs_key_olbs_type_phone_contact_type') THEN
-    DROP INDEX uk_phone_contact_olbs_key_olbs_type_phone_contact_type ON phone_contact; 
-END IF;
-
 IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'phone_contact' AND index_name = 'ix_phone_contact_phone_contact_type') THEN
     DROP INDEX ix_phone_contact_phone_contact_type ON phone_contact; 
 END IF;
@@ -2232,68 +1923,12 @@ IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_sche
     DROP INDEX ix_bus_reg_read_audit_created_on ON bus_reg_read_audit; 
 END IF;
 
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_traffic_area' AND index_name = 'uk_bus_reg_traffic_area_olbs_key_traffic_area_id') THEN
-    DROP INDEX uk_bus_reg_traffic_area_olbs_key_traffic_area_id ON bus_reg_traffic_area; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_traffic_area' AND index_name = 'uk_bus_reg_traffic_area_olbs_key_traffic_area_id') THEN
-    DROP INDEX uk_bus_reg_traffic_area_olbs_key_traffic_area_id ON bus_reg_traffic_area; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_traffic_area' AND index_name = 'ix_bus_reg_traffic_area_olbs_key_traffic_area_id') THEN
-    DROP INDEX ix_bus_reg_traffic_area_olbs_key_traffic_area_id ON bus_reg_traffic_area; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_traffic_area' AND index_name = 'ix_bus_reg_traffic_area_olbs_key_traffic_area_id') THEN
-    DROP INDEX ix_bus_reg_traffic_area_olbs_key_traffic_area_id ON bus_reg_traffic_area; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_variation_reason' AND index_name = 'ix_bus_reg_variation_reason_olbs_key_olbs_key2') THEN
-    DROP INDEX ix_bus_reg_variation_reason_olbs_key_olbs_key2 ON bus_reg_variation_reason; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'bus_reg_variation_reason' AND index_name = 'ix_bus_reg_variation_reason_olbs_key_olbs_key2') THEN
-    DROP INDEX ix_bus_reg_variation_reason_olbs_key_olbs_key2 ON bus_reg_variation_reason; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'cases' AND index_name = 'ix_cases_olbs_key_olbs_type') THEN
-    DROP INDEX ix_cases_olbs_key_olbs_type ON cases; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'cases' AND index_name = 'ix_cases_olbs_key_olbs_type') THEN
-    DROP INDEX ix_cases_olbs_key_olbs_type ON cases; 
-END IF;
-
 IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'cases_read_audit' AND index_name = 'ix_cases_read_audit_created_on') THEN
     DROP INDEX ix_cases_read_audit_created_on ON cases_read_audit; 
 END IF;
 
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'company_subsidiary' AND index_name = 'uk_company_subsidiary_olbs_key_licence_id') THEN
-    DROP INDEX uk_company_subsidiary_olbs_key_licence_id ON company_subsidiary; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'company_subsidiary' AND index_name = 'uk_company_subsidiary_olbs_key_licence_id') THEN
-    DROP INDEX uk_company_subsidiary_olbs_key_licence_id ON company_subsidiary; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'complaint' AND index_name = 'ix_complaint_olbs_key') THEN
-    DROP INDEX ix_complaint_olbs_key ON complaint; 
-END IF;
-
 IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'continuation' AND index_name = 'ix_continuation_traffic_area_id_year_month') THEN
     DROP INDEX ix_continuation_traffic_area_id_year_month ON continuation; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'continuation' AND index_name = 'ix_continuation_traffic_area_id_year_month') THEN
-    DROP INDEX ix_continuation_traffic_area_id_year_month ON continuation; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'continuation' AND index_name = 'ix_continuation_traffic_area_id_year_month') THEN
-    DROP INDEX ix_continuation_traffic_area_id_year_month ON continuation; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'ebsr_route_reprint' AND index_name = 'ix_ebsr_route_reprint_olbs_key') THEN
-    DROP INDEX ix_ebsr_route_reprint_olbs_key ON ebsr_route_reprint; 
 END IF;
 
 IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'event_history_type' AND index_name = 'uk_event_history_type_event_code') THEN
@@ -2314,18 +1949,6 @@ END IF;
 
 IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'licence_vehicle' AND index_name = 'ix_licence_vehicle_vi_action') THEN
     DROP INDEX ix_licence_vehicle_vi_action ON licence_vehicle; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'operating_centre_opposition' AND index_name = 'uk_operating_centre_opposition_olbs_oc_id_olbs_opp_id_olbs_type') THEN
-    DROP INDEX uk_operating_centre_opposition_olbs_oc_id_olbs_opp_id_olbs_type ON operating_centre_opposition; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'operating_centre_opposition' AND index_name = 'uk_operating_centre_opposition_olbs_oc_id_olbs_opp_id_olbs_type') THEN
-    DROP INDEX uk_operating_centre_opposition_olbs_oc_id_olbs_opp_id_olbs_type ON operating_centre_opposition; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'operating_centre_opposition' AND index_name = 'uk_operating_centre_opposition_olbs_oc_id_olbs_opp_id_olbs_type') THEN
-    DROP INDEX uk_operating_centre_opposition_olbs_oc_id_olbs_opp_id_olbs_type ON operating_centre_opposition; 
 END IF;
 
 IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'organisation' AND index_name = 'ix_organisation_name') THEN
@@ -2366,10 +1989,6 @@ END IF;
 
 IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'traffic_area_enforcement_area' AND index_name = 'uk_ta_enforcement_area_traffic_area_id_enforcement_area_id') THEN
     DROP INDEX uk_ta_enforcement_area_traffic_area_id_enforcement_area_id ON traffic_area_enforcement_area; 
-END IF;
-
-IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'txn' AND index_name = 'ix_txn_olbs_key') THEN
-    DROP INDEX ix_txn_olbs_key ON txn; 
 END IF;
 
 IF EXISTS (SELECT index_name FROM information_schema.statistics WHERE table_schema = database() AND table_name = 'user' AND index_name = 'uk_user_pid') THEN

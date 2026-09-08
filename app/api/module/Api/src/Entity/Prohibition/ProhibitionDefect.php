@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'ix_prohibition_defect_prohibition_id', columns: ['prohibition_id'])]
 #[ORM\Index(name: 'ix_prohibition_defect_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_prohibition_defect_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\UniqueConstraint(name: 'uk_prohibition_defect_olbs_key', columns: ['olbs_key'])]
 #[ORM\Entity]
 class ProhibitionDefect extends AbstractProhibitionDefect
 {
