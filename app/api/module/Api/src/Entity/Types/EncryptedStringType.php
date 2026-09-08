@@ -13,17 +13,6 @@ class EncryptedStringType extends StringType
     private ?AES $encrypter = null;
 
     /**
-     * Get the name of this type
-     *
-     * @return string
-     */
-    #[\Override]
-    public function getName()
-    {
-        return self::TYPE;
-    }
-
-    /**
      * Convert value to PHP value
      *
      * @param string           $value    Value from DB
@@ -32,8 +21,10 @@ class EncryptedStringType extends StringType
      * @return bool|string
      */
     #[\Override]
-    public function convertToPhpValue($value, AbstractPlatform $platform)
-    {
+    public function convertToPHPValue(
+        mixed $value,
+        AbstractPlatform $platform
+    ): mixed {
         return $this->getEncrypter()->decrypt(base64_decode($value));
     }
 
@@ -46,8 +37,10 @@ class EncryptedStringType extends StringType
      * @return string
      */
     #[\Override]
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
-    {
+    public function convertToDatabaseValue(
+        mixed $value,
+        AbstractPlatform $platform
+    ): mixed {
         return base64_encode($this->getEncrypter()->encrypt($value));
     }
 

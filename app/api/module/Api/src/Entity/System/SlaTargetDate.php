@@ -16,7 +16,6 @@ use Dvsa\Olcs\Api\Entity\Cases\ProposeToRevoke;
 #[ORM\Table(name: 'sla_target_date')]
 #[ORM\Index(name: 'ix_sla_target_date_created_by', columns: ['created_by'])]
 #[ORM\Index(name: 'ix_sla_target_date_last_modified_by', columns: ['last_modified_by'])]
-#[ORM\Index(name: 'ix_sla_target_date_document_id', columns: ['document_id'])]
 #[ORM\UniqueConstraint(name: 'uk_sla_target_date_document_id', columns: ['document_id'])]
 #[ORM\Entity]
 class SlaTargetDate extends AbstractSlaTargetDate

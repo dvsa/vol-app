@@ -54,7 +54,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
     /**
      * SiPenaltyErruRequested
      *
-     * @var \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested
+     * @var \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested|null
      */
     #[ORM\JoinColumn(name: 'si_penalty_erru_requested_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Si\SiPenaltyErruRequested::class, inversedBy: 'appliedPenalties', fetch: 'LAZY')]
@@ -81,7 +81,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -91,7 +91,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -101,7 +101,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
     /**
      * imposed
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'imposed', nullable: true)]
     protected $imposed;
@@ -109,7 +109,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
     /**
      * Start date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'start_date', nullable: true)]
     protected $startDate;
@@ -117,7 +117,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
     /**
      * End date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'end_date', nullable: true)]
     protected $endDate;
@@ -125,7 +125,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
     /**
      * Reason not imposed
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'reason_not_imposed', length: 500, nullable: true)]
     protected $reasonNotImposed;
@@ -142,7 +142,7 @@ abstract class AbstractSiPenalty implements BundleSerializableInterface, JsonSer
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;

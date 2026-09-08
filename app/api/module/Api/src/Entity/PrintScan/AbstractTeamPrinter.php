@@ -66,7 +66,7 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
     /**
      * Optional field to enable different printers to be used for different categories of document. The default document setting is where this field is NULL
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
+     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory|null
      */
     #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SubCategory::class, fetch: 'LAZY')]
@@ -75,7 +75,7 @@ abstract class AbstractTeamPrinter implements BundleSerializableInterface, JsonS
     /**
      * Optional field to enable different printers to be used for different users within a team. The settings for the team are where this field is NULL. The settings for individual users are where this field is populated
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]

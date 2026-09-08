@@ -13,10 +13,10 @@ use Dvsa\OlcsTest\Integration\IntegrationTestCase;
  * recorded in schema-drift-baseline.txt; the test fails only when NEW drift is
  * introduced (an entity change with no matching migration, or vice versa).
  *
- * Column and table comments are excluded from the comparison: they are owned
- * by olcs-etl DDL, and ORM 2.x cannot express them on association join columns
- * (JoinColumn has no options), so they can never round-trip through entity
- * metadata. Revisit once on ORM 3, where JoinColumn supports options.
+ * Comments are silenced only where the mapping declares none of its own - see
+ * silenceUnmodelledComments(). The former rationale, that ORM 2's JoinColumn had no
+ * options so a comment could never round-trip, no longer holds: ORM 3's JoinColumn
+ * takes options.
  *
  * When resolving drift, or after a legitimate coordinated entity + migration
  * change, regenerate the baseline:
@@ -52,23 +52,27 @@ class SchemaDriftTest extends IntegrationTestCase
         $databaseSchema = $schemaManager->introspectSchema();
         $entitySchema = (new SchemaTool($entityManager))->getSchemaFromMetadata($metadata);
 
+        SchemaComparison::silenceUnmodelledComments($databaseSchema, $entitySchema);
+
         foreach ([$databaseSchema, $entitySchema] as $schema) {
             foreach ($schema->getTables() as $table) {
-                $table->addOption('comment', '');
                 foreach ($table->getColumns() as $column) {
-                    $column->setComment('');
-
-                    // Custom DBAL types are PHP conversion semantics over a plain
-                    // storage type; the Liquibase DDL never carries their DC2Type
-                    // comment hint, so compare the storage declaration instead.
+                    // YesNoType and YesNoNullType hardcode
+                    // "tinyint(1) NOT NULL COMMENT '(DC2Type:yesno)'" as their whole
+                    // declaration SQL, so they can never match the column they map however
+                    // it is declared. They are PHP conversion semantics over a plain
+                    // boolean, so compare the storage declaration instead.
+                    //
+                    // EncryptedStringType needed the same treatment under DBAL 3, which
+                    // appended a DC2Type comment hint to custom types. DBAL 4 dropped that
+                    // mechanism and the type declares as its StringType parent, so no
+                    // normalisation is required - removing it changes no statement.
                     $type = $column->getType();
                     if (
                         $type instanceof \Dvsa\Olcs\Api\Entity\Types\YesNoType
                         || $type instanceof \Dvsa\Olcs\Api\Entity\Types\YesNoNullType
                     ) {
                         $column->setType(\Doctrine\DBAL\Types\Type::getType('boolean'));
-                    } elseif ($type instanceof \Dvsa\Olcs\Api\Entity\Types\EncryptedStringType) {
-                        $column->setType(\Doctrine\DBAL\Types\Type::getType('string'));
                     }
                 }
 
@@ -99,21 +103,42 @@ class SchemaDriftTest extends IntegrationTestCase
         $schemaDiff = $schemaManager->createComparator()->compareSchemas($databaseSchema, $entitySchema);
         $statements = $connection->getDatabasePlatform()->getAlterSchemaSQL($schemaDiff);
 
-        // Tables with no entity mapping (audit *_hist tables, ETL working tables
-        // and so on) are owned by olcs-etl and are not drift the API cares about.
-        $statements = array_values(
-            array_filter($statements, static fn (string $sql): bool => !str_starts_with($sql, 'DROP TABLE')),
+        // Tables the entity side knows nothing about (audit *_hist tables, ETL working
+        // tables and so on) are owned by olcs-etl and are not drift the API cares about.
+        // Dropping only the DROP TABLE is not enough: Doctrine emits an ALTER TABLE ...
+        // DROP FOREIGN KEY for the same tables first, and four of those sat in the baseline
+        // describing a table that had since gained an entity.
+        $knownTables = array_map(
+            static fn (\Doctrine\DBAL\Schema\Table $table): string => $table->getName(),
+            $entitySchema->getTables(),
         );
+        $statements = array_values(array_filter(
+            $statements,
+            static function (string $sql) use ($knownTables): bool {
+                if (str_starts_with($sql, 'DROP TABLE')) {
+                    return false;
+                }
+
+                $table = SchemaComparison::tableOf($sql);
+
+                return $table === null || in_array($table, $knownTables, true);
+            },
+        ));
         sort($statements);
 
+        $mappedTables = array_map(
+            static fn (\Doctrine\ORM\Mapping\ClassMetadata $classMetadata): string => $classMetadata->getTableName(),
+            $metadata,
+        );
+
         if (getenv('REGENERATE_SCHEMA_DRIFT_BASELINE')) {
-            file_put_contents(self::BASELINE_FILE, implode(PHP_EOL, $statements) . PHP_EOL);
+            file_put_contents(self::BASELINE_FILE, SchemaComparison::renderBaseline($statements, $mappedTables));
             $this->assertFileExists(self::BASELINE_FILE);
             return;
         }
 
         $baseline = is_file(self::BASELINE_FILE)
-            ? file(self::BASELINE_FILE, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
+            ? SchemaComparison::parseBaseline((string) file_get_contents(self::BASELINE_FILE))
             : [];
 
         $this->assertSame(

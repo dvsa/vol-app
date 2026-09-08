@@ -101,6 +101,7 @@ class EntityGenerator implements EntityGeneratorInterface
             'table' => $table,
             'hasCollections' => $this->hasCollections($fields),
             'hasCreatedOn' => $this->hasField($fields, 'createdOn'),
+            'createdOnNotNull' => $this->isFieldNotNull($fields, 'createdOn'),
             'hasModifiedOn' => $this->hasField($fields, 'lastModifiedOn'),
             'softDeletable' => $this->hasSoftDeletable($table, $config),
             'entityConfig' => $this->entityConfigService->getTableConfig($tableName),
@@ -275,9 +276,18 @@ class EntityGenerator implements EntityGeneratorInterface
         foreach ($relationships as $relationship) {
             // Create inverse relationship field
             // Determine the proper type for the relationship
+            $sourceEntityNamespace = $this->entityConfigService->getEntityNamespace(
+                $relationship['sourceEntity']
+            ) ?? '';
+
+            $sourceEntityClass = '\\Dvsa\\Olcs\\Api\\Entity\\'
+                . ($sourceEntityNamespace !== '' ? $sourceEntityNamespace . '\\' : '')
+                . $relationship['sourceEntity'];
+
             $propertyType = $relationship['relationshipType']->isCollection()
-                ? '\\' . \Doctrine\Common\Collections\ArrayCollection::class
-                : '\\Dvsa\\Olcs\\Api\\Entity\\' . $relationship['sourceEntity'];
+                ? '\\' . \Doctrine\Common\Collections\Collection::class
+                    . '<int, ' . $sourceEntityClass . '>'
+                : $sourceEntityClass;
 
             // Generate annotations
             $annotations = [$this->inverseRelationshipProcessor->generateInverseAnnotation($relationship)];
@@ -299,7 +309,7 @@ class EntityGenerator implements EntityGeneratorInterface
                     'name' => $relationship['property'],
                     'type' => $propertyType,
                     'docBlock' => ucfirst(str_replace('_', ' ', $relationship['property'])),
-                    'nullable' => false,
+                    'nullable' => !$relationship['relationshipType']->isCollection(),
                     'isRelationship' => true,
                     'defaultValue' => 'null',
                 ],
@@ -365,6 +375,7 @@ class EntityGenerator implements EntityGeneratorInterface
             'uniqueConstraints' => $table->getUniqueConstraints(),
             'hasCollections' => $this->hasCollections($fields),
             'hasCreatedOn' => $this->hasField($fields, 'createdOn'),
+            'createdOnNotNull' => $this->isFieldNotNull($fields, 'createdOn'),
             'hasModifiedOn' => $this->hasField($fields, 'lastModifiedOn'),
             'softDeletable' => $this->hasSoftDeletable($table, $config),
             'imports' => $this->gatherImports($fields),
@@ -612,7 +623,7 @@ class EntityGenerator implements EntityGeneratorInterface
             ? $this->buildOwningManyToManyAnnotation($targetEntity, $inversePropertyName, $relationship)
             : $this->buildInverseManyToManyAnnotation($targetEntity, $inversePropertyName);
 
-        return $this->buildManyToManyFieldArray($propertyName, $annotation);
+        return $this->buildManyToManyFieldArray($propertyName, $annotation, $targetEntity);
     }
 
     /**
@@ -683,8 +694,11 @@ class EntityGenerator implements EntityGeneratorInterface
     /**
      * Build ManyToMany field array structure
      */
-    private function buildManyToManyFieldArray(string $propertyName, string $annotation): array
-    {
+    private function buildManyToManyFieldArray(
+        string $propertyName,
+        string $annotation,
+        string $targetEntity
+    ): array {
         return [
             'column' => null,
             'handler' => null,
@@ -692,7 +706,8 @@ class EntityGenerator implements EntityGeneratorInterface
             'annotation' => $annotation,
             'property' => [
                 'name' => $propertyName,
-                'type' => '\\' . \Doctrine\Common\Collections\ArrayCollection::class,
+                'type' => '\\' . \Doctrine\Common\Collections\Collection::class
+                    . '<int, \\' . ltrim($targetEntity, '\\') . '>',
                 'docBlock' => ucfirst(str_replace('_', ' ', $propertyName)),
                 'defaultValue' => 'null',
                 'nullable' => false,
@@ -721,6 +736,23 @@ class EntityGenerator implements EntityGeneratorInterface
     /**
      * Check if a specific field exists
      */
+    /**
+     * Whether a field exists and its column is NOT NULL. Drives the choice between
+     * CreatedOnTrait and CreatedOnNotNullTrait, which differ only in the mapping's nullable
+     * flag - the 13 tables that declare created_on NOT NULL need the mapping to say so, and
+     * the trait is where that mapping lives.
+     */
+    private function isFieldNotNull(array $fields, string $fieldName): bool
+    {
+        foreach ($fields as $field) {
+            if (($field['property']['name'] ?? null) === $fieldName) {
+                return ($field['property']['nullable'] ?? true) === false;
+            }
+        }
+
+        return false;
+    }
+
     private function hasField(array $fields, string $fieldName): bool
     {
         foreach ($fields as $field) {

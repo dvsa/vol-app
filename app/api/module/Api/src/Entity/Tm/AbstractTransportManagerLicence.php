@@ -73,7 +73,7 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * TmType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'tm_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -82,7 +82,7 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -92,7 +92,7 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -102,7 +102,7 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * isOwner
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'is_owner', nullable: true)]
     protected $isOwner;
@@ -110,63 +110,63 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Hours mon
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_mon', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_mon', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursMon;
 
     /**
      * Hours tue
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_tue', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_tue', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursTue;
 
     /**
      * Hours wed
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_wed', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_wed', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursWed;
 
     /**
      * Hours thu
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_thu', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_thu', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursThu;
 
     /**
      * Hours fri
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_fri', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_fri', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursFri;
 
     /**
      * Hours sat
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_sat', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_sat', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursSat;
 
     /**
      * Hours sun
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'decimal', name: 'hours_sun', nullable: true, options: ['unsigned' => true])]
+    #[ORM\Column(type: 'decimal', name: 'hours_sun', nullable: true, options: ['unsigned' => true], precision: 3, scale: 1)]
     protected $hoursSun;
 
     /**
      * Additional information
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'additional_information', length: 4000, nullable: true)]
     protected $additionalInformation;
@@ -174,7 +174,7 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Last tm first email date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'last_tm_first_email_date', nullable: true)]
     protected $lastTmFirstEmailDate;
@@ -182,7 +182,7 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Last tm letter date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'last_tm_letter_date', nullable: true)]
     protected $lastTmLetterDate;
@@ -199,7 +199,7 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
@@ -207,7 +207,7 @@ abstract class AbstractTransportManagerLicence implements BundleSerializableInte
     /**
      * OtherLicences
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\OtherLicence\OtherLicence::class, mappedBy: 'transportManagerLicence')]
     protected $otherLicences;

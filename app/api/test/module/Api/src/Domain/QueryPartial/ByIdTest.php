@@ -29,12 +29,13 @@ final class ByIdTest extends QueryPartialTestCase
     public function testModifyQuery(): void
     {
         $id = 111;
+        $expr = \Mockery::mock(\Doctrine\ORM\Query\Expr\Comparison::class);
 
         $this->qb->shouldReceive('getRootAliases')
             ->andReturn(['a'])
             ->shouldReceive('andWhere')
             ->once()
-            ->with('a.id = :byId')
+            ->with($expr)
             ->andReturnSelf()
             ->shouldReceive('setParameter')
             ->once()
@@ -46,7 +47,7 @@ final class ByIdTest extends QueryPartialTestCase
 
         $this->qb->shouldReceive('expr->eq')
             ->with('a.id', ':byId')
-            ->andReturn('a.id = :byId');
+            ->andReturn($expr);
 
         $this->sut->modifyQuery($this->qb, [$id]);
     }

@@ -72,6 +72,7 @@ class AddressOptionalPostcode
 
     /**
      * @Transfer\Filter("Laminas\Filter\StringTrim")
+     * @Transfer\Filter("Laminas\Filter\StringToUpper")
      * @Transfer\Validator("Laminas\Validator\StringLength", options={"min": 0, "max": 2})
      */
     public $countryCode;

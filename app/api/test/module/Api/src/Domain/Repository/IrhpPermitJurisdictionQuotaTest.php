@@ -68,7 +68,7 @@ final class IrhpPermitJurisdictionQuotaTest extends RepositoryTestCase
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
 
-        $mockJurisdictionQuotaRepo = m::mock();
+        $mockJurisdictionQuotaRepo = m::mock(\Doctrine\ORM\EntityRepository::class);
 
         $this->em
             ->shouldReceive('getRepository')
@@ -78,7 +78,7 @@ final class IrhpPermitJurisdictionQuotaTest extends RepositoryTestCase
             ->shouldReceive('createQueryBuilder')
             ->andReturn($qb);
 
-        $where = m::mock();
+        $where = m::mock(\Doctrine\ORM\Query\Expr\Comparison::class);
 
         $qb
             ->shouldReceive('andWhere')

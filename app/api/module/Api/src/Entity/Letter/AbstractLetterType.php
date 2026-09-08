@@ -52,7 +52,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * MasterTemplate
      *
-     * @var \Dvsa\Olcs\Api\Entity\Letter\MasterTemplate
+     * @var \Dvsa\Olcs\Api\Entity\Letter\MasterTemplate|null
      */
     #[ORM\JoinColumn(name: 'master_template_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\MasterTemplate::class, fetch: 'LAZY')]
@@ -61,7 +61,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * LetterTestData
      *
-     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterTestData
+     * @var \Dvsa\Olcs\Api\Entity\Letter\LetterTestData|null
      */
     #[ORM\JoinColumn(name: 'letter_test_data_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Letter\LetterTestData::class, fetch: 'LAZY')]
@@ -70,7 +70,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * Category
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\Category
+     * @var \Dvsa\Olcs\Api\Entity\System\Category|null
      */
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\Category::class, fetch: 'LAZY')]
@@ -79,7 +79,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * SubCategory
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory
+     * @var \Dvsa\Olcs\Api\Entity\System\SubCategory|null
      */
     #[ORM\JoinColumn(name: 'sub_category_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\SubCategory::class, fetch: 'LAZY')]
@@ -88,7 +88,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -98,7 +98,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -116,7 +116,7 @@ abstract class AbstractLetterType implements BundleSerializableInterface, JsonSe
     /**
      * Description
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'description', length: 255, nullable: true)]
     protected $description;

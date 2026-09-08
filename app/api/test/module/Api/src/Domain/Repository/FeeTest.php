@@ -39,17 +39,19 @@ final class FeeTest extends RepositoryTestCase
 
         $mockQb->shouldReceive('join')->with('f.feeType', 'ft')->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('ft.feeType', ':feeTypeFeeType')->once()->andReturn('foo');
-        $mockQb->shouldReceive('andWhere')->with('foo')->once()->andReturnSelf();
+        $feeTypeExpr = $this->mockExprEq('ft.feeType', ':feeTypeFeeType');
+        $mockQb->shouldReceive('expr->eq')->with('ft.feeType', ':feeTypeFeeType')->once()->andReturn($feeTypeExpr);
+        $mockQb->shouldReceive('andWhere')->with($feeTypeExpr)->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('f.application', ':applicationId')->once()->andReturn('bar');
-        $mockQb->shouldReceive('andWhere')->with('bar')->once()->andReturnSelf();
+        $applicationExpr = $this->mockExprEq('f.application', ':applicationId');
+        $mockQb->shouldReceive('expr->eq')->with('f.application', ':applicationId')->once()->andReturn($applicationExpr);
+        $mockQb->shouldReceive('andWhere')->with($applicationExpr)->once()->andReturnSelf();
 
         $this->em->shouldReceive('getReference')->with(
             RefDataEntity::class,
             FeeTypeEntity::FEE_TYPE_GRANTINT
-        )->once()->andReturn('refdata');
-        $mockQb->shouldReceive('setParameter')->with('feeTypeFeeType', 'refdata')->once()->andReturnSelf();
+        )->once()->andReturn($refData = m::mock(RefDataEntity::class));
+        $mockQb->shouldReceive('setParameter')->with('feeTypeFeeType', $refData)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('applicationId', $applicationId)->once()->andReturnSelf();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('result');
@@ -73,11 +75,12 @@ final class FeeTest extends RepositoryTestCase
         $this->em->shouldReceive('getReference')->with(
             RefDataEntity::class,
             FeeEntity::STATUS_OUTSTANDING
-        )->once()->andReturn('ot');
+        )->once()->andReturn($outstandingRef = m::mock(RefDataEntity::class));
 
-        $mockQb->shouldReceive('expr->eq')->with('f.feeStatus', ':feeStatus')->once()->andReturn('expr-eq');
-        $mockQb->shouldReceive('andWhere')->with('expr-eq')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('feeStatus', 'ot')->once();
+        $statusExpr = $this->mockExprEq('f.feeStatus', ':feeStatus');
+        $mockQb->shouldReceive('expr->eq')->with('f.feeStatus', ':feeStatus')->once()->andReturn($statusExpr);
+        $mockQb->shouldReceive('andWhere')->with($statusExpr)->once()->andReturnSelf();
+        $mockQb->shouldReceive('setParameter')->with('feeStatus', $outstandingRef)->once();
 
         $this->assertSame('result', $this->sut->fetchInterimFeesByApplicationId(12, true));
     }
@@ -92,7 +95,7 @@ final class FeeTest extends RepositoryTestCase
         $sort = 'invoicedDate';
         $order = 'DESC';
 
-        $mockRepo = m::mock(Fee::class);
+        $mockRepo = m::mock(\Doctrine\ORM\EntityRepository::class);
         $mockRepo->shouldAllowMockingProtectedMethods();
 
         $this->em->shouldReceive('getRepository')->andReturn($mockRepo);
@@ -108,12 +111,6 @@ final class FeeTest extends RepositoryTestCase
         $mockQb->shouldReceive('leftJoin')->with($alias . '.application', 'a')->once()->andReturnSelf();
         $mockQb->shouldReceive('join')->with($alias . '.feeType', 'fty')->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('fty.feeType', ':feeType')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->isNotNull')->with('COALESCE(a.withdrawnDate, a.refusedDate, a.grantedDate)')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->gte')->with($alias . '.invoicedDate', ':after')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->lte')->with($alias . '.invoicedDate', ':before')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->in')->once()->with('f.feeStatus', ':feeStatus')->andReturnSelf();
-        $mockQb->shouldReceive('expr->in')->once()->with('l.trafficArea', ':trafficArea')->andReturnSelf();
         $mockQb->shouldReceive('expr')->andReturn(new Expr());
 
         $mockQb->shouldReceive('andWhere')->andReturnSelf();
@@ -146,11 +143,12 @@ final class FeeTest extends RepositoryTestCase
         $this->em->shouldReceive('getReference')->with(
             RefDataEntity::class,
             FeeEntity::STATUS_PAID
-        )->once()->andReturn('ot');
+        )->once()->andReturn($paidRef = m::mock(RefDataEntity::class));
 
-        $mockQb->shouldReceive('expr->eq')->with('f.feeStatus', ':feeStatus')->once()->andReturn('expr-eq');
-        $mockQb->shouldReceive('andWhere')->with('expr-eq')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('feeStatus', 'ot')->once();
+        $statusExpr = $this->mockExprEq('f.feeStatus', ':feeStatus');
+        $mockQb->shouldReceive('expr->eq')->with('f.feeStatus', ':feeStatus')->once()->andReturn($statusExpr);
+        $mockQb->shouldReceive('andWhere')->with($statusExpr)->once()->andReturnSelf();
+        $mockQb->shouldReceive('setParameter')->with('feeStatus', $paidRef)->once();
 
         $this->assertSame('result', $this->sut->fetchInterimFeesByApplicationId(12, false, true));
     }
@@ -164,16 +162,17 @@ final class FeeTest extends RepositoryTestCase
         $this->em->shouldReceive('getReference')->with(
             RefDataEntity::class,
             FeeEntity::STATUS_PAID
-        )->once()->andReturn('ot');
+        )->once()->andReturn($paidRef = m::mock(RefDataEntity::class));
 
         $this->em->shouldReceive('getReference')->with(
             RefDataEntity::class,
             FeeEntity::STATUS_OUTSTANDING
-        )->once()->andReturn('pd');
+        )->once()->andReturn($outstandingRef = m::mock(RefDataEntity::class));
 
-        $mockQb->shouldReceive('expr->in')->with('f.feeStatus', ':feeStatus')->once()->andReturn('expr-in');
-        $mockQb->shouldReceive('andWhere')->with('expr-in')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('feeStatus', ['ot', 'pd'])->once();
+        $statusExpr = $this->mockExprIn('f.feeStatus', ':feeStatus');
+        $mockQb->shouldReceive('expr->in')->with('f.feeStatus', ':feeStatus')->once()->andReturn($statusExpr);
+        $mockQb->shouldReceive('andWhere')->with($statusExpr)->once()->andReturnSelf();
+        $mockQb->shouldReceive('setParameter')->with('feeStatus', [$paidRef, $outstandingRef])->once();
 
         $this->assertSame('result', $this->sut->fetchInterimFeesByApplicationId(12, true, true));
     }
@@ -207,18 +206,20 @@ final class FeeTest extends RepositoryTestCase
             ->once()
             ->andReturn('condition3');
 
+        $condition4 = $this->mockExprNotIn('app.status', ':excludedApplicationStatuses');
         $mockQb->shouldReceive('expr->notIn')
             ->with('app.status', ':excludedApplicationStatuses')
             ->once()
-            ->andReturn('condition4');
+            ->andReturn($condition4);
 
+        $condition5 = $this->mockOrX();
         $mockQb->shouldReceive('expr->orX')
             ->withAnyArgs()
             ->once()
-            ->andReturn('condition5');
+            ->andReturn($condition5);
 
         $mockQb->shouldReceive('andWhere')
-            ->with('condition5')
+            ->with($condition5)
             ->once()
             ->andReturnSelf();
 
@@ -227,12 +228,14 @@ final class FeeTest extends RepositoryTestCase
             ->once()
             ->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->notIn')->with('l.status', ':ceasedStatuses')->once()->andReturn('condition1');
-        $mockQb->shouldReceive('expr->neq')->with('ftype.feeType', ':feeType')->once()->andReturn('condition2');
-        $mockQb->shouldReceive('andWhere')->with('condition1')->andReturnSelf();
+        $condition1 = $this->mockExprNotIn('l.status', ':ceasedStatuses');
+        $condition2 = $this->mockExprNeq('ftype.feeType', ':feeType');
+        $mockQb->shouldReceive('expr->notIn')->with('l.status', ':ceasedStatuses')->once()->andReturn($condition1);
+        $mockQb->shouldReceive('expr->neq')->with('ftype.feeType', ':feeType')->once()->andReturn($condition2);
+        $mockQb->shouldReceive('andWhere')->with($condition1)->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('ceasedStatuses', $ceasedStatuses)->andReturnSelf();
         $mockQb->shouldReceive('innerJoin')->with('f.feeType', 'ftype')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->with('condition2')->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($condition2)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('feeType', RefDataEntity::FEE_TYPE_CONT)->once()->andReturnSelf();
 
         $this->em
@@ -438,7 +441,7 @@ final class FeeTest extends RepositoryTestCase
         $mockQb->shouldReceive('expr->in');
 
         // mock pagination
-        $mockQuery = m::mock();
+        $mockQuery = m::mock(\Doctrine\ORM\Query::class);
         $mockQb->shouldReceive('getQuery')->andReturn($mockQuery);
         $mockQuery->shouldReceive('setHydrationMode');
         $paginator = m::mock();
@@ -518,15 +521,11 @@ final class FeeTest extends RepositoryTestCase
 
         $mockQb = m::mock(QueryBuilder::class);
 
-        $mockExpr = m::mock(Expr::class)
-            ->shouldReceive('eq')->withAnyArgs()->andReturnSelf()
-            ->shouldReceive('in')->withAnyArgs()->andReturnSelf()
-            ->getMock();
+        $mockExpr = new Expr();
         $mockQb->shouldReceive('expr')->with()->andReturn($mockExpr);
 
         $mockQb
-            ->shouldReceive('expr')->with()->andReturn($mockQb)
-            ->shouldReceive('andWhere')->with($mockExpr)->times(3)->andReturnSelf()
+            ->shouldReceive('andWhere')->times(3)->andReturnSelf()
             ->shouldReceive('setParameter')->times(3)->andReturnSelf()
             ->shouldReceive('setMaxResults')->with(1)->once()->andReturnSelf()
             ->shouldReceive('getQuery->getResult')->with()->once()->andReturn([]);
@@ -557,12 +556,15 @@ final class FeeTest extends RepositoryTestCase
 
         $this->mockWhereOutstandingFee($mockQb);
 
+        $applicationExpr = $this->mockExprEq('f.application', ':application');
+
         $mockQb
             ->shouldReceive('expr->eq')
             ->with('f.application', ':application')
-            ->andReturnSelf();
+            ->andReturn($applicationExpr);
         $mockQb
             ->shouldReceive('andWhere')
+            ->with($applicationExpr)
             ->andReturnSelf();
         $mockQb
             ->shouldReceive('setParameter')
@@ -579,7 +581,7 @@ final class FeeTest extends RepositoryTestCase
 
     private function mockWhereOutstandingFee(m\MockInterface $mockQb): void
     {
-        $where = m::mock();
+        $where = $this->mockExprEq('f.feeStatus', ':feeStatus');
         $mockQb
             ->shouldReceive('expr->eq')
             ->with('f.feeStatus', ':feeStatus')
@@ -652,7 +654,9 @@ final class FeeTest extends RepositoryTestCase
             ->andReturnUsing(
                 function ($refData, $input) {
                     unset($refData); // unused
-                    return $input;
+                    $reference = m::mock(RefDataEntity::class);
+                    $reference->shouldReceive('getId')->andReturn($input);
+                    return $reference;
                 }
             );
 
@@ -680,10 +684,11 @@ final class FeeTest extends RepositoryTestCase
         $this->em->shouldReceive('getReference')->with(
             RefDataEntity::class,
             FeeEntity::STATUS_OUTSTANDING
-        )->once()->andReturn('ot');
+        )->once()->andReturn($outstandingRef = m::mock(RefDataEntity::class));
+        $outstandingRef->shouldReceive('getId')->andReturn(FeeEntity::STATUS_OUTSTANDING);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()
+            m::mock(\Doctrine\ORM\Query::class)
                 ->shouldReceive('execute')->zeroOrMoreTimes()->andReturnNull()
                 ->shouldReceive('getResult')->andReturn(['RESULTS'])->getMock()
         );
@@ -696,7 +701,7 @@ final class FeeTest extends RepositoryTestCase
         );
 
         $expectedQuery = 'BLAH INNER JOIN f.feeType ft AND f.licence = [[716]] AND '
-            . 'ft.feeType = [[CONT]] AND f.feeStatus = [[ot]]'
+            . 'ft.feeType = [[CONT]] AND f.feeStatus = [[lfs_ot]]'
             . ' AND f.invoicedDate >= [[' . $expectedAfterStr . ']]';
         $this->assertEquals($expectedQuery, $this->query);
     }
@@ -714,15 +719,17 @@ final class FeeTest extends RepositoryTestCase
             ->once()
             ->andReturn($mockQb);
 
+        $condition = $this->mockExprEq('f.application', ':application');
+
         $mockQb
-            ->shouldReceive('expr->eq')->with('f.application', ':application')->once()->andReturn('cond1');
+            ->shouldReceive('expr->eq')->with('f.application', ':application')->once()->andReturn($condition);
 
         $mockQb
             ->shouldReceive('innerJoin')->with('f.feeTransactions', 'ft')->once()->andReturnSelf()
             ->shouldReceive('innerJoin')->with('ft.transaction', 't')->once()->andReturnSelf()
             ->shouldReceive('addOrderBy')->with('t.completedDate', 'DESC')->once()->andReturnSelf()
             ->shouldReceive('addOrderBy')->with('t.id', 'DESC')->once()->andReturnSelf()
-            ->shouldReceive('andWhere')->with('cond1')->andReturnSelf()
+            ->shouldReceive('andWhere')->with($condition)->andReturnSelf()
             ->shouldReceive('setParameter')->with('application', $applicationId)->once()->andReturnSelf()
             ->shouldReceive('setMaxResults')->with(1)->once()->andReturnSelf();
 
@@ -748,7 +755,8 @@ final class FeeTest extends RepositoryTestCase
         $this->em->shouldReceive('getReference')->with(
             RefDataEntity::class,
             $feeTypeFeeType
-        )->once()->andReturn($feeTypeFeeType);
+        )->once()->andReturn($feeTypeRef = m::mock(RefDataEntity::class));
+        $feeTypeRef->shouldReceive('getId')->andReturn($feeTypeFeeType);
 
         $this->queryBuilder->shouldReceive('modifyQuery')
             ->once()
@@ -776,7 +784,7 @@ final class FeeTest extends RepositoryTestCase
             ->andReturnSelf();
         $mockQb
             ->shouldReceive('setParameter')
-            ->with('feeTypeFeeType', m::type('string'))
+            ->with('feeTypeFeeType', $feeTypeRef)
             ->andReturnSelf();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('result');
@@ -862,6 +870,8 @@ final class FeeTest extends RepositoryTestCase
         /** @var QueryBuilder $qb */
         $mockQb = m::mock(QueryBuilder::class);
 
+        $outstandingRef = m::mock(RefDataEntity::class);
+
         $this->em
             ->shouldReceive('getReference')
             ->with(
@@ -869,7 +879,9 @@ final class FeeTest extends RepositoryTestCase
                 FeeEntity::STATUS_OUTSTANDING
             )
             ->once()
-            ->andReturn('ot')
+            ->andReturn($outstandingRef);
+
+        $this->em
             ->shouldReceive('getRepository->createQueryBuilder')
             ->with('f')
             ->once()
@@ -897,7 +909,7 @@ final class FeeTest extends RepositoryTestCase
             ->with('irfoPsvAuthId', $irfoPsvAuthId)
             ->andReturnSelf()
             ->shouldReceive('setParameter')
-            ->with('feeStatus', 'ot')
+            ->with('feeStatus', $outstandingRef)
             ->andReturnSelf();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('result');
@@ -914,27 +926,23 @@ final class FeeTest extends RepositoryTestCase
         $applicationId = 69;
 
         /** @var QueryBuilder $qb */
+        $applicationExpr = $this->mockExprEq('f.application', ':application');
+        $feeTypeExpr = $this->mockExprEq('ft.feeType', ':feeType');
+        $mockExpr = m::mock(Expr::class)
+            ->shouldReceive('eq')->with('f.application', ':application')->once()->andReturn($applicationExpr)
+            ->shouldReceive('eq')->with('ft.feeType', ':feeType')->once()->andReturn($feeTypeExpr)
+            ->getMock();
+
         $mockQb = m::mock(QueryBuilder::class)
             ->shouldReceive('expr')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('eq')
-                    ->with('f.application', ':application')
-                    ->andReturn('FOO')
-                    ->once()
-                    ->shouldReceive('eq')
-                    ->with('ft.feeType', ':feeType')
-                    ->andReturn('BAR')
-                    ->once()
-                    ->getMock()
-            )
+            ->andReturn($mockExpr)
             ->twice()
             ->shouldReceive('andWhere')
-            ->with('FOO')
+            ->with($applicationExpr)
             ->once()
             ->andReturnSelf()
             ->shouldReceive('andWhere')
-            ->with('BAR')
+            ->with($feeTypeExpr)
             ->once()
             ->andReturnSelf()
             ->shouldReceive('setParameter')
@@ -990,8 +998,9 @@ final class FeeTest extends RepositoryTestCase
             ->shouldReceive('with')->with('t.status')->once()->andReturnSelf()
             ->shouldReceive('order')->with('invoicedDate', 'ASC')->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->in')->with('f.id', ':feeIds')->once()->andReturn('IN');
-        $mockQb->shouldReceive('andWhere')->with('IN')->once()->andReturnSelf();
+        $condition = $this->mockExprIn('f.id', ':feeIds');
+        $mockQb->shouldReceive('expr->in')->with('f.id', ':feeIds')->once()->andReturn($condition);
+        $mockQb->shouldReceive('andWhere')->with($condition)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('feeIds', $ids)->andReturnSelf();
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('result');
 
@@ -1018,26 +1027,22 @@ final class FeeTest extends RepositoryTestCase
             ->shouldReceive('addOrderBy')->once()->with('t.completedDate', 'DESC')->andReturnSelf()
             ->shouldReceive('addOrderBy')->once()->with('t.id', 'DESC')->andReturnSelf()
             ->shouldReceive('expr')
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('eq')
-                    ->with('f.licence', ':licence')
-                    ->andReturn('cond1')
-                    ->once()
-                    ->shouldReceive('eq')
-                    ->with('f.feeStatus', ':feeStatus')
-                    ->andReturn('cond2')
-                    ->once()
-                    ->shouldReceive('eq')
-                    ->with('ftp.feeType', ':feeType')
-                    ->andReturn('cond3')
-                    ->once()
-                    ->getMock()
-            )
+            ->andReturnUsing(function () {
+                static $expressions;
+
+                $expressions ??= [
+                    $this->mockExprEq('f.licence', ':licence'),
+                    $this->mockExprEq('f.feeStatus', ':feeStatus'),
+                    $this->mockExprEq('ftp.feeType', ':feeType'),
+                ];
+
+                $expr = m::mock(Expr::class);
+                $expr->shouldReceive('eq')->andReturnUsing(fn () => array_shift($expressions));
+
+                return $expr;
+            })
             ->times(3)
-            ->shouldReceive('andWhere')->with('cond1')->once()->andReturnSelf()
-            ->shouldReceive('andWhere')->with('cond2')->once()->andReturnSelf()
-            ->shouldReceive('andWhere')->with('cond3')->once()->andReturnSelf()
+            ->shouldReceive('andWhere')->with(m::type(\Doctrine\ORM\Query\Expr\Comparison::class))->times(3)->andReturnSelf()
             ->shouldReceive('setParameter')->with('licence', $licenceId)->once()->andReturnSelf()
             ->shouldReceive('setMaxResults')->with(1)->once()->andReturnSelf()
             ->shouldReceive('setParameter')->with('feeType', RefDataEntity::FEE_TYPE_CONT)->once()->andReturnSelf()
@@ -1116,18 +1121,20 @@ final class FeeTest extends RepositoryTestCase
             ->once()
             ->andReturn('condition1');
 
+        $condition2 = $this->mockExprNotIn('app.status', ':excludedApplicationStatuses');
         $mockQb->shouldReceive('expr->notIn')
             ->with('app.status', ':excludedApplicationStatuses')
             ->once()
-            ->andReturn('condition2');
+            ->andReturn($condition2);
 
+        $condition3 = $this->mockOrX();
         $mockQb->shouldReceive('expr->orX')
             ->withAnyArgs()
             ->once()
-            ->andReturn('condition3');
+            ->andReturn($condition3);
 
         $mockQb->shouldReceive('andWhere')
-            ->with('condition3')
+            ->with($condition3)
             ->once()
             ->andReturnSelf();
 
@@ -1137,7 +1144,7 @@ final class FeeTest extends RepositoryTestCase
             ->andReturnSelf();
 
         // mock pagination
-        $mockQuery = m::mock();
+        $mockQuery = m::mock(\Doctrine\ORM\Query::class);
         $mockQb->shouldReceive('getQuery')->andReturn($mockQuery);
         $mockQuery->shouldReceive('setHydrationMode');
 

@@ -57,7 +57,7 @@ abstract class AbstractScan implements BundleSerializableInterface, JsonSerializ
     /**
      * Foreign Key to application
      *
-     * @var \Dvsa\Olcs\Api\Entity\Application\Application
+     * @var \Dvsa\Olcs\Api\Entity\Application\Application|null
      */
     #[ORM\JoinColumn(name: 'application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, fetch: 'LAZY')]
@@ -66,7 +66,7 @@ abstract class AbstractScan implements BundleSerializableInterface, JsonSerializ
     /**
      * Foreign Key to bus_reg
      *
-     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg
+     * @var \Dvsa\Olcs\Api\Entity\Bus\BusReg|null
      */
     #[ORM\JoinColumn(name: 'bus_reg_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, fetch: 'LAZY')]
@@ -75,7 +75,7 @@ abstract class AbstractScan implements BundleSerializableInterface, JsonSerializ
     /**
      * Foreign Key to licence
      *
-     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence
+     * @var \Dvsa\Olcs\Api\Entity\Licence\Licence|null
      */
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Licence::class, fetch: 'LAZY')]
@@ -84,7 +84,7 @@ abstract class AbstractScan implements BundleSerializableInterface, JsonSerializ
     /**
      * Case
      *
-     * @var \Dvsa\Olcs\Api\Entity\Cases\Cases
+     * @var \Dvsa\Olcs\Api\Entity\Cases\Cases|null
      */
     #[ORM\JoinColumn(name: 'case_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, fetch: 'LAZY')]
@@ -93,7 +93,7 @@ abstract class AbstractScan implements BundleSerializableInterface, JsonSerializ
     /**
      * Foreign Key to transport_manager
      *
-     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager
+     * @var \Dvsa\Olcs\Api\Entity\Tm\TransportManager|null
      */
     #[ORM\JoinColumn(name: 'transport_manager_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManager::class, fetch: 'LAZY')]
@@ -102,7 +102,7 @@ abstract class AbstractScan implements BundleSerializableInterface, JsonSerializ
     /**
      * IrfoOrganisation
      *
-     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation
+     * @var \Dvsa\Olcs\Api\Entity\Organisation\Organisation|null
      */
     #[ORM\JoinColumn(name: 'irfo_organisation_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\Organisation::class, fetch: 'LAZY')]
@@ -111,7 +111,7 @@ abstract class AbstractScan implements BundleSerializableInterface, JsonSerializ
     /**
      * IrhpApplication
      *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication|null
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, fetch: 'LAZY')]
@@ -138,7 +138,7 @@ abstract class AbstractScan implements BundleSerializableInterface, JsonSerializ
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -148,7 +148,7 @@ abstract class AbstractScan implements BundleSerializableInterface, JsonSerializ
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -166,7 +166,7 @@ abstract class AbstractScan implements BundleSerializableInterface, JsonSerializ
     /**
      * Date received
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'date_received', nullable: true)]
     protected $dateReceived;

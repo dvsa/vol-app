@@ -18,7 +18,7 @@ class MessagingSubject extends AbstractRepository
     {
         if (method_exists($query, 'getOnlyActive') && $query->getOnlyActive()) {
             $qb->Where($qb->expr()->eq($this->alias . '.isActive', ':isActive'))
-                ->setParameter('isActive', 1);
+                ->setParameter('isActive', true);
         }
     }
 }

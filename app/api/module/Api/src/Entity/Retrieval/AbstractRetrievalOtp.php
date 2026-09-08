@@ -38,7 +38,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      * @var int
      */
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', name: 'id', nullable: false)]
+    #[ORM\Column(type: 'integer', name: 'id', nullable: false, options: ['unsigned' => true])]
     #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     protected $id;
 
@@ -47,7 +47,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      *
      * @var \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink
      */
-    #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'retrieval_link_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Retrieval\RetrievalLink::class, fetch: 'LAZY')]
     protected $retrievalLink;
 
@@ -64,7 +64,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'attempts', nullable: false, options: ['default' => 0])]
+    #[ORM\Column(type: 'integer', name: 'attempts', nullable: false, options: ['default' => 0, 'unsigned' => true])]
     protected $attempts = 0;
 
     /**
@@ -72,7 +72,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
      *
      * @var int
      */
-    #[ORM\Column(type: 'integer', name: 'max_attempts', nullable: false, options: ['default' => 5])]
+    #[ORM\Column(type: 'integer', name: 'max_attempts', nullable: false, options: ['default' => 5, 'unsigned' => true])]
     protected $maxAttempts = 5;
 
     /**
@@ -102,7 +102,7 @@ abstract class AbstractRetrievalOtp implements BundleSerializableInterface, Json
     /**
      * Request ip
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'request_ip', length: 45, nullable: true)]
     protected $requestIp;

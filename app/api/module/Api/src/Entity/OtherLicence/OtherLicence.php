@@ -16,8 +16,6 @@ use Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence;
 #[ORM\Index(name: 'ix_other_licence_last_modified_by', columns: ['last_modified_by'])]
 #[ORM\Index(name: 'ix_other_licence_transport_manager_id', columns: ['transport_manager_id'])]
 #[ORM\Index(name: 'ix_other_licence_transport_manager_application_id', columns: ['transport_manager_application_id'])]
-#[ORM\Index(name: 'fk_other_licence_transport_manager_licence1_idx', columns: ['transport_manager_licence_id'])]
-#[ORM\Index(name: 'fk_other_licence_ref_data1_idx', columns: ['role'])]
 #[ORM\Entity]
 class OtherLicence extends AbstractOtherLicence implements \Dvsa\Olcs\Api\Entity\OrganisationProviderInterface
 {

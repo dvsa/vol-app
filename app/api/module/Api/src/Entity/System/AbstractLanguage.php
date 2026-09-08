@@ -48,7 +48,7 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -58,7 +58,7 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -68,7 +68,7 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
     /**
      * Name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'name', length: 255, nullable: true)]
     protected $name;
@@ -76,7 +76,7 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
     /**
      * Iso code
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'iso_code', length: 20, nullable: true)]
     protected $isoCode;
@@ -84,7 +84,7 @@ abstract class AbstractLanguage implements BundleSerializableInterface, JsonSeri
     /**
      * Version
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'version', nullable: true, options: ['default' => 1, 'unsigned' => true])]
     #[ORM\Version]

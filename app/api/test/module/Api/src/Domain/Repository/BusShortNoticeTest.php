@@ -38,10 +38,7 @@ final class BusShortNoticeTest extends RepositoryTestCase
             ->andReturn($id);
 
         /** @var Expr $expr */
-        $expr = m::mock(QueryBuilder::class);
-        $expr->shouldReceive('eq')
-            ->with('b.id', ':busReg')
-            ->andReturnSelf();
+        $expr = new \Doctrine\ORM\Query\Expr();
 
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
@@ -54,7 +51,7 @@ final class BusShortNoticeTest extends RepositoryTestCase
             ->andReturnSelf();
 
         $qb->shouldReceive('andWhere')
-            ->with($expr)
+            ->with(m::type(\Doctrine\ORM\Query\Expr\Comparison::class))
             ->andReturnSelf();
 
         $this->queryBuilder->shouldReceive('modifyQuery')

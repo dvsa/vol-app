@@ -65,7 +65,7 @@ final class ConversationTest extends RepositoryTestCase
             ->andReturnSelf()
             ->shouldReceive('expr')
             ->times(5)
-            ->andReturn(m::mock()->shouldReceive('in', 'eq', 'orX', 'exists')->getMock());
+            ->andReturn(new \Doctrine\ORM\Query\Expr());
 
         $result = $this->sut->applyOrderForListing($qb, $roleNames);
 
@@ -82,7 +82,7 @@ final class ConversationTest extends RepositoryTestCase
             ->andReturnSelf()
             ->shouldReceive('expr')
             ->once()
-            ->andReturn(m::mock()->shouldReceive('orX')->andReturnSelf()->shouldReceive('addMultiple')->getMock());
+            ->andReturn(new \Doctrine\ORM\Query\Expr());
 
         $result = $this->sut->filterByStatuses($qb, $statuses);
 

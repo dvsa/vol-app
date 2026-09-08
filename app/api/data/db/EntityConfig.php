@@ -224,26 +224,11 @@ return array(
         'no_tm_confirmation' => array(
             'type' => 'yesnonull'
         ),
-        'financial_evidence_uploaded' => array(
-            'type' => 'smallint'
-        ),
-        'small_vehicle_evidence_uploaded' => array(
-            'type' => 'smallint'
-        ),
-        'occupation_evidence_uploaded' => array(
-            'type' => 'smallint'
-        ),
         'psv_income_records_confirmation' => array(
             'type' => 'yesnonull'
         ),
         'psv_occupation_records_confirmation' => array(
             'type' => 'yesnonull'
-        ),
-        'psv_total_vehicle_small' => array(
-            'type' => 'smallint'
-        ),
-        'psv_total_vehicle_large' => array(
-            'type' => 'smallint'
         ),
         'prev_has_licence' => array(
             'type' => 'yesnonull'
@@ -318,9 +303,6 @@ return array(
         )
     ),
     'licence_operating_centre' => array(
-        'ad_placed' => array(
-            'type' => 'smallint'
-        ),
         'sufficient_parking' => array(
             'type' => 'yesno'
         ),
@@ -341,9 +323,6 @@ return array(
         )
     ),
     'application_operating_centre' => array(
-        'ad_placed' => array(
-            'type' => 'smallint'
-        ),
         'publication_appropriate' => array(
             'type' => 'yesno'
         ),
@@ -1576,6 +1555,15 @@ return array(
             )
         )
     ),
+    // Retrieval module: RetrievalLink::$documents is an ordinary generated inverse
+    // collection on the abstract, so generateInverse stays on. Without this entry the
+    // generator has no idea the association is bidirectional and a regeneration drops both
+    // the collection and the owning side's inversedBy.
+    'retrieval_link_document' => array(
+        'retrieval_link_id' => array(
+            'inversedBy' => array('entity' => 'RetrievalLink', 'property' => 'documents')
+        )
+    ),
     // Letter module: the inverse collections are hand-written in the concrete
     // entities (with cascade/orphanRemoval options), so generateInverse is false -
     // the owning side still emits a matching inversedBy, but no collection is
@@ -2512,8 +2500,5 @@ return array(
         ),
     ),
     'messaging_subject' => array(
-        'is_active' => array(
-            'type' => 'smallint'
-        ),
     ),
 );

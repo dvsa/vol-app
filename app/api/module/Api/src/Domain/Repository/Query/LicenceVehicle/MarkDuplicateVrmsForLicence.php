@@ -56,8 +56,8 @@ class MarkDuplicateVrmsForLicence extends AbstractRawQuery
     protected function getParamTypes()
     {
         return [
-            'vrms' => \Doctrine\DBAL\Connection::PARAM_STR_ARRAY,
-            'licenceStatuses' => \Doctrine\DBAL\Connection::PARAM_STR_ARRAY
+            'vrms' => \Doctrine\DBAL\ArrayParameterType::STRING,
+            'licenceStatuses' => \Doctrine\DBAL\ArrayParameterType::STRING
         ];
     }
 }

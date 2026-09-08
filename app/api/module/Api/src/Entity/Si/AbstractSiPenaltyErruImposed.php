@@ -72,7 +72,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Executed
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'executed', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -81,7 +81,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -91,7 +91,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -101,7 +101,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Penalty imposed identifier
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'penalty_imposed_identifier', nullable: true, options: ['unsigned' => true])]
     protected $penaltyImposedIdentifier;
@@ -109,7 +109,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Final decision date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'final_decision_date', nullable: true)]
     protected $finalDecisionDate;
@@ -117,7 +117,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Start date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'start_date', nullable: true)]
     protected $startDate;
@@ -125,7 +125,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * End date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'end_date', nullable: true)]
     protected $endDate;
@@ -142,7 +142,7 @@ abstract class AbstractSiPenaltyErruImposed implements BundleSerializableInterfa
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;

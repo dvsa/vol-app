@@ -71,7 +71,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -81,7 +81,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -99,7 +99,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * End date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'end_date', nullable: true)]
     protected $endDate;
@@ -107,7 +107,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Date processed by batch job
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'start_processed_date', nullable: true)]
     protected $startProcessedDate;
@@ -115,7 +115,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * End processed date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'end_processed_date', nullable: true)]
     protected $endProcessedDate;
@@ -132,7 +132,7 @@ abstract class AbstractLicenceStatusRule implements BundleSerializableInterface,
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;

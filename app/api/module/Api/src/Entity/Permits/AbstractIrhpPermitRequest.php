@@ -50,7 +50,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * IrhpApplication
      *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication|null
      */
     #[ORM\JoinColumn(name: 'irhp_application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, inversedBy: 'irhpPermitRequests', fetch: 'LAZY')]
@@ -59,7 +59,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * IrhpPermitApplication
      *
-     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication
+     * @var \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication|null
      */
     #[ORM\JoinColumn(name: 'irhp_permit_application_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpPermitApplication::class, inversedBy: 'irhpPermitRequests', fetch: 'LAZY')]
@@ -68,7 +68,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -78,7 +78,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -105,7 +105,7 @@ abstract class AbstractIrhpPermitRequest implements BundleSerializableInterface,
     /**
      * IrhpPermitRequestAttributes
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\System\RefData>
      */
     #[ORM\JoinTable(name: 'irhp_permit_request_attribute')]
     #[ORM\JoinColumn(name: 'irhp_permit_request_id', referencedColumnName: 'id')]

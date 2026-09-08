@@ -18,6 +18,7 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlerRegistry;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\BlameableTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\DefaultTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\RelationshipTypeHandler;
+use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\YesNoTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\InversedByConfig;
 use Mockery as m;
@@ -401,11 +402,12 @@ final class AttributeEmissionTest extends TestCase
     }
 
     /**
-     * cf. document_analysis.status. DBAL has no ENUM mapping, and an unmappable column
-     * aborts the whole generation run ("Unknown database type enum requested"), not just
-     * the table that owns it.
+     * cf. document_analysis.status. A column the platform cannot type aborts the whole
+     * generation run ("Unknown database type enum requested"), not just the table that owns
+     * it. DBAL 4 maps MySQL's ENUM to its own EnumType, so the introspector's registration is
+     * a no-op there; either way the platform has to end up with a mapping.
      */
-    public function testEnumIsRegisteredAsStringSoIntrospectionDoesNotAbort(): void
+    public function testEnumIsMappedSoIntrospectionDoesNotAbort(): void
     {
         $platform = new \Doctrine\DBAL\Platforms\MySQL80Platform();
         $connection = m::mock(\Doctrine\DBAL\Connection::class);
@@ -413,11 +415,204 @@ final class AttributeEmissionTest extends TestCase
         $connection->shouldReceive('createSchemaManager')
             ->andReturn(m::mock(\Doctrine\DBAL\Schema\AbstractSchemaManager::class));
 
-        $this->assertFalse($platform->hasDoctrineTypeMappingFor('enum'), 'precondition');
-
         new Doctrine3SchemaIntrospector($connection);
 
-        $this->assertSame('string', $platform->getDoctrineTypeMapping('enum'));
+        $this->assertTrue($platform->hasDoctrineTypeMappingFor('enum'));
+    }
+
+    /**
+     * Whichever type the platform resolves an ENUM to, it is flattened back to a plain string
+     * property backed by class constants - under DBAL 4 that arrives here as `enum` rather
+     * than the `string` testZeroLengthIsNotEmitted covers.
+     */
+    public function testEnumColumnEmitsAnUnlengthedString(): void
+    {
+        $sut = new DefaultTypeHandler();
+        $column = new ColumnMetadata('status', 'enum', null, false, false, false, 'PENDING');
+
+        $this->assertSame(
+            "#[ORM\\Column(type: 'string', name: 'status', nullable: false,"
+            . " options: ['default' => 'PENDING'])]",
+            $sut->generateAnnotation($column)
+        );
+    }
+
+    public function testNullableRelationshipPropertyUsesColumnNullability(): void
+    {
+        $table = new TableMetadata('application', [], [], [], [
+            ['local_columns' => ['licence_id'], 'foreign_table' => 'licence'],
+        ]);
+
+        $sut = new RelationshipTypeHandler();
+        $sut->setCurrentTable($table);
+
+        $nullableColumn = new ColumnMetadata('licence_id', 'integer', null, true);
+        $nonNullableColumn = new ColumnMetadata('licence_id', 'integer', null, false);
+
+        $this->assertTrue($sut->generateProperty($nullableColumn)['nullable']);
+        $this->assertFalse($sut->generateProperty($nonNullableColumn)['nullable']);
+    }
+
+    public function testCollectionPhpTypeUsesCollectionInterface(): void
+    {
+        $sut = new MethodGeneratorService();
+
+        $this->assertSame(
+            '\Doctrine\Common\Collections\Collection',
+            $sut->getPhpTypeFromType('\Doctrine\Common\Collections\Collection')
+        );
+
+        $this->assertSame(
+            '\Doctrine\Common\Collections\Collection',
+            $sut->getPhpTypeFromType('\Doctrine\Common\Collections\ArrayCollection')
+        );
+
+        $this->assertSame(
+            '\Doctrine\Common\Collections\Collection',
+            $sut->getPhpTypeFromType(
+                '\Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Task\Task>'
+            )
+        );
+    }
+
+
+    /**
+     * Without a length DBAL renders `text` as LONGTEXT, so every TEXT and MEDIUMTEXT column
+     * reads as drifted against the Liquibase schema. Widths are what DBAL introspects them
+     * as; longtext comes back with a null length and stays unlengthed.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpTextWidths')]
+    public function testTextColumnsCarryTheirWidth(?int $length, string $expected): void
+    {
+        $sut = new DefaultTypeHandler();
+        $column = new ColumnMetadata('notes', 'text', $length, true);
+
+        $this->assertSame($expected, $sut->generateAnnotation($column));
+    }
+
+    /** @return array<string, array{int|null, string}> */
+    public static function dpTextWidths(): array
+    {
+        return [
+            'tinytext' => [255, "#[ORM\\Column(type: 'text', name: 'notes', length: 255, nullable: true)]"],
+            'text' => [65535, "#[ORM\\Column(type: 'text', name: 'notes', length: 65535, nullable: true)]"],
+            'mediumtext' => [
+                16777215,
+                "#[ORM\\Column(type: 'text', name: 'notes', length: 16777215, nullable: true)]",
+            ],
+            'longtext stays unlengthed' => [null, "#[ORM\\Column(type: 'text', name: 'notes', nullable: true)]"],
+        ];
+    }
+
+
+    /**
+     * JoinColumn defaults to nullable: true, the opposite of Column, so a NOT NULL
+     * created_by has to say so explicitly. The handler hardcoded true, which made every
+     * Blameable column read as nullable however the schema declared it.
+     */
+    public function testNotNullBlameableColumnSaysSo(): void
+    {
+        $sut = new BlameableTypeHandler();
+
+        $this->assertStringContainsString(
+            "#[ORM\\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: false)]",
+            $sut->generateAnnotation(new ColumnMetadata('created_by', 'integer', null, false))
+        );
+        $this->assertFalse($sut->generateProperty(new ColumnMetadata('created_by', 'integer', null, false))['nullable']);
+    }
+
+    public function testNullableBlameableColumnStillSaysTrue(): void
+    {
+        $sut = new BlameableTypeHandler();
+
+        $this->assertStringContainsString(
+            "#[ORM\\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]",
+            $sut->generateAnnotation(new ColumnMetadata('last_modified_by', 'integer', null, true))
+        );
+    }
+
+
+    /**
+     * cf. ref_data.olbs_key, latin1_swedish_ci on a utf8mb3_unicode_ci table. A column that
+     * overrides its table's charset or collation has to say so, or the mapping renders the
+     * table default and the column reads as drifted for a difference nothing expresses.
+     * Only overrides are emitted - carrying them on every column would put charset and
+     * collation on all 7722 of them.
+     */
+    public function testCharsetAndCollationOverridesAreEmitted(): void
+    {
+        $sut = new DefaultTypeHandler();
+        $column = new ColumnMetadata(
+            'olbs_key',
+            'string',
+            20,
+            true,
+            false,
+            false,
+            null,
+            null,
+            ['charset' => 'latin1', 'collation' => 'latin1_swedish_ci'],
+        );
+
+        $this->assertSame(
+            "#[ORM\\Column(type: 'string', name: 'olbs_key', length: 20, nullable: true,"
+            . " options: ['charset' => 'latin1', 'collation' => 'latin1_swedish_ci'])]",
+            $sut->generateAnnotation($column)
+        );
+    }
+
+    /** A column that simply inherits its table's collation carries no options at all. */
+    public function testInheritedCollationIsNotEmitted(): void
+    {
+        $sut = new DefaultTypeHandler();
+
+        $this->assertSame(
+            "#[ORM\\Column(type: 'string', name: 'olbs_key', length: 20, nullable: true)]",
+            $sut->generateAnnotation(new ColumnMetadata('olbs_key', 'string', 20, true))
+        );
+    }
+
+
+    /**
+     * yesnonull describes what the PHP value can hold - Y, N or null - which says nothing
+     * about whether the column accepts NULL. The handler treated the two as the same thing,
+     * so a NOT NULL column configured yesnonull reported as nullable regardless of schema.
+     */
+    public function testYesNoNullOnANotNullColumnIsNotNullable(): void
+    {
+        $sut = new YesNoTypeHandler();
+        $column = new ColumnMetadata('is_copy', 'boolean', null, false, false, false, '0');
+
+        $this->assertStringContainsString(
+            'nullable: false',
+            $sut->generateAnnotation($column, ['is_copy' => ['type' => 'yesnonull']])
+        );
+    }
+
+    /** The config-aware path is the one the generator actually calls. */
+    public function testYesNoNullOnANotNullColumnIsNotNullableViaFieldConfig(): void
+    {
+        $sut = new YesNoTypeHandler();
+        $column = new ColumnMetadata('is_copy', 'boolean', null, false, false, false, '0');
+
+        $this->assertStringContainsString(
+            'nullable: false',
+            $sut->generateAnnotationWithConfig(
+                $column,
+                \Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig::fromArray(['type' => 'yesnonull'])
+            )
+        );
+    }
+
+    public function testYesNoNullOnANullableColumnStaysNullable(): void
+    {
+        $sut = new YesNoTypeHandler();
+        $column = new ColumnMetadata('is_copy', 'boolean', null, true, false, false, '0');
+
+        $this->assertStringContainsString(
+            'nullable: true',
+            $sut->generateAnnotation($column, ['is_copy' => ['type' => 'yesnonull']])
+        );
     }
 
     private function invokeGeneratorMethod(string $method, array $args): string

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\CommandHandler\DataRetention;
 
-use Doctrine\DBAL\Driver\Connection;
+use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use Dvsa\Olcs\Api\Domain\CommandHandler\DataRetention\Populate;
 use Dvsa\Olcs\Api\Domain\Repository\DataRetentionRule;

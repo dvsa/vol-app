@@ -10,6 +10,7 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
@@ -40,7 +41,7 @@ final class CompaniesHouseCompanyTest extends RepositoryTestCase
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
 
-        $where = m::mock();
+        $where = $this->mockExprEq('cc.companyNumber', ':companyNumber');
         $qb->shouldReceive('expr->eq')
             ->with('cc.companyNumber', ':companyNumber')
             ->andReturn($where);

@@ -40,8 +40,9 @@ final class LicenceOperatingCentreTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('with')->with('operatingCentre', 'oc')->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('with')->with('oc.address')->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('loc.licence', ':licenceId')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('loc.licence', ':licenceId');
+        $mockQb->shouldReceive('expr->eq')->with('loc.licence', ':licenceId')->once()->andReturn($expr);
+        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('licenceId', 7634)->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
@@ -93,11 +94,13 @@ final class LicenceOperatingCentreTest extends RepositoryTestCase
         $qb->shouldReceive('innerJoin')->with('loc.operatingCentre', 'oc')->once();
         $qb->shouldReceive('innerJoin')->with('oc.address', 'oca')->once();
         $qb->shouldReceive('leftJoin')->with('oca.countryCode', 'ocac')->once();
-        $qb->shouldReceive('expr->eq')->with('occ.status', ':complaintStatus')->andReturn('exp1')->once();
-        $qb->shouldReceive('leftJoin')->with('oc.complaints', 'occ', Join::WITH, 'exp1')->once();
+        $exp1 = $this->mockExprEq('occ.status', ':complaintStatus');
+        $qb->shouldReceive('expr->eq')->with('occ.status', ':complaintStatus')->once()->andReturn($exp1);
+        $qb->shouldReceive('leftJoin')->with('oc.complaints', 'occ', Join::WITH, $exp1)->once();
         $qb->shouldReceive('setParameter')->with('complaintStatus', Complaint::COMPLAIN_STATUS_OPEN)->once();
-        $qb->shouldReceive('expr->eq')->with('loc.licence', ':licence')->andReturn('exp2')->once();
-        $qb->shouldReceive('andWhere')->with('exp2')->once();
+        $exp2 = $this->mockExprEq('loc.licence', ':licence');
+        $qb->shouldReceive('expr->eq')->with('loc.licence', ':licence')->once()->andReturn($exp2);
+        $qb->shouldReceive('andWhere')->with($exp2)->once();
         $qb->shouldReceive('setParameter')->with('licence', 1)->once();
         $qb->shouldReceive('addSelect')->with('s4')->once();
         $qb->shouldReceive('addSelect')->with('oc')->once();

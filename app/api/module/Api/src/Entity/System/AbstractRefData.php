@@ -43,7 +43,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
     /**
      * Parent
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -52,7 +52,7 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
     /**
      * Description
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'description', length: 512, nullable: true)]
     #[Gedmo\Translatable]
@@ -69,15 +69,15 @@ abstract class AbstractRefData implements BundleSerializableInterface, JsonSeria
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var string
+     * @var string|null
      */
-    #[ORM\Column(type: 'string', name: 'olbs_key', length: 20, nullable: true)]
+    #[ORM\Column(type: 'string', name: 'olbs_key', length: 20, nullable: true, options: ['charset' => 'latin1', 'collation' => 'latin1_swedish_ci'])]
     protected $olbsKey;
 
     /**
      * Display order
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'display_order', nullable: true, options: ['unsigned' => true])]
     protected $displayOrder;

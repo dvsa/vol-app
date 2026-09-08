@@ -60,7 +60,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * AssignedTo
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'assigned_to', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -69,7 +69,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * GoodsOrPsv
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -87,7 +87,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -97,7 +97,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -123,7 +123,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Organisation name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'organisation_name', length: 160, nullable: true)]
     protected $organisationName;
@@ -131,7 +131,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Organisation id
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'organisation_id', nullable: true, options: ['unsigned' => true])]
     protected $organisationId;
@@ -139,7 +139,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Licence id
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'licence_id', nullable: true, options: ['unsigned' => true])]
     protected $licenceId;
@@ -147,7 +147,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Lic no
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'lic_no', length: 18, nullable: true)]
     protected $licNo;
@@ -163,7 +163,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Next review date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'next_review_date', nullable: true)]
     protected $nextReviewDate;
@@ -171,7 +171,7 @@ abstract class AbstractDataRetention implements BundleSerializableInterface, Jso
     /**
      * Actioned date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'actioned_date', nullable: true)]
     protected $actionedDate;

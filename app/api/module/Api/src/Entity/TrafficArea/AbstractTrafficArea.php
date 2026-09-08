@@ -57,7 +57,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -67,7 +67,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -85,7 +85,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * TransXChange name
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'txc_name', length: 70, nullable: true)]
     protected $txcName;
@@ -142,7 +142,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * BusRegs
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Bus\BusReg>
      */
     #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, mappedBy: 'trafficAreas', fetch: 'LAZY')]
     protected $busRegs;
@@ -150,7 +150,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Recipients
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Publication\Recipient>
      */
     #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\Recipient::class, mappedBy: 'trafficAreas', fetch: 'LAZY')]
     protected $recipients;
@@ -158,7 +158,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * Documents
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Doc\Document>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'trafficArea')]
     protected $documents;
@@ -166,7 +166,7 @@ abstract class AbstractTrafficArea implements BundleSerializableInterface, JsonS
     /**
      * TrafficAreaEnforcementAreas
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficAreaEnforcementArea>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficAreaEnforcementArea::class, mappedBy: 'trafficArea')]
     protected $trafficAreaEnforcementAreas;

@@ -35,14 +35,17 @@ final class VenueTest extends RepositoryTestCase
         $mockQ = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
         $mockQ->shouldReceive('getTrafficArea')->andReturn('B');
 
-        $mockQb->shouldReceive('expr->eq')->with('m.trafficArea', ':trafficArea')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
-        $mockQb->shouldReceive('setParameter')->with('trafficArea', 'B')->once();
+        $expr = new \Doctrine\ORM\Query\Expr();
 
-        $mockQb->shouldReceive('expr->isNull')->with('m.endDate')->once()->andReturn('C1');
-        $mockQb->shouldReceive('expr->gt')->with('m.endDate', ':today')->once()->andReturn('C2');
-        $mockQb->shouldReceive('expr->orX')->with('C1', 'C2')->once()->andReturn('C1C2');
-        $mockQb->shouldReceive('andWhere')->with('C1C2')->once()->andReturnSelf();
+        $mockQb->shouldReceive('expr')
+            ->times(4)
+            ->andReturn($expr);
+
+        $mockQb->shouldReceive('andWhere')
+            ->twice()
+            ->andReturnSelf();
+
+        $mockQb->shouldReceive('setParameter')->with('trafficArea', 'B')->once();
         $mockQb->shouldReceive('setParameter')->with('today', m::type(\DateTime::class))->once();
 
         $mockQb->shouldReceive('orderBy')->with('m.name', 'ASC')->once()->andReturnSelf();

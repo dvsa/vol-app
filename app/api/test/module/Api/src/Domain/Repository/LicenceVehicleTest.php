@@ -73,7 +73,7 @@ final class LicenceVehicleTest extends RepositoryTestCase
             . ' AND m.removalDate IS NULL'
             // Specified = Y
             . ' AND m.specifiedDate IS NOT NULL'
-            . ' AND (m.application = [[111]] OR m.licence = [[222]])';
+            . ' AND m.application = [[111]] OR m.licence = [[222]]';
         $this->assertEquals($expectedQuery, $this->query);
     }
 
@@ -150,7 +150,7 @@ final class LicenceVehicleTest extends RepositoryTestCase
             . ' AND m.removalDate IS NULL'
             // Specified = Y
             . ' AND m.specifiedDate IS NOT NULL'
-            . ' AND (m.application = [[111]] OR (m.licence = [[222]] AND m.specifiedDate IS NOT NULL))';
+            . ' AND m.application = [[111]] OR (m.licence = [[222]] AND m.specifiedDate IS NOT NULL)';
         $this->assertEquals($expectedQuery, $this->query);
     }
 
@@ -187,7 +187,7 @@ final class LicenceVehicleTest extends RepositoryTestCase
             // Include Removed = true
             // Specified = N
             . ' AND m.specifiedDate IS NULL'
-            . ' AND (m.application = [[111]] OR (m.licence = [[222]] AND m.specifiedDate IS NOT NULL))';
+            . ' AND m.application = [[111]] OR (m.licence = [[222]] AND m.specifiedDate IS NOT NULL)';
         $this->assertEquals($expectedQuery, $this->query);
     }
 
@@ -357,7 +357,7 @@ final class LicenceVehicleTest extends RepositoryTestCase
         $this->assertSame($qb, $this->sut->createPaginatedVehiclesDataForApplicationQueryPsv($qry, $appId, $licId));
 
         $expectedQuery = '[QUERY] INNER JOIN m.vehicle v AND m.removalDate IS NULL AND m.licence = [[333]] '
-            . 'AND (m.application = [[222]] OR m.specifiedDate IS NOT NULL)';
+            . 'AND m.application = [[222]] OR m.specifiedDate IS NOT NULL';
         $this->assertEquals($expectedQuery, $this->query);
     }
 
@@ -487,8 +487,9 @@ final class LicenceVehicleTest extends RepositoryTestCase
             ->once()
             ->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('m.vehicle', ':vehicle')->andReturn('condition');
-        $mockQb->shouldReceive('where')->with('condition')->andReturnSelf();
+        $condition = $this->mockExprEq('m.vehicle', ':vehicle');
+        $mockQb->shouldReceive('expr->eq')->with('m.vehicle', ':vehicle')->andReturn($condition);
+        $mockQb->shouldReceive('where')->with($condition)->andReturnSelf();
         $mockQb->shouldReceive('orderBy')->with('m.specifiedDate', 'DESC')->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('vehicle', 1)->andReturnSelf();
 
@@ -522,7 +523,7 @@ final class LicenceVehicleTest extends RepositoryTestCase
             . ' AND m.removalDate IS NULL'
             . ' AND l.id != [[111]]'
             . ' AND l.goodsOrPsv = [[lcat_gv]]'
-            . ' AND l.status IN ["lsts_curtailed","lsts_valid","lsts_suspended"]'
+            . ' AND l.status IN(["lsts_curtailed","lsts_valid","lsts_suspended"])'
             . ' AND m.warningLetterSeedDate IS NULL',
             $this->query
         );
@@ -545,7 +546,7 @@ final class LicenceVehicleTest extends RepositoryTestCase
 
         $this->assertEquals(
             '{{QUERY}} INNER JOIN m.licence l'
-            . ' AND l.status IN ["lsts_curtailed","lsts_valid","lsts_suspended"]'
+            . ' AND l.status IN(["lsts_curtailed","lsts_valid","lsts_suspended"])'
             . ' AND m.warningLetterSeedDate < [[' . $expectedDate . ']]'
             . ' AND m.warningLetterSentDate IS NULL'
             . ' AND m.removalDate IS NULL',
@@ -615,8 +616,9 @@ final class LicenceVehicleTest extends RepositoryTestCase
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($mockQb);
 
         $mockQb->shouldReceive('select')->with('count(m.id)')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn('expr');
-        $mockQb->shouldReceive('andWhere')->with('expr')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('m.licence', ':licence');
+        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn($expr);
+        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('licence', 1)->once()->andReturnSelf();
         $mockQb->shouldReceive('getQuery->getSingleScalarResult')->once()->andReturn('2');
 
@@ -629,9 +631,11 @@ final class LicenceVehicleTest extends RepositoryTestCase
         $this->em->shouldReceive('getRepository->createQueryBuilder')->with('m')->once()->andReturn($mockQb);
 
         $mockQb->shouldReceive('select')->with('count(m.id)')->once()->andReturnSelf();
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn('expr');
+        $expr = $this->mockExprEq('m.licence', ':licence');
+        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn($expr);
         $mockQb->shouldReceive('expr->isNull')->with('m.removalDate')->once()->andReturn('expr');
-        $mockQb->shouldReceive('andWhere')->with('expr')->times(2)->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with('expr')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('licence', 1)->once()->andReturnSelf();
         $mockQb->shouldReceive('getQuery->getSingleScalarResult')->once()->andReturn('1');
 
@@ -653,11 +657,11 @@ final class LicenceVehicleTest extends RepositoryTestCase
         $mockQb->shouldReceive('getQuery->toIterable')
             ->once()
             ->with()
-            ->andReturn('EXPECT');
+            ->andReturn(['EXPECT']);
 
         $this->mockCreateQueryBuilder($mockQb);
 
-        $this->assertEquals('EXPECT', $this->sut->fetchForExport($mockQb));
+        $this->assertEquals(['EXPECT'], $this->sut->fetchForExport($mockQb));
 
         $this->assertEquals('{{QUERY}} ' .
         'SELECT v.vrm, v.platedWeight, m.specifiedDate, ' .
@@ -680,10 +684,11 @@ final class LicenceVehicleTest extends RepositoryTestCase
             ->andReturnSelf();
         $mockQb->shouldReceive('orderBy')->with('m.specifiedDate', 'ASC')->once()->andReturnSelf();
         $mockQb->shouldReceive('expr->isNotNull')->with('m.specifiedDate')->once()->andReturn('COND1');
-        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn('COND2');
+        $cond2 = $this->mockExprEq('m.licence', ':licence');
+        $mockQb->shouldReceive('expr->eq')->with('m.licence', ':licence')->once()->andReturn($cond2);
         $mockQb->shouldReceive('expr->isNull')->with('m.removalDate')->once()->andReturn('COND3');
         $mockQb->shouldReceive('andWhere')->with('COND1')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->with('COND2')->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($cond2)->once()->andReturnSelf();
         $mockQb->shouldReceive('andWhere')->with('COND3')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('licence', $licenceId)->once()->andReturnSelf();
 
@@ -698,6 +703,14 @@ final class LicenceVehicleTest extends RepositoryTestCase
 
         $mockQb->shouldReceive('innerJoin')->with('m.vehicle', 'v')->once()->andReturnSelf();
         $mockQb->shouldReceive('innerJoin')->with('m.licence', 'l')->once()->andReturnSelf();
+        $cond1 = $this->mockExprIn(
+            'l.status',
+            [
+                LicenceEntity::LICENCE_STATUS_CURTAILED,
+                LicenceEntity::LICENCE_STATUS_VALID,
+                LicenceEntity::LICENCE_STATUS_SUSPENDED,
+            ]
+        );
         $mockQb->shouldReceive('expr->in')
             ->with(
                 'l.status',
@@ -708,11 +721,12 @@ final class LicenceVehicleTest extends RepositoryTestCase
                 ]
             )
             ->once()
-            ->andReturn('COND1');
-        $mockQb->shouldReceive('expr->lt')->with('m.warningLetterSentDate', ':sentDate')->once()->andReturn('COND2');
+            ->andReturn($cond1);
+        $cond2 = $this->mockExprLt('m.warningLetterSentDate', ':sentDate');
+        $mockQb->shouldReceive('expr->lt')->with('m.warningLetterSentDate', ':sentDate')->once()->andReturn($cond2);
         $mockQb->shouldReceive('expr->isNull')->with('m.removalDate')->once()->andReturn('COND3');
-        $mockQb->shouldReceive('andWhere')->with('COND1')->once()->andReturnSelf();
-        $mockQb->shouldReceive('andWhere')->with('COND2')->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($cond1)->once()->andReturnSelf();
+        $mockQb->shouldReceive('andWhere')->with($cond2)->once()->andReturnSelf();
         $mockQb->shouldReceive('andWhere')->with('COND3')->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('sentDate', m::type(\DateTime::class))->once()->andReturnSelf();
         $mockQb->shouldReceive('getQuery->getResult')->with(Query::HYDRATE_OBJECT)->once()->andReturn('result');

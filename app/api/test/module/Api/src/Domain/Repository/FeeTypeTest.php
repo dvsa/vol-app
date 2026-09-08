@@ -50,7 +50,7 @@ final class FeeTypeTest extends RepositoryTestCase
 
         $qb->shouldReceive('getQuery')
             ->andReturn(
-                m::mock()
+                m::mock(\Doctrine\ORM\Query::class)
                     ->shouldReceive('execute')
                     ->andReturn(['RESULTS'])
                     ->getMock()
@@ -109,7 +109,7 @@ final class FeeTypeTest extends RepositoryTestCase
 
         $expectedQuery = 'QUERY'
             . ' AND ft.isMiscellaneous = [[0]]'
-            . ' AND ft.feeType IN ["APP","VAR","GRANT","GRANTINT"]'
+            . ' AND ft.feeType IN(["APP","VAR","GRANT","GRANTINT"])'
             . ' AND ft.goodsOrPsv = [[GOODS_OR_PSV]]'
             . ' AND ft.licenceType = [[LICENCE_TYPE]]'
             . ' AND ft.effectiveFrom <= [[2014-10-26T00:00:00+00:00]]'
@@ -164,7 +164,7 @@ final class FeeTypeTest extends RepositoryTestCase
         $this->assertEquals(['RESULTS'], $this->sut->fetchList($queryDto, Query::HYDRATE_OBJECT));
 
         $expectedQuery = 'QUERY'
-            . ' AND ft.feeType IN ["CONT"]'
+            . ' AND ft.feeType IN(["CONT"])'
             . ' AND ft.licenceType = [[LICENCE_TYPE]]'
             . ' AND ft.effectiveFrom <= [[2014-10-26T00:00:00+00:00]]'
             . ' ORDER BY ftft.id ASC'
@@ -208,7 +208,7 @@ final class FeeTypeTest extends RepositoryTestCase
 
         $expectedQuery = 'QUERY'
             . ' AND ft.isMiscellaneous = [[0]]'
-            . ' AND ft.feeType IN ["IRFOGVPERMIT","IRFOPSVANN","IRFOPSVAPP","IRFOPSVCOPY"]'
+            . ' AND ft.feeType IN(["IRFOGVPERMIT","IRFOPSVANN","IRFOPSVAPP","IRFOPSVCOPY"])'
             . ' AND ft.effectiveFrom <= [[' . $expectedDate . ']]'
             . ' ORDER BY ftft.id ASC'
             . ' ORDER BY ft.effectiveFrom DESC';
@@ -256,7 +256,7 @@ final class FeeTypeTest extends RepositoryTestCase
 
         $expectedQuery = 'QUERY'
             . ' AND ft.isMiscellaneous = [[0]]'
-            . ' AND ft.feeType IN ["BUSAPP","BUSVAR"]'
+            . ' AND ft.feeType IN(["BUSAPP","BUSVAR"])'
             . ' AND ft.effectiveFrom <= [[' . $expectedDate . ']]'
             . ' ORDER BY ftft.id ASC'
             . ' ORDER BY ft.effectiveFrom DESC';
@@ -431,7 +431,7 @@ final class FeeTypeTest extends RepositoryTestCase
     public function testFetchDistinctFeeTypesVisibleInInternal(): void
     {
         $qb = m::mock(QueryBuilder::class);
-        $repo = m::mock(FeeType::class)->shouldAllowMockingProtectedMethods();
+        $repo = m::mock(\Doctrine\ORM\EntityRepository::class);
 
         $this->em->shouldReceive('getRepository')->with(FeeType::class)->andReturn($repo);
 

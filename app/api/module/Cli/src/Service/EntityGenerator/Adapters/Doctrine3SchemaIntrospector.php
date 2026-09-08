@@ -29,10 +29,11 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
     }
 
     /**
-     * DBAL has no mapping for MySQL's ENUM, and introspecting a column it cannot type throws
-     * `Unknown database type enum requested`, which aborts the entire generation run rather
-     * than just the table that owns the column. Mapping it to `string` matches how these
-     * columns are already modelled in the entities (a string property with class constants).
+     * Introspecting a column the platform cannot type throws `Unknown database type <x>
+     * requested`, which aborts the entire generation run rather than just the table that owns
+     * the column. DBAL 4 maps MySQL's ENUM to its own EnumType, so this is a no-op there and
+     * DefaultTypeHandler is what flattens `enum` back to `string`; the registration stays for
+     * platforms that carry no mapping of their own, where `string` is the same end state.
      */
     private function registerUnmappedPlatformTypes(): void
     {
@@ -188,13 +189,14 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
 
         // Get primary key columns
         $primaryKeyColumns = [];
-        if ($table->hasPrimaryKey()) {
-            $primaryKey = $table->getPrimaryKey();
+        $primaryKey = $table->getPrimaryKey();
+
+        if ($primaryKey !== null) {
             $primaryKeyColumns = $primaryKey->getColumns();
         }
 
         foreach ($table->getColumns() as $column) {
-            $columnMetadata = $this->convertColumn($column);
+            $columnMetadata = $this->convertColumn($column, $table);
             // Set primary key flag
             if (in_array($column->getName(), $primaryKeyColumns)) {
                 $columnMetadata = new ColumnMetadata(
@@ -218,11 +220,11 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
     /**
      * Convert Doctrine Column to our ColumnMetadata
      */
-    private function convertColumn(Column $column): ColumnMetadata
+    private function convertColumn(Column $column, ?Table $table = null): ColumnMetadata
     {
         // unsigned/fixed are first-class DBAL column properties; surface them as
         // options so handlers can emit them for schema fidelity
-        $options = $column->getCustomSchemaOptions();
+        $options = [];
         if ($column->getUnsigned()) {
             $options['unsigned'] = true;
         }
@@ -230,14 +232,43 @@ class Doctrine3SchemaIntrospector implements SchemaIntrospectorInterface
             $options['fixed'] = true;
         }
 
+        // A column that overrides its table's charset or collation has to say so, or the
+        // mapping renders the table default and the column reads as drifted for a difference
+        // nothing in the attribute expresses. Only the overrides are emitted - carrying them
+        // on every column would put charset and collation on all 7722 of them.
+        $tableOptions = $table?->getOptions() ?? [];
+        foreach (['charset' => $column->getCharset(), 'collation' => $column->getCollation()] as $key => $value) {
+            if ($value !== null && $value !== ($tableOptions[$key] ?? null)) {
+                $options[$key] = $value;
+            }
+        }
+
+        $type = \Doctrine\DBAL\Types\Type::lookupName($column->getType());
+
+        // DBAL models precision/scale as first-class column properties, but
+        // DefaultTypeHandler reads precision from length and scale from options, so
+        // map them across here. Without this the handler's precision/scale emission
+        // never fires on a real schema, and DBAL 4 rejects a decimal column whose
+        // declaration omits them (ColumnPrecisionRequired).
+        $length = $column->getLength();
+        if ($type === 'decimal') {
+            $length = $column->getPrecision();
+            $options['scale'] = $column->getScale();
+        }
+
+        $default = $column->getDefault();
+        if ($default instanceof \Doctrine\DBAL\Schema\DefaultExpression) {
+            $default = $default->toSQL($this->connection->getDatabasePlatform());
+        }
+
         return new ColumnMetadata(
             name: $column->getName(),
-            type: $column->getType()->getName(),
-            length: $column->getLength(),
+            type: $type,
+            length: $length,
             nullable: !$column->getNotnull(),
             primary: false, // Will be set later from primary key info
             autoIncrement: $column->getAutoincrement(),
-            default: $column->getDefault(),
+            default: $default,
             comment: $column->getComment(),
             options: $options
         );

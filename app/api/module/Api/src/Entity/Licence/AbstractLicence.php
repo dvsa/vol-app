@@ -64,7 +64,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * FK to vehicle_inspectorate.
      *
-     * @var \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea
+     * @var \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea|null
      */
     #[ORM\JoinColumn(name: 'enforcement_area_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\EnforcementArea\EnforcementArea::class, fetch: 'LAZY')]
@@ -82,7 +82,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * FK to traffic area.  An Operator can have One licence per area.
      *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea|null
      */
     #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
@@ -91,7 +91,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Correspondence contact details
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails|null
      */
     #[ORM\JoinColumn(name: 'correspondence_cd_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY', cascade: ['persist'])]
@@ -100,7 +100,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Establishment contact details
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails|null
      */
     #[ORM\JoinColumn(name: 'establishment_cd_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY')]
@@ -109,7 +109,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Transport consultant contact details
      *
-     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails
+     * @var \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails|null
      */
     #[ORM\JoinColumn(name: 'transport_consultant_cd_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\ContactDetails\ContactDetails::class, fetch: 'LAZY')]
@@ -118,7 +118,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Is a licence for goods vehicles or passenger service vehicles
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'goods_or_psv', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -127,7 +127,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * VehicleType
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'vehicle_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -136,7 +136,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * e.g. Restricted, Standard national.
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'licence_type', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -154,7 +154,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * New olcs column values not applicable, external, internal
      *
-     * @var \Dvsa\Olcs\Api\Entity\System\RefData
+     * @var \Dvsa\Olcs\Api\Entity\System\RefData|null
      */
     #[ORM\JoinColumn(name: 'tachograph_ins', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\System\RefData::class, fetch: 'LAZY')]
@@ -163,7 +163,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -173,7 +173,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -183,7 +183,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Licence number.  Normally 9 Chars.  First denotes goods/psv, second TA, rest ID.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'lic_no', length: 18, nullable: true)]
     protected $licNo;
@@ -199,7 +199,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * C, U or D.  Triggers vehicle inspectorate-mobile compliance export.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'vi_action', length: 1, nullable: true)]
     protected $viAction;
@@ -215,7 +215,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Number of trailers authorised on licence
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'tot_auth_trailers', nullable: true, options: ['unsigned' => true])]
     protected $totAuthTrailers;
@@ -223,7 +223,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Number of vehicles authorised on licence
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'tot_auth_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totAuthVehicles;
@@ -231,7 +231,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Number of HGV vehicles authorised on licence
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'tot_auth_hgv_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totAuthHgvVehicles;
@@ -239,7 +239,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Number of LGV vehicles authorised on licence
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'tot_auth_lgv_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $totAuthLgvVehicles;
@@ -247,7 +247,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * number of community, (european) licences allowed
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'tot_community_licences', nullable: true, options: ['unsigned' => true])]
     protected $totCommunityLicences;
@@ -255,7 +255,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * No of trailers in possession. Should be less than authorised number
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'trailers_in_possession', nullable: true, options: ['unsigned' => true])]
     protected $trailersInPossession;
@@ -263,7 +263,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Fabs reference
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'fabs_reference', length: 10, nullable: true)]
     protected $fabsReference;
@@ -271,7 +271,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * expiry date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'expiry_date', nullable: true)]
     protected $expiryDate;
@@ -279,7 +279,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * granted date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'granted_date', nullable: true)]
     protected $grantedDate;
@@ -287,7 +287,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Date licence is reviewed
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'review_date', nullable: true)]
     protected $reviewDate;
@@ -295,7 +295,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Same as expiry date for all new licences.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'fee_date', nullable: true)]
     protected $feeDate;
@@ -303,7 +303,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Date licence is effective
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'date', name: 'in_force_date', nullable: true)]
     protected $inForceDate;
@@ -311,7 +311,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Date surrendered by operator
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'surrendered_date', nullable: true)]
     protected $surrenderedDate;
@@ -319,7 +319,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Date revoked
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'revoked_date', nullable: true)]
     protected $revokedDate;
@@ -327,7 +327,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Date curtailed, i.e. reduced authorisation
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'curtailed_date', nullable: true)]
     protected $curtailedDate;
@@ -335,7 +335,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Date suspended.  Temporarily out of use
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'suspended_date', nullable: true)]
     protected $suspendedDate;
@@ -343,7 +343,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Continuation not sought date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'cns_date', nullable: true)]
     protected $cnsDate;
@@ -351,7 +351,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Max period in weeks between safety inspections.
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'safety_ins_trailers', nullable: true, options: ['unsigned' => true])]
     protected $safetyInsTrailers;
@@ -359,7 +359,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Max period in weeks between safety inspections.
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'safety_ins_vehicles', nullable: true, options: ['unsigned' => true])]
     protected $safetyInsVehicles;
@@ -375,7 +375,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * New olcs column for when some vehicles inspected more often
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'safety_ins_varies', nullable: true)]
     protected $safetyInsVaries;
@@ -383,7 +383,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * New olcs column for tachograph inspector
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'tachograph_ins_name', length: 90, nullable: true)]
     protected $tachographInsName;
@@ -391,7 +391,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Number of psv discs to be printed.  Psv discs are per licence, rather than being assigned to a specific vehicle.
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'psv_discs_to_be_printed_no', nullable: true, options: ['unsigned' => true])]
     protected $psvDiscsToBePrintedNo;
@@ -407,7 +407,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Are maintenance facilities/agreements suitable for the vehicles on the licence.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'yesnonull', name: 'is_maintenance_suitable', nullable: true)]
     protected $isMaintenanceSuitable;
@@ -424,7 +424,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Used to map FKs during ETL. Can be dropped safely when OLBS decommissioned
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'integer', name: 'olbs_key', nullable: true, options: ['unsigned' => true])]
     protected $olbsKey;
@@ -432,7 +432,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Decisions
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Pi\Decision>
      */
     #[ORM\JoinTable(name: 'licence_status_decision')]
     #[ORM\JoinColumn(name: 'licence_id', referencedColumnName: 'id')]
@@ -443,7 +443,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Applications
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Application\Application>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Application\Application::class, mappedBy: 'licence')]
     protected $applications;
@@ -451,7 +451,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * BusRegs
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Bus\BusReg>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, mappedBy: 'licence', cascade: ['persist'])]
     protected $busRegs;
@@ -459,7 +459,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Cases
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Cases\Cases>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\Cases::class, mappedBy: 'licence')]
     protected $cases;
@@ -467,7 +467,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * ChangeOfEntitys
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Organisation\ChangeOfEntity>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\ChangeOfEntity::class, mappedBy: 'licence')]
     protected $changeOfEntitys;
@@ -475,7 +475,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * CommunityLics
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\CommunityLic\CommunityLic::class, mappedBy: 'licence', fetch: 'EXTRA_LAZY')]
     protected $communityLics;
@@ -483,7 +483,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * CompanySubsidiaries
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Organisation\CompanySubsidiary>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\CompanySubsidiary::class, mappedBy: 'licence')]
     protected $companySubsidiaries;
@@ -491,7 +491,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * ConditionUndertakings
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Cases\ConditionUndertaking::class, mappedBy: 'licence')]
     protected $conditionUndertakings;
@@ -499,7 +499,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * ContinuationDetails
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail::class, mappedBy: 'licence')]
     protected $continuationDetails;
@@ -507,7 +507,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Documents
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Doc\Document>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Doc\Document::class, mappedBy: 'licence')]
     protected $documents;
@@ -515,7 +515,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Fees
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Fee\Fee>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Fee\Fee::class, mappedBy: 'licence')]
     protected $fees;
@@ -523,7 +523,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * GracePeriods
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Licence\GracePeriod>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\GracePeriod::class, mappedBy: 'licence')]
     protected $gracePeriods;
@@ -531,7 +531,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * IrhpApplications
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Permits\IrhpApplication::class, mappedBy: 'licence')]
     protected $irhpApplications;
@@ -539,7 +539,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * OperatingCentres
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Licence\LicenceOperatingCentre>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\LicenceOperatingCentre::class, mappedBy: 'licence')]
     protected $operatingCentres;
@@ -547,7 +547,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * ReadAudits
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Licence\LicenceReadAudit>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\LicenceReadAudit::class, mappedBy: 'licence')]
     protected $readAudits;
@@ -555,7 +555,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * LicenceStatusRules
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Licence\LicenceStatusRule>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\LicenceStatusRule::class, mappedBy: 'licence')]
     protected $licenceStatusRules;
@@ -563,7 +563,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * LicenceVehicles
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle::class, mappedBy: 'licence')]
     protected $licenceVehicles;
@@ -571,7 +571,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * PrivateHireLicences
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Licence\PrivateHireLicence>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\PrivateHireLicence::class, mappedBy: 'licence')]
     protected $privateHireLicences;
@@ -579,7 +579,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * PsvDiscs
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Licence\PsvDisc>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\PsvDisc::class, mappedBy: 'licence')]
     #[ORM\OrderBy(['discNo' => 'ASC'])]
@@ -588,7 +588,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * PublicationLinks
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Publication\PublicationLink>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Publication\PublicationLink::class, mappedBy: 'licence')]
     protected $publicationLinks;
@@ -596,7 +596,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * TradingNames
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Organisation\TradingName>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Organisation\TradingName::class, mappedBy: 'licence')]
     protected $tradingNames;
@@ -604,7 +604,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * TmLicences
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Tm\TransportManagerLicence::class, mappedBy: 'licence')]
     protected $tmLicences;
@@ -612,7 +612,7 @@ abstract class AbstractLicence implements BundleSerializableInterface, JsonSeria
     /**
      * Workshops
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Licence\Workshop>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Licence\Workshop::class, mappedBy: 'licence')]
     protected $workshops;

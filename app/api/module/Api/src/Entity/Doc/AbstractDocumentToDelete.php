@@ -9,7 +9,7 @@ use JsonSerializable;
 use Dvsa\Olcs\Api\Entity\Traits\BundleSerializableTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ClearPropertiesTrait;
-use Dvsa\Olcs\Api\Entity\Traits\CreatedOnTrait;
+use Dvsa\Olcs\Api\Entity\Traits\CreatedOnNotNullTrait;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -26,7 +26,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
     use BundleSerializableTrait;
     use ProcessDateTrait;
     use ClearPropertiesTrait;
-    use CreatedOnTrait;
+    use CreatedOnNotNullTrait;
 
     /**
      * Primary key.  Auto incremented if numeric.
@@ -65,7 +65,7 @@ abstract class AbstractDocumentToDelete implements BundleSerializableInterface, 
     /**
      * Process after date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     #[ORM\Column(type: 'datetime', name: 'process_after_date', nullable: true)]
     protected $processAfterDate;

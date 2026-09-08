@@ -70,6 +70,13 @@ abstract class AbstractTypeHandler implements TypeHandlerInterface
             $entries[] = "'fixed' => true";
         }
 
+        foreach (['charset', 'collation'] as $key) {
+            $value = $column->getOption($key);
+            if (is_string($value) && $value !== '') {
+                $entries[] = sprintf("'%s' => '%s'", $key, $value);
+            }
+        }
+
         return $entries;
     }
 
