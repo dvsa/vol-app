@@ -1,5 +1,20 @@
 # Changelog
 
+## [9.3.0](https://github.com/dvsa/vol-app/compare/v9.2.2...v9.3.0) (2026-09-07)
+
+
+### Features
+
+* update process inbox timing to 7am ([#1762](https://github.com/dvsa/vol-app/issues/1762)) ([5403453](https://github.com/dvsa/vol-app/commit/54034538482c6b1c52fb8aac85550b315b228e7f))
+
+
+### Bug Fixes
+
+* **api:** neutralise the AWS egress proxy in the local config template ([#1763](https://github.com/dvsa/vol-app/issues/1763)) ([0541c0e](https://github.com/dvsa/vol-app/commit/0541c0ef4f88c1204390fee47c75c64fe62c1318))
+* update sas extract script ([#1761](https://github.com/dvsa/vol-app/issues/1761)) ([933bf9b](https://github.com/dvsa/vol-app/commit/933bf9bbb1974b57454c89faab218bd6b88ae895))
+* updates to MariaDB dump ([#1760](https://github.com/dvsa/vol-app/issues/1760)) ([b7e7dd7](https://github.com/dvsa/vol-app/commit/b7e7dd74dc3fe2f502d89a806c01a4dca745d84b))
+* vol 6118 open cases filtering bug ([#1705](https://github.com/dvsa/vol-app/issues/1705)) ([632c2e8](https://github.com/dvsa/vol-app/commit/632c2e84bb2624222eb18532cc3d742f2b66a437))
+
 ## [9.2.2](https://github.com/dvsa/vol-app/compare/v9.2.1...v9.2.2) (2026-09-04)
 
 

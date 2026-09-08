@@ -97,6 +97,62 @@ class DocumentAnalysis extends AbstractRepository
     }
 
     /**
+     * Resolve a PENDING row to SUCCESS with its result payload, guarded by the same
+     * conditional UPDATE pattern as sweepStalePending() so a row already resolved by the
+     * sweeper (or a concurrent/duplicate invocation) cannot be overwritten.
+     *
+     * @param array<mixed> $result
+     * @param array<mixed> $metadata
+     *
+     * @return int rows affected (0 if the row was no longer PENDING)
+     */
+    public function recordSuccess(int $analysisId, array $result, array $metadata): int
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        return (int)$qb->update(Entity::class, $this->alias)
+            ->set($this->alias . '.status', ':success')
+            ->set($this->alias . '.result', ':result')
+            ->set($this->alias . '.resultMetadata', ':metadata')
+            ->set($this->alias . '.completedAt', ':now')
+            ->where($qb->expr()->eq($this->alias . '.id', ':id'))
+            ->andWhere($qb->expr()->eq($this->alias . '.status', ':pending'))
+            ->setParameter('success', Entity::STATUS_SUCCESS)
+            ->setParameter('result', $result, Types::JSON)
+            ->setParameter('metadata', $metadata, Types::JSON)
+            ->setParameter('now', new \DateTime())
+            ->setParameter('id', $analysisId)
+            ->setParameter('pending', Entity::STATUS_PENDING)
+            ->getQuery()
+            ->execute();
+    }
+
+    /**
+     * Resolve a PENDING row to ERROR with its failure detail, guarded by the same
+     * conditional UPDATE pattern as recordSuccess().
+     *
+     * @return int rows affected (0 if the row was no longer PENDING)
+     */
+    public function recordError(int $analysisId, string $errorDetail): int
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        return (int)$qb->update(Entity::class, $this->alias)
+            ->set($this->alias . '.status', ':error')
+            ->set($this->alias . '.errorDetail', ':errorDetail')
+            ->set($this->alias . '.completedAt', ':now')
+            ->where($qb->expr()->eq($this->alias . '.id', ':id'))
+            ->andWhere($qb->expr()->eq($this->alias . '.status', ':pending'))
+            ->setParameter('error', Entity::STATUS_ERROR)
+            ->setParameter('errorDetail', $errorDetail)
+            ->setParameter('now', new \DateTime())
+            ->setParameter('id', $analysisId)
+            ->setParameter('pending', Entity::STATUS_PENDING)
+            ->getQuery()
+            ->execute();
+    }
+
+    /**
      * Rows sweepStalePending() would resolve, so the caller can log them. Kept separate so
      * the write stays atomic.
      *
