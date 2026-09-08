@@ -1,4 +1,3 @@
-olcs-etl commit: 5b4f0336947de34e14b01ea674d5bf528b7c3166
 Liquibase running with context: prep
 Running migrations...
 Liquibase Version: 5.0.2

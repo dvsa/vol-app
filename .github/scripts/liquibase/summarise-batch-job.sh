@@ -13,6 +13,8 @@ summary="${GITHUB_STEP_SUMMARY:-/dev/stdout}"
 etl_short="${etl_sha:0:12}"
 
 status=$(aws batch describe-jobs --jobs "$job_id" --query 'jobs[0].status' --output text)
+status_reason=$(aws batch describe-jobs --jobs "$job_id" --query 'jobs[0].statusReason' --output text 2>/dev/null || true)
+[ "$status_reason" = "None" ] && status_reason=""
 
 # Batch keeps one log stream per attempt; read them all so a retried job is summarised completely.
 mapfile -t streams < <(aws batch describe-jobs --jobs "$job_id" \
@@ -25,11 +27,12 @@ fi
 log=""
 for stream in "${streams[@]}"; do
   log+=$(aws logs get-log-events --log-group-name "$group" --log-stream-name "$stream" \
-    --start-from-head --query 'events[].message' --output text | tr '\t' '\n')
+    --start-from-head --query 'events[].message' --output text | tr '\t' '\n' || true)
   log+=$'\n'
 done
 
 run_count=$(grep -E '^Run:' <<<"$log" | tail -1 | awk '{print $2}' || true)
+ran_sha=$(grep -E '^olcs-etl commit: ' <<<"$log" | tail -1 | sed -E 's/^olcs-etl commit: //' || true)
 
 # "Running Changeset" lines whose next line is a precondition skip ("NOT applying") are not real work.
 executed=$(awk '
@@ -43,6 +46,8 @@ executed=$(awk '
   echo "- Batch job: \`${job_id}\` finished \`${status}\`"
   echo "- olcs-etl commit: \`${etl_sha}\`"
   echo "- Image digest: \`${digest}\`"
+  echo "- Image reports olcs-etl commit: \`${ran_sha:-not stamped}\`"
+  if [ -n "$status_reason" ]; then echo "- Batch status reason: ${status_reason}"; fi
   echo
   echo '```'
   grep -E '^(Run|Previously run|Filtered out|Total change sets|Context mismatch):' <<<"$log" | tail -5 || true
@@ -59,6 +64,12 @@ if grep -qE 'Migration failed|Unexpected error running Liquibase' <<<"$log"; the
 fi
 if [ "${DRY_RUN:-false}" != "true" ] && ! grep -qF "Liquibase command 'update' was executed successfully" <<<"$log"; then
   echo "::error::Liquibase update did not report success in job ${job_id} (status ${status})" >&2
+  exit 1
+fi
+if [ -z "$ran_sha" ] || [ "$ran_sha" = "unknown" ]; then
+  echo "::warning::The image that ran did not report its olcs-etl commit (built before the stamp), so it cannot be checked against ${etl_sha}"
+elif [ "$ran_sha" != "$etl_sha" ]; then
+  echo "::error::The Batch job ran an image built from olcs-etl ${ran_sha}, not the resolved ${etl_sha}. The job definition is pinned to a different tag." >&2
   exit 1
 fi
 if [ "${run_count:-}" = "0" ] && [ -n "$previous" ] && [ "$previous" != "$etl_short" ]; then

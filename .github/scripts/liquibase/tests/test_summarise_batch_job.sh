@@ -7,6 +7,7 @@ _fake_aws_for_logs() { # <fixture file> [status]
   fake_cmd aws '
     case "$*" in
       *describe-jobs*jobs\[0\].status*) echo "$FAKE_JOB_STATUS" ;;
+      *describe-jobs*statusReason*) echo "None" ;;
       *describe-jobs*attempts*) echo "liquibase/default/abc" ;;
       *describe-jobs*container.logStreamName*) echo "liquibase/default/abc" ;;
       *get-log-events*) paste -sd "\t" "$FAKE_LOG_FILE" ;;
@@ -22,6 +23,7 @@ _fake_aws_multi_attempt() { # <first attempt fixture> <second attempt fixture>
   fake_cmd aws '
     case "$*" in
       *describe-jobs*jobs\[0\].status*) echo "$FAKE_JOB_STATUS" ;;
+      *describe-jobs*statusReason*) echo "None" ;;
       *describe-jobs*attempts*) printf "liquibase/default/a\tliquibase/default/b\n" ;;
       *get-log-events*log-stream-name\ liquibase/default/a*) paste -sd "\t" "$FAKE_LOG_A" ;;
       *get-log-events*log-stream-name\ liquibase/default/b*) paste -sd "\t" "$FAKE_LOG_B" ;;
@@ -37,6 +39,7 @@ _fake_aws_no_attempts() { # <fixture>
   fake_cmd aws '
     case "$*" in
       *describe-jobs*jobs\[0\].status*) echo "$FAKE_JOB_STATUS" ;;
+      *describe-jobs*statusReason*) echo "None" ;;
       *describe-jobs*attempts*) echo "" ;;
       *describe-jobs*container.logStreamName*) echo "liquibase/default/only" ;;
       *get-log-events*) paste -sd "\t" "$FAKE_LOG_FILE" ;;
@@ -111,4 +114,17 @@ test_falls_back_to_container_stream_when_no_attempts() {
   _fake_aws_no_attempts "${SCRIPTS_DIR}/tests/fixtures/liquibase-run3.txt"
   bash "${SCRIPTS_DIR}/summarise-batch-job.sh" job-10 5b4f0336947de34e14b01ea674d5bf528b7c3166 sha256:abc >/dev/null
   assert_contains "sp_elastic_person.sql" "$(cat "$GITHUB_STEP_SUMMARY")"
+}
+
+test_image_built_from_other_commit_fails() {
+  _fake_aws_for_logs "${SCRIPTS_DIR}/tests/fixtures/liquibase-run3.txt"
+  err=$(bash "${SCRIPTS_DIR}/summarise-batch-job.sh" job-11 0000000000000000000000000000000000000000 sha256:abc 2>&1 >/dev/null || true)
+  assert_contains "::error::" "$err" &&
+  assert_fails bash "${SCRIPTS_DIR}/summarise-batch-job.sh" job-11 0000000000000000000000000000000000000000 sha256:abc
+}
+
+test_unstamped_image_warns_but_passes() {
+  _fake_aws_for_logs "${SCRIPTS_DIR}/tests/fixtures/liquibase-run0-unstamped.txt"
+  out=$(bash "${SCRIPTS_DIR}/summarise-batch-job.sh" job-12 5b4f0336947de34e14b01ea674d5bf528b7c3166 sha256:abc 5b4f0336947d 2>&1)
+  assert_contains "::warning::" "$out"
 }

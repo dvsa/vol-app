@@ -37,3 +37,10 @@ test_missing_source_tag_fails() {
   fake_cmd aws 'echo "{\"images\":[],\"failures\":[{\"failureCode\":\"ImageNotFound\"}]}"'
   assert_fails bash "${SCRIPTS_DIR}/ecr-tag-image.sh" vol-app/liquibase nosuch newtag
 }
+
+test_no_extra_tags_still_prints_digest() {
+  _fake_aws_for_tagging
+  out=$(bash "${SCRIPTS_DIR}/ecr-tag-image.sh" vol-app/liquibase src)
+  assert_contains "image_digest=sha256:aaa" "$out" &&
+  [ ! -e "${FAKE_BIN}/put.log" ]
+}
