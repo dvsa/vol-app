@@ -609,6 +609,7 @@ jobs:
           SOURCE_DIGEST: ${{ steps.source.outputs.digest }}
         run: |
           docker buildx imagetools create \
+            --prefer-index=false \
             --tag "${PROD_REGISTRY}/vol-app/liquibase:${ETL_SHORT}" \
             --tag "${PROD_REGISTRY}/vol-app/liquibase:${RELEASE_TAG}" \
             --tag "${PROD_REGISTRY}/vol-app/liquibase:latest" \
@@ -670,6 +671,7 @@ jobs:
       - release-please
       - orchestrator
       - push-to-prod-ecr
+      - push-liquibase-to-prod-ecr
     uses: ./.github/workflows/deploy-account.yaml
     with:
       account: prod
