@@ -40,17 +40,17 @@ final class UserEntityTest extends EntityTester
 
     #[\PHPUnit\Framework\Attributes\DataProvider('getUserTypeDataProvider')]
     public function testGetUserType(
-        mixed $team,
-        mixed $localAuthority,
-        mixed $transportManager,
-        mixed $partnerContactDetails,
+        \Closure $createTeam,
+        \Closure $createLocalAuthority,
+        \Closure $createTransportManager,
+        \Closure $createPartnerContactDetails,
         mixed $expected,
         mixed $expectedIsInternal
     ): void {
-        $this->entity->setTeam($team);
-        $this->entity->setLocalAuthority($localAuthority);
-        $this->entity->setTransportManager($transportManager);
-        $this->entity->setPartnerContactDetails($partnerContactDetails);
+        $this->entity->setTeam($createTeam());
+        $this->entity->setLocalAuthority($createLocalAuthority());
+        $this->entity->setTransportManager($createTransportManager());
+        $this->entity->setPartnerContactDetails($createPartnerContactDetails());
 
         $reflectionClass = new ReflectionClass(UserEntity::class);
         $property = $reflectionClass->getProperty('userType');
@@ -62,15 +62,16 @@ final class UserEntityTest extends EntityTester
 
     public static function getUserTypeDataProvider(): \Iterator
     {
-        $team = m::mock(TeamEntity::class);
-        $localAuthority = m::mock(LocalAuthorityEntity::class);
-        $transportManager = m::mock(TransportManagerEntity::class);
-        $partnerContactDetails = m::mock(ContactDetailsEntity::class);
-        yield [$team, null, null, null, Entity::USER_TYPE_INTERNAL, true];
-        yield [null, $localAuthority, null, null, Entity::USER_TYPE_LOCAL_AUTHORITY, false];
-        yield [null, null, $transportManager, null, Entity::USER_TYPE_TRANSPORT_MANAGER, false];
-        yield [null, null, null, $partnerContactDetails, Entity::USER_TYPE_PARTNER, false];
-        yield [null, null, null, null, Entity::USER_TYPE_OPERATOR, false];
+        $none = static fn () => null;
+        $team = static fn () => m::mock(TeamEntity::class);
+        $localAuthority = static fn () => m::mock(LocalAuthorityEntity::class);
+        $transportManager = static fn () => m::mock(TransportManagerEntity::class);
+        $partnerContactDetails = static fn () => m::mock(ContactDetailsEntity::class);
+        yield [$team, $none, $none, $none, Entity::USER_TYPE_INTERNAL, true];
+        yield [$none, $localAuthority, $none, $none, Entity::USER_TYPE_LOCAL_AUTHORITY, false];
+        yield [$none, $none, $transportManager, $none, Entity::USER_TYPE_TRANSPORT_MANAGER, false];
+        yield [$none, $none, $none, $partnerContactDetails, Entity::USER_TYPE_PARTNER, false];
+        yield [$none, $none, $none, $none, Entity::USER_TYPE_OPERATOR, false];
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpCreateInternal')]
@@ -1123,14 +1124,24 @@ final class UserEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpIsAllowedToPerformActionOnRoles')]
-    public function testIsAllowedToPerformActionOnRoles(mixed $rolesOwn, mixed $rolesToCheck, mixed $expected): void
+    public function testIsAllowedToPerformActionOnRoles(array $rolesOwn, mixed $rolesToCheck, mixed $expected): void
     {
+        $roles = array_map(
+            static function (string $role) {
+                $roleEntity = m::mock(RoleEntity::class)->makePartial();
+                $roleEntity->setRole($role);
+
+                return $roleEntity;
+            },
+            $rolesOwn
+        );
+
         $entity = Entity::create(
             'pid',
             Entity::USER_TYPE_INTERNAL,
             [
                 'loginId' => 'loginId',
-                'roles' => $rolesOwn,
+                'roles' => $roles,
             ]
         );
 
@@ -1139,21 +1150,6 @@ final class UserEntityTest extends EntityTester
 
     public static function dpIsAllowedToPerformActionOnRoles(): array
     {
-        $systemAdminRole = m::mock(RoleEntity::class)->makePartial();
-        $systemAdminRole->setRole(RoleEntity::ROLE_SYSTEM_ADMIN);
-
-        $internalAdminRole = m::mock(RoleEntity::class)->makePartial();
-        $internalAdminRole->setRole(RoleEntity::ROLE_INTERNAL_ADMIN);
-
-        $internalIrhpAdminRole = m::mock(RoleEntity::class)->makePartial();
-        $internalIrhpAdminRole->setRole(RoleEntity::ROLE_INTERNAL_IRHP_ADMIN);
-
-        $internalCaseWorkerRole = m::mock(RoleEntity::class)->makePartial();
-        $internalCaseWorkerRole->setRole(RoleEntity::ROLE_INTERNAL_CASE_WORKER);
-
-        $internalReadOnlyRole = m::mock(RoleEntity::class)->makePartial();
-        $internalReadOnlyRole->setRole(RoleEntity::ROLE_INTERNAL_READ_ONLY);
-
         return [
             'user with no roles' => [
                 'rolesOwn' => [],
@@ -1161,7 +1157,7 @@ final class UserEntityTest extends EntityTester
                 'expected' => false,
             ],
             'ROLE_SYSTEM_ADMIN user - allowed to perform action on the following roles' => [
-                'rolesOwn' => [$systemAdminRole],
+                'rolesOwn' => [RoleEntity::ROLE_SYSTEM_ADMIN],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_SYSTEM_ADMIN,
                     RoleEntity::ROLE_INTERNAL_ADMIN,
@@ -1181,7 +1177,7 @@ final class UserEntityTest extends EntityTester
                 'expected' => true,
             ],
             'ROLE_INTERNAL_ADMIN user - allowed to perform action on the following roles' => [
-                'rolesOwn' => [$internalAdminRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_ADMIN],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_INTERNAL_ADMIN,
                     RoleEntity::ROLE_INTERNAL_IRHP_ADMIN,
@@ -1200,14 +1196,14 @@ final class UserEntityTest extends EntityTester
                 'expected' => true,
             ],
             'ROLE_INTERNAL_IRHP_ADMIN user - not allowed to perform action on ROLE_SYSTEM_ADMIN' => [
-                'rolesOwn' => [$internalIrhpAdminRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_IRHP_ADMIN],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_SYSTEM_ADMIN,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_IRHP_ADMIN user - allowed to perform action on the following roles' => [
-                'rolesOwn' => [$internalIrhpAdminRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_IRHP_ADMIN],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_INTERNAL_ADMIN,
                     RoleEntity::ROLE_INTERNAL_IRHP_ADMIN,
@@ -1226,14 +1222,14 @@ final class UserEntityTest extends EntityTester
                 'expected' => true,
             ],
             'ROLE_INTERNAL_ADMIN user - not allowed to perform action on ROLE_SYSTEM_ADMIN' => [
-                'rolesOwn' => [$internalAdminRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_ADMIN],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_SYSTEM_ADMIN,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_CASE_WORKER user - allowed to perform action on the following roles' => [
-                'rolesOwn' => [$internalCaseWorkerRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_CASE_WORKER],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_INTERNAL_CASE_WORKER,
                     RoleEntity::ROLE_INTERNAL_READ_ONLY,
@@ -1250,119 +1246,119 @@ final class UserEntityTest extends EntityTester
                 'expected' => true,
             ],
             'ROLE_INTERNAL_CASE_WORKER user - not allowed to perform action on ROLE_SYSTEM_ADMIN' => [
-                'rolesOwn' => [$internalCaseWorkerRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_CASE_WORKER],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_SYSTEM_ADMIN,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_CASE_WORKER user - not allowed to perform action on ROLE_INTERNAL_ADMIN' => [
-                'rolesOwn' => [$internalCaseWorkerRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_CASE_WORKER],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_INTERNAL_ADMIN,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_CASE_WORKER user - not allowed to perform action on ROLE_INTERNAL_IRHP_ADMIN' => [
-                'rolesOwn' => [$internalCaseWorkerRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_CASE_WORKER],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_INTERNAL_IRHP_ADMIN,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_READ_ONLY user - not allowed to perform action on ROLE_SYSTEM_ADMIN' => [
-                'rolesOwn' => [$internalReadOnlyRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_READ_ONLY],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_SYSTEM_ADMIN,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_READ_ONLY user - not allowed to perform action on ROLE_INTERNAL_ADMIN' => [
-                'rolesOwn' => [$internalReadOnlyRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_READ_ONLY],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_INTERNAL_ADMIN,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_READ_ONLY user - not allowed to perform action on ROLE_INTERNAL_IRHP_ADMIN' => [
-                'rolesOwn' => [$internalReadOnlyRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_READ_ONLY],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_INTERNAL_IRHP_ADMIN,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_READ_ONLY user - not allowed to perform action on ROLE_INTERNAL_CASE_WORKER' => [
-                'rolesOwn' => [$internalReadOnlyRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_READ_ONLY],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_INTERNAL_CASE_WORKER,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_READ_ONLY user - not allowed to perform action on ROLE_INTERNAL_READ_ONLY' => [
-                'rolesOwn' => [$internalReadOnlyRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_READ_ONLY],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_INTERNAL_READ_ONLY,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_READ_ONLY user - not allowed to perform action on ROLE_INTERNAL_LIMITED_READ_ONLY' => [
-                'rolesOwn' => [$internalReadOnlyRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_READ_ONLY],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_INTERNAL_LIMITED_READ_ONLY,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_READ_ONLY user - not allowed to perform action on ROLE_OPERATOR_TC' => [
-                'rolesOwn' => [$internalReadOnlyRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_READ_ONLY],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_OPERATOR_TC,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_READ_ONLY user - not allowed to perform action on ROLE_OPERATOR_ADMIN' => [
-                'rolesOwn' => [$internalReadOnlyRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_READ_ONLY],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_OPERATOR_ADMIN,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_READ_ONLY user - not allowed to perform action on ROLE_OPERATOR_USER' => [
-                'rolesOwn' => [$internalReadOnlyRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_READ_ONLY],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_OPERATOR_USER,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_READ_ONLY user - not allowed to perform action on ROLE_OPERATOR_TM' => [
-                'rolesOwn' => [$internalReadOnlyRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_READ_ONLY],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_OPERATOR_TM,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_READ_ONLY user - not allowed to perform action on ROLE_PARTNER_ADMIN' => [
-                'rolesOwn' => [$internalReadOnlyRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_READ_ONLY],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_PARTNER_ADMIN,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_READ_ONLY user - not allowed to perform action on ROLE_PARTNER_USER' => [
-                'rolesOwn' => [$internalReadOnlyRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_READ_ONLY],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_PARTNER_USER,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_READ_ONLY user - not allowed to perform action on ROLE_LOCAL_AUTHORITY_ADMIN' => [
-                'rolesOwn' => [$internalReadOnlyRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_READ_ONLY],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_LOCAL_AUTHORITY_ADMIN,
                 ],
                 'expected' => false,
             ],
             'ROLE_INTERNAL_READ_ONLY user - not allowed to perform action on ROLE_LOCAL_AUTHORITY_USER' => [
-                'rolesOwn' => [$internalReadOnlyRole],
+                'rolesOwn' => [RoleEntity::ROLE_INTERNAL_READ_ONLY],
                 'rolesToCheck' => [
                     RoleEntity::ROLE_LOCAL_AUTHORITY_USER,
                 ],

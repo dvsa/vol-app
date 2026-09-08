@@ -18,19 +18,19 @@ final class QuestionTextTest extends MockeryTestCase
 {
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestGenerate')]
     public function testGenerate(
-        mixed $questionFilteredTranslateableText,
-        mixed $questionSummaryTranslateableText,
-        mixed $detailsFilteredTranslateableText,
-        mixed $guidanceFilteredTranslateableText,
-        mixed $additionalGuidanceFilteredTranslateableText,
-        mixed $expectedRepresentation
+        ?array $questionRepresentation,
+        bool $hasQuestionSummary,
+        ?array $detailsRepresentation,
+        ?array $guidanceRepresentation,
+        ?array $additionalGuidanceRepresentation,
+        array $expectedRepresentation
     ): void {
         $questionText = new QuestionText(
-            $questionFilteredTranslateableText,
-            $questionSummaryTranslateableText,
-            $detailsFilteredTranslateableText,
-            $guidanceFilteredTranslateableText,
-            $additionalGuidanceFilteredTranslateableText
+            $this->createFilteredTranslateableText($questionRepresentation),
+            $hasQuestionSummary ? m::mock(FilteredTranslateableText::class) : null,
+            $this->createFilteredTranslateableText($detailsRepresentation),
+            $this->createFilteredTranslateableText($guidanceRepresentation),
+            $this->createFilteredTranslateableText($additionalGuidanceRepresentation)
         );
 
         $this->assertEquals(
@@ -46,31 +46,13 @@ final class QuestionTextTest extends MockeryTestCase
         $guidanceRepresentation = ['guidanceRepresentation'];
         $additionalGuidanceRepresentation = ['additionalGuidanceRepresentation'];
 
-        $questionFilteredTranslateableText = m::mock(FilteredTranslateableText::class);
-        $questionFilteredTranslateableText->shouldReceive('getRepresentation')
-            ->andReturn($questionRepresentation);
-
-        $questionSummaryFilteredTranslateableText = m::mock(FilteredTranslateableText::class);
-
-        $detailsFilteredTranslateableText = m::mock(FilteredTranslateableText::class);
-        $detailsFilteredTranslateableText->shouldReceive('getRepresentation')
-            ->andReturn($detailsRepresentation);
-
-        $guidanceFilteredTranslateableText = m::mock(FilteredTranslateableText::class);
-        $guidanceFilteredTranslateableText->shouldReceive('getRepresentation')
-            ->andReturn($guidanceRepresentation);
-
-        $additionalGuidanceFilteredTranslateableText = m::mock(FilteredTranslateableText::class);
-        $additionalGuidanceFilteredTranslateableText->shouldReceive('getRepresentation')
-            ->andReturn($additionalGuidanceRepresentation);
-
         return [
             'All values present' => [
-                $questionFilteredTranslateableText,
-                $questionSummaryFilteredTranslateableText,
-                $detailsFilteredTranslateableText,
-                $guidanceFilteredTranslateableText,
-                $additionalGuidanceFilteredTranslateableText,
+                $questionRepresentation,
+                true,
+                $detailsRepresentation,
+                $guidanceRepresentation,
+                $additionalGuidanceRepresentation,
                 [
                     'question' => $questionRepresentation,
                     'details' => $detailsRepresentation,
@@ -79,9 +61,9 @@ final class QuestionTextTest extends MockeryTestCase
                 ]
             ],
             'Some values missing 1' => [
-                $questionFilteredTranslateableText,
-                $questionSummaryFilteredTranslateableText,
-                $detailsFilteredTranslateableText,
+                $questionRepresentation,
+                true,
+                $detailsRepresentation,
                 null,
                 null,
                 [
@@ -91,16 +73,29 @@ final class QuestionTextTest extends MockeryTestCase
             ],
             'Some values missing 2' => [
                 null,
+                false,
                 null,
-                null,
-                $guidanceFilteredTranslateableText,
-                $additionalGuidanceFilteredTranslateableText,
+                $guidanceRepresentation,
+                $additionalGuidanceRepresentation,
                 [
                     'guidance' => $guidanceRepresentation,
                     'additionalGuidance' => $additionalGuidanceRepresentation
                 ]
             ],
         ];
+    }
+
+    private function createFilteredTranslateableText(?array $representation): ?FilteredTranslateableText
+    {
+        if ($representation === null) {
+            return null;
+        }
+
+        $filteredTranslateableText = m::mock(FilteredTranslateableText::class);
+        $filteredTranslateableText->shouldReceive('getRepresentation')
+            ->andReturn($representation);
+
+        return $filteredTranslateableText;
     }
 
     public function testGetQuestion(): void

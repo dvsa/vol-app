@@ -11,11 +11,12 @@ use Dvsa\Olcs\Api\Domain\Query\Bookmark\LicenceBundle;
 use Dvsa\Olcs\Api\Entity\Licence\Licence;
 use Dvsa\Olcs\Api\Service\Document\Bookmark\Stlstandardlicparagraph as Sut;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * StlstandardlicparagraphTest
  */
-final class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
+final class StlstandardlicparagraphTest extends MockeryTestCase
 {
     public function testGetQueryLicence(): void
     {
@@ -134,7 +135,7 @@ final class StlstandardlicparagraphTest extends \PHPUnit\Framework\TestCase
         ];
         yield [
             false,
-            ['application' => ['licenceType' => 'X'], 'application' => ['licenceType' => 'Z']]
+            ['application' => ['licenceType' => 'X'], 'licence' => ['licenceType' => 'Z']]
         ];
         yield [
             false,

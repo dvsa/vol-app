@@ -41,8 +41,36 @@ final class GetDetailsTest extends QueryHandlerTestCase
         parent::setUp();
     }
 
-    public function testHandleQuery(): void
+    public static function dpHandleQuery(): array
     {
+        $lgvArQualification = static function () {
+            $lgvArQualification = m::mock(TmQualification::class);
+            $lgvArQualification->shouldReceive('getSerialNo')
+                ->withNoArgs()
+                ->andReturn('ABC1234');
+
+            return $lgvArQualification;
+        };
+
+        return [
+            'with LGV AR qualification' => [
+                'createLgvArQualification' => $lgvArQualification,
+                'expectedLgvAcquiredRightsReferenceNumber' => 'ABC1234',
+            ],
+            'without LGV AR qualification' => [
+                'createLgvArQualification' => static fn () => null,
+                'expectedLgvAcquiredRightsReferenceNumber' => '',
+            ],
+        ];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHandleQuery')]
+    public function testHandleQuery(
+        \Closure $createLgvArQualification,
+        mixed $expectedLgvAcquiredRightsReferenceNumber
+    ): void {
+        $lgvArQualification = $createLgvArQualification();
+
         $query = Query::create(['id' => 32]);
 
         $licence = new \Dvsa\Olcs\Api\Entity\Licence\Licence(

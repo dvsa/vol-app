@@ -7,9 +7,10 @@ namespace Dvsa\OlcsTest\Api\Entity\Types;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Dvsa\Olcs\Api\Entity\Types\DateTimeType;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Types\DateTimeType::class)]
-final class DateTimeTypeTest extends \PHPUnit\Framework\TestCase
+final class DateTimeTypeTest extends MockeryTestCase
 {
     /**
      * @var DateTimeType

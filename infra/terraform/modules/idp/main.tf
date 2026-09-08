@@ -390,7 +390,7 @@ resource "aws_cloudwatch_event_target" "analyse_financial_document" {
 # as command arguments, overriding the default container command.
 locals {
   # Batch ARNs follow the naming conventions established by the service module.
-  store_result_batch_queue_arn   = "arn:aws:batch:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:job-queue/vol-app-${var.environment}-default"
+  store_result_batch_queue_arn   = "arn:aws:batch:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:job-queue/vol-app-${var.environment}-idp-events"
   store_result_batch_job_def_arn = "arn:aws:batch:${data.aws_region.current.region}:${data.aws_caller_identity.current.account_id}:job-definition/vol-app-${var.environment}-idp-store-document-analysis-result"
 }
 

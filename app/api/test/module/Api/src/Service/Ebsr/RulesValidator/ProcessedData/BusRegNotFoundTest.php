@@ -24,8 +24,9 @@ final class BusRegNotFoundTest extends MockeryTestCase
      * @param bool $valid
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
-    public function testIsValid(mixed $txcAppType, mixed $busReg, mixed $valid): void
+    public function testIsValid(mixed $txcAppType, bool $hasBusReg, mixed $valid): void
     {
+        $busReg = $hasBusReg ? m::mock(BusRegEntity::class) : null;
         $sut = new BusRegNotFound();
 
         $value = [
@@ -45,14 +46,13 @@ final class BusRegNotFoundTest extends MockeryTestCase
      */
     public static function isValidProvider(): \Iterator
     {
-        $busMock = m::mock(BusRegEntity::class);
-        yield [BusRegEntity::TXC_APP_NEW, $busMock, true];
-        yield [BusRegEntity::TXC_APP_NEW, null, true];
-        yield [BusRegEntity::TXC_APP_CANCEL, $busMock, true];
-        yield [BusRegEntity::TXC_APP_CANCEL, null, false];
-        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, $busMock, true];
-        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, null, false];
-        yield [BusRegEntity::TXC_APP_CHARGEABLE, $busMock, true];
-        yield [BusRegEntity::TXC_APP_CHARGEABLE, null, false];
+        yield [BusRegEntity::TXC_APP_NEW, true, true];
+        yield [BusRegEntity::TXC_APP_NEW, false, true];
+        yield [BusRegEntity::TXC_APP_CANCEL, true, true];
+        yield [BusRegEntity::TXC_APP_CANCEL, false, false];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, true, true];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, false, false];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, true, true];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, false, false];
     }
 }
