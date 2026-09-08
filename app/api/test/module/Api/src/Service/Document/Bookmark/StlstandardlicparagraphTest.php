@@ -135,7 +135,7 @@ final class StlstandardlicparagraphTest extends MockeryTestCase
         ];
         yield [
             false,
-            ['application' => ['licenceType' => 'X'], 'application' => ['licenceType' => 'Z']]
+            ['application' => ['licenceType' => 'X'], 'licence' => ['licenceType' => 'Z']]
         ];
         yield [
             false,
