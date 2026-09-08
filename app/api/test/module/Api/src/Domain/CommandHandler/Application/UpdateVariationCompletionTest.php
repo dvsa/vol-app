@@ -100,8 +100,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
     {
         yield 'Changed Type Of Licence and Vehicle Type' => [
             'typeOfLicence',
-            self::getApplicationState1(),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState2(),
             [
                 'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -115,8 +115,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Change Vehicle Type only' => [
             'typeOfLicence',
-            self::getApplicationState2(RefData::APP_VEHICLE_TYPE_LGV),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState2(RefData::APP_VEHICLE_TYPE_LGV),
+            static fn () => self::getLicenceState2(),
             [
                 'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -130,8 +130,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Change Vehicle Type to something which requires Operating Centre' => [
             'typeOfLicence',
-            self::getApplicationState2(RefData::APP_VEHICLE_TYPE_MIXED),
-            self::getLicenceState2(RefData::APP_VEHICLE_TYPE_LGV),
+            static fn () => self::getApplicationState2(RefData::APP_VEHICLE_TYPE_MIXED),
+            static fn () => self::getLicenceState2(RefData::APP_VEHICLE_TYPE_LGV),
             [
                 'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'OperatingCentres' => UpdateVariationCompletion::STATUS_UPDATED,
@@ -145,8 +145,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Change Vehicle Type to something which can have Trailer' => [
             'typeOfLicence',
-            self::getApplicationState2(RefData::APP_VEHICLE_TYPE_MIXED),
-            self::getLicenceState2(RefData::APP_VEHICLE_TYPE_LGV),
+            static fn () => self::getApplicationState2(RefData::APP_VEHICLE_TYPE_MIXED),
+            static fn () => self::getLicenceState2(RefData::APP_VEHICLE_TYPE_LGV),
             [
                 'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Safety' => UpdateVariationCompletion::STATUS_UNCHANGED,
@@ -160,8 +160,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Unchanged Type Of Licence' => [
             'typeOfLicence',
-            self::getApplicationState2(),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState2(),
+            static fn () => self::getLicenceState2(),
             [
                 'TypeOfLicence' => UpdateVariationCompletion::STATUS_UPDATED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -175,8 +175,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Transport Managers' => [
             'transportManagers',
-            self::getApplicationState1(),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState2(),
             [
                 'TransportManagers' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -190,8 +190,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Unchanged Transport Managers' => [
             'transportManagers',
-            self::getApplicationState2(),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState2(),
+            static fn () => self::getLicenceState2(),
             [
                 'TransportManagers' => UpdateVariationCompletion::STATUS_UPDATED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -205,8 +205,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Vehicles' => [
             'vehicles',
-            self::getApplicationState1(),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState2(),
             [
                 'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -220,8 +220,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Vehicles - totAuthVehicles below activeVehicles count' => [
             'vehicles',
-            self::getApplicationState1()->updateTotAuthHgvVehicles(1),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState1()->updateTotAuthHgvVehicles(1),
+            static fn () => self::getLicenceState2(),
             [
                 'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
             ],
@@ -233,8 +233,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Vehicles - application activeVehicles count below 1' => [
             'vehicles',
-            self::getApplicationState1(0),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState1(0),
+            static fn () => self::getLicenceState2(),
             [
                 'Vehicles' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
             ],
@@ -246,8 +246,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Unchanged Vehicles' => [
             'vehicles',
-            self::getApplicationState2(),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState2(),
+            static fn () => self::getLicenceState2(),
             [
                 'Vehicles' => UpdateVariationCompletion::STATUS_UPDATED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -261,8 +261,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Conditions Undertakings' => [
             'conditionsUndertakings',
-            self::getApplicationState1(),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState2(),
             [
                 'ConditionsUndertakings' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -276,8 +276,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Unchanged Conditions Undertakings' => [
             'conditionsUndertakings',
-            self::getApplicationState2(),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState2(),
+            static fn () => self::getLicenceState2(),
             [
                 'ConditionsUndertakings' => UpdateVariationCompletion::STATUS_UPDATED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -291,8 +291,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Undertakings' => [
             'undertakings',
-            self::getApplicationState1(),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState2(),
             [
                 'Undertakings' => UpdateVariationCompletion::STATUS_UNCHANGED
             ],
@@ -304,8 +304,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Unchanged Undertakings' => [
             'undertakings',
-            self::getApplicationState3(),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState3(),
+            static fn () => self::getLicenceState2(),
             [
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
             ],
@@ -317,8 +317,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Business Type' => [
             'businessType',
-            self::getApplicationState1(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState1(),
             [
                 'BusinessType' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -334,8 +334,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Business Details' => [
             'businessDetails',
-            self::getApplicationState1(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState1(),
             [
                 'BusinessDetails' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -351,8 +351,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Business Details - requires attention or updated, mark the section as updated' => [
             'businessDetails',
-            self::getApplicationState1(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState1(),
             [
                 'BusinessDetails' => UpdateVariationCompletion::STATUS_UPDATED,
             ],
@@ -364,8 +364,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Unchanged Business Details' => [
             'businessDetails',
-            self::getApplicationState1(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState1(),
             [
                 'BusinessDetails' => UpdateVariationCompletion::STATUS_UNCHANGED,
             ],
@@ -379,8 +379,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Addresses' => [
             'addresses',
-            self::getApplicationState1(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState1(),
             [
                 'Addresses' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -396,8 +396,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Addresses - requires attention or updated, mark the section as updated' => [
             'addresses',
-            self::getApplicationState1(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState1(),
             [
                 'Addresses' => UpdateVariationCompletion::STATUS_UPDATED,
             ],
@@ -409,8 +409,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Unchanged Addresses' => [
             'addresses',
-            self::getApplicationState1(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState1(),
             [
                 'Addresses' => UpdateVariationCompletion::STATUS_UNCHANGED,
             ],
@@ -424,8 +424,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed People' => [
             'people',
-            self::getApplicationState6('U'),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState6('U'),
+            static fn () => self::getLicenceState1(),
             [
                 'People' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -441,8 +441,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed People 1' => [
             'people',
-            self::getApplicationState6('D'),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState6('D'),
+            static fn () => self::getLicenceState1(),
             [
                 'People' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -456,8 +456,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed People - requires attention or updated, mark the section as updated' => [
             'people',
-            self::getApplicationState6('U'),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState6('U'),
+            static fn () => self::getLicenceState1(),
             [
                 'People' => UpdateVariationCompletion::STATUS_UPDATED,
             ],
@@ -469,8 +469,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Unchanged People' => [
             'people',
-            self::getApplicationState6(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState6(),
+            static fn () => self::getLicenceState1(),
             [
                 'People' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
             ],
@@ -482,8 +482,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Financial Evidence' => [
             'financialEvidence',
-            self::getApplicationState1(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState1(),
             [
                 'FinancialEvidence' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -497,8 +497,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Discs' => [
             'discs',
-            self::getApplicationState1(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState1(),
             [
                 'Discs' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -512,8 +512,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Discs - totAuthVehicles less than psvDiscsNotCeasedCount' => [
             'discs',
-            self::getApplicationState1()->updateTotAuthHgvVehicles(1),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1()->updateTotAuthHgvVehicles(1),
+            static fn () => self::getLicenceState1(),
             [
                 'Discs' => UpdateVariationCompletion::STATUS_UNCHANGED,
             ],
@@ -525,8 +525,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Community Licences' => [
             'communityLicences',
-            self::getApplicationState1(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState1(),
             [
                 'CommunityLicences' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -540,8 +540,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Community Licences - totAuthVehicles less than comLic' => [
             'communityLicences',
-            self::getApplicationState1()->updateTotAuthHgvVehicles(1),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1()->updateTotAuthHgvVehicles(1),
+            static fn () => self::getLicenceState1(),
             [
                 'CommunityLicences' => UpdateVariationCompletion::STATUS_UNCHANGED,
             ],
@@ -553,8 +553,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Safety' => [
             'safety',
-            self::getApplicationState1(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState1(),
             [
                 'Safety' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -570,8 +570,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Unchanged Safety' => [
             'safety',
-            self::getApplicationState1(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState1(),
             [
                 'Safety' => UpdateVariationCompletion::STATUS_UNCHANGED,
             ],
@@ -585,8 +585,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Operating Centres 1' => [
             'operatingCentres',
-            self::getApplicationState1(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState1(),
             [
                 'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
@@ -602,8 +602,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Operating Centres 2' => [
             'operatingCentres',
-            self::getApplicationState2(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState2(),
+            static fn () => self::getLicenceState1(),
             [
                 'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
@@ -619,8 +619,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Operating Centres 3' => [
             'operatingCentres',
-            self::getApplicationState4(),
-            self::getLicenceState3(),
+            static fn () => self::getApplicationState4(),
+            static fn () => self::getLicenceState3(),
             [
                 'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
@@ -636,8 +636,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Operating Centres 4' => [
             'operatingCentres',
-            self::getApplicationState4(),
-            self::getLicenceState4(),
+            static fn () => self::getApplicationState4(),
+            static fn () => self::getLicenceState4(),
             [
                 'OperatingCentres' => UpdateVariationCompletion::STATUS_REQUIRES_ATTENTION,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
@@ -652,8 +652,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Unchanged Operating Centres' => [
             'operatingCentres',
-            self::getApplicationState2(),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState2(),
+            static fn () => self::getLicenceState2(),
             [
                 'OperatingCentres' => UpdateVariationCompletion::STATUS_UPDATED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -667,8 +667,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Unchanged Operating Centres - hasActuallyUpdatedOperatingCentres' => [
             'operatingCentres',
-            self::getApplicationState2(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState2(),
+            static fn () => self::getLicenceState1(),
             [
                 'OperatingCentres' => UpdateVariationCompletion::STATUS_UNCHANGED,
             ],
@@ -680,8 +680,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Goods - totAuthVehicles has dropped below the number of vehicles added' => [
             'operatingCentres',
-            self::getApplicationState2()->updateTotAuthHgvVehicles(0),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState2()->updateTotAuthHgvVehicles(0),
+            static fn () => self::getLicenceState1(),
             [
                 'OperatingCentres' => UpdateVariationCompletion::STATUS_UPDATED,
                 'Vehicles' => UpdateVariationCompletion::STATUS_UNCHANGED,
@@ -695,8 +695,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Financial History' => [
             'financialHistory',
-            self::getApplicationState1(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState1(),
             [
                 'FinancialHistory' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -710,8 +710,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Unchanged Financial History' => [
             'financialHistory',
-            self::getApplicationState2(),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState2(),
+            static fn () => self::getLicenceState2(),
             [
                 'FinancialHistory' => UpdateVariationCompletion::STATUS_UPDATED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -725,8 +725,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Convictions Penalties 1' => [
             'convictionsPenalties',
-            self::getApplicationState1(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState1(),
             [
                 'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -740,8 +740,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Changed Convictions Penalties 2' => [
             'convictionsPenalties',
-            self::getApplicationState2(),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState2(),
+            static fn () => self::getLicenceState1(),
             [
                 'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -755,8 +755,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Unchanged Convictions Penalties' => [
             'convictionsPenalties',
-            self::getApplicationState3(),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState3(),
+            static fn () => self::getLicenceState2(),
             [
                 'ConvictionsPenalties' => UpdateVariationCompletion::STATUS_UPDATED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED
@@ -770,8 +770,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Licence Upgrade' => [
             'typeOfLicence',
-            self::getApplicationState1(),
-            self::getLicenceState3(),
+            static fn () => self::getApplicationState1(),
+            static fn () => self::getLicenceState3(),
             [
                 'TypeOfLicence' => UpdateVariationCompletion::STATUS_UNCHANGED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
@@ -795,8 +795,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Declarations Internal unchanged' => [
             'declarationsInternal',
-            self::getApplicationState3(),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState3(),
+            static fn () => self::getLicenceState2(),
             [
                 'DeclarationsInternal' => UpdateVariationCompletion::STATUS_UNCHANGED,
             ],
@@ -808,8 +808,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Declarations Internal authSignature set' => [
             'declarationsInternal',
-            self::getApplicationState5(),
-            self::getLicenceState2(),
+            static fn () => self::getApplicationState5(),
+            static fn () => self::getLicenceState2(),
             [
                 'DeclarationsInternal' => UpdateVariationCompletion::STATUS_UNCHANGED,
             ],
@@ -821,8 +821,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'Financial Evidence upload later is unchanged' => [
             'financialEvidence',
-            self::getApplicationState1()->setFinancialEvidenceUploaded('2'),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1()->setFinancialEvidenceUploaded('2'),
+            static fn () => self::getLicenceState1(),
             [
                 'FinancialEvidence' => UpdateVariationCompletion::STATUS_UPDATED,
                 'Undertakings' => UpdateVariationCompletion::STATUS_UPDATED,
@@ -836,8 +836,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'PSV Documentary Evidence Small upload later is unchanged' => [
             'psvDocumentaryEvidenceSmall',
-            self::getApplicationState1()->setSmallVehicleEvidenceUploaded('2'),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1()->setSmallVehicleEvidenceUploaded('2'),
+            static fn () => self::getLicenceState1(),
             [
                 'PsvDocumentaryEvidenceSmall' => UpdateVariationCompletion::STATUS_UPDATED,
             ],
@@ -849,8 +849,8 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
         ];
         yield 'PSV Documentary Evidence Large upload later is unchanged' => [
             'psvDocumentaryEvidenceLarge',
-            self::getApplicationState1()->setOccupationEvidenceUploaded('2'),
-            self::getLicenceState1(),
+            static fn () => self::getApplicationState1()->setOccupationEvidenceUploaded('2'),
+            static fn () => self::getLicenceState1(),
             [
                 'PsvDocumentaryEvidenceLarge' => UpdateVariationCompletion::STATUS_UPDATED,
             ],
@@ -866,13 +866,18 @@ final class UpdateVariationCompletionTest extends AbstractCommandHandlerTestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('handleCommandProvider')]
     public function testHandleCommand(
         mixed $section,
-        ApplicationEntity $application,
-        LicenceEntity $licence,
+        \Closure $createApplication,
+        \Closure $createLicence,
         array $previousStatuses = [],
         array $expectedStatuses = [],
         mixed $expectedDeclarationConfirmation = '',
         array $commandData = []
     ): void {
+        /** @var ApplicationEntity $application */
+        $application = $createApplication();
+        /** @var LicenceEntity $licence */
+        $licence = $createLicence();
+
         $this->setUpLegacy();
         $data = [
             'id' => 111,
