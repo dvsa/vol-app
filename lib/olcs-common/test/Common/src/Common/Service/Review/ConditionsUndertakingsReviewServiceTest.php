@@ -17,13 +17,14 @@ use Common\Service\Review\AbstractReviewServiceServices;
 use Common\Service\Review\ConditionsUndertakingsReviewService;
 use Common\Service\Table\Formatter\Address;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * Conditions Undertakings Review Service Test
  *
  * @author Rob Caiger <rob@clocal.co.uk>
  */
-final class ConditionsUndertakingsReviewServiceTest extends \PHPUnit\Framework\TestCase
+final class ConditionsUndertakingsReviewServiceTest extends MockeryTestCase
 {
     protected $sut;
 

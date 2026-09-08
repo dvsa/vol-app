@@ -65,41 +65,33 @@ final class ApplicationPathEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetApplicationStepByQuestionId')]
-    public function testGetApplicationStepByQuestionId(mixed $applicationSteps, mixed $questionId, mixed $expectedApplicationStep): void
+    public function testGetApplicationStepByQuestionId(mixed $questionId, ?int $expectedApplicationStepIndex): void
     {
+        $applicationSteps = [];
+        foreach ([38, 40, 42] as $stepQuestionId) {
+            $applicationStep = m::mock(ApplicationStep::class);
+            $applicationStep->shouldReceive('getQuestion->getId')
+                ->withNoArgs()
+                ->andReturn($stepQuestionId);
+            $applicationSteps[] = $applicationStep;
+        }
+
         $applicationPath = new Entity();
-        $applicationPath->setApplicationSteps($applicationSteps);
+        $applicationPath->setApplicationSteps(new ArrayCollection($applicationSteps));
 
         $this->assertSame(
-            $expectedApplicationStep,
+            $expectedApplicationStepIndex === null ? null : $applicationSteps[$expectedApplicationStepIndex],
             $applicationPath->getApplicationStepByQuestionId($questionId)
         );
     }
 
     public static function dpGetApplicationStepByQuestionId(): array
     {
-        $applicationStep1 = m::mock(ApplicationStep::class);
-        $applicationStep1->shouldReceive('getQuestion->getId')
-            ->withNoArgs()
-            ->andReturn(38);
-
-        $applicationStep2 = m::mock(ApplicationStep::class);
-        $applicationStep2->shouldReceive('getQuestion->getId')
-            ->withNoArgs()
-            ->andReturn(40);
-
-        $applicationStep3 = m::mock(ApplicationStep::class);
-        $applicationStep3->shouldReceive('getQuestion->getId')
-            ->withNoArgs()
-            ->andReturn(42);
-
-        $applicationSteps = new ArrayCollection([$applicationStep1, $applicationStep2, $applicationStep3]);
-
         return [
-            [$applicationSteps, 38, $applicationStep1],
-            [$applicationSteps, 40, $applicationStep2],
-            [$applicationSteps, 42, $applicationStep3],
-            [$applicationSteps, 44, null],
+            [38, 0],
+            [40, 1],
+            [42, 2],
+            [44, null],
         ];
     }
 }

@@ -57,8 +57,10 @@ final class GenerateLicenceNumberTest extends AbstractCommandHandlerTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('cantGenerateProvider')]
-    public function testHandleCommandCantGenerate(ApplicationEntity $application): void
+    public function testHandleCommandCantGenerate(\Closure $createApplication): void
     {
+        $application = $createApplication();
+
         $data = [
             'id' => 111
         ];
@@ -87,8 +89,10 @@ final class GenerateLicenceNumberTest extends AbstractCommandHandlerTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('gvOrPsvProvider')]
-    public function testHandleCommandWithoutLicenceNo(ApplicationEntity $application, mixed $expectedLicNo): void
+    public function testHandleCommandWithoutLicenceNo(\Closure $createApplication, mixed $expectedLicNo): void
     {
+        $application = $createApplication();
+
         $data = [
             'id' => 111
         ];
@@ -219,42 +223,37 @@ final class GenerateLicenceNumberTest extends AbstractCommandHandlerTestCase
 
     public static function cantGenerateProvider(): array
     {
-        $gvRefData = m::mock(RefData::class)->makePartial()->setId(LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE);
-
-        $applicationWithNulls = m::mock(ApplicationEntity::class)->makePartial();
-        $applicationWithGoodsOrPsv = m::mock(ApplicationEntity::class)->makePartial();
-        $applicationWithGoodsOrPsv->setGoodsOrPsv($gvRefData);
-
         return [
             [
-                $applicationWithNulls
+                static fn () => m::mock(ApplicationEntity::class)->makePartial()
             ],
             [
-                $applicationWithGoodsOrPsv
+                static fn () => self::applicationWithGoodsOrPsv(LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE)
             ]
         ];
     }
 
     public static function gvOrPsvProvider(): array
     {
-        $gvRefData = m::mock(RefData::class)->makePartial()->setId(LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE);
-        $psvRefData = m::mock(RefData::class)->makePartial()->setId(LicenceEntity::LICENCE_CATEGORY_PSV);
-
-        $applicationGv = m::mock(ApplicationEntity::class)->makePartial();
-        $applicationGv->setGoodsOrPsv($gvRefData);
-
-        $applicationPsv = m::mock(ApplicationEntity::class)->makePartial();
-        $applicationPsv->setGoodsOrPsv($psvRefData);
-
         return [
             [
-                $applicationGv,
+                static fn () => self::applicationWithGoodsOrPsv(LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE),
                 'OB12345678'
             ],
             [
-                $applicationPsv,
+                static fn () => self::applicationWithGoodsOrPsv(LicenceEntity::LICENCE_CATEGORY_PSV),
                 'PB12345678'
             ]
         ];
+    }
+
+    private static function applicationWithGoodsOrPsv(string $goodsOrPsv): ApplicationEntity
+    {
+        $refData = m::mock(RefData::class)->makePartial()->setId($goodsOrPsv);
+
+        $application = m::mock(ApplicationEntity::class)->makePartial();
+        $application->setGoodsOrPsv($refData);
+
+        return $application;
     }
 }
