@@ -47,8 +47,14 @@ test_run0_with_same_image_does_not_warn() {
   ! grep -q "::warning::" <<<"$out"
 }
 
-test_dry_run_does_not_require_success_line() {
-  _fake_aws_for_logs "${SCRIPTS_DIR}/tests/fixtures/liquibase-failed.log" SUCCEEDED
+test_dry_run_does_not_require_update_success_line() {
+  _fake_aws_for_logs "${SCRIPTS_DIR}/tests/fixtures/liquibase-dryrun.log" SUCCEEDED
   export DRY_RUN=true
   bash "${SCRIPTS_DIR}/summarise-batch-job.sh" job-6 5b4f0336947de34e14b01ea674d5bf528b7c3166 sha256:abc >/dev/null
+}
+
+test_dry_run_still_fails_on_migration_error() {
+  _fake_aws_for_logs "${SCRIPTS_DIR}/tests/fixtures/liquibase-failed.log" SUCCEEDED
+  export DRY_RUN=true
+  assert_fails bash "${SCRIPTS_DIR}/summarise-batch-job.sh" job-7 5b4f0336947de34e14b01ea674d5bf528b7c3166 sha256:abc
 }

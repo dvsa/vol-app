@@ -53,15 +53,13 @@ executed=$(awk '
   echo
 } >> "$summary"
 
-if [ "${DRY_RUN:-false}" != "true" ]; then
-  if grep -qE 'Migration failed|Unexpected error running Liquibase' <<<"$log"; then
-    echo "::error::Liquibase reported a migration failure in job ${job_id}" >&2
-    exit 1
-  fi
-  if ! grep -qF "Liquibase command 'update' was executed successfully" <<<"$log"; then
-    echo "::error::Liquibase update did not report success in job ${job_id} (status ${status})" >&2
-    exit 1
-  fi
+if grep -qE 'Migration failed|Unexpected error running Liquibase' <<<"$log"; then
+  echo "::error::Liquibase reported a migration failure in job ${job_id}" >&2
+  exit 1
+fi
+if [ "${DRY_RUN:-false}" != "true" ] && ! grep -qF "Liquibase command 'update' was executed successfully" <<<"$log"; then
+  echo "::error::Liquibase update did not report success in job ${job_id} (status ${status})" >&2
+  exit 1
 fi
 if [ "${run_count:-0}" = "0" ] && [ -n "$previous" ] && [ "$previous" != "$etl_short" ]; then
   echo "::warning::olcs-etl image changed from ${previous} to ${etl_short} but no changesets ran; check the changelog actually changed"
