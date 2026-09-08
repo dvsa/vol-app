@@ -150,9 +150,10 @@ jobs:
         id: resolve
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          ETL_REF: ${{ inputs.etl_ref }}
         run: |
           set -o pipefail
-          bash .github/scripts/liquibase/resolve-etl-ref.sh "${{ inputs.etl_ref }}" | tee -a "$GITHUB_OUTPUT"
+          bash .github/scripts/liquibase/resolve-etl-ref.sh "$ETL_REF" | tee -a "$GITHUB_OUTPUT"
 
       - name: Checkout olcs-etl at the resolved commit
         uses: actions/checkout@v6
@@ -200,30 +201,38 @@ jobs:
           cache-from: type=gha,scope=liquibase
           cache-to: type=gha,mode=max,scope=liquibase
 
-      - name: Apply release and latest tags
+      - name: Tag image and read digest
         id: tag
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          ETL_SHORT: ${{ steps.resolve.outputs.etl_short }}
         run: |
           set -o pipefail
           extra=()
-          if [ -n "${{ inputs.release_tag }}" ]; then
-            extra+=("${{ inputs.release_tag }}" latest)
+          if [ -n "$RELEASE_TAG" ]; then
+            extra+=("$RELEASE_TAG" latest)
           fi
-          bash .github/scripts/liquibase/ecr-tag-image.sh vol-app/liquibase "${{ steps.resolve.outputs.etl_short }}" "${extra[@]}" | tee tag.out
-          grep '^image_digest=' tag.out >> "$GITHUB_OUTPUT"
+          bash .github/scripts/liquibase/ecr-tag-image.sh vol-app/liquibase "$ETL_SHORT" "${extra[@]}" | tee "$RUNNER_TEMP/tag.out"
+          grep '^image_digest=' "$RUNNER_TEMP/tag.out" >> "$GITHUB_OUTPUT"
 
       - name: Tag olcs-etl for the release
         if: ${{ inputs.release_tag != '' }}
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
-        run: bash .github/scripts/liquibase/create-etl-tag.sh "${{ inputs.release_tag }}" "${{ steps.resolve.outputs.etl_sha }}"
+          RELEASE_TAG: ${{ inputs.release_tag }}
+          ETL_SHA: ${{ steps.resolve.outputs.etl_sha }}
+        run: bash .github/scripts/liquibase/create-etl-tag.sh "$RELEASE_TAG" "$ETL_SHA"
 
       - name: Summary
+        env:
+          ETL_REF: ${{ inputs.etl_ref }}
+          RELEASE_TAG: ${{ inputs.release_tag }}
         run: |
           {
             echo "#### Liquibase image"
-            echo "- olcs-etl ref \`${{ inputs.etl_ref }}\` resolved to \`${{ steps.resolve.outputs.etl_sha }}\`"
+            echo "- olcs-etl ref \`$ETL_REF\` resolved to \`${{ steps.resolve.outputs.etl_sha }}\`"
             echo "- image \`vol-app/liquibase:${{ steps.resolve.outputs.etl_short }}\` digest \`${{ steps.tag.outputs.image_digest }}\` (built: ${{ steps.check-image.outputs.exists != 'true' }})"
-            echo "- release tag: \`${{ inputs.release_tag || 'none' }}\`; branch build: ${{ inputs.branch_build }}"
+            echo "- release tag: \`${RELEASE_TAG:-none}\`; branch build: ${{ inputs.branch_build }}"
           } >> "$GITHUB_STEP_SUMMARY"
 
   submit-batch-job:
@@ -292,6 +301,6 @@ jobs:
             "${{ needs.build.outputs.image_digest }}" \
             "${{ inputs.previous_image_tag }}"
           if [ "${{ steps.check-status.outputs.status }}" != "SUCCEEDED" ]; then
-            echo "::error::Batch job ${{ steps.submit-job.outputs.job_id }} finished ${{ steps.check-status.outputs.status }}"
+            echo "::error::Batch job ${{ steps.submit-job.outputs.job_id }} finished ${{ steps.check-status.outputs.status || 'unknown' }}"
             exit 1
           fi
