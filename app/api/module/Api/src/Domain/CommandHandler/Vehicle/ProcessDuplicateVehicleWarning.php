@@ -9,7 +9,6 @@
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\Vehicle;
 
 use Dvsa\Olcs\Api\Domain\Command\Document\GenerateAndStore;
-use Dvsa\Olcs\Api\Domain\Command\PrintScheduler\Enqueue;
 use Dvsa\Olcs\Transfer\Command\Document\PrintLetter;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
@@ -25,8 +24,8 @@ use Dvsa\Olcs\Api\Entity\Licence\LicenceVehicle;
  */
 final class ProcessDuplicateVehicleWarning extends AbstractCommandHandler implements TransactionedInterface
 {
-    protected const TEMPLATE_ID_GB = 1064;
-    protected const TEMPLATE_ID_NI = 1065;
+    public const TEMPLATE_ID_GB = 1064;
+    public const TEMPLATE_ID_NI = 1065;
     protected $repoServiceName = 'LicenceVehicle';
 
     #[\Override]
@@ -43,9 +42,7 @@ final class ProcessDuplicateVehicleWarning extends AbstractCommandHandler implem
             'jobName' => $description
 
         ];
-        $correspondenceEmail = array_filter(
-            $licenceVehicle->getLicence()->getCorrespondenceCd()->getEmailAddress()
-        );
+        $correspondenceEmail = $licenceVehicle->getLicence()->getCorrespondenceCd()->getEmailAddress();
         $method = !empty($correspondenceEmail)
             ? PrintLetter::METHOD_EMAIL
             : PrintLetter::METHOD_PRINT_AND_POST;
