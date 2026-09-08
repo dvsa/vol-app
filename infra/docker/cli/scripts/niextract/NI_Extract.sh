@@ -149,7 +149,7 @@ if $CREATE_NI_XML_DUMP ; then
 
     cd "$NI_EXTRACT_DUMP_DIR" || log_error "Could not enter output target dump directory"
 
-    "$DUMP_BIN" $CONNECTION -X "$DB" --set-gtid-purged=OFF \
+    "$DUMP_BIN" $CONNECTION -X "$DB" \
         | tr -cd '\11\12\15\40-\176' > "$XML_DUMP_FILE" \
         || log_error "create NI database dump FAILED!"
 
