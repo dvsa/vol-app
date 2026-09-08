@@ -10,12 +10,13 @@ use Symfony\Component\Lock\Exception\LockConflictedException;
 use Symfony\Component\Lock\LockInterface;
 use Symfony\Component\Lock\Store\FlockStore;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * Class FilesystemTest
  * @package CommonTest\Filesystem
  */
-final class FilesystemTest extends \PHPUnit\Framework\TestCase
+final class FilesystemTest extends MockeryTestCase
 {
     public function testCreateTmpDir(): void
     {
