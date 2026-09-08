@@ -173,10 +173,28 @@ jobs:
       selfserve: ${{ steps.selfserve-version.outputs.version }}
       internal: ${{ steps.internal-version.outputs.version }}
       assets: ${{ steps.assets-version.outputs.version }}
+      etl_sha: ${{ steps.etl.outputs.etl_sha }}
+      etl_short: ${{ steps.etl.outputs.etl_short }}
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
+      - name: Generate GitHub App Token
+        id: generate-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.VOL_GITHUB_APP_ID }}
+          private-key: ${{ secrets.VOL_GITHUB_APP_PRIVATE_KEY }}
+          owner: dvsa
+          repositories: olcs-etl
+      # Resolved once so int, prep and prod all migrate from the same olcs-etl commit.
+      - name: Resolve olcs-etl main
+        id: etl
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        run: |
+          set -o pipefail
+          bash .github/scripts/liquibase/resolve-etl-ref.sh main | tee -a "$GITHUB_OUTPUT"
       # lib is part of every app's version because it is part of every app's artefact:
       # composer resolves lib/<name> through a path repository and php.yaml materialises
       # those symlinks into real directories before packaging. The action resolves a version
@@ -213,6 +231,7 @@ jobs:
           echo "**Selfserve**: \`${{ steps.selfserve-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Internal**: \`${{ steps.internal-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
           echo "**Assets**: \`${{ steps.assets-version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "**olcs-etl**: \`${{ steps.etl.outputs.etl_sha }}\`" >> "$GITHUB_STEP_SUMMARY"
 
   cdn-nonprod:
     name: CDN
@@ -361,7 +380,8 @@ jobs:
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      etl_ref: ${{ needs.release-please.outputs.release_created && format('release-{0}', needs.release-please.outputs.tag_name) || 'main' }}
+      etl_ref: ${{ needs.get-version.outputs.etl_sha }}
+      liquibase-image-tag: ${{ needs.get-version.outputs.etl_short }}
       aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
       bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
       bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
@@ -399,7 +419,9 @@ jobs:
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      etl_ref: ${{ needs.release-please.outputs.release_created && format('release-{0}', needs.release-please.outputs.tag_name) || 'main' }}
+      etl_ref: ${{ needs.get-version.outputs.etl_sha }}
+      liquibase-image-tag: ${{ needs.get-version.outputs.etl_short }}
+      release_tag: ${{ needs.release-please.outputs.release_created && format('release-{0}', needs.release-please.outputs.tag_name) || '' }}
       aws_role: ${{ vars.ACCOUNT_NONPROD_TEST_OIDC_ROLE }}
       bucket_name: ${{ vars.ACCOUNT_NONPROD_S3_REPORT_BUCKET }}
       bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
@@ -445,8 +467,6 @@ jobs:
             repo: vol-app
           - project: internal
             repo: vol-app
-          - project: liquibase
-            repo: vol-app
           - project: gotenberg
             repo: vol-app
           - project: vft
@@ -475,8 +495,8 @@ jobs:
             echo "tag=${{ needs.get-version.outputs.selfserve }}" >> $GITHUB_OUTPUT
           elif [ "${{ matrix.project }}" == "internal" ]; then
             echo "tag=${{ needs.get-version.outputs.internal }}" >> $GITHUB_OUTPUT
-          elif [ "${{ matrix.project }}" == "liquibase" ] || [ "${{ matrix.project }}" == "gotenberg" ]; then
-            # For liquibase and gotenberg, use the latest tag
+          elif [ "${{ matrix.project }}" == "gotenberg" ]; then
+            # For gotenberg, use the latest tag
             echo "tag=latest" >> $GITHUB_OUTPUT
           fi
 
@@ -530,15 +550,78 @@ jobs:
             echo "Pushing image to PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:${{ steps.image-tag.outputs.tag }}"
             docker push ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:${{ steps.image-tag.outputs.tag }}
 
-            # Also push as latest if not liquibase (which already uses latest)
-            if [ "${{ matrix.project }}" != "liquibase" ]; then
-              echo "Tagging image as latest for PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest"
-              docker tag local-image:${{ steps.image-tag.outputs.tag }} ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest
+            echo "Tagging image as latest for PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest"
+            docker tag local-image:${{ steps.image-tag.outputs.tag }} ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest
 
-              echo "Pushing latest tag to PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest"
-              docker push ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest
-            fi
+            echo "Pushing latest tag to PROD ECR: ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest"
+            docker push ${PROD_REGISTRY}/${{ matrix.repo }}/${{ matrix.project }}:latest
           fi
+
+  push-liquibase-to-prod-ecr:
+    name: Push Liquibase Image to PROD ECR
+    permissions:
+      contents: read
+      id-token: write
+    if: |
+      always() &&
+      !cancelled() &&
+      !failure() &&
+      needs.release-please.outputs.release_created &&
+      needs.deploy_int.result == 'success'
+    runs-on: ubuntu-24.04-arm
+    needs:
+      - release-please
+      - get-version
+      - deploy_int
+    env:
+      NONPROD_REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
+      PROD_REGISTRY: 146997448015.dkr.ecr.eu-west-1.amazonaws.com
+      AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
+      ETL_SHORT: ${{ needs.get-version.outputs.etl_short }}
+      RELEASE_TAG: release-${{ needs.release-please.outputs.tag_name }}
+    steps:
+      - name: Configure AWS credentials for NONPROD
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Login to NONPROD ECR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.NONPROD_REGISTRY }}
+      - name: Record source digest
+        id: source
+        run: |
+          DIGEST=$(aws ecr describe-images --repository-name vol-app/liquibase --image-ids imageTag="${ETL_SHORT}" --query 'imageDetails[0].imageDigest' --output text)
+          echo "digest=${DIGEST}" >> "$GITHUB_OUTPUT"
+      - name: Configure AWS credentials for PROD
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: ${{ vars.ACCOUNT_PROD_TF_OIDC_ROLE }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Login to PROD ECR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.PROD_REGISTRY }}
+      # imagetools copies the manifest and blobs registry-to-registry; both logins stay valid in docker config.
+      - name: Copy image to PROD ECR by digest
+        env:
+          SOURCE_DIGEST: ${{ steps.source.outputs.digest }}
+        run: |
+          docker buildx imagetools create \
+            --tag "${PROD_REGISTRY}/vol-app/liquibase:${ETL_SHORT}" \
+            --tag "${PROD_REGISTRY}/vol-app/liquibase:${RELEASE_TAG}" \
+            --tag "${PROD_REGISTRY}/vol-app/liquibase:latest" \
+            "${NONPROD_REGISTRY}/vol-app/liquibase@${SOURCE_DIGEST}"
+      - name: Verify
+        env:
+          SOURCE_DIGEST: ${{ steps.source.outputs.digest }}
+        run: |
+          PROD_DIGEST=$(aws ecr describe-images --repository-name vol-app/liquibase --image-ids imageTag="${ETL_SHORT}" --query 'imageDetails[0].imageDigest' --output text)
+          echo "nonprod ${SOURCE_DIGEST}"
+          echo "prod    ${PROD_DIGEST}"
+          [ "${PROD_DIGEST}" = "${SOURCE_DIGEST}" ] || { echo "::error::prod digest differs from nonprod"; exit 1; }
+          echo "- liquibase \`${ETL_SHORT}\` / \`${RELEASE_TAG}\` copied to prod ECR (\`${PROD_DIGEST}\`)" >> "$GITHUB_STEP_SUMMARY"
 
   cdn-prod:
     name: CDN
@@ -567,6 +650,7 @@ jobs:
       - orchestrator
       - deploy_int
       - push-to-prod-ecr
+      - push-liquibase-to-prod-ecr
     uses: ./.github/workflows/deploy-account.yaml
     with:
       account: prod
@@ -609,6 +693,7 @@ jobs:
       - orchestrator
       - terraform-account-prod
       - push-to-prod-ecr
+      - push-liquibase-to-prod-ecr
     concurrency:
       group: ${{ github.workflow }}-prep
     uses: ./.github/workflows/deploy-and-test.yaml
@@ -620,7 +705,8 @@ jobs:
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      etl_ref: ${{ needs.release-please.outputs.tag_name && format('release-{0}', needs.release-please.outputs.tag_name) || 'main' }}
+      etl_ref: ${{ needs.get-version.outputs.etl_sha }}
+      liquibase-image-tag: ${{ needs.get-version.outputs.etl_short }}
       aws_role: ${{ vars.ACCOUNT_PROD_TEST_OIDC_ROLE }}
       bucket_name: ${{ vars.ACCOUNT_PROD_S3_REPORT_BUCKET }}
       bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
@@ -652,6 +738,7 @@ jobs:
       - orchestrator
       - terraform-account-prod
       - push-to-prod-ecr
+      - push-liquibase-to-prod-ecr
     concurrency:
       group: ${{ github.workflow }}-prod
     uses: ./.github/workflows/deploy-and-test.yaml
@@ -663,7 +750,8 @@ jobs:
       selfserve-image-tag: ${{ needs.get-version.outputs.selfserve }}
       internal-image-tag: ${{ needs.get-version.outputs.internal }}
       assets-version: ${{ needs.get-version.outputs.assets }}
-      etl_ref: ${{ needs.release-please.outputs.tag_name && format('release-{0}', needs.release-please.outputs.tag_name) || 'main' }}
+      etl_ref: ${{ needs.get-version.outputs.etl_sha }}
+      liquibase-image-tag: ${{ needs.get-version.outputs.etl_short }}
       aws_role: ${{ vars.ACCOUNT_PROD_TEST_OIDC_ROLE }}
       bucket_name: ${{ vars.ACCOUNT_PROD_S3_REPORT_BUCKET }}
       bucket_key: ${{ vars.S3_REPORT_BUCKET_KEY }}
