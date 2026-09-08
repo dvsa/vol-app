@@ -1,7 +1,9 @@
 name: Run Liquibase Migrations
+
 permissions:
   id-token: write
   contents: read
+
 on:
   workflow_dispatch:
     inputs:
@@ -22,47 +24,64 @@ on:
           - prep
           - prod
         required: true
+      etl_ref:
+        description: "olcs-etl ref to bundle as the changelog: branch, tag or commit sha"
+        required: false
+        type: string
+        default: "main"
+      release_tag:
+        description: "Release build only: tag to create in olcs-etl and apply to the image (e.g. release-v9.4.0). Requires branch_build unticked."
+        required: false
+        type: string
+        default: ""
+      branch_build:
+        description: "Never write the latest tag (default for ad-hoc runs)"
+        required: false
+        type: boolean
+        default: true
       dry_run:
         description: "Run in dry-run mode (show pending changes only)"
         required: true
         type: boolean
         default: true
-      ref:
-        description: "Git ref to checkout for vol-app (for liquibase dockerfile/entrypoint)"
-        required: false
-        type: string
-        default: "main"
-      etl_ref:
-        description: "Git ref to checkout for ETL repo (to bundle in as liquibase changelog)"
-        required: false
-        type: string
-        default: "main"
       submit_job:
-        description: "Submit AWS Batch job after building"
+        description: "Submit the AWS Batch job after building"
         required: true
         type: boolean
         default: false
+      ref:
+        description: "vol-app ref to checkout (Dockerfile, entrypoint, scripts)"
+        required: false
+        type: string
+        default: "main"
   workflow_call:
     inputs:
-      push:
-        type: boolean
-        required: true
       account:
         type: string
         required: true
       environment:
         type: string
         required: true
-      ref:
-        type: string
-        required: false
-        default: "main"
-        description: "Git ref to checkout for vol-app (for liquibase dockerfile/entrypoint)"
       etl_ref:
-        description: "Git ref to checkout for ETL repo (to bundle in as liquibase changelog)"
         type: string
         required: false
         default: "main"
+        description: "olcs-etl ref to bundle as the changelog: branch, tag or commit sha"
+      release_tag:
+        type: string
+        required: false
+        default: ""
+        description: "Release build only: tag to create in olcs-etl and apply to the image"
+      branch_build:
+        type: boolean
+        required: false
+        default: false
+        description: "Never write the latest tag"
+      previous_image_tag:
+        type: string
+        required: false
+        default: ""
+        description: "Image tag the environment ran before this deploy, for the no-op warning"
       dry_run:
         type: boolean
         required: false
@@ -71,9 +90,22 @@ on:
         type: boolean
         required: false
         default: false
+      ref:
+        type: string
+        required: false
+        default: "main"
+        description: "vol-app ref to checkout (Dockerfile, entrypoint, scripts)"
+    outputs:
+      etl_sha:
+        value: ${{ jobs.build.outputs.etl_sha }}
+      etl_short:
+        value: ${{ jobs.build.outputs.etl_short }}
+      image_digest:
+        value: ${{ jobs.build.outputs.image_digest }}
     secrets:
       VOL_GITHUB_APP_PRIVATE_KEY:
         required: true
+
 env:
   REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
   AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
@@ -85,15 +117,22 @@ env:
     inputs.environment == 'prep' && 'LQBASE_QUEUE_PREP' ||
     inputs.environment == 'prod' && 'LQBASE_QUEUE_PROD'
     }}
+
 jobs:
   build:
     environment: ${{ inputs.environment }}
     outputs:
-      image_tag: ${{ steps.etl-sha.outputs.image_tag }}
-      etl_sha: ${{ steps.etl-sha.outputs.sha }}
-      etl_ref: ${{ inputs.etl_ref }}
+      etl_sha: ${{ steps.resolve.outputs.etl_sha }}
+      etl_short: ${{ steps.resolve.outputs.etl_short }}
+      image_digest: ${{ steps.tag.outputs.image_digest }}
     runs-on: ubuntu-24.04-arm
     steps:
+      - name: Validate inputs
+        if: ${{ inputs.branch_build && inputs.release_tag != '' }}
+        run: |
+          echo "::error::release_tag cannot be combined with branch_build"
+          exit 1
+
       - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref }}
@@ -107,52 +146,20 @@ jobs:
           owner: dvsa
           repositories: olcs-etl
 
-      - name: Check ETL tag existence
-        if: inputs.etl_ref != 'main'
-        id: check-tag
-        run: |
-          TAG_EXISTS=$(gh api repos/dvsa/olcs-etl/git/refs/tags/${{ inputs.etl_ref }} --silent && echo 'true' || echo 'false')
-          echo "exists=$TAG_EXISTS" >> $GITHUB_OUTPUT
+      - name: Resolve olcs-etl ref
+        id: resolve
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
-
-      - name: Checkout ETL repository on main to create tag
-        if: inputs.etl_ref != 'main' && steps.check-tag.outputs.exists != 'true'
-        uses: actions/checkout@v6
-        with:
-          repository: dvsa/olcs-etl
-          path: etl-temp
-          ref: main
-          token: ${{ steps.generate-token.outputs.token }}
-          persist-credentials: false
-
-      - name: Create ETL tag
-        if: inputs.etl_ref != 'main' && steps.check-tag.outputs.exists != 'true'
         run: |
-          cd "$GITHUB_WORKSPACE/etl-temp"
-          git tag "${{ inputs.etl_ref }}"
-          GIT_CONFIG_COUNT=1 \
-          GIT_CONFIG_KEY_0="http.extraHeader" \
-          GIT_CONFIG_VALUE_0="Authorization: Basic $(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)" \
-          git push origin "${{ inputs.etl_ref }}"
-        env:
-          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          set -o pipefail
+          bash .github/scripts/liquibase/resolve-etl-ref.sh "${{ inputs.etl_ref }}" | tee -a "$GITHUB_OUTPUT"
 
-      - name: Cleanup temporary ETL checkout
-        if: always() && inputs.etl_ref != 'main' && steps.check-tag.outputs.exists != 'true'
-        run: |
-          if [ -n "$GITHUB_WORKSPACE" ] && [ "$GITHUB_WORKSPACE" != "/" ] && [ -d "$GITHUB_WORKSPACE/etl-temp" ]; then
-            rm -rf "$GITHUB_WORKSPACE/etl-temp"
-          else
-            echo "Skipping cleanup: GITHUB_WORKSPACE is not set correctly or etl-temp does not exist."
-          fi
-
-      - name: Checkout ETL repository
+      - name: Checkout olcs-etl at the resolved commit
         uses: actions/checkout@v6
         with:
           repository: dvsa/olcs-etl
           path: infra/docker/liquibase/changelog
-          ref: ${{ inputs.etl_ref }}
+          ref: ${{ steps.resolve.outputs.etl_sha }}
           token: ${{ steps.generate-token.outputs.token }}
 
       - name: Configure AWS credentials
@@ -166,59 +173,83 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
 
-      - name: Get ETL SHA
-        id: etl-sha
-        working-directory: infra/docker/liquibase/changelog
-        run: |
-          echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-          echo "image_tag=${REGISTRY}/vol-app/liquibase:$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
-      - name: Check if image exists
+      - name: Check whether the sha image already exists
         id: check-image
         run: |
-          if aws ecr describe-images --repository-name vol-app/liquibase --image-ids imageTag=${{ steps.etl-sha.outputs.sha }} 2>/dev/null; then
-            echo "exists=true" >> $GITHUB_OUTPUT
+          if aws ecr describe-images --repository-name vol-app/liquibase --image-ids "imageTag=${{ steps.resolve.outputs.etl_short }}" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
           else
-            echo "exists=false" >> $GITHUB_OUTPUT
+            echo "exists=false" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Set up Docker Buildx
         if: steps.check-image.outputs.exists != 'true'
         uses: docker/setup-buildx-action@v3
 
-      - name: Build and push
-        if: steps.check-image.outputs.exists != 'true' && (inputs.push || github.event_name == 'workflow_dispatch')
+      - name: Build and push the sha image
+        if: steps.check-image.outputs.exists != 'true'
         uses: docker/build-push-action@v6
         with:
           context: ./infra/docker/liquibase
           push: true
+          provenance: false
           platforms: linux/arm64
-          tags: |
-            ${{ steps.etl-sha.outputs.image_tag }}
-            ${{ env.REGISTRY }}/vol-app/liquibase:latest
-
+          build-args: |
+            ETL_SHA=${{ steps.resolve.outputs.etl_sha }}
+          tags: ${{ env.REGISTRY }}/vol-app/liquibase:${{ steps.resolve.outputs.etl_short }}
           cache-from: type=gha,scope=liquibase
           cache-to: type=gha,mode=max,scope=liquibase
+
+      - name: Apply release and latest tags
+        id: tag
+        run: |
+          set -o pipefail
+          extra=()
+          if [ -n "${{ inputs.release_tag }}" ]; then
+            extra+=("${{ inputs.release_tag }}" latest)
+          fi
+          bash .github/scripts/liquibase/ecr-tag-image.sh vol-app/liquibase "${{ steps.resolve.outputs.etl_short }}" "${extra[@]}" | tee tag.out
+          grep '^image_digest=' tag.out >> "$GITHUB_OUTPUT"
+
+      - name: Tag olcs-etl for the release
+        if: ${{ inputs.release_tag != '' }}
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        run: bash .github/scripts/liquibase/create-etl-tag.sh "${{ inputs.release_tag }}" "${{ steps.resolve.outputs.etl_sha }}"
+
+      - name: Summary
+        run: |
+          {
+            echo "#### Liquibase image"
+            echo "- olcs-etl ref \`${{ inputs.etl_ref }}\` resolved to \`${{ steps.resolve.outputs.etl_sha }}\`"
+            echo "- image \`vol-app/liquibase:${{ steps.resolve.outputs.etl_short }}\` digest \`${{ steps.tag.outputs.image_digest }}\` (built: ${{ steps.check-image.outputs.exists != 'true' }})"
+            echo "- release tag: \`${{ inputs.release_tag || 'none' }}\`; branch build: ${{ inputs.branch_build }}"
+          } >> "$GITHUB_STEP_SUMMARY"
 
   submit-batch-job:
     outputs:
       job_id: ${{ steps.submit-job.outputs.job_id }}
       job_status: ${{ steps.check-status.outputs.status }}
     needs: build
-    if: |
-      (inputs.push || inputs.submit_job || (github.event_name == 'workflow_dispatch' && inputs.submit_job == 'true'))
+    if: ${{ inputs.submit_job }}
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
+          sparse-checkout: .github/scripts/liquibase
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v5
         with:
           role-to-assume: ${{ env.AWS_OIDC_ROLE }}
           aws-region: ${{ env.AWS_REGION }}
+
       - name: Submit AWS Batch job
         id: submit-job
         run: |
           JOB_ID=$(aws batch submit-job \
-          --job-name "liquibase-migration-${{ github.run_id }}-${{ github.run_attempt }}" \
+          --job-name "liquibase-${{ inputs.environment }}-${{ needs.build.outputs.etl_short }}-${{ github.run_id }}-${{ github.run_attempt }}" \
           --job-queue "${{ vars[env.BATCH_QUEUE] }}" \
           --job-definition "${{ vars[env.BATCH_QUEUE] }}" \
           --container-overrides "{
@@ -231,21 +262,36 @@ jobs:
           --share-identifier "volapp" \
           --query 'jobId' \
           --output text)
-          echo "job_id=$JOB_ID" >> $GITHUB_OUTPUT
+          echo "job_id=$JOB_ID" >> "$GITHUB_OUTPUT"
 
       - name: Wait for job completion
         id: check-status
         timeout-minutes: 30
         run: |
           while true; do
-            STATUS=$(aws batch describe-jobs --jobs ${{ steps.submit-job.outputs.job_id }} --query 'jobs[0].status' --output text)
+            STATUS=$(aws batch describe-jobs --jobs "${{ steps.submit-job.outputs.job_id }}" --query 'jobs[0].status' --output text)
             if [[ "$STATUS" == "SUCCEEDED" || "$STATUS" == "FAILED" ]]; then
-              echo "status=$STATUS" >> $GITHUB_OUTPUT
-              if [[ "$STATUS" == "FAILED" ]]; then
-                exit 1
-              fi
+              echo "status=$STATUS" >> "$GITHUB_OUTPUT"
+              echo "Job status: $STATUS"
               break
             fi
             echo "Job status: $STATUS"
             sleep 30
           done
+
+      - name: Summarise migration output
+        if: ${{ always() && steps.submit-job.outputs.job_id != '' }}
+        env:
+          BATCH_LOG_GROUP: /aws/batch/${{ vars[env.BATCH_QUEUE] }}
+          ENVIRONMENT: ${{ inputs.environment }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          bash .github/scripts/liquibase/summarise-batch-job.sh \
+            "${{ steps.submit-job.outputs.job_id }}" \
+            "${{ needs.build.outputs.etl_sha }}" \
+            "${{ needs.build.outputs.image_digest }}" \
+            "${{ inputs.previous_image_tag }}"
+          if [ "${{ steps.check-status.outputs.status }}" != "SUCCEEDED" ]; then
+            echo "::error::Batch job ${{ steps.submit-job.outputs.job_id }} finished ${{ steps.check-status.outputs.status }}"
+            exit 1
+          fi
