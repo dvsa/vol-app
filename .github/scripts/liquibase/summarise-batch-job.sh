@@ -33,7 +33,7 @@ run_count=$(grep -E '^Run:' <<<"$log" | tail -1 | awk '{print $2}' || true)
 
 # "Running Changeset" lines whose next line is a precondition skip ("NOT applying") are not real work.
 executed=$(awk '
-  /^Running Changeset:/ { pending=$0; next }
+  /^Running Changeset:/ { if (pending != "") print pending; pending=$0; next }
   pending != "" { if ($0 !~ /NOT applying/) print pending; pending="" }
   END { if (pending != "") print pending }' <<<"$log" | sed -E 's/^Running Changeset: /- /')
 
@@ -61,6 +61,6 @@ if [ "${DRY_RUN:-false}" != "true" ] && ! grep -qF "Liquibase command 'update' w
   echo "::error::Liquibase update did not report success in job ${job_id} (status ${status})" >&2
   exit 1
 fi
-if [ "${run_count:-0}" = "0" ] && [ -n "$previous" ] && [ "$previous" != "$etl_short" ]; then
+if [ "${run_count:-}" = "0" ] && [ -n "$previous" ] && [ "$previous" != "$etl_short" ]; then
   echo "::warning::olcs-etl image changed from ${previous} to ${etl_short} but no changesets ran; check the changelog actually changed"
 fi
