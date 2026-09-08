@@ -26,4 +26,9 @@ variable "cli_image_tag" {
 variable "liquibase_image_tag" {
   type        = string
   description = "The tag of the liquibase (olcs-etl changelog) image to deploy; the olcs-etl short sha"
+
+  validation {
+    condition     = length(var.liquibase_image_tag) > 0
+    error_message = "liquibase_image_tag must not be empty."
+  }
 }
