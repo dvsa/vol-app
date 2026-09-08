@@ -7,12 +7,13 @@ namespace OlcsTest\View\Helper;
 use Common\Service\Table\Formatter\Address;
 use Olcs\View\Helper\Address as AddressHelper;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * Class AddressTest
  * @package OlcsTest\View\Helper
  */
-final class AddressTest extends \PHPUnit\Framework\TestCase
+final class AddressTest extends MockeryTestCase
 {
     protected $addressFormatter;
     protected $sut;

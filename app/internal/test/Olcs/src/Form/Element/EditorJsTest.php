@@ -7,11 +7,11 @@ namespace OlcsTest\Form\Element;
 use Olcs\Form\Element\EditorJs;
 use Olcs\Form\Element\EditorJsFactory;
 use Olcs\Service\EditorJs\HtmlConverter;
-use PHPUnit\Framework\TestCase;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Form\Element\EditorJs::class)]
-final class EditorJsTest extends TestCase
+final class EditorJsTest extends MockeryTestCase
 {
     private EditorJs $sut;
     private $mockHtmlConverter;
