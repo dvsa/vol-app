@@ -55,8 +55,10 @@ final class PeriodGeneratorTest extends MockeryTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGenerate')]
-    public function testGenerate(mixed $irhpPermitApplication): void
+    public function testGenerate(bool $hasIrhpPermitApplication): void
     {
+        $irhpPermitApplication = $hasIrhpPermitApplication ? m::mock(IrhpPermitApplication::class) : null;
+
         $fieldsResponse = [
             'fieldsResponseKey1' => 'fieldsResponseValue1',
             'fieldsResponseKey2' => 'fieldsResponseValue2'
@@ -90,8 +92,8 @@ final class PeriodGeneratorTest extends MockeryTestCase
 
     public static function dpGenerate(): \Iterator
     {
-        yield [m::mock(IrhpPermitApplication::class)];
-        yield [null];
+        yield [true];
+        yield [false];
     }
 
     public function testGenerateException(): void

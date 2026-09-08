@@ -35,7 +35,7 @@ final class MostSeriousInfringementTest extends AbstractSubmissionSectionTestCas
      */
     public static function sectionTestProvider(): \Iterator
     {
-        $case = static::getCase();
+        $case = static fn () => static::getCase();
 
         $expectedResult = ['data' => ['overview' => static::EXPECTED_RESULT]];
 

@@ -7,10 +7,10 @@ namespace CommonTest\Common\Data\Mapper\Licence\Surrender\Sections;
 use Common\Data\Mapper\Licence\Surrender\ReviewDetails;
 use Common\Service\Helper\TranslationHelperService;
 use CommonTest\Common\Data\Mapper\Licence\Surrender\ReviewContactDetailsMocksAndExpectationsTrait;
-use PHPUnit\Framework\TestCase;
 use Laminas\Mvc\Controller\Plugin\Url;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-final class ReviewDetailsTest extends TestCase
+final class ReviewDetailsTest extends MockeryTestCase
 {
     use ReviewContactDetailsMocksAndExpectationsTrait;
 

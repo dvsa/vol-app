@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "3f9b16e88f1a6980a6986c79b6937559",
+  "content-hash": "0966a9b1a844ce35ec2df743802fcd1d",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -506,16 +506,16 @@
     },
     {
       "name": "dvsa/laminas-config-cloud-parameters",
-      "version": "v2.1.0",
+      "version": "v2.2.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters.git",
-        "reference": "2baec7c36d8efc20294bfd5f8c37fbb77d729863"
+        "reference": "7e9984dcb7faa1466f1cf966f6a3978fa68bfe68"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/dvsa-laminas-config-cloud-parameters/zipball/2baec7c36d8efc20294bfd5f8c37fbb77d729863",
-        "reference": "2baec7c36d8efc20294bfd5f8c37fbb77d729863",
+        "url": "https://api.github.com/repos/dvsa/dvsa-laminas-config-cloud-parameters/zipball/7e9984dcb7faa1466f1cf966f6a3978fa68bfe68",
+        "reference": "7e9984dcb7faa1466f1cf966f6a3978fa68bfe68",
         "shasum": ""
       },
       "require": {
@@ -550,9 +550,9 @@
       "license": ["MIT"],
       "support": {
         "issues": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/issues",
-        "source": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/tree/v2.1.0"
+        "source": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/tree/v2.2.0"
       },
-      "time": "2026-06-09T12:32:58+00:00"
+      "time": "2026-09-08T12:06:45+00:00"
     },
     {
       "name": "ezyang/htmlpurifier",

@@ -51,8 +51,10 @@ final class EmailAwareTraitTest extends m\Adapter\Phpunit\MockeryTestCase
      * Test organisation recipients when there is no user, or when the user has no contact details
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('emptyUserProvider')]
-    public function testOrganisationRecipientsNoUserDetails(mixed $user): void
+    public function testOrganisationRecipientsNoUserDetails(\Closure $createUser): void
     {
+        $user = $createUser();
+
         $orgEmail1 = 'orgEmail1@test.com';
         $orgEmail2 = 'orgEmail2@test.com';
 
@@ -76,19 +78,27 @@ final class EmailAwareTraitTest extends m\Adapter\Phpunit\MockeryTestCase
 
     public static function emptyUserProvider(): array
     {
-        $userWithoutEmail = m::mock(User::class);
-        $userWithoutEmail->shouldReceive('isInternal')->withNoArgs()->andReturn(false);
-        $userWithoutEmail->shouldReceive('getContactDetails')->withNoArgs()->andReturnNull();
+        $userWithoutEmail = static function () {
+            $user = m::mock(User::class);
+            $user->shouldReceive('isInternal')->withNoArgs()->andReturn(false);
+            $user->shouldReceive('getContactDetails')->withNoArgs()->andReturnNull();
 
-        $contactDetails = m::mock(ContactDetails::class);
-        $contactDetails->shouldReceive('getEmailAddress')->withNoArgs()->andReturn('internal@test.com');
+            return $user;
+        };
 
-        $userInternal = m::mock(User::class);
-        $userInternal->shouldReceive('isInternal')->withNoArgs()->andReturn(true);
-        $userInternal->shouldReceive('getContactDetails')->withNoArgs()->andReturn($contactDetails);
+        $userInternal = static function () {
+            $contactDetails = m::mock(ContactDetails::class);
+            $contactDetails->shouldReceive('getEmailAddress')->withNoArgs()->andReturn('internal@test.com');
+
+            $user = m::mock(User::class);
+            $user->shouldReceive('isInternal')->withNoArgs()->andReturn(true);
+            $user->shouldReceive('getContactDetails')->withNoArgs()->andReturn($contactDetails);
+
+            return $user;
+        };
 
         return [
-            [null],
+            [static fn () => null],
             [$userWithoutEmail],
             [$userInternal],
         ];

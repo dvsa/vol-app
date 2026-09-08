@@ -15,7 +15,7 @@ final class ApplicantsResponsesTest extends AbstractSubmissionSectionTestCase
 
     public static function sectionTestProvider(): \Iterator
     {
-        $case = static::getCase();
+        $case = static fn () => static::getCase();
 
         $expectedResult = 'foo';
 
@@ -31,6 +31,10 @@ final class ApplicantsResponsesTest extends AbstractSubmissionSectionTestCase
     #[\Override]
     public function testGenerateSection(mixed $input = null, mixed $expectedResult = null): void
     {
+        if ($input instanceof \Closure) {
+            $input = $input();
+        }
+
         $mockQueryHandler = m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class);
         $mockViewRenderer = m::mock(PhpRenderer::class);
 

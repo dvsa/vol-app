@@ -11,10 +11,10 @@ use Dvsa\Olcs\Transfer\Util\Annotation\AnnotationBuilder;
 use Laminas\Filter\FilterPluginManager;
 use Laminas\ServiceManager\ServiceManager;
 use Laminas\Validator\ValidatorPluginManager;
-use PHPUnit\Framework\TestCase;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
-final class GoodsVehiclesTest extends TestCase
+final class GoodsVehiclesTest extends MockeryTestCase
 {
     public function testGetVehicleIdsReturnsAnArrayProvided()
     {
