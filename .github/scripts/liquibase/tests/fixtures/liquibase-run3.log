@@ -1,0 +1,15 @@
+Liquibase running with context: prep
+Running migrations...
+Liquibase Version: 5.0.2
+Running Changeset: changesets/testdataset.xml::testdata::olcs
+          changesets/OLCS.xml : NOT applying testdata
+Running Changeset: changesets/9.2.0-data.xml::add-13-week-sla-trial-exceptions::olcs
+Running Changeset: changesets/views_procs.xml::sp_elastic_address.sql::olcs
+Running Changeset: changesets/views_procs.xml::sp_elastic_person.sql::olcs
+UPDATE SUMMARY
+Run:                          3
+Previously run:            1620
+Filtered out:                 2
+Total change sets:         1631
+Context mismatch:             2
+Liquibase command 'update' was executed successfully.
