@@ -298,7 +298,7 @@ jobs:
       selfserve-image-tag: ${{ needs.terraform_env.outputs.previous_selfserve_image_tag }}
       internal-image-tag: ${{ needs.terraform_env.outputs.previous_internal_image_tag }}
       assets-version: ${{ needs.terraform_env.outputs.previous_assets_version }}
-      liquibase-image-tag: ${{ needs.terraform_env.outputs.previous_liquibase_image_tag }}
+      liquibase-image-tag: ${{ needs.terraform_env.outputs.previous_liquibase_image_tag || inputs.liquibase-image-tag }}
     permissions:
       contents: read
       id-token: write

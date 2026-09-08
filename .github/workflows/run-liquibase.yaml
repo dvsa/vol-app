@@ -107,7 +107,7 @@ on:
         required: true
 
 env:
-  REGISTRY: 054614622558.dkr.ecr.eu-west-1.amazonaws.com
+  REGISTRY: ${{ inputs.account == 'prod' && '146997448015.dkr.ecr.eu-west-1.amazonaws.com' || '054614622558.dkr.ecr.eu-west-1.amazonaws.com' }}
   AWS_REGION: ${{ vars.DVSA_AWS_REGION }}
   AWS_OIDC_ROLE: ${{ inputs.account == 'prod' && vars.ACCOUNT_PROD_TF_OIDC_ROLE || vars.ACCOUNT_NONPROD_TF_OIDC_ROLE }}
   BATCH_QUEUE: ${{
@@ -294,13 +294,14 @@ jobs:
           BATCH_LOG_GROUP: /aws/batch/${{ vars[env.BATCH_QUEUE] }}
           ENVIRONMENT: ${{ inputs.environment }}
           DRY_RUN: ${{ inputs.dry_run }}
+          JOB_ID: ${{ steps.submit-job.outputs.job_id }}
+          ETL_SHA: ${{ needs.build.outputs.etl_sha }}
+          IMAGE_DIGEST: ${{ needs.build.outputs.image_digest }}
+          PREVIOUS_IMAGE_TAG: ${{ inputs.previous_image_tag }}
+          JOB_STATUS: ${{ steps.check-status.outputs.status || 'unknown' }}
         run: |
-          bash .github/scripts/liquibase/summarise-batch-job.sh \
-            "${{ steps.submit-job.outputs.job_id }}" \
-            "${{ needs.build.outputs.etl_sha }}" \
-            "${{ needs.build.outputs.image_digest }}" \
-            "${{ inputs.previous_image_tag }}"
-          if [ "${{ steps.check-status.outputs.status }}" != "SUCCEEDED" ]; then
-            echo "::error::Batch job ${{ steps.submit-job.outputs.job_id }} finished ${{ steps.check-status.outputs.status || 'unknown' }}"
+          bash .github/scripts/liquibase/summarise-batch-job.sh "$JOB_ID" "$ETL_SHA" "$IMAGE_DIGEST" "$PREVIOUS_IMAGE_TAG"
+          if [ "$JOB_STATUS" != "SUCCEEDED" ]; then
+            echo "::error::Batch job $JOB_ID finished $JOB_STATUS"
             exit 1
           fi
