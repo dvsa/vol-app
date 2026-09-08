@@ -204,8 +204,10 @@ final class FeesHelperServiceTest extends MockeryTestCase
      * @param array $expected allocated amounts e.g. ['97' => '12.45', '98' => '0.05']
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestAllocatePayments')]
-    public function testAllocatePayments(mixed $amount, mixed $fees, mixed $expected): void
+    public function testAllocatePayments(mixed $amount, array $feeSpecs, mixed $expected): void
     {
+        $fees = array_map(static fn (array $spec) => self::getStubFee(...$spec), $feeSpecs);
+
         $this->assertSame($expected, $this->sut->allocatePayments($amount, $fees));
     }
 
@@ -214,16 +216,16 @@ final class FeesHelperServiceTest extends MockeryTestCase
         yield [
             '0.00',
             [
-                self::getStubFee('10', '99.99'),
-                self::getStubFee('11', '100.01', '2013-12-11', true),
+                ['10', '99.99'],
+                ['11', '100.01', '2013-12-11', true],
             ],
             []
         ];
         yield [
             '200.00',
             [
-                self::getStubFee('10', '99.99'),
-                self::getStubFee('11', '100.01'),
+                ['10', '99.99'],
+                ['11', '100.01'],
             ],
             [
                 '10' => '99.99',
@@ -233,10 +235,10 @@ final class FeesHelperServiceTest extends MockeryTestCase
         yield [
             '200.00',
             [
-                self::getStubFee('10', '99.99', '2015-09-04'),
-                self::getStubFee('11', '50.01', '2015-09-02'),
-                self::getStubFee('12', '100.00', '2015-09-02'),
-                self::getStubFee('13', '100.00', '2015-09-05'),
+                ['10', '99.99', '2015-09-04'],
+                ['11', '50.01', '2015-09-02'],
+                ['12', '100.00', '2015-09-02'],
+                ['13', '100.00', '2015-09-05'],
             ],
             [
                 '11' => '50.01',
@@ -248,10 +250,10 @@ final class FeesHelperServiceTest extends MockeryTestCase
             '200.00',
             [
                 // check tie-break on same invoicedDate
-                self::getStubFee('1', '100.00', '2015-09-03'),
-                self::getStubFee('2', '100.00', '2015-09-02'),
-                self::getStubFee('3', '100.00', '2015-09-02'),
-                self::getStubFee('4', '100.00', '2015-09-02'),
+                ['1', '100.00', '2015-09-03'],
+                ['2', '100.00', '2015-09-02'],
+                ['3', '100.00', '2015-09-02'],
+                ['4', '100.00', '2015-09-02'],
             ],
             [
                 '2' => '100.00',
@@ -288,8 +290,10 @@ final class FeesHelperServiceTest extends MockeryTestCase
      * @param string $expected formatted amount
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('overpaymentProvider')]
-    public function testGetOverpaymentAmount(mixed $amount, mixed $fees, mixed $expected): void
+    public function testGetOverpaymentAmount(mixed $amount, array $feeSpecs, mixed $expected): void
     {
+        $fees = array_map(static fn (array $spec) => self::getStubFee(...$spec), $feeSpecs);
+
         $this->assertSame($expected, $this->sut->getOverpaymentAmount($amount, $fees));
     }
 
@@ -303,16 +307,16 @@ final class FeesHelperServiceTest extends MockeryTestCase
         yield 'underpayment' => [
             '0.00',
             [
-                self::getStubFee('10', '99.99'),
-                self::getStubFee('11', '100.01'),
+                ['10', '99.99'],
+                ['11', '100.01'],
             ],
             '-200.00',
         ];
         yield 'overpayment' => [
             '250',
             [
-                self::getStubFee('10', '99.99'),
-                self::getStubFee('11', '100.01'),
+                ['10', '99.99'],
+                ['11', '100.01'],
             ],
             '50.00',
         ];

@@ -46,6 +46,9 @@ final class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
     #[\PHPUnit\Framework\Attributes\DataProvider('getConfigProvider')]
     public function testGetConfig(mixed $data, mixed $expected): void
     {
+        $tmDigitalSignature = $data['hasDigitalSignatures'] ? $this->createDigitalSignature() : null;
+        $opDigitalSignature = $tmDigitalSignature;
+
         $this->mockTranslator
             ->shouldReceive('translate')
             ->with(TransportManagerSignatureReviewService::ADDRESS)
@@ -55,7 +58,7 @@ final class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
         $this->mockTranslator->shouldReceive('translate')->with($expected['label'])->once()
             ->andReturn($expected['label'] . 'translated');
 
-        if (empty($data['TmDigitalSignature'])) {
+        if (empty($tmDigitalSignature)) {
             $this->mockTranslator->shouldReceive('translate')->with($expected['markup'])->once()->
             andReturn(
                 '%s_%s'
@@ -63,9 +66,9 @@ final class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
         }
 
         $tma = m::mock(TransportManagerApplication::class);
-        $tma->shouldReceive('getTmDigitalSignature')->andReturn($data['TmDigitalSignature']);
+        $tma->shouldReceive('getTmDigitalSignature')->andReturn($tmDigitalSignature);
 
-        $tma->shouldReceive('getOpDigitalSignature')->twice()->andReturn($data['OpDigitalSignature']);
+        $tma->shouldReceive('getOpDigitalSignature')->twice()->andReturn($opDigitalSignature);
         $tma->shouldReceive('getIsOwner')->once()->andReturn('N');
 
         $tma->shouldReceive('getApplication->getLicence->getOrganisation->getType->getId')->with()->once()
@@ -73,7 +76,7 @@ final class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
 
         $expectedMarkup = $expected['label'] . 'translated_ADDRESS';
 
-        if ($data['TmDigitalSignature']) {
+        if ($tmDigitalSignature) {
             $digitalSignatureDate = new DateTime('2018-01-01');
             $birthDate = new DateTime('1980-01-01')->format('d M Y');
             $signatureName = 'Name';
@@ -98,19 +101,11 @@ final class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
 
     public static function getConfigProvider(): array
     {
-
-        $digitalSignature = m::mock(DigitalSignature::class);
-        $digitalSignature->shouldReceive('getSignatureName')->andReturn('Name');
-        $digitalSignature->shouldReceive('getDateOfBirth')->andReturn('01 Jan 1980');
-        $digitalSignatureDate = new DateTime('2018-01-01');
-        $digitalSignature->shouldReceive('getCreatedOn')->with(true)->andReturn($digitalSignatureDate);
-
         return [
             'case_01' => [
                 [
                     'organisationType' => 'unknown',
-                    'TmDigitalSignature' => null,
-                    'OpDigitalSignature' => null,
+                    'hasDigitalSignatures' => false,
                 ],
                 [
                     'label' => 'responsible-person-signature',
@@ -120,8 +115,7 @@ final class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
             'case_02' => [
                 [
                     'organisationType' => Organisation::ORG_TYPE_LLP,
-                    'TmDigitalSignature' => null,
-                    'OpDigitalSignature' => null,
+                    'hasDigitalSignatures' => false,
                 ],
                 [
                     'label' => 'directors-signature',
@@ -131,8 +125,7 @@ final class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
             'case_03' => [
                 [
                     'organisationType' => Organisation::ORG_TYPE_REGISTERED_COMPANY,
-                    'TmDigitalSignature' => null,
-                    'OpDigitalSignature' => null
+                    'hasDigitalSignatures' => false,
                 ],
                 [
                     'label' => 'directors-signature',
@@ -142,8 +135,7 @@ final class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
             'case_04' => [
                 [
                     'organisationType' => Organisation::ORG_TYPE_PARTNERSHIP,
-                    'TmDigitalSignature' => null,
-                    'OpDigitalSignature' => null
+                    'hasDigitalSignatures' => false,
                 ],
                 [
                     'label' => 'partners-signature',
@@ -153,8 +145,7 @@ final class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
             'case_05' => [
                 [
                     'organisationType' => Organisation::ORG_TYPE_SOLE_TRADER,
-                    'TmDigitalSignature' => null,
-                    'OpDigitalSignature' => null
+                    'hasDigitalSignatures' => false,
                 ],
                 [
                     'label' => 'owners-signature',
@@ -164,8 +155,7 @@ final class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
             'case_06' => [
                 [
                     'organisationType' => 'unknown',
-                    'TmDigitalSignature' => $digitalSignature,
-                    'OpDigitalSignature' => $digitalSignature
+                    'hasDigitalSignatures' => true,
                 ],
                 [
                     'label' => 'responsible-person-signature',
@@ -212,6 +202,16 @@ final class TransportManagerSignatureReviewServiceTest extends MockeryTestCase
         $this->assertEquals([
             'markup' => $expected['markup']
         ], $actual);
+    }
+
+    private function createDigitalSignature(): DigitalSignature
+    {
+        $digitalSignature = m::mock(DigitalSignature::class);
+        $digitalSignature->shouldReceive('getSignatureName')->andReturn('Name');
+        $digitalSignature->shouldReceive('getDateOfBirth')->andReturn('01 Jan 1980');
+        $digitalSignature->shouldReceive('getCreatedOn')->with(true)->andReturn(new DateTime('2018-01-01'));
+
+        return $digitalSignature;
     }
 
     public static function digitalSignatureDataProvider(): array

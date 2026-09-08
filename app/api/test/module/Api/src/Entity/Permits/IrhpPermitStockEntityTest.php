@@ -207,8 +207,13 @@ final class IrhpPermitStockEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpBilateralMoroccoException')]
-    public function testCreateBilateralMoroccoException(mixed $countryId, mixed $permitCategory, mixed $expectedMessage): void
-    {
+    public function testCreateBilateralMoroccoException(
+        mixed $countryId,
+        \Closure $createPermitCategory,
+        mixed $expectedMessage
+    ): void {
+        $permitCategory = $createPermitCategory();
+
         $irhpPermitType = m::mock(IrhpPermitType::class);
         $irhpPermitType->shouldReceive('getId')
             ->withNoArgs()
@@ -248,8 +253,13 @@ final class IrhpPermitStockEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpBilateralMoroccoException')]
-    public function testUpdateBilateralMoroccoException(mixed $countryId, mixed $permitCategory, mixed $expectedMessage): void
-    {
+    public function testUpdateBilateralMoroccoException(
+        mixed $countryId,
+        \Closure $createPermitCategory,
+        mixed $expectedMessage
+    ): void {
+        $permitCategory = $createPermitCategory();
+
         $irhpPermitType = m::mock(IrhpPermitType::class);
         $irhpPermitType->shouldReceive('getId')
             ->withNoArgs()
@@ -307,12 +317,12 @@ final class IrhpPermitStockEntityTest extends EntityTester
     {
         yield [
             Country::ID_MOROCCO,
-            null,
+            static fn () => null,
             'Permit category must be specified for Bilateral Morocco stocks'
         ];
         yield [
             Country::ID_BELARUS,
-            m::mock(RefData::class),
+            static fn () => m::mock(RefData::class),
             'Permit category is only applicable for Bilateral Morocco stocks'
         ];
     }
@@ -349,12 +359,12 @@ final class IrhpPermitStockEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHasOpenWindow')]
-    public function testHasOpenWindow(mixed $openWindow, mixed $expected): void
+    public function testHasOpenWindow(\Closure $createOpenWindow, mixed $expected): void
     {
         $entity = m::mock(Entity::class)->makePartial();
         $entity->shouldReceive('getOpenWindow')
            ->withNoArgs()
-           ->andReturn($openWindow);
+           ->andReturn($createOpenWindow());
 
         $this->assertEquals(
             $expected,
@@ -364,8 +374,8 @@ final class IrhpPermitStockEntityTest extends EntityTester
 
     public static function dpHasOpenWindow(): \Iterator
     {
-        yield [null, false];
-        yield [m::mock(IrhpPermitWindow::class), true];
+        yield [static fn () => null, false];
+        yield [static fn () => m::mock(IrhpPermitWindow::class), true];
     }
 
     public function testGetStatusDescription(): void
@@ -400,8 +410,9 @@ final class IrhpPermitStockEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('canDeleteProvider')]
-    public function testCanDelete(mixed $data, mixed $expected): void
+    public function testCanDelete(\Closure $createData, mixed $expected): void
     {
+        $data = $createData();
         $status = m::mock(RefData::class);
         $irhpPermitType = m::mock(IrhpPermitType::class)->makePartial();
 
@@ -428,7 +439,7 @@ final class IrhpPermitStockEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('emissionsRangeProvider')]
-    public function testHasEuro5Range(mixed $data, mixed $expected): void
+    public function testHasEuro5Range(\Closure $createRanges, mixed $expected): void
     {
         $status = m::mock(RefData::class);
         $irhpPermitType = m::mock(IrhpPermitType::class)->makePartial();
@@ -446,13 +457,13 @@ final class IrhpPermitStockEntityTest extends EntityTester
             '2019-02-01'
         );
 
-        $stock->setIrhpPermitRanges($data);
+        $stock->setIrhpPermitRanges($createRanges());
 
         $this->assertEquals($expected['euro5'], $stock->hasEuro5Range());
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('emissionsRangeProvider')]
-    public function testHasEuro6Range(mixed $data, mixed $expected): void
+    public function testHasEuro6Range(\Closure $createRanges, mixed $expected): void
     {
         $status = m::mock(RefData::class);
         $irhpPermitType = m::mock(IrhpPermitType::class)->makePartial();
@@ -470,7 +481,7 @@ final class IrhpPermitStockEntityTest extends EntityTester
             '2019-02-01'
         );
 
-        $stock->setIrhpPermitRanges($data);
+        $stock->setIrhpPermitRanges($createRanges());
 
         $this->assertEquals($expected['euro6'], $stock->hasEuro6Range());
     }
@@ -482,37 +493,40 @@ final class IrhpPermitStockEntityTest extends EntityTester
      */
     public static function emissionsRangeProvider(): array
     {
-        $euro5Range = m::mock(IrhpPermitRange::class)->makePartial();
-        $euro5Range->setEmissionsCategory(new RefData(RefData::EMISSIONS_CATEGORY_EURO5_REF));
-
-        $euro6Range = m::mock(IrhpPermitRange::class)->makePartial();
-        $euro6Range->setEmissionsCategory(new RefData(RefData::EMISSIONS_CATEGORY_EURO6_REF));
-
-        $naRange = m::mock(IrhpPermitRange::class)->makePartial();
-        $naRange->setEmissionsCategory(new RefData(RefData::EMISSIONS_CATEGORY_NA_REF));
+        $euro5 = RefData::EMISSIONS_CATEGORY_EURO5_REF;
+        $euro6 = RefData::EMISSIONS_CATEGORY_EURO6_REF;
+        $na = RefData::EMISSIONS_CATEGORY_NA_REF;
 
         return [
             'both' => [
-                [$euro5Range, $euro6Range],
+                static fn () => [self::createEmissionsRange($euro5), self::createEmissionsRange($euro6)],
                 ['euro5' => true, 'euro6' => true],
             ],
             'euro5' => [
-                [$euro5Range],
+                static fn () => [self::createEmissionsRange($euro5)],
                 ['euro5' => true, 'euro6' => false],
             ],
             'euro6' => [
-                [$euro6Range],
+                static fn () => [self::createEmissionsRange($euro6)],
                 ['euro5' => false, 'euro6' => true],
             ],
             'na' => [
-                [$naRange],
+                static fn () => [self::createEmissionsRange($na)],
                 ['euro5' => false, 'euro6' => false],
             ],
         ];
     }
 
+    private static function createEmissionsRange(string $emissionsCategoryRef): IrhpPermitRange
+    {
+        $range = m::mock(IrhpPermitRange::class)->makePartial();
+        $range->setEmissionsCategory(new RefData($emissionsCategoryRef));
+
+        return $range;
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHasCabotageOrStandardRange')]
-    public function testHasCabotageOrStandardRange(mixed $data, mixed $expected): void
+    public function testHasCabotageOrStandardRange(\Closure $createRanges, mixed $expected): void
     {
         $status = m::mock(RefData::class);
         $irhpPermitType = m::mock(IrhpPermitType::class)->makePartial();
@@ -527,7 +541,7 @@ final class IrhpPermitStockEntityTest extends EntityTester
             null
         );
 
-        $stock->setIrhpPermitRanges($data);
+        $stock->setIrhpPermitRanges($createRanges());
 
         $this->assertEquals($expected['cabotage'], $stock->hasCabotageRange());
         $this->assertEquals($expected['standard'], $stock->hasStandardRange());
@@ -535,36 +549,37 @@ final class IrhpPermitStockEntityTest extends EntityTester
 
     public static function dpHasCabotageOrStandardRange(): array
     {
-        $cabotageRange = m::mock(IrhpPermitRange::class);
-        $cabotageRange->shouldReceive('isCabotage')->withNoArgs()->andReturnTrue();
-        $cabotageRange->shouldReceive('isStandard')->withNoArgs()->andReturnFalse();
-
-        $standardRange = m::mock(IrhpPermitRange::class);
-        $standardRange->shouldReceive('isCabotage')->withNoArgs()->andReturnFalse();
-        $standardRange->shouldReceive('isStandard')->withNoArgs()->andReturnTrue();
-
-        $naRange = m::mock(IrhpPermitRange::class);
-        $naRange->shouldReceive('isCabotage')->withNoArgs()->andReturnFalse();
-        $naRange->shouldReceive('isStandard')->withNoArgs()->andReturnFalse();
+        $cabotageRange = static fn () => self::createCabotageOrStandardRange(true, false);
+        $standardRange = static fn () => self::createCabotageOrStandardRange(false, true);
+        $naRange = static fn () => self::createCabotageOrStandardRange(false, false);
 
         return [
             'both' => [
-                [$cabotageRange, $standardRange],
+                static fn () => [$cabotageRange(), $standardRange()],
                 ['cabotage' => true, 'standard' => true],
             ],
             'cabotage' => [
-                [$cabotageRange],
+                static fn () => [$cabotageRange()],
                 ['cabotage' => true, 'standard' => false],
             ],
             'standard' => [
-                [$standardRange],
+                static fn () => [$standardRange()],
                 ['cabotage' => false, 'standard' => true],
             ],
             'na' => [
-                [$naRange],
+                static fn () => [$naRange()],
                 ['cabotage' => false, 'standard' => false],
             ],
         ];
+    }
+
+    private static function createCabotageOrStandardRange(bool $isCabotage, bool $isStandard): IrhpPermitRange
+    {
+        $range = m::mock(IrhpPermitRange::class);
+        $range->shouldReceive('isCabotage')->withNoArgs()->andReturn($isCabotage);
+        $range->shouldReceive('isStandard')->withNoArgs()->andReturn($isStandard);
+
+        return $range;
     }
 
     /**
@@ -575,28 +590,28 @@ final class IrhpPermitStockEntityTest extends EntityTester
     public static function canDeleteProvider(): \Iterator
     {
         yield 'valid delete' => [
-            [
+            static fn () => [
                 'irhpPermitRanges' => [],
                 'irhpPermitWindows' => [],
             ],
             true,
         ];
         yield 'existing range' => [
-            [
+            static fn () => [
                 'irhpPermitRanges' => [m::mock(IrhpPermitRange::class)],
                 'irhpPermitWindows' => [],
             ],
             false,
         ];
         yield 'existing window' => [
-            [
+            static fn () => [
                 'irhpPermitRanges' => [],
                 'irhpPermitWindows' => [m::mock(IrhpPermitWindow::class)],
             ],
             false,
         ];
         yield 'existing window and range' => [
-            [
+            static fn () => [
                 'irhpPermitRanges' => [m::mock(IrhpPermitRange::class)],
                 'irhpPermitWindows' => [m::mock(IrhpPermitWindow::class)],
             ],
@@ -1943,12 +1958,38 @@ final class IrhpPermitStockEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetPermitUsageList')]
-    public function testGetPermitUsageList(mixed $irhpPermitRanges, mixed $expected): void
+    /**
+     * @param array<array{bool, bool, int, string, string|null}> $ranges per range: ss reserve, lost replacement,
+     *        from no, emissions category id, journey ref data id (null for none)
+     * @param string[] $expectedJourneyRefs journey ref data ids expected back, in display order
+     */
+    public function testGetPermitUsageList(array $ranges, array $expectedJourneyRefs): void
     {
+        $journeys = [
+            RefData::JOURNEY_MULTIPLE => new RefData(RefData::JOURNEY_MULTIPLE)->setDisplayOrder(10),
+            RefData::JOURNEY_SINGLE => new RefData(RefData::JOURNEY_SINGLE)->setDisplayOrder(20),
+        ];
+
+        $irhpPermitRanges = [];
+        foreach ($ranges as [$ssReserve, $lostReplacement, $fromNo, $emissionsCategoryId, $journeyRef]) {
+            $irhpPermitRanges[] = self::createMockRange(
+                $ssReserve,
+                $lostReplacement,
+                $fromNo,
+                $emissionsCategoryId,
+                $journeyRef === null ? null : $journeys[$journeyRef]
+            );
+        }
+
+        $expected = [];
+        foreach ($expectedJourneyRefs as $journeyRef) {
+            $expected[$journeys[$journeyRef]->getDisplayOrder()] = $journeys[$journeyRef];
+        }
+
         $entity = m::mock(Entity::class)->makePartial();
 
         $entity->shouldReceive('getIrhpPermitRanges')
-            ->andReturn($irhpPermitRanges);
+            ->andReturn(new ArrayCollection($irhpPermitRanges));
 
         $result = $entity->getPermitUsageList();
 
@@ -1957,57 +1998,45 @@ final class IrhpPermitStockEntityTest extends EntityTester
 
     public static function dpGetPermitUsageList(): \Iterator
     {
-        $journeyMultiple = new RefData(RefData::JOURNEY_MULTIPLE)->setDisplayOrder(10);
-        $journeySingle = new RefData(RefData::JOURNEY_SINGLE)->setDisplayOrder(20);
+        $multiple = RefData::JOURNEY_MULTIPLE;
+        $single = RefData::JOURNEY_SINGLE;
+        $euro5 = RefData::EMISSIONS_CATEGORY_EURO5_REF;
+        $euro6 = RefData::EMISSIONS_CATEGORY_EURO6_REF;
+
         yield [
-            new ArrayCollection(
-                [
-                    self::createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, null),
-                    self::createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
-                    self::createMockRange(false, true, 230, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
-                    self::createMockRange(true, false, 100, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
-                    self::createMockRange(true, true, 500, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
-                    self::createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
-                ]
-            ),
             [
-                10 => $journeyMultiple,
-                20 => $journeySingle,
+                [false, false, 1, $euro5, null],
+                [false, false, 300, $euro5, $multiple],
+                [false, true, 230, $euro5, $multiple],
+                [true, false, 100, $euro6, $single],
+                [true, true, 500, $euro5, $single],
+                [false, false, 420, $euro6, $single],
             ],
+            [$multiple, $single],
         ];
         yield [
-            new ArrayCollection(
-                [
-                    self::createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
-                    self::createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
-                    self::createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeyMultiple),
-                ]
-            ),
             [
-                10 => $journeyMultiple,
+                [false, false, 1, $euro5, $multiple],
+                [false, false, 300, $euro5, $multiple],
+                [false, false, 420, $euro6, $multiple],
             ],
+            [$multiple],
         ];
         yield [
-            new ArrayCollection(
-                [
-                    self::createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
-                    self::createMockRange(false, false, 300, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
-                    self::createMockRange(false, false, 420, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
-                ]
-            ),
             [
-                20 => $journeySingle,
+                [false, false, 1, $euro5, $single],
+                [false, false, 300, $euro5, $single],
+                [false, false, 420, $euro6, $single],
             ],
+            [$single],
         ];
         yield [
-            new ArrayCollection(
-                [
-                    self::createMockRange(false, false, 1, RefData::EMISSIONS_CATEGORY_EURO5_REF, null),
-                    self::createMockRange(false, true, 230, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeyMultiple),
-                    self::createMockRange(true, false, 100, RefData::EMISSIONS_CATEGORY_EURO6_REF, $journeySingle),
-                    self::createMockRange(true, true, 500, RefData::EMISSIONS_CATEGORY_EURO5_REF, $journeySingle),
-                ]
-            ),
+            [
+                [false, false, 1, $euro5, null],
+                [false, true, 230, $euro5, $multiple],
+                [true, false, 100, $euro6, $single],
+                [true, true, 500, $euro5, $single],
+            ],
             [],
         ];
     }

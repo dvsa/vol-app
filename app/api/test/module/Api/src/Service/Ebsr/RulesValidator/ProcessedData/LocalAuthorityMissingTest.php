@@ -25,13 +25,19 @@ final class LocalAuthorityMissingTest extends MockeryTestCase
      * @param $valid
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
-    public function testIsValid(mixed $la, mixed $naptan, mixed $valid): void
+    public function testIsValid(array $laIds, array $naptanIds, mixed $valid): void
     {
         $sut = new LocalAuthorityMissing();
 
+        // One instance per id: the same authority must be the same object in both collections
+        $localAuthorities = [];
+        foreach (array_unique(array_merge($laIds, $naptanIds)) as $id) {
+            $localAuthorities[$id] = $this->createLocalAuthority($id);
+        }
+
         $value = [
-            'localAuthoritys' => $la,
-            'naptanAuthorities' => $naptan
+            'localAuthoritys' => new ArrayCollection(array_map(static fn (int $id) => $localAuthorities[$id], $laIds)),
+            'naptanAuthorities' => new ArrayCollection(array_map(static fn (int $id) => $localAuthorities[$id], $naptanIds)),
         ];
 
         $this->assertEquals($valid, $sut->isValid($value));
@@ -44,19 +50,18 @@ final class LocalAuthorityMissingTest extends MockeryTestCase
      */
     public static function isValidProvider(): array
     {
-        $la1 = m::mock(LaEntity::class)->makePartial();
-        $la1->setId(1);
-
-        $la2 = m::mock(LaEntity::class)->makePartial();
-        $la2->setId(2);
-
-        $la3 = m::mock(LaEntity::class)->makePartial();
-        $la3->setId(3);
-
         return [
-            [new ArrayCollection([$la3, $la2]), new ArrayCollection([$la1, $la2]), false],
-            [new ArrayCollection([$la3, $la2]), new ArrayCollection([$la3]), true],
-            [new ArrayCollection([$la3]), new ArrayCollection([$la3]), true],
+            [[3, 2], [1, 2], false],
+            [[3, 2], [3], true],
+            [[3], [3], true],
         ];
+    }
+
+    private function createLocalAuthority(int $id): LaEntity
+    {
+        $la = m::mock(LaEntity::class)->makePartial();
+        $la->setId($id);
+
+        return $la;
     }
 }

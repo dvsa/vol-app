@@ -283,9 +283,9 @@ final class TransactionEntityTest extends EntityTester
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpTestIsReserved')]
-    public function testIsReserved(mixed $transactions, mixed $expect): void
+    public function testIsReserved(\Closure $createTransactions, mixed $expect): void
     {
-        $this->sut->setFeeTransactions(new ArrayCollection($transactions));
+        $this->sut->setFeeTransactions(new ArrayCollection($createTransactions()));
 
         $this->assertSame($expect, $this->sut->isReversed());
     }
@@ -293,11 +293,11 @@ final class TransactionEntityTest extends EntityTester
     public static function dpTestIsReserved(): \Iterator
     {
         yield 'no fee transactions' => [
-            [],
+            static fn () => [],
             false,
         ];
         yield 'one refunded fee transaction' => [
-            [
+            static fn () => [
                 m::mock(FeeTransaction::class)
                     ->shouldReceive('isRefundedOrReversed')
                     ->andReturn(true)
@@ -306,7 +306,7 @@ final class TransactionEntityTest extends EntityTester
             true,
         ];
         yield 'one other fee transaction' => [
-            [
+            static fn () => [
                 m::mock(FeeTransaction::class)
                     ->shouldReceive('isRefundedOrReversed')
                     ->andReturn(false)
@@ -315,7 +315,7 @@ final class TransactionEntityTest extends EntityTester
             false,
         ];
         yield 'mix of fee transactions' => [
-            [
+            static fn () => [
                 m::mock(FeeTransaction::class)
                     ->shouldReceive('isRefundedOrReversed')
                     ->andReturn(false)
