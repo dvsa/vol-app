@@ -1,9 +1,0 @@
-olcs-etl commit: 5b4f0336947de34e14b01ea674d5bf528b7c3166
-Liquibase running with context: prep
-Running in dry-run mode - showing pending changes:
-Liquibase Version: 5.0.2
-2 changesets have not been applied to olcsapi@jdbc:mysql://olcsdb-rds.pre.olcs.dvsacloud.uk:3306/OLCS_RDS_OLCSDB
-     changesets/views_procs.xml::sp_elastic_address.sql::olcs
-     changesets/views_procs.xml::sp_elastic_person.sql::olcs
-Liquibase command 'status' was executed successfully.
-Liquibase command 'update-sql' was executed successfully.

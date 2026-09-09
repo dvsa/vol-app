@@ -1,7 +1,0 @@
-olcs-etl commit: 5b4f0336947de34e14b01ea674d5bf528b7c3166
-Liquibase running with context: prep
-Running migrations...
-Liquibase Version: 5.0.2
-Running Changeset: changesets/4.253-data.xml::OLCS-28325-ss-bilateral-ukraine-essential-information::olcs
-Unexpected error running Liquibase: Migration failed for changeset changesets/4.253-data.xml::OLCS-28325-ss-bilateral-ukraine-essential-information::olcs:
-     Reason: liquibase.exception.DatabaseException: COLLATION 'utf8_unicode_ci' is not valid for CHARACTER SET 'utf8mb4'
