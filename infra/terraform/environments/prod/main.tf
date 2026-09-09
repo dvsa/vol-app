@@ -207,7 +207,11 @@ locals {
       ]
       resources = [
         "arn:aws:s3:::app-olcs-pri-integration-dva-s3",
-        "arn:aws:s3:::app-olcs-pri-integration-dva-s3/*"
+        "arn:aws:s3:::app-olcs-pri-integration-dva-s3/*",
+        "arn:aws:s3:::app-olcs-pri-integration-reporting-s3",
+        "arn:aws:s3:::app-olcs-pri-integration-reporting-s3/*",
+        "arn:aws:s3:::app-mc-pri-integration-data-s3",
+        "arn:aws:s3:::app-mc-pri-integration-data-s3/*"
       ]
     }
   ]
@@ -766,10 +770,11 @@ module "service" {
         queue = "liquibase"
       },
       {
-        name     = "sas-mi-extract",
-        commands = ["/mnt/data/scripts/sas_mi_extract.sh"],
-        type     = "scripts",
-        schedule = ["cron(00 01 * * ? *)"],
+        name              = "sas-mi-extract",
+        commands          = ["/mnt/data/scripts/sas_mi_extract.sh"],
+        type              = "scripts",
+        ephemeral_storage = 50,
+        schedule          = ["cron(00 01 * * ? *)"],
       },
       {
         name     = "import-anondb",

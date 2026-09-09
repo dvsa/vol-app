@@ -207,7 +207,11 @@ locals {
       ]
       resources = [
         "arn:aws:s3:::apppp-olcs-pri-integration-dva-s3",
-        "arn:aws:s3:::apppp-olcs-pri-integration-dva-s3/*"
+        "arn:aws:s3:::apppp-olcs-pri-integration-dva-s3/*",
+        "arn:aws:s3:::apppp-olcs-pri-integration-reporting-s3",
+        "arn:aws:s3:::apppp-olcs-pri-integration-reporting-s3/*",
+        "arn:aws:s3:::apppp-mc-pri-integration-data-s3",
+        "arn:aws:s3:::apppp-mc-pri-integration-data-s3/*"
       ]
     }
   ]
