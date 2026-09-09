@@ -949,6 +949,77 @@ final class OrganisationEntityTest extends EntityTester
         $this->assertEquals(false, $entity->isEligibleForPermits());
     }
 
+    /**
+     * Only a PSV licence in a strictly active state may accept EBSR submissions - notably a licence
+     * under surrender consideration counts as active elsewhere but must not qualify here
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('dpHasEbsrEligibleLicence')]
+    public function testHasEbsrEligibleLicence(?string $status, ?string $goodsOrPsv, bool $expected): void
+    {
+        $licence = m::mock(LicenceEntity::class);
+        $licence->shouldReceive('getGoodsOrPsv')
+            ->andReturn($goodsOrPsv === null ? null : new RefData($goodsOrPsv));
+        $licence->shouldReceive('getStatus')->andReturn(new RefData($status));
+
+        $entity = $this->instantiate(Entity::class);
+        $entity->setLicences(new ArrayCollection([$licence]));
+
+        $this->assertSame($expected, $entity->hasEbsrEligibleLicence());
+    }
+
+    /**
+     * @return \Iterator<string, array{?string, ?string, bool}>
+     */
+    public static function dpHasEbsrEligibleLicence(): \Iterator
+    {
+        yield 'psv valid' => [LicenceEntity::LICENCE_STATUS_VALID, LicenceEntity::LICENCE_CATEGORY_PSV, true];
+        yield 'psv suspended' => [LicenceEntity::LICENCE_STATUS_SUSPENDED, LicenceEntity::LICENCE_CATEGORY_PSV, true];
+        yield 'psv curtailed' => [LicenceEntity::LICENCE_STATUS_CURTAILED, LicenceEntity::LICENCE_CATEGORY_PSV, true];
+        yield 'psv surrender under consideration' => [
+            LicenceEntity::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION,
+            LicenceEntity::LICENCE_CATEGORY_PSV,
+            false,
+        ];
+        yield 'psv under consideration' => [
+            LicenceEntity::LICENCE_STATUS_UNDER_CONSIDERATION,
+            LicenceEntity::LICENCE_CATEGORY_PSV,
+            false,
+        ];
+        yield 'psv granted' => [LicenceEntity::LICENCE_STATUS_GRANTED, LicenceEntity::LICENCE_CATEGORY_PSV, false];
+        yield 'psv revoked' => [LicenceEntity::LICENCE_STATUS_REVOKED, LicenceEntity::LICENCE_CATEGORY_PSV, false];
+        yield 'goods valid' => [
+            LicenceEntity::LICENCE_STATUS_VALID,
+            LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE,
+            false,
+        ];
+        yield 'no category' => [LicenceEntity::LICENCE_STATUS_VALID, null, false];
+    }
+
+    public function testHasEbsrEligibleLicenceFindsLicenceBeyondTheFirst(): void
+    {
+        $goods = m::mock(LicenceEntity::class);
+        $goods->shouldReceive('getGoodsOrPsv')
+            ->andReturn(new RefData(LicenceEntity::LICENCE_CATEGORY_GOODS_VEHICLE));
+        $goods->shouldReceive('getStatus')->andReturn(new RefData(LicenceEntity::LICENCE_STATUS_VALID));
+
+        $psv = m::mock(LicenceEntity::class);
+        $psv->shouldReceive('getGoodsOrPsv')->andReturn(new RefData(LicenceEntity::LICENCE_CATEGORY_PSV));
+        $psv->shouldReceive('getStatus')->andReturn(new RefData(LicenceEntity::LICENCE_STATUS_VALID));
+
+        $entity = $this->instantiate(Entity::class);
+        $entity->setLicences(new ArrayCollection([$goods, $psv]));
+
+        $this->assertTrue($entity->hasEbsrEligibleLicence());
+    }
+
+    public function testHasEbsrEligibleLicenceWithNoLicences(): void
+    {
+        $entity = $this->instantiate(Entity::class);
+        $entity->setLicences(new ArrayCollection());
+
+        $this->assertFalse($entity->hasEbsrEligibleLicence());
+    }
+
     #[\PHPUnit\Framework\Attributes\DataProvider('dpHasSubmittedLicenceApplication')]
     public function testHasSubmittedLicenceApplication(mixed $status, mixed $expected): void
     {

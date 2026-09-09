@@ -291,6 +291,34 @@ class Organisation extends AbstractOrganisation implements ContextProviderInterf
     }
 
     /**
+     * Whether the organisation holds a licence that is allowed to accept EBSR submissions.
+     *
+     * Deliberately stricter than hasActiveLicences(LICENCE_CATEGORY_PSV): it applies the same rule
+     * the pack itself is held to once it reaches processing, in
+     * Dvsa\Olcs\Api\Service\Ebsr\RulesValidator\Licence - a PSV licence in a strictly active
+     * state. A licence under surrender consideration counts as active elsewhere but cannot take
+     * new EBSR submissions.
+     *
+     * @return bool
+     */
+    public function hasEbsrEligibleLicence()
+    {
+        foreach ($this->getLicences() as $licence) {
+            $goodsOrPsv = $licence->getGoodsOrPsv();
+
+            if (
+                $goodsOrPsv !== null
+                && $goodsOrPsv->getId() === LicenceEntity::LICENCE_CATEGORY_PSV
+                && $this->isLicenceStatusStrictlyActive($licence)
+            ) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Get related licences
      *
      * @return ArrayCollection

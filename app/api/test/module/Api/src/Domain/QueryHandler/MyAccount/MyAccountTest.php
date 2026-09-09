@@ -84,6 +84,7 @@ final class MyAccountTest extends QueryHandlerTestCase
         $mockUser->expects('isInternal')->withNoArgs()->andReturnFalse();
         $mockUser->shouldReceive('serialize')->andReturn(['foo']);
         $mockUser->shouldReceive('hasActivePsvLicence')->andReturn(false);
+        $mockUser->shouldReceive('hasEbsrEligibleLicence')->andReturn(false);
         $mockUser->shouldReceive('getNumberOfVehicles')->andReturn(2);
         $mockUser->shouldReceive('hasOrganisationSubmittedLicenceApplication')->andReturn(true);
         $mockUser->expects('isEligibleForPermits')->withNoArgs()->andReturn($isEligibleForPermits);
@@ -108,6 +109,7 @@ final class MyAccountTest extends QueryHandlerTestCase
         $expectedResult = [
             'foo',
             'hasActivePsvLicence' => false,
+            'hasEbsrEligibleLicence' => false,
             'numberOfVehicles' => 2,
             'hasOrganisationSubmittedLicenceApplication' => true,
             'eligibleForPermits' => $isEligibleForPermits,
@@ -174,6 +176,7 @@ final class MyAccountTest extends QueryHandlerTestCase
         $mockUser->expects('isInternal')->withNoArgs()->andReturnTrue();
         $mockUser->shouldReceive('serialize')->andReturn(['foo']);
         $mockUser->shouldReceive('hasActivePsvLicence')->never();
+        $mockUser->shouldReceive('hasEbsrEligibleLicence')->never();
         $mockUser->shouldReceive('getNumberOfVehicles')->never();
         $mockUser->shouldReceive('hasOrganisationSubmittedLicenceApplication')->never();
         $mockUser->expects('isEligibleForPermits')->never();
@@ -192,6 +195,7 @@ final class MyAccountTest extends QueryHandlerTestCase
         $expectedResult = [
             'foo',
             'hasActivePsvLicence' => false,
+            'hasEbsrEligibleLicence' => false,
             'numberOfVehicles' => 0,
             'hasOrganisationSubmittedLicenceApplication' => false,
             'eligibleForPermits' => false,
@@ -243,6 +247,7 @@ final class MyAccountTest extends QueryHandlerTestCase
         $mockUser->expects('isInternal')->withNoArgs()->andReturnFalse();
         $mockUser->shouldReceive('serialize')->andReturn(['foo']);
         $mockUser->shouldReceive('hasActivePsvLicence')->never();
+        $mockUser->shouldReceive('hasEbsrEligibleLicence')->never();
         $mockUser->shouldReceive('getNumberOfVehicles')->never();
         $mockUser->shouldReceive('hasOrganisationSubmittedLicenceApplication')->never();
         $mockUser->expects('isEligibleForPermits')->never();
@@ -261,6 +266,7 @@ final class MyAccountTest extends QueryHandlerTestCase
         $expectedResult = [
             'foo',
             'hasActivePsvLicence' => false,
+            'hasEbsrEligibleLicence' => false,
             'numberOfVehicles' => 0,
             'hasOrganisationSubmittedLicenceApplication' => false,
             'eligibleForPermits' => false,

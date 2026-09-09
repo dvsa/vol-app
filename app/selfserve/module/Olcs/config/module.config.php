@@ -1777,6 +1777,7 @@ return [
     'lmc_rbac' => [
         'assertion_map' => [
             'selfserve-ebsr-list' => \Olcs\Assertion\Ebsr\EbsrList::class,
+            'selfserve-ebsr-upload' => \Olcs\Assertion\Ebsr\EbsrUpload::class,
         ],
         'guards' => [
             \LmcRbacMvc\Guard\RoutePermissionsGuard::class => [
@@ -1787,7 +1788,8 @@ return [
                 'manage-user' => ['can-manage-user-selfserve'],
 
                 // Bus reg stuff and who can access
-                // upload page accessible by operators only
+                // upload page accessible only by operators whose licence can accept EBSR
+                // submissions (see Olcs\Assertion\Ebsr\EbsrUpload)
                 'bus-registration/ebsr' => ['selfserve-ebsr-upload'],
 
                 // bus reg list accessible by operators and LAs
