@@ -17,7 +17,7 @@ You will need:
 - [Git](https://git-scm.com/) `git --version`
 - [Docker with Compose](https://docs.docker.com/manuals/) `docker -v`
 - [Node.js ~22.16.0](https://nodejs.org/en/) `node -v`
-- [PHP 8.2](https://www.php.net/) `php -v`
+- [PHP 8.4](https://www.php.net/) `php -v`
 - [Composer](https://getcomposer.org/) `composer -V`
 - [AWS CLI](https://aws.amazon.com/cli/) `aws --version`
 
