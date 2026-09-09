@@ -214,7 +214,7 @@ locals {
     propagate_tags        = true
     platform_capabilities = ["FARGATE"]
 
-    container_properties = jsonencode({
+    container_properties = jsonencode(merge({
 
       command = (try(job.type, "default") == "default" ? concat([
         "/var/www/html/vendor/bin/laminas",
@@ -259,8 +259,11 @@ locals {
           awslogs-stream-prefix = job.name
         }
       }
+      }, try(job.ephemeral_storage, null) == null ? {} : {
+      ephemeralStorage = {
+        sizeInGiB = job.ephemeral_storage
       }
-    )
+    }))
 
     attempt_duration_seconds = job.timeout
     retry_strategy           = local.default_retry_policy

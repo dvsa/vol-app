@@ -94,14 +94,15 @@ variable "batch" {
       })), [])
     }))
     jobs = list(object({
-      name     = string
-      type     = optional(string, "default")
-      queue    = optional(string, "default")
-      commands = optional(list(string))
-      cpu      = optional(number, 1)
-      memory   = optional(number, 4096)
-      timeout  = optional(number, 300)
-      schedule = optional(list(string), [])
+      name              = string
+      type              = optional(string, "default")
+      queue             = optional(string, "default")
+      commands          = optional(list(string))
+      cpu               = optional(number, 1)
+      memory            = optional(number, 4096)
+      timeout           = optional(number, 300)
+      ephemeral_storage = optional(number)
+      schedule          = optional(list(string), [])
     }))
   })
 }
