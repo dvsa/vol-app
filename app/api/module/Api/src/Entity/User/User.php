@@ -644,6 +644,18 @@ class User extends AbstractUser implements OrganisationProviderInterface
     }
 
     /**
+     * Checks if the user belongs to an org holding a licence able to accept EBSR submissions
+     *
+     * @return bool
+     */
+    public function hasEbsrEligibleLicence()
+    {
+        $org = $this->getRelatedOrganisation();
+
+        return $org !== null && $org->hasEbsrEligibleLicence();
+    }
+
+    /**
      * Returns related Organisation Name based on the user's type
      *
      * @return string

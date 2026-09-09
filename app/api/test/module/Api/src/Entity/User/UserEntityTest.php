@@ -929,6 +929,22 @@ final class UserEntityTest extends EntityTester
         $this->assertEquals(true, $user->hasActivePsvLicence());
     }
 
+    public function testHasEbsrEligibleLicence(): void
+    {
+        $user = new Entity('pid', Entity::USER_TYPE_OPERATOR);
+        $this->assertEquals(false, $user->hasEbsrEligibleLicence());
+
+        $org = m::mock(OrganisationEntity::class)->makePartial();
+        $org->shouldReceive('hasEbsrEligibleLicence')->andReturn(true);
+
+        $orgUser = new OrganisationUserEntity();
+        $orgUser->setUser($user);
+        $orgUser->setOrganisation($org);
+
+        $user->addOrganisationUsers($orgUser);
+        $this->assertEquals(true, $user->hasEbsrEligibleLicence());
+    }
+
     public function testGetNumberOfVehicles(): void
     {
         $user = new Entity('pid', Entity::USER_TYPE_OPERATOR);

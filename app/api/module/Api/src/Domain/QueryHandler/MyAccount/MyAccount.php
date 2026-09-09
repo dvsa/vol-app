@@ -54,6 +54,7 @@ class MyAccount extends AbstractQueryHandler implements CacheAwareInterface
         $isEligibleForPermits = false;
         $isEligibleForPrompt = false;
         $hasActivePsv = false;
+        $hasEbsrEligibleLicence = false;
         $hasSubmittedLicenceApplication = false;
         $canDeleteOperatorAdmin = false;
         $numVehicles = 0;
@@ -91,6 +92,7 @@ class MyAccount extends AbstractQueryHandler implements CacheAwareInterface
             }
 
             $hasActivePsv = $user->hasActivePsvLicence();
+            $hasEbsrEligibleLicence = $user->hasEbsrEligibleLicence();
             $numVehicles = $user->getNumberOfVehicles();
             $hasSubmittedLicenceApplication = $user->hasOrganisationSubmittedLicenceApplication();
         }
@@ -115,6 +117,7 @@ class MyAccount extends AbstractQueryHandler implements CacheAwareInterface
             ],
             [
                 'hasActivePsvLicence' => $hasActivePsv,
+                'hasEbsrEligibleLicence' => $hasEbsrEligibleLicence,
                 'numberOfVehicles' => $numVehicles,
                 'hasOrganisationSubmittedLicenceApplication' => $hasSubmittedLicenceApplication,
                 'eligibleForPermits' => $isEligibleForPermits,
