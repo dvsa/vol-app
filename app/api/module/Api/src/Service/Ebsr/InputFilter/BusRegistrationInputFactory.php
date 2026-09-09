@@ -26,6 +26,8 @@ use Psr\Container\ContainerInterface;
  */
 class BusRegistrationInputFactory implements FactoryInterface
 {
+    use ValidationToggleTrait;
+
     /**
      * invoke method
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -59,7 +61,7 @@ class BusRegistrationInputFactory implements FactoryInterface
         $filterChain->attach($filterManager->get(MiscSnJustification::class));
         $validatorChain = $service->getValidatorChain();
         //allows validators to be switched off (debug only, not to be used for production)
-        if (!isset($config['ebsr']['validate'][$inputName]) || $config['ebsr']['validate'][$inputName] === true) {
+        if ($this->isValidationEnabled($config, $inputName)) {
             /** @var ContainerInterface $validatorManager */
             $validatorManager = $container->get('ValidatorManager');
             $validatorChain->attach($validatorManager->get(EffectiveDate::class));

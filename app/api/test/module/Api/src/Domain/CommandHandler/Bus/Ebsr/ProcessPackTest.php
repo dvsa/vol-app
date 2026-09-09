@@ -60,4 +60,32 @@ final class ProcessPackTest extends ProcessPackTestCase
 
         $this->sut->handleCommand($command);
     }
+
+    /**
+     * An Error raised while processing a pack must be handled the same way as an Exception, so the
+     * submission is queued as failed rather than left stuck in the validating state
+     */
+    public function testHandleCommandWithError(): void
+    {
+        $cmdData = [
+            'organisation' => 11,
+            'id' => 12
+        ];
+
+        $command = ProcessPackCmd::create($cmdData);
+
+        $this->commandHandler
+            ->shouldReceive('handleCommand')
+            ->with(ProcessPackTransactionCmd::class, false)
+            ->andThrow(new \Error('Call to a member function getGoodsOrPsv() on null'));
+
+        $this->commandHandler
+            ->expects('handleCommand')
+            ->with(CreateQueue::class, false)
+            ->andReturn(new Result());
+
+        $this->expectException(ProcessPackException::class);
+
+        $this->sut->handleCommand($command);
+    }
 }

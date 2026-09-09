@@ -53,7 +53,9 @@ class Licence extends AbstractValidator
             return false;
         }
 
-        $licence = $licenceCollection[0];
+        //matching() preserves the keys of the organisation's licence collection, so the licence we
+        //matched is not necessarily at index 0
+        $licence = $licenceCollection->first();
 
         if ($licence->getGoodsOrPsv()->getId() !== LicenceEntity::LICENCE_CATEGORY_PSV) {
             $this->error(self::LICENCE_TYPE_ERROR);

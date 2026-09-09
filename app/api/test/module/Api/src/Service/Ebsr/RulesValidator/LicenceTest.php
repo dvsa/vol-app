@@ -34,6 +34,34 @@ final class LicenceTest extends MockeryTestCase
     }
 
     /**
+     * Organisation::getLicenceByLicNo() filters with a Criteria, and that preserves the keys of the
+     * organisation's licence collection - so for an organisation holding more than one licence the
+     * match is not necessarily at index 0
+     */
+    public function testIsValidLicenceNotFirstInCollection(): void
+    {
+        $sut = new Licence();
+
+        $licNo = 'PD5783498';
+        $value = ['licNo' => $licNo];
+
+        $licence = new LicenceEntity(
+            new OrganisationEntity(),
+            new RefData(LicenceEntity::LICENCE_STATUS_VALID)
+        );
+        $licence->setGoodsOrPsv(new RefData(LicenceEntity::LICENCE_CATEGORY_PSV));
+
+        $matchedLicence = new ArrayCollection([1 => $licence]);
+
+        $organisation = m::mock(OrganisationEntity::class);
+        $organisation->expects('getLicenceByLicNo')->with($licNo)->andReturn($matchedLicence);
+
+        $context['organisation'] = $organisation;
+
+        $this->assertTrue($sut->isValid($value, $context));
+    }
+
+    /**
      * Returns whether a licence is allowed to receive ebsr submissions based on the status
      *
      *
