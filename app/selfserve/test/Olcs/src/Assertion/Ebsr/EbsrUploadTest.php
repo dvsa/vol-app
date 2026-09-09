@@ -68,12 +68,21 @@ final class EbsrUploadTest extends MockeryTestCase
         //the api has not been deployed with the flag yet, or the user data predates it
         yield 'operator with no flag at all' => [User::USER_TYPE_OPERATOR, [], false];
 
-        //uploading is for operators only, local authorities receive registrations
+        //an operator admin who is also a transport manager is typed transport-manager, and must not
+        //lose access on that basis - the permission is what restricts this to operator roles
+        yield 'transport manager holding an operator role' => [
+            User::USER_TYPE_TRANSPORT_MANAGER,
+            ['hasEbsrEligibleLicence' => true],
+            true,
+        ];
+
+        //local authority and partner users hold no organisation, so the flag is always false for
+        //them, and they do not hold the upload permission in the first place
         yield 'local authority' => [
             User::USER_TYPE_LOCAL_AUTHORITY,
-            ['hasEbsrEligibleLicence' => true],
+            ['hasEbsrEligibleLicence' => false],
             false,
         ];
-        yield 'partner' => [User::USER_TYPE_PARTNER, ['hasEbsrEligibleLicence' => true], false];
+        yield 'partner' => [User::USER_TYPE_PARTNER, ['hasEbsrEligibleLicence' => false], false];
     }
 }
