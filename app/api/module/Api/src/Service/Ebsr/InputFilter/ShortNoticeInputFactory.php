@@ -17,6 +17,8 @@ use Psr\Container\NotFoundExceptionInterface;
  */
 class ShortNoticeInputFactory implements FactoryInterface
 {
+    use ValidationToggleTrait;
+
     /**
      * invoke method
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -35,7 +37,7 @@ class ShortNoticeInputFactory implements FactoryInterface
         $config = $container->get('config');
         $validatorChain = $service->getValidatorChain();
         //allows validators to be switched off (debug only, not to be used for production)
-        if (!isset($config['ebsr']['validate'][$inputName]) || $config['ebsr']['validate'][$inputName] === true) {
+        if ($this->isValidationEnabled($config, $inputName)) {
             /** @var ServiceLocatorInterface $validatorManager */
             $validatorManager = $container->get('ValidatorManager');
             $validatorChain->attach($validatorManager->get(MissingSection::class), true);

@@ -30,12 +30,15 @@ final class ProcessPack extends AbstractCommandHandler
     #[\Override]
     public function handleCommand(CommandInterface $command)
     {
+        $data = $command->getArrayCopy();
+
         try {
-            $data = $command->getArrayCopy();
             $command = ProcessPackTransactionCmd::create($data);
             $this->result->merge($this->handleSideEffect($command));
             return $this->result;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            //Throwable, not Exception: an Error raised while processing a pack must still mark the
+            //submission as failed rather than leaving it stuck in the validating state
             $command = $this->createQueueCmd($data['id'], $e->getMessage());
             $this->handleSideEffect($command);
             throw new ProcessPackException($e->getMessage());

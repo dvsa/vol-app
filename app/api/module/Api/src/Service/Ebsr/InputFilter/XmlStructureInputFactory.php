@@ -18,6 +18,8 @@ use Psr\Container\ContainerInterface;
  */
 class XmlStructureInputFactory implements FactoryInterface
 {
+    use ValidationToggleTrait;
+
     public const MAX_SCHEMA_MSG = 'No config specified for max_schema_errors';
     public const SCHEMA_VERSION_MSG = 'No config specified for transxchange schema version';
     public const XML_VALID_EXCLUDE_MSG = 'No config specified for xml messages to exclude';
@@ -43,7 +45,7 @@ class XmlStructureInputFactory implements FactoryInterface
         $filterChain->attach($container->get('FilterManager')->get(ParseXml::class));
         $validatorchain = $service->getValidatorChain();
         //allows validators to be switched off (debug only, not to be used for production)
-        if (!isset($config['ebsr']['validate'][$inputName]) || $config['ebsr']['validate'][$inputName] === true) {
+        if ($this->isValidationEnabled($config, $inputName)) {
             if (!isset($config['ebsr']['max_schema_errors'])) {
                 throw new \RuntimeException(self::MAX_SCHEMA_MSG);
             }

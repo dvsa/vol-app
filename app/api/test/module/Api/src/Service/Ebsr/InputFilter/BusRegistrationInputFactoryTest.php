@@ -121,4 +121,70 @@ final class BusRegistrationInputFactoryTest extends TestCase
         $this->assertCount(9, $service->getFilterChain());
         $this->assertCount(0, $service->getValidatorChain());
     }
+
+    /**
+     * Validation is only ever switched off for debugging. A config value that isn't a boolean must
+     * not detach the rules validators, or unchecked packs are processed as if they were valid.
+     */
+    #[\PHPUnit\Framework\Attributes\DataProvider('nonDisablingSettingProvider')]
+    public function testInvokeKeepsValidatorsForNonDisablingConfig(mixed $setting): void
+    {
+        $config = [
+            'ebsr' => [
+                'validate' => [
+                    'bus_registration' => $setting
+                ]
+            ]
+        ];
+
+        $mockMappings = m::mock(SpecificationInterface::class);
+
+        $mockFilter = m::mock(\Laminas\Filter\AbstractFilter::class);
+        $mockValidator = m::mock(\Laminas\Validator\AbstractValidator::class);
+
+        $mockMapFilter = m::mock(MapXmlFile::class);
+        $mockMapFilter->shouldReceive('setMapping')->with($mockMappings);
+
+        $mockSl = m::mock(ContainerInterface::class);
+        $mockSl->shouldReceive('get')->with('config')->andReturn($config);
+        $mockSl->shouldReceive('get')->with('FilterManager')->andReturnSelf();
+        $mockSl->shouldReceive('get')->with('ValidatorManager')->andReturnSelf();
+
+        $mockSl->shouldReceive('get')->with('TransExchangeXmlMapping')->andReturn($mockMappings);
+
+        $mockSl->shouldReceive('get')->with(MapXmlFile::class)->andReturn($mockMapFilter);
+        $mockSl->shouldReceive('get')->with(InjectIsTxcApp::class)->andReturn($mockFilter);
+        $mockSl->shouldReceive('get')->with(InjectReceivedDate::class)->andReturn($mockFilter);
+        $mockSl->shouldReceive('get')->with(InjectNaptanCodes::class)->andReturn($mockFilter);
+        $mockSl->shouldReceive('get')->with(NoticePeriod::class)->andReturn($mockFilter);
+        $mockSl->shouldReceive('get')->with(Subsidy::class)->andReturn($mockFilter);
+        $mockSl->shouldReceive('get')->with(Via::class)->andReturn($mockFilter);
+        $mockSl->shouldReceive('get')->with(ExistingRegNo::class)->andReturn($mockFilter);
+        $mockSl->shouldReceive('get')->with(MiscSnJustification::class)->andReturn($mockFilter);
+
+        $mockSl->shouldReceive('get')->with(EffectiveDate::class)->andReturn($mockValidator);
+        $mockSl->shouldReceive('get')->with(ApplicationType::class)->andReturn($mockValidator);
+        $mockSl->shouldReceive('get')->with(Licence::class)->andReturn($mockValidator);
+        $mockSl->shouldReceive('get')->with(ServiceNo::class)->andReturn($mockValidator);
+        $mockSl->shouldReceive('get')->with(EndDate::class)->andReturn($mockValidator);
+
+        $sut = new BusRegistrationInputFactory();
+        /** @var Input $service */
+        $service = $sut->__invoke($mockSl, Input::class);
+
+        $this->assertCount(5, $service->getValidatorChain());
+    }
+
+    /**
+     * @return \Iterator<string, array{mixed}>
+     */
+    public static function nonDisablingSettingProvider(): \Iterator
+    {
+        yield 'string true' => ['true'];
+        yield 'integer one' => [1];
+        yield 'string one' => ['1'];
+        yield 'unrecognised string' => ['disabled'];
+        yield 'empty string' => [''];
+        yield 'null' => [null];
+    }
 }
