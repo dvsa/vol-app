@@ -2,6 +2,10 @@
  * EditorJS component styles
  */
 
+// The package stylesheet is resolved at build time. Omitting the .css suffix
+// makes Sass inline it rather than leaving a browser-facing node_modules URL.
+@import "../../../node_modules/@vitriltd/editor-js-govuk-frontend/dist/editor-overrides";
+
 .editorjs-container {
   position: relative;
   margin-bottom: 1em;

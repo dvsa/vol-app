@@ -34,12 +34,27 @@
       <button type="submit" id="host-submit">Save</button>
     </form>
 
+    <div
+      class="editorjs-container"
+      data-element-name="longTextContent"
+      data-placeholder="Enter Long Text content..."
+      data-tools-profile="govuk-long-text"
+    >
+      <div id="editor-long-text" class="editorjs-editor"></div>
+      <input
+        type="hidden"
+        name="longTextContent"
+        value='{"blocks":[{"id":"paragraph-1","type":"paragraph","data":{"text":"<b>Important</b> <i>guidance</i> with an <u>underline</u> and a <a href=\"/help\">link</a>.","size":"body"}},{"id":"heading-1","type":"heading","data":{"text":"Before you apply","level":2}},{"id":"list-1","type":"list","data":{"style":"number","items":["First step","Second step"]}}],"version":"2.31.0","time":123}'
+      />
+    </div>
+
     <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
     <script src="../../node_modules/@editorjs/editorjs/dist/editorjs.umd.js"></script>
     <script src="../../node_modules/@editorjs/header/dist/header.umd.js"></script>
     <script src="../../node_modules/@editorjs/list/dist/list.umd.js"></script>
     <script src="../../node_modules/@editorjs/paragraph/dist/paragraph.umd.js"></script>
     <script src="../../node_modules/@editorjs/underline/dist/underline.umd.js"></script>
+    <script src="../../assets/vendor/editorjs-govuk-frontend.js"></script>
 
     <script>
       // The component expects these OLCS globals; the application supplies them.

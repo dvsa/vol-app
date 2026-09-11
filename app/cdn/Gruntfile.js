@@ -52,6 +52,7 @@ var sass = require("sass");
       ];
 
       if (theme === "internal") {
+        files.splice(files.indexOf("assets/_js/components/*.js"), 0, "assets/vendor/editorjs-govuk-frontend.js");
         files.push("node_modules/pace-progress/pace.min.js");
       }
       if (theme === "selfserve") {
@@ -101,6 +102,18 @@ var sass = require("sass");
     grunt.initConfig({
       // Set any global configuration
       globalConfig: globalConfig,
+
+      browserify: {
+        editorJsGovuk: {
+          src: "assets/_js/vendor/editorjs-govuk-frontend.js",
+          dest: "assets/vendor/editorjs-govuk-frontend.js",
+          options: {
+            browserifyOptions: {
+              standalone: "VolEditorJsGovuk",
+            },
+          },
+        },
+      },
 
       babel: {
         options: {
@@ -430,6 +443,7 @@ var sass = require("sass");
     grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-uglify");
     grunt.loadNpmTasks("grunt-browser-sync");
+    grunt.loadNpmTasks("grunt-browserify");
     grunt.loadNpmTasks("grunt-sass");
     grunt.loadNpmTasks("grunt-svg-sprite");
     grunt.loadNpmTasks("grunt-babel");
@@ -453,6 +467,7 @@ var sass = require("sass");
       return [
         "pre-clean", // Clean up any previous builds
         "babel",
+        "browserify:editorJsGovuk",
         "images",
         "sass:" + environment,
         "postcss",

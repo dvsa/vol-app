@@ -5,7 +5,7 @@
  * Follows OLCS component pattern for modal compatibility
  */
 
-/* global EditorJS, Header, List, Paragraph, Underline */
+/* global EditorJS, Header, List, Paragraph, Underline, VolEditorJsGovuk */
 OLCS.editorjs = (function (document, $, undefined) {
   "use strict";
 
@@ -92,8 +92,10 @@ OLCS.editorjs = (function (document, $, undefined) {
    * @param {string} editorId - The ID of the editor container
    * @param {string} inputName - The name of the form input
    * @param {string} initialValue - Initial value (JSON string from API)
+   * @param {string} placeholder - Editor placeholder
+   * @param {string} toolsProfile - Optional tool configuration profile
    */
-  function initializeEditorJs(editorId, inputName, initialValue) {
+  function initializeEditorJs(editorId, inputName, initialValue, placeholder, toolsProfile) {
     // Check if EditorJS is available
     if (typeof EditorJS === "undefined") {
       if (typeof OLCS.logger !== "undefined") {
@@ -113,13 +115,49 @@ OLCS.editorjs = (function (document, $, undefined) {
       return;
     }
 
-    // Configure EditorJS tools
+    // Configure EditorJS tools. Long Text uses the GOV.UK component library,
+    // while existing editors keep their established tools and JSON vocabulary.
     var tools = {};
+
+    if (toolsProfile === "govuk-long-text") {
+      if (typeof VolEditorJsGovuk === "undefined") {
+        if (typeof OLCS.logger !== "undefined") {
+          OLCS.logger("GOV.UK EditorJS tools not available");
+        }
+        return;
+      }
+
+      tools = {
+        heading: {
+          class: VolEditorJsGovuk.GovukHeading,
+          inlineToolbar: true,
+          config: {
+            levels: [1, 2, 3, 4],
+            defaultLevel: 2,
+          },
+        },
+        paragraph: {
+          class: VolEditorJsGovuk.LongTextParagraph,
+          inlineToolbar: true,
+          config: {
+            placeholder: placeholder,
+          },
+        },
+        list: {
+          class: VolEditorJsGovuk.GovukList,
+          inlineToolbar: true,
+        },
+      };
+
+      if (typeof Underline !== "undefined") {
+        tools.underline = Underline;
+      }
+    }
 
     // Add Header tool if available.
     // VOL-7305: inlineToolbar enables Bold / Italic / Link from EditorJS core so
     // admins can format chrome headings the same way as paragraphs.
-    if (typeof Header !== "undefined") {
+    if (toolsProfile !== "govuk-long-text" && typeof Header !== "undefined") {
       tools.header = {
         class: Header,
         inlineToolbar: true,
@@ -132,7 +170,7 @@ OLCS.editorjs = (function (document, $, undefined) {
     }
 
     // Add List tool if available
-    if (typeof List !== "undefined") {
+    if (toolsProfile !== "govuk-long-text" && typeof List !== "undefined") {
       tools.list = {
         class: List,
         inlineToolbar: true,
@@ -143,7 +181,7 @@ OLCS.editorjs = (function (document, $, undefined) {
     }
 
     // Add Paragraph tool if available (should be default)
-    if (typeof Paragraph !== "undefined") {
+    if (toolsProfile !== "govuk-long-text" && typeof Paragraph !== "undefined") {
       tools.paragraph = {
         class: Paragraph,
         inlineToolbar: true,
@@ -151,7 +189,7 @@ OLCS.editorjs = (function (document, $, undefined) {
     }
 
     // Add Underline tool if available
-    if (typeof Underline !== "undefined") {
+    if (toolsProfile !== "govuk-long-text" && typeof Underline !== "undefined") {
       tools.underline = Underline;
     }
 
@@ -177,7 +215,7 @@ OLCS.editorjs = (function (document, $, undefined) {
       var editor = new EditorJS({
         holder: editorId,
         tools: tools,
-        placeholder: "Enter your submission comment...",
+        placeholder: placeholder || "Enter your submission comment...",
         autofocus: false,
         data: initialData,
         onChange: function () {
@@ -326,6 +364,8 @@ OLCS.editorjs = (function (document, $, undefined) {
           var editorId = editor.attr("id");
           var hiddenInput = container.find("input[type='hidden']");
           var initialValue = hiddenInput.val() || "";
+          var placeholder = container.data("placeholder") || "Enter your submission comment...";
+          var toolsProfile = container.data("tools-profile") || "default";
 
           // Skip if already initialized (prevent duplicate editors)
           if (container.data("editorjs-initialized")) {
@@ -333,7 +373,7 @@ OLCS.editorjs = (function (document, $, undefined) {
           }
 
           container.data("editorjs-initialized", true);
-          initializeEditorJs(editorId, elementName, initialValue);
+          initializeEditorJs(editorId, elementName, initialValue, placeholder, toolsProfile);
         }
       });
     }
