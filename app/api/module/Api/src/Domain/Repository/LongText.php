@@ -62,9 +62,13 @@ class LongText extends AbstractRepository
         }
 
         if ($query->getSearch() !== null && $query->getSearch() !== '') {
-            $qb->orWhere($this->alias . '.referenceKey LIKE :search')
-                ->orWhere($this->alias . '.pageName LIKE :search')
-                ->orWhere($this->alias . '.description LIKE :search')
+            $searchExpression = $qb->expr()->orX(
+                $this->alias . '.referenceKey LIKE :search',
+                $this->alias . '.pageName LIKE :search',
+                $this->alias . '.description LIKE :search'
+            );
+
+            $qb->andWhere($searchExpression)
                 ->setParameter('search', '%' . $query->getSearch() . '%');
         }
 
