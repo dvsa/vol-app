@@ -73,6 +73,7 @@ class SectionConfig
                 ]
             ]
         ],
+        'financial_evidence_assessment' => [],
         'transport_managers' => [
             'restricted' => [
                 RefData::LICENCE_TYPE_STANDARD_NATIONAL,

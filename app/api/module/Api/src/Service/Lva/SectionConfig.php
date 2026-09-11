@@ -64,6 +64,7 @@ class SectionConfig
                 ]
             ]
         ],
+        'financial_evidence_assessment' => [],
         'transport_managers' => [
             'prerequisite' => [
                 'operating_centres'
