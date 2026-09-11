@@ -14,7 +14,6 @@ use Dvsa\Olcs\Api\Entity\Traits\ModifiedOnTrait;
 use Dvsa\Olcs\Api\Entity\Traits\ProcessDateTrait;
 use JsonSerializable;
 
-#[ORM\Table(name: 'long_text')]
 #[ORM\MappedSuperclass]
 #[ORM\HasLifecycleCallbacks]
 abstract class AbstractLongText implements BundleSerializableInterface, JsonSerializable, \Stringable
