@@ -1,5 +1,24 @@
 # Changelog
 
+## [9.4.0](https://github.com/dvsa/vol-app/compare/v9.3.0...v9.4.0) (2026-09-11)
+
+
+### Features
+
+* added inset text to annotated form for financial evidence section ([#1745](https://github.com/dvsa/vol-app/issues/1745)) ([253d634](https://github.com/dvsa/vol-app/commit/253d6348051657ae21b66547fb29e44685c60965))
+* **cdn:** update govuk-frontend to v6.5.0 ([#1769](https://github.com/dvsa/vol-app/issues/1769)) ([c531b52](https://github.com/dvsa/vol-app/commit/c531b52511a42eca284c57c91040257cc802eb7d))
+* idp stage 3 (process analysis results) ([#1764](https://github.com/dvsa/vol-app/issues/1764)) ([510beba](https://github.com/dvsa/vol-app/commit/510bebac2f4325a4d950ecfae7d369a110438894))
+* vol 7469 duplicate vehicle letter email ([#1766](https://github.com/dvsa/vol-app/issues/1766)) ([4d2d88d](https://github.com/dvsa/vol-app/commit/4d2d88dc14bf99b62451c149208c447e5ae65a85))
+
+
+### Bug Fixes
+
+* created and moved the IDP analysed event to it's own batch job queue ([#1771](https://github.com/dvsa/vol-app/issues/1771)) ([c0022af](https://github.com/dvsa/vol-app/commit/c0022aff6e554dcbcf119e8ef4a9e5a8d91874da))
+* NI extract MariaDB dump arguments ([#1772](https://github.com/dvsa/vol-app/issues/1772)) ([c364a80](https://github.com/dvsa/vol-app/commit/c364a808409e1c7936f261c77275d04e7509d51b))
+* pass analysis_token/execution_arn as batch job parameters ([#1775](https://github.com/dvsa/vol-app/issues/1775)) ([85431da](https://github.com/dvsa/vol-app/commit/85431da95ce6867dd792c6b218b3166da4c35cd3))
+* sort mockery test leaks ([#1767](https://github.com/dvsa/vol-app/issues/1767)) ([a5b96b7](https://github.com/dvsa/vol-app/commit/a5b96b7dff3792a5b77fc57f5349974f87396c22))
+* stop sm from double stringifying json object & update FI10 to use ApplicationDate rather than DocumentUploadDate ([#1777](https://github.com/dvsa/vol-app/issues/1777)) ([07685d4](https://github.com/dvsa/vol-app/commit/07685d4ba6bd3c4b828b8c1bcf81eb8dfe488af1))
+
 ## [9.3.0](https://github.com/dvsa/vol-app/compare/v9.2.2...v9.3.0) (2026-09-07)
 
 
