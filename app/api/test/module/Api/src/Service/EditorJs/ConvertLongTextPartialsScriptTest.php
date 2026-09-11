@@ -58,5 +58,22 @@ final class ConvertLongTextPartialsScriptTest extends TestCase
         self::assertStringNotContainsString("'unrelated-page'", $sql);
         self::assertStringNotContainsString("'continuation-declaration-psv-standard'", $sql);
         self::assertStringNotContainsString('ON DUPLICATE KEY UPDATE', $sql);
+        self::assertStringContainsString('SET NAMES utf8mb4;', $sql);
+    }
+
+    public function testConvertsTheKnownPhpPartials(): void
+    {
+        $script = dirname(__DIR__, 6) . '/data/db/convert-long-text-partials.php';
+        $command = sprintf('%s %s 2>&1', escapeshellarg(PHP_BINARY), escapeshellarg($script));
+
+        exec($command, $output, $exitCode);
+        $sql = implode("\n", $output);
+
+        self::assertSame(0, $exitCode);
+        self::assertStringContainsString("'review-text', 'en_GB'", $sql);
+        self::assertStringContainsString('Check your answers (opens in new tab)', $sql);
+        self::assertStringContainsString("'tma-tm-declaration', 'en_GB'", $sql);
+        self::assertStringContainsString('Licence - administration', $sql);
+        self::assertStringNotContainsString('needs manual migration', $sql);
     }
 }

@@ -77,7 +77,7 @@ abstract class AbstractDeclarationController extends AbstractController
 
         $params = [
             'content' => $translationHelper->translateReplace(
-                $this->declarationMarkup,
+                $this->tma['declaration'],
                 $this->getTranslatedDeclarationMarkupParams($translationHelper)
             ),
             'tmFullName' => $this->getTmName(),

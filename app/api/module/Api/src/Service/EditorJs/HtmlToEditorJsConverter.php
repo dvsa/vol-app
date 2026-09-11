@@ -13,7 +13,6 @@ final class HtmlToEditorJsConverter
 {
     private const HEADING_TAGS = ['h1' => 1, 'h2' => 2, 'h3' => 3, 'h4' => 4, 'h5' => 5, 'h6' => 6];
 
-    /** Fragments substituted into a parent template are often bare inline markup — the "-declare" partials are a lone */
     private const INLINE_TAGS = ['strong', 'b', 'em', 'i', 'a', 'span', 'u', 'br', 'abbr'];
 
     /**
@@ -59,8 +58,6 @@ final class HtmlToEditorJsConverter
         foreach ($parent->childNodes as $node) {
             $tag = $node instanceof DOMElement ? strtolower($node->nodeName) : null;
 
-            // Loose <li> fragments are list items meant to be substituted into a
-            // parent list; consecutive ones become a single list.
             if ($tag === 'li') {
                 $flushInline();
                 $listItems[] = $this->normalise($this->innerHtml($node));
@@ -78,7 +75,6 @@ final class HtmlToEditorJsConverter
 
             $flushInline();
 
-            // Containers carry no meaning of their own here.
             if ($tag === 'div') {
                 $blocks = array_merge($blocks, $this->blocksFrom($node));
                 continue;
@@ -134,9 +130,7 @@ final class HtmlToEditorJsConverter
     /**
      * @return list<string>
      *
-     * @throws UnconvertibleContentException if the list contains a substitution
-     *         point, which the block model cannot hold — items are flat strings,
-     *         so a %s between them has nowhere to live and would be dropped
+     * @throws UnconvertibleContentException if a placeholder sits between list items
      */
     private function listItems(DOMElement $list): array
     {
@@ -176,7 +170,6 @@ final class HtmlToEditorJsConverter
         return $html;
     }
 
-    /** Templates are indented for readability, which would otherwise become runs of whitespace in the stored content. */
     private function normalise(string $text): string
     {
         return trim((string) preg_replace('/\s+/u', ' ', $text));
@@ -195,7 +188,6 @@ final class HtmlToEditorJsConverter
         libxml_clear_errors();
         libxml_use_internal_errors($previous);
 
-        // NOIMPLIED omits html/body, so wrap for a predictable root.
         if ($document->getElementsByTagName('body')->length === 0) {
             $wrapper = new DOMDocument();
             libxml_use_internal_errors(true);

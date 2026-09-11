@@ -131,6 +131,25 @@ final class LongTextConverterServiceTest extends TestCase
         self::assertSame('<p class="govuk-body"><b>Important</b></p>', $html);
     }
 
+    public function testRuntimeLinkPlaceholderAndTargetArePreserved(): void
+    {
+        $html = (new LongTextConverterService())->convertJsonToHtml(
+            self::document([
+                'id' => 'paragraph-1',
+                'type' => 'paragraph',
+                'data' => [
+                    'text' => 'Signed by %s. <a href="%s" target="_blank">Check your answers (opens in new tab)</a>',
+                ],
+            ]),
+        );
+
+        self::assertStringContainsString(
+            '<a href="%s" target="_blank"',
+            $html,
+        );
+        self::assertStringContainsString('Check your answers (opens in new tab)</a>', $html);
+    }
+
     public function testNestedListMarkupInsideAnItemSurvives(): void
     {
         $html = (new LongTextConverterService())->convertJsonToHtml(

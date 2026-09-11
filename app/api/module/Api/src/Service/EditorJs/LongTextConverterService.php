@@ -13,6 +13,8 @@ use Setono\EditorJS\Renderer\Renderer;
 /** Converts Long Text EditorJS JSON into GOV.UK Frontend markup. */
 final class LongTextConverterService
 {
+    private const LINK_PLACEHOLDER = 'https://placeholder.invalid/vol-long-text-runtime-link';
+
     private const LIST_STYLES = [
         'bullet' => 'unordered',
         'number' => 'ordered',
@@ -53,23 +55,19 @@ final class LongTextConverterService
 
         $config = \HTMLPurifier_Config::createDefault();
 
-        // HTMLPurifier's default definition cache lives inside the vendor tree,
-        // which is read-only in deployed containers.
         $config->set('Cache.SerializerPath', sys_get_temp_dir());
-
-        // The URI scheme registry is a process-global singleton.
+        $config->set('Attr.AllowedFrameTargets', ['_blank']);
         $config->set('URI.OverrideAllowedSchemes', false);
 
+        $html = str_replace('href="%s"', 'href="' . self::LINK_PLACEHOLDER . '"', $html);
         $clean = (new \HTMLPurifier($config))->purify($html);
+        $clean = str_replace(self::LINK_PLACEHOLDER, '%s', $clean);
 
-        // An empty block renders as a blank gap; the letter converter drops
-        // these too.
         $clean = (string) preg_replace('/<p[^>]*>\s*<\/p>/', '', $clean);
 
         return trim($clean);
     }
 
-    /** The GOV.UK tools name blocks differently from the Setono parser. */
     private function adaptForParser(string $jsonData): string
     {
         $data = json_decode($jsonData, true, flags: JSON_THROW_ON_ERROR);
@@ -78,7 +76,6 @@ final class LongTextConverterService
             return $jsonData;
         }
 
-        // Only documents saved through the editor carry the time/version envelope and per-block ids
         $data['time'] ??= 0;
         $data['version'] ??= '2.28.2';
 

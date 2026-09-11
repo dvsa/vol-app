@@ -64,15 +64,11 @@ final class DeclarationPartialMigrationTest extends TestCase
         $original = file_get_contents($file);
         self::assertIsString($original);
 
-        // Partials are plain markup plus %s substitution points; none of the
-        // undertakings templates execute PHP.
         self::assertStringNotContainsString('<?php', $original, 'partial contains PHP and needs handling by hand');
 
         try {
             $blocks = (new HtmlToEditorJsConverter())->convert($original);
         } catch (UnconvertibleContentException $e) {
-            // Recorded rather than silently passed: these need authoring by
-            // hand, and testPartialsNeedingHandAuthoring pins how many there are.
             self::assertContains(basename($file), self::NEEDS_HAND_AUTHORING, $e->getMessage());
 
             return;

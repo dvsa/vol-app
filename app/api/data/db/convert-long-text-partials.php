@@ -53,6 +53,7 @@ foreach (declarationVariants() as $variant) {
 $sql = array_map(static fn (array $record): string => sqlFor($record), $records);
 
 if ($sql !== []) {
+    echo "SET NAMES utf8mb4;\n\n";
     echo "START TRANSACTION;\n\n";
     echo implode("\n\n", $sql);
     echo "\n\nCOMMIT;\n";
@@ -348,11 +349,161 @@ function partialMarkup(string $partial, string $locale, array $directories): str
         throw new InvalidArgumentException('Could not read ' . $file);
     }
 
+    $markup = prepareKnownPartial($partial, $locale, $markup);
+
     if (preg_match('/<\?(?:php|=)?/i', $markup) === 1) {
         throw new InvalidArgumentException('Contains PHP in ' . $file);
     }
 
     return $markup;
+}
+
+function prepareKnownPartial(string $partial, string $locale, string $markup): string
+{
+    if ($locale !== 'en_GB') {
+        return $markup;
+    }
+
+    if ($partial === 'markup-review-text') {
+        return (string) preg_replace(
+            '/<\?php\s+echo \$this->escapeHtml\(\$this->translate\(\'link\.opens-new-window\'\)\);\s*\?>/',
+            '(opens in new tab)',
+            $markup,
+        );
+    }
+
+    if ($partial !== 'markup-tma-tm_declaration') {
+        return $markup;
+    }
+
+    $translations = tmDeclarationTranslations();
+
+    $markup = (string) preg_replace_callback(
+        '/echo \$this->escapeHtml\(\$this->translate\(\'([^\']+)\'\)\);/',
+        static function (array $matches) use ($translations): string {
+            $key = $matches[1];
+
+            if (!isset($translations[$key])) {
+                throw new InvalidArgumentException('Missing transport manager translation: ' . $key);
+            }
+
+            return $translations[$key];
+        },
+        $markup,
+    );
+
+    return (string) preg_replace('/<\?php|\?>/', '', $markup);
+}
+
+/** @return array<string, string> */
+function tmDeclarationTranslations(): array
+{
+    return [
+        'tma-tm-declaration-list-subheader' => <<<'HTML'
+<ul>
+<li>manage, audit and review compliance systems, ensuring they are effective;</li>
+<li>review prohibition shortcomings and/or annual test failures;</li>
+<li>ensure relevant changes are notified in accordance with operator licence requirements;</li>
+<li>keep up to date on relevant changes in standards and legislation.</li>
+</ul>
+HTML,
+        'tma-tm-declaration-drivers-administration' => <<<'HTML'
+<h4 class="govuk-heading-s">Drivers - administration</h4>
+<ul class="list--bullet">
+<li>ensure drivers hold the appropriate licence for the vehicle they are driving (including non-GB vocational drivers from EU member states who are required to register their driving licences with DVLA within 12 months of being resident);</li>
+<li>ensure regular checks are carried out on drivers’ licences (usually every 3 months);</li>
+<li>ensure vocational drivers hold a valid driver CPC qualification (DQC);</li>
+<li>ensure all drivers hours records are kept for a period of no less than 12 months and made available upon request;</li>
+<li>ensure all working time records are kept for a period of no less than 24 months and made available upon request;</li>
+<li>ensure relevant declarations are posted for drivers in EU Member States.</li>
+</ul>
+HTML,
+        'tma-tm-declaration-drivers-management' => <<<'HTML'
+<p>
+<h4 class="govuk-heading-s">Drivers - management</h4>
+<ul class="list--bullet">
+<li>ensure compliance with driving hours rules (EU or Domestic Hours rules);</li>
+<li>ensure drivers are recording their duty, driving time and rest breaks on the appropriate equipment or in drivers hours books and returned for inspection as required;</li>
+<li>where appropriate, download and store data from the vehicle digital tachograph unit (at least every 90 days) and from the drivers’ tachograph smart cards (at least every 28 days).</li>
+<li>ensure drivers’ hours records are retained and are available to be produced during the relevant period;</li>
+<li>ensure records are retained for the purposes of the Working Time Directive (WTD) and they are available to be produced during the relevant period;</li>
+<li>ensure drivers are adequately trained and competent to operate all relevant vehicles and equipment;</li>
+<li>contribute to relevant training and subsequent disciplinary processes as required.</li>
+</ul>
+</p>
+HTML,
+        'tma-tm-declaration-drivers-operations' => <<<'HTML'
+<p></p>
+<h4 class="govuk-heading-s">Drivers - operations</h4>
+<ul class="list--bullet">
+<li>ensure drivers are completing and returning their driver defect reporting sheets and that defects are recorded correctly;</li>
+<li>ensure all drivers and mobile workers take adequate breaks and periods of daily and weekly rest (as per the relevant regulations which apply).</li>
+</ul>
+HTML,
+        'tma-tm-declaration-vehicle-administration' => <<<'HTML'
+<p>
+<h4 class="govuk-heading-s">Vehicle - administration</h4>
+<ul class="list--bullet">
+<li>ensure vehicle maintenance records are retained for a period of no less than 15 months and made available upon request;</li>
+<li>ensure vehicles are specified as required and that operator licence discs are current and displayed correctly</li>
+<li>ensure sufficient contingency within the level of authority;</li>
+<li>ensure vehicle payloads notifications are correct, height indicators are fitted and correct, and tachograph calibrations are up to date and displayed;</li>
+<li>ensure there are up to date certificates of insurance indemnifying company cars, commercial vehicles and plant;</li>
+<li>ensure a suitable maintenance planner is completed and displayed appropriately, setting preventative maintenance inspection dates at least 6 months in advance and to include the Annual Test and other testing or calibration dates.</li>
+</ul>
+</p>
+HTML,
+        'tma-tm-declaration-vehicle-management' => <<<'HTML'
+<p>
+<h4 class="govuk-heading-s">Vehicle - management</h4>
+<ul class="list--bullet">
+<li>ensure vehicles and trailers are kept in a fit and roadworthy condition;</li>
+<li>ensure that reported defects are either recorded in writing or in a format which is readily accessible and repaired promptly;</li>
+<li>ensure that vehicles and trailers that are not roadworthy are taken out of service;</li>
+<li>ensure that vehicles and towed equipment are made available for safety inspections, service, repair and statutory testing;</li>
+<li>ensure that safety inspections and other statutory testing are carried out within the notified O-licence maintenance intervals (ISO weeks);</li>
+<li>liaise with maintenance contractors, manufacturers, hire companies and dealers, as might be appropriate and to make certain vehicles and trailers are serviced in accordance with manufacturer recommendations;</li>
+<li>ensure the security of vehicles so that they can only be operated under the authority of the operator.</li>
+</ul>
+</p>
+HTML,
+        'tma-tm-declaration-licence-administration' => <<<'HTML'
+<p>
+<h4 class="govuk-heading-s">Licence - administration</h4>
+<ul class="list--bullet">
+<li>ensure the traffic commissioner is made aware of any relevant matters within 28 days including convictions and prosecutions of the transport manager(s) or drivers and also of my own resignation should I leave the employment of the operator.</li>
+</ul>
+</p>
+HTML,
+        'tma-tm-declaration-internal' => <<<'HTML'
+<p>
+<h3 class="govuk-heading-m">Internal transport manager’s declaration</h3>
+<p class="govuk-body">I confirm that:</p>
+<ul class="list--bullet">
+<li>I am resident in the United Kingdom;</li>
+<li>I shall effectively and continuously manage the transport activities of the licence holder/applicant;</li>
+<li>I have a genuine link to the licence holder/applicant;</li>
+</ul>
+</p>
+HTML,
+        'tma-tm-declaration-external' => <<<'HTML'
+<p>
+<h3 class="govuk-heading-m">External transport manager’s declaration</h3>
+<p class="govuk-body">I confirm that:</p>
+<ul class="list--bullet">
+<li>I am resident in the United Kingdom;</li>
+<li>I shall perform my tasks solely in the interests of the licence holder/applicant;</li>
+<li>I shall be the transport manager for a maximum of 4 operators, with a combined maximum total fleet of 50 vehicles; and</li>
+<li>I have a contract with the licence holder/applicant which specifies the tasks I must perform as transport manager.</li>
+</ul>
+</p>
+HTML,
+        'tma-tm-declaration-warning' => <<<'HTML'
+<p class="govuk-body">
+<b>Should I fail to meet any of the above requirements I understand that the traffic commissioner has the power to disqualify me from being a transport manager in any European Union country. I also understand that I do not become a transport manager for the licence(s) named until this is confirmed in writing by the Traffic Commissioner.</b>
+</p>
+HTML,
+    ];
 }
 
 function findPartial(string $partial, string $locale, array $directories): ?string

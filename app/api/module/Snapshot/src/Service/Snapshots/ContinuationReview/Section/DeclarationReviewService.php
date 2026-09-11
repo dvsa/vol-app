@@ -148,6 +148,35 @@ class DeclarationReviewService extends AbstractReviewService
         return $markup;
     }
 
+    public function getLongTextDeclarationMarkup(ContinuationDetail $continuationDetail): string
+    {
+        $licence = $continuationDetail->getLicence();
+
+        if (!$licence->isGoods()) {
+            $type = match (true) {
+                $licence->isSpecialRestricted() => 'special-restricted',
+                $licence->isRestricted() => 'restricted',
+                default => 'standard',
+            };
+
+            return $this->translate('markup-continuation-declaration-psv-' . $type);
+        }
+
+        $region = $licence->isNi() ? 'ni' : 'gb';
+        $type = match (true) {
+            $licence->isNi() && $licence->isLgv() => 'lgv',
+            $licence->isStandardNational() || $licence->isStandardInternational() => 'standard',
+            default => 'restricted',
+        };
+
+        return $this->translate(sprintf('markup-continuation-declaration-goods-%s-%s', $region, $type));
+    }
+
+    public function getLongTextReviewMarkup(): string
+    {
+        return $this->translate('markup-continuation-declaration-review');
+    }
+
     /**
      * Get signature
      *

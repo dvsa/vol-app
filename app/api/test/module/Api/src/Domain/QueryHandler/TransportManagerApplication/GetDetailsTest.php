@@ -12,6 +12,8 @@ use Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication;
 use Dvsa\Olcs\Transfer\Query\TransportManagerApplication\GetDetails as Query;
 use Dvsa\OlcsTest\Api\Domain\QueryHandler\QueryHandlerTestCase;
 use LmcRbacMvc\Service\AuthorizationService;
+use Laminas\I18n\Translator\TranslatorInterface;
+use Dvsa\Olcs\Api\Service\LongText\LongTextTranslator;
 use Mockery as m;
 
 /**
@@ -37,6 +39,7 @@ final class GetDetailsTest extends QueryHandlerTestCase
 
         $this->mockedSmServices = [
             AuthorizationService::class => m::mock(\LmcRbacMvc\Service\AuthorizationService::class),
+            LongTextTranslator::class => m::mock(TranslatorInterface::class),
         ];
 
         parent::setUp();
@@ -119,12 +122,18 @@ final class GetDetailsTest extends QueryHandlerTestCase
 
         $this->mockedSmServices[AuthorizationService::class]->shouldReceive('getIdentity->getUser')
             ->andReturn($mockUser);
+        $this->mockedSmServices[LongTextTranslator::class]
+            ->shouldReceive('translate')
+            ->once()
+            ->with('markup-tma-tm_declaration')
+            ->andReturn('DECLARATION');
 
         $expected = [
             'foo' => 'bar',
             'isTmLoggedInUser' => true,
             'disableSignatures' => 'disable gds verify signatures value',
             'lgvAcquiredRightsReferenceNumber' => $expectedLgvAcquiredRightsReferenceNumber,
+            'declaration' => 'DECLARATION',
         ];
 
         $this->assertEquals($expected, $this->sut->handleQuery($query)->serialize());
