@@ -16,6 +16,7 @@ use Laminas\Mvc\MvcEvent;
 use Laminas\View\Model\ViewModel;
 use Olcs\Controller\AbstractSelfserveController;
 use Olcs\Controller\Config\DataSource\DataSourceConfig;
+use Olcs\Controller\Config\DataSource\Licence as LicenceDataSource;
 use Permits\Controller\Config\FeatureToggle\FeatureToggleConfig;
 use Permits\Data\Mapper\MapperManager;
 
@@ -31,6 +32,17 @@ class StartController extends AbstractSelfserveController implements ToggleAware
 
     protected $dataSourceConfig = [
         'index' => DataSourceConfig::LICENCE
+    ];
+
+    protected $conditionalDisplayConfig = [
+        'index' => [
+            [
+                'source' => LicenceDataSource::DATA_KEY,
+                'key' => 'isLicenceSurrenderAllowed',
+                'value' => true,
+                'route' => 'lva-licence',
+            ],
+        ],
     ];
 
     protected $formConfig = [

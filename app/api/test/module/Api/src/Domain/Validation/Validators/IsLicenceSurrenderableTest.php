@@ -36,6 +36,7 @@ final class IsLicenceSurrenderableTest extends AbstractValidatorsTestCase
 
         $licence = m::mock(Licence::class);
         $licence->shouldReceive('getStatus->getId')->andReturn($licenceStatus);
+        $licence->shouldReceive('hasQueuedRevocation')->andReturnFalse();
         $licenceRepo = $this->mockRepo('Licence');
         $licenceRepo->shouldReceive('fetchById')->with($licenceId)->andReturn($licence);
 
@@ -57,6 +58,7 @@ final class IsLicenceSurrenderableTest extends AbstractValidatorsTestCase
 
         $licence = m::mock(Licence::class);
         $licence->shouldReceive('getStatus->getId')->andReturn($licenceStatus);
+        $licence->shouldReceive('hasQueuedRevocation')->andReturnFalse();
         $licenceRepo = $this->mockRepo('Licence');
         $licenceRepo->shouldReceive('fetchById')->with($licenceId)->andReturn($licence);
 
@@ -78,6 +80,7 @@ final class IsLicenceSurrenderableTest extends AbstractValidatorsTestCase
 
         $licence = m::mock(Licence::class);
         $licence->shouldReceive('getStatus->getId')->andReturn($licenceStatus);
+        $licence->shouldReceive('hasQueuedRevocation')->andReturnFalse();
         $licenceRepo = $this->mockRepo('Licence');
         $licenceRepo->shouldReceive('fetchById')->with($licenceId)->andReturn($licence);
 
@@ -104,6 +107,7 @@ final class IsLicenceSurrenderableTest extends AbstractValidatorsTestCase
 
         $licence = m::mock(Licence::class);
         $licence->shouldReceive('getStatus->getId')->andReturn($licenceStatus);
+        $licence->shouldReceive('hasQueuedRevocation')->andReturnFalse();
         $licenceRepo = $this->mockRepo('Licence');
         $licenceRepo->shouldReceive('fetchById')->with($licenceId)->andReturn($licence);
 
@@ -116,6 +120,22 @@ final class IsLicenceSurrenderableTest extends AbstractValidatorsTestCase
 
         $surrenderRepo = $this->mockRepo('Surrender');
         $surrenderRepo->shouldReceive('fetchOneByLicenceId')->with($licenceId)->andReturn($existingSurrender);
+
+        $this->sut->isValid($licenceId);
+    }
+
+    public function testNotValidLicenceWithQueuedRevocation(): void
+    {
+        $licenceId = 1;
+
+        $licence = m::mock(Licence::class);
+        $licence->shouldReceive('getStatus->getId')->andReturn(Licence::LICENCE_STATUS_VALID);
+        $licence->shouldReceive('hasQueuedRevocation')->once()->andReturnTrue();
+
+        $licenceRepo = $this->mockRepo('Licence');
+        $licenceRepo->shouldReceive('fetchById')->with($licenceId)->andReturn($licence);
+
+        $this->expectException(ForbiddenException::class);
 
         $this->sut->isValid($licenceId);
     }

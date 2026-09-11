@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Dvsa\Olcs\Api\Domain\CommandHandler\DigitalSignature;
 
+use Doctrine\ORM\Exception\ORMException;
 use Dvsa\Olcs\Api\Domain\Command\DigitalSignature\UpdateSurrender as UpdateSurrenderCmd;
 use Dvsa\Olcs\Api\Domain\Command\Result;
 use Dvsa\Olcs\Api\Domain\Command\Surrender\Snapshot;
 use Dvsa\Olcs\Api\Domain\Command\Task\CreateTask;
 use Dvsa\Olcs\Api\Domain\CommandHandler\AbstractCommandHandler;
 use Dvsa\Olcs\Api\Domain\CommandHandler\TransactionedInterface;
+use Dvsa\Olcs\Api\Domain\Exception\ForbiddenException;
+use Dvsa\Olcs\Api\Domain\Exception\RuntimeException;
 use Dvsa\Olcs\Api\Domain\Repository\Surrender as SurrenderRepo;
 use Dvsa\Olcs\Api\Entity\DigitalSignature;
 use Dvsa\Olcs\Api\Entity\EventHistory\EventHistoryType;
@@ -28,6 +31,11 @@ final class UpdateSurrender extends AbstractCommandHandler implements Transactio
     {
     }
 
+    /**
+     * @throws ForbiddenException
+     * @throws RuntimeException
+     * @throws ORMException
+     */
     #[\Override]
     public function handleCommand(CommandInterface $command): Result
     {
@@ -39,6 +47,11 @@ final class UpdateSurrender extends AbstractCommandHandler implements Transactio
         $licenceId = (int)$command->getLicence();
         $surrender = $repo->fetchOneByLicenceId($licenceId);
         assert($surrender instanceof SurrenderEntity);
+
+        $licence = $surrender->getLicence();
+        if ($licence->hasQueuedRevocation()) {
+            throw new ForbiddenException('This licence cannot be surrendered because it has a pending revocation');
+        }
 
         $licenceStatus = $repo->getRefdataReference(LicenceEntity::LICENCE_STATUS_SURRENDER_UNDER_CONSIDERATION);
         $surrenderStatus = $repo->getRefdataReference(SurrenderEntity::SURRENDER_STATUS_SIGNED);
@@ -53,7 +66,7 @@ final class UpdateSurrender extends AbstractCommandHandler implements Transactio
         $this->result->merge($this->handleSideEffect($this->createSurrenderTaskCmd($licenceId)));
 
         $this->eventHistoryCreator->create(
-            $surrender->getLicence(),
+            $licence,
             EventHistoryType::EVENT_CODE_SURRENDER_UNDER_CONSIDERATION
         );
 
