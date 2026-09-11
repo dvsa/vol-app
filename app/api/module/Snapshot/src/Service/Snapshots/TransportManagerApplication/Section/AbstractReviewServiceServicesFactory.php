@@ -11,7 +11,7 @@ class AbstractReviewServiceServicesFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, ?array $options = null)
     {
         return new AbstractReviewServiceServices(
-            $container->get('translator')
+            $container->get(\Dvsa\Olcs\Api\Service\LongText\LongTextTranslator::class)
         );
     }
 }

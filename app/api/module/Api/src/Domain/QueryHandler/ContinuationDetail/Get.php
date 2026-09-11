@@ -5,7 +5,7 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler\ContinuationDetail;
 use Doctrine\ORM\Query;
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Api\Service\FinancialStandingHelperService;
-use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\ApplicationUndertakingsReviewService;
+use Dvsa\Olcs\Snapshot\Service\Snapshots\ContinuationReview\Section\DeclarationReviewService;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Dvsa\Olcs\Api\Entity\Licence\ContinuationDetail as ContinuationDetailEntity;
 use Dvsa\Olcs\Api\Entity\Fee\Fee as FeeEntity;
@@ -30,7 +30,7 @@ class Get extends AbstractQueryHandler
     private $financialStandingHelper;
 
     /**
-     * @var ApplicationUndertakingsReviewService
+     * @var DeclarationReviewService
      */
     private $reviewService;
 
@@ -87,7 +87,8 @@ class Get extends AbstractQueryHandler
                 ),
                 'documents' => $documents,
                 'organisationTypeId' => $licence->getOrganisation()->getType()->getId(),
-                'declarations' => $this->reviewService->getDeclarationMarkup($continuationDetail),
+                'declarations' => $this->reviewService->getLongTextDeclarationMarkup($continuationDetail),
+                'reviewText' => $this->reviewService->getLongTextReviewMarkup(),
                 'disableSignatures' => $this->getRepo('SystemParameter')->getDisableGdsVerifySignatures(),
                 'hasOutstandingContinuationFee' => count($continuationFees) > 0,
                 'signature' => $signatureDetails,
