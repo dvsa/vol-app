@@ -3,6 +3,8 @@ set -e
 
 cd /liquibase/changelog
 
+echo "olcs-etl commit: $(cat /liquibase/ETL_SHA 2>/dev/null || echo unknown)"
+
 # Default to 'all' if ENVIRONMENT not set (maintains backward compatibility) e.g. local envs
 CONTEXT=${ENVIRONMENT:-all}
 
