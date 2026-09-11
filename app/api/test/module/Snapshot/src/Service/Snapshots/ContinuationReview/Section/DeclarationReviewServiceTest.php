@@ -306,6 +306,13 @@ final class DeclarationReviewServiceTest extends MockeryTestCase
             false,
             true,
         ];
+        yield 'goods GB restricted LGV' => [
+            'markup-continuation-declaration-goods-gb-lgv',
+            Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
+            Licence::LICENCE_TYPE_RESTRICTED,
+            false,
+            true,
+        ];
         yield 'PSV special restricted' => [
             'markup-continuation-declaration-psv-special-restricted',
             Licence::LICENCE_CATEGORY_PSV,

@@ -8,6 +8,7 @@ use Dvsa\Olcs\Api\Domain\Exception\NotFoundException;
 use Dvsa\Olcs\Api\Domain\Repository\LongText as LongTextRepo;
 use Dvsa\Olcs\Api\Entity\System\LongText;
 use Dvsa\Olcs\Api\Service\EditorJs\LongTextConverterService;
+use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 use Laminas\I18n\Translator\Translator;
 use Laminas\I18n\Translator\TranslatorInterface;
 use Olcs\Logging\Log\Logger;
@@ -95,8 +96,12 @@ final class LongTextTranslator implements TranslatorInterface
 
     private function currentLocale(): string
     {
-        return $this->translator instanceof Translator
-            ? $this->translator->getLocale()
+        $translator = $this->translator instanceof TranslatorDelegator
+            ? $this->translator->getTranslator()
+            : $this->translator;
+
+        return $translator instanceof Translator
+            ? $translator->getLocale()
             : LongText::DEFAULT_LOCALE;
     }
 }

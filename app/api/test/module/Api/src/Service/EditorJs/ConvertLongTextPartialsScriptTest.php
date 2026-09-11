@@ -74,6 +74,7 @@ final class ConvertLongTextPartialsScriptTest extends TestCase
         self::assertStringContainsString('Check your answers (opens in new tab)', $sql);
         self::assertStringContainsString("'tma-tm-declaration', 'en_GB'", $sql);
         self::assertStringContainsString('Licence - administration', $sql);
+        self::assertStringContainsString("'continuation-declaration-goods-gb-lgv', 'en_GB'", $sql);
         self::assertStringNotContainsString('needs manual migration', $sql);
     }
 }

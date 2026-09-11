@@ -9,6 +9,8 @@ use Dvsa\Olcs\Api\Domain\Repository\LongText as LongTextRepo;
 use Dvsa\Olcs\Api\Entity\System\LongText as LongTextEntity;
 use Dvsa\Olcs\Api\Service\EditorJs\LongTextConverterService;
 use Dvsa\Olcs\Api\Service\LongText\LongTextTranslator;
+use Dvsa\Olcs\Utils\Translation\Replacements;
+use Dvsa\Olcs\Utils\Translation\TranslatorDelegator;
 use Laminas\I18n\Translator\Translator;
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -56,6 +58,37 @@ final class LongTextTranslatorTest extends MockeryTestCase
             '<p class="govuk-body">I declare that…</p>',
             $this->sut->translate('markup-application_undertakings_GV79'),
         );
+    }
+
+    public function testItUsesTheLocaleFromTheProductionTranslatorWrapper(): void
+    {
+        $entity = m::mock(LongTextEntity::class);
+        $entity->shouldReceive('getContent')->andReturn([
+            'blocks' => [['id' => 'a', 'type' => 'paragraph', 'data' => ['text' => 'Datganiad']]],
+        ]);
+
+        $this->inner->shouldReceive('getLocale')->once()->andReturn('cy_NI');
+        $selectedLocale = null;
+        $this->repo->shouldReceive('fetchByReferenceKey')
+            ->once()
+            ->withArgs(function (string $referenceKey, string $locale) use (&$selectedLocale): bool {
+                $selectedLocale = $locale;
+
+                return $referenceKey === 'application-undertakings-gv79';
+            })
+            ->andReturn($entity);
+
+        $sut = new LongTextTranslator(
+            new TranslatorDelegator($this->inner, new Replacements([])),
+            $this->repo,
+            new LongTextConverterService(),
+        );
+
+        self::assertSame(
+            '<p class="govuk-body">Datganiad</p>',
+            $sut->translate('markup-application_undertakings_GV79'),
+        );
+        self::assertSame('cy_NI', $selectedLocale);
     }
 
     public function testItFallsBackToTheExistingWordingWhenNothingIsManagedYet(): void
