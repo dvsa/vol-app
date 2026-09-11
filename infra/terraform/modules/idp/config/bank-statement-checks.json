@@ -599,14 +599,14 @@
     {
       "id": "FI10",
       "name": "StatementRecentlyIssued",
-      "description": "Statement is recent and not dated after document upload",
+      "description": "Statement is recent and not dated after application submitted date",
       "grouping": "Dates, transactions and balances",
       "coreIssue": false,
-      "validation": "Statement end date must be on or before DocumentUploadDate (cannot be in the future relative to upload), and must be within 58 days before DocumentUploadDate. The 58-day threshold is used instead of '2 calendar months' to handle edge cases like January/February or February/March back-to-back months. Use DocumentUploadDate from applicantProfile as reference, NOT today's date. This applies from the date of submission and applies to the last day of the dated transactions.",
-      "calculation": "1. Check: statement_end_date <= DocumentUploadDate (must not be after upload). 2. Check: (DocumentUploadDate - statement_end_date) <= 58 days. Both conditions must be true for PASS.",
-      "passCriteria": "Statement end date is on or before DocumentUploadDate AND within 58 days before DocumentUploadDate.",
-      "failCriteria": "Statement end date is after DocumentUploadDate (suspicious - future date) OR statement end date is more than 58 days before DocumentUploadDate (too old).",
-      "example": "DocumentUploadDate: 20 Sep 2019. Statement ending 18 Sep 2019 (2 days before): PASS. Statement ending 25 Jul 2019 (57 days before): PASS. Statement ending 20 Jul 2019 (62 days before): FAIL - exceeds 58 days.",
+      "validation": "Statement end date must be on or before ApplicationDate, and must be within 58 days before ApplicationDate. The 58-day threshold is used instead of '2 calendar months' to handle edge cases like January/February or February/March back-to-back months. Use ApplicationDate from applicantProfile as reference, NOT today's date. This applies from the date of submission and applies to the last day of the dated transactions.",
+      "calculation": "1. Check: statement_end_date <= ApplicationDate. 2. Check: (ApplicationDate - statement_end_date) <= 58 days. Both conditions must be true for PASS.",
+      "passCriteria": "Statement end date is on or before ApplicationDate AND within 58 days before ApplicationDate.",
+      "failCriteria": "Statement end date is after ApplicationDate (suspicious - future date) OR statement end date is more than 58 days before ApplicationDate (too old).",
+      "example": "ApplicationDate: 20 Sep 2019. Statement ending 18 Sep 2019 (2 days before): PASS. Statement ending 25 Jul 2019 (57 days before): PASS. Statement ending 20 Jul 2019 (62 days before): FAIL - exceeds 58 days.",
       "note": "58 days is the minimum for back-to-back months (e.g., January/February or February/March) and is more precise than '2 calendar months'."
     },
     {

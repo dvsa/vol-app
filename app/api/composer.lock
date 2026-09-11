@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "7d42c5d8548bfc67b7dca5d98e8abf68",
+  "content-hash": "ae5259eaefda6a1a8df6fa088fddc18e",
   "packages": [
     {
       "name": "alphagov/notifications-php-client",
@@ -1691,22 +1691,22 @@
     },
     {
       "name": "dvsa/laminas-config-cloud-parameters",
-      "version": "v2.2.0",
+      "version": "v2.3.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters.git",
-        "reference": "7e9984dcb7faa1466f1cf966f6a3978fa68bfe68"
+        "reference": "02e06fab7545f536d39f3565a208ebf94c171645"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/dvsa-laminas-config-cloud-parameters/zipball/7e9984dcb7faa1466f1cf966f6a3978fa68bfe68",
-        "reference": "7e9984dcb7faa1466f1cf966f6a3978fa68bfe68",
+        "url": "https://api.github.com/repos/dvsa/dvsa-laminas-config-cloud-parameters/zipball/02e06fab7545f536d39f3565a208ebf94c171645",
+        "reference": "02e06fab7545f536d39f3565a208ebf94c171645",
         "shasum": ""
       },
       "require": {
         "ext-json": "*",
         "laminas/laminas-modulemanager": "^2.4",
-        "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
         "symfony/dependency-injection": "^5|^6|^7",
         "symfony/property-access": "^5|^6|^7"
       },
@@ -1735,9 +1735,9 @@
       "license": ["MIT"],
       "support": {
         "issues": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/issues",
-        "source": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/tree/v2.2.0"
+        "source": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/tree/v2.3.0"
       },
-      "time": "2026-09-08T12:06:45+00:00"
+      "time": "2026-09-09T15:04:17+00:00"
     },
     {
       "name": "dvsa/php-govuk-account",
