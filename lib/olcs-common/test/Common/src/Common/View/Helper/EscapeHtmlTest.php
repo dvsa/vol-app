@@ -7,14 +7,14 @@ namespace CommonTest\View\Helper;
 use Common\View\Helper\EscapeHtml;
 use HTMLPurifier;
 use Mockery as m;
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * Test EscapeHtml view helper
  *
  * @author Andy Newton <andy@vitri.ltd>
  */
-final class EscapeHtmlTest extends TestCase
+final class EscapeHtmlTest extends MockeryTestCase
 {
     /**
      * Test Escape HTML helper

@@ -46,8 +46,10 @@ final class TransportManagerMainReviewServiceTest extends MockeryTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
-    public function testGetConfig(mixed $tma, mixed $expected): void
+    public function testGetConfig(string $tmaKey, mixed $expected): void
     {
+        $tma = self::createTransportManagerApplications()[$tmaKey];
+
         $this->mockTranslator->shouldReceive('translate')
             ->andReturnUsing(
                 fn($string) => $string . '-translated'
@@ -57,6 +59,101 @@ final class TransportManagerMainReviewServiceTest extends MockeryTestCase
     }
 
     public static function provider(): array
+    {
+        return [
+            [
+                'withCertificates',
+                [
+                    'multiItems' => [
+                        [
+                            [
+                                'label' => 'tm-review-main-name',
+                                'value' => 'Mr Foo Bar'
+                            ],
+                            [
+                                'label' => 'tm-review-main-birthDate',
+                                'value' => '23 Aug 1989'
+                            ],
+                            [
+                                'label' => 'tm-review-main-birthPlace',
+                                'value' => 'Footown'
+                            ],
+                            [
+                                'label' => 'tm-review-main-email',
+                                'value' => 'foo@bar.com'
+                            ],
+                            [
+                                'label' => 'tm-review-main-certificate',
+                                'noEscape' => true,
+                                'value' => 'unit_File1Desc<br>unit_File2Desc',
+                            ],
+                            [
+                                'label' => 'tm-review-responsibility-training-undertaken',
+                                'value' => 'Yes',
+                            ],
+                            [
+                                'label' => 'tm-review-main-home-address',
+                                'value' => '123 home street'
+                            ],
+                            [
+                                'label' => 'tm-review-main-work-address',
+                                'value' => '123 work street'
+                            ]
+                        ]
+                    ]
+                ]
+            ],
+            [
+                'withoutCertificates',
+                [
+                    'multiItems' => [
+                        [
+                            [
+                                'label' => 'tm-review-main-name',
+                                'value' => 'Mr Foo Bar'
+                            ],
+                            [
+                                'label' => 'tm-review-main-birthDate',
+                                'value' => '23 Aug 1989'
+                            ],
+                            [
+                                'label' => 'tm-review-main-birthPlace',
+                                'value' => 'Footown'
+                            ],
+                            [
+                                'label' => 'tm-review-main-email',
+                                'value' => 'foo@bar.com'
+                            ],
+                            [
+                                'label' => 'tm-review-main-certificate',
+                                'noEscape' => true,
+                                'value' => 'tm-review-main-no-files-translated'
+                            ],
+                            [
+                                'label' => 'tm-review-responsibility-training-undertaken',
+                                'value' => 'No',
+                            ],
+                            [
+                                'label' => 'tm-review-main-home-address',
+                                'value' => '123 home street'
+                            ],
+                            [
+                                'label' => 'tm-review-main-work-address',
+                                'value' => '123 work street'
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+    }
+
+    /**
+     * Built per test rather than in the provider, so the mocks belong to the running test's Mockery container.
+     *
+     * @return array<string, \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication>
+     */
+    private static function createTransportManagerApplications(): array
     {
         /** @var RefData $title */
         $title = m::mock(RefData::class)->makePartial();
@@ -136,90 +233,8 @@ final class TransportManagerMainReviewServiceTest extends MockeryTestCase
         $tma2->setHasUndertakenTraining('N');
 
         return [
-            [
-                $tma1,
-                [
-                    'multiItems' => [
-                        [
-                            [
-                                'label' => 'tm-review-main-name',
-                                'value' => 'Mr Foo Bar'
-                            ],
-                            [
-                                'label' => 'tm-review-main-birthDate',
-                                'value' => '23 Aug 1989'
-                            ],
-                            [
-                                'label' => 'tm-review-main-birthPlace',
-                                'value' => 'Footown'
-                            ],
-                            [
-                                'label' => 'tm-review-main-email',
-                                'value' => 'foo@bar.com'
-                            ],
-                            [
-                                'label' => 'tm-review-main-certificate',
-                                'noEscape' => true,
-                                'value' => 'unit_File1Desc<br>unit_File2Desc',
-                            ],
-                            [
-                                'label' => 'tm-review-responsibility-training-undertaken',
-                                'value' => 'Yes',
-                            ],
-                            [
-                                'label' => 'tm-review-main-home-address',
-                                'value' => '123 home street'
-                            ],
-                            [
-                                'label' => 'tm-review-main-work-address',
-                                'value' => '123 work street'
-                            ]
-                        ]
-                    ]
-                ]
-            ],
-            [
-                $tma2,
-                [
-                    'multiItems' => [
-                        [
-                            [
-                                'label' => 'tm-review-main-name',
-                                'value' => 'Mr Foo Bar'
-                            ],
-                            [
-                                'label' => 'tm-review-main-birthDate',
-                                'value' => '23 Aug 1989'
-                            ],
-                            [
-                                'label' => 'tm-review-main-birthPlace',
-                                'value' => 'Footown'
-                            ],
-                            [
-                                'label' => 'tm-review-main-email',
-                                'value' => 'foo@bar.com'
-                            ],
-                            [
-                                'label' => 'tm-review-main-certificate',
-                                'noEscape' => true,
-                                'value' => 'tm-review-main-no-files-translated'
-                            ],
-                            [
-                                'label' => 'tm-review-responsibility-training-undertaken',
-                                'value' => 'No',
-                            ],
-                            [
-                                'label' => 'tm-review-main-home-address',
-                                'value' => '123 home street'
-                            ],
-                            [
-                                'label' => 'tm-review-main-work-address',
-                                'value' => '123 work street'
-                            ]
-                        ]
-                    ]
-                ]
-            ]
+            'withCertificates' => $tma1,
+            'withoutCertificates' => $tma2,
         ];
     }
 }

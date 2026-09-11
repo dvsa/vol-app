@@ -47,8 +47,10 @@ final class TransportManagerOtherEmploymentReviewServiceTest extends MockeryTest
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('provider')]
-    public function testGetConfig(mixed $tma, mixed $expected): void
+    public function testGetConfig(string $tmaKey, mixed $expected): void
     {
+        $tma = self::createTransportManagerApplications()[$tmaKey];
+
         $this->mockTranslator->shouldReceive('translate')
             ->andReturnUsing(
                 fn($string) => $string . '-translated'
@@ -59,52 +61,9 @@ final class TransportManagerOtherEmploymentReviewServiceTest extends MockeryTest
 
     public static function provider(): array
     {
-        /** @var Entity\Tm\TransportManager $tm1 */
-        $tm1 = m::mock(Entity\Tm\TransportManager::class)->makePartial();
-        $tm1->setEmployments(new ArrayCollection());
-
-        /** @var Entity\Tm\TransportManagerApplication $tma1 */
-        $tma1 = m::mock(Entity\Tm\TransportManagerApplication::class)->makePartial();
-        $tma1->setTransportManager($tm1);
-
-        /** @var Entity\ContactDetails\Address $address */
-        $address = m::mock(Entity\ContactDetails\Address::class)->makePartial();
-        $address->setAddressLine1('Foo street');
-        $address->setTown('Footown');
-
-        /** @var Entity\ContactDetails\ContactDetails $contactDetails */
-        $contactDetails = m::mock(Entity\ContactDetails\ContactDetails::class)->makePartial();
-        $contactDetails->setAddress($address);
-
-        /** @var Entity\Tm\TmEmployment $employment1 */
-        $employment1 = m::mock(Entity\Tm\TmEmployment::class)->makePartial();
-        $employment1->setEmployerName('Tesco');
-        $employment1->setPosition('Boss');
-        $employment1->setHoursPerWeek('All night long');
-        $employment1->setContactDetails($contactDetails);
-
-        /** @var Entity\Tm\TmEmployment $employment2 */
-        $employment2 = m::mock(Entity\Tm\TmEmployment::class)->makePartial();
-        $employment2->setEmployerName('Asda');
-        $employment2->setPosition('Bossing around');
-        $employment2->setHoursPerWeek('24/7');
-        $employment2->setContactDetails($contactDetails);
-
-        $employments = new ArrayCollection();
-        $employments->add($employment1);
-        $employments->add($employment2);
-
-        /** @var Entity\Tm\TransportManager $tm2 */
-        $tm2 = m::mock(Entity\Tm\TransportManager::class)->makePartial();
-        $tm2->setEmployments($employments);
-
-        /** @var Entity\Tm\TransportManagerApplication $tma2 */
-        $tma2 = m::mock(Entity\Tm\TransportManagerApplication::class)->makePartial();
-        $tma2->setTransportManager($tm2);
-
         return [
             [
-                $tma1,
+                'noEmployments',
                 [
                     'subSections' => [
                         [
@@ -118,7 +77,7 @@ final class TransportManagerOtherEmploymentReviewServiceTest extends MockeryTest
                 ]
             ],
             [
-                $tma2,
+                'withEmployments',
                 [
                     'subSections' => [
                         [
@@ -174,6 +133,62 @@ final class TransportManagerOtherEmploymentReviewServiceTest extends MockeryTest
                     ]
                 ]
             ]
+        ];
+    }
+
+    /**
+     * Built per test rather than in the provider, so the mocks belong to the running test's Mockery container.
+     *
+     * @return array<string, \Dvsa\Olcs\Api\Entity\Tm\TransportManagerApplication>
+     */
+    private static function createTransportManagerApplications(): array
+    {
+        /** @var Entity\Tm\TransportManager $tm1 */
+        $tm1 = m::mock(Entity\Tm\TransportManager::class)->makePartial();
+        $tm1->setEmployments(new ArrayCollection());
+
+        /** @var Entity\Tm\TransportManagerApplication $tma1 */
+        $tma1 = m::mock(Entity\Tm\TransportManagerApplication::class)->makePartial();
+        $tma1->setTransportManager($tm1);
+
+        /** @var Entity\ContactDetails\Address $address */
+        $address = m::mock(Entity\ContactDetails\Address::class)->makePartial();
+        $address->setAddressLine1('Foo street');
+        $address->setTown('Footown');
+
+        /** @var Entity\ContactDetails\ContactDetails $contactDetails */
+        $contactDetails = m::mock(Entity\ContactDetails\ContactDetails::class)->makePartial();
+        $contactDetails->setAddress($address);
+
+        /** @var Entity\Tm\TmEmployment $employment1 */
+        $employment1 = m::mock(Entity\Tm\TmEmployment::class)->makePartial();
+        $employment1->setEmployerName('Tesco');
+        $employment1->setPosition('Boss');
+        $employment1->setHoursPerWeek('All night long');
+        $employment1->setContactDetails($contactDetails);
+
+        /** @var Entity\Tm\TmEmployment $employment2 */
+        $employment2 = m::mock(Entity\Tm\TmEmployment::class)->makePartial();
+        $employment2->setEmployerName('Asda');
+        $employment2->setPosition('Bossing around');
+        $employment2->setHoursPerWeek('24/7');
+        $employment2->setContactDetails($contactDetails);
+
+        $employments = new ArrayCollection();
+        $employments->add($employment1);
+        $employments->add($employment2);
+
+        /** @var Entity\Tm\TransportManager $tm2 */
+        $tm2 = m::mock(Entity\Tm\TransportManager::class)->makePartial();
+        $tm2->setEmployments($employments);
+
+        /** @var Entity\Tm\TransportManagerApplication $tma2 */
+        $tma2 = m::mock(Entity\Tm\TransportManagerApplication::class)->makePartial();
+        $tma2->setTransportManager($tm2);
+
+        return [
+            'noEmployments' => $tma1,
+            'withEmployments' => $tma2,
         ];
     }
 }

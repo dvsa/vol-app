@@ -26,7 +26,7 @@
     "@vitriltd/editor-js-govuk-frontend": "1.0.0",
     "autoprefixer": "^10.4.20",
     "chosen-npm": "^1.4.2",
-    "govuk-frontend": "^6.4.0",
+    "govuk-frontend": "^6.5.0",
     "jquery": "^3.7.1",
     "pace-progress": "^1.0.2"
   },

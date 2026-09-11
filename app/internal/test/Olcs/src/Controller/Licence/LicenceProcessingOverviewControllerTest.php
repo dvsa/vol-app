@@ -21,6 +21,7 @@ use Olcs\Service\Data\SubCategory;
 use Laminas\Mvc\MvcEvent;
 use Mockery as m;
 use Psr\Container\ContainerInterface;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * Class LicenceProcessingOverviewControllerTest
@@ -28,7 +29,7 @@ use Psr\Container\ContainerInterface;
  */
 #[\PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations]
 #[\PHPUnit\Framework\Attributes\CoversClass(\Olcs\Controller\Licence\Processing\LicenceProcessingOverviewController::class)]
-final class LicenceProcessingOverviewControllerTest extends \PHPUnit\Framework\TestCase
+final class LicenceProcessingOverviewControllerTest extends MockeryTestCase
 {
     protected $mockScriptFactory;
     protected $mockFormHelper;

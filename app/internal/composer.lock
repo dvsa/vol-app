@@ -4,7 +4,7 @@
     "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
     "This file is @generated automatically"
   ],
-  "content-hash": "3f9b16e88f1a6980a6986c79b6937559",
+  "content-hash": "901213442b7e97dca18fee4cb509c6c4",
   "packages": [
     {
       "name": "aws/aws-crt-php",
@@ -506,22 +506,22 @@
     },
     {
       "name": "dvsa/laminas-config-cloud-parameters",
-      "version": "v2.1.0",
+      "version": "v2.3.0",
       "source": {
         "type": "git",
         "url": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters.git",
-        "reference": "2baec7c36d8efc20294bfd5f8c37fbb77d729863"
+        "reference": "02e06fab7545f536d39f3565a208ebf94c171645"
       },
       "dist": {
         "type": "zip",
-        "url": "https://api.github.com/repos/dvsa/dvsa-laminas-config-cloud-parameters/zipball/2baec7c36d8efc20294bfd5f8c37fbb77d729863",
-        "reference": "2baec7c36d8efc20294bfd5f8c37fbb77d729863",
+        "url": "https://api.github.com/repos/dvsa/dvsa-laminas-config-cloud-parameters/zipball/02e06fab7545f536d39f3565a208ebf94c171645",
+        "reference": "02e06fab7545f536d39f3565a208ebf94c171645",
         "shasum": ""
       },
       "require": {
         "ext-json": "*",
         "laminas/laminas-modulemanager": "^2.4",
-        "php": "~8.2.0 || ~8.3.0 || ~8.4.0",
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
         "symfony/dependency-injection": "^5|^6|^7",
         "symfony/property-access": "^5|^6|^7"
       },
@@ -550,9 +550,9 @@
       "license": ["MIT"],
       "support": {
         "issues": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/issues",
-        "source": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/tree/v2.1.0"
+        "source": "https://github.com/dvsa/dvsa-laminas-config-cloud-parameters/tree/v2.3.0"
       },
-      "time": "2026-06-09T12:32:58+00:00"
+      "time": "2026-09-09T15:04:17+00:00"
     },
     {
       "name": "ezyang/htmlpurifier",

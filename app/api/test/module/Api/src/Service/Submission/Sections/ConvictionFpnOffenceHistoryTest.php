@@ -21,7 +21,7 @@ final class ConvictionFpnOffenceHistoryTest extends AbstractSubmissionSectionTes
      */
     public static function sectionTestProvider(): \Iterator
     {
-        $case = static::getCase();
+        $case = static fn () => static::getCase();
 
         $expectedResult = [
             'data' => [
