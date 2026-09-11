@@ -224,7 +224,7 @@
       "Parameters": {
         "Bucket.$": "$.config.outputBucket",
         "Key.$": "$.analysisResultKey",
-        "Body.$": "States.JsonToString($.analysisReport)",
+        "Body.$": "$.analysisReport",
         "ContentType": "application/json"
       },
       "ResultPath": null,
