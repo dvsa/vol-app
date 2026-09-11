@@ -640,20 +640,6 @@ return [
             ],
         ],
     ],
-    'acquired_rights' => [
-        // enables the expiry check, lookup of reference number, status check and dob comparison
-        'check_enabled' => true,
-        // determines when a user is no longer able to use an acquired rights reference number
-        'expiry' => DateTimeImmutable::createFromFormat(\DateTimeInterface::RFC7231, 'Tue, 20 May 2025 22:59:59 GMT'), // Tue, 20 May 2025 23:59:59 BST
-        // guzzle client options
-        'client' => [ // Client configuration passed to Guzzle client. base_url is required and must be set to API root.
-            'base_uri' => '%lar_base_uri%',
-            'timeout' => 30,
-            'headers' => [
-                'x-api-key' => '%lar_vol_ref_lookup_api_key%'
-            ],
-        ],
-    ],
     'govuk_account' => [
         'discovery_endpoint' => '%govuk_account_discovery_endpoint%',
         'client_id' => '%govuk_account_client_id%',

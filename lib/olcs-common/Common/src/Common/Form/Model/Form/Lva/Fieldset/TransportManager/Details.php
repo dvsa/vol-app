@@ -88,38 +88,6 @@ class Details
     public $certificate;
 
     /**
-     * @Form\Attributes({"value": "markup-lva-tm-details-details-lgvAcquiredRightsHtml"})
-     * @Form\Type("\Common\Form\Elements\Types\HtmlTranslated")
-     * @Form\Flags({"priority": -70})
-     */
-    public $lgvAcquiredRightsHtml;
-
-    /**
-     * @Form\Required(false)
-     * @Form\Type("Text")
-     * @Form\Attributes({"id":"lgv-acquired-rights-ref-number","class":"medium"})
-     * @Form\Options({
-     *     "label": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber",
-     *     "label_attributes": {"class": "legend"},
-     *     "hint": "lva-tm-details-details-lgvAcquiredRightsReferenceNumber-hint",
-     * })
-     * @Form\Filter("Laminas\Filter\StringTrim")
-     * @Form\Validator("\Laminas\Validator\StringLength",
-     *     options={
-     *         "min": 7,
-     *         "max": 7,
-     *         "messages": {
-     *             \Laminas\Validator\StringLength::INVALID: "lva-tm-details-details-lgvAcquiredRightsReferenceNumber-error-length",
-     *             \Laminas\Validator\StringLength::TOO_SHORT: "lva-tm-details-details-lgvAcquiredRightsReferenceNumber-error-length",
-     *             \Laminas\Validator\StringLength::TOO_LONG: "lva-tm-details-details-lgvAcquiredRightsReferenceNumber-error-length",
-     *         }
-     *     }
-     * )
-     * @Form\Flags({"priority": -80})
-     */
-    public $lgvAcquiredRightsReferenceNumber;
-
-    /**
      * @Form\Options({
      *     "label": "tm-review-responsibility-training-undertaken",
      *     "value_options": {"Y":"Yes", "N":"No"},

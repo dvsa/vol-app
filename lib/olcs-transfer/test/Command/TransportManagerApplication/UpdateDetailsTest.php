@@ -16,7 +16,6 @@ final class UpdateDetailsTest extends \PHPUnit\Framework\TestCase
             'version' => 888,
             'email' => 'unit_email',
             'placeOfBirth' => 'unit_placeOfBirth',
-            'lgvAcquiredRightsReferenceNumber' => 'unit_lgvArRefNumber',
             'homeAddress' => 'unit_homeAddress',
             'workAddress' => 'unit_workAddress',
             'tmType' => 'unit_tmType',
@@ -45,7 +44,6 @@ final class UpdateDetailsTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals('unit_email', $command->getEmail());
         $this->assertEquals('unit_placeOfBirth', $command->getPlaceOfBirth());
-        $this->assertEquals('unit_lgvArRefNumber', $command->getLgvAcquiredRightsReferenceNumber());
         $this->assertEquals('unit_homeAddress', $command->getHomeAddress());
         $this->assertEquals('unit_workAddress', $command->getWorkAddress());
         $this->assertEquals('unit_tmType', $command->getTmType());

@@ -39,7 +39,7 @@ final class Update extends AbstractCommand
      *      options={
      *          "haystack": {
      *              "tm_qt_ar", "tm_qt_cpcsi", "tm_qt_cpcsn", "tm_qt_exsi", "tm_qt_exsn", "tm_qt_niar",
-     *              "tm_qt_nicpcsi", "tm_qt_nicpcsn", "tm_qt_niexsi", "tm_qt_niexsn", "tm_qt_lgvar", "tm_qt_nilgvar"
+     *              "tm_qt_nicpcsi", "tm_qt_nicpcsn", "tm_qt_niexsi", "tm_qt_niexsn"
      *          }
      *      }
      * )

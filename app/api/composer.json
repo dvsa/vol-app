@@ -94,7 +94,6 @@
   "autoload": {
     "psr-4": {
       "Dvsa\\Olcs\\Db\\": "module/Db/src",
-      "Dvsa\\Olcs\\AcquiredRights\\": "module/AcquiredRights/src",
       "Dvsa\\Olcs\\Api\\": "module/Api/src",
       "Dvsa\\Olcs\\DocumentShare\\": "module/DocumentShare/src",
       "Dvsa\\Olcs\\Cli\\": "module/Cli/src",
