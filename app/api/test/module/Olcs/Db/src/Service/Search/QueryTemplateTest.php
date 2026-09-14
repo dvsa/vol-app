@@ -43,6 +43,20 @@ final class QueryTemplateTest extends m\Adapter\Phpunit\MockeryTestCase
         $this->assertEquals($expected, $sut->getParam('query'));
     }
 
+    public function testQueryTemplateNotDecodingToAnArrayIsRejected(): void
+    {
+        $file = tempnam(sys_get_temp_dir(), 'qt');
+        file_put_contents($file, '"not an object"');
+
+        try {
+            $this->expectException(\RuntimeException::class);
+            $this->expectExceptionMessage('Empty params for query template file');
+            new QueryTemplate($file, 'bar');
+        } finally {
+            unlink($file);
+        }
+    }
+
     public function testToArrayReturnsTheDecodedTemplate(): void
     {
         $sut = new QueryTemplate(__DIR__ . '/mock-query-template.json', 'SMITH');

@@ -52,13 +52,15 @@ class QueryTemplate
             file_get_contents($filename)
         );
 
-        $this->params = json_decode($template, true);
+        $params = json_decode($template, true);
 
-        if (empty($this->params)) {
+        if (!is_array($params) || $params === []) {
             throw new RuntimeException(
                 "Empty params for query template file '" . $filename . "' and search term '" . $searchTerm . "'"
             );
         }
+
+        $this->params = $params;
 
         // apply filters
         $this->applyFilters($filters, $filterTypes);

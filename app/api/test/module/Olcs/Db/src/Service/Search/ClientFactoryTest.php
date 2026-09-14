@@ -48,19 +48,26 @@ final class ClientFactoryTest extends m\Adapter\Phpunit\MockeryTestCase
         $sut = new ClientFactory();
 
         $this->assertSame(
-            ['base_uri' => 'https://searchv6.example.com:443'],
+            ['base_uri' => 'https://searchv6.example.com:443', 'timeout' => 300],
             $sut->getHttpClientOptions(['host' => 'searchv6.example.com', 'port' => '443', 'transport' => 'Https'])
         );
     }
 
-    public function testHttpClientOptionsDefaultsToHttpOnPort9200(): void
+    public function testHttpClientOptionsDefaultsToHttpOnPort9200WithA300SecondTimeout(): void
     {
         $sut = new ClientFactory();
 
         $this->assertSame(
-            ['base_uri' => 'http://localhost:9200'],
+            ['base_uri' => 'http://localhost:9200', 'timeout' => 300],
             $sut->getHttpClientOptions([])
         );
+    }
+
+    public function testHttpClientOptionsTimeoutIsConfigurable(): void
+    {
+        $sut = new ClientFactory();
+
+        $this->assertSame(30, $sut->getHttpClientOptions(['timeout' => 30])['timeout']);
     }
 
     public function testHttpClientOptionsPassesCurlOptionsThrough(): void

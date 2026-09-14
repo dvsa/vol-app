@@ -131,7 +131,7 @@ final class SearchTest extends MockeryTestCase
         $this->assertTrue($this->sut->updateVehicleSection26($ids, $section26Value));
     }
 
-    public function testUpdateVehicleSection26ReturnsFalseWhenBulkReportsErrors(): void
+    public function testUpdateVehicleSection26ThrowsWhenBulkReportsItemErrors(): void
     {
         $this->mockClient->expects('search')->andReturn(
             ['hits' => ['hits' => [['_index' => 'vehicle_current_v1', '_id' => 'zz', '_source' => []]]]]
@@ -145,9 +145,26 @@ final class SearchTest extends MockeryTestCase
                     ],
                 ]
             )
-            ->andReturn(['took' => 1, 'errors' => true, 'items' => []]);
+            ->andReturn([
+                'took' => 1,
+                'errors' => true,
+                'items' => [
+                    ['update' => ['_index' => 'vehicle_current_v1', '_id' => 'zz', 'status' => 409, 'error' => ['type' => 'version_conflict_engine_exception']]],
+                ],
+            ]);
 
-        $this->assertFalse($this->sut->updateVehicleSection26([511], false));
+        $this->expectException(\RuntimeException::class);
+        $this->expectExceptionMessage('version_conflict_engine_exception');
+
+        $this->sut->updateVehicleSection26([511], false);
+    }
+
+    public function testUpdateVehicleSection26WithNoIdsDoesNotTouchTheIndex(): void
+    {
+        $this->mockClient->shouldNotReceive('search');
+        $this->mockClient->shouldNotReceive('bulk');
+
+        $this->assertTrue($this->sut->updateVehicleSection26([], true));
     }
 
     public function testUpdateVehicleSection26NoResults(): void

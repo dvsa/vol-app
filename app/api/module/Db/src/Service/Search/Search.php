@@ -347,9 +347,15 @@ class Search implements AuthAwareInterface
      * @param bool  $section26Value Set or unset the value
      *
      * @return boolean If success
+     * @throws \RuntimeException If any document in the bulk update failed
      */
     public function updateVehicleSection26(array $ids, $section26Value)
     {
+        // No IDs, therefore nothing to do (an empty bool/should would otherwise match every document)
+        if ($ids === []) {
+            return true;
+        }
+
         // Build a query to search where vehicle id is one of the IDs
         $should = [];
         foreach ($ids as $id) {
@@ -381,7 +387,18 @@ class Search implements AuthAwareInterface
 
         $bulkResponse = $this->getClient()->bulk(['body' => $body]);
 
-        return empty($bulkResponse['errors']);
+        if (!empty($bulkResponse['errors'])) {
+            $failed = array_filter(
+                $bulkResponse['items'] ?? [],
+                fn(array $item) => isset($item['update']['error'])
+            );
+
+            throw new \RuntimeException(
+                'Section 26 bulk update failed for ' . count($failed) . ' document(s): ' . json_encode(array_values($failed))
+            );
+        }
+
+        return true;
     }
 
     /**

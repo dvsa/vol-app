@@ -43,7 +43,7 @@ class ClientFactory implements FactoryInterface
     /**
      * Map the elastic_search config block onto Guzzle client options
      *
-     * @param array $config The elastic_search config block (host, port, transport, curl, log)
+     * @param array $config The elastic_search config block (host, port, transport, timeout, curl, log)
      *
      * @return array
      */
@@ -56,6 +56,8 @@ class ClientFactory implements FactoryInterface
                 $config['host'] ?? 'localhost',
                 $config['port'] ?? 9200
             ),
+            // Same default request timeout as the previous (Elastica) client
+            'timeout' => $config['timeout'] ?? 300,
         ];
 
         if (!empty($config['curl'])) {
