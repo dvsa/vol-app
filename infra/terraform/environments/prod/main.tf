@@ -791,6 +791,7 @@ module "service" {
       {
         name     = "ni-compliance",
         commands = ["/mnt/data/scripts/niextract/ni_dvacompliance.sh"],
+        ephemeral_storage = 50,
         type     = "scripts"
       },
       {
