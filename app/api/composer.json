@@ -58,7 +58,6 @@
     "phpseclib/phpseclib": "^3.0.47",
     "qandidate/toggle": "^2.0",
     "ramsey/uuid": "^3.9",
-    "ruflin/elastica": "^7.3",
     "saeven/zf3-purifier": "^1.1",
     "symfony/filesystem": "^8.1",
     "symfony/finder": "^8.1",
@@ -89,7 +88,8 @@
     "psr/cache": "^3.0",
     "symfony/cache": "^8.1",
     "laminas/laminas-authentication": "^2.19",
-    "symfony/uid": "^8.0"
+    "symfony/uid": "^8.0",
+    "opensearch-project/opensearch-php": "^2.7"
   },
   "autoload": {
     "psr-4": {

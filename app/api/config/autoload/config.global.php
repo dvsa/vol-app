@@ -30,9 +30,10 @@ return [
         ]
     ],
 
-    // Elastic search
+    // OpenSearch (config keys kept as-is so local.php overrides carry on working).
+    // In-VPC endpoint reached directly: deliberately NOT routed via the shared squid proxy.
     'elastic_search' => [
-        // Hostname e.g. elasticsearch-dev.olcs.mgt.mtpdvsa *Environment specific*
+        // Hostname e.g. searchv6.dev.olcs.dev-dvsacloud.uk *Environment specific*
         'host' => 'searchv6.%domain%',
         // Port, e.g. 9200
         'port' => '443',
