@@ -27,10 +27,10 @@ final class GetList extends AbstractQuery implements PagedQueryInterface, Ordere
 
     /**
      * @Transfer\Filter("Laminas\Filter\StringTrim")
+     * @Transfer\Validator("Laminas\Validator\InArray", options={"haystack":{"en_GB","cy_GB","en_NI","cy_NI"}})
      * @Transfer\Optional
      */
     protected $locale;
-
     public function getSearch(): ?string
     {
         return $this->search;
