@@ -293,6 +293,14 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     protected $licenceHistoryStatus;
 
     /**
+     * Knowledge experience status
+     *
+     * @var int
+     */
+    #[ORM\Column(type: 'smallint', name: 'knowledge_experience_status', nullable: true, options: ['unsigned' => true])]
+    protected $knowledgeExperienceStatus;
+
+    /**
      * Convictions penalties status
      *
      * @var int
@@ -1091,6 +1099,30 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     public function getLicenceHistoryStatus()
     {
         return $this->licenceHistoryStatus;
+    }
+
+    /**
+     * Set the knowledge experience status
+     *
+     * @param int $knowledgeExperienceStatus new value being set
+     *
+     * @return static
+     */
+    public function setKnowledgeExperienceStatus($knowledgeExperienceStatus)
+    {
+        $this->knowledgeExperienceStatus = $knowledgeExperienceStatus;
+
+        return $this;
+    }
+
+    /**
+     * Get the knowledge experience status
+     *
+     * @return int
+     */
+    public function getKnowledgeExperienceStatus()
+    {
+        return $this->knowledgeExperienceStatus;
     }
 
     /**

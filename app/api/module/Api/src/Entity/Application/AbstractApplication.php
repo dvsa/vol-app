@@ -367,6 +367,22 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     protected $occupationEvidenceUploaded;
 
     /**
+     * Knowledge experience evidence uploaded
+     *
+     * @var int
+     */
+    #[ORM\Column(type: 'smallint', name: 'knowledge_experience_evidence_uploaded', nullable: true, options: ['unsigned' => true])]
+    protected $knowledgeExperienceEvidenceUploaded;
+
+    /**
+     * Applicant is content to attend Operator Licence Awareness Training
+     *
+     * @var string
+     */
+    #[ORM\Column(type: 'yesnonull', name: 'knowledge_experience_olat', nullable: true)]
+    protected $knowledgeExperienceOlat;
+
+    /**
      * Submitted date.  Was date_entered in OLBS
      *
      * @var \DateTime
@@ -1772,6 +1788,56 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     public function getOccupationEvidenceUploaded()
     {
         return $this->occupationEvidenceUploaded;
+    }
+
+    /**
+     * Set knowledge experience evidence uploaded
+     *
+     * @param int $knowledgeExperienceEvidenceUploaded
+     *
+     * @return static
+     */
+    public function setKnowledgeExperienceEvidenceUploaded(
+        $knowledgeExperienceEvidenceUploaded
+    ) {
+        $this->knowledgeExperienceEvidenceUploaded =
+            $knowledgeExperienceEvidenceUploaded;
+
+        return $this;
+    }
+
+    /**
+     * Get knowledge experience evidence uploaded
+     *
+     * @return int
+     */
+    public function getKnowledgeExperienceEvidenceUploaded()
+    {
+        return $this->knowledgeExperienceEvidenceUploaded;
+    }
+
+    /**
+     * Set knowledge experience OLAT
+     *
+     * @param string $knowledgeExperienceOlat
+     *
+     * @return static
+     */
+    public function setKnowledgeExperienceOlat($knowledgeExperienceOlat)
+    {
+        $this->knowledgeExperienceOlat = $knowledgeExperienceOlat;
+
+        return $this;
+    }
+
+    /**
+     * Get knowledge experience OLAT
+     *
+     * @return string
+     */
+    public function getKnowledgeExperienceOlat()
+    {
+        return $this->knowledgeExperienceOlat;
     }
 
     /**
