@@ -34,7 +34,8 @@ final class KnowledgeExperienceControllerFactory implements FactoryInterface
             $container->get(RestrictionHelperService::class),
             $container->get(StringHelperService::class),
             $container->get(ApplicationKnowledgeExperienceAdapter::class),
-            $container->get(FileUploadHelperService::class)
+            $container->get(FileUploadHelperService::class),
+            $container->get('navigation')
         );
     }
 }

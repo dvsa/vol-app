@@ -37,7 +37,8 @@ final class KnowledgeExperienceController extends AbstractController implements
         protected RestrictionHelperService $restrictionHelper,
         protected StringHelperService $stringHelper,
         protected ApplicationKnowledgeExperienceAdapter $lvaAdapter,
-        protected FileUploadHelperService $uploadHelper
+        protected FileUploadHelperService $uploadHelper,
+        protected $navigation
     ) {
         parent::__construct(
             $niTextTranslationUtil,

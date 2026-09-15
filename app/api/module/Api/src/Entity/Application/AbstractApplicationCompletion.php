@@ -295,7 +295,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Knowledge experience status
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'knowledge_experience_status', nullable: true, options: ['unsigned' => true])]
     protected $knowledgeExperienceStatus;
@@ -1104,7 +1104,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Set the knowledge experience status
      *
-     * @param int $knowledgeExperienceStatus new value being set
+     * @param int|null $knowledgeExperienceStatus new value being set
      *
      * @return static
      */
@@ -1118,7 +1118,7 @@ abstract class AbstractApplicationCompletion implements BundleSerializableInterf
     /**
      * Get the knowledge experience status
      *
-     * @return int
+     * @return int|null
      */
     public function getKnowledgeExperienceStatus()
     {

@@ -369,7 +369,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Knowledge experience evidence uploaded
      *
-     * @var int
+     * @var int|null
      */
     #[ORM\Column(type: 'smallint', name: 'knowledge_experience_evidence_uploaded', nullable: true, options: ['unsigned' => true])]
     protected $knowledgeExperienceEvidenceUploaded;
@@ -1793,7 +1793,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Set knowledge experience evidence uploaded
      *
-     * @param int $knowledgeExperienceEvidenceUploaded
+     * @param int|null $knowledgeExperienceEvidenceUploaded
      *
      * @return static
      */
@@ -1809,7 +1809,7 @@ abstract class AbstractApplication implements BundleSerializableInterface, JsonS
     /**
      * Get knowledge experience evidence uploaded
      *
-     * @return int
+     * @return int|null
      */
     public function getKnowledgeExperienceEvidenceUploaded()
     {
