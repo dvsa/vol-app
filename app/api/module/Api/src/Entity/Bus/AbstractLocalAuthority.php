@@ -49,7 +49,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Foreign Key to traffic_area
      *
-     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea
+     * @var \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea|null
      */
     #[ORM\JoinColumn(name: 'traffic_area_id', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea::class, fetch: 'LAZY')]
@@ -58,7 +58,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Created by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'created_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -68,7 +68,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Last modified by
      *
-     * @var \Dvsa\Olcs\Api\Entity\User\User
+     * @var \Dvsa\Olcs\Api\Entity\User\User|null
      */
     #[ORM\JoinColumn(name: 'last_modified_by', referencedColumnName: 'id', nullable: true)]
     #[ORM\ManyToOne(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, fetch: 'LAZY')]
@@ -86,7 +86,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Email address
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'email_address', length: 255, nullable: true)]
     protected $emailAddress;
@@ -94,7 +94,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Authorities name in TransXChange.
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'txc_name', length: 255, nullable: true)]
     protected $txcName;
@@ -102,7 +102,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * GB National Public Transport Access Nodes code for authority
      *
-     * @var string
+     * @var string|null
      */
     #[ORM\Column(type: 'string', name: 'naptan_code', length: 3, nullable: true, options: ['fixed' => true])]
     protected $naptanCode;
@@ -119,7 +119,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * BusRegs
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\Bus\BusReg>
      */
     #[ORM\ManyToMany(targetEntity: \Dvsa\Olcs\Api\Entity\Bus\BusReg::class, mappedBy: 'localAuthoritys', fetch: 'LAZY')]
     protected $busRegs;
@@ -127,7 +127,7 @@ abstract class AbstractLocalAuthority implements BundleSerializableInterface, Js
     /**
      * Users
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection
+     * @var \Doctrine\Common\Collections\Collection<int, \Dvsa\Olcs\Api\Entity\User\User>
      */
     #[ORM\OneToMany(targetEntity: \Dvsa\Olcs\Api\Entity\User\User::class, mappedBy: 'localAuthority')]
     protected $users;

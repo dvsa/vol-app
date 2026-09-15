@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dvsa\OlcsTest\Api\Domain\Repository;
 
+use Doctrine\ORM\Query;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Result as DbalResult;
 use Doctrine\ORM\QueryBuilder;
@@ -33,7 +34,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -44,7 +45,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
             . 'INNER JOIN ia.irhpPermitApplications ipa '
             . 'INNER JOIN ipa.irhpPermitWindow ipw '
             . 'AND ipw.id = [[ID]] '
-            . 'AND ia.status IN [[["S1","S2"]]]';
+            . 'AND ia.status IN([[["S1","S2"]]])';
 
         $this->assertEquals($expectedQuery, $this->query);
     }
@@ -95,7 +96,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($queryBuilder);
 
         $queryBuilder->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -104,8 +105,8 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $this->assertEquals(['RESULTS'], $this->sut->fetchForRoadworthinessReport($startDate, $endDate));
 
         $expectedQuery = 'query'
-            . ' AND ia.irhpPermitType IN [[[' . implode(',', IrhpPermitType::CERTIFICATE_TYPES) . ']]]'
-            . ' AND ia.status NOT IN [[["' . IrhpInterface::STATUS_NOT_YET_SUBMITTED . '","' . IrhpInterface::STATUS_CANCELLED . '","' . IrhpInterface::STATUS_WITHDRAWN . '"]]]'
+            . ' AND ia.irhpPermitType IN([[[' . implode(',', IrhpPermitType::CERTIFICATE_TYPES) . ']]])'
+            . ' AND ia.status NOT IN([[["' . IrhpInterface::STATUS_NOT_YET_SUBMITTED . '","' . IrhpInterface::STATUS_CANCELLED . '","' . IrhpInterface::STATUS_WITHDRAWN . '"]]])'
             . ' AND ia.dateReceived BETWEEN [[' . $startDate . ']] AND [[' . $endDate . ']]';
 
         $this->assertEquals($expectedQuery, $this->query);
@@ -118,7 +119,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($queryBuilder);
 
         $queryBuilder->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()
@@ -128,7 +129,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
 
         $expectedQuery = 'BLAH '
             . 'AND ia.status = [[' . IrhpInterface::STATUS_VALID . ']] '
-            . 'AND ia.irhpPermitType IN [[[6,7]]]';
+            . 'AND ia.irhpPermitType IN([[[6,7]]])';
 
         $this->assertEquals($expectedQuery, $this->query);
     }
@@ -144,7 +145,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $stockId = 14;
 
         $dbalResult = m::mock(DbalResult::class);
-        $dbalResult->expects('fetchAll')
+        $dbalResult->expects('fetchAllAssociative')
             ->andReturn(
                 [
                     [ 'id' => 14 ],
@@ -193,7 +194,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $stockId = 14;
 
         $dbalResult = m::mock(DbalResult::class);
-        $dbalResult->expects('fetchAll')
+        $dbalResult->expects('fetchAllAssociative')
             ->andReturn(
                 [
                     [ 'id' => 14 ],
@@ -264,11 +265,8 @@ final class IrhpApplicationTest extends RepositoryTestCase
     {
         $stockId = 7;
 
-        $dbalResult = m::mock(DbalResult::class);
-        $dbalResult->expects('execute');
-
         $connection = m::mock(Connection::class);
-        $connection->shouldReceive('executeQuery')
+        $connection->expects('executeStatement')
             ->with(
                 'update irhp_application e ' .
                 'set e.in_scope = 0 ' .
@@ -279,8 +277,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
                 ')',
                 ['stockId' => $stockId]
             )
-            ->once()
-            ->andReturn($dbalResult);
+            ->andReturn(1);
 
         $this->em->shouldReceive('getConnection')->once()->andReturn($connection);
 
@@ -291,11 +288,8 @@ final class IrhpApplicationTest extends RepositoryTestCase
     {
         $stockId = 7;
 
-        $dbalResult = m::mock(DbalResult::class);
-        $dbalResult->expects('execute');
-
         $connection = m::mock(Connection::class);
-        $connection->shouldReceive('executeQuery')
+        $connection->expects('executeStatement')
             ->with(
                 'update irhp_application as e ' .
                 'inner join licence as l on e.licence_id = l.id ' .
@@ -319,8 +313,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
                     'licenceStatus3' => LicenceEntity::LICENCE_STATUS_CURTAILED
                 ]
             )
-            ->once()
-            ->andReturn($dbalResult);
+            ->andReturn(1);
 
         $this->em->shouldReceive('getConnection')->once()->andReturn($connection);
 
@@ -864,7 +857,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         ];
 
         $dbalResult = m::mock(DbalResult::class);
-        $dbalResult->expects('fetchAll')
+        $dbalResult->expects('fetchAllAssociative')
             ->andReturn($associations);
 
         $connection = m::mock(Connection::class);
@@ -998,7 +991,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $organisationId = 14;
 
         $dbalResult = m::mock(DbalResult::class);
-        $dbalResult->expects('fetchAll')
+        $dbalResult->expects('fetchAllAssociative')
             ->andReturn($rows);
 
         $connection = m::mock(Connection::class);
@@ -1065,7 +1058,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $organisationId = 14;
 
         $dbalResult = m::mock(DbalResult::class);
-        $dbalResult->expects('fetchAll')
+        $dbalResult->expects('fetchAllAssociative')
             ->andReturn($rows);
 
         $connection = m::mock(Connection::class);
@@ -1128,7 +1121,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $status = null;
 
         $dbalResult = m::mock(DbalResult::class);
-        $dbalResult->expects('fetchAll')
+        $dbalResult->expects('fetchAllAssociative')
             ->andReturn($rows);
 
         $connection = m::mock(Connection::class);
@@ -1198,7 +1191,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $status = IrhpInterface::STATUS_NOT_YET_SUBMITTED;
 
         $dbalResult = m::mock(DbalResult::class);
-        $dbalResult->expects('fetchAll')
+        $dbalResult->expects('fetchAllAssociative')
             ->andReturn($rows);
 
         $connection = m::mock(Connection::class);
@@ -1252,7 +1245,7 @@ final class IrhpApplicationTest extends RepositoryTestCase
         $this->mockCreateQueryBuilder($qb);
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULTS'])
                 ->getMock()

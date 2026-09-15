@@ -84,24 +84,67 @@ against the real, Liquibase-migrated schema — the sync-check half of
 records the known, triaged disagreements; the test fails only on **new** drift:
 an entity change with no matching olcs-etl migration, or vice versa.
 
-The comparison deliberately normalises what can never round-trip through ORM 2
-metadata, so the baseline only contains real disagreements:
+The comparison is faithful by default. It makes three deliberate reductions in
+fidelity, each named and pinned by `SchemaComparisonTest` so none can quietly
+widen:
 
-- **Comments** (column and table) are excluded — they are owned by olcs-etl
-  DDL, and ORM 2's `JoinColumn` cannot carry options. Revisit on ORM 3.
-- **Custom DBAL types** (`yesno`, `yesnonull`, `encrypted_string`) are
-  compared by their storage type, so Doctrine's `DC2Type` comment hints —
-  which the Liquibase DDL never carries — cannot diff.
+- **Comments** are silenced _only where the mapping declares none of its own_.
+  The database carries comments on 2081 columns and 136 tables; the entity
+  metadata models none, because the generator turns a column comment into the
+  property's PHP docblock rather than an `ORM\Column` options entry. Comparing
+  them would report every commented column, truthfully and uselessly. The rule
+  is conditional rather than blanket so the blind spot shrinks by itself: a
+  column that does declare `options: ['comment' => ...]` is compared like any
+  other. (ORM 2's `JoinColumn` had no options, which used to be the stated
+  reason; ORM 3's does, so that reasoning is spent.)
+- **`yesno` / `yesnonull`** are compared by their storage type.
+  `YesNoType::getSqlDeclaration()` hardcodes the whole string
+  `tinyint(1) NOT NULL COMMENT '(DC2Type:yesno)'`, so it can never match the
+  column it maps however that column is declared. (`encrypted_string` needed
+  the same treatment under DBAL 3, which appended `DC2Type` comment hints to
+  custom types. DBAL 4 dropped that mechanism, so the normalisation was removed
+  — measured, it changes no statement.)
 - **Foreign key constraint names** are compared structurally (olcs-etl uses
   semantic names, Doctrine generates hashed ones).
-- **View-backed entities** (`Entity\View`) and tables with no entity mapping
-  (audit `*_hist` tables, ETL working tables, Liquibase bookkeeping) are
-  excluded — neither can ever match by construction.
 
-Everything left in the baseline is a genuine entity-vs-schema disagreement
-(wrong lengths, precision, signedness, index differences) awaiting a decision:
-fix the entity metadata, or fix the schema in olcs-etl. Shrinking it is welcome;
-adding to it should be a conscious, reviewed act:
+**View-backed entities** (`Entity\View`) and tables the entity side knows
+nothing about (audit `*_hist` tables, ETL working tables, Liquibase bookkeeping)
+are dropped from the output entirely — neither can match by construction. Note
+that this covers the `ALTER TABLE ... DROP FOREIGN KEY` statements Doctrine
+emits for such tables as well as the `DROP TABLE` itself; missing that is how
+four stale `document_analysis` lines survived in the baseline after the table
+gained an entity.
+
+### Reading the baseline
+
+The file is grouped under two headings carrying a count. Grouping is
+presentational — every statement is still compared, and the headings are
+comments the parser ignores:
+
+- **actionable** — a real disagreement between an entity and the schema. Fix
+  the mapping, or add a Liquibase migration in olcs-etl.
+- **inexpressible from mapping** — differences on implicit ManyToMany join
+  tables that no entity change can resolve. Those tables have no entity to
+  carry an `#[ORM\Index]`, and ORM 3's `JoinTable` attribute takes only `name`,
+  `schema`, `joinColumns`, `inverseJoinColumns` and `options` — no way to name
+  an index, declare a unique constraint, or map an extra column. `SchemaTool`
+  builds their indexes with no name, so DBAL falls through to
+  `_generateIdentifierName()` and produces `IDX_<hash>`, which the Liquibase DDL
+  will never match.
+
+A join table's own columns are the exception: their declarations derive from the
+referenced entities' primary keys, so a `CHANGE` is fixable there as anywhere
+else, and a compound statement carrying both is filed as actionable so the half
+that can be fixed stays visible.
+
+Normalising those generated names away, as the comparison already does for
+foreign key names, was considered and rejected. It trades a real difference for
+a quieter file, and the cost is not hypothetical: DBAL's existing rename
+detection had been masking a redundant index on `application_tracking`, which
+surfaced only when an unrelated attribute beside it was removed.
+
+Shrinking the actionable section is welcome; adding to it should be a conscious,
+reviewed act:
 
 ```bash
 REGENERATE_SCHEMA_DRIFT_BASELINE=1 vendor/bin/phpunit \

@@ -35,8 +35,9 @@ final class PreviousConvictionTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('modifyQuery')->with($mockQb)->once()->andReturnSelf();
         $this->queryBuilder->shouldReceive('withRefdata')->with()->once()->andReturnSelf();
 
-        $mockQb->shouldReceive('expr->eq')->with('pc.transportManager', ':tmId')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('pc.transportManager', ':tmId');
+        $mockQb->shouldReceive('expr->eq')->with('pc.transportManager', ':tmId')->once()->andReturn($expr);
+        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('tmId', 123)->once();
 
         $mockQb->shouldReceive('getQuery->getResult')->once()->andReturn('RESULT');
@@ -53,8 +54,9 @@ final class PreviousConvictionTest extends RepositoryTestCase
         $mockQ = m::mock(\Dvsa\Olcs\Transfer\Query\QueryInterface::class);
         $mockQ->shouldReceive('getTransportManager')->with()->twice()->andReturn(33);
 
-        $mockQb->shouldReceive('expr->eq')->with('pc.transportManager', ':tmId')->once()->andReturn('EXPR');
-        $mockQb->shouldReceive('andWhere')->with('EXPR')->once()->andReturnSelf();
+        $expr = $this->mockExprEq('pc.transportManager', ':tmId');
+        $mockQb->shouldReceive('expr->eq')->with('pc.transportManager', ':tmId')->once()->andReturn($expr);
+        $mockQb->shouldReceive('andWhere')->with($expr)->once()->andReturnSelf();
         $mockQb->shouldReceive('setParameter')->with('tmId', 33)->once();
 
         $this->sut->applyListFilters($mockQb, $mockQ);

@@ -241,7 +241,7 @@ final class OrganisationTest extends RepositoryTestCase
             ->once()
             ->andReturnSelf();
 
-        $where = m::mock();
+        $where = m::mock(\Doctrine\ORM\Query\Expr\Comparison::class);
         $qb->shouldReceive('expr->eq')
             ->with('o.companyOrLlpNo', ':companyNumber')
             ->andReturn($where);
@@ -385,7 +385,7 @@ final class OrganisationTest extends RepositoryTestCase
         $query = m::mock(CpidOrganisation::class)
             ->makePartial()
             ->shouldReceive('getCpid')
-            ->andReturn('op_cpid_central_government');
+            ->andReturn(m::mock(\Doctrine\ORM\Query\Expr\Comparison::class));
 
         /** @var QueryBuilder $qb */
         $qb = m::mock(QueryBuilder::class);
@@ -440,7 +440,7 @@ final class OrganisationTest extends RepositoryTestCase
 
         $qb->shouldReceive('getQuery')
             ->once()
-            ->andReturn(m::mock()->shouldReceive('toIterable')->getMock());
+            ->andReturn(m::mock(\Doctrine\ORM\Query::class)->shouldReceive('toIterable')->getMock());
 
         $repo = m::mock(EntityRepository::class);
         $repo->shouldReceive('createQueryBuilder')
@@ -471,7 +471,7 @@ final class OrganisationTest extends RepositoryTestCase
 
         $qb->shouldReceive('getQuery')
             ->once()
-            ->andReturn(m::mock()->shouldReceive('toIterable')->getMock());
+            ->andReturn(m::mock(\Doctrine\ORM\Query::class)->shouldReceive('toIterable')->getMock());
 
         $repo = m::mock(EntityRepository::class);
         $repo->shouldReceive('createQueryBuilder')
@@ -521,8 +521,8 @@ final class OrganisationTest extends RepositoryTestCase
 
         $expectedQuery = '[QUERY] SELECT o.companyOrLlpNo DISTINCT INNER JOIN Dvsa\Olcs\Api\Entity\Licence\Licence l ' .
         'WITH l.organisation = o.id ' .
-        'AND l.status IN [[["lsts_consideration","lsts_suspended","lsts_valid","lsts_curtailed","lsts_granted"]]] ' .
-        'AND o.companyOrLlpNo IS NOT NULL AND o.type IN [[["org_t_rc","org_t_llp"]]]';
+        'AND l.status IN([[["lsts_consideration","lsts_suspended","lsts_valid","lsts_curtailed","lsts_granted"]]]) ' .
+        'AND o.companyOrLlpNo IS NOT NULL AND o.type IN([[["org_t_rc","org_t_llp"]]])';
 
         $this->assertEquals($expectedQuery, $this->query);
     }
