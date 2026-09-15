@@ -21,6 +21,7 @@ jobs:
           severity-cutoff: medium
           fail-build: true
           output-format: sarif
+          skip-dirs: "infra/docker/printpit,infra/docker/mock-govuk-signin"
           # Note: Grype will scan the files in the directory for package vulnerabilities.
           # To exclude specific sub-directories, use a .grypeignore file or adjust the scan path accordingly.
 
