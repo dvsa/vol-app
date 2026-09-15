@@ -4,6 +4,7 @@ namespace Dvsa\Olcs\Api\Domain\QueryHandler\Application;
 
 use Dvsa\Olcs\Api\Domain\QueryHandler\AbstractQueryHandler;
 use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\ApplicationUndertakingsReviewService;
+use Dvsa\Olcs\Snapshot\Service\Snapshots\ApplicationReview\Section\VariationUndertakingsReviewService;
 use Dvsa\Olcs\Transfer\Query\QueryInterface;
 use Psr\Container\ContainerInterface;
 use Dvsa\Olcs\Api\Entity\System\SystemParameter;
@@ -33,7 +34,9 @@ class Declaration extends AbstractQueryHandler
      */
     private $feesHelper;
 
-    private ApplicationUndertakingsReviewService $reviewService;
+    private ApplicationUndertakingsReviewService $applicationReviewService;
+
+    private VariationUndertakingsReviewService $variationReviewService;
 
     /**
      * Handle query
@@ -83,6 +86,7 @@ class Declaration extends AbstractQueryHandler
                 'disableSignatures' =>
                     (bool)$this->getRepo('SystemParameter')->fetchValue(SystemParameter::DISABLE_GDS_VERIFY_SIGNATURES),
                 'declarations' => $this->getDeclarations($application),
+                'reviewText' => $this->getReviewService($application)->getLongTextReviewMarkup(),
                 'signature' => $signatureDetails,
                 'interimFee' => $interimFeeAmount,
                 'showPeriodOfGraceQuestion' => $application->showPeriodOfGraceQuestion(),
@@ -103,7 +107,13 @@ class Declaration extends AbstractQueryHandler
         $data['isGoods'] = $application->isGoods();
         $data['isInternal'] = false;
 
-        return $this->reviewService->getMarkup($data);
+        return $this->getReviewService($application)->getLongTextMarkup($data);
+    }
+
+    private function getReviewService(
+        ApplicationEntity $application
+    ): ApplicationUndertakingsReviewService | VariationUndertakingsReviewService {
+        return $application->isVariation() ? $this->variationReviewService : $this->applicationReviewService;
     }
 
     /**
@@ -164,7 +174,8 @@ class Declaration extends AbstractQueryHandler
 
         $this->sectionAccessService = $container->get('SectionAccessService');
         $this->feesHelper = $container->get('FeesHelperService');
-        $this->reviewService = $container->get('Review\ApplicationUndertakings');
+        $this->applicationReviewService = $container->get('Review\ApplicationUndertakings');
+        $this->variationReviewService = $container->get('Review\VariationUndertakings');
         return parent::__invoke($fullContainer, $requestedName, $options);
     }
 }
