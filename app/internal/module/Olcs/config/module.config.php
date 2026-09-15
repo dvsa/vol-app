@@ -235,7 +235,7 @@ return [
             LvaApplicationControllers\ConvictionsPenaltiesController::class => LvaApplicationControllerFactories\ConvictionsPenaltiesControllerFactory::class,
             LvaApplicationControllers\DeclarationsInternalController::class => LvaApplicationControllerFactories\DeclarationsInternalControllerFactory::class,
             LvaApplicationControllers\FinancialEvidenceController::class => LvaApplicationControllerFactories\FinancialEvidenceControllerFactory::class,
-            LvaApplicationControllers\FinancialEvidenceAssessmentController::class => LvaApplicationControllerFactories\FinancialEvidenceControllerFactory::class,
+            LvaApplicationControllers\FinancialEvidenceAssessmentController::class => LvaApplicationControllerFactories\FinancialEvidenceAssessmentControllerFactory::class,
             LvaApplicationControllers\FinancialHistoryController::class => LvaApplicationControllerFactories\FinancialHistoryControllerFactory::class,
             LvaApplicationControllers\GrantController::class => LvaApplicationControllerFactories\GrantControllerFactory::class,
             LvaApplicationControllers\InterimController::class => LvaApplicationControllerFactories\InterimControllerFactory::class,
