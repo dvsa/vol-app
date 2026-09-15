@@ -646,9 +646,13 @@ module "service" {
         schedule = ["cron(15 * * * ? *)"],
       },
       {
-        name     = "idp-store-document-analysis-result",
-        commands = ["idp:store-document-analysis-result"],
-        timeout  = 300,
+        name = "idp-store-document-analysis-result",
+        commands = [
+          "idp:store-document-analysis-result",
+          "--analysis-token", "Ref::analysis_token",
+          "--execution-arn", "Ref::execution_arn",
+        ],
+        timeout = 300,
       },
       {
         name     = "cancel-unsubmitted-bilateral",

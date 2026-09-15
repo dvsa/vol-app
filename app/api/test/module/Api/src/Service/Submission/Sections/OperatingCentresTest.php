@@ -18,48 +18,60 @@ final class OperatingCentresTest extends AbstractSubmissionSectionTestCase
      */
     public static function sectionTestProvider(): array
     {
-        $case = static::getApplicationCase();
+        $case = static fn () => static::getApplicationCase();
 
-        $case2 = static::getApplicationCase();
-        $oc = $case2->getLicence()->getOperatingCentres();
-        $oc->current()->getOperatingCentre()->setAddress(null);
+        $case2 = static function () {
+            $case = static::getApplicationCase();
+            $oc = $case->getLicence()->getOperatingCentres();
+            $oc->current()->getOperatingCentre()->setAddress(null);
+
+            return $case;
+        };
 
         //  --  prepare data for 'add, update, delete oc in application'
-        $case3 = static::getApplicationCase();
-        $app = $case3->getApplication();
-        $appOcRels = $case3->getApplication()->getOperatingCentres();
+        $case3 = static function () {
+            $case = static::getApplicationCase();
+            $app = $case->getApplication();
+            $appOcRels = $case->getApplication()->getOperatingCentres();
 
-        //  add operation center
-        $ocNew = static::generateOperatingCentre(3);
-        $ocNew->getAddress()->setPostcode('A_first');
+            //  add operation center
+            $ocNew = static::generateOperatingCentre(3);
+            $ocNew->getAddress()->setPostcode('A_first');
 
-        $appOcRels->add(
-            new ApplicationOperatingCentre($app, $ocNew)
-                ->setAction(ApplicationOperatingCentre::ACTION_ADD)
-                ->setNoOfVehiclesRequired(903)
-                ->setNoOfTrailersRequired(803)
-        );
+            $appOcRels->add(
+                new ApplicationOperatingCentre($app, $ocNew)
+                    ->setAction(ApplicationOperatingCentre::ACTION_ADD)
+                    ->setNoOfVehiclesRequired(903)
+                    ->setNoOfTrailersRequired(803)
+            );
 
-        //  update operation center in licence
-        $ocUpd = static::generateOperatingCentre(2);
-        $ocUpd->getAddress()->setPostcode('Z_last');
+            //  update operation center in licence
+            $ocUpd = static::generateOperatingCentre(2);
+            $ocUpd->getAddress()->setPostcode('Z_last');
 
-        $appOcRels->add(
-            new ApplicationOperatingCentre($app, $ocUpd)
-                ->setAction(ApplicationOperatingCentre::ACTION_UPDATE)
-                ->setNoOfVehiclesRequired(902)
-                ->setNoOfTrailersRequired(802)
-        );
+            $appOcRels->add(
+                new ApplicationOperatingCentre($app, $ocUpd)
+                    ->setAction(ApplicationOperatingCentre::ACTION_UPDATE)
+                    ->setNoOfVehiclesRequired(902)
+                    ->setNoOfTrailersRequired(802)
+            );
 
-        //  delete operation center in licence
-        $appOcRels->add(
-            new ApplicationOperatingCentre($app, static::generateOperatingCentre(1))
-                ->setAction(ApplicationOperatingCentre::ACTION_DELETE)
-        );
+            //  delete operation center in licence
+            $appOcRels->add(
+                new ApplicationOperatingCentre($app, static::generateOperatingCentre(1))
+                    ->setAction(ApplicationOperatingCentre::ACTION_DELETE)
+            );
+
+            return $case;
+        };
 
         //  --  prepare data for 'no oper centres'
-        $case4 = static::getApplicationCase();
-        $case4->getLicence()->getOperatingCentres()->clear();
+        $case4 = static function () {
+            $case = static::getApplicationCase();
+            $case->getLicence()->getOperatingCentres()->clear();
+
+            return $case;
+        };
 
         return [
             [

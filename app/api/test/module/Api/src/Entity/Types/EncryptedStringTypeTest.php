@@ -7,10 +7,11 @@ namespace Dvsa\OlcsTest\Api\Entity\Types;
 use Doctrine\DBAL\Platforms\MySQLPlatform;
 use phpseclib3\Crypt\AES;
 use Mockery as m;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Dvsa\Olcs\Api\Entity\Types\EncryptedStringType;
 
 #[\PHPUnit\Framework\Attributes\CoversClass(\Dvsa\Olcs\Api\Entity\Types\EncryptedStringType::class)]
-final class EncryptedStringTypeTest extends \PHPUnit\Framework\TestCase
+final class EncryptedStringTypeTest extends MockeryTestCase
 {
     /**
      * @var EncryptedStringType

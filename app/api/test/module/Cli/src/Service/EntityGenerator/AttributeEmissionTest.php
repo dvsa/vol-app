@@ -21,7 +21,7 @@ use Dvsa\Olcs\Cli\Service\EntityGenerator\TypeHandlers\RelationshipTypeHandler;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\FieldConfig;
 use Dvsa\Olcs\Cli\Service\EntityGenerator\ValueObjects\InversedByConfig;
 use Mockery as m;
-use PHPUnit\Framework\TestCase;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 
 /**
  * Guards the exact PHP-attribute source emitted by the entity generator.
@@ -32,7 +32,7 @@ use PHPUnit\Framework\TestCase;
  * resolve relative to the generated entity's namespace), and string-typed
  * decimal defaults (a float 0.00 renders as DEFAULT '0' in schema diffs).
  */
-final class AttributeEmissionTest extends TestCase
+final class AttributeEmissionTest extends MockeryTestCase
 {
     public function testToOneRelationshipMatchesCommittedForm(): void
     {

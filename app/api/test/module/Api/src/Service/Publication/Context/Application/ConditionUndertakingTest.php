@@ -107,9 +107,8 @@ Test the application condition undertakings filter')]
      */
     public static function provideTestProvider(): \Iterator
     {
-        $sut = new ConditionUndertakingContext(m::mock(\Dvsa\Olcs\Api\Domain\QueryHandlerManager::class));
-        yield ['A', $sut::COND_NEW];
-        yield ['D', $sut::COND_REMOVE];
-        yield ['ZZZ', $sut::COND_NEW];
+        yield ['A', ConditionUndertakingContext::COND_NEW];
+        yield ['D', ConditionUndertakingContext::COND_REMOVE];
+        yield ['ZZZ', ConditionUndertakingContext::COND_NEW];
     }
 }

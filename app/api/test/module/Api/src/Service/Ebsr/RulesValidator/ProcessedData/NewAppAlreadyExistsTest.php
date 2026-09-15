@@ -23,8 +23,9 @@ final class NewAppAlreadyExistsTest extends MockeryTestCase
      * @param bool $valid
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('isValidProvider')]
-    public function testIsValid(mixed $txcAppType, mixed $busReg, mixed $valid): void
+    public function testIsValid(mixed $txcAppType, bool $hasBusReg, mixed $valid): void
     {
+        $busReg = $hasBusReg ? m::mock(BusRegEntity::class) : null;
         $sut = new NewAppAlreadyExists();
 
         $value = [
@@ -44,14 +45,13 @@ final class NewAppAlreadyExistsTest extends MockeryTestCase
      */
     public static function isValidProvider(): \Iterator
     {
-        $busMock = m::mock(BusRegEntity::class);
-        yield [BusRegEntity::TXC_APP_NEW, $busMock, false];
-        yield [BusRegEntity::TXC_APP_NEW, null, true];
-        yield [BusRegEntity::TXC_APP_CANCEL, $busMock, true];
-        yield [BusRegEntity::TXC_APP_CANCEL, null, true];
-        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, $busMock, true];
-        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, null, true];
-        yield [BusRegEntity::TXC_APP_CHARGEABLE, $busMock, true];
-        yield [BusRegEntity::TXC_APP_CHARGEABLE, null, true];
+        yield [BusRegEntity::TXC_APP_NEW, true, false];
+        yield [BusRegEntity::TXC_APP_NEW, false, true];
+        yield [BusRegEntity::TXC_APP_CANCEL, true, true];
+        yield [BusRegEntity::TXC_APP_CANCEL, false, true];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, true, true];
+        yield [BusRegEntity::TXC_APP_NON_CHARGEABLE, false, true];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, true, true];
+        yield [BusRegEntity::TXC_APP_CHARGEABLE, false, true];
     }
 }

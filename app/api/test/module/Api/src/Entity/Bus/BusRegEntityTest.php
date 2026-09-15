@@ -47,15 +47,18 @@ final class BusRegEntityTest extends EntityTester
     protected $entityClass = Entity::class;
 
     /**
+     * Tests shouldCreateFee
      *
-     * @param $receivedDate
-     * @param $status
-     * @param $fees
-     * @param $expectedResult
+     * @param string|null $receivedDate
+     * @param string $status
+     * @param string[] $feeStates one of 'outstanding', 'paid' or 'cancelled' per fee
+     * @param bool $expectedResult
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('shouldCreateFeeProvider')]
-    public function testShouldCreateFee(mixed $receivedDate, mixed $status, mixed $fees, mixed $expectedResult): void
+    public function testShouldCreateFee(mixed $receivedDate, mixed $status, array $feeStates, mixed $expectedResult): void
     {
+        $fees = array_map($this->createFee(...), $feeStates);
+
         $statusRefData = new RefData($status);
         $entity = new Entity();
         $entity->setReceivedDate($receivedDate);
@@ -68,39 +71,44 @@ final class BusRegEntityTest extends EntityTester
     /**
      * Data provider for shouldCreateFee
      *
+     * Fees are described by state and built by the test: providers run at suite build time, before Mockery
+     * has a container for the test, so mocks created here would never have their expectations verified.
+     *
      * @return array
      */
     public static function shouldCreateFeeProvider(): array
     {
-        $outstandingFee = m::mock(FeeEntity::class);
-        $outstandingFee->shouldReceive('isPaid')->andReturn(false);
-        $outstandingFee->shouldReceive('isOutstanding')->andReturn(true);
-
-        $paidFee = m::mock(FeeEntity::class);
-        $paidFee->shouldReceive('isPaid')->andReturn(true);
-        $paidFee->shouldReceive('isOutstanding')->never();
-
-        $cancelledFee = m::mock(FeeEntity::class);
-        $cancelledFee->shouldReceive('isPaid')->andReturn(false);
-        $cancelledFee->shouldReceive('isOutstanding')->andReturn(false);
-
         return [
             [null, Entity::STATUS_NEW, [], false],
             [null, Entity::STATUS_VAR, [], false],
             ['2015-12-25', Entity::STATUS_CANCEL, [], false],
-            ['2015-12-25', Entity::STATUS_NEW, [$cancelledFee], true],
-            ['2015-12-25', Entity::STATUS_VAR, [$cancelledFee], true],
+            ['2015-12-25', Entity::STATUS_NEW, ['cancelled'], true],
+            ['2015-12-25', Entity::STATUS_VAR, ['cancelled'], true],
             ['2015-12-25', Entity::STATUS_NEW, [], true],
             ['2015-12-25', Entity::STATUS_VAR, [], true],
-            ['2015-12-25', Entity::STATUS_NEW, [$paidFee], false],
-            ['2015-12-25', Entity::STATUS_VAR, [$paidFee], false],
-            ['2015-12-25', Entity::STATUS_NEW, [$outstandingFee], false],
-            ['2015-12-25', Entity::STATUS_VAR, [$outstandingFee], false],
-            ['2015-12-25', Entity::STATUS_NEW, [$cancelledFee, $paidFee], false],
-            ['2015-12-25', Entity::STATUS_VAR, [$cancelledFee, $paidFee], false],
-            ['2015-12-25', Entity::STATUS_NEW, [$cancelledFee, $outstandingFee], false],
-            ['2015-12-25', Entity::STATUS_VAR, [$cancelledFee, $outstandingFee], false],
+            ['2015-12-25', Entity::STATUS_NEW, ['paid'], false],
+            ['2015-12-25', Entity::STATUS_VAR, ['paid'], false],
+            ['2015-12-25', Entity::STATUS_NEW, ['outstanding'], false],
+            ['2015-12-25', Entity::STATUS_VAR, ['outstanding'], false],
+            ['2015-12-25', Entity::STATUS_NEW, ['cancelled', 'paid'], false],
+            ['2015-12-25', Entity::STATUS_VAR, ['cancelled', 'paid'], false],
+            ['2015-12-25', Entity::STATUS_NEW, ['cancelled', 'outstanding'], false],
+            ['2015-12-25', Entity::STATUS_VAR, ['cancelled', 'outstanding'], false],
         ];
+    }
+
+    private function createFee(string $state): FeeEntity
+    {
+        $fee = m::mock(FeeEntity::class);
+        $fee->shouldReceive('isPaid')->andReturn($state === 'paid');
+
+        if ($state === 'paid') {
+            $fee->shouldReceive('isOutstanding')->never();
+        } else {
+            $fee->shouldReceive('isOutstanding')->andReturn($state === 'outstanding');
+        }
+
+        return $fee;
     }
 
     private function getAssertionsForCanEditIsTrue(): void

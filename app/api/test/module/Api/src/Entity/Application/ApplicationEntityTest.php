@@ -4445,8 +4445,9 @@ final class ApplicationEntityTest extends EntityTester
      * @param bool $expected
      */
     #[\PHPUnit\Framework\Attributes\DataProvider('hasApplicationFeeProvider')]
-    public function testHasApplicationFee(mixed $fee, mixed $expected): void
+    public function testHasApplicationFee(\Closure $createFee, mixed $expected): void
     {
+        $fee = $createFee();
         $application = $this->instantiate(Entity::class);
 
         $this->assertFalse($application->hasApplicationFee());
@@ -4461,11 +4462,11 @@ final class ApplicationEntityTest extends EntityTester
     public static function hasApplicationFeeProvider(): \Iterator
     {
         yield 'no fee' => [
-            null,
+            static fn () => null,
             false,
         ];
         yield 'cancelled fee' => [
-            m::mock()
+            static fn () => m::mock()
                 ->shouldReceive('isNewApplicationFee')
                 ->andReturn(true)
                 ->shouldReceive('isVariationFee')
@@ -4476,7 +4477,7 @@ final class ApplicationEntityTest extends EntityTester
             false,
         ];
         yield 'new app fee' => [
-            m::mock()
+            static fn () => m::mock()
                 ->shouldReceive('isNewApplicationFee')
                 ->andReturn(true)
                 ->shouldReceive('isVariationFee')
@@ -4487,7 +4488,7 @@ final class ApplicationEntityTest extends EntityTester
             true,
         ];
         yield 'variation fee' => [
-            m::mock()
+            static fn () => m::mock()
                 ->shouldReceive('isNewApplicationFee')
                 ->andReturn(false)
                 ->shouldReceive('isVariationFee')

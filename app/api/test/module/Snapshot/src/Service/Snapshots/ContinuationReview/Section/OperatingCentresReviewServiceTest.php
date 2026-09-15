@@ -40,12 +40,14 @@ final class OperatingCentresReviewServiceTest extends MockeryTestCase
     public function testGetConfigFromData(
         mixed $canHaveTrailer,
         mixed $isVehicleTypeMixedWithLgv,
-        mixed $licenceOperatingCentres,
+        array $licenceOperatingCentreSpecs,
         mixed $expected
     ): void {
         $continuationDetail = new ContinuationDetail();
 
-        $licenceOperatingCentres = new ArrayCollection($licenceOperatingCentres);
+        $licenceOperatingCentres = new ArrayCollection(
+            array_map(fn (array $spec) => $this->createLicenceOperatingCentre(...$spec), $licenceOperatingCentreSpecs)
+        );
 
         $mockLicence = m::mock(Licence::class)
             ->shouldReceive('getOperatingCentres')
@@ -66,63 +68,10 @@ final class OperatingCentresReviewServiceTest extends MockeryTestCase
 
     public static function dpGetConfigFromData(): \Iterator
     {
-        $loc1 = m::mock()
-            ->shouldReceive('getOperatingCentre')
-            ->withNoArgs()
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('getAddress')
-                    ->andReturn(
-                        m::mock()
-                            ->shouldReceive('getAddressLine1')
-                            ->andReturn('Foo')
-                            ->withNoArgs()
-                            ->shouldReceive('getTown')
-                            ->andReturn('Bar')
-                            ->withNoArgs()
-                            ->getMock()
-                    )
-                    ->withNoArgs()
-                    ->getMock()
-            )
-            ->shouldReceive('getNoOfVehiclesRequired')
-            ->andReturn(1)
-            ->withNoArgs()
-            ->shouldReceive('getNoOfTrailersRequired')
-            ->andReturn(2)
-            ->withNoArgs()
-            ->getMock();
-
-        $loc2 = m::mock()
-            ->shouldReceive('getOperatingCentre')
-            ->withNoArgs()
-            ->andReturn(
-                m::mock()
-                    ->shouldReceive('getAddress')
-                    ->andReturn(
-                        m::mock()
-                            ->shouldReceive('getAddressLine1')
-                            ->andReturn('Baz')
-                            ->withNoArgs()
-                            ->shouldReceive('getTown')
-                            ->andReturn('Cake')
-                            ->withNoArgs()
-                            ->getMock()
-                    )
-                    ->withNoArgs()
-                    ->getMock()
-            )
-            ->shouldReceive('getNoOfVehiclesRequired')
-            ->andReturn(3)
-            ->withNoArgs()
-            ->shouldReceive('getNoOfTrailersRequired')
-            ->andReturn(4)
-            ->withNoArgs()
-            ->getMock();
         yield 'licence cannot have trailers, vehicle type not mixed with lgv' => [
             false,
             false,
-            [$loc1, $loc2],
+            [['Foo', 'Bar', 1, 2], ['Baz', 'Cake', 3, 4]],
             [
                 [
                     ['value' => 'continuations.oc-section.table.name', 'header' => true],
@@ -141,7 +90,7 @@ final class OperatingCentresReviewServiceTest extends MockeryTestCase
         yield 'licence cannot have trailers, vehicle type mixed with lgv' => [
             false,
             true,
-            [$loc1, $loc2],
+            [['Foo', 'Bar', 1, 2], ['Baz', 'Cake', 3, 4]],
             [
                 [
                     ['value' => 'continuations.oc-section.table.name', 'header' => true],
@@ -160,7 +109,7 @@ final class OperatingCentresReviewServiceTest extends MockeryTestCase
         yield 'licence can have trailers, vehicle type not mixed with lgv' => [
             true,
             false,
-            [$loc1, $loc2],
+            [['Foo', 'Bar', 1, 2], ['Baz', 'Cake', 3, 4]],
             [
                 [
                     ['value' => 'continuations.oc-section.table.name', 'header' => true],
@@ -182,7 +131,7 @@ final class OperatingCentresReviewServiceTest extends MockeryTestCase
         yield 'licence can have trailers, vehicle type mixed with lgv' => [
             true,
             true,
-            [$loc1, $loc2],
+            [['Foo', 'Bar', 1, 2], ['Baz', 'Cake', 3, 4]],
             [
                 [
                     ['value' => 'continuations.oc-section.table.name', 'header' => true],
@@ -207,6 +156,36 @@ final class OperatingCentresReviewServiceTest extends MockeryTestCase
             [],
             [],
         ];
+    }
+
+    private function createLicenceOperatingCentre(string $addressLine1, string $town, int $vehicles, int $trailers): m\MockInterface
+    {
+        return m::mock()
+            ->shouldReceive('getOperatingCentre')
+            ->withNoArgs()
+            ->andReturn(
+                m::mock()
+                    ->shouldReceive('getAddress')
+                    ->andReturn(
+                        m::mock()
+                            ->shouldReceive('getAddressLine1')
+                            ->andReturn($addressLine1)
+                            ->withNoArgs()
+                            ->shouldReceive('getTown')
+                            ->andReturn($town)
+                            ->withNoArgs()
+                            ->getMock()
+                    )
+                    ->withNoArgs()
+                    ->getMock()
+            )
+            ->shouldReceive('getNoOfVehiclesRequired')
+            ->andReturn($vehicles)
+            ->withNoArgs()
+            ->shouldReceive('getNoOfTrailersRequired')
+            ->andReturn($trailers)
+            ->withNoArgs()
+            ->getMock();
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('dpGetSummaryFromData')]

@@ -73,8 +73,10 @@ final class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
     }
 
     #[DataProvider('addressData')]
-    public function testHandleCommandCreatesTasks(mixed $licence, mixed $team): void
+    public function testHandleCommandCreatesTasks(\Closure $createLicence, mixed $team): void
     {
+        $licence = $createLicence();
+
         $this->setupStandardService();
         $this->setupMockCHRepo();
 
@@ -113,8 +115,10 @@ final class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
     }
 
     #[DataProvider('emailTestsDataProvider')]
-    public function testHandleCommandSendsEmails(mixed $licence): void
+    public function testHandleCommandSendsEmails(\Closure $createLicence): void
     {
+        $licence = $createLicence();
+
         $this->setupStandardService();
         $this->setupMockCHRepo();
 
@@ -512,11 +516,11 @@ final class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
     public static function addressData(): \Iterator
     {
         yield 'GBLicence' => [
-            self::getMockLicences()[0],
+            static fn () => self::getMockLicences()[0],
             ProcessInsolvency::GB_TEAMLEADER_TASK,
         ];
         yield 'NILicence' => [
-            self::getMockLicences()[1],
+            static fn () => self::getMockLicences()[1],
             ProcessInsolvency::NI_TEAMLEADER_TASK,
         ];
     }
@@ -524,10 +528,10 @@ final class ProcessInsolvencyTest extends AbstractCompaniesHouseConsumerTestCase
     public static function emailTestsDataProvider(): \Iterator
     {
         yield 'GBLicence' => [
-            self::getMockLicences()[0],
+            static fn () => self::getMockLicences()[0],
         ];
         yield 'NILicence' => [
-            self::getMockLicences()[1],
+            static fn () => self::getMockLicences()[1],
         ];
     }
 
