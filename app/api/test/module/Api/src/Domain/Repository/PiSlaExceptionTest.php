@@ -43,7 +43,7 @@ final class PiSlaExceptionTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['RESULT1', 'RESULT2'])
                 ->getMock()
@@ -72,7 +72,7 @@ final class PiSlaExceptionTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['CASE_RESULT'])
                 ->getMock()
@@ -103,7 +103,7 @@ final class PiSlaExceptionTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['ACTIVE_RESULT'])
                 ->getMock()
@@ -117,7 +117,7 @@ final class PiSlaExceptionTest extends RepositoryTestCase
             'AND m.pi = [[789]] ' .
             'INNER JOIN m.slaException se ' .
             'AND se.effectiveFrom <= [[2024-01-15T00:00:00+00:00]] ' .
-            'AND (se.effectiveTo IS NULL OR se.effectiveTo >= [[2024-01-15T00:00:00+00:00]]) ' .
+            'AND se.effectiveTo IS NULL OR se.effectiveTo >= [[2024-01-15T00:00:00+00:00]] ' .
             'SELECT se ' .
             'ORDER BY se.slaDescription ASC';
         $this->assertEquals($expectedQuery, $this->query);
@@ -134,7 +134,7 @@ final class PiSlaExceptionTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn(['ACTIVE_DEFAULT_RESULT'])
                 ->getMock()
@@ -163,7 +163,7 @@ final class PiSlaExceptionTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn([])
                 ->getMock()
@@ -192,7 +192,7 @@ final class PiSlaExceptionTest extends RepositoryTestCase
         $this->queryBuilder->shouldReceive('modifyQuery')->with($qb)->andReturnSelf();
 
         $qb->shouldReceive('getQuery')->andReturn(
-            m::mock()->shouldReceive('execute')
+            m::mock(\Doctrine\ORM\Query::class)->shouldReceive('execute')
                 ->shouldReceive('getResult')
                 ->andReturn([])
                 ->getMock()

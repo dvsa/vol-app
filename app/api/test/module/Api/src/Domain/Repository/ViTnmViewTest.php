@@ -44,7 +44,7 @@ final class ViTnmViewTest extends RepositoryTestCase
             ->once()
             ->shouldReceive('getQuery')
             ->andReturn(
-                m::mock()
+                m::mock(\Doctrine\ORM\Query::class)
                 ->shouldReceive('getResult')
                 ->with(Query::HYDRATE_ARRAY)
                 ->once()

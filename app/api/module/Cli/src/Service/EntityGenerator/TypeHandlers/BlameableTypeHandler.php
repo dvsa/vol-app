@@ -22,10 +22,13 @@ class BlameableTypeHandler extends AbstractTypeHandler
     {
         $annotations = [];
 
-        // Add JoinColumn
+        // Add JoinColumn. JoinColumn's default is nullable: true, the opposite of Column's,
+        // so a NOT NULL created_by has to say so explicitly - hardcoding true here made the
+        // metadata misreport the constraint on every Blameable column that is NOT NULL.
         $annotations[] = sprintf(
-            "#[ORM\JoinColumn(name: '%s', referencedColumnName: 'id', nullable: true)]",
-            $column->getName()
+            "#[ORM\JoinColumn(name: '%s', referencedColumnName: 'id', nullable: %s)]",
+            $column->getName(),
+            $column->isNullable() ? 'true' : 'false'
         );
 
         // Add ManyToOne relationship
@@ -51,7 +54,7 @@ class BlameableTypeHandler extends AbstractTypeHandler
             'type' => '\\' . \Dvsa\Olcs\Api\Entity\User\User::class,
             'docBlock' => $column->getName() === 'created_by' ? 'Created by' : 'Last modified by',
             'defaultValue' => 'null',
-            'nullable' => true,
+            'nullable' => $column->isNullable(),
             'isRelationship' => true,
         ];
     }
