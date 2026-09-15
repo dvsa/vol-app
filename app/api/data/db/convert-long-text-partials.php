@@ -202,12 +202,6 @@ function declarationVariants(): array
             [$continuation . 'goods-gb-sn-standard'],
         ),
         variant(
-            'continuation-declaration-goods-gb-lgv',
-            'Continuation – goods – GB – light goods vehicles',
-            $continuation . 'goods-gb',
-            [$continuation . 'goods-operating-centres-lgv', ''],
-        ),
-        variant(
             'continuation-declaration-goods-gb-restricted',
             'Continuation – goods – GB – restricted',
             $continuation . 'goods-gb',

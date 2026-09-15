@@ -306,8 +306,8 @@ final class DeclarationReviewServiceTest extends MockeryTestCase
             false,
             true,
         ];
-        yield 'goods GB restricted LGV' => [
-            'markup-continuation-declaration-goods-gb-lgv',
+        yield 'goods GB restricted ignores LGV flag' => [
+            'markup-continuation-declaration-goods-gb-restricted',
             Licence::LICENCE_CATEGORY_GOODS_VEHICLE,
             Licence::LICENCE_TYPE_RESTRICTED,
             false,

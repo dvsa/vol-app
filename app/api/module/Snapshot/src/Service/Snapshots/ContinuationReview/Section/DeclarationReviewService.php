@@ -166,7 +166,6 @@ class DeclarationReviewService extends AbstractReviewService
         $isStandard = $licence->isStandardNational() || $licence->isStandardInternational();
         $type = match (true) {
             $licence->isNi() && $licence->isLgv() => 'lgv',
-            !$licence->isNi() && !$isStandard && $licence->isLgv() => 'lgv',
             $isStandard => 'standard',
             default => 'restricted',
         };
