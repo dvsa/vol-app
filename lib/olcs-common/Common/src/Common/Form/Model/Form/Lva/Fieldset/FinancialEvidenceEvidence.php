@@ -40,6 +40,16 @@ class FinancialEvidenceEvidence
     public $uploadedFileCount;
 
     /**
+     * @Form\Name("evidenceStatementGuidance")
+     * @Form\Attributes({
+     *     "value": "lva-financial-evidence-statement.hint",
+     *     "data-container-class": "govuk-inset-text"
+     * })
+     * @Form\Type("Common\Form\Elements\Types\GuidanceTranslated")
+     */
+    public $evidenceStatementGuidance;
+
+    /**
      * @Form\Required(false)
      * @Form\Attributes({"id":"uploadNowRadio","allowWrap":true,"data-container-class":"form-control__container"})
      * @Form\Options({
