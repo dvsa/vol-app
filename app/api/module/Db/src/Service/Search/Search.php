@@ -5,12 +5,6 @@ namespace Dvsa\Olcs\Db\Service\Search;
 use Dvsa\Olcs\Api\Entity\TrafficArea\TrafficArea;
 use Dvsa\Olcs\Api\Domain\Repository\SystemParameter as SysParamRepo;
 use Dvsa\Olcs\Api\Entity\System\SystemParameter as SysParamEntity;
-use Elastica\Aggregation\Terms;
-use Elastica\Client;
-use Elastica\Query\BoolQuery;
-use Elastica\Query\MatchQuery;
-use Elastica\Query;
-use Elastica\ResultSet;
 use Dvsa\Olcs\Db\Exceptions\SearchDateFilterParseException;
 use Laminas\Filter\Word\CamelCaseToUnderscore;
 use Laminas\Filter\Word\UnderscoreToCamelCase;
@@ -18,6 +12,7 @@ use Dvsa\Olcs\Api\Domain\AuthAwareInterface;
 use Dvsa\Olcs\Api\Domain\AuthAwareTrait;
 use LmcRbacMvc\Service\AuthorizationService;
 use Dvsa\Olcs\Db\Service\Search\Indices\AbstractIndex;
+use OpenSearch\Client;
 
 /**
  * Class Search
@@ -58,7 +53,7 @@ class Search implements AuthAwareInterface
     }
 
     /**
-     * Get the Elastic client
+     * Get the OpenSearch client
      *
      * @return Client
      */
@@ -112,7 +107,7 @@ class Search implements AuthAwareInterface
     }
 
     /**
-     * Submit a search request to elastic
+     * Submit a search request to OpenSearch
      *
      * @param string $query   The string you are searching for
      * @param array  $indexes The indexes to search, this is now only used to idenitify which query template to use
@@ -136,7 +131,7 @@ class Search implements AuthAwareInterface
             fn($item) => $item !== null,
         );
 
-        $elasticaQuery = new QueryTemplate(
+        $queryBody = new QueryTemplate(
             $queryTemplate,
             $query,
             $this->getFilters(),
@@ -146,51 +141,51 @@ class Search implements AuthAwareInterface
         );
 
         if (!empty($this->getSort()) && !empty($this->getOrder())) {
-            $elasticaQuery->setSort([$this->getSort() => strtolower($this->getOrder())]);
+            $queryBody->setSort([$this->getSort() => strtolower($this->getOrder())]);
         }
 
         if (!$this->isAnonymousUser() && $this->isInternalUser() && $indexes[0] !== 'irfo') {
             $exemptTeams = str_getcsv((string) $this->sysParamRepo->fetchValue(SysParamEntity::DATA_SEPARATION_TEAMS_EXEMPT), ',', '"', '\\');
             if (!in_array($this->getCurrentUser()->getTeam()->getId(), $exemptTeams)) {
-                $elasticaQuery->setPostFilter($this->getInternalUserTAPostFilter($indexes[0]));
+                $queryBody->setPostFilter($this->getInternalUserTAPostFilter($indexes[0]));
             }
         }
 
-        $elasticaQuery->setSize($limit);
-        $elasticaQuery->setFrom($limit * ($page - 1));
+        $queryBody->setSize($limit);
+        $queryBody->setFrom($limit * ($page - 1));
 
         /**
-         * This deals with asking elastic for the filters / aggregation terms we want.
+         * This deals with asking OpenSearch for the filters / aggregation terms we want.
          */
-        $filterNames = $this->getFilterNames();
-        if (isset($filterNames)) {
-            foreach ($filterNames as $filterName) {
-                $terms = new Terms($filterName);
-                $terms->setField($filterName);
-                $terms->setOrder('_term', 'ASC');
-                $terms->setSize(25);
-
-                $elasticaQuery->addAggregation($terms);
-            }
+        foreach ($this->getFilterNames() as $filterName) {
+            $queryBody->addAggregation(
+                $filterName,
+                [
+                    'terms' => [
+                        'field' => $filterName,
+                        'order' => ['_key' => 'asc'],
+                        'size' => 25,
+                    ],
+                ]
+            );
         }
 
-        //Search on the index.
-        $es = new \Elastica\Search($this->getClient());
+        // Search on the given indices only, otherwise search is executed against all indices
+        $resultSet = $this->getClient()->search([
+            'index' => implode(',', $indexes),
+            'body' => $queryBody->toArray(),
+        ]);
 
-        // Add indices, otherwise search is executed against all indices
-        $es->addIndicesByName($indexes);
+        $totalHits = (int) ($resultSet['hits']['total']['value'] ?? 0);
 
         $response = [];
-        $resultSet = $es->search($elasticaQuery);
 
-        // Limit max number of results to prevent the ES "Result window is too large" error
-        $response['Count'] = ($resultSet->getTotalHits() > self::MAX_NUMBER_OF_RESULTS)
-            ? self::MAX_NUMBER_OF_RESULTS
-            : $resultSet->getTotalHits();
+        // Limit max number of results to prevent the "Result window is too large" error
+        $response['Count'] = min($totalHits, self::MAX_NUMBER_OF_RESULTS);
 
-        $response['Results'] = $this->processResults($resultSet);
+        $response['Results'] = $this->processResults($resultSet['hits']['hits'] ?? []);
 
-        $response['Filters'] = $this->processFilters($resultSet->getAggregations());
+        $response['Filters'] = $this->processFilters($resultSet['aggregations'] ?? []);
 
         return $response;
     }
@@ -220,19 +215,18 @@ class Search implements AuthAwareInterface
     /**
      * Process results
      *
-     * @param ResultSet $resultSet Result set
+     * @param array $hits The hits.hits element of the search response
      *
      * @return array
      */
-    protected function processResults(ResultSet $resultSet)
+    protected function processResults(array $hits)
     {
         $f = new UnderscoreToCamelCase();
 
         $response = [];
 
-        foreach ($resultSet as $result) {
-            /** @var \Elastica\Result $result */
-            $raw = $result->getSource();
+        foreach ($hits as $hit) {
+            $raw = $hit['_source'] ?? [];
             $refined = [];
             foreach ($raw as $key => $value) {
                 $refined[lcfirst((string) $f->filter($key))] = $value;
@@ -353,62 +347,75 @@ class Search implements AuthAwareInterface
      * @param bool  $section26Value Set or unset the value
      *
      * @return boolean If success
+     * @throws \RuntimeException If any document in the bulk update failed
      */
     public function updateVehicleSection26(array $ids, $section26Value)
     {
-        // Build a query to search where vehicle id is one of the IDs
-        $queryBool = new Query\BoolQuery();
-        foreach ($ids as $id) {
-            $match = new MatchQuery();
-            $match->setField('veh_id', $id);
-            $queryBool->addShould($match);
+        // No IDs, therefore nothing to do (an empty bool/should would otherwise match every document)
+        if ($ids === []) {
+            return true;
         }
 
-        $query = new Query();
-        $query->setQuery($queryBool);
-        // set size to a large value
-        $query->setSize(1000);
+        // Build a query to search where vehicle id is one of the IDs
+        $should = [];
+        foreach ($ids as $id) {
+            $should[] = ['match' => ['veh_id' => $id]];
+        }
 
-        // Search both vehicle indexes
-        $search = new \Elastica\Search($this->getClient());
-        $search->addIndex('vehicle_current');
-        $search->addIndex('vehicle_removed');
-        $resultSet = $search->search($query);
+        // Search both vehicle indexes, with size set to a large value
+        $resultSet = $this->getClient()->search([
+            'index' => 'vehicle_current,vehicle_removed',
+            'body' => [
+                'query' => ['bool' => ['should' => $should]],
+                'size' => 1000,
+            ],
+        ]);
+
+        $hits = $resultSet['hits']['hits'] ?? [];
 
         // No results found, therefore nothing to do
-        if ($resultSet->count() === 0) {
+        if ($hits === []) {
             return true;
         }
 
         // Create a bulk request to update all the section 26 values
-        $bulk = new \Elastica\Bulk($this->getClient());
-        foreach ($resultSet->getResults() as $result) {
-            /* @var $result \Elastica\Result */
-
-            $action = new \Elastica\Bulk\Action(\Elastica\Bulk\Action::OP_TYPE_UPDATE);
-            $action->setId($result->getId());
-            $action->setIndex($result->getIndex());
-            $action->setSource(['doc' => ['section_26' => $section26Value ? 1 : 0]]);
-            $bulk->addAction($action);
+        $body = [];
+        foreach ($hits as $hit) {
+            $body[] = ['update' => ['_index' => $hit['_index'], '_id' => $hit['_id']]];
+            $body[] = ['doc' => ['section_26' => $section26Value ? 1 : 0]];
         }
 
-        return $bulk->send()->isOk();
+        $bulkResponse = $this->getClient()->bulk(['body' => $body]);
+
+        if (!empty($bulkResponse['errors'])) {
+            $failed = array_filter(
+                $bulkResponse['items'] ?? [],
+                fn(array $item) => isset($item['update']['error'])
+            );
+
+            throw new \RuntimeException(
+                'Section 26 bulk update failed for ' . count($failed) . ' document(s): ' . json_encode(array_values($failed))
+            );
+        }
+
+        return true;
     }
 
     /**
-     * @return BoolQuery
+     * @return array A bool query restricting internal users to their own GB/NI side of the data
      */
     protected function getInternalUserTAPostFilter($searchIndex)
     {
-        $postFilter = new BoolQuery();
         $isNi = in_array($this->getCurrentUser()->getTeam()->getTrafficArea()->getId(), TrafficArea::NI_TA_IDS);
         $disallowedTrafficAreaIds = $isNi ? TrafficArea::GB_TA_IDS : TrafficArea::NI_TA_IDS;
+
+        $postFilter = ['bool' => ['must_not' => []]];
         foreach ($disallowedTrafficAreaIds as $taId) {
-            $postFilter->addMustNot(new MatchQuery('ta_id', $taId));
+            $postFilter['bool']['must_not'][] = ['match' => ['ta_id' => $taId]];
         }
 
         if ($searchIndex === 'application') {
-            $postFilter->addMust(new MatchQuery('ni_flag', $isNi));
+            $postFilter['bool']['must'][] = ['match' => ['ni_flag' => $isNi]];
         }
 
         return $postFilter;
