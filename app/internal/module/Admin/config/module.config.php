@@ -981,9 +981,7 @@ return [
                                                 'type' => 'segment',
                                                 'options' => [
                                                     'route' => 'fee-type-list/:date',
-                                                    // 'constraints' => [
-                                                    //     'date' => '([0-9]{4}\-[0-9]{2}\-[0-9]{2})',
-                                                    // ],
+                                                    // 'constraints' => [ 'date' => '([0-9]{4}\-[0-9]{2}\-[0-9]{2})', ]
                                                     'defaults' => [
                                                         'action' => 'feeTypeList',
                                                     ]
@@ -1038,6 +1036,20 @@ return [
                                 'controller' => Admin\Controller\EditableTranslationsController::class,
                                 'action' => 'index',
                             ]
+                        ],
+                    ],
+                    'admin-long-text' => [
+                        'type' => 'Segment',
+                        'options' => [
+                            'route' => 'long-text[/:action][/:id][/]',
+                            'constraints' => [
+                                'action' => '(index|add|edit)',
+                                'id' => '[0-9]+',
+                            ],
+                            'defaults' => [
+                                'controller' => Admin\Controller\LongTextController::class,
+                                'action' => 'index',
+                            ],
                         ],
                     ],
                     'admin-replacements' => [
@@ -1101,7 +1113,7 @@ return [
          *   'edit' => ['requireRows' => true]
          * ]
          */
-    ],
+        ],
     'controllers' => [
         'factories' => [
             Admin\Controller\DataRetention\ExportController::class => Admin\Controller\DataRetention\ExportControllerFactory::class,
@@ -1151,6 +1163,7 @@ return [
             Admin\Controller\PublishedPublicationController::class => Admin\Controller\PublishedPublicationControllerFactory::class,
             Admin\Controller\RecipientController::class => Admin\Controller\RecipientControllerFactory::class,
             Admin\Controller\ReplacementsController::class => Admin\Controller\ReplacementsControllerFactory::class,
+            Admin\Controller\LongTextController::class => Admin\Controller\LongTextControllerFactory::class,
             Admin\Controller\ReportCasesOpenController::class => Admin\Controller\ReportCasesOpenControllerFactory::class,
             Admin\Controller\ReportController::class =>  Admin\Controller\ReportControllerFactory::class,
             Admin\Controller\ReportUploadController::class => Admin\Controller\ReportUploadControllerFactory::class,
